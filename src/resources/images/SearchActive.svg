@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="31px" viewBox="0 0 30 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Shape Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FAD961" offset="0%"></stop>
+            <stop stop-color="#F7961C" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Explore-Tab-Copy" transform="translate(-76.000000, -604.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g id="Group-2" transform="translate(46.000000, 591.000000)">
+                <g id="Group-4">
+                    <path d="M41.9648094,13 C35.3500737,13 30,18.4016837 30,25.0802292 C30,31.7587754 35.3500737,37.1604585 41.9648094,37.1604585 C44.3264298,37.1604585 46.5120971,36.4609599 48.3651026,35.2729226 L55.5131965,42.4899713 C56.3313023,43.3159691 57.6641115,43.3223668 58.4901092,42.504261 C58.4948952,42.4995207 58.4996585,42.4947574 58.5043988,42.4899713 L58.5043988,42.4899713 C59.3323993,41.6539834 59.3315302,40.3067639 58.5024517,39.471845 L51.4662757,32.3861032 C53.0003669,30.3542264 53.9296188,27.8365865 53.9296188,25.0802292 C53.9296188,18.4016837 48.5795458,13 41.9648094,13 Z M42,17 C46.4302886,17 50,20.5697114 50,25 C50,29.4302886 46.4302886,33 42,33 C37.5697114,33 34,29.4302886 34,25 C34,20.5697114 37.5697114,17 42,17 Z" id="Shape-Copy"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "declaration": false,
+    "noResolve": false,
+    "jsx": "react",
+//    "jsxFactory": "React",
+    "reactNamespace": "RX",
+    "module": "commonjs",
+    "pretty": true,
+    "target": "es5",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./web/js/",
+    "baseUrl": ".",
+    "paths": {
+      "modules/*": [
+        "./src/ts/modules/*/index.web",
+        "./src/ts/modules/*/index"
+      ],
+      "src/*": [
+        "./src/*"
+      ],
+      "common/*": [
+        "./src/ts/common/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "es2015",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "temp",
+    ".vscode",
+    ".web-build",
+    ".idea",
+    "./src/ts/views2",
+  ],
+  "include": [
+    "./src/ts/**/*"
+  ]
+}

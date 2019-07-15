@@ -1,0 +1,39 @@
+/*
+ * paths.js
+ * Copyright: Ouranos Studio 2019
+ */
+
+const fs = require('fs')
+const path = require('path')
+
+const appDirectory = fs.realpathSync(process.cwd())
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath)
+
+module.exports = {
+  root: appDirectory,
+  src: resolveApp('src'),
+  common: resolveApp('src/ts/common'),
+
+  entryClient: resolveApp('src/ts/index.web.tsx'),
+  entryServer: resolveApp('src/ts/web/entry-server'),
+
+  public: resolveApp('web'),
+  manifest: resolveApp('web/manifest.json'),
+  appCss: resolveApp('web/app.css'),
+  favicon: resolveApp('web/favicon.ico'),
+  images: resolveApp('web/images'),
+  fonts: resolveApp('web/fonts'),
+
+  build: resolveApp('web/build'),
+  assets: resolveApp('web/build/assets.json'),
+  buildServer: resolveApp('web/build/server-bundle'),
+  buildSW: resolveApp('web/build/sw.js'),
+
+  // These paths are relatve to the 'build' folder
+  buildImages: 'images',
+  buildFonts: 'fonts',
+  buildStyles: 'styles',
+
+  packageJson: resolveApp('package.json'),
+  nodeModules: resolveApp('node_modules')
+}
