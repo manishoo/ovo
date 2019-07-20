@@ -4,16 +4,16 @@
  */
 
 import RX from 'reactxp'
-import {fullHeight, navigate} from 'src/ts/utilities'
-import EventComponent from './Event'
-import DateView from './DateView'
-import {Event} from 'src/ts/models/FoodModels'
-import {ComponentBase} from 'resub'
-import ListView from './ListView/ListView'
+import { ComponentBase } from 'resub'
 import theme from 'src/ts/app/Theme'
-import {Routes} from 'src/ts/navigator/routes'
-import UserStore from 'src/ts/stores/UserStore'
+import { Event } from 'src/ts/models/FoodModels'
+import { Routes } from 'src/ts/navigator/routes'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import UserStore from 'src/ts/stores/UserStore'
+import { fullHeight, navigate } from 'src/ts/utilities'
+import DateView from './DateView'
+import EventComponent from './Event'
+import ListView from './ListView/ListView'
 
 interface PathState {
 	activeMeal?: Event,
@@ -28,33 +28,6 @@ interface PathProps extends RX.CommonProps {
 }
 
 export default class PathScreen extends ComponentBase<PathProps, PathState> {
-	protected _buildState(_props: {}, _initialBuild: boolean): PathState {
-		const user = UserStore.getUser()
-
-		let pureWidth = ResponsiveWidthStore.getWidth()
-
-		if (!ResponsiveWidthStore.isSmallOrTinyScreenSize()) {
-			pureWidth = pureWidth - theme.styles.drawerWidth
-		}
-
-		if (_initialBuild) {
-			return {
-				path: user ? user.path : [],
-				activeMeal: undefined,
-				activeDateTime: String(new Date()),
-				height: ResponsiveWidthStore.getHeight(), //FIXME optimize
-				pureWidth: pureWidth
-			}
-		}
-
-		return {
-			...this.state,
-			height: ResponsiveWidthStore.getHeight(),
-			pureWidth: pureWidth
-		}
-	}
-
-
 	render() {
 		return (
 			<RX.View
@@ -92,11 +65,37 @@ export default class PathScreen extends ComponentBase<PathProps, PathState> {
 		})
 		if (nextMealIndex === undefined) return
 
-		this.setState({activeMeal: nextMeal})
+		this.setState({ activeMeal: nextMeal })
 
 		return {
 			nextMeal: nextMeal,
 			nextMealIndex: nextMealIndex,
+		}
+	}
+
+	protected _buildState(_props: {}, _initialBuild: boolean): PathState {
+		const user = UserStore.getUser()
+
+		let pureWidth = ResponsiveWidthStore.getWidth()
+
+		if (!ResponsiveWidthStore.isSmallOrTinyScreenSize()) {
+			pureWidth = pureWidth - theme.styles.drawerWidth
+		}
+
+		if (_initialBuild) {
+			return {
+				path: user ? user.path : [],
+				activeMeal: undefined,
+				activeDateTime: String(new Date()),
+				height: ResponsiveWidthStore.getHeight(), //FIXME optimize
+				pureWidth: pureWidth
+			}
+		}
+
+		return {
+			...this.state,
+			height: ResponsiveWidthStore.getHeight(),
+			pureWidth: pureWidth
 		}
 	}
 
@@ -114,11 +113,10 @@ export default class PathScreen extends ComponentBase<PathProps, PathState> {
 	private _renderList = () => {
 		return (
 			<ListView
-				// ref={(ref: any) => this._list = ref}
 				path={this.state.path}
 				renderItem={this._renderItem}
 				findClosestMeal={this.findClosestMeal}
-				onDateTimeChange={(activeDateTime: any) => this.setState({activeDateTime})} //FIXME
+				onDateTimeChange={(activeDateTime: any) => this.setState({ activeDateTime })} //FIXME
 			/>
 		)
 	}

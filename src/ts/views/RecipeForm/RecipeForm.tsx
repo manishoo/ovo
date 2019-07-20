@@ -3,24 +3,24 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import FilePicker from 'common/FilePicker/FilePicker'
+import FilledButton from 'common/FilledButton/FilledButton'
+import { showFoodModal } from 'common/FoodDialog/FoodDialog'
+import Image from 'common/Image/Image'
+import Input from 'common/Input/Input'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Navbar from 'common/Navbar/Navbar'
+import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
+import { Mutation, MutationFn } from 'react-apollo'
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import Navbar from 'common/Navbar/Navbar'
-import {getLocalizedText} from 'common/LocalizedText'
-import Ingredients from './components/Ingredients/Ingredients'
-import Text from 'common/Text'
-import {FoodTypes, Ingredient, Instruction, MealItem, Weight, Recipe} from 'src/ts/models/FoodModels'
-import {showFoodModal} from 'common/FoodDialog/FoodDialog'
-import Input from 'common/Input'
-import Instructions from './components/Instructions/Instructions'
-import FilledButton from 'common/FilledButton'
-import {Mutation, MutationFn} from 'react-apollo'
-import gql from 'graphql-tag'
-import {RecipeFragment} from 'src/ts/models/GraphQLModels'
-import FilePicker from 'common/FilePicker/FilePicker'
-import Image from 'common/Image/Image'
-import {PROFILE_RECIPES_QUERY} from 'src/ts/views/ProfileScreen/ProfileScreen'
+import { FoodTypes, Ingredient, Instruction, MealItem, Recipe, Weight } from 'src/ts/models/FoodModels'
+import { RecipeFragment } from 'src/ts/models/GraphQLModels'
 import LocationStore from 'src/ts/stores/LocationStore'
+import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/ProfileScreen'
+import Ingredients from './components/Ingredients/Ingredients'
+import Instructions from './components/Instructions/Instructions'
 
 const WINDOW_MAX_WIDTH = 975
 
@@ -89,7 +89,7 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 	}
 
 	render() {
-		const {style, recipe} = this.props
+		const { style, recipe } = this.props
 
 		const mutationField = recipe ? 'updateRecipe' : 'createRecipe'
 
@@ -107,10 +107,10 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 							label={this.state.coverImagePreview ? 'Replace Image' : undefined}
 							onImageChange={coverImage => {
 								console.log('coverImage', coverImage)
-								this.setState({coverImage})
+								this.setState({ coverImage })
 							}}
 							onImagePreviewChange={coverImagePreview => {
-								this.setState({coverImagePreview})
+								this.setState({ coverImagePreview })
 							}}
 						/>
 
@@ -127,7 +127,7 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 						<Input
 							label={getLocalizedText('Slug')}
 							value={this.state.slug}
-							onChange={(slug: string) => this.setState({slug, slugEdited: true})}
+							onChange={(slug: string) => this.setState({ slug, slugEdited: true })}
 							style={styles.input}
 						/>
 
@@ -135,7 +135,7 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 							label={getLocalizedText('Description')}
 							autoGrow
 							value={this.state.description}
-							onChange={(description: string) => this.setState({description})}
+							onChange={(description: string) => this.setState({ description })}
 							style={styles.input}
 						/>
 
@@ -170,25 +170,25 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 						<Input
 							label={getLocalizedText('PreparationTime')}
 							value={this.state.prepTime ? String(this.state.prepTime) : ''}
-							onChange={(prepTime: string) => this.setState({prepTime: prepTime ? Number(prepTime) : undefined})}
+							onChange={(prepTime: string) => this.setState({ prepTime: prepTime ? Number(prepTime) : undefined })}
 							style={styles.input}
 						/>
 						<Input
 							label={getLocalizedText('CookingTime')}
 							value={this.state.cookTime ? String(this.state.cookTime) : ''}
-							onChange={(cookTime: string) => this.setState({cookTime: cookTime ? Number(cookTime) : undefined})}
+							onChange={(cookTime: string) => this.setState({ cookTime: cookTime ? Number(cookTime) : undefined })}
 							style={styles.input}
 						/>
 						<Input
 							label={getLocalizedText('TotalTime')}
 							value={this.state.totalTime ? String(this.state.totalTime) : ''}
-							onChange={(totalTime: string) => this.setState({totalTime: totalTime ? Number(totalTime) : undefined})}
+							onChange={(totalTime: string) => this.setState({ totalTime: totalTime ? Number(totalTime) : undefined })}
 							style={styles.input}
 						/>
 						<Input
 							label={getLocalizedText('Yield')}
 							value={this.state.recipeYield ? String(this.state.recipeYield) : ''}
-							onChange={(recipeYield: string) => this.setState({recipeYield: recipeYield ? Number(recipeYield) : undefined})}
+							onChange={(recipeYield: string) => this.setState({ recipeYield: recipeYield ? Number(recipeYield) : undefined })}
 							style={styles.input}
 						/>
 
@@ -199,9 +199,9 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 								recipe: this._getRecipe(),
 							}}
 							mutation={recipe ? UPDATE_QUERY : CREATE_QUERY}
-							update={(cache, {data, data: {[mutationField]: fieldData}}) => {
+							update={(cache, { data, data: { [mutationField]: fieldData } }) => {
 								// @ts-ignore
-								const {listMyRecipes} = cache.readQuery({query: PROFILE_RECIPES_QUERY})
+								const { listMyRecipes } = cache.readQuery({ query: PROFILE_RECIPES_QUERY })
 								let recipes = [...listMyRecipes.recipes]
 								if (recipe) {
 									recipes = listMyRecipes.recipes.map((r: Recipe) => {
@@ -225,7 +225,7 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 								})
 							}}
 						>
-							{(mutate, {loading, error}) => (
+							{(mutate, { loading, error }) => (
 								<FilledButton
 									label={loading ? 'Loading' : 'Submit'}
 									onPress={this._onSubmit(mutate)}
@@ -260,7 +260,6 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 			key: mealItem.key,
 			name: mealItem.title,
 			thumbnail: mealItem.thumbnail,
-			// description: mealItem.unitDescription,
 			unit: mealItem.customUnit,
 			amount,
 			foodId: mealItem.id,
@@ -283,7 +282,7 @@ export default class RecipeForm extends RX.Component<RecipeFormProps, RecipeForm
 		foundInstruction.text = instruction.text
 		foundInstruction.image = instruction.image
 
-		this.setState({instructions})
+		this.setState({ instructions })
 	}
 
 	private _onInstructionDelete = (id: string) => {

@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+
+import FilledButton from 'common/FilledButton/FilledButton'
 import RX from 'reactxp'
-import FilledButton from 'common/FilledButton'
-import {Ingredient} from 'src/ts/models/FoodModels'
-import IngredientRow from 'src/ts/views/RecipeForm/components/Ingredients/components/IngredientRow/IngredientRow'
 import theme from 'src/ts/app/Theme'
+import { Ingredient } from 'src/ts/models/FoodModels'
+import IngredientRow from 'src/ts/views/RecipeForm/components/Ingredients/components/IngredientRow/IngredientRow'
 
 interface IngredientsProps {
 	style?: any,
@@ -20,7 +20,7 @@ interface IngredientsProps {
 
 export default class Ingredients extends RX.Component<IngredientsProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
@@ -39,7 +39,8 @@ export default class Ingredients extends RX.Component<IngredientsProps> {
 
 				{/*Add new*/}
 
-				<FilledButton label={'Add Ingredient'} onPress={this.props.onAddNewIngredient} containerStyle={{marginTop: theme.styles.spacing}}/>
+				<FilledButton label={'Add Ingredient'} onPress={this.props.onAddNewIngredient}
+											containerStyle={{ marginTop: theme.styles.spacing }} />
 			</RX.View>
 		)
 	}

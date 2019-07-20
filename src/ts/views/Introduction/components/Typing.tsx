@@ -3,7 +3,6 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
 import RX from 'reactxp'
 
 interface ChatTypingProps {
@@ -23,9 +22,9 @@ class TypingDot extends RX.Component<TypingDotProps> {
 	}
 
 	blink = (on: boolean) => {
-		const {delay} = this.props
+		const { delay } = this.props
 		let opacityAnimation = RX.Animated.timing(this.animatedOpacityValue,
-			{toValue: on ? 1.0 : 0.0, duration: 500 + delay, easing: RX.Animated.Easing.InOut()}
+			{ toValue: on ? 1.0 : 0.0, duration: 500 + delay, easing: RX.Animated.Easing.InOut() }
 		)
 
 		opacityAnimation.start(() => {
@@ -34,7 +33,7 @@ class TypingDot extends RX.Component<TypingDotProps> {
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		let animatedStyle = RX.Styles.createAnimatedViewStyle({
 			opacity: this.animatedOpacityValue,
@@ -60,15 +59,15 @@ const dotStyles = {
 
 export default class ChatTyping extends RX.Component<ChatTypingProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
 				style={[styles.container, style]}
 			>
-				<TypingDot delay={0}/>
-				<TypingDot delay={100}/>
-				<TypingDot delay={200}/>
+				<TypingDot delay={0} />
+				<TypingDot delay={100} />
+				<TypingDot delay={200} />
 			</RX.View>
 		)
 	}

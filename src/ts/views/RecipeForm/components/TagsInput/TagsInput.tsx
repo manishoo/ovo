@@ -3,13 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import {Query, QueryResult} from 'react-apollo'
+import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
-import {TagFragment} from 'src/ts/models/GraphQLModels'
-import Text from 'common/Text'
-import {Tag} from 'src/ts/models/FoodModels'
-// import Input from 'common/Input'
+import { Query, QueryResult } from 'react-apollo'
+import RX from 'reactxp'
+import { Tag } from 'src/ts/models/FoodModels'
+import { TagFragment } from 'src/ts/models/GraphQLModels'
 
 interface TagsInputProps {
 	style?: any,
@@ -18,8 +17,8 @@ interface TagsInputProps {
 }
 
 export default class TagsInput extends RX.Component<TagsInputProps> {
-	render() {
-		return (
+  render() {
+    return (
 			<Query
 				query={gql`
 					query TagsInputQuery {
@@ -29,11 +28,11 @@ export default class TagsInput extends RX.Component<TagsInputProps> {
 			>
 				{this._renderContent}
 			</Query>
-		)
-	}
+    )
+  }
 
-	private _renderContent = ({data, loading, error}: QueryResult) => {
-		const {style} = this.props
+	private _renderContent = ({ data, loading, error }: QueryResult) => {
+		const { style } = this.props
 
 		if (error) {
 			console.error(error)
@@ -61,16 +60,6 @@ export default class TagsInput extends RX.Component<TagsInputProps> {
 			<Text>Loading</Text>
 		)
 	}
-
-	// private _renderTagForm = () => {
-	// 	return (
-	// 		<RX.View>
-	// 			<Input label={'slug'} value={this.state.slug} onChange={this._onChange('slug')}/>
-	// 			<Input label={'title'} value={this.state.title} onChange={this._onChange('title')}/>
-	//
-	// 		</RX.View>
-	// 	)
-	// }
 }
 
 const styles = {

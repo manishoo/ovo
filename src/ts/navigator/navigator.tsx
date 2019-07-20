@@ -3,40 +3,39 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import FilledButton from 'common/FilledButton/FilledButton'
+import Image from 'common/Image/Image'
+import Link from 'common/Link/Link'
+import Text from 'common/Text/Text'
+import { Action } from 'history'
+import ImageSource from 'modules/images'
+import { matchPath } from 'react-router'
+import { Route, RouteProps, Router, Switch } from 'react-router-dom'
 import RX from 'reactxp'
-import {Router, Route, Switch, RouteProps} from 'react-router-dom'
+import { ComponentBase } from 'resub'
+import AppConfig from 'src/ts/app/AppConfig'
+import theme from 'src/ts/app/Theme'
+import { User } from 'src/ts/models/FoodModels'
+import LocationStore from 'src/ts/stores/LocationStore'
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import UserStore from 'src/ts/stores/UserStore'
+import { navigate } from 'src/ts/utilities'
+import ExploreSearch from 'src/ts/views/ExploreSearch/ExploreSearch'
 import {
 	LandingScreen,
 	LoginModal,
-	RegisterModal,
-	// FeedScreen,
+	MealPlanScreen,
 	PathScreen,
 	ProfileScreen,
 	PublicProfileScreen,
-	RecipeForm,
 	Recipe,
-	SettingsScreen,
-	SearchResult,
+	RecipeForm,
 	RecipeFormContainer,
-	MealPlanScreen,
+	RegisterModal,
 	Routes,
+	SearchResult,
+	SettingsScreen,
 } from './routes'
-import {ComponentBase} from 'resub'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import {navigate} from 'src/ts/utilities'
-import theme from 'src/ts/app/Theme'
-import {matchPath} from 'react-router'
-import AppConfig from 'src/ts/app/AppConfig'
-import ImageSource from 'modules/images'
-import UserStore from 'src/ts/stores/UserStore'
-import Link from 'common/Link/Link'
-import Text from 'common/Text'
-import FilledButton from 'common/FilledButton'
-import Image from 'common/Image/Image'
-import {User} from 'src/ts/models/FoodModels'
-import ExploreSearch from 'src/ts/views/ExploreSearch/ExploreSearch'
-import LocationStore from 'src/ts/stores/LocationStore'
-import {Action} from 'history'
 
 const NAVBAR_HEIGHT = 50
 const BRAND_IMAGE_WIDTH = 135
@@ -73,6 +72,78 @@ function trimSlashes(s: string) {
 }
 
 export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { history: any }, WebAppRouterState> {
+	private _searchInput: any
+	private _drawerClosedValue = AppConfig.isRTL() ? theme.styles.drawerWidth : -theme.styles.drawerWidth
+	private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
+	private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
+	private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
+	private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
+	private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateX: this._drawerAnimationLeftValue }],
+	})
+	private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateY: this._navbarAnimationTopValue }],
+	})
+	private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateY: this._searchContainerAnimationTopValue }],
+	})
+	private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		opacity: this._searchContainerBackDropAnimationOpacityValue,
+	})
+
+	render() {
+		const Navbar = this._renderNavbar()
+
+		return (
+			<Router history={this.props.history}>
+				<RX.View
+					style={[styles.container, { paddingTop: (this.state.mode === 'navbar' && Navbar) ? NAVBAR_HEIGHT : 0 }]}>
+					<RX.View style={{ flexDirection: 'row' }}>
+						{
+							(this.state.mode === 'drawer' && !this.state.isLanding) &&
+              <RX.Animated.View style={{ height: 100, width: theme.styles.drawerWidth }} />
+						}
+						<RX.ScrollView
+							style={[styles.innerContainer, { height: this.state.height }]}
+						>
+							<Switch>
+								{
+									this.state.routes.map(route => (
+										<Route
+											{...route}
+										/>
+									))
+								}
+							</Switch>
+						</RX.ScrollView>
+					</RX.View>
+
+					{Navbar}
+					{this._renderTabBar()}
+					{this._renderDrawer()}
+					{this._renderSearch()}
+					<RX.Text>{this.state.mode}</RX.Text>
+
+					{/* Modals */}
+
+					{
+						this.state.routes.filter(r => r.modal).map(route => (
+							<Route
+								{...route}
+							/>
+						))
+					}
+				</RX.View>
+			</Router>
+		)
+	}
+
+	componentDidMount(): void {
+		this._checkIfHomeHideDrawer(undefined, false)
+
+		this.props.history.listen(this._handleLocationChange) // FIXME better place to call this maybe
+	}
+
 	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
 		const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
 		const user = UserStore.getUser()
@@ -165,57 +236,11 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		}
 	}
 
-	render() {
-		const Navbar = this._renderNavbar()
-
-		return (
-			<Router history={this.props.history}>
-				<RX.View style={[styles.container, {paddingTop: (this.state.mode === 'navbar' && Navbar) ? NAVBAR_HEIGHT : 0}]}>
-					<RX.View style={{flexDirection: 'row'}}>
-						{
-							(this.state.mode === 'drawer' && !this.state.isLanding) &&
-              <RX.Animated.View style={{height: 100, width: theme.styles.drawerWidth}} />
-						}
-						<RX.ScrollView
-							style={[styles.innerContainer, {height: this.state.height}]}
-						>
-							<Switch>
-								{
-									this.state.routes.map(route => (
-										<Route
-											{...route}
-										/>
-									))
-								}
-							</Switch>
-						</RX.ScrollView>
-					</RX.View>
-
-					{Navbar}
-					{this._renderTabBar()}
-					{this._renderDrawer()}
-					{this._renderSearch()}
-					<RX.Text>{this.state.mode}</RX.Text>
-
-					{/* Modals */}
-
-					{
-						this.state.routes.filter(r => r.modal).map(route => (
-							<Route
-								{...route}
-							/>
-						))
-					}
-				</RX.View>
-			</Router>
-		)
-	}
-
 	private _renderDrawer = () => {
 		if (this.state.isLanding && !this.state.userLoggedIn) return null
 
 		return (
-			<RX.Animated.View style={[styles.drawer.container, {height: this.state.height}, this._drawerAnimationStyle]}>
+			<RX.Animated.View style={[styles.drawer.container, { height: this.state.height }, this._drawerAnimationStyle]}>
 				<Image
 					source={ImageSource.Brand}
 					style={styles.drawer.logo}
@@ -227,31 +252,27 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 							return [
 								<Link
 									to={`/${this.state.userLoggedIn.username}`}
-									style={{alignSelf: 'center', marginVertical: theme.styles.spacing,}}
+									style={{ alignSelf: 'center', marginVertical: theme.styles.spacing, }}
 								>
 									<Image source={this.state.userLoggedIn.avatar.url} style={styles.drawer.avatar} />
 								</Link>,
 								<Link to={`/`} style={styles.drawer.link}><Text translate>Path</Text></Link>,
 								<Link to={`${Routes.mealPlan}`} style={styles.drawer.link}><Text translate>MealPlan</Text></Link>,
 								<Link to={`/explore`} style={styles.drawer.link}><Text translate>Explore</Text></Link>,
-								<Link to={`/${this.state.userLoggedIn.username}`} style={styles.drawer.link}><Text translate>Profile</Text></Link>,
-								/*<Link to={`/`} style={styles.drawer.link}><Text translate>Profile</Text></Link>,*/
+								<Link to={`/${this.state.userLoggedIn.username}`} style={styles.drawer.link}><Text
+									translate>Profile</Text></Link>,
 							]
 						} else {
 							return <FilledButton onPress={() => navigate(this.props, Routes.login)} label={'Login'} />
 						}
 					})()
 				}
-
-				{/*<Link to={`/`} style={styles.drawer.link}><Text translate>Articles</Text></Link>*/}
-				{/*<Link to={`/`} style={styles.drawer.link}><Text translate>MealPlan&ShoppingList</Text></Link>*/}
-				{/*<Link to={`/`} style={styles.drawer.link}><Text translate>DrawerBrowse</Text></Link>*/}
 			</RX.Animated.View>
 		)
 	}
 
 	private _renderNavbar = () => {
-		const {currentPath, routes} = this.state
+		const { currentPath, routes } = this.state
 
 		const foundRoute = routes.find(p => !!matchPath(currentPath, {
 			path: p.path,
@@ -261,7 +282,7 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		if (!foundRoute) return null
 		if (!foundRoute.navOptions) return null
 
-		const {title, back} = foundRoute.navOptions as NavOptions
+		const { title, back } = foundRoute.navOptions as NavOptions
 
 		return (
 			<RX.Animated.View style={[styles.navbarContainer, this._navbarAnimationStyle]}>
@@ -275,7 +296,7 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		if (this.state.mode === 'drawer') return null
 		if (!this.state.userLoggedIn) return null
 
-		let {currentPath} = this.state
+		let { currentPath } = this.state
 
 		let activePath: string | undefined
 
@@ -300,7 +321,7 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 
 		return (
 			<RX.View style={styles.tabBar.container}>
-				<RX.View style={[styles.tabBar.innerContainer, {width: this.state.width}]}>
+				<RX.View style={[styles.tabBar.innerContainer, { width: this.state.width }]}>
 					<Image
 						source={activePath === 'feed' ? ImageSource.SearchActive : ImageSource.Search}
 						style={{
@@ -337,10 +358,10 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 
 		const toggleModal = (show: boolean) => () => {
 			RX.Animated.parallel([
-				RX.Animated.timing(this._searchContainerAnimationTopValue, {toValue: show ? 0 : -this.state.height}),
-				RX.Animated.timing(this._searchContainerBackDropAnimationOpacityValue, {toValue: show ? 1 : 0}),
+				RX.Animated.timing(this._searchContainerAnimationTopValue, { toValue: show ? 0 : -this.state.height }),
+				RX.Animated.timing(this._searchContainerBackDropAnimationOpacityValue, { toValue: show ? 1 : 0 }),
 			]).start(() => {
-				this.setState({searchModalShowing: show})
+				this.setState({ searchModalShowing: show })
 				if (this._searchInput) {
 					this._searchInput.focus()
 				}
@@ -348,7 +369,7 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		}
 
 		return [
-			<RX.View onPress={toggleModal(true)} style={[styles.search.iconContainer, {opacity: match ? 0 : 1}]}>
+			<RX.View onPress={toggleModal(true)} style={[styles.search.iconContainer, { opacity: match ? 0 : 1 }]}>
 				<Image
 					source={ImageSource.SearchIcon}
 					style={styles.search.icon}
@@ -373,17 +394,11 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 				]}
 			>
 				{this.state.mode === 'navbar' &&
-        <RX.Text style={{padding: theme.styles.spacing, fontSize: 20}} onPress={toggleModal(false)}>x</RX.Text>}
+        <RX.Text style={{ padding: theme.styles.spacing, fontSize: 20 }} onPress={toggleModal(false)}>x</RX.Text>}
 
 				<ExploreSearch ref={(ref: any) => this._searchInput = ref} onSubmit={toggleModal(false)} />
 			</RX.Animated.View>
 		]
-	}
-
-	componentDidMount(): void {
-		this._checkIfHomeHideDrawer(undefined, false)
-
-		this.props.history.listen(this._handleLocationChange) // FIXME better place to call this maybe
 	}
 
 	private _handleLocationChange = (location: Location, action: Action) => {
@@ -421,7 +436,6 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		})
 
 		if (match) {
-			// set the state
 			this.setState({
 				isLanding: !this.state.userLoggedIn,
 			})
@@ -441,43 +455,15 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 			this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate)
 		}
 	}
-
-	private _searchInput: any
-	private _drawerClosedValue = AppConfig.isRTL() ? theme.styles.drawerWidth : -theme.styles.drawerWidth
-	// private _drawerOpenedValue = AppConfig.isRTL() ? -theme.styles.drawerWidth : theme.styles.drawerWidth
-	private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
-	// private _drawerAnimationLeftValue2 = RX.Animated.createValue(this._drawerClosedValue)
-	private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
-	private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
-	private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
-
-	private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{translateX: this._drawerAnimationLeftValue}],
-	})
-	private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{translateY: this._navbarAnimationTopValue}],
-	})
-	private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{translateY: this._searchContainerAnimationTopValue}],
-	})
-	private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		opacity: this._searchContainerBackDropAnimationOpacityValue,
-	})
 }
 
 
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
-		// alignSelf: 'stretch',
-		// alignItems: 'stretch',
-		// overflow: 'visible',
 	}),
 	innerContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		// [theme.styles.end]: theme.styles.drawerWidth,
-		// marginTop: NAVBAR_HEIGHT,
-		// maxWidth: WINDOW_MAX_WIDTH,
 		overflow: 'visible',
 	}),
 	navbarContainer: RX.Styles.createViewStyle({
@@ -499,7 +485,7 @@ const styles = {
 			backgroundColor: theme.colors.drawerBg,
 			shadowColor: 'rgba(0, 0, 0, .12)',
 			shadowOffset: {
-				width: 0/*AppConfig.isRTL() ? 15 : -15*/,
+				width: 0,
 				height: 0,
 			},
 			shadowRadius: 50,
@@ -561,7 +547,6 @@ const styles = {
 			right: 0,
 			justifyContent: 'center',
 			alignItems: 'center',
-			// margin: theme.styles.spacing,
 			padding: theme.styles.spacing,
 		}),
 		innerContainer: RX.Styles.createViewStyle({

@@ -1,10 +1,10 @@
 /*
- * Image.tsx
+ * Image.ios.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX, {Types} from 'reactxp'
+
+import RX, { Types } from 'reactxp'
 
 interface ImageProps extends Types.ImageProps {
 	style?: any,
@@ -12,7 +12,7 @@ interface ImageProps extends Types.ImageProps {
 
 export default class Image extends RX.Component<ImageProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			// @ts-ignore

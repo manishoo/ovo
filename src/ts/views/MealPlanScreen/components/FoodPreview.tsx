@@ -3,12 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+import FilledButton from 'common/FilledButton/FilledButton'
 import RX from 'reactxp'
-// import Input from '../../Input'
-import FilledButton from 'common/FilledButton'
 import theme from 'src/ts/app/Theme'
-import {SearchResultItem} from './AddMealItemDialog'
+import { SearchResultItem } from './AddMealItemDialog'
 
 interface FoodPreviewProps {
 	style?: any,
@@ -31,7 +29,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps> {
 	}
 
 	render() {
-		const {style, item} = this.props
+		const { style, item } = this.props
 
 		return (
 			<RX.View
@@ -75,21 +73,6 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps> {
 					<RX.View
 						style={styles.flex1}
 					>
-						{/*<Input
-							inputRef={inputRef}
-							value={'1'}
-							onChange={() => {}}
-							label={'Amount'}
-							keyboardType={'number-pad'}
-						/>
-						<Input
-							value={'-'}
-							onChange={() => {}}
-							label={'Unit'}
-							onFocus={() => {
-
-							}}
-						/>*/}
 					</RX.View>
 					<RX.View
 						style={styles.chartContainer}
@@ -102,7 +85,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps> {
 
 				<FilledButton
 					label='Add to Meal'
-					onPress={() => {}}
+					onPress={() => {
+					}}
 					containerStyle={styles.addToMeal}
 				/>
 			</RX.View>
@@ -118,9 +102,6 @@ const styles = {
 		right: 0,
 	}),
 	cancelSelectedMealContainer: RX.Styles.createViewStyle({
-		// position: 'absolute',
-		// left: 10,
-		// top: 10,
 		width: 50,
 		height: 50,
 		justifyContent: 'center',
@@ -148,7 +129,6 @@ const styles = {
 	}),
 	secondRow: RX.Styles.createViewStyle({
 		flexDirection: 'row',
-		// alignItems: 'flex-end',
 		padding: 20,
 	}),
 	flex1: RX.Styles.createViewStyle({

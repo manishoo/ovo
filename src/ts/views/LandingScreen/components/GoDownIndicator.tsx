@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
+import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
-import Text from 'common/Text'
+import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
 
 interface GoDownIndicatorProps {
@@ -13,11 +13,16 @@ interface GoDownIndicatorProps {
 }
 
 export default class GoDownIndicator extends RX.Component<GoDownIndicatorProps> {
+	private _imageTopAnimation = RX.Animated.createValue(0)
+	private _imageAnimationStyle = RX.Styles.createAnimatedImageStyle({
+		top: this._imageTopAnimation,
+	})
+
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
-			<RX.View style={{flexDirection: 'row', padding: theme.styles.spacing}}>
+			<RX.View style={{ flexDirection: 'row', padding: theme.styles.spacing }}>
 				<RX.Animated.Image
 					source={ImageSource.ArrowDownCircle}
 					style={[
@@ -55,11 +60,6 @@ export default class GoDownIndicator extends RX.Component<GoDownIndicatorProps> 
 					.start()
 			})
 	}
-
-	private _imageTopAnimation = RX.Animated.createValue(0)
-	private _imageAnimationStyle = RX.Styles.createAnimatedImageStyle({
-		top: this._imageTopAnimation,
-	})
 }
 
 const styles = {

@@ -5,7 +5,6 @@
     "declaration": false,
     "noResolve": false,
     "jsx": "react",
-//    "jsxFactory": "React",
     "reactNamespace": "RX",
     "module": "commonjs",
     "pretty": true,
@@ -47,7 +46,7 @@
     ".vscode",
     ".web-build",
     ".idea",
-    "./src/ts/views2",
+    "./src/ts/views-old"
   ],
   "include": [
     "./src/ts/**/*"

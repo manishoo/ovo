@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+
 import RX from 'reactxp'
 
 interface AvatarProps {
@@ -15,7 +15,7 @@ interface AvatarProps {
 
 export default class Avatar extends RX.Component<AvatarProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
@@ -39,8 +39,7 @@ export default class Avatar extends RX.Component<AvatarProps> {
 }
 
 const styles = {
-	container: RX.Styles.createViewStyle({
-	}),
+	container: RX.Styles.createViewStyle({}),
 	image: RX.Styles.createImageStyle({
 		borderWidth: 5,
 		backgroundColor: '#eee',

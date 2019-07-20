@@ -17,4 +17,4 @@ const cache = new InMemoryCache({
 // @ts-ignore
 	.restore(window.__APOLLO_STATE__)
 
-export {cache}
+export { cache }

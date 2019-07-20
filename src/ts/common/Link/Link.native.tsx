@@ -11,7 +11,7 @@ interface LinkProps {
 
 export default class Link extends RX.Component<LinkProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View

@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import {getParam} from 'src/ts/utilities'
 import gql from 'graphql-tag'
-import {Query} from 'react-apollo'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
+import { RecipeFragment } from 'src/ts/models/GraphQLModels'
+import { getParam } from 'src/ts/utilities'
 import RecipeForm from './RecipeForm'
-import {RecipeFragment} from 'src/ts/models/GraphQLModels'
 
 export default class RecipeFormContainer extends RX.Component {
   render() {
@@ -24,7 +24,7 @@ export default class RecipeFormContainer extends RX.Component {
 				`}
 				fetchPolicy={'cache-and-network'}
 			>
-				{({data: {getRecipe}, loading, error}) => {
+				{({ data: { getRecipe }, loading, error }) => {
 					return (
 						<RX.View>
 							{!!getRecipe && <RecipeForm recipe={getRecipe} />}

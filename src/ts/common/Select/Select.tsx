@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+
+import { showSelectDialog } from 'common/Select/components/SelectDialog'
+import Text from 'common/Text/Text'
 import RX from 'reactxp'
-import {showSelectDialog} from 'common/Select/components/SelectDialog'
-import Text from 'common/Text'
 
 export interface Option {
 	value: any,
@@ -34,13 +34,13 @@ export default class Select extends RX.Component<SelectProps, SelectState> {
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
 				style={[styles.container, style]}
 				onPress={() => showSelectDialog({
-					onOptionSelect: (option => this.setState({selectedOption: option})),
+					onOptionSelect: (option => this.setState({ selectedOption: option })),
 					options: this.props.options,
 				})}
 			>

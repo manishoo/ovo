@@ -3,29 +3,28 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import IngredientItem from 'src/ts/views/Recipe/components/IngredientItem'
-import {Recipe as RecipeType, User} from 'src/ts/models/FoodModels'
-import Navbar from 'common/Navbar/Navbar'
-import theme from 'src/ts/app/Theme'
-import {ComponentBase} from 'resub'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import Text from 'common/Text'
-import Instructions from './components/Instructions'
-import UserStore from 'src/ts/stores/UserStore'
-import FilledButton from 'common/FilledButton'
-import {Mutation} from 'react-apollo'
-import gql from 'graphql-tag'
-import {navigate} from 'src/ts/utilities'
+import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
+import Link from 'common/Link/Link'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Navbar from 'common/Navbar/Navbar'
+import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
 // @ts-ignore
 import moment from 'moment-jalali'
+import { Mutation } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
-import Link from 'common/Link/Link'
-import {PROFILE_RECIPES_QUERY} from 'src/ts/views/ProfileScreen/ProfileScreen'
+import theme from 'src/ts/app/Theme'
+import { Recipe as RecipeType, User } from 'src/ts/models/FoodModels'
 import LocationStore from 'src/ts/stores/LocationStore'
-import {getLocalizedText} from 'common/LocalizedText'
-
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import UserStore from 'src/ts/stores/UserStore'
+import { navigate } from 'src/ts/utilities'
+import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/ProfileScreen'
+import IngredientItem from 'src/ts/views/Recipe/components/IngredientItem'
+import Instructions from './components/Instructions'
 
 interface RecipeProps extends RX.CommonProps {
 	style?: any,
@@ -42,7 +41,7 @@ interface RecipeState {
 export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 	render() {
 		return (
-			<RX.View style={{flex: 1}}>
+			<RX.View style={{ flex: 1 }}>
 				<RX.ScrollView
 					style={[
 						styles.container,
@@ -86,14 +85,24 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 		)
 	}
 
+	protected _buildState(props: RecipeProps, initialBuild: boolean): Partial<RecipeState> | undefined {
+		return {
+			windowHeight: ResponsiveWidthStore.getHeight(),
+			windowWidth: ResponsiveWidthStore.getWidth(),
+			isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+			user: UserStore.getUser(),
+		}
+	}
+
 	private _renderIngredientsSection = () => {
 		const recipe = this.props.recipe
 
 		return (
 			<RX.View style={styles.ingredients.container}>
-				<RX.View style={{flexDirection: 'row'}}>
-					<Text translate style={[styles.label, {[theme.styles.marginEnd]: theme.styles.spacing}]}>Ingredients</Text>
-					<Text translate variables={{number: '2' /*TODO use state*/}} style={styles.subLabel}>IngredientsYieldLabel</Text>
+				<RX.View style={{ flexDirection: 'row' }}>
+					<Text translate style={[styles.label, { [theme.styles.marginEnd]: theme.styles.spacing }]}>Ingredients</Text>
+					<Text translate variables={{ number: '2' /*TODO use state*/ }}
+								style={styles.subLabel}>IngredientsYieldLabel</Text>
 				</RX.View>
 
 				{
@@ -125,7 +134,7 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 
 		return (
 			<RX.View style={styles.authorAndDescriptionSection.container}>
-				<RX.View style={{flexDirection: 'column', alignItems: 'center', marginBottom: theme.styles.spacing}}>
+				<RX.View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: theme.styles.spacing }}>
 					<Link to={`/${recipe.author.username}/`}>
 						<Image
 							source={recipe.author.avatar.url}
@@ -133,9 +142,6 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 						/>
 					</Link>
 					<Text>{recipe.author.firstName || `${recipe.author.username}@`}</Text>
-					{/*<RX.View style={{justifyContent: 'center'}}>
-						<Text>{recipe.author.firstName || `${recipe.author.username}@`}</Text>
-					</RX.View>*/}
 				</RX.View>
 				{
 					!!recipe.description &&
@@ -153,18 +159,17 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 		)
 	}
 
-
 	private _renderControlBar = () => {
     if (this.state.user && this.state.user.id === this.props.recipe.author.id) {
       return (
-				<RX.View style={{flexDirection: 'row'}}>
+				<RX.View style={{ flexDirection: 'row' }}>
 					<Mutation
 						variables={{
 							recipeId: this.props.recipe.id,
 						}}
 						update={(cache) => {
 							// @ts-ignore
-							const {listMyRecipes} = cache.readQuery({query: PROFILE_RECIPES_QUERY})
+							const { listMyRecipes } = cache.readQuery({ query: PROFILE_RECIPES_QUERY })
 
 							cache.writeQuery({
 								query: PROFILE_RECIPES_QUERY,
@@ -183,29 +188,21 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 						`}
 					>
 						{(mutate) => (
-							<FilledButton label={'Delete Recipe'} onPress={() => RX.Alert.show(getLocalizedText('deleteRecipe?'), undefined, [{text: getLocalizedText('yes'), onPress: () => mutate().then(() => navigate(this.props, 'back'))}, {text: getLocalizedText('no')}])} />
+							<FilledButton label={'Delete Recipe'}
+														onPress={() => RX.Alert.show(getLocalizedText('deleteRecipe?'), undefined, [{
+															text: getLocalizedText('yes'),
+															onPress: () => mutate().then(() => navigate(this.props, 'back'))
+														}, { text: getLocalizedText('no') }])} />
 						)}
 					</Mutation>
-					<FilledButton label={'Edit Recipe'} onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, {params: {}})} />
+					<FilledButton label={'Edit Recipe'}
+												onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })} />
 				</RX.View>
       )
     }
 
 		return null
   }
-
-  // private _handleRecipeDelete = () => {
-  // 	alert('Delete Recipe')
-  // }
-
-	protected _buildState(props: RecipeProps, initialBuild: boolean): Partial<RecipeState> | undefined {
-		return {
-			windowHeight: ResponsiveWidthStore.getHeight(),
-			windowWidth: ResponsiveWidthStore.getWidth(),
-			isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-			user: UserStore.getUser(),
-		}
-	}
 
 	private _getMaximum1024 = (width: number) => (width > theme.styles.mainContentMaxWidth ? theme.styles.mainContentMaxWidth : width) // maximum 1024
 	private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - theme.styles.drawerWidth)

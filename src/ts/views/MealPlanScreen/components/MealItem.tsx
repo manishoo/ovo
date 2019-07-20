@@ -3,12 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import {MealItem as MealItemType} from 'src/ts/models/FoodModels'
-import theme from 'src/ts/app/Theme'
-import {navigate, renderImageOrPlaceholder, withNavigation} from 'src/ts/utilities'
 import TotalTime from 'common/TotalTime/TotalTime'
+import RX from 'reactxp'
+import theme from 'src/ts/app/Theme'
+import { MealItem as MealItemType } from 'src/ts/models/FoodModels'
+import { navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
 
 interface MealItemProps {
 	style?: any,
@@ -29,7 +28,7 @@ export default class MealItem extends RX.Component<MealItemProps> {
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
@@ -41,9 +40,8 @@ export default class MealItem extends RX.Component<MealItemProps> {
 				<RX.View style={styles.textsContainer}>
 					<RX.Text style={styles.title}>{this.props.mealItem.title}</RX.Text>
 					<RX.Text style={styles.subtitle}>{this.props.mealItem.subtitle}</RX.Text>
-					{!!this.props.mealItem.totalTime && <TotalTime totalTime={this.props.mealItem.totalTime}/>}
+					{!!this.props.mealItem.totalTime && <TotalTime totalTime={this.props.mealItem.totalTime} />}
 				</RX.View>
-				{/*<MoreButton onPress={() => {}} style={styles.moreButton} />*/}
 			</RX.View>
 		)
 	}

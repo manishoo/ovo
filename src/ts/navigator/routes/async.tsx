@@ -3,9 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+
 import RX from 'reactxp'
-// import Loading from 'common/Loading'
 
 // `path` should be relative to the `components/` folder
 const loadComponentAsync = (path: string, secondaryPath?: string) => (
@@ -25,7 +24,7 @@ const loadComponentAsync = (path: string, secondaryPath?: string) => (
 				/* webpackChunkName: "[request]" */
 				/* webpackPreload: true */
 				`src/ts/views/${path}/${secondaryPath || path}`
-			)
+				)
 				.then(mod => {
 					if (mod.default) {
 						return mod.default
@@ -34,16 +33,16 @@ const loadComponentAsync = (path: string, secondaryPath?: string) => (
 					return mod
 				})
 				.then((Component) => {
-					this.setState({Component})
+					this.setState({ Component })
 				})
 				.catch(error => {
 					console.error('cs error', error)
-					this.setState({error})
+					this.setState({ error })
 				})
 		}
 
 		render() {
-			const {Component} = this.state
+			const { Component } = this.state
 
 			return Component
 				? <Component {...this.props} />

@@ -3,10 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import ImageSource from 'modules/images'
 
 interface SubmitButtonProps {
 	style?: any,
@@ -19,7 +18,7 @@ interface SubmitButtonProps {
 
 export default class SubmitButton extends RX.Component<SubmitButtonProps> {
 	render() {
-		const {style, onPress, skip, onSkip, disabled} = this.props
+		const { style, onPress, skip, onSkip, disabled } = this.props
 
 		if (skip) {
 			return (
@@ -35,7 +34,7 @@ export default class SubmitButton extends RX.Component<SubmitButtonProps> {
 
 		return (
 			<RX.View
-				style={[styles.sendButton, style, {cursor: disabled? 'default' : 'pointer'}]}
+				style={[styles.sendButton, style, { cursor: disabled ? 'default' : 'pointer' }]}
 				activeOpacity={0.7}
 				onPress={disabled ? undefined : onPress}
 				disableTouchOpacityAnimation={disabled}
@@ -58,7 +57,6 @@ const styles = {
 		width: 45,
 		height: 45,
 		borderColor: theme.colors.submitButtonBorderColor,
-		// borderRadius: 22.5,
 		marginLeft: 16,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -68,7 +66,6 @@ const styles = {
 		fontSize: 20,
 	}),
 	skipButton: RX.Styles.createViewStyle({
-		// width: 45,
 		height: 45,
 		backgroundColor: theme.colors.white,
 		borderRadius: 22.5,

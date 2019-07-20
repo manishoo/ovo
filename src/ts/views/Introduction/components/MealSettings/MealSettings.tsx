@@ -3,11 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
 import RX from 'reactxp'
-import MacroNutrientBar from './components/MacroNutrientBar'
-import Input from '../../../../common/Input'
+import Input from 'src/ts/common/Input/Input'
 import SubmitButton from '../SubmitButton'
+import MacroNutrientBar from './components/MacroNutrientBar'
 
 interface MealSettingsProps {
 	style?: any,
@@ -23,6 +22,9 @@ interface MealSettingsState {
 }
 
 export default class MealSettings extends RX.Component<MealSettingsProps, MealSettingsState> {
+	hintOpacityAnimated = RX.Animated.createValue(0)
+	hintLeftAnimated = RX.Animated.createValue(200)
+
 	constructor(props: MealSettingsProps) {
 		super(props)
 
@@ -33,9 +35,6 @@ export default class MealSettings extends RX.Component<MealSettingsProps, MealSe
 			tdee: props.settings.tdee,
 		}
 	}
-
-	hintOpacityAnimated = RX.Animated.createValue(0)
-	hintLeftAnimated = RX.Animated.createValue(200)
 
 	componentDidMount(): void {
 		this.showHint()
@@ -111,7 +110,7 @@ export default class MealSettings extends RX.Component<MealSettingsProps, MealSe
 	}
 
 	onSubmit = () => {
-		const {onSubmit} = this.props
+		const { onSubmit } = this.props
 
 		onSubmit({
 			mealPlanSettings: {
@@ -124,7 +123,7 @@ export default class MealSettings extends RX.Component<MealSettingsProps, MealSe
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 		const {
 			protein,
 			fat,
@@ -162,7 +161,7 @@ export default class MealSettings extends RX.Component<MealSettingsProps, MealSe
 					label='TDEE (target calories burnt per day)'
 					value={String(tdee)}
 					onChange={this.onTDEEChange}
-					textInputStyle={{width: 50}}
+					textInputStyle={{ width: 50 }}
 					style={styles.input}
 					returnKeyType={'done'}
 					keyboardType={'numeric'}

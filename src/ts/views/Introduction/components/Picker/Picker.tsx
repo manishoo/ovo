@@ -22,13 +22,13 @@ export default class Picker extends RX.Component<PickerProps, PickerState> {
 
 		this.state = Object.assign(
 			{},
-			...props.defaultValues.map((item, index) => ({[`selectedItem${index}`]: item})),
+			...props.defaultValues.map((item, index) => ({ [`selectedItem${index}`]: item })),
 			{}
 		)
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
@@ -38,7 +38,7 @@ export default class Picker extends RX.Component<PickerProps, PickerState> {
 					this.props.pickers.map((pickerItems, index) => (
 						<RX.Picker
 							selectedValue={this.state[`selectedItem${index}`]}
-							onValueChange={(itemValue) => this.setState({[`selectedItem${index}`]: itemValue})}
+							onValueChange={(itemValue) => this.setState({ [`selectedItem${index}`]: itemValue })}
 							items={pickerItems}
 							style={styles.picker}
 						/>

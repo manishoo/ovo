@@ -4,11 +4,11 @@
  */
 
 import RX from 'reactxp'
-import Login from 'src/ts/views/Login/Login'
-import {ComponentBase} from 'resub'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { ComponentBase } from 'resub'
 import theme from 'src/ts/app/Theme'
-import {navigate} from 'src/ts/utilities'
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { navigate } from 'src/ts/utilities'
+import Login from 'src/ts/views/Login/Login'
 
 const LOGIN_WINDOW_DIMENSION = 450
 const LOGIN_WINDOW_BORDER_RADIUS = 20
@@ -22,12 +22,6 @@ export default class LoginModal extends ComponentBase<{}, LoginModalState> {
 	private _modalAnimatedStyle = RX.Styles.createAnimatedViewStyle({
 		opacity: this._modalOpacity,
 	})
-
-	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<LoginModalState> | undefined {
-		return {
-			isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize()
-		}
-	}
 
 	componentDidMount(): void {
 		RX.Animated.timing(this._modalOpacity, {
@@ -44,7 +38,7 @@ export default class LoginModal extends ComponentBase<{}, LoginModalState> {
 	render() {
 		const LoginWindow = () => (
 			<RX.Animated.View style={this.state.isTinyOrSmall ? [styles.container, this._modalAnimatedStyle] : styles.login}>
-				<Login {...this.props}/>
+				<Login {...this.props} />
 				<RX.Text style={styles.closeButton} onPress={() => this.dismiss(() => navigate(this.props, 'back'))}>X</RX.Text>
 			</RX.Animated.View>
 		)
@@ -55,11 +49,17 @@ export default class LoginModal extends ComponentBase<{}, LoginModalState> {
 
 		return (
 			<RX.Animated.View
-				style={[styles.container, {backgroundColor: theme.colors.modalBackDrop}, this._modalAnimatedStyle]}
+				style={[styles.container, { backgroundColor: theme.colors.modalBackDrop }, this._modalAnimatedStyle]}
 			>
 				<LoginWindow />
 			</RX.Animated.View>
 		)
+	}
+
+	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<LoginModalState> | undefined {
+		return {
+			isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize()
+		}
 	}
 }
 

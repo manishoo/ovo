@@ -3,14 +3,15 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import {Ingredient} from 'src/ts/models/FoodModels'
-import Text from 'common/Text'
+
 import Image from 'common/Image/Image'
+import Input from 'common/Input/Input'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Text from 'common/Text/Text'
+import ImageSource from 'modules/images'
+import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import Input from 'common/Input'
-import {getLocalizedText} from 'common/LocalizedText'
+import { Ingredient } from 'src/ts/models/FoodModels'
 
 const IMAGE_DIMENSIONS = 50
 const CLEAR_DIMENSIONS = 20
@@ -30,8 +31,19 @@ interface IngredientRowState {
 }
 
 export default class IngredientRow extends RX.Component<IngredientRowProps, IngredientRowState> {
+	constructor(props: IngredientRowProps) {
+		super(props)
+
+		this.state = {
+			description: '',
+			name: props.ingredient.name || '',
+			amount: props.ingredient.amount,
+			customUnit: props.ingredient.unit,
+		}
+	}
+
 	render() {
-		const {style, ingredient} = this.props
+		const { style, ingredient } = this.props
 
 		return (
 			<RX.View
@@ -40,7 +52,7 @@ export default class IngredientRow extends RX.Component<IngredientRowProps, Ingr
 				{/*Delete*/}
 				<RX.View style={styles.clearWrapper} onPress={this._onDeletePress}>
 					<RX.Image
-						source={require('src/ts/sharedAssets/Clear.png')}
+						source={ImageSource.Clear}
 						style={styles.clear}
 					/>
 				</RX.View>
@@ -52,16 +64,14 @@ export default class IngredientRow extends RX.Component<IngredientRowProps, Ingr
 								source={ingredient.thumbnail.url}
 								style={styles.thumbnail}
 							/> :
-							<RX.View style={[styles.thumbnail, {backgroundColor: '#eee'}]}/>
+							<RX.View style={[styles.thumbnail, { backgroundColor: '#eee' }]} />
 					}
 				</RX.View>
 
-				{/*Text*/}
-				{/*<Text style={styles.name}>{ingredient.name}</Text>*/}
 				<Input
 					value={this.state.name}
 					defaultValue={ingredient.name}
-					onChange={name => this.setState({name}, this._onChange)}
+					onChange={name => this.setState({ name }, this._onChange)}
 					style={styles.input}
 					placeholder={ingredient.name}
 				/>
@@ -69,9 +79,8 @@ export default class IngredientRow extends RX.Component<IngredientRowProps, Ingr
 				{/*Amount and Unit FIXME!!!!!!*/}
 				<Input
 					value={String(this.state.amount)}
-					onChange={amount => this.setState({amount: Number(amount)}, this._onChange)}
-					style={{width: 35, marginBottom: 0}}
-					// placeholder={getLocalizedText('description')}
+					onChange={amount => this.setState({ amount: Number(amount) }, this._onChange)}
+					style={{ width: 35, marginBottom: 0 }}
 				/>
 
 				{
@@ -79,14 +88,14 @@ export default class IngredientRow extends RX.Component<IngredientRowProps, Ingr
 						<Text translate>{this._getUnit(ingredient)}</Text> :
 						<Input
 							value={this.state.customUnit || ''}
-							style={{width: 50, marginBottom: 0, [theme.styles.marginStart]: theme.styles.spacing}}
-							onChange={value => this.setState({customUnit: value}, this._onChange)}
+							style={{ width: 50, marginBottom: 0, [theme.styles.marginStart]: theme.styles.spacing }}
+							onChange={value => this.setState({ customUnit: value }, this._onChange)}
 						/>
 				}
 
 				<Input
 					value={this.state.description}
-					onChange={description => this.setState({description}, this._onChange)}
+					onChange={description => this.setState({ description }, this._onChange)}
 					style={styles.input}
 					placeholder={getLocalizedText('description')}
 				/>
@@ -113,17 +122,6 @@ export default class IngredientRow extends RX.Component<IngredientRowProps, Ingr
 	}
 
 	private _onDeletePress = () => this.props.onDelete(this.props.ingredient.key)
-
-	constructor(props: IngredientRowProps) {
-		super(props)
-
-		this.state = {
-			description: '',
-			name: props.ingredient.name || '',
-			amount: props.ingredient.amount,
-			customUnit: props.ingredient.unit,
-		}
-	}
 }
 
 const styles = {

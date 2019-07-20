@@ -3,17 +3,16 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
+import FlatButton from 'common/FlatButton/FlatButton'
 import Glass from 'common/Glass/Glass'
-import FlatButton from 'common/FlatButton'
-import theme from 'src/ts/app/Theme'
-import {VirtualListView} from 'reactxp-virtuallistview'
-import {Query} from 'react-apollo'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
+import { VirtualListView } from 'reactxp-virtuallistview'
 import client from 'src/ts/app/client'
+import theme from 'src/ts/app/Theme'
 import FoodPreview from './FoodPreview'
-import {getLocalizedText} from 'common/LocalizedText'
 
 interface AddMealItemDialogProps {
 	style?: any,
@@ -38,6 +37,11 @@ export interface SearchResultItem {
 }
 
 export default class AddMealItemDialog extends RX.Component<AddMealItemDialogProps, AddMealItemDialogState> {
+	textInput: any
+	preview: any
+	inputContainerAnimatedHeight: RX.Animated.Value = RX.Animated.createValue(50)
+	opacityAnimatedValue: RX.Animated.Value = RX.Animated.createValue(0)
+
 	constructor(props: AddMealItemDialogProps) {
 		super(props)
 
@@ -46,11 +50,6 @@ export default class AddMealItemDialog extends RX.Component<AddMealItemDialogPro
 			searchResults: [],
 		}
 	}
-
-	textInput: any
-	preview: any
-	inputContainerAnimatedHeight: RX.Animated.Value = RX.Animated.createValue(50)
-	opacityAnimatedValue: RX.Animated.Value = RX.Animated.createValue(0)
 
 	componentDidMount(): void {
 		RX.Animated.timing(this.opacityAnimatedValue, {
@@ -63,7 +62,7 @@ export default class AddMealItemDialog extends RX.Component<AddMealItemDialogPro
 	}
 
 	dismiss = () => {
-		const {onDismiss} = this.props
+		const { onDismiss } = this.props
 
 		RX.Animated.timing(this.opacityAnimatedValue, {
 			toValue: 0,
@@ -131,7 +130,7 @@ export default class AddMealItemDialog extends RX.Component<AddMealItemDialogPro
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View>
@@ -148,7 +147,7 @@ export default class AddMealItemDialog extends RX.Component<AddMealItemDialogPro
 							q: this.state.searchText,
 						}}
 					>
-						{({data, refetch}) => (
+						{({ data, refetch }) => (
 							(
 								<Glass
 									blurType='xlight'
@@ -192,16 +191,16 @@ export default class AddMealItemDialog extends RX.Component<AddMealItemDialogPro
 															onPress={() => {
 																//
 															}}
-															style={{borderWidth: 0, marginTop: 10,}}
-															labelStyle={{color: theme.colors.secondary, fontSize: 16}}
+															style={{ borderWidth: 0, marginTop: 10, }}
+															labelStyle={{ color: theme.colors.secondary, fontSize: 16 }}
 														/>,
 														<FlatButton
 															label={'Create A New Dish'}
 															onPress={() => {
 																//
 															}}
-															style={{borderWidth: 0}}
-															labelStyle={{color: theme.colors.secondary, fontSize: 16}}
+															style={{ borderWidth: 0 }}
+															labelStyle={{ color: theme.colors.secondary, fontSize: 16 }}
 														/>,
 													]
 												}
@@ -210,7 +209,6 @@ export default class AddMealItemDialog extends RX.Component<AddMealItemDialogPro
 													return (
 														<VirtualListView
 															keyboardShouldPersistTaps
-															// keyboardDismissMode={'none'}
 															itemList={data.searchMealItems.map((i: any) => ({
 																...i,
 																height: 40,
@@ -265,7 +263,6 @@ const styles = {
 		borderWidth: 1,
 		paddingHorizontal: 10,
 		justifyContent: 'center',
-		// alignItems: 'center',
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		borderBottomWidth: 0,

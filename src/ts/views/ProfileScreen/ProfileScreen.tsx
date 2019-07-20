@@ -1,26 +1,24 @@
 /*
- * Profile.tsx
+ * ProfileScreen.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import {fullHeight, navigate} from 'src/ts/utilities'
-import Avatar from './components/Avatar'
-import theme from 'src/ts/app/Theme'
+import FilledButton from 'common/FilledButton/FilledButton'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RecipesList from 'common/RecipesList/RecipesList'
-import {Routes} from 'src/ts/navigator/routes'
-import ImageSource from 'modules/images'
-import AppConfig from 'src/ts/app/AppConfig'
-// import Text from 'common/Text'
 import gql from 'graphql-tag'
-import {RecipeFragment} from 'src/ts/models/GraphQLModels'
-import {Query, QueryResult} from 'react-apollo'
-import FilledButton from 'common/FilledButton'
-import {getLocalizedText} from 'common/LocalizedText'
-import {ComponentBase} from 'resub'
+import ImageSource from 'modules/images'
+import { Query, QueryResult } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
+import AppConfig from 'src/ts/app/AppConfig'
+import theme from 'src/ts/app/Theme'
+import { Recipe } from 'src/ts/models/FoodModels'
+import { RecipeFragment } from 'src/ts/models/GraphQLModels'
+import { Routes } from 'src/ts/navigator/routes'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import {Recipe} from 'src/ts/models/FoodModels'
+import { fullHeight, navigate } from 'src/ts/utilities'
+import Avatar from './components/Avatar'
 
 interface ProfileState {
 	height: number,
@@ -32,39 +30,17 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
 		recipes: [],
 		height: fullHeight(),
 	}
+	private recipesListHeight: number | undefined
 
-	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileState> | undefined {
-		return {
-			height: ResponsiveWidthStore.getHeight(),
-		}
-	}
-
-	private renderSettingsIcon = () => {
+	render() {
 		return (
-			<RX.View
-				style={styles.imageContainerStyle}
-				onPress={() => navigate(this.props, Routes.settings)}
-			>
-				<RX.Image
-					source={ImageSource.SettingsIcon}
-					style={styles.imageStyle}
-				/>
-			</RX.View>
-		)
-	}
-
-  render() {
-    return (
 			<Query
-				// variables={{
-				// 	lastId: 'undefined',
-				// }}
 				fetchPolicy={'cache-and-network'}
 				query={PROFILE_RECIPES_QUERY}
 			>
 				{(queryData) => (
 					<RX.ScrollView
-						style={[styles.container, {height: this.state.height}]}
+						style={[styles.container, { height: this.state.height }]}
 						onScroll={this._onScroll(queryData)}
 					>
 						{
@@ -90,10 +66,30 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
 					</RX.ScrollView>
 				)}
 			</Query>
-    )
-  }
+		)
+	}
 
-	private _renderContent = ({data, loading, variables}: QueryResult<any, { lastId?: string }>) => {
+	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileState> | undefined {
+		return {
+			height: ResponsiveWidthStore.getHeight(),
+		}
+	}
+
+	private renderSettingsIcon = () => {
+		return (
+			<RX.View
+				style={styles.imageContainerStyle}
+				onPress={() => navigate(this.props, Routes.settings)}
+			>
+				<RX.Image
+					source={ImageSource.SettingsIcon}
+					style={styles.imageStyle}
+				/>
+			</RX.View>
+		)
+	}
+
+	private _renderContent = ({ data, loading, variables }: QueryResult<any, { lastId?: string }>) => {
 		// FIXME on mobile probably
 		if (!data) return null
 		if (!data.listMyRecipes) return null
@@ -124,8 +120,8 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
 		)
 	}
 
-	private _onScroll = ({data, loading, refetch, error}: QueryResult<any, { lastId?: string }>) => (newScrollValue: number) => {
-		const {height} = this.state
+	private _onScroll = ({ data, loading, refetch, error }: QueryResult<any, { lastId?: string }>) => (newScrollValue: number) => {
+		const { height } = this.state
 
 		if (!this.recipesListHeight) return
 
@@ -154,8 +150,6 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
 				})
 		}
 	}
-
-	private recipesListHeight: number | undefined
 }
 
 export const PROFILE_RECIPES_QUERY = gql`

@@ -43,18 +43,7 @@ if (isProd) {
   app.get('*', require('./web/build/server-bundle').default(assets))
 } else {
   require('@babel/register')
-  // const compiler = require('webpack')(devWebpackConfig)
-  //
-  // app.use(require('webpack-dev-middleware')(compiler, {
-  //   noInfo: false,
-  //   publicPath,
-  //   stats: {
-  //     colors: true
-  //   }
-  // }))
-  //
-  // app.use(require('webpack-hot-middleware')(compiler))
-  app.get('*', require('./src/ts/web/render-dev-app'))
+  app.get('*', require('./src/ts/app/web/render-dev-app'))
 }
 
 app.use((err, req, res, next) => {

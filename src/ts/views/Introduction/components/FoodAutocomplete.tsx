@@ -3,14 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import {Food} from 'src/ts/models/FoodModels'
-import {Query} from 'react-apollo'
 import gql from 'graphql-tag'
-// import {MessageType} from './types'
-import {fullWidth} from 'src/ts/utilities'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
+import { Food } from 'src/ts/models/FoodModels'
+import { fullWidth } from 'src/ts/utilities'
 import SubmitButton from './SubmitButton'
 
 interface FoodAutocompleteProps {
@@ -26,6 +24,8 @@ interface FoodAutocompleteState {
 }
 
 export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompleteState> {
+	input: any
+
 	constructor(props: FoodAutocompleteProps) {
 		super(props)
 
@@ -35,8 +35,6 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 		}
 	}
 
-	input: any
-
 	onChangeText = (text: string) => {
 		this.setState({
 			text,
@@ -44,9 +42,6 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 	}
 
 	onKeyPress = (e: KeyboardEvent) => {
-		// console.log('e.code =======>', e.code)
-		// console.log('e.key =======>', e.key)
-		// console.log('e.key =======>', e.key)
 		//TODO change to a better solution
 		if (e.keyCode === 8) {
 			// delete
@@ -63,7 +58,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 	}
 
 	renderInput = () => {
-		const {text} = this.state
+		const { text } = this.state
 
 		return (
 			<RX.TextInput
@@ -71,8 +66,6 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 				key='textinput'
 				value={text}
 				placeholder='Enter food name'
-				// keyboardType={getKeyboardType(inputType)}
-				// multiline
 				style={styles.textInput}
 				onChangeText={this.onChangeText}
 				// @ts-ignore
@@ -104,12 +97,11 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 		})
 	}
 
-	renderSuggestions = ({data, error, loading}: any) => {
-		const {selectedFoods} = this.state
+	renderSuggestions = ({ data, error, loading }: any) => {
+		const { selectedFoods } = this.state
 		if (error || loading || !data) return null
 
 		const onSuggestionPress = (f: Food) => () => {
-			// e.preventDefault()
 			this.setState(prevState => ({
 				selectedFoods: [...prevState.selectedFoods, f],
 				text: '',
@@ -151,8 +143,8 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 	}
 
 	render() {
-		const {style, onSubmit, skip, onSkip} = this.props
-		const {selectedFoods, text} = this.state
+		const { style, onSubmit, skip, onSkip } = this.props
+		const { selectedFoods, text } = this.state
 
 		return (
 			<RX.View
@@ -204,7 +196,6 @@ const styles = {
 		backgroundColor: '#eee',
 	}),
 	inputContainer: RX.Styles.createViewStyle({
-		// flex: 1,
 		flexDirection: 'row',
 		paddingBottom: 10,
 		borderColor: '#eee',
@@ -216,15 +207,11 @@ const styles = {
 		borderTopRightRadius: 15,
 		paddingLeft: 10,
 		paddingTop: 10,
-		// backgroundColor: theme.colors.white,
-		// width: fullWidth(),
 		minHeight: 50,
 	}),
 	suggestionsContainer: RX.Styles.createViewStyle({
-		// flex: 1,
 		flexDirection: 'row',
 		backgroundColor: 'transparent',
-		// width: fullWidth(),
 		maxHeight: 50,
 		marginBottom: 5,
 		paddingLeft: 5,
@@ -238,13 +225,11 @@ const styles = {
 		borderColor: '#eee',
 	}),
 	addedFood: RX.Styles.createViewStyle({
-		// backgroundColor: theme.colors.yellow,
 		justifyContent: 'center',
 		borderColor: '#eee',
 		borderWidth: 1,
 		alignItems: 'center',
 		height: 45,
-		// padding: 5,
 		borderRadius: 22.5,
 		marginRight: 8,
 		paddingRight: 10,
@@ -253,13 +238,9 @@ const styles = {
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		minWidth: 100,
-		// maxHeight: 60,
 		height: 50,
-		// borderBottomWidth: 1,
 		fontSize: 16,
-		// borderColor: 'transparent',
 		marginRight: 50,
-		// borderColor: '#eee',
 		borderBottomWidth: 0,
 	}),
 	submitButton: RX.Styles.createViewStyle({

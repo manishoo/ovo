@@ -3,17 +3,19 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import {VirtualListView} from 'reactxp-virtuallistview'
-import {ListViewProps, ListViewState} from './types'
 import moment from 'moment-timezone'
+import RX from 'reactxp'
+import { VirtualListView } from 'reactxp-virtuallistview'
 import theme from 'src/ts/app/Theme'
-import {EVENT_CONTAINER_HEIGHT} from '../Event'
+import { EVENT_CONTAINER_HEIGHT } from '../Event'
+import { ListViewProps, ListViewState } from './types'
 
 const _itemTemplate = 'event'
 const _itemHeight = EVENT_CONTAINER_HEIGHT
 
 export default class ListView extends RX.Component<ListViewProps, ListViewState> {
+	private _listView: any
+
 	constructor(props: ListViewProps) {
 		super(props)
 
@@ -38,6 +40,10 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 				renderItem={this._renderItem}
 			/>
 		)
+	}
+
+	componentDidMount(): void {
+		setTimeout(() => this._scrollToCurrentMeal(true), 500)
 	}
 
 	private _renderItem = (details: any) => {
@@ -85,17 +91,11 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 		// /* activeDateTime,centerEvent*/
 	}
 
-
-	componentDidMount(): void {
-		setTimeout(() => this._scrollToCurrentMeal(true), 500)
-	}
-
 	private _scrollToCurrentMeal = (animated: boolean = false) => {
 		const closestMeal = this.props.findClosestMeal()
 		if (!closestMeal) return
 
 		setTimeout(() => {
-			// this._listView.scrollToIndex({index: closestMeal.nextMealIndex, animated, viewPosition: 0.5})
 			if (this._listView) {
 				this._listView.scrollToTop(true, 0)
 			}
@@ -110,18 +110,17 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 		if (closestMeal.nextMeal === undefined) return null
 
 		if (closestMeal.nextMeal.id === this.state.centerEvent.id) return null
-		// const activeMealDay = moment(this.state.activeMeal.datetime).format('YYYY-MM-DD')
 
 		if (moment(this.state.centerEvent.datetime).isAfter(moment())) {
 			// current day was in the past
 			return (
-				<RX.View style={[styles.goToToday, {top: 32}]} onPress={() => this._scrollToCurrentMeal(true)}>
+				<RX.View style={[styles.goToToday, { top: 32 }]} onPress={() => this._scrollToCurrentMeal(true)}>
 					<RX.Image
 						source={require('../assets/Back.png')}
 						style={{
 							width: 25,
 							height: 25,
-							transform: [{rotate: '90deg'}],
+							transform: [{ rotate: '90deg' }],
 							top: -2
 						}}
 					/>
@@ -130,13 +129,13 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 		} else {
 			// current day is in the future
 			return (
-				<RX.View style={[styles.goToToday, {bottom: 100}]} onPress={() => this._scrollToCurrentMeal(true)}>
+				<RX.View style={[styles.goToToday, { bottom: 100 }]} onPress={() => this._scrollToCurrentMeal(true)}>
 					<RX.Image
 						source={require('../assets/Back.png')}
 						style={{
 							width: 25,
 							height: 25,
-							transform: [{rotate: '-90deg'}],
+							transform: [{ rotate: '-90deg' }],
 							bottom: -2
 						}}
 					/>
@@ -144,8 +143,6 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 			)
 		}
 	}
-
-	private _listView: any
 }
 
 const styles = {
@@ -153,8 +150,6 @@ const styles = {
 		position: 'absolute',
 		width: 50,
 		height: 50,
-		// padding: 10,
-		// backgroundColor: '#fff',
 		borderRadius: 25,
 		borderWidth: 2,
 		borderColor: theme.colors.goToTodayBorder,

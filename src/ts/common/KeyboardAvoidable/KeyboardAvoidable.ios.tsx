@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { KeyboardAvoidingView } from 'react-native'
 import RX from 'reactxp'
-import {KeyboardAvoidingView} from 'react-native'
 
 interface KeyboardAvoidableProps {
 	enabled?: boolean,
@@ -12,7 +12,7 @@ interface KeyboardAvoidableProps {
 
 export default class KeyboardAvoidable extends RX.Component<KeyboardAvoidableProps> {
 	render() {
-		const {children, enabled, ...props} = this.props
+		const { children, enabled, ...props } = this.props
 
 		return (
 			<KeyboardAvoidingView

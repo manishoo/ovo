@@ -1,27 +1,27 @@
 /*
- * _FoodDialog.tsx
+ * FoodDialog.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
-import {VirtualListView, VirtualListViewItemInfo} from 'reactxp-virtuallistview'
-import {Query} from 'react-apollo'
-import gql from 'graphql-tag'
-import client from 'src/ts/app/client'
-import FoodPreview from './components/FoodPreview'
-import {getLocalizedText} from 'common/LocalizedText'
-import {Food, FoodTypes, MealItem, Weight} from 'src/ts/models/FoodModels'
-import {fullHeight} from 'src/ts/utilities'
-import SelectDialog from 'common/Select/components/SelectDialog'
-import Text from 'common/Text'
+
+import FlatButton from 'common/FlatButton/FlatButton'
 import Image from 'common/Image/Image'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import SelectDialog from 'common/Select/components/SelectDialog'
+import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
-import {ComponentBase} from 'resub'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
+import { VirtualListView, VirtualListViewItemInfo } from 'reactxp-virtuallistview'
+import { ComponentBase } from 'resub'
+import client from 'src/ts/app/client'
+import theme from 'src/ts/app/Theme'
+import { Food, FoodTypes, MealItem, Weight } from 'src/ts/models/FoodModels'
+import { MealItemFragment } from 'src/ts/models/GraphQLModels'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import {MealItemFragment} from 'src/ts/models/GraphQLModels'
-import FlatButton from 'common/FlatButton'
+import { fullHeight } from 'src/ts/utilities'
+import FoodPreview from './components/FoodPreview'
 
 const WINDOW_MAX_WIDTH = 500
 const INNER_CONTAINER_HEIGHT = 500
@@ -58,6 +58,14 @@ export function showFoodModal(props: FoodDialogProps) {
 }
 
 export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.CommonProps, FoodDialogState> {
+	textInput: any
+	preview: any
+	inputContainerAnimatedHeight = RX.Animated.createValue(50)
+	_opacityAnimatedValue = RX.Animated.createValue(fullHeight())
+	_containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateY: this._opacityAnimatedValue }],
+	})
+
 	constructor(props: FoodDialogProps) {
 		super(props)
 
@@ -69,15 +77,8 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 		}
 	}
 
-	protected _buildState(props: FoodDialogProps, initialBuild: boolean): Partial<FoodDialogState> | undefined {
-		return {
-			width: ResponsiveWidthStore.getWidth(),
-			height: ResponsiveWidthStore.getHeight(),
-		}
-	}
-
   render() {
-		const {style} = this.props
+		const { style } = this.props
 
     return (
 			<RX.View>
@@ -98,10 +99,9 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 							q: this.state.searchText,
 						}}
 					>
-						{({data}) => (
+						{({ data }) => (
 							(
 								<RX.View
-									// blurType='xlight'
 									style={[
 										styles.container,
 										{
@@ -111,7 +111,7 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 										style,
 									]}
 								>
-									<RX.View style={[styles.innerContainer, {width: this.state.width}]}>
+									<RX.View style={[styles.innerContainer, { width: this.state.width }]}>
 										<RX.Animated.View
 											style={[
 												styles.inputContainer,
@@ -161,7 +161,7 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 													if (data && data.searchMealItems && data.searchMealItems.length === 0) {
 														return (
 															<FlatButton
-																label={getLocalizedText('createX', {name: this.state.searchText})}
+																label={getLocalizedText('createX', { name: this.state.searchText })}
 																onPress={() => {
 																	const key = String(Math.random())
 																	this.props.onSubmit({
@@ -176,8 +176,7 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 																	}, 1)
 																	this.dismiss()
 																}}
-																style={{borderWidth: 0, marginTop: 10,}}
-																// labelStyle={{color: theme.colors.secondary, fontSize: 16}}
+																style={{ borderWidth: 0, marginTop: 10, }}
 															/>
 														)
 													}
@@ -189,7 +188,6 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 																	marginTop: theme.styles.spacing,
 																}}
 																keyboardShouldPersistTaps
-																// keyboardDismissMode={'none'}
 																itemList={data.searchMealItems.map((i: any) => ({
 																	...i,
 																	height: 40,
@@ -231,11 +229,62 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 	componentDidMount(): void {
 		RX.Animated.timing(this._opacityAnimatedValue, {
 			toValue: 0,
-			// duration: 200,
-			// easing: RX.Animated.Easing.Out()
 		}).start(() => {
 			this.textInput.focus()
 		})
+	}
+
+	renderSelectDialog = () => {
+		if (!this.state.selectedItem) return null
+		if (!this.state.selectDialogVisible) return null
+
+		return (
+			<SelectDialog
+				options={[
+					{ value: 'g', text: 'gram' },
+					...this.state.weights.map(w => ({
+						text: w.description,
+						value: w.id,
+					})),
+				]}
+				onOptionSelect={option => this.setState({ selectedWeight: this.state.weights.find(p => p.id === option.value) })}
+				onDismiss={() => this.setState({ selectDialogVisible: false })}
+			/>
+		)
+	}
+
+	_renderMealItem = (item: VirtualListViewItemInfo & MealItem) => {
+		return (
+			<RX.View
+				style={styles.searchResultItemContainer}
+				onPress={this._onResultPress(item)}
+			>
+				<Text>
+					{item.title}
+				</Text>
+				<Text style={{ color: '#e4e4e4' }}>
+					{item.subtitle}
+				</Text>
+			</RX.View>
+		)
+	}
+
+	dismiss = () => {
+		const { onDismiss } = this.props
+
+		RX.Animated.timing(this._opacityAnimatedValue, {
+			toValue: this.state.height || fullHeight(),
+		}).start(() => {
+			RX.Modal.dismiss(MODAL_ID)
+			onDismiss()
+		})
+	}
+
+	protected _buildState(props: FoodDialogProps, initialBuild: boolean): Partial<FoodDialogState> | undefined {
+		return {
+			width: ResponsiveWidthStore.getWidth(),
+			height: ResponsiveWidthStore.getHeight(),
+		}
 	}
 
 	private _renderPreview = (item: MealItem) => {
@@ -256,61 +305,12 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 						inputRef={(ref: any) => this.preview = ref}
 						onDismiss={this._cancelSelection}
 						selectedWeight={this.state.selectedWeight}
-						onSelectPress={(weights) => this.setState({selectDialogVisible: true, weights})}
+						onSelectPress={(weights) => this.setState({ selectDialogVisible: true, weights })}
 						onSubmit={this._onSubmit}
 						height={INNER_CONTAINER_HEIGHT}
 					/>
 				)
 		}
-	}
-
-	renderSelectDialog = () => {
-		if (!this.state.selectedItem) return null
-		if (!this.state.selectDialogVisible) return null
-
-		return (
-			<SelectDialog
-				// options={this.state.selectedItem.weights.map(weight => ({value: weight.id, text: weight.description || ''}))}
-				options={[
-					{value: 'g', text: 'gram'},
-					...this.state.weights.map(w => ({
-						text: w.description,
-						value: w.id,
-					})),
-				]}
-				onOptionSelect={option => this.setState({selectedWeight: this.state.weights.find(p => p.id === option.value)})}
-				onDismiss={() => this.setState({selectDialogVisible: false})}
-			/>
-		)
-	}
-
-	_renderMealItem = (item: VirtualListViewItemInfo & MealItem) => {
-		return (
-			<RX.View
-				style={styles.searchResultItemContainer}
-				onPress={this._onResultPress(item)}
-			>
-				<Text>
-					{item.title}
-				</Text>
-				<Text style={{color: '#e4e4e4'}}>
-					{item.subtitle}
-				</Text>
-			</RX.View>
-		)
-	}
-
-	dismiss = () => {
-		const {onDismiss} = this.props
-
-		RX.Animated.timing(this._opacityAnimatedValue, {
-			toValue: this.state.height || fullHeight(),
-			// duration: 200,
-			// easing: RX.Animated.Easing.Out()
-		}).start(() => {
-			RX.Modal.dismiss(MODAL_ID)
-			onDismiss()
-		})
 	}
 
 	private _onTextChange = (value: string) => {
@@ -360,14 +360,6 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 		}, amount, weight)
 		return this.dismiss()
 	}
-
-	textInput: any
-	preview: any
-	inputContainerAnimatedHeight = RX.Animated.createValue(50)
-	_opacityAnimatedValue = RX.Animated.createValue(fullHeight())
-	_containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{translateY: this._opacityAnimatedValue}],
-	})
 }
 
 const styles = {
@@ -384,12 +376,9 @@ const styles = {
 		alignSelf: 'stretch',
 		borderRadius: 10,
 		backgroundColor: theme.colors.foodDialogSearchBG,
-		// borderColor: '#f5f5f5',
-		// borderWidth: 1,
 		paddingHorizontal: 10,
 		marginTop: 60,
 		justifyContent: 'center',
-		// alignItems: 'center',
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		borderBottomWidth: 0,

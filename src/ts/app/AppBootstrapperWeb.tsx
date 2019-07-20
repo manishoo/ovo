@@ -5,12 +5,21 @@
 
 // Do shimming before anything else.
 import * as ShimHelpers from '../utilities/ShimHelpers'
-
 ShimHelpers.shimEnvironment(__DEV__, false)
 
-// Initialize AppConfig.
+import { ApolloProvider } from 'react-apollo'
+import RX from 'reactxp'
+
+import client from 'src/ts/app/client'
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import RootView from 'src/ts/views/RootView/RootView'
+import * as SyncTasks from 'synctasks'
+import AppBootstrapper from './AppBootstrapper'
 import AppConfig from './AppConfig'
 
+const { createBrowserHistory } = require('history')
+
+// Initialize AppConfig.
 let appVersion
 
 if (typeof document !== 'undefined') {
@@ -23,15 +32,6 @@ AppConfig.initialize({
 	appVersion
 })
 
-import * as SyncTasks from 'synctasks'
-
-import RX from 'reactxp'
-import AppBootstrapper from './AppBootstrapper'
-import {ApolloProvider} from 'react-apollo'
-import client from 'src/ts/app/client'
-import RootView from 'src/ts/views/RootView/RootView'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-const { createBrowserHistory } = require('history')
 
 class AppBootstrapperWeb extends AppBootstrapper {
 	protected _getInitialUrl(): SyncTasks.Promise<string | undefined> {
@@ -50,7 +50,7 @@ class AppBootstrapperWeb extends AppBootstrapper {
 	}
 
 	private _onLayoutRootView = (e: RX.Types.ViewOnLayoutEvent) => {
-		const {width, height} = e
+		const { width, height } = e
 		ResponsiveWidthStore.putWindowSize(width, height)
 	}
 }

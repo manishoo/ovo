@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { LinearGradientProps } from 'common/LinearGradient/types'
 import RX from 'reactxp'
-import {LinearGradientProps} from 'common/LinearGradient/types'
 
 export default class LinearGradient extends RX.Component<LinearGradientProps> {
 	render() {
-		const {style, colors} = this.props
+		const { style, colors } = this.props
 
 		return (
 			<RX.View

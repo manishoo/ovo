@@ -3,16 +3,15 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+import Image from 'common/Image/Image'
+import RecipesList from 'common/RecipesList/RecipesList'
+import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import RecipesList from 'common/RecipesList/RecipesList'
-import Text from 'common/Text'
-import gql from 'graphql-tag'
-import {RecipeFragment} from 'src/ts/models/GraphQLModels'
-import {Query} from 'react-apollo'
-import {User} from 'src/ts/models/FoodModels'
-import Image from 'common/Image/Image'
+import { User } from 'src/ts/models/FoodModels'
+import { RecipeFragment } from 'src/ts/models/GraphQLModels'
 
 interface ProfileProps {
 	style?: any,
@@ -21,7 +20,7 @@ interface ProfileProps {
 
 export default class ProfileScreen extends RX.Component<ProfileProps> {
   render() {
-		const {style, user} = this.props
+		const { style, user } = this.props
 
     return (
 			<RX.ScrollView
@@ -50,7 +49,7 @@ export default class ProfileScreen extends RX.Component<ProfileProps> {
 					  }
 					`}
 					>
-						{({data, loading}) => {
+						{({ data, loading }) => {
 							if (loading) return <RX.Text>Loading</RX.Text>
 							if (!data) return null
 							if (!data.listRecipes) return null
@@ -60,7 +59,6 @@ export default class ProfileScreen extends RX.Component<ProfileProps> {
 									recipes={data.listRecipes.recipes}
 								/>
 							)
-							// return data.listMyRecipes.recipes.map((recipe: Recipe) => this._renderRecipeCell(recipe))
 						}}
 					</Query>
 				</RX.View>

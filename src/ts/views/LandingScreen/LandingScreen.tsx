@@ -3,21 +3,21 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
-import {navigate} from 'src/ts/utilities'
-import {Routes} from 'src/ts/navigator/routes'
-import Image from 'common/Image/Image'
-import ImageSource from 'modules/images'
-import HoverButton from 'src/ts/controls/HoverButton'
-import Text from 'common/Text'
-import Introduction from 'src/ts/views/Introduction/Introduction'
-import {ComponentBase} from 'resub'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import GoDownIndicator from 'src/ts/views/LandingScreen/components/GoDownIndicator'
-import {getLocalizedText} from 'common/LocalizedText'
 import Assistant from 'common/Assistant/Assistant'
-import FilledButton from 'common/FilledButton'
+import FilledButton from 'common/FilledButton/FilledButton'
+import Image from 'common/Image/Image'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Text from 'common/Text/Text'
+import ImageSource from 'modules/images'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
+import theme from 'src/ts/app/Theme'
+import HoverButton from 'src/ts/common/HoverButton/HoverButton'
+import { Routes } from 'src/ts/navigator/routes'
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { navigate } from 'src/ts/utilities'
+import Introduction from 'src/ts/views/Introduction/Introduction'
+import GoDownIndicator from 'src/ts/views/LandingScreen/components/GoDownIndicator'
 
 const HEADER_MAX_WIDTH = 950
 const HEADER_HEIGHT = 80
@@ -32,15 +32,8 @@ interface AssistantScreenState {
 }
 
 export default class LandingScreen extends ComponentBase<AssistantScreenProps, AssistantScreenState> {
-	protected _buildState(props: AssistantScreenProps, initialBuild: boolean): Partial<AssistantScreenState> | undefined {
-		return {
-			height: ResponsiveWidthStore.getHeight(),
-			width: ResponsiveWidthStore.getWidth(),
-		}
-	}
-
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		if (this.state.width < 950) {
 			return (
@@ -58,10 +51,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 		}
 
 		return (
-			<RX.View
-				style={[styles.container, style]}
-			>
-
+			<RX.View style={[styles.container, style]}>
 				<RX.View
 					style={[
 						{
@@ -81,7 +71,6 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 				{this._renderSection(ImageSource.SC1, getLocalizedText('landing_1_t'), getLocalizedText('landing_1_s'))}
 				{this._renderSection(ImageSource.SC2, getLocalizedText('landing_2_t'), getLocalizedText('landing_2_s'), {
 					width: 400,
-					// marginRight: 58
 				})}
 				{this._renderSection(ImageSource.SC3, getLocalizedText('landing_3_t'), getLocalizedText('landing_3_s'))}
 				{this._renderSection(ImageSource.SC4, getLocalizedText('landing_4_t'), getLocalizedText('landing_4_s'))}
@@ -91,6 +80,13 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 				{this._renderHeader()}
 			</RX.View>
 		)
+	}
+
+	protected _buildState(props: AssistantScreenProps, initialBuild: boolean): Partial<AssistantScreenState> | undefined {
+		return {
+			height: ResponsiveWidthStore.getHeight(),
+			width: ResponsiveWidthStore.getWidth(),
+		}
 	}
 
 	private _renderHeader = () => {
@@ -121,13 +117,12 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 						</RX.View>
 					)}
         />}
-				{/*<RX.Text onPress1={() => navigate(this.props, Routes.register)}>Join Ovocado</RX.Text>*/}
 			</RX.View>
 		)
 	}
 
 	private _renderPhone = () => {
-		let {height} = this.state
+		let { height } = this.state
 
 		if (height < 900) {
 			height = 900
@@ -169,7 +164,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 	}
 
 	private _renderSection = (image: any, title: string, subtitle: string, imageStyle?: any) => {
-		const {height, width} = this.state
+		const { height, width } = this.state
 
 		let sectionWidth = width
 		if (width >= 950) {
@@ -177,18 +172,18 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 		}
 
 		return (
-			<RX.View style={[styles.sectionContainer, {minHeight: height, width: sectionWidth}]}>
+			<RX.View style={[styles.sectionContainer, { minHeight: height, width: sectionWidth }]}>
 				<RX.View>
 					<Image
 						source={image}
 						style={[styles.sectionImage, imageStyle]}
 					/>
 				</RX.View>
-				<RX.View style={{flexDirection: 'row', padding: theme.styles.spacing}}>
+				<RX.View style={{ flexDirection: 'row', padding: theme.styles.spacing }}>
 					<RX.View>
 						<RX.View style={styles.circle} />
 					</RX.View>
-					<RX.View style={{maxWidth: 500}}>
+					<RX.View style={{ maxWidth: 500 }}>
 						<Text style={styles.sectionTitle}>{title}</Text>
 						<Text style={styles.sectionSubtitle}>{subtitle}</Text>
 					</RX.View>
@@ -206,7 +201,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 			<FilledButton
 				label={getLocalizedText('LandingStartFree')}
 				fontSize={24}
-				style={{paddingRight: theme.styles.spacingLarge * 2, paddingLeft: theme.styles.spacingLarge * 2}}
+				style={{ paddingRight: theme.styles.spacingLarge * 2, paddingLeft: theme.styles.spacingLarge * 2 }}
 				onPress={() => {
 				}}
 			/>
@@ -223,7 +218,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 				}}
 				resizeMode={'cover'}
 			/>,
-			<RX.View style={[styles.footerContainer, {width: this.state.width}]}>
+			<RX.View style={[styles.footerContainer, { width: this.state.width }]}>
 				<RX.View
 					style={{
 						flexDirection: 'row',
@@ -232,7 +227,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 						marginLeft: theme.styles.spacing,
 					}}
 				>
-					<RX.View style={{[theme.styles.marginEnd]: theme.styles.spacing * 2}}>
+					<RX.View style={{ [theme.styles.marginEnd]: theme.styles.spacing * 2 }}>
 						<Text translate style={styles.footerTitle}>LandingFooterCentralOffice</Text>
 						<Text translate style={styles.footerLink}>LandingFooterAboutCaloria</Text>
 						<Text translate style={styles.footerLink}>LandingFooterContactUs</Text>
@@ -274,7 +269,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 									source={ImageSource.FaceBookIcon}
 									style={[
 										styles.socialMediaIcon,
-										{opacity: isHovering ? 0.8 : 1,}
+										{ opacity: isHovering ? 0.8 : 1, }
 									]}
 								/>
 							)}
@@ -285,7 +280,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 									source={ImageSource.YoutubeIcon}
 									style={[
 										styles.socialMediaIcon,
-										{opacity: isHovering ? 0.8 : 1,}
+										{ opacity: isHovering ? 0.8 : 1, }
 									]}
 								/>
 							)}
@@ -296,7 +291,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 									source={ImageSource.TwitterIcon}
 									style={[
 										styles.socialMediaIcon,
-										{opacity: isHovering ? 0.8 : 1,}
+										{ opacity: isHovering ? 0.8 : 1, }
 									]}
 								/>
 							)}
@@ -307,7 +302,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 									source={ImageSource.PinterestIcon}
 									style={[
 										styles.socialMediaIcon,
-										{opacity: isHovering ? 0.8 : 1,}
+										{ opacity: isHovering ? 0.8 : 1, }
 									]}
 								/>
 							)}
@@ -318,7 +313,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 									source={ImageSource.InstagramIcon}
 									style={[
 										styles.socialMediaIcon,
-										{opacity: isHovering ? 0.8 : 1,}
+										{ opacity: isHovering ? 0.8 : 1, }
 									]}
 								/>
 							)}
@@ -329,7 +324,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 									source={ImageSource.TelegramIcon}
 									style={[
 										styles.socialMediaIcon,
-										{opacity: isHovering ? 0.8 : 1,}
+										{ opacity: isHovering ? 0.8 : 1, }
 									]}
 								/>
 							)}

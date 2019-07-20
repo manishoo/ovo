@@ -58,27 +58,16 @@ export interface NutritionalData {
 	cholesterol?: number
 }
 
-// export interface FoodVariety { //DEPRECATED
-// 	id?: string
-// 	name: string
-// 	description?: string
-// 	// nutrients?: NutritionalData
-// 	// weights?: Weight[]
-// }
-
 export interface Food {
 	id: string
 	name: string
 	description?: string
 	fullDescription?: string
-	foodGroup: {name: string, id: string}[]
+	foodGroup: { name: string, id: string }[]
 	image?: Image
 	thumbnail?: Image
 	weights?: Weight[]
 	nutrients?: NutritionalData
-
-	// nutrients?: Nutrient[]
-	// varieties: FoodVariety[]
 }
 
 export interface WeightUnit {
@@ -152,13 +141,6 @@ export interface MealItem {
 
 
 export interface Meal {
-	// id: string
-	// name: string
-	// availableTime?: number
-	// cook: boolean
-	// foods: FoodUnit[]
-	// recipes: RecipeUnit[]
-
 	name: string
 	time: string
 	datetime: string
@@ -178,18 +160,13 @@ export interface Recipe {
 	instructionsRaw: string
 	instructions: Instruction[]
 	yield: number
-	// author?: Ref<User>
 	notes?: string[]
 	description?: string
 	courses?: string[]
 	cuisine?: string
 	calories?: number
-	// timing?: RecipeTiming
-	// origin?: RecipeOrigin
-	// tags?: Tag[]
 	coverImage?: Image
 	images?: Image[]
-	// video?: Video
 	dataVersion?: number
 	additionalData?: any
 	slug: string
@@ -216,10 +193,7 @@ export interface MealPlan {
 }
 
 export interface Ingredient {
-	// id?: string
 	key: any
-	// unitId?: string
-	// weight?: Weight
 	name?: string
 	unit?: string
 	amount: number
@@ -241,7 +215,6 @@ export interface IngredientFood {
 	name?: string
 	image?: Image
 	srcDb?: string
-	// substituteFoods?: Food[]
 }
 
 export interface Image {
@@ -249,7 +222,6 @@ export interface Image {
 	height?: number
 	source?: string
 	authorName?: string
-	// authorId?: Ref<User>
 	url: string
 }
 

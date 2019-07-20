@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import ImageSource from 'modules/images'
-import theme from 'src/ts/app/Theme'
 import Image from 'common/Image/Image'
+import ImageSource from 'modules/images'
+import RX from 'reactxp'
+import theme from 'src/ts/app/Theme'
 
 function getRandomFromArray(array: any[]): any {
 	return array[Math.floor(Math.random() * array.length)]
@@ -33,9 +33,15 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
 		mouthBorderBottom: 2,
 		mouthOpen: true
 	}
+	private _glowScaleAnimationValue = RX.Animated.createValue(0.8)
+	private _glowAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [
+			{ scale: this._glowScaleAnimationValue }
+		]
+	})
 
 	render() {
-		const {style, size} = this.props
+		const { style, size } = this.props
 
 		return (
 			<RX.View
@@ -70,8 +76,6 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
 	componentDidMount(): void {
 		this._blink()
 		this._glow(this._getGlowTime())
-		// setTimeout(this._blink, this._getBlinkTime())
-		// setTimeout(this._glow, this._getGlowTime())
 	}
 
 	private _renderExtra = () => {
@@ -129,91 +133,14 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
 	}
 
 	private _blink = () => {
-		this.setState({eyesClosed: true}, () => {
+		this.setState({ eyesClosed: true }, () => {
 			setTimeout(() => {
-				this.setState({eyesClosed: false}, () => {
+				this.setState({ eyesClosed: false }, () => {
 					setTimeout(this._blink, this._getBlinkTime())
 				})
 			}, 25)
 		})
 	}
-
-	// private _renderMouth = () => {
-	// 	const { size } = this.props
-	//
-	// 	const width = size / 5
-	//
-	// 	return [
-	// 		<RX.Animated.View
-	// 			style={[
-	// 				{
-	// 					width,
-	// 					height: width / 2,
-	// 					borderTopLeftRadius: width,
-	// 					borderTopRightRadius: width,
-	// 					borderBottomLeftRadius: width * 3.5,
-	// 					borderBottomRightRadius: width * 3.5,
-	// 					borderColor: '#4a4a4a',
-	// 					borderWidth: 2,
-	// 					position: 'absolute',
-	// 					top: size * 1.15,
-	// 					borderTopWidth: 0,
-	// 					borderBottomWidth: this.state.mouthBorderBottom,
-	// 					borderRightWidth: 2,
-	// 					borderLeftWidth: 2,
-	// 					alignItems: 'center',
-	// 				},
-	//
-	// 			]}
-	// 		/>,
-	// 		this.state.mouthOpen && <RX.View
-	// 			style={{
-	// 				width: width / 2,
-	// 				height: width / 5,
-	// 				borderRadius: width,
-	// 				backgroundColor: '#FF8A31',
-	// 				position: 'absolute',
-	// 				top: size * 1.19,
-	// 			}}
-	// 		/>
-	// 	]
-	// }
-	//
-	// private _getMouthOpenBorderBottomValue = () => {
-	// 	const { size } = this.props
-	//
-	// 	return size / 9
-	// }
-	//
-	// private _getMouthClosedBorderBottomValue = () => {
-	// 	return 2
-	// }
-	//
-	// private _toggleMouthOpen = (open: boolean) => async () => {
-	// 	if (open) {
-	// 		this.setState({mouthOpen: true})
-	// 		for (let i = 1; i < new Array(this._getMouthOpenBorderBottomValue()).length; i++) {
-	// 			await new Promise(res => {
-	// 				this.setState({
-	// 					mouthBorderBottom: i
-	// 				}, () => {
-	// 					setTimeout(res, 15)
-	// 				})
-	// 			})
-	// 		}
-	// 	} else {
-	// 		this.setState({mouthOpen: false})
-	// 		for (let i = this._getMouthOpenBorderBottomValue(); i > this._getMouthClosedBorderBottomValue(); i--) {
-	// 			await new Promise(res => {
-	// 				this.setState({
-	// 					mouthBorderBottom: i
-	// 				}, () => {
-	// 					setTimeout(res, 15)
-	// 				})
-	// 			})
-	// 		}
-	// 	}
-	// }
 
 	private _renderEyeLids = () => {
 		if (!this.state.eyesClosed) return null
@@ -221,19 +148,12 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
 		const eyeLidSize = (this.props.size || 65) / 3
 
 		return (
-			<RX.View style={[styles.eyeContainer, {width: this.props.size}]}>
-				<RX.View style={[styles.eyeLid, {width: eyeLidSize, height: eyeLidSize * 1.2}]} />
-				<RX.View style={[styles.eyeLid, {width: eyeLidSize, height: eyeLidSize * 1.2}]} />
+			<RX.View style={[styles.eyeContainer, { width: this.props.size }]}>
+				<RX.View style={[styles.eyeLid, { width: eyeLidSize, height: eyeLidSize * 1.2 }]} />
+				<RX.View style={[styles.eyeLid, { width: eyeLidSize, height: eyeLidSize * 1.2 }]} />
 			</RX.View>
 		)
 	}
-
-	private _glowScaleAnimationValue = RX.Animated.createValue(0.8)
-	private _glowAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [
-			{scale: this._glowScaleAnimationValue}
-		]
-	})
 }
 
 const styles = {

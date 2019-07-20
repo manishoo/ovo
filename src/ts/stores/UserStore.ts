@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import gql from 'graphql-tag'
 import RX from 'reactxp'
-import {StoreBase, AutoSubscribeStore, autoSubscribe} from 'resub'
-import {IPersistableStore} from 'resub-persist'
-import {User} from 'src/ts/models/FoodModels'
+import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
+import { IPersistableStore } from 'resub-persist'
+import { User } from 'src/ts/models/FoodModels'
 import * as SyncTasks from 'synctasks'
 import client from '../app/client'
-import gql from 'graphql-tag'
 
 const STORAGE_KEYS = {
 	user: 'user',
@@ -79,14 +79,12 @@ class UserStore extends StoreBase implements IPersistableStore {
 				}
 		 	`
     })
-		.then(({data: {me}}) => {
-			console.log('ME SUCCESS', me)
-			// me.path = me.path.reverse()
+		.then(({ data: { me } }) => {
 			this.user = me
 			RX.Storage.setItem(STORAGE_KEYS.user, JSON.stringify(this.user)) // FIXME are you sure?
 			this.trigger()
 		})
-	}
+  }
 
 	setUser(user: User) {
 		RX.Storage.setItem(STORAGE_KEYS.user, JSON.stringify(user))

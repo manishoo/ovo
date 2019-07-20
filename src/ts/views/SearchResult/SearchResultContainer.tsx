@@ -1,12 +1,11 @@
 /*
- * SearchResultContainer.web.tsx
+ * SearchResultContainer.tsx
  * Copyright: Ouranos Studio 2019
  */
 
 import RX from 'reactxp'
-// import qs from 'query-string'
-import SearchResult from './SearchResult'
 import AppConfig from 'src/ts/app/AppConfig'
+import SearchResult from './SearchResult'
 
 export interface SearchResultParameters {
 	q: string

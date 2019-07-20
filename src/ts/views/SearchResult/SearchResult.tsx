@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import {SearchResultParameters} from './SearchResultContainer'
-import {Query} from 'react-apollo'
-import gql from 'graphql-tag'
-import {RecipeFragment} from 'src/ts/models/GraphQLModels'
 import RecipesList from 'common/RecipesList/RecipesList'
+import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import Text from 'common/Text'
+import { RecipeFragment } from 'src/ts/models/GraphQLModels'
+import { SearchResultParameters } from './SearchResultContainer'
 
 interface SearchResultProps {
 	parameters: SearchResultParameters,
@@ -32,7 +32,7 @@ export default class SearchResult extends RX.Component<SearchResultProps> {
 					}
 				`}
 			>
-				{({data}) => {
+				{({ data }) => {
 					if (data && data.searchRecipes) {
 						return (
 							<RX.View style={styles.container}>

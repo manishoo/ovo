@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import {navigate, withNavigation} from 'src/ts/utilities'
-import {Routes} from 'src/ts/navigator/routes'
-import Text from 'common/Text'
+import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
+import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
+import { Routes } from 'src/ts/navigator/routes'
+import { navigate, withNavigation } from 'src/ts/utilities'
 
 interface AddRecipeCellProps {
 	wrapperStyle?: any,

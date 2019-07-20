@@ -1,18 +1,18 @@
 /*
- * RecipeCell.tsx
+ * RecipeCard.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import {Recipe} from 'src/ts/models/FoodModels'
-import Text from 'common/Text'
-import {navigate, withNavigation} from 'src/ts/utilities'
-import theme from 'src/ts/app/Theme'
-import Link from 'common/Link/Link'
+
 import Image from 'common/Image/Image'
 import LikeButton from 'common/LikeButton/LikeButton'
+import Link from 'common/Link/Link'
+import Text from 'common/Text/Text'
+import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
+import theme from 'src/ts/app/Theme'
+import { Recipe } from 'src/ts/models/FoodModels'
+import { navigate, withNavigation } from 'src/ts/utilities'
 
 // import Image from 'common/Image'
 
@@ -26,8 +26,13 @@ interface AddRecipeCellProps {
 
 @withNavigation
 export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
+	private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+	private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ scale: this._previewScaleAnimatedValue }]
+	})
+
 	render() {
-		const {recipe} = this.props
+		const { recipe } = this.props
 		return (
 			<RX.View
 				onMouseEnter={this._onHoverStart}
@@ -97,7 +102,7 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
 		}
 
 		return (
-			<RX.View style={[styles.likesContainer, {top: (this.props.size * 1.3) - (size - 10)}]}>
+			<RX.View style={[styles.likesContainer, { top: (this.props.size * 1.3) - (size - 10) }]}>
 				<LikeButton
 					size={size}
 					liked={this.props.recipe.likedByUser}
@@ -109,9 +114,10 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
 			</RX.View>
 		)
 	}
+
 	private _renderTime = () => {
 		return (
-			<RX.View style={[styles.timingContainer, {top: ((this.props.size * 1.3) - 30)}]}>
+			<RX.View style={[styles.timingContainer, { top: ((this.props.size * 1.3) - 30) }]}>
 				<Text translate style={styles.timingUnit}>min</Text>
 				<Text style={styles.timingNumber}>{this.props.recipe.timing.totalTime}</Text>
 			</RX.View>
@@ -132,11 +138,6 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
 	private _onHoverEnd = () => {
 		this._setUI(false)
 	}
-
-	private _previewScaleAnimatedValue = RX.Animated.createValue(1)
-	private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{scale: this._previewScaleAnimatedValue}]
-	})
 }
 
 const styles = {

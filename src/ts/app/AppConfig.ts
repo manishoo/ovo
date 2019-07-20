@@ -14,10 +14,10 @@ class AppConfig {
 	public serverAddress = 'http://5.253.24.16:4003'
 	public locale = 'fa'
 	private _appVersion: string
-	private _frontendHost: string
-	private _platformType: RX.Types.PlatformType
-	private _isTouchInterface: boolean
-	private _startupTime: number
+	private readonly _frontendHost: string
+	private readonly _platformType: RX.Types.PlatformType
+	private readonly _isTouchInterface: boolean
+	private readonly _startupTime: number
 
 	constructor() {
 		this._appVersion = '0.0.0.1'

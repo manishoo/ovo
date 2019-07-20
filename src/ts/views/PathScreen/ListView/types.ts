@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import {Event} from 'src/ts/models/FoodModels'
+import { Event } from 'src/ts/models/FoodModels'
 
 export interface ListViewProps {
 	style?: any,

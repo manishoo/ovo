@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="102px" height="102px" viewBox="0 0 102 102" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
-    <title>Character</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <linearGradient x1="69.0514942%" y1="13.9050258%" x2="29.1488923%" y2="86.9590046%" id="linearGradient-1">
-            <stop stop-color="#FEFF00" offset="0%"></stop>
-            <stop stop-color="#FFE014" offset="100%"></stop>
-        </linearGradient>
-        <rect id="path-2" x="0" y="0" width="94" height="93.8532147" rx="46.497792"></rect>
-        <filter x="-6.9%" y="-5.9%" width="113.8%" height="113.9%" filterUnits="objectBoundingBox" id="filter-3">
-            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.200584572 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
-        </filter>
-    </defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Character" transform="translate(4.000000, 3.000000)">
-            <g>
-                <g id="Rectangle">
-                    <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
-                    <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
-                </g>
-                <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="23.5" cy="45.1077466" rx="16.6307692" ry="19.6436961"></ellipse>
-                <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="70.5" cy="45.1077466" rx="16.6307692" ry="19.6436961"></ellipse>
-                <path d="M29.1490385,40.7900838 C27.7847889,40.7900838 26.6232169,41.2725034 25.6642879,42.237357 C24.7152447,43.2022106 24.2407302,44.3709591 24.2407302,45.7436374 C24.2407302,47.1063688 24.7152447,48.2701438 25.6642879,49.2349974 C26.6232169,50.1998511 27.7847889,50.6822706 29.1490385,50.6822706 C30.5034022,50.6822706 31.6600313,50.1998511 32.6189603,49.2349974 C33.5778894,48.2701438 34.0573468,47.1063688 34.0573468,45.7436374 C34.0573468,44.3709591 33.5778894,43.2022106 32.6189603,42.237357 C31.6600313,41.2725034 30.5034022,40.7900838 29.1490385,40.7900838 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
-                <circle id="Oval" fill="#4A4A4A" cx="71" cy="45" r="11"></circle>
-                <circle id="Oval" fill="#FFFFFF" cx="64.5" cy="37.5" r="4.5"></circle>
-                <circle id="Oval" fill="#4A4A4A" cx="23" cy="45" r="11"></circle>
-                <circle id="Oval" fill="#FFFFFF" cx="17.5" cy="37.5" r="4.5"></circle>
-            </g>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="102px" height="102px" viewBox="0 0 102 102" version="1.1"
+     xmlns="http://www.w3.org/2000/svg">
+  <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+  <title>Character</title>
+  <desc>Created with Sketch.</desc>
+  <defs>
+    <linearGradient x1="69.0514942%" y1="13.9050258%" x2="29.1488923%" y2="86.9590046%" id="linearGradient-1">
+      <stop stop-color="#FEFF00" offset="0%"></stop>
+      <stop stop-color="#FFE014" offset="100%"></stop>
+    </linearGradient>
+    <rect id="path-2" x="0" y="0" width="94" height="93.8532147" rx="46.497792"></rect>
+    <filter x="-6.9%" y="-5.9%" width="113.8%" height="113.9%" filterUnits="objectBoundingBox" id="filter-3">
+      <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+      <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.200584572 0" type="matrix"
+                     in="shadowBlurOuter1"></feColorMatrix>
+    </filter>
+  </defs>
+  <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Character" transform="translate(4.000000, 3.000000)">
+      <g>
+        <g id="Rectangle">
+          <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+          <use fill="url(#linearGradient-1)" fill-rule="evenodd" xlink:href="#path-2"></use>
         </g>
+        <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="23.5" cy="45.1077466" rx="16.6307692"
+                 ry="19.6436961"></ellipse>
+        <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="70.5" cy="45.1077466" rx="16.6307692"
+                 ry="19.6436961"></ellipse>
+        <path
+            d="M29.1490385,40.7900838 C27.7847889,40.7900838 26.6232169,41.2725034 25.6642879,42.237357 C24.7152447,43.2022106 24.2407302,44.3709591 24.2407302,45.7436374 C24.2407302,47.1063688 24.7152447,48.2701438 25.6642879,49.2349974 C26.6232169,50.1998511 27.7847889,50.6822706 29.1490385,50.6822706 C30.5034022,50.6822706 31.6600313,50.1998511 32.6189603,49.2349974 C33.5778894,48.2701438 34.0573468,47.1063688 34.0573468,45.7436374 C34.0573468,44.3709591 33.5778894,43.2022106 32.6189603,42.237357 C31.6600313,41.2725034 30.5034022,40.7900838 29.1490385,40.7900838 Z"
+            id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+        <circle id="Oval" fill="#4A4A4A" cx="71" cy="45" r="11"></circle>
+        <circle id="Oval" fill="#FFFFFF" cx="64.5" cy="37.5" r="4.5"></circle>
+        <circle id="Oval" fill="#4A4A4A" cx="23" cy="45" r="11"></circle>
+        <circle id="Oval" fill="#FFFFFF" cx="17.5" cy="37.5" r="4.5"></circle>
+      </g>
     </g>
+  </g>
 </svg>

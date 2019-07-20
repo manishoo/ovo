@@ -3,13 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+import Text from 'common/Text/Text'
 import RX from 'reactxp'
-import {Ingredient} from 'src/ts/models/FoodModels'
 import theme from 'src/ts/app/Theme'
-import Text from 'common/Text'
+import { Ingredient } from 'src/ts/models/FoodModels'
 
-const IngredientItem = ({ingredient, unitsVisible = true}: {ingredient: Ingredient, unitsVisible: boolean}) => {
+const IngredientItem = ({ ingredient, unitsVisible = true }: { ingredient: Ingredient, unitsVisible: boolean }) => {
 	function _getUnit() {
 		if (ingredient.unit) {
 			return ingredient.unit
@@ -36,22 +35,18 @@ const IngredientItem = ({ingredient, unitsVisible = true}: {ingredient: Ingredie
 					<RX.View
 						style={styles.image}
 					>
-						<Text>{ ingredient.name && ingredient.name[0] }</Text>
+						<Text>{ingredient.name && ingredient.name[0]}</Text>
 					</RX.View>
 			}
 			<Text style={styles.title}>{ingredient.name}</Text>
-			{ unitsVisible && <Text style={styles.amountText}>{ingredient.amount} {_getUnit()}</Text> }
+			{unitsVisible && <Text style={styles.amountText}>{ingredient.amount} {_getUnit()}</Text>}
 		</RX.View>
 	)
 }
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
-		// justifyContent: 'center',
 		alignItems: 'center',
-		// paddingTop: 5,
-		// paddingBottom: 5,
-		// padding: 20,
 	}),
 	image: RX.Styles.createViewStyle({
 		width: 30,
@@ -67,7 +62,6 @@ const styles = {
 		[theme.styles.marginEnd]: theme.styles.spacingLarge,
 	}),
 	amountText: RX.Styles.createTextStyle({
-		// color: theme.colors.ingredientUnit,
 		marginLeft: theme.styles.spacing / 2,
 	})
 }

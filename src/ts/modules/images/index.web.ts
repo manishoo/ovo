@@ -1,12 +1,10 @@
-/**
+/*
  * index.web.ts
- * Copyright: Microsoft 2018
- *
- * Web implementation of "images" module.
+ * Copyright: Ouranos Studio 2019
  */
 
 import AppConfig from '../../app/AppConfig'
-import {ImageSourceBase} from './Images'
+import { ImageSourceBase } from './Images'
 
 class ImageSource implements ImageSourceBase {
 	OvocadoTypo = AppConfig.getImagePath('OvocadoTypo.png')
@@ -46,6 +44,9 @@ class ImageSource implements ImageSourceBase {
 	PinterestIcon = AppConfig.getImagePath('PIN.svg')
 	InstagramIcon = AppConfig.getImagePath('IN.svg')
 	TelegramIcon = AppConfig.getImagePath('TEL.svg')
+
+	Clear = AppConfig.getImagePath('Clear.png')
+	More = AppConfig.getImagePath('More.png')
 }
 
 export default new ImageSource()

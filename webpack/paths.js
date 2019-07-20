@@ -15,7 +15,7 @@ module.exports = {
   common: resolveApp('src/ts/common'),
 
   entryClient: resolveApp('src/ts/index.web.tsx'),
-  entryServer: resolveApp('src/ts/web/entry-server'),
+  entryServer: resolveApp('src/ts/app/web/entry-server'),
 
   public: resolveApp('web'),
   manifest: resolveApp('web/manifest.json'),

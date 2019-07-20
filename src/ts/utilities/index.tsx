@@ -1,27 +1,19 @@
 /*
- * index.ts
+ * index.tsx
  * Copyright: Ouranos Studio 2019
  */
 
 import RX from 'reactxp'
-import {Image} from 'src/ts/models/FoodModels'
-import AppConfig from '../app/AppConfig'
-import {Routes} from 'src/ts/navigator/routes'
+import { Image } from 'src/ts/models/FoodModels'
+import { Routes } from 'src/ts/navigator/routes'
 import LocationStore from 'src/ts/stores/LocationStore'
+import AppConfig from '../app/AppConfig'
 
 export function fullWidth() {
-	//FIXME
-
-	// if (RX.Platform.getType() === 'web') {
-	// 	return 375
-	// }
 	return RX.UserInterface.measureWindow().width
 }
 
 export function fullHeight() {
-	// if (RX.Platform.getType() === 'web') {
-	// 	return 667
-	// }
 	return RX.UserInterface.measureWindow().height
 }
 
@@ -56,7 +48,7 @@ export function withNavigation(T: any) {
 
 	let M
 	if (type == 'web') {
-		const {withRouter} = require('react-router-dom')
+		const { withRouter } = require('react-router-dom')
 		M = withRouter(T)
 	} else {
 		// const {withNavigation} = require('react-navigation')
@@ -67,7 +59,7 @@ export function withNavigation(T: any) {
 	return M
 }
 
-export function navigate(props: any, route: Routes | string, config: any = {params: {}}): void {
+export function navigate(props: any, route: Routes | string, config: any = { params: {} }): void {
 	console.warn('navigate is DEPRECATED! use LocationStore.navigate')
 	return LocationStore.navigate(props, route, config)
 }
@@ -91,13 +83,13 @@ export function getImageUrl(imageObject?: Image) {
 }
 
 const DAY_COLORS = [
-	{name: 'saturday', color: '#FFCC00'},
-	{name: 'sunday', color: '#F06292'},
-	{name: 'monday', color: '#43A047'},
-	{name: 'tuesday', color: '#FF9209'},
-	{name: 'wednesday', color: '#1E88E5'},
-	{name: 'thursday', color: '#5E35B1'},
-	{name: 'friday', color: '#E53935'},
+	{ name: 'saturday', color: '#FFCC00' },
+	{ name: 'sunday', color: '#F06292' },
+	{ name: 'monday', color: '#43A047' },
+	{ name: 'tuesday', color: '#FF9209' },
+	{ name: 'wednesday', color: '#1E88E5' },
+	{ name: 'thursday', color: '#5E35B1' },
+	{ name: 'friday', color: '#E53935' },
 ]
 
 export function getDayColor(dayName: string) {

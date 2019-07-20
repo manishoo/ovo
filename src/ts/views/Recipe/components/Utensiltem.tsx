@@ -3,11 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
 import RX from 'reactxp'
 
-
-const UtensilItem = ({utensil, style}: any) => {
+const UtensilItem = ({ utensil, style }: any) => {
 	return (
 		<RX.View
 			style={[style, styles.container]}
@@ -45,7 +43,7 @@ const styles = {
 		justifyContent: 'center',
 		alignItems: 'center'
 	}),
-	amountText: RX.Styles.createTextStyle({color: 'orange'})
+	amountText: RX.Styles.createTextStyle({ color: 'orange' })
 }
 
 export default UtensilItem

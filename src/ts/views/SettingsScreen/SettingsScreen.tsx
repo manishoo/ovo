@@ -1,5 +1,5 @@
 /*
- * Settings.tsx
+ * SettingsScreen.tsx
  * Copyright: Ouranos Studio 2019
  */
 
@@ -11,7 +11,7 @@ interface SettingsProps {
 
 export default class SettingsScreen extends RX.Component<SettingsProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View

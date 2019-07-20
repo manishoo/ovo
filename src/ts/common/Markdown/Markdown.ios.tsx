@@ -3,10 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
 // @ts-ignore
 import RNMarkdown from 'react-native-easy-markdown'
+import RX from 'reactxp'
 
 interface MarkdownProps {
 	style?: any,
@@ -14,7 +13,7 @@ interface MarkdownProps {
 
 export default class Markdown extends RX.Component<MarkdownProps> {
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RNMarkdown

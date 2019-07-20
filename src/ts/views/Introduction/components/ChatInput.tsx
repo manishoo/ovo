@@ -3,19 +3,19 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import { generateHeightRange, generateWeightRange} from 'src/ts/utilities'
-import theme from 'src/ts/app/Theme'
-import {EXPECTATIONS, Item, MessageType} from '../types'
-import InputForm from './InputForm'
-import FoodAutocomplete from './FoodAutocomplete'
-import SubmitButton from './SubmitButton'
-import {Food} from 'src/ts/models/FoodModels'
-import Picker from './Picker/Picker'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import _ from 'lodash'
-import MealSettings from './MealSettings/MealSettings'
+import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
-import {getLocalizedText} from 'common/LocalizedText'
+import theme from 'src/ts/app/Theme'
+import { Food } from 'src/ts/models/FoodModels'
+import { generateHeightRange, generateWeightRange } from 'src/ts/utilities'
+import { EXPECTATIONS, Item, MessageType } from '../types'
+import FoodAutocomplete from './FoodAutocomplete'
+import InputForm from './InputForm'
+import MealSettings from './MealSettings/MealSettings'
+import Picker from './Picker/Picker'
+import SubmitButton from './SubmitButton'
 
 interface MessageInput {
 	inputType: MessageType,
@@ -71,8 +71,6 @@ function getPlaceholder(expect: EXPECTATIONS) {
 			return 'Enter your goal'
 		case EXPECTATIONS.meals:
 			return 'Enter your meals'
-		// case EXPECTATIONS.register:
-		// 	return 'Enter your register'
 		case EXPECTATIONS.allergy:
 			return 'Enter your allergies'
 		case EXPECTATIONS.dislikedFoods:
@@ -108,7 +106,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 			},
 			loading,
 		} = this.props
-		const {message} = this.state
+		const { message } = this.state
 
 		const animatedStyle = RX.Styles.createAnimatedViewStyle({
 			bottom: this.animatedBottomValue,
@@ -160,7 +158,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
             key='sc'
             style={[
 							styles.selectItemContainer,
-							{width: this.props.introductionWidth},
+							{ width: this.props.introductionWidth },
 							(items && items.length <= 2) ? {
 								justifyContent: 'center',
 								alignItems: 'center',
@@ -240,7 +238,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 											disabled={loading}
 											style={[
 												styles.submitButton,
-												{top: 206}
+												{ top: 206 }
 											]}
 											onPress={this.onPickerSubmit}
 										/>
@@ -270,7 +268,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 											key='button'
 											style={[
 												styles.submitButton,
-												{top: 206}
+												{ top: 206 }
 											]}
 											onPress={this.onPickerSubmit}
 											disabled={loading}
@@ -290,7 +288,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 											placeholder={loading ? getLocalizedText('AssistantInputPlaceholder') : getPlaceholder(expect)}
 											returnKeyType='send'
 											secureTextEntry={MessageType.password == inputType}
-											style={[styles.textInput, {width: this.props.introductionWidth * 0.77}]}
+											style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
 											onChangeText={this.onChangeText}
 											onSubmitEditing={this.onTextSubmit}
 										/>
@@ -316,7 +314,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 	}
 
 	onFoodSubmit = (data: Food[]) => {
-		const {onSubmit} = this.props
+		const { onSubmit } = this.props
 		let text = ''
 		data.map((f: Food) => {
 			text += `${f.name}, `
@@ -331,7 +329,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 	}
 
 	onSkip = (text: string) => {
-		const {onSubmit} = this.props
+		const { onSubmit } = this.props
 
 		onSubmit({
 			text,
@@ -342,7 +340,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 	}
 
 	onPickerSubmit = () => {
-		const {onSubmit} = this.props
+		const { onSubmit } = this.props
 		const pickerValues: { [k: string]: any } = this.picker.getValues()
 
 		onSubmit({
@@ -386,7 +384,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 		})
 	}
 
-	onSelectSubmit = ({text, value}: Item) => () => {
+	onSelectSubmit = ({ text, value }: Item) => () => {
 		switch (this.props.input.expect) {
 			case EXPECTATIONS.mealPlan: {
 				return this.props.onOpenMealPlan()
@@ -404,7 +402,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 	}
 
 	onMealSettingsSubmit = (data: any) => {
-		const {onSubmit} = this.props
+		const { onSubmit } = this.props
 
 		onSubmit({
 			text: `protein: %${data.mealPlanSettings.protein}\nfat: %${data.mealPlanSettings.fat}\ncarbs: %${data.mealPlanSettings.carbs}\nTDEE: ${data.mealPlanSettings.tdee}calories`,
@@ -413,12 +411,12 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 	}
 
 	controlInputPosition = (inputType: MessageType) => {
-		const {onHeightChange} = this.props
+		const { onHeightChange } = this.props
 
 		switch (inputType) {
 			case MessageType.form: {
 				let bottomAnimation = RX.Animated.timing(this.animatedBottomValue,
-					{toValue: -30, duration: 350, easing: RX.Animated.Easing.InOut()})
+					{ toValue: -30, duration: 350, easing: RX.Animated.Easing.InOut() })
 
 				onHeightChange(366)
 				return bottomAnimation.start()
@@ -426,7 +424,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 			case MessageType.height:
 			case MessageType.weight: {
 				let bottomAnimation = RX.Animated.timing(this.animatedBottomValue,
-					{toValue: -140, duration: 500, easing: RX.Animated.Easing.InOut()})
+					{ toValue: -140, duration: 500, easing: RX.Animated.Easing.InOut() })
 
 				onHeightChange(250)
 				return bottomAnimation.start()
@@ -493,7 +491,6 @@ const containerStyle: RX.Types.ViewStyle = {
 const styles = {
 	textInputContainer: RX.Styles.createViewStyle({
 		flexDirection: 'row',
-		// justifyContent: 'flex-end',
 		[theme.styles.paddingStart]: theme.styles.spacing * 3,
 		minHeight: 50,
 	}),
@@ -509,25 +506,18 @@ const styles = {
 		left: 0,
 		right: 0,
 		backgroundColor: 'transparent',
-		// flexDirection: 'row',
 		height: 100,
 		padding: 10,
 		flexDirection: 'row',
-		// justifyContent: 'flex-end',
-		// alignItems: 'stretch',
 	}),
 	selectItem: RX.Styles.createViewStyle({
-		// flex: 1,
 		padding: 15,
-		// borderColor: '#E5E5E5',
 		borderWidth: 1,
 		backgroundColor: theme.colors.assistantUserMessageBG,
 		borderRadius: 100,
-		// marginRight: 5,
 		marginBottom: 5,
 		justifyContent: 'center',
 		alignItems: 'center',
-		// height: 50,
 	}),
 	selectItemText: RX.Styles.createTextStyle({
 		color: theme.colors.assistantUserMessageTextColor,

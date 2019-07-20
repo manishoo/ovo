@@ -3,13 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import {Message, SENDERS} from '../types'
-import theme from 'src/ts/app/Theme'
 import Markdown from 'common/Markdown/Markdown'
-import ChatTyping from './Typing'
+import RX from 'reactxp'
+import theme from 'src/ts/app/Theme'
 import IntroductionButton from 'src/ts/views/Introduction/components/IntroductionButton'
+import { Message, SENDERS } from '../types'
+import ChatTyping from './Typing'
 
 interface ChatBoxProps {
 	style?: any,
@@ -23,7 +22,7 @@ interface ChatBoxProps {
 	introductionHeight: number
 }
 
-export const AssistantMessage = ({text, style}: { text: string, style?: any }) => (
+export const AssistantMessage = ({ text, style }: { text: string, style?: any }) => (
 	<RX.View
 		style={[
 			styles.baseMessage, {
@@ -34,7 +33,7 @@ export const AssistantMessage = ({text, style}: { text: string, style?: any }) =
 		]}
 	>
 		<Markdown
-			style={{lineHeight: RX.Platform.select({default: 20, web: 2}), color: theme.colors.white}}>{text}</Markdown>
+			style={{ lineHeight: RX.Platform.select({ default: 20, web: 2 }), color: theme.colors.white }}>{text}</Markdown>
 	</RX.View>
 )
 
@@ -42,6 +41,7 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 	scrollView: any
 	introButton: any
 	initialState: boolean = true
+	private _contentSize = 0
 
 	renderMessage(msg: Message) {
 		switch (msg.sender) {
@@ -56,7 +56,7 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 
 	renderSpacing(n: number = 80) {
 		return (
-			<RX.View key={Math.random()} style={{height: n}} />
+			<RX.View key={Math.random()} style={{ height: n }} />
 		)
 	}
 
@@ -105,11 +105,15 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 			<RX.View style={options.outerContainerStyle}>
 				<RX.View
 					key={msg.id}
-					style={[styles.baseMessage, options.containerStyle, {width: msg.text.length * 10}]} //FIXME
+					style={[styles.baseMessage, options.containerStyle, { width: msg.text.length * 10 }]} //FIXME
 				>
 					<Markdown
-						style={{lineHeight: RX.Platform.select({default: 20, web: 2}), ...options.textStyle}}>{msg.text}</Markdown>
-					{/*<RX.Text>{msg.text}</RX.Text>*/}
+						style={{
+							lineHeight: RX.Platform.select({
+								default: 20,
+								web: 2
+							}), ...options.textStyle
+						}}>{msg.text}</Markdown>
 				</RX.View>
 			</RX.View>
 		)
@@ -143,11 +147,11 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 	}
 
 	render() {
-		const {style, messages, scrollEnabled, loading, bottomMargin, bottomPadding} = this.props
+		const { style, messages, scrollEnabled, loading, bottomMargin, bottomPadding } = this.props
 
 		return (
 			<RX.ScrollView
-				style={[styles.container, style, {bottom: bottomMargin}]}
+				style={[styles.container, style, { bottom: bottomMargin }]}
 				onContentSizeChange={messages.length > 4 ? this.onContentSizeChanged : undefined}
 				ref={(ref: any) => this.scrollView = ref}
 				scrollEnabled={scrollEnabled}
@@ -170,16 +174,12 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 			</RX.ScrollView>
 		)
 	}
-
-	private _contentSize = 0
 }
 
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
 		paddingTop: 95,
-		// bottom: 80,
-		// marginBottom: 200,
 	}),
 	userText: {
 		color: theme.colors.assistantUserMessageTextColor,

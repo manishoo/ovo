@@ -1,11 +1,9 @@
-/**
+/*
  * index.web.ts
- * Copyright: Microsoft 2018
- *
- * Web implementation of "fonts" module.
+ * Copyright: Ouranos Studio 2019
  */
 
-import {FontBase} from './Fonts'
+import { FontBase } from './Fonts'
 
 // FIXME multi lang
 class Fonts implements FontBase {

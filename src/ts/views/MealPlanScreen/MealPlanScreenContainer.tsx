@@ -1,18 +1,17 @@
 /*
- * MealPlanContainer.tsx
+ * MealPlanScreenContainer.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
 import gql from 'graphql-tag'
-import {Query} from 'react-apollo'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
+import { MealItemFragment } from 'src/ts/models/GraphQLModels'
 import MealPlanScreen from 'src/ts/views/MealPlanScreen/MealPlanScreen'
-import {MealItemFragment} from 'src/ts/models/GraphQLModels'
 
 export default class MealPlanScreenContainer extends RX.Component {
-	render() {
-		return (
+  render() {
+    return (
 			<Query
 				query={gql`
 					query MealPlanQuery {
@@ -34,13 +33,13 @@ export default class MealPlanScreenContainer extends RX.Component {
 					}
 				`}
 			>
-				{({data: { getMealPlan }}) => (
+				{({ data: { getMealPlan } }) => (
 					getMealPlan ? <MealPlanScreen
 						mealPlan={getMealPlan}
 						{...this.props}
 					/> : null
 				)}
 			</Query>
-		)
-	}
+    )
+  }
 }

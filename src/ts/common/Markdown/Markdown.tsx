@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
 import ReactMarkdown from 'react-markdown'
+import RX from 'reactxp'
 
-const Markdown = ({children, style, ...props}: any) => {
+const Markdown = ({ children, style, ...props }: any) => {
 	return (
 		<span style={style} {...props}>
-			<ReactMarkdown source={children}/>
+			<ReactMarkdown source={children} />
 		</span>
 	)
 }

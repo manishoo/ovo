@@ -1,19 +1,17 @@
-/**
-* index.native.ts
-* Copyright: Microsoft 2018
-*
-* Native implementation of "fonts" module.
-*/
+/*
+ * index.native.ts
+ * Copyright: Ouranos Studio 2019
+ */
 
-import { FontBase } from './Fonts';
+import { FontBase } from './Fonts'
 
 class Fonts implements FontBase {
-    monospace = 'System';
+	monospace = 'System'
 
-    displayLight = 'System';
-    displayRegular = 'System';
-    displaySemibold = 'System';
-    displayBold = 'System';
+	displayLight = 'System'
+	displayRegular = 'System'
+	displaySemibold = 'System'
+	displayBold = 'System'
 }
 
-export default new Fonts();
+export default new Fonts()

@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import ImageSource from 'modules/images'
 import Image from 'common/Image/Image'
+import ImageSource from 'modules/images'
+import RX from 'reactxp'
 
 interface LikeButtonProps {
 	style?: any,
@@ -19,12 +19,20 @@ interface LikeButtonState {
 }
 
 export default class LikeButton extends RX.Component<LikeButtonProps, LikeButtonState> {
+	constructor(props: LikeButtonProps) {
+		super(props)
+
+		this.state = {
+			left: props.liked ? (-28 * props.size) : 0,
+		}
+	}
+
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
-				style={[styles.container, style, {width: this.props.size, height: this.props.size}]}
+				style={[styles.container, style, { width: this.props.size, height: this.props.size }]}
 				onPress={this._click}
 				onLayout={this._realign}
 			>
@@ -73,19 +81,6 @@ export default class LikeButton extends RX.Component<LikeButtonProps, LikeButton
 			})
 		}
 	}
-
-	constructor(props: LikeButtonProps) {
-		super(props)
-
-		this.state = {
-			left: props.liked ? (-28 * props.size) : 0,
-		}
-	}
-
-	// private _imageAnimationLeft = RX.Animated.createValue(1)
-	// private _imageAnimationStyle = RX.Styles.createAnimatedImageStyle({
-	// 	transform: [{translateX: this._imageAnimationLeft}]
-	// })
 }
 
 const styles = {

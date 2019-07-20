@@ -3,24 +3,24 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
-import KeyboardAvoidable from 'common/KeyboardAvoidable/KeyboardAvoidable'
-import gql from 'graphql-tag'
-import {Mutation} from 'react-apollo'
-import {EXPECTATIONS, Message, MessageType, SENDERS} from './types'
-import ChatInput from './components/ChatInput'
-import ChatBox from './components/ChatBox'
-import LocalizedText, {getLocalizedText} from 'common/LocalizedText'
-import theme from 'src/ts/app/Theme'
-import {createMessage, getLastInputType} from './utils'
-import {fullHeight, fullWidth, navigate} from 'src/ts/utilities'
 import Assistant from 'common/Assistant/Assistant'
-import {ComponentBase} from 'resub'
+import KeyboardAvoidable from 'common/KeyboardAvoidable/KeyboardAvoidable'
+import LocalizedText, { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import gql from 'graphql-tag'
+import { Mutation } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
+import theme from 'src/ts/app/Theme'
+import LinearGradient from 'src/ts/common/LinearGradient/LinearGradient'
+import { Routes } from 'src/ts/navigator/routes'
+import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
-import LocationStore from 'src/ts/stores/LocationStore'
-import {Routes} from 'src/ts/navigator/routes'
-import LinearGradient from 'src/ts/common/LinearGradient/LinearGradient'
+import { fullHeight, fullWidth, navigate } from 'src/ts/utilities'
+import ChatBox from './components/ChatBox'
+import ChatInput from './components/ChatInput'
+import { EXPECTATIONS, Message, MessageType, SENDERS } from './types'
+import { createMessage, getLastInputType } from './utils'
 
 const INITIAL_MESSAGES = [
 	{
@@ -74,6 +74,8 @@ interface IntroductionState {
 }
 
 export default class Introduction extends ComponentBase<IntroductionProps, IntroductionState> {
+	private chatBox: any
+
 	constructor(props: IntroductionProps) {
 		super(props)
 
@@ -89,15 +91,8 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 		}
 	}
 
-	protected _buildState(props: IntroductionProps, initialBuild: boolean): Partial<IntroductionState> | undefined {
-		return {
-			width: ResponsiveWidthStore.getWidth(),
-			height: ResponsiveWidthStore.getHeight(),
-		}
-	}
-
   render() {
-		const {style} = this.props
+		const { style } = this.props
 		const {
 			showButtons: showIntro,
 			messages,
@@ -140,7 +135,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 					}
 				`}
 			>
-				{(setupConversation, {loading}) => (
+				{(setupConversation, { loading }) => (
 					[
 						<KeyboardAvoidable
 							keyboardVerticalOffset={20}
@@ -149,8 +144,8 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 							style={[styles.container, style]}
 						>
 							{false && <LinearGradient
-								colors={[theme.colors.assistantLinearGradient1, theme.colors.assistantLinearGradient2]}
-							/>}
+                colors={[theme.colors.assistantLinearGradient1, theme.colors.assistantLinearGradient2]}
+              />}
 							<ChatBox
 								ref={ref => this.chatBox = ref}
 								loading={loading || assistantTalking}
@@ -173,22 +168,22 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 
 							{
 								!showIntro &&
-								<ChatInput
-								  style={styles.chatInput}
-								  loading={loading || assistantTalking}
-								  input={getLastInputType(messages)}
-								  onSubmit={this.sendMessage(setupConversation)}
-								  onHeightChange={this.onHeightChange}
-								  toggleMainKeyboardAvoidable={this.onMainKeyboardAvoidableToggle}
-									onOpenMealPlan={() => {
+                <ChatInput
+                  style={styles.chatInput}
+                  loading={loading || assistantTalking}
+                  input={getLastInputType(messages)}
+                  onSubmit={this.sendMessage(setupConversation)}
+                  onHeightChange={this.onHeightChange}
+                  toggleMainKeyboardAvoidable={this.onMainKeyboardAvoidableToggle}
+                  onOpenMealPlan={() => {
 										return //FIXME
 										UserStore.getAndSetUser()
 											.then(() => {
 												LocationStore.navigate(this.props, Routes.mealPlan)
 											})
 									}}
-									introductionWidth={this.props.introductionWidth || this.state.width}
-								/>
+                  introductionWidth={this.props.introductionWidth || this.state.width}
+                />
 							}
 						</KeyboardAvoidable>,
 						<RX.View
@@ -199,7 +194,6 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 								left: 0,
 								right: 0,
 								marginTop: 20,
-								// height: 66,
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}
@@ -214,8 +208,12 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
     )
   }
 
-  // refs
-	private chatBox: any
+	protected _buildState(props: IntroductionProps, initialBuild: boolean): Partial<IntroductionState> | undefined {
+		return {
+			width: ResponsiveWidthStore.getWidth(),
+			height: ResponsiveWidthStore.getHeight(),
+		}
+	}
 
 	private scrollDown = () => {
 		if (this.chatBox) {
@@ -226,7 +224,6 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 	private async addToMessagesSlowly(messages: Message[]) {
 		if (messages.length > 1) {
 			this.onAssistantTalking(true)
-			// let lastMsg: Message = null
 			for (let i = 0; i < messages.length; i++) {
 				const msg = messages[i]
 				const isLast = i === (messages.length - 1)
@@ -266,8 +263,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 			showButtons: false,
 		})
 		await RX.Storage.removeItem('token')
-		// const tok = await RX.Storage.getItem('token')
-		const {data: {setupConversation: {token, messages}}} = await setupConversation({
+		const { data: { setupConversation: { token, messages } } } = await setupConversation({
 			variables: {
 				token: undefined,
 				message: undefined,
@@ -277,7 +273,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 		this.addToMessagesSlowly(messages)
 	}
 
-	private sendMessage = (sendMessage: any) => async ({text, data}: { text: string, data: any }) => {
+	private sendMessage = (sendMessage: any) => async ({ text, data }: { text: string, data: any }) => {
 		const token = await RX.Storage.getItem('token')
 
 		this.setState(prevState => ({
@@ -286,7 +282,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 				createMessage(text, data),
 			]
 		}))
-		const {data: {setupConversation: {messages}}} = await sendMessage({
+		const { data: { setupConversation: { messages } } } = await sendMessage({
 			variables: {
 				message: text,
 				token,
@@ -328,7 +324,6 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 				style={{
 					color: theme.colors.secondary,
 					textAlign: 'center',
-					// fontWeight: 'bold',
 					marginTop: 20,
 					marginBottom: 30,
 				}}
@@ -353,7 +348,6 @@ const styles = {
 	logo: RX.Styles.createImageStyle({
 		width: 80,
 		height: 80,
-		// top: 0,
 	}),
 	chatBoxWithForm: RX.Styles.createViewStyle({
 		bottom: 230,

@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
-import Meal from './components/Meal'
-import {MealPlan as MealPlanType} from 'src/ts/models/FoodModels'
-import {getLocalizedText} from 'common/LocalizedText'
-import {getDayColor} from 'src/ts/utilities'
-import {ComponentBase} from 'resub'
+import { ComponentBase } from 'resub'
+import { MealPlan as MealPlanType } from 'src/ts/models/FoodModels'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { getDayColor } from 'src/ts/utilities'
+import Meal from './components/Meal'
 
 interface MealPlanProps extends RX.CommonProps {
 	style?: any,
@@ -31,21 +31,13 @@ export default class MealPlanScreen extends ComponentBase<MealPlanProps, MealPla
 		}
 	}
 
-	protected _buildState(props: MealPlanProps, initialBuild: boolean): Partial<MealPlanState> | undefined {
-		return {
-			isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-		}
-	}
-
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.ScrollView
 				style={[styles.container, style]}
 			>
-
-				{/*<RX.StatusBar/>*/}
 				{
 					this.state.mealPlan.days.map((day) => (
 						<RX.View
@@ -80,6 +72,12 @@ export default class MealPlanScreen extends ComponentBase<MealPlanProps, MealPla
 			</RX.ScrollView>
 		)
 	}
+
+	protected _buildState(props: MealPlanProps, initialBuild: boolean): Partial<MealPlanState> | undefined {
+		return {
+			isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+		}
+	}
 }
 
 const styles = {
@@ -92,6 +90,5 @@ const styles = {
 		fontWeight: 'bold',
 		alignSelf: 'center',
 		margin: 25,
-		// margin: 25
 	})
 }

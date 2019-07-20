@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+
+import { Option } from 'common/Select/Select'
 import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import theme from 'src/ts/app/Theme'
-import {fullHeight} from 'src/ts/utilities'
-import {Option} from 'common/Select/Select'
-import {ComponentBase} from 'resub'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { fullHeight } from 'src/ts/utilities'
 
 interface SelectDialogProps {
 	style?: any,
@@ -34,8 +34,17 @@ export function showSelectDialog(props: SelectDialogProps) {
 }
 
 export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.CommonProps, SelectDialogState> {
+	_containerBottomAnimatedValue: RX.Animated.Value = RX.Animated.createValue(fullHeight()) //FIXME wrong!
+	_backDropOpacityAnimatedValue: RX.Animated.Value = RX.Animated.createValue(0)
+	private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateY: this._containerBottomAnimatedValue }]
+	})
+	private _backDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		opacity: this._backDropOpacityAnimatedValue,
+	})
+
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View style={styles.topContainer}>
@@ -55,13 +64,6 @@ export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.C
 					]}
 				>
 					<RX.View style={[styles.container, style]}>
-						{/*<RX.View
-							onPress={this._dismiss}
-							style={styles.cancelButton}
-						>
-							<RX.Text style={styles.cancelText}>Back</RX.Text>
-						</RX.View>*/}
-
 						{
 							this.props.options.map(option => (
 								this._renderOption(option)
@@ -86,33 +88,13 @@ export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.C
 		)
 	}
 
-	private _setUI = (show: boolean, cb?: () => void) => {
-		RX.Animated.parallel([
-			RX.Animated.timing(this._backDropOpacityAnimatedValue, {
-				toValue: show ? 0.8 : 0,
-				// duration: 200,
-				// easing: RX.Animated.Easing.Out()
-			}),
-			RX.Animated.timing(this._containerBottomAnimatedValue, {
-				toValue: show ? 0 : this.state.height,
-				// duration: 200,
-				// easing: RX.Animated.Easing.Out()
-			}),
-		]).start(cb)
-	}
-
-	private _dismiss = () => {
-		const {onDismiss} = this.props
-
-		this._setUI(false, () => {
-			RX.Modal.dismiss(MODAL_ID)
-			onDismiss ? onDismiss() : null
-		})
-	}
-
 	_onOptionPress = (option: Option) => () => {
 		this.props.onOptionSelect(option)
 		this._dismiss()
+	}
+
+	componentDidMount(): void {
+		this._setUI(true)
 	}
 
 	protected _buildState(props: SelectDialogProps, initialBuild: boolean): Partial<SelectDialogState> | undefined {
@@ -121,17 +103,24 @@ export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.C
 		}
 	}
 
-	_containerBottomAnimatedValue: RX.Animated.Value = RX.Animated.createValue(fullHeight()) //FIXME wrong!
-	_backDropOpacityAnimatedValue: RX.Animated.Value = RX.Animated.createValue(0)
-	private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{translateY: this._containerBottomAnimatedValue}]
-	})
-	private _backDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		opacity: this._backDropOpacityAnimatedValue,
-	})
+	private _setUI = (show: boolean, cb?: () => void) => {
+		RX.Animated.parallel([
+			RX.Animated.timing(this._backDropOpacityAnimatedValue, {
+				toValue: show ? 0.8 : 0,
+			}),
+			RX.Animated.timing(this._containerBottomAnimatedValue, {
+				toValue: show ? 0 : this.state.height,
+			}),
+		]).start(cb)
+	}
 
-	componentDidMount(): void {
-		this._setUI(true)
+	private _dismiss = () => {
+		const { onDismiss } = this.props
+
+		this._setUI(false, () => {
+			RX.Modal.dismiss(MODAL_ID)
+			onDismiss ? onDismiss() : null
+		})
 	}
 }
 
@@ -155,11 +144,8 @@ const styles = {
 		alignSelf: 'stretch',
 		borderRadius: 10,
 		backgroundColor: theme.colors.foodDialogSearchBG,
-		// borderColor: '#f5f5f5',
-		// borderWidth: 1,
 		paddingHorizontal: 10,
 		justifyContent: 'center',
-		// alignItems: 'center',
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		borderBottomWidth: 0,

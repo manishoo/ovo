@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RX from 'reactxp'
 import Image from 'common/Image/Image'
+import RX from 'reactxp'
 
 interface TotalTimeProps {
 	style?: any,
@@ -26,7 +26,7 @@ export default class TotalTime extends RX.Component<TotalTimeProps> {
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
@@ -39,7 +39,7 @@ export default class TotalTime extends RX.Component<TotalTimeProps> {
 						height: 13,
 					}}
 				/>
-				<RX.Text style={{fontSize: 10, fontWeight: '100'}}>{this.props.totalTime}m</RX.Text>
+				<RX.Text style={{ fontSize: 10, fontWeight: '100' }}>{this.props.totalTime}m</RX.Text>
 			</RX.View>
 		)
 	}

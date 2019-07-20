@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import FilledButton from 'common/FilledButton/FilledButton'
 import RX from 'reactxp'
-import FilledButton from 'common/FilledButton'
 
 interface FilePickerProps {
 	style?: any,
@@ -15,20 +15,20 @@ interface FilePickerProps {
 export default class FilePicker extends RX.Component<FilePickerProps> {
 	_input: any
 
-	private _openPicker = () => {
-		console.log('this._input', this._input)
-	}
-
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
 				style={[styles.container, style]}
 			>
-				<FilledButton label={'Select Image'} onPress={this._openPicker}/>
+				<FilledButton label={'Select Image'} onPress={this._openPicker} />
 			</RX.View>
 		)
+	}
+
+	private _openPicker = () => {
+		console.log('this._input', this._input)
 	}
 }
 

@@ -3,13 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import {Instruction} from 'src/ts/models/FoodModels'
-import TextInputAutoGrow from 'src/ts/controls/TextInputAutoGrow'
-// import Image from 'common/Image'
-// import FilePicker from 'common/FilePicker/FilePicker'
+import TextInputAutoGrow from 'src/ts/common/TextInputAutoGrow/TextInputAutoGrow'
+import { Instruction } from 'src/ts/models/FoodModels'
 
 const IMAGE_DIMENSIONS = 50
 const CLEAR_DIMENSIONS = 20
@@ -25,34 +23,17 @@ export default class InstructionRow extends RX.Component<IngredientRowProps> {
 	onDeletePress = () => this.props.onDelete(this.props.instruction.id)
 
 	render() {
-		const {style, instruction: {text}} = this.props
+		const { style, instruction: { text } } = this.props
 
 		return (
 			<RX.View>
-				<RX.View>
-					{/*{
-						this.state.coverImagePreview &&
-            <Image source={this.state.coverImagePreview} style={styles.coverImage} resizeMode={'cover'} />
-					}
-					<FilePicker
-						label={this.state.coverImagePreview ? 'Replace Image' : undefined}
-						onImageChange={coverImage => {
-							console.log('coverImage', coverImage)
-							this.setState({coverImage})
-						}}
-						onImagePreviewChange={coverImagePreview => {
-							this.setState({coverImagePreview})
-						}}
-					/>*/}
-				</RX.View>
-
 				<RX.View
 					style={[styles.container, style]}
 				>
 					{/*Delete*/}
 					<RX.View style={styles.clearWrapper} onPress={this.onDeletePress}>
 						<RX.Image
-							source={require('src/ts/sharedAssets/Clear.png')}
+							source={ImageSource.Clear}
 							style={styles.clear}
 						/>
 					</RX.View>
@@ -65,7 +46,7 @@ export default class InstructionRow extends RX.Component<IngredientRowProps> {
 							text: newText,
 						})}
 						style={styles.textInput}
-						wrapperStyle={{flex: 1}}
+						wrapperStyle={{ flex: 1 }}
 					/>
 				</RX.View>
 			</RX.View>

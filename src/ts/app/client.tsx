@@ -6,19 +6,16 @@
 /**
  * Apollo Client
  * */
-import {ApolloClient} from 'apollo-client'
-import {onError} from 'apollo-link-error'
-import {withClientState} from 'apollo-link-state'
-import {ApolloLink, Observable} from 'apollo-link'
-import AppConfig from './AppConfig'
-import UserStore from 'src/ts/stores/UserStore'
-import {createUploadLink} from 'apollo-upload-client'
+import { ApolloClient } from 'apollo-client'
+import { ApolloLink, Observable } from 'apollo-link'
+import { onError } from 'apollo-link-error'
+import { withClientState } from 'apollo-link-state'
+import { createUploadLink } from 'apollo-upload-client'
 import fetch from 'isomorphic-fetch'
-import {cache} from 'src/ts/app/client-cache'
+import { cache } from 'src/ts/app/client-cache'
+import UserStore from 'src/ts/stores/UserStore'
+import AppConfig from './AppConfig'
 
-async function getToken() {
-	return UserStore.getSession()
-}
 
 const request = async (operation: any) => {
 	operation.setContext({
@@ -27,7 +24,7 @@ const request = async (operation: any) => {
 		}
 	})
 
-	const token = await getToken()
+	const token = await UserStore.getSession()
 	if (token) {
 		operation.setContext({
 			headers: {
@@ -68,16 +65,9 @@ function logoutUser() {
 	//
 }
 
-// const link = new HttpLink({
-// 	uri: AppConfig.graphQLAddress,
-// 	headers: {
-// 		'accept-language': 'en',
-// 	},
-// })
-
 const client = new ApolloClient({
 	link: ApolloLink.from([
-		onError(({graphQLErrors, networkError}) => {
+		onError(({ graphQLErrors, networkError }) => {
 			if (graphQLErrors) {
 				sendToLoggingService(graphQLErrors)
 			}
@@ -92,8 +82,8 @@ const client = new ApolloClient({
 			},
 			resolvers: {
 				Mutation: {
-					updateNetworkStatus: (_: any, {isConnected}: any, {cache}: any) => {
-						cache.writeData({data: {isConnected}})
+					updateNetworkStatus: (_: any, { isConnected }: any, { cache }: any) => {
+						cache.writeData({ data: { isConnected } })
 						return null
 					}
 				}

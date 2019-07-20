@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
-import {navigate, withNavigation} from 'src/ts/utilities'
+import { navigate, withNavigation } from 'src/ts/utilities'
 
 interface NavbarProps {
 	style?: any,
@@ -15,21 +15,8 @@ interface NavbarProps {
 
 @withNavigation
 export default class Navbar extends RX.Component<NavbarProps> {
-	private renderBackButton = () => (
-		<RX.View
-			style={{ flexDirection: 'row', alignItems: 'center' }}
-			onPress={() => navigate(this.props, 'back')}
-		>
-			<RX.Image
-				source={require('./assets/Back.png')}
-				style={styles.backImage}
-			/>
-			<RX.Text style={styles.backText}>Back</RX.Text>
-		</RX.View>
-	)
-
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		if (RX.Platform.getType() === 'web') return null
 
@@ -45,6 +32,19 @@ export default class Navbar extends RX.Component<NavbarProps> {
 			</RX.View>
 		)
 	}
+
+	private renderBackButton = () => (
+		<RX.View
+			style={{ flexDirection: 'row', alignItems: 'center' }}
+			onPress={() => navigate(this.props, 'back')}
+		>
+			<RX.Image
+				source={require('./assets/Back.png')}
+				style={styles.backImage}
+			/>
+			<RX.Text style={styles.backText}>Back</RX.Text>
+		</RX.View>
+	)
 }
 
 const styles = {

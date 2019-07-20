@@ -3,13 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import Input from 'common/Input'
-import FilledButton from 'common/FilledButton'
+import FilledButton from 'common/FilledButton/FilledButton'
+import Input from 'common/Input/Input'
 import moment from 'moment-timezone'
-import {isEmailValid} from '../../../utilities'
-
+import RX from 'reactxp'
+import { isEmailValid } from 'src/ts/utilities'
 
 interface InputFormProps {
 	style?: any,
@@ -17,11 +15,12 @@ interface InputFormProps {
 }
 
 interface InputFormState {
-	[k: string]: string
 	username: string
 	email: string
 	password: string
 	passwordVerification: string
+
+	[k: string]: string
 }
 
 export default class InputForm extends RX.Component<InputFormProps, InputFormState> {
@@ -85,7 +84,7 @@ export default class InputForm extends RX.Component<InputFormProps, InputFormSta
 	}
 
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 		const {
 			username,
 			email,
@@ -125,11 +124,12 @@ export default class InputForm extends RX.Component<InputFormProps, InputFormSta
 				/>
 				<FilledButton
 					label='Send'
-					onPress={this.isValid() ? this.handleSubmit : () => {}}
+					onPress={this.isValid() ? this.handleSubmit : () => {
+					}}
 					containerStyle={[
 						styles.submitButton,
 						{
-							opacity: this.isValid() ? 1: 0.7
+							opacity: this.isValid() ? 1 : 0.7
 						}
 					]}
 				/>

@@ -1,10 +1,10 @@
 /*
- * FilePicker.native.tsx
+ * FilePicker.tsx
  * Copyright: Ouranos Studio 2019
  */
 
+import FilledButton from 'common/FilledButton/FilledButton'
 import RX from 'reactxp'
-import FilledButton from 'common/FilledButton'
 import AppConfig from 'src/ts/app/AppConfig'
 
 let reader: any
@@ -21,24 +21,29 @@ interface FilePickerProps {
 }
 
 export default class FilePicker extends RX.Component<FilePickerProps> {
+	static defaultProps = {
+		label: 'Select Image'
+	}
+	_input: any
+
 	render() {
-		const {style} = this.props
+		const { style } = this.props
 
 		return (
 			<RX.View
 				style={[styles.container, style]}
 			>
-				<FilledButton label={this.props.label} onPress={this._openPicker}/>
+				<FilledButton label={this.props.label} onPress={this._openPicker} />
 				<input
 					ref={ref => this._input = ref}
 					type="file"
 					required
-					style={{display: 'none'}}
+					style={{ display: 'none' }}
 					// @ts-ignore
-					onChange={({target: {validity, files: [file], result}}) => {
+					onChange={({ target: { validity, files: [file], result } }) => {
 						if (reader) {
 							if (!file) return null
-								// @ts-ignore
+							// @ts-ignore
 							reader.onload = (event) => {
 								this.props.onImagePreviewChange(event.target.result)
 							}
@@ -51,12 +56,6 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
 			</RX.View>
 		)
 	}
-
-	static defaultProps = {
-		label: 'Select Image'
-	}
-
-	_input: any
 
 	private _openPicker = () => {
 		this._input.click()

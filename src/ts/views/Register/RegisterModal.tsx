@@ -4,11 +4,11 @@
  */
 
 import RX from 'reactxp'
-import Register from 'src/ts/views/Register/Register'
-import {ComponentBase} from 'resub'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { ComponentBase } from 'resub'
 import theme from 'src/ts/app/Theme'
-import {navigate} from 'src/ts/utilities'
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { navigate } from 'src/ts/utilities'
+import Register from 'src/ts/views/Register/Register'
 
 const REGISTER_WINDOW_DIMENSION = 600
 const REGISTER_WINDOW_BORDER_RADIUS = 20
@@ -22,12 +22,6 @@ export default class RegisterModal extends ComponentBase<{}, RegisterModalState>
 	private _modalAnimatedStyle = RX.Styles.createAnimatedViewStyle({
 		opacity: this._modalOpacity,
 	})
-
-	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<RegisterModalState> | undefined {
-		return {
-			isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize()
-		}
-	}
 
 	componentDidMount(): void {
 		RX.Animated.timing(this._modalOpacity, {
@@ -44,7 +38,7 @@ export default class RegisterModal extends ComponentBase<{}, RegisterModalState>
 	render() {
 		const RegisterWindow = () => (
 			<RX.Animated.View style={this.state.isTinyOrSmall ? [styles.container, this._modalAnimatedStyle] : styles.login}>
-				<Register {...this.props}/>
+				<Register {...this.props} />
 				<RX.Text style={styles.closeButton} onPress={() => this.dismiss(() => navigate(this.props, 'back'))}>X</RX.Text>
 			</RX.Animated.View>
 		)
@@ -55,11 +49,17 @@ export default class RegisterModal extends ComponentBase<{}, RegisterModalState>
 
 		return (
 			<RX.Animated.View
-				style={[styles.container, {backgroundColor: theme.colors.modalBackDrop}, this._modalAnimatedStyle]}
+				style={[styles.container, { backgroundColor: theme.colors.modalBackDrop }, this._modalAnimatedStyle]}
 			>
 				<RegisterWindow />
 			</RX.Animated.View>
 		)
+	}
+
+	protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<RegisterModalState> | undefined {
+		return {
+			isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize()
+		}
 	}
 }
 

@@ -1,20 +1,23 @@
 /*
- * ProfileScreen.tsx
+ * PublicProfileScreenContainer.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
 import gql from 'graphql-tag'
-import {UserFragment} from 'src/ts/models/GraphQLModels'
-import {Query} from 'react-apollo'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
-import PublicProfileScreen from './PublicProfileScreen'
-import {ComponentBase} from 'resub'
+import { UserFragment } from 'src/ts/models/GraphQLModels'
 import LocationStore from 'src/ts/stores/LocationStore'
+import PublicProfileScreen from './PublicProfileScreen'
 
+export default class PublicProfileScreenContainer extends ComponentBase<RX.CommonProps, { path: string }> {
+	state = {
+		path: LocationStore.getPath() || '/',
+	}
+	private _username?: string
 
-export default class PublicProfileScreenContainer extends ComponentBase<RX.CommonProps, {path: string}> {
   render() {
     return (
 			<Query
@@ -27,7 +30,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
 					  }
 					`}
 			>
-				{({data, loading}) => {
+				{({ data, loading }) => {
 					if (loading) return <RX.Text>Loading</RX.Text>
 					if (!data) return null
 					if (!data.getUser) return null
@@ -53,10 +56,4 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
 			path: LocationStore.getPath()
 		}
 	}
-
-	state = {
-  	path: LocationStore.getPath() || '/',
-	}
-
-	private _username?: string
 }

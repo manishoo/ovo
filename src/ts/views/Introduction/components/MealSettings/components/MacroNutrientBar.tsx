@@ -3,7 +3,6 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
 
@@ -24,17 +23,17 @@ export default class MacroNutrientBar extends RX.Component<MacroNutrientBarProps
 				style={styles.bar}
 			>
 				<RX.View
-					style={[styles.barFilled, {flex: percentageFill, backgroundColor: color}]}
+					style={[styles.barFilled, { flex: percentageFill, backgroundColor: color }]}
 				/>
 				<RX.View
-					style={{flex: 100 - percentageFill}}
+					style={{ flex: 100 - percentageFill }}
 				/>
 			</RX.View>
 		)
 	}
 
 	onResponderMove = (e: RX.Types.SyntheticEvent): void => {
-		const {value, onChange} = this.props
+		const { value, onChange } = this.props
 		console.log(e.nativeEvent)
 		if (e.nativeEvent.pageX === this.prevLocationX) return undefined
 		if (this.prevLocationX) {
@@ -74,13 +73,11 @@ export default class MacroNutrientBar extends RX.Component<MacroNutrientBarProps
 					style={styles.container1}
 				>
 					<RX.Text style={styles.label}>{label}</RX.Text>
-					<RX.Text style={{color}}>%{Math.ceil(value * 100)}</RX.Text>
-					<RX.Text style={{color: '#ccc', fontSize: 12}}>~{Math.ceil(value * tdee)} calories</RX.Text>
+					<RX.Text style={{ color }}>%{Math.ceil(value * 100)}</RX.Text>
+					<RX.Text style={{ color: '#ccc', fontSize: 12 }}>~{Math.ceil(value * tdee)} calories</RX.Text>
 				</RX.View>
 				<RX.View
 					style={styles.container2}
-					// onDragStart={this.onDrag}
-					// onDrag={this.onDrag}
 					onResponderMove={this.onResponderMove}
 					onResponderEnd={this.onResponderEnd}
 					onResponderRelease={this.onResponderEnd}
@@ -106,9 +103,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
 		flexDirection: 'row',
-		// width: fullWidth(),
 		marginBottom: 8,
-		// height: 45,
 	}),
 	container1: RX.Styles.createViewStyle({
 		width: 100,

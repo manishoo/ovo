@@ -3,31 +3,28 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import Input from 'common/Input'
-import {getLocalizedText} from 'common/LocalizedText'
-import FilledButton from 'common/FilledButton'
-import {Mutation} from 'react-apollo'
-import gql from 'graphql-tag'
+import FilledButton from 'common/FilledButton/FilledButton'
+import Input from 'common/Input/Input'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Navbar from 'common/Navbar/Navbar'
-import theme from 'src/ts/app/Theme'
-import {isEmailValid, navigate} from 'src/ts/utilities'
-import {Routes} from 'src/ts/navigator/routes'
+import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
-import Checkbox from 'src/ts/controls/Checkbox'
 import moment from 'moment-timezone'
+import { Mutation } from 'react-apollo'
+import RX from 'reactxp'
+import theme from 'src/ts/app/Theme'
+import Checkbox from 'src/ts/common/Checkbox/Checkbox'
+import { User } from 'src/ts/models/FoodModels'
+import { SelfUserFragment } from 'src/ts/models/GraphQLModels'
+import { Routes } from 'src/ts/navigator/routes'
 import UserStore from 'src/ts/stores/UserStore'
-import {User} from 'src/ts/models/FoodModels'
-import {SelfUserFragment} from 'src/ts/models/GraphQLModels'
-
+import { isEmailValid, navigate } from 'src/ts/utilities'
 
 const FORM_WIDTH = 270
 
 interface RegisterProps {
 	style?: any,
 }
-
 
 export default class Register extends RX.Component<RegisterProps> {
 	state = {
@@ -55,10 +52,11 @@ export default class Register extends RX.Component<RegisterProps> {
 	}
 
 	handleSubmit = (mutate: any) => () => {
-		if (!this.isValid()) return () => {}
+		if (!this.isValid()) return () => {
+		}
 
 		return mutate()
-			.then(async ({data: {register}}: { data: { register: User } }) => {
+			.then(async ({ data: { register } }: { data: { register: User } }) => {
 				/**
 				 * Register Success
 				 * */
@@ -84,7 +82,7 @@ export default class Register extends RX.Component<RegisterProps> {
 	}
 
   render() {
-		const {style} = this.props
+		const { style } = this.props
 
     return (
 			<Mutation

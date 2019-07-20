@@ -2,8 +2,9 @@
  * Theme.ts
  * Copyright: Ouranos Studio 2019
  */
+
+import { default as FontRefs } from 'modules/fonts'
 import RX from 'reactxp'
-import {default as FontRefs} from 'modules/fonts'
 import AppConfig from 'src/ts/app/AppConfig'
 
 class Theme {
@@ -17,23 +18,46 @@ class Theme {
 			shadowColor: 'rgba(0, 0, 0, .12)',
 			shadowRadius: 10,
 		},
-		get start() {return AppConfig.isRTL() ? 'right' : 'left'},
-		get end() {return AppConfig.isRTL() ? 'left' : 'right'},
+		get start() {
+			return AppConfig.isRTL() ? 'right' : 'left'
+		},
+		get end() {
+			return AppConfig.isRTL() ? 'left' : 'right'
+		},
 
-		// for use in example: marginRight
-		get Start() {return AppConfig.isRTL() ? 'Right' : 'Left'},
-		get End() {return AppConfig.isRTL() ? 'Left' : 'Right'},
+		get Start() {
+			return AppConfig.isRTL() ? 'Right' : 'Left'
+		},
+		get End() {
+			return AppConfig.isRTL() ? 'Left' : 'Right'
+		},
 
-		get marginStart() {return `margin${this.Start}`},
-		get marginEnd() {return `margin${this.End}`},
-		get paddingStart() {return `padding${this.Start}`},
-		get paddingEnd() {return `padding${this.End}`},
+		get marginStart() {
+			return `margin${this.Start}`
+		},
+		get marginEnd() {
+			return `margin${this.End}`
+		},
+		get paddingStart() {
+			return `padding${this.Start}`
+		},
+		get paddingEnd() {
+			return `padding${this.End}`
+		},
 
-		get borderTopEndRadius() {return `borderTop${this.End}Radius`},
-		get borderTopStartRadius() {return `borderTop${this.Start}Radius`},
+		get borderTopEndRadius() {
+			return `borderTop${this.End}Radius`
+		},
+		get borderTopStartRadius() {
+			return `borderTop${this.Start}Radius`
+		},
 
-		get borderBottomEndRadius() {return `borderBottom${this.End}Radius`},
-		get borderBottomStartRadius() {return `borderBottom${this.Start}Radius`},
+		get borderBottomEndRadius() {
+			return `borderBottom${this.End}Radius`
+		},
+		get borderBottomStartRadius() {
+			return `borderBottom${this.Start}Radius`
+		},
 	}
 
 	public colors = {
@@ -54,12 +78,6 @@ class Theme {
 		largeHeading: '#cecece',
 
 		red: '#d32f2f',
-
-		// listOfColors: [
-		// 	'#cddc39',
-		// 	'#fdd835',
-		// 	'#e53935',
-		// ],
 
 		mealCardBackgroundColor: '#fff',
 		mealItemSubtitle: '#4A4A4A',

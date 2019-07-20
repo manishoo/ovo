@@ -1,21 +1,21 @@
 /*
- * _FoodPreview.tsx
+ * FoodPreview.tsx
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
-import RX from 'reactxp'
-import FilledButton from 'common/FilledButton'
-import theme from 'src/ts/app/Theme'
-import Input from 'common/Input'
+
+import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
-import Text from 'common/Text'
-import {getLocalizedText} from 'common/LocalizedText'
-import {Food, MealItem, Weight} from 'src/ts/models/FoodModels'
-import {Query} from 'react-apollo'
+import Input from 'common/Input/Input'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
-import {FoodFragment} from 'src/ts/models/GraphQLModels'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
 import client from 'src/ts/app/client'
+import theme from 'src/ts/app/Theme'
+import { Food, MealItem, Weight } from 'src/ts/models/FoodModels'
+import { FoodFragment } from 'src/ts/models/GraphQLModels'
 
 const TEXT_HEADING_WIDTH = 200
 
@@ -44,7 +44,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 	}
 
   render() {
-		const {style} = this.props
+		const { style } = this.props
 
     return (
 			<Query
@@ -58,7 +58,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 					}
 				`}
 			>
-				{({data, loading}) => (
+				{({ data, loading }) => (
 					<RX.View
 						style={[styles.previewContainer, style]}
 					>
@@ -75,6 +75,22 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 			</Query>
     )
   }
+
+	getSelectedWeight = () => {
+		if (this.props.selectedWeight) {
+			return this.props.selectedWeight.description
+		}
+
+		return getLocalizedText('g')
+	}
+
+	onSubmit = (food: Food) => () => {
+		return this.props.onSubmit(
+			food,
+			this.state.amount,
+			this.props.selectedWeight,
+		)
+	}
 
 	private _renderContent = (data: { getFoodVariety: Food }, loading: boolean) => {
 		if (loading) {
@@ -95,7 +111,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 	}
 
 	private _renderAmountSelection = (food: Food) => {
-		const {inputRef} = this.props
+		const { inputRef } = this.props
 
 		return [
 			<RX.View
@@ -129,12 +145,13 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 						autoFocus
 						inputRef={inputRef}
 						value={String(this.state.amount)}
-						onChange={(amount: string) => this.setState({amount: Number(amount)})}
+						onChange={(amount: string) => this.setState({ amount: Number(amount) })}
 						label={getLocalizedText('Amount')}
 						keyboardType={'number-pad'}
 					/>
 					<Text translate style={styles.label}>Unit</Text>
-					<RX.View style={styles.selectContainer} onPress={() => this.props.onSelectPress(food.weights || [])} activeOpacity={0.4}>
+					<RX.View style={styles.selectContainer} onPress={() => this.props.onSelectPress(food.weights || [])}
+									 activeOpacity={0.4}>
 						<RX.Text>{this.getSelectedWeight()}</RX.Text>
 					</RX.View>
 				</RX.View>
@@ -155,8 +172,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 	}
 
 	private _renderNotAvailable = () => {
-  	return (
-  		<RX.View>
+		return (
+			<RX.View>
 				<Text>This food is not available</Text>
 			</RX.View>
 		)
@@ -164,22 +181,6 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 
 	private _dismiss = () => {
 		this.props.onDismiss()
-	}
-
-	getSelectedWeight = () => {
-		if (this.props.selectedWeight) {
-			return this.props.selectedWeight.description
-		}
-
-		return getLocalizedText('g')
-	}
-
-	onSubmit = (food: Food) => () => {
-		return this.props.onSubmit(
-			food,
-			this.state.amount,
-			this.props.selectedWeight,
-		)
 	}
 }
 

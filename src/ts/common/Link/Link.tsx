@@ -4,8 +4,8 @@
  */
 
 import RX from 'reactxp'
-import {navigate, withNavigation} from 'src/ts/utilities'
 import theme from 'src/ts/app/Theme'
+import { navigate, withNavigation } from 'src/ts/utilities'
 
 interface LinkProps {
 	style?: any,

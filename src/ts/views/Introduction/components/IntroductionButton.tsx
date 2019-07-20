@@ -3,11 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-// import React from 'react'
+import LocalizedText from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
-import LocalizedText from 'common/LocalizedText'
 import theme from 'src/ts/app/Theme'
-import {fullWidth} from 'src/ts/utilities'
+import { fullWidth } from 'src/ts/utilities'
 
 interface IntroductionButtonProps {
 	style?: any,
@@ -16,6 +15,10 @@ interface IntroductionButtonProps {
 }
 
 export default class IntroductionButton extends RX.Component<IntroductionButtonProps, { large: boolean }> {
+	private _widthAnimated: any
+	private _marginTopAnimated: any
+	private _borderRadiusAnimated: any
+
 	constructor(props: IntroductionButtonProps) {
 		super(props)
 
@@ -26,10 +29,6 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
 		this._marginTopAnimated = RX.Animated.createValue(100)
 		this._borderRadiusAnimated = RX.Animated.createValue(20)
 	}
-
-	private _widthAnimated: any
-	private _marginTopAnimated: any
-	private _borderRadiusAnimated: any
 
 	shrink = () => {
 		RX.Animated.parallel([
@@ -57,8 +56,8 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
 	}
 
 	render() {
-		const {style} = this.props
-		const {large} = this.state
+		const { style } = this.props
+		const { large } = this.state
 
 		return (
 			[
@@ -79,9 +78,9 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
 						activeOpacity={large ? 0.7 : 1}
 						style={[
 							styles.baseMessage,
-							{width: this._widthAnimated},
+							{ width: this._widthAnimated },
 							style,
-							large ? {} : {[theme.styles.borderBottomEndRadius]: 5}
+							large ? {} : { [theme.styles.borderBottomEndRadius]: 5 }
 						]}
 					>
 						<RX.Text
@@ -103,16 +102,11 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
 const styles = {
 	baseMessage: RX.Styles.createViewStyle({
 		padding: 15,
-		// paddingBottom: 8,
 		justifyContent: 'center',
 		minHeight: 30,
 		borderRadius: 25,
-		// maxWidth: fullWidth() - 150,
-		// minWidth: 70,
 		margin: 5,
 		[theme.styles.marginEnd]: 10,
-
 		backgroundColor: theme.colors.assistantUserMessageBG,
-		// borderBottomRightRadius: 5,
 	}),
 }

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import {EXPECTATIONS, Item, Message, MessageType} from './types'
+import { EXPECTATIONS, Item, Message, MessageType } from './types'
 
 export function getLastInputType(messages: Message[]) {
 	// @ts-ignore

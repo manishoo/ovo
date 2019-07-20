@@ -6,7 +6,7 @@ The commands in the instructions below assume you are in the root of this repo.
 
 ### Building
 
-- From the RXPTodoList directory, run `npm install`. This fetches the dependencies.
+- From the root directory, run `npm install`. This fetches the dependencies.
 
 ### Developing for Web
 
@@ -18,7 +18,7 @@ The commands in the instructions below assume you are in the root of this repo.
 
 - Run `npm run start-ios`. This compiles the TypeScript code and recompiles it whenever any files are changed.
 - In another command prompt run `npm run start`. This starts the React Native Packager.
-- Open the project (ios/RXPTodoList.xcodeproj) in Xcode and build it like any other React Native project.
+- Open the project (ios/supernova.xcodeproj) in Xcode and build it like any other React Native project.
 
 ### Building for Android
 
@@ -26,15 +26,7 @@ The commands in the instructions below assume you are in the root of this repo.
 - In another command prompt run `npm run start`. This starts the React Native Packager.
 - Open the project (in the android directory) in Android Studio and build it like any other React Native project.
 
-### Building for Windows
-
-- Run `npm run start-windows`. This compiles the TypeScript code and recompiles it whenever any files are changed.
-- In another command prompt run `npm run start`. This starts the React Native Packager.
-- Open the project (in the windows directory) in Visual Studio and build it like any other React Native project.
-
-
 # Concepts
-This sample demonstrates a number of concepts that you can leverage within your app. Some of these concepts demonstrate advanced ways to orchestrate the build of a more complex cross-platform app. Others demonstrate coding techniques within the app.
 
 ## Gulp-based Build
 Most of the other ReactXP samples use a simple build technique where the build script is implemented entirely within the package.json "scripts" section. This sample demonstrates a more sophisticated build that leverages [gulp](https://www.npmjs.com/package/gulp), a popular automation toolkit.
