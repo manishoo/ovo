@@ -47,6 +47,10 @@ class ImageSource implements ImageSourceBase {
 
 	Clear = AppConfig.getImagePath('Clear.png')
 	More = AppConfig.getImagePath('More.png')
+
+	Back = AppConfig.getImagePath('Back.png')
+	ShoppingList = AppConfig.getImagePath('ShoppingList.png')
+	Finger = AppConfig.getImagePath('Finger.png')
 }
 
 export default new ImageSource()

@@ -156,6 +156,18 @@ class ImageSource implements ImageSourceBase {
 	get More() {
 		return require('../../../images/More.png')
 	}
+
+	get Back() {
+		return require('../../../images/Back.png')
+	}
+
+	get ShoppingList() {
+		return require('../../../images/ShoppingList.png')
+	}
+
+	get Finger() {
+		return require('../../../images/Finger.png')
+	}
 }
 
 export default new ImageSource()

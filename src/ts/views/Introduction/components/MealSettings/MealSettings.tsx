@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import Input from 'src/ts/common/Input/Input'
 import SubmitButton from '../SubmitButton'
@@ -95,7 +96,7 @@ export default class MealSettings extends RX.Component<MealSettingsProps, MealSe
 	renderHint = () => {
 		return (
 			<RX.Animated.Image
-				source={require('./assets/finger.png')}
+				source={ImageSource.Finger}
 				// @ts-ignore
 				style={{
 					opacity: this.hintOpacityAnimated,

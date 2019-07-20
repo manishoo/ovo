@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import ImageSource from 'modules/images'
 import moment from 'moment-timezone'
 import RX from 'reactxp'
 import { VirtualListView } from 'reactxp-virtuallistview'
@@ -116,7 +117,7 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 			return (
 				<RX.View style={[styles.goToToday, { top: 32 }]} onPress={() => this._scrollToCurrentMeal(true)}>
 					<RX.Image
-						source={require('../assets/Back.png')}
+						source={ImageSource.Back}
 						style={{
 							width: 25,
 							height: 25,
@@ -131,7 +132,7 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 			return (
 				<RX.View style={[styles.goToToday, { bottom: 100 }]} onPress={() => this._scrollToCurrentMeal(true)}>
 					<RX.Image
-						source={require('../assets/Back.png')}
+						source={ImageSource.Back}
 						style={{
 							width: 25,
 							height: 25,

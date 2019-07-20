@@ -47,4 +47,8 @@ export interface ImageSourceBase {
 
 	Clear: string;
 	More: string;
+
+	Back: string;
+	ShoppingList: string;
+	Finger: string;
 }

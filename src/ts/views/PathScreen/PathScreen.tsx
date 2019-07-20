@@ -14,6 +14,7 @@ import { fullHeight, navigate } from 'src/ts/utilities'
 import DateView from './DateView'
 import EventComponent from './Event'
 import ListView from './ListView/ListView'
+import ImageSource from 'modules/images'
 
 interface PathState {
 	activeMeal?: Event,
@@ -124,7 +125,7 @@ export default class PathScreen extends ComponentBase<PathProps, PathState> {
 	private _renderShoppingListIcon = () => (
 		<RX.View onPress={() => navigate(this.props, Routes.shoppingList)} style={styles.shoppingListIcon}>
 			<RX.Image
-				source={require('./assets/shoppinglist.png')}
+				source={ImageSource.ShoppingList}
 				style={styles.shoppingListImage}
 			/>
 		</RX.View>
