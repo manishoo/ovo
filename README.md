@@ -2,8 +2,25 @@
 
 This app works on React Native (iOS, Android, Windows) and web.
 
-The commands in the instructions below assume you are in the root of this repo.
+## Tech Stack
+* Html
+* Css
+* Javascript
+* Typescript
+* React
+* React Native
+* NodeJs
+* ReactXP
+* Resub
+* GraphQL
+* Apollo Client
+* React Router
+* React Navigation
+* Webpack
+* Babel
+* Gulp
 
+## Running the App
 ### Building
 
 - From the root directory, run `npm install`. This fetches the dependencies.
@@ -26,11 +43,45 @@ The commands in the instructions below assume you are in the root of this repo.
 - In another command prompt run `npm run start`. This starts the React Native Packager.
 - Open the project (in the android directory) in Android Studio and build it like any other React Native project.
 
+## Folder Structure
+### app/
+This directory contains modules that are related to app startup and configuration. It also contains various other app-wide modules that don't have a good home elsewhere.
+
+### common/
+This directory contains the components that are used in more than one component and thus are “common”
+
+### models/
+This directory contains data structures and types that are common to other modules. In general, they should be at the bottom of the import tree and should therefore not import any other modules.
+
+### modules/
+This directory contains platform-specific modules. A module should present the same interface for all supported platforms.
+
+### navigator/
+This directory contains navigators for web and native (iOS and Android). The navigators are entirely platform-specific. The navigator on the web is `react-router` and on mobile `react-navigation`. The `navigator/routes/` allows for code-splitting.
+
+### services/
+This directory contains modules that implement singleton "services". These are intended to be started once, often at app launch time. The `ServiceManager` is responsible for starting services in a well-defined order. It will start dependent services in dependency order. 
+### stores/
+This directory contains modules that implement data stores. Modules can subscribe to stores and be notified when the data within a store changes.
+
+### utilities/
+This directory contains various utility modules. These are generally leaf nodes in the import dependency tree and should try not to depend on other modules.
+
+### views/
+This directory contains modules that implement app-specific UI views.
+
+## Practices
+### Components
+* style at the bottom
+* render at the top after state definitions, constructors or _buildState methods
+* private methods must start with `private _functionName`
+
+### Navigation
+navigation on the web is using the history api and on mobile it is using the navigation props provided by `react-navigation`. In order to navigate anywhere, LocationStore methods must be used and props must be passed to it.
+
 # Concepts
 
 ## Gulp-based Build
-Most of the other ReactXP samples use a simple build technique where the build script is implemented entirely within the package.json "scripts" section. This sample demonstrates a more sophisticated build that leverages [gulp](https://www.npmjs.com/package/gulp), a popular automation toolkit.
-
 The script logic is mostly located in the file gulpfile.js. This script also makes use of buildconfig.js, which defines all of the build parameters (such as paths and config options).
 
 The package.json "scripts" section defines two scripts for each platform.
@@ -61,7 +112,7 @@ This replacement is performed by either a gulp task (see method ```replaceFlags`
 If you want to use this technique in your project, copy those relevant sections from gulpfile.js and webpack.config.ts.
 
 ## Platform-specific Code Modules
-ReactXP attempts to enable most of your app's code to be platform-agnostic. However, there are times when it's necessary to write platform-specific code. The recommended approach is to encapsulate the functionality within a module that has a common interface but different, per-platform, implementations.
+We attempt to enable most of the app's code to be platform-agnostic. However, there are times when it's necessary to write platform-specific code. The recommended approach is to encapsulate the functionality within a module that has a common interface but different, per-platform, implementations.
 
 This sample shows a way to "link" the appropriate code based on the platform type. It does this through the use of flexible aliasing in both webpack and the RN packager.
 
@@ -76,14 +127,6 @@ import LinearGradient from 'module/linear-gradient';
 This aliasing technique is implemented primarily in the buildconfig.js file. Refer to the ```getModuleAliases``` function, which computes the aliases array. These aliases are then applied at build time by either the ```apply-aliases``` gulp step in the case of native builds or through a webpack plugin (see the "aliases" section of webpack.config.ts) for web builds.
 
 To incorporate this techinque into your project, copy the relevant sections of buildconfig.js, gulpfile.js, and webpack.config.ts.
-
-## Local Web Server
-The other ReactXP samples allow you to run the resulting web app by simply opening the ```index.html``` file in your browser. This sample shows a more advanced technique that uses a simple local web server running in node. This web server is not intended for development only, not for production hosting.
-
-To configure and run the local web server, refer to the instructions in docs/setup.
-
-To add this mechanism to your project, copy the nodeserver.js file to the root of your project.
-
 
 ## Stores and Auto-subscriptions
 This sample demonstrates the use of [ReSub](https://www.npmjs.com/package/resub), which provides a way for components to auto-subscribe to data stores and automatically get notified when the underlying data changes. Unlikely many other mechanisms based on flux (e.g. redux), this technique involves minimal boilerplate code because it leverages features within the TypeScript language to install subscriptions automatically.
@@ -105,20 +148,11 @@ This sample demonstrates how to include static images within your project. It us
 
 Refer to the ```modules/images/``` directory for details.
 
-## Navigation Contexts
-There are many ways to implement navigation in React apps. This sample demonstrates one such technique that allows the app to switch between "stack-based" navigation (which is most appropriate for small screen sizes) and "composite" navigation where multiple panels are visible side by side (most appropriate for larger screen sizes). The sample app is able to switch between these two modes as you resize your browser.
-
-A "navigation context" defines a location in the app. Many nav contexts also include state variables (such as the "current selected item") that are related to navigation. Nav contexts can be converted to and from deep links, which take the form of a URI. More on this below.
-
-The NavContextStore is responsible for maintaining the current navigation location within the app - and a variable that indicates whether the app is currently using stack-based or composite mode. Any changes in navigation must update this store. When an update occurs, the top layers of the view hierarchy are notified of the change, and they initiate a re-render if necessary. Refer to the views/RootView.tsx file for details.
-
-The NavContextStore module exposes methods for navigating to a new context. See ```navigateToTodoList``` for an example.
-
 ## Other Useful Modules
 The sample implements several other useful modules that you may want to copy into your project.
 
-### Styles
-The app/Styles module provides common definitions for colors, fonts, font sizes, etc. It's useful to define these within one place to facilitate app-wide themeing and enforce a consistent design language.
+### Theme
+The app/Theme module provides common definitions for colors, fonts, font sizes, etc. It's useful to define these within one place to facilitate app-wide themeing and enforce a consistent design language.
 
 ### AppConfig
 The app/AppConfig module provides accessor methods for static configuration information - like platform, app version, development flag, and various paths. This is not considered a "store" because the information provided by this module never changes at runtime.
