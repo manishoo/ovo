@@ -9,7 +9,7 @@ import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { User } from 'src/ts/models/FoodModels'
 import { RecipeFragment } from 'src/ts/models/GraphQLModels'
 
@@ -71,7 +71,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		// FIXME width: fullWidth(),
 		flex: 1,
-		padding: theme.styles.spacingLarge,
+		padding: Styles.values.spacingLarge,
 		backgroundColor: '#fff',
 		alignSelf: 'center',
 	}),
@@ -94,6 +94,6 @@ const styles = {
 		// fontWeight: 'bold',
 		fontWeight: 'bold',
 		color: '#e7e7e7',
-		marginBottom: theme.styles.spacing,
+		marginBottom: Styles.values.spacing,
 	}),
 }

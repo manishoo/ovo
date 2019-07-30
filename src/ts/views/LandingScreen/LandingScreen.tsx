@@ -11,7 +11,9 @@ import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import HoverButton from 'src/ts/common/HoverButton/HoverButton'
 import { Routes } from 'src/ts/navigator/routes'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -40,9 +42,9 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 				<RX.View>
 					<Text
 						style={{
-							fontSize: theme.fontSizes.size20,
+							fontSize: Styles.fontSizes.size20,
 							alignSelf: 'center',
-							padding: theme.styles.spacing,
+							padding: Styles.values.spacing,
 							textAlign: 'center',
 						}}
 					>This website is currently under development, please use a desktop browser to view this page</Text>
@@ -51,34 +53,38 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 		}
 
 		return (
-			<RX.View style={[styles.container, style]}>
-				<RX.View
-					style={[
-						{
-							height: this.state.height,
-							minHeight: 1000
-						},
-						styles.initialPageContainer,
-					]}>
-					<Text translate style={styles.title}>landingTitle</Text>
-					<Text translate style={styles.subtitle}>landingSubtitle</Text>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View style={[styles.container, style]}>
+						<RX.View
+							style={[
+								{
+									height: this.state.height,
+									minHeight: 1000
+								},
+								styles.initialPageContainer,
+							]}>
+							<Text translate style={styles.title}>landingTitle</Text>
+							<Text translate style={[styles.subtitle, { color: theme.colors.landingSubtitle }]}>landingSubtitle</Text>
 
-					{this._renderPhone()}
+							{this._renderPhone()}
 
-					<GoDownIndicator />
-				</RX.View>
+							<GoDownIndicator />
+						</RX.View>
 
-				{this._renderSection(ImageSource.SC1, getLocalizedText('landing_1_t'), getLocalizedText('landing_1_s'))}
-				{this._renderSection(ImageSource.SC2, getLocalizedText('landing_2_t'), getLocalizedText('landing_2_s'), {
-					width: 400,
-				})}
-				{this._renderSection(ImageSource.SC3, getLocalizedText('landing_3_t'), getLocalizedText('landing_3_s'))}
-				{this._renderSection(ImageSource.SC4, getLocalizedText('landing_4_t'), getLocalizedText('landing_4_s'))}
+						{this._renderSection(theme, ImageSource.SC1, getLocalizedText('landing_1_t'), getLocalizedText('landing_1_s'))}
+						{this._renderSection(theme, ImageSource.SC2, getLocalizedText('landing_2_t'), getLocalizedText('landing_2_s'), {
+							width: 400,
+						})}
+						{this._renderSection(theme, ImageSource.SC3, getLocalizedText('landing_3_t'), getLocalizedText('landing_3_s'))}
+						{this._renderSection(theme, ImageSource.SC4, getLocalizedText('landing_4_t'), getLocalizedText('landing_4_s'))}
 
-				{this._renderBottomCall2Action()}
-				{this._renderFooter()}
-				{this._renderHeader()}
-			</RX.View>
+						{this._renderBottomCall2Action()}
+						{this._renderFooter(theme)}
+						{this._renderHeader(theme)}
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
@@ -89,7 +95,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 		}
 	}
 
-	private _renderHeader = () => {
+	private _renderHeader = (theme: Theme) => {
 		return (
 			<RX.View style={styles.headerContainer}>
 				<RX.View
@@ -113,7 +119,8 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 								}
 							]}
 						>
-							<Text translate style={styles.loginButtonText}>Login</Text>
+							<Text translate
+										style={{ color: theme.colors.loginButtonTextColor }}>Login</Text>
 						</RX.View>
 					)}
         />}
@@ -163,7 +170,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 		)
 	}
 
-	private _renderSection = (image: any, title: string, subtitle: string, imageStyle?: any) => {
+	private _renderSection = (theme: Theme, image: any, title: string, subtitle: string, imageStyle?: any) => {
 		const { height, width } = this.state
 
 		let sectionWidth = width
@@ -179,13 +186,13 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 						style={[styles.sectionImage, imageStyle]}
 					/>
 				</RX.View>
-				<RX.View style={{ flexDirection: 'row', padding: theme.styles.spacing }}>
+				<RX.View style={{ flexDirection: 'row', padding: Styles.values.spacing }}>
 					<RX.View>
-						<RX.View style={styles.circle} />
+						<RX.View style={[styles.circle, { borderColor: theme.colors.sectionCircle }]} />
 					</RX.View>
 					<RX.View style={{ maxWidth: 500 }}>
-						<Text style={styles.sectionTitle}>{title}</Text>
-						<Text style={styles.sectionSubtitle}>{subtitle}</Text>
+						<Text style={[styles.sectionTitle, { color: theme.colors.landingSectionTitle }]}>{title}</Text>
+						<Text style={[styles.sectionSubtitle, { color: theme.colors.landingSectionSubtitle }]}>{subtitle}</Text>
 					</RX.View>
 				</RX.View>
 			</RX.View>
@@ -201,14 +208,19 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 			<FilledButton
 				label={getLocalizedText('LandingStartFree')}
 				fontSize={24}
-				style={{ paddingRight: theme.styles.spacingLarge * 2, paddingLeft: theme.styles.spacingLarge * 2 }}
+				style={{ paddingRight: Styles.values.spacingLarge * 2, paddingLeft: Styles.values.spacingLarge * 2 }}
 				onPress={() => {
 				}}
 			/>
 		]
 	}
 
-	private _renderFooter = () => {
+	private _renderFooter = (theme: Theme) => {
+		const footerLinkStyle = RX.Styles.createTextStyle({
+			marginTop: Styles.values.spacing,
+			color: theme.colors.footerLinkColor,
+		}, false)
+
 		return [
 			<Image
 				source={ImageSource.LandingCurve}
@@ -218,20 +230,22 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 				}}
 				resizeMode={'cover'}
 			/>,
-			<RX.View style={[styles.footerContainer, { width: this.state.width }]}>
+			<RX.View
+				style={[styles.footerContainer, { width: this.state.width, backgroundColor: theme.colors.landingFooterBG }]}>
 				<RX.View
 					style={{
 						flexDirection: 'row',
 						justifyContent: 'space-between',
-						marginRight: theme.styles.spacing,
-						marginLeft: theme.styles.spacing,
+						marginRight: Styles.values.spacing,
+						marginLeft: Styles.values.spacing,
 					}}
 				>
-					<RX.View style={{ [theme.styles.marginEnd]: theme.styles.spacing * 2 }}>
-						<Text translate style={styles.footerTitle}>LandingFooterCentralOffice</Text>
-						<Text translate style={styles.footerLink}>LandingFooterAboutCaloria</Text>
-						<Text translate style={styles.footerLink}>LandingFooterContactUs</Text>
-						<Text translate style={styles.footerLink}>LandingFooterTerms</Text>
+					<RX.View style={{ [Styles.values.marginEnd]: Styles.values.spacing * 2 }}>
+						<Text translate
+									style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}>LandingFooterCentralOffice</Text>
+						<Text translate style={footerLinkStyle}>LandingFooterAboutCaloria</Text>
+						<Text translate style={footerLinkStyle}>LandingFooterContactUs</Text>
+						<Text translate style={footerLinkStyle}>LandingFooterTerms</Text>
 					</RX.View>
 					<RX.View>
 						<Image
@@ -240,7 +254,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 								width: 152,
 								height: 31,
 								alignSelf: 'flex-end',
-								marginBottom: theme.styles.spacing * 2,
+								marginBottom: Styles.values.spacing * 2,
 							}}
 						/>
 						<Image
@@ -255,7 +269,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 				<RX.View
 					style={{
 						alignItems: 'center',
-						marginTop: theme.styles.spacing * 4,
+						marginTop: Styles.values.spacing * 4,
 					}}
 				>
 					<RX.View
@@ -332,7 +346,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 					</RX.View>
 					<Text
 						translate
-						style={styles.socialMediaText}
+						style={[styles.socialMediaText, { color: theme.colors.footerTitleColor }]}
 					>LandingFooterSocialMediaText</Text>
 				</RX.View>
 
@@ -340,10 +354,10 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 					translate
 					style={{
 						position: 'absolute',
-						bottom: theme.styles.spacing,
+						bottom: Styles.values.spacing,
 						width: this.state.width,
 						color: theme.colors.footerTitleColor,
-						font: theme.fonts.displayLight,
+						font: Styles.fonts.displayLight,
 						fontSize: 12,
 						textAlign: 'center',
 					}}
@@ -367,15 +381,15 @@ const styles = {
 		right: 0,
 		minHeight: 50,
 		maxWidth: HEADER_MAX_WIDTH,
-		padding: theme.styles.spacing,
-		marginTop: theme.styles.spacing,
+		padding: Styles.values.spacing,
+		marginTop: Styles.values.spacing,
 		// @ts-ignore
 		margin: 'auto' //FIXME only web
 	}),
 	brandContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
-		left: theme.styles.spacing,
-		top: theme.styles.spacing,
+		left: Styles.values.spacing,
+		top: Styles.values.spacing,
 	}),
 	brand: RX.Styles.createImageStyle({
 		width: 150,
@@ -384,12 +398,9 @@ const styles = {
 		},
 	}),
 	loginButtonContainer: RX.Styles.createViewStyle({
-		padding: theme.styles.spacing,
+		padding: Styles.values.spacing,
 		backgroundColor: '#fff',
-		...theme.styles.defaultShadow,
-	}),
-	loginButtonText: RX.Styles.createTextStyle({
-		color: theme.colors.loginButtonTextColor,
+		...Styles.values.defaultShadow,
 	}),
 	phone: RX.Styles.createImageStyle({
 		width: 300,
@@ -399,14 +410,13 @@ const styles = {
 		alignItems: 'center',
 	}),
 	title: RX.Styles.createTextStyle({
-		fontSize: theme.fontSizes.size32,
-		font: theme.fonts.displayBold,
-		marginBottom: theme.styles.spacingLarge,
+		fontSize: Styles.fontSizes.size32,
+		font: Styles.fonts.displayBold,
+		marginBottom: Styles.values.spacingLarge,
 	}),
 	subtitle: RX.Styles.createTextStyle({
-		fontSize: theme.fontSizes.size20,
-		color: theme.colors.landingSubtitle,
-		marginBottom: theme.styles.spacing,
+		fontSize: Styles.fontSizes.size20,
+		marginBottom: Styles.values.spacing,
 	}),
 	introductionContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -421,10 +431,9 @@ const styles = {
 	}),
 	footerContainer: RX.Styles.createViewStyle({
 		flex: 1,
-		backgroundColor: theme.colors.landingFooterBG,
-		padding: theme.styles.spacing,
+		padding: Styles.values.spacing,
 		alignItems: 'center',
-		paddingBottom: theme.styles.spacing * 4
+		paddingBottom: Styles.values.spacing * 4
 	}),
 	sectionContainer: RX.Styles.createViewStyle({
 		flexDirection: 'row',
@@ -432,40 +441,31 @@ const styles = {
 	}),
 	circle: RX.Styles.createViewStyle({
 		borderWidth: 6,
-		borderColor: theme.colors.sectionCircle,
 		width: 20,
 		height: 20,
 		borderRadius: 10,
 		marginTop: 5,
-		[theme.styles.marginEnd]: 10,
+		[Styles.values.marginEnd]: 10,
 	}),
 	sectionTitle: RX.Styles.createTextStyle({
-		color: theme.colors.landingSectionTitle,
-		fontSize: theme.fontSizes.size20,
-		font: theme.fonts.displayBold,
+		fontSize: Styles.fontSizes.size20,
+		font: Styles.fonts.displayBold,
 		marginBottom: 5,
 	}),
 	sectionSubtitle: RX.Styles.createTextStyle({
-		color: theme.colors.landingSectionSubtitle,
-		fontSize: theme.fontSizes.size16,
+		fontSize: Styles.fontSizes.size16,
 		fontWeight: '100',
 	}),
 	footerTitle: RX.Styles.createTextStyle({
-		color: theme.colors.footerTitleColor,
-		font: theme.fonts.displayBold,
-	}),
-	footerLink: RX.Styles.createTextStyle({
-		color: theme.colors.footerLinkColor,
-		marginTop: theme.styles.spacing,
+		font: Styles.fonts.displayBold,
 	}),
 	socialMediaIcon: RX.Styles.createImageStyle({
 		width: 30,
 		height: 30,
-		marginHorizontal: theme.styles.spacing
+		marginHorizontal: Styles.values.spacing
 	}),
 	socialMediaText: RX.Styles.createTextStyle({
-		fontSize: theme.fontSizes.size16,
-		color: theme.colors.footerTitleColor,
-		marginTop: theme.styles.spacing
+		fontSize: Styles.fontSizes.size16,
+		marginTop: Styles.values.spacing
 	})
 }

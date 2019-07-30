@@ -5,7 +5,7 @@
 
 import FilledButton from 'common/FilledButton/FilledButton'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { SearchResultItem } from './AddMealItemDialog'
 
 interface FoodPreviewProps {
@@ -32,64 +32,68 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps> {
 		const { style, item } = this.props
 
 		return (
-			<RX.View
-				style={[styles.previewContainer, style]}
-			>
-				<RX.View
-					onPress={this.dismiss}
-					style={styles.cancelSelectedMealContainer}
-				>
-					<RX.Text>X</RX.Text>
-				</RX.View>
-				<RX.View
-					style={styles.firstRow}
-				>
-					{
-						item.imageUrl &&
-            <RX.Image
-              source={item.imageUrl}
-              style={imageStyle}
-            />
-					}
-					<RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						style={[styles.previewContainer, style]}
+					>
 						<RX.View
-							style={styles.textHeadingContainer}
+							onPress={this.dismiss}
+							style={styles.cancelSelectedMealContainer}
 						>
-							<RX.Text
-								style={styles.bigTitle}
-							>Bananas</RX.Text>
-							<RX.Text
-								style={styles.smallTitle}
-							>, raw, bashed, shit</RX.Text>
+							<RX.Text>X</RX.Text>
 						</RX.View>
-						<RX.Text
-							style={styles.subtitle}
-						>fruits</RX.Text>
-					</RX.View>
-				</RX.View>
-				<RX.View
-					style={styles.secondRow}
-				>
-					<RX.View
-						style={styles.flex1}
-					>
-					</RX.View>
-					<RX.View
-						style={styles.chartContainer}
-					>
-						<RX.Text
-							style={styles.chartTextContainer}
-						>MacroNutrients Chart</RX.Text>
-					</RX.View>
-				</RX.View>
+						<RX.View
+							style={styles.firstRow}
+						>
+							{
+								item.imageUrl &&
+                <RX.Image
+                  source={item.imageUrl}
+                  style={imageStyle}
+                />
+							}
+							<RX.View>
+								<RX.View
+									style={styles.textHeadingContainer}
+								>
+									<RX.Text
+										style={styles.bigTitle}
+									>Bananas</RX.Text>
+									<RX.Text
+										style={[styles.smallTitle, { color: theme.colors.labelInput }]}
+									>, raw, bashed, shit</RX.Text>
+								</RX.View>
+								<RX.Text
+									style={[styles.subtitle, { color: theme.colors.subtitle }]}
+								>fruits</RX.Text>
+							</RX.View>
+						</RX.View>
+						<RX.View
+							style={styles.secondRow}
+						>
+							<RX.View
+								style={styles.flex1}
+							>
+							</RX.View>
+							<RX.View
+								style={styles.chartContainer}
+							>
+								<RX.Text
+									style={[styles.chartTextContainer, { color: theme.colors.subtitle }]}
+								>MacroNutrients Chart</RX.Text>
+							</RX.View>
+						</RX.View>
 
-				<FilledButton
-					label='Add to Meal'
-					onPress={() => {
-					}}
-					containerStyle={styles.addToMeal}
-				/>
-			</RX.View>
+						<FilledButton
+							label='Add to Meal'
+							onPress={() => {
+							}}
+							containerStyle={styles.addToMeal}
+						/>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -120,12 +124,9 @@ const styles = {
 		fontSize: 30,
 		top: 2
 	}),
-	smallTitle: RX.Styles.createTextStyle({
-		color: theme.colors.labelInput,
-	}),
+	smallTitle: RX.Styles.createTextStyle({}),
 	subtitle: RX.Styles.createTextStyle({
 		fontSize: 12,
-		color: theme.colors.subtitle,
 	}),
 	secondRow: RX.Styles.createViewStyle({
 		flexDirection: 'row',
@@ -146,7 +147,6 @@ const styles = {
 	}),
 	chartTextContainer: RX.Styles.createTextStyle({
 		fontSize: 12,
-		color: theme.colors.subtitle,
 		width: 100,
 		textAlign: 'center',
 	}),

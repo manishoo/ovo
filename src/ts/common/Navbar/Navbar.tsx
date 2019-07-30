@@ -5,7 +5,9 @@
 
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { navigate, withNavigation } from 'src/ts/utilities'
 
 interface NavbarProps {
@@ -21,19 +23,23 @@ export default class Navbar extends RX.Component<NavbarProps> {
 		if (RX.Platform.getType() === 'web') return null
 
 		return (
-			<RX.View
-				style={[styles.container, style]}
-			>
-				<RX.Text style={styles.titleContainer}>
-					<RX.Text style={styles.title}>{this.props.title}</RX.Text>
-				</RX.Text>
-				{this.renderBackButton()}
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						style={[styles.container, { height: Styles.values.navBarHeight }, style]}
+					>
+						<RX.Text style={styles.titleContainer}>
+							<RX.Text style={[styles.title, { fontSize: Styles.fontSizes.size16, }]}>{this.props.title}</RX.Text>
+						</RX.Text>
+						{this.renderBackButton(theme)}
 
-			</RX.View>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
-	private renderBackButton = () => (
+	private renderBackButton = (theme: Theme) => (
 		<RX.View
 			style={{ flexDirection: 'row', alignItems: 'center' }}
 			onPress={() => navigate(this.props, 'back')}
@@ -42,7 +48,7 @@ export default class Navbar extends RX.Component<NavbarProps> {
 				source={require('./assets/Back.png')}
 				style={styles.backImage}
 			/>
-			<RX.Text style={styles.backText}>Back</RX.Text>
+			<RX.Text style={[styles.backText, { color: theme.colors.navbarBackButtonColor }]}>Back</RX.Text>
 		</RX.View>
 	)
 }
@@ -53,14 +59,12 @@ const styles = {
 		top: 0,
 		left: 0,
 		right: 0,
-		height: theme.styles.navBarHeight,
 		flexDirection: 'row',
 		alignItems: 'center',
 		padding: 16,
 		backgroundColor: 'red'
 	}),
 	backText: RX.Styles.createTextStyle({
-		color: theme.colors.navbarBackButtonColor,
 		fontWeight: '500',
 		marginLeft: 5,
 	}),
@@ -77,7 +81,6 @@ const styles = {
 	}),
 	title: RX.Styles.createTextStyle({
 		textAlign: 'center',
-		fontSize: theme.fontSizes.size16,
 		fontWeight: 'bold',
 	}),
 }

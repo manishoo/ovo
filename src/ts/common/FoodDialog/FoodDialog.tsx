@@ -16,7 +16,8 @@ import RX from 'reactxp'
 import { VirtualListView, VirtualListViewItemInfo } from 'reactxp-virtuallistview'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Food, FoodTypes, MealItem, Weight } from 'src/ts/models/FoodModels'
 import { MealItemFragment } from 'src/ts/models/GraphQLModels'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -81,148 +82,154 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 		const { style } = this.props
 
     return (
-			<RX.View>
-				<RX.Animated.View
-					style={[
-						this._containerAnimationStyle
-					]}
-				>
-					<Query
-						query={gql`
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View>
+						<RX.Animated.View
+							style={[
+								this._containerAnimationStyle
+							]}
+						>
+							<Query
+								query={gql`
 							query SearchMealItemsQuery($q: String!) {
 								searchMealItems(q: $q) ${MealItemFragment}
 							}
 						`}
-						client={client}
-						skip={!this.state.searchText}
-						variables={{
-							q: this.state.searchText,
-						}}
-					>
-						{({ data }) => (
-							(
-								<RX.View
-									style={[
-										styles.container,
-										{
-											width: this.state.width,
-											height: this.state.height,
-										},
-										style,
-									]}
-								>
-									<RX.View style={[styles.innerContainer, { width: this.state.width }]}>
-										<RX.Animated.View
+								client={client}
+								skip={!this.state.searchText}
+								variables={{
+									q: this.state.searchText,
+								}}
+							>
+								{({ data }) => (
+									(
+										<RX.View
 											style={[
-												styles.inputContainer,
+												styles.container,
+												{ backgroundColor: theme.colors.white },
 												{
-													height: this.inputContainerAnimatedHeight,
-												}
+													width: this.state.width,
+													height: this.state.height,
+												},
+												style,
 											]}
 										>
-											{
-												!this.state.selectedItem &&
-                        <RX.TextInput
-                          ref={(ref: any) => this.textInput = ref}
-                          value={this.state.searchText}
-                          onChangeText={this._onTextChange}
-                          style={styles.textInput}
-                          placeholder={getLocalizedText('mealItemExample')}
-                        />
-											}
-
-											{this.state.selectedItem && this._renderPreview(this.state.selectedItem)}
-										</RX.Animated.View>
-
-										{
-											(() => {
-												if (!this.state.selectedItem) {
-													if (!this.state.searchText) {
-														// return [
-														// 	<FlatButton
-														// 		label={'Browse Foods & Recipes'}
-														// 		onPress={() => {
-														// 			//
-														// 		}}
-														// 		style={{borderWidth: 0, marginTop: 10,}}
-														// 		labelStyle={{color: theme.colors.secondary, fontSize: 16}}
-														// 	/>,
-														// 	<FlatButton
-														// 		label={'Create A New Dish'}
-														// 		onPress={() => {
-														// 			//
-														// 		}}
-														// 		style={{borderWidth: 0}}
-														// 		labelStyle={{color: theme.colors.secondary, fontSize: 16}}
-														// 	/>,
-														// ]
+											<RX.View style={[styles.innerContainer, { width: this.state.width }]}>
+												<RX.Animated.View
+													style={[
+														styles.inputContainer,
+														{ backgroundColor: theme.colors.foodDialogSearchBG },
+														{
+															height: this.inputContainerAnimatedHeight,
+														}
+													]}
+												>
+													{
+														!this.state.selectedItem &&
+                            <RX.TextInput
+                              ref={(ref: any) => this.textInput = ref}
+                              value={this.state.searchText}
+                              onChangeText={this._onTextChange}
+                              style={styles.textInput}
+                              placeholder={getLocalizedText('mealItemExample')}
+                            />
 													}
 
-													if (data && data.searchMealItems && data.searchMealItems.length === 0) {
-														return (
-															<FlatButton
-																label={getLocalizedText('createX', { name: this.state.searchText })}
-																onPress={() => {
-																	const key = String(Math.random())
-																	this.props.onSubmit({
-																		key,
-																		title: this.state.searchText,
-																		type: 'food',
-																		// height: 40,
-																		// template: '_mealItem',
-																		customUnit: getLocalizedText('g'),
-																		weights: [],
-																		slug: key,
-																	}, 1)
-																	this.dismiss()
-																}}
-																style={{ borderWidth: 0, marginTop: 10, }}
-															/>
-														)
-													}
+													{this.state.selectedItem && this._renderPreview(this.state.selectedItem)}
+												</RX.Animated.View>
 
-													if (data && data.searchMealItems) {
-														return (
-															<VirtualListView
-																style={{
-																	marginTop: theme.styles.spacing,
-																}}
-																keyboardShouldPersistTaps
-																itemList={data.searchMealItems.map((i: any) => ({
-																	...i,
-																	height: 40,
-																	template: '_mealItem',
-																	key: i.id,
-																}))}
-																renderItem={this._renderMealItem}
-															/>
-														)
-													}
+												{
+													(() => {
+														if (!this.state.selectedItem) {
+															if (!this.state.searchText) {
+																// return [
+																// 	<FlatButton
+																// 		label={'Browse Foods & Recipes'}
+																// 		onPress={() => {
+																// 			//
+																// 		}}
+																// 		style={{borderWidth: 0, marginTop: 10,}}
+																// 		labelStyle={{color: theme.colors.secondary, fontSize: 16}}
+																// 	/>,
+																// 	<FlatButton
+																// 		label={'Create A New Dish'}
+																// 		onPress={() => {
+																// 			//
+																// 		}}
+																// 		style={{borderWidth: 0}}
+																// 		labelStyle={{color: theme.colors.secondary, fontSize: 16}}
+																// 	/>,
+																// ]
+															}
+
+															if (data && data.searchMealItems && data.searchMealItems.length === 0) {
+																return (
+																	<FlatButton
+																		label={getLocalizedText('createX', { name: this.state.searchText })}
+																		onPress={() => {
+																			const key = String(Math.random())
+																			this.props.onSubmit({
+																				key,
+																				title: this.state.searchText,
+																				type: 'food',
+																				// height: 40,
+																				// template: '_mealItem',
+																				customUnit: getLocalizedText('g'),
+																				weights: [],
+																				slug: key,
+																			}, 1)
+																			this.dismiss()
+																		}}
+																		style={{ borderWidth: 0, marginTop: 10, }}
+																	/>
+																)
+															}
+
+															if (data && data.searchMealItems) {
+																return (
+																	<VirtualListView
+																		style={{
+																			marginTop: Styles.values.spacing,
+																		}}
+																		keyboardShouldPersistTaps
+																		itemList={data.searchMealItems.map((i: any) => ({
+																			...i,
+																			height: 40,
+																			template: '_mealItem',
+																			key: i.id,
+																		}))}
+																		renderItem={this._renderMealItem}
+																	/>
+																)
+															}
+														}
+
+														return null
+													})()
 												}
+											</RX.View>
 
-												return null
-											})()
-										}
-									</RX.View>
+											<RX.View
+												onPress={this.dismiss}
+												style={styles.cancelButton}
+											>
+												<Image
+													source={ImageSource.CrossIcon}
+													style={styles.cancelIcon}
+													resizeMode={'cover'}
+												/>
+											</RX.View>
+										</RX.View>
+									)
+								)}
+							</Query>
+						</RX.Animated.View>
 
-									<RX.View
-										onPress={this.dismiss}
-										style={styles.cancelButton}
-									>
-										<Image
-											source={ImageSource.CrossIcon}
-											style={styles.cancelIcon}
-											resizeMode={'cover'}
-										/>
-									</RX.View>
-								</RX.View>
-							)
-						)}
-					</Query>
-				</RX.Animated.View>
-
-				{this.renderSelectDialog()}
-			</RX.View>
+						{this.renderSelectDialog()}
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
     )
   }
 
@@ -364,7 +371,6 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
 
 const styles = {
 	container: RX.Styles.createViewStyle({
-		backgroundColor: theme.colors.white,
 		paddingTop: 80,
 		padding: 20,
 		alignItems: 'center',
@@ -375,7 +381,6 @@ const styles = {
 	inputContainer: RX.Styles.createViewStyle({
 		alignSelf: 'stretch',
 		borderRadius: 10,
-		backgroundColor: theme.colors.foodDialogSearchBG,
 		paddingHorizontal: 10,
 		marginTop: 60,
 		justifyContent: 'center',
@@ -387,9 +392,9 @@ const styles = {
 	}),
 	cancelButton: RX.Styles.createViewStyle({
 		position: 'absolute',
-		top: theme.styles.spacing,
-		left: theme.styles.spacing,
-		padding: theme.styles.spacing,
+		top: Styles.values.spacing,
+		left: Styles.values.spacing,
+		padding: Styles.values.spacing,
 		cursor: 'pointer',
 	}),
 	cancelIcon: RX.Styles.createImageStyle({

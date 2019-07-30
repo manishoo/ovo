@@ -5,7 +5,8 @@
 
 import Markdown from 'common/Markdown/Markdown'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import IntroductionButton from 'src/ts/views/Introduction/components/IntroductionButton'
 import { Message, SENDERS } from '../types'
 import ChatTyping from './Typing'
@@ -23,18 +24,25 @@ interface ChatBoxProps {
 }
 
 export const AssistantMessage = ({ text, style }: { text: string, style?: any }) => (
-	<RX.View
-		style={[
-			styles.baseMessage, {
-				width: text.length * 10,
-				backgroundColor: theme.colors.assistantMessageBG,
-				[theme.styles.borderTopStartRadius]: 5,
-			}, style
-		]}
-	>
-		<Markdown
-			style={{ lineHeight: RX.Platform.select({ default: 20, web: 2 }), color: theme.colors.white }}>{text}</Markdown>
-	</RX.View>
+	<ThemeContext.Consumer>
+		{({ theme }) => (
+			<RX.View
+				style={[
+					styles.baseMessage, {
+						width: text.length * 10,
+						backgroundColor: theme.colors.assistantMessageBG,
+						[Styles.values.borderTopStartRadius]: 5,
+					}, style
+				]}
+			>
+				<Markdown
+					style={{
+						lineHeight: RX.Platform.select({ default: 20, web: 2 }),
+						color: theme.colors.white
+					}}>{text}</Markdown>
+			</RX.View>
+		)}
+	</ThemeContext.Consumer>
 )
 
 export default class ChatBox extends RX.Component<ChatBoxProps> {
@@ -65,7 +73,7 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 			<AssistantMessage
 				style={{
 					margin: 5,
-					[theme.styles.marginStart]: 10,
+					[Styles.values.marginStart]: 10,
 				}}
 				key={Math.random()}
 				text={msg.text}
@@ -83,14 +91,20 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 			/>
 		}
 
-		return this._renderBaseMessage(msg, {
-			outerContainerStyle: {
-				flexDirection: 'row',
-				justifyContent: 'flex-end'
-			},
-			containerStyle: styles.userMessage,
-			textStyle: styles.userText,
-		})
+		return (
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					this._renderBaseMessage(msg, {
+						outerContainerStyle: {
+							flexDirection: 'row',
+							justifyContent: 'flex-end'
+						},
+						containerStyle: [styles.userMessage, { backgroundColor: theme.colors.assistantUserMessageBG }],
+						textStyle: [styles.userText, { color: theme.colors.assistantUserMessageTextColor }],
+					})
+				)}
+			</ThemeContext.Consumer>
+		)
 	}
 
 	_renderBaseMessage(
@@ -182,12 +196,8 @@ const styles = {
 		paddingTop: 95,
 	}),
 	userText: {
-		color: theme.colors.assistantUserMessageTextColor,
 		fontWeight: 'bold',
 	},
-	assistantText: RX.Styles.createTextStyle({
-		color: theme.colors.white,
-	}),
 	baseMessage: RX.Styles.createViewStyle({
 		padding: 15,
 		paddingBottom: 8,
@@ -198,8 +208,7 @@ const styles = {
 		minWidth: 70,
 	}),
 	userMessage: RX.Styles.createViewStyle({
-		backgroundColor: theme.colors.assistantUserMessageBG,
-		[theme.styles.borderBottomEndRadius]: 5,
-		[theme.styles.marginEnd]: 10,
+		[Styles.values.borderBottomEndRadius]: 5,
+		[Styles.values.marginEnd]: 10,
 	}),
 }

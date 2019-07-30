@@ -6,7 +6,8 @@
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Food } from 'src/ts/models/FoodModels'
 import { fullWidth } from 'src/ts/utilities'
 import SubmitButton from './SubmitButton'
@@ -97,7 +98,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 		})
 	}
 
-	renderSuggestions = ({ data, error, loading }: any) => {
+	renderSuggestions = (theme: Theme) => ({ data, error, loading }: any) => {
 		const { selectedFoods } = this.state
 		if (error || loading || !data) return null
 
@@ -113,7 +114,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 			return (
 				<RX.View
 					key={f.id}
-					style={styles.suggestionItem}
+					style={[styles.suggestionItem, { backgroundColor: theme.colors.white }]}
 					onPress={onSuggestionPress(f)}
 				>
 					<RX.Text>{f.name}</RX.Text>
@@ -147,34 +148,38 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
 		const { selectedFoods, text } = this.state
 
 		return (
-			<RX.View
-				style={[styles.container, style]}
-				onPress={() => this.input.focus()}
-				activeOpacity={1}
-			>
-				<Query
-					query={FOOD_AUTOCOMPLETE_QUERY}
-					skip={!text}
-					variables={{
-						q: text,
-					}}
-				>
-					{this.renderSuggestions}
-				</Query>
-				<RX.View
-					style={styles.inputContainer}
-				>
-					{this.renderFoods(selectedFoods)}
-					{this.renderInput()}
-					{this.renderBorderBottom()}
-					<SubmitButton
-						style={styles.submitButton}
-						skip={selectedFoods.length > 0 ? undefined : skip}
-						onPress={() => onSubmit(selectedFoods)}
-						onSkip={() => onSkip('Nope')}
-					/>
-				</RX.View>
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						style={[styles.container, style]}
+						onPress={() => this.input.focus()}
+						activeOpacity={1}
+					>
+						<Query
+							query={FOOD_AUTOCOMPLETE_QUERY}
+							skip={!text}
+							variables={{
+								q: text,
+							}}
+						>
+							{this.renderSuggestions(theme)}
+						</Query>
+						<RX.View
+							style={[styles.inputContainer, { backgroundColor: theme.colors.white }]}
+						>
+							{this.renderFoods(selectedFoods)}
+							{this.renderInput()}
+							{this.renderBorderBottom()}
+							<SubmitButton
+								style={styles.submitButton}
+								skip={selectedFoods.length > 0 ? undefined : skip}
+								onPress={() => onSubmit(selectedFoods)}
+								onSkip={() => onSkip('Nope')}
+							/>
+						</RX.View>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -202,7 +207,6 @@ const styles = {
 		borderBottomWidth: 1,
 		borderWidth: 1,
 		flexWrap: 'wrap',
-		backgroundColor: theme.colors.white,
 		borderTopLeftRadius: 15,
 		borderTopRightRadius: 15,
 		paddingLeft: 10,
@@ -217,7 +221,6 @@ const styles = {
 		paddingLeft: 5,
 	}),
 	suggestionItem: RX.Styles.createViewStyle({
-		backgroundColor: theme.colors.white,
 		padding: 16,
 		borderRadius: 20,
 		marginRight: 8,

@@ -6,7 +6,7 @@
 import Input from 'common/Input/Input'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { navigate } from 'src/ts/utilities'
 import Keys from 'src/ts/utilities/KeyCodes'
 
@@ -47,7 +47,7 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
 						}
 					}}
 					textInputStyle={{
-						fontSize: theme.fontSizes.size16,
+						fontSize: Styles.fontSizes.size16,
 					}}
 				/>
 			</RX.View>

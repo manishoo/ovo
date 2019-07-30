@@ -5,7 +5,8 @@
 
 import moment from 'moment'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Event, Meal, MealItem } from 'src/ts/models/FoodModels'
 import { Routes } from 'src/ts/navigator/routes'
 import { fullHeight, navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
@@ -51,33 +52,37 @@ export default class EventComponent extends RX.Component<EventProps> {
 		}
 
 		return (
-			<RX.View
-				style={
-					[
-						styles.container,
-						{ width: this.props.containerWidth },
-						style,
-					]
-				}
-			>
-				<RX.View
-					style={[styles.line, { height: lineHeight }]}
-				>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
 					<RX.View
-						style={[
-							{
-								backgroundColor: theme.colors.pathLine,
-								flex: 1,
-							}
-						]}
-					/>
-				</RX.View>
-				{!!item.meal && this.renderMeal(item.meal, this.relativeSize, borderWidth)}
-				<RX.View style={styles.mealTime}>
-					<RX.Text style={styles.time}>{moment(item.datetime).format('HH:mm')}</RX.Text>
-					<RX.Text style={styles.mealName}>{item.name}</RX.Text>
-				</RX.View>
-			</RX.View>
+						style={
+							[
+								styles.container,
+								{ width: this.props.containerWidth },
+								style,
+							]
+						}
+					>
+						<RX.View
+							style={[styles.line, { height: lineHeight }]}
+						>
+							<RX.View
+								style={[
+									{
+										backgroundColor: theme.colors.pathLine,
+										flex: 1,
+									}
+								]}
+							/>
+						</RX.View>
+						{!!item.meal && this.renderMeal(theme, item.meal, this.relativeSize, borderWidth)}
+						<RX.View style={styles.mealTime}>
+							<RX.Text style={styles.time}>{moment(item.datetime).format('HH:mm')}</RX.Text>
+							<RX.Text style={styles.mealName}>{item.name}</RX.Text>
+						</RX.View>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
@@ -116,7 +121,7 @@ export default class EventComponent extends RX.Component<EventProps> {
 	// 	return null
 	// }
 
-	private renderMeal = (meal: Meal, relativeSize: RX.Animated.Value, borderWidth: number) => {
+	private renderMeal = (theme: Theme, meal: Meal, relativeSize: RX.Animated.Value, borderWidth: number) => {
 		const SIZE = 30
 		const pureDimension = this.props.containerWidth / 4
 		let dimensions = pureDimension - (meal.items.length * SIZE)

@@ -14,7 +14,7 @@ import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { Mutation, MutationFn } from 'react-apollo'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { FoodTypes, Ingredient, Instruction, MealItem, Recipe, Weight } from 'src/ts/models/FoodModels'
 import { RecipeFragment } from 'src/ts/models/GraphQLModels'
 import LocationStore from 'src/ts/stores/LocationStore'
@@ -347,8 +347,8 @@ const UPDATE_QUERY = gql`
 
 const styles = {
 	container: RX.Styles.createViewStyle({
-		padding: theme.styles.spacing * 2,
-		paddingTop: theme.styles.navBarHeight,
+		padding: Styles.values.spacing * 2,
+		paddingTop: Styles.values.navBarHeight,
 		flex: 1,
 		overflow: 'visible',
 		maxWidth: WINDOW_MAX_WIDTH,
@@ -365,6 +365,6 @@ const styles = {
 	coverImage: RX.Styles.createImageStyle({
 		height: WINDOW_MAX_WIDTH / 2,
 		borderRadius: 15,
-		marginBottom: theme.styles.spacing,
+		marginBottom: Styles.values.spacing,
 	})
 }

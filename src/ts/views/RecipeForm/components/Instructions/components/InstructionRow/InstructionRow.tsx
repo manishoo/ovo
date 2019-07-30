@@ -5,7 +5,8 @@
 
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import TextInputAutoGrow from 'src/ts/common/TextInputAutoGrow/TextInputAutoGrow'
 import { Instruction } from 'src/ts/models/FoodModels'
 
@@ -26,49 +27,53 @@ export default class InstructionRow extends RX.Component<IngredientRowProps> {
 		const { style, instruction: { text } } = this.props
 
 		return (
-			<RX.View>
-				<RX.View
-					style={[styles.container, style]}
-				>
-					{/*Delete*/}
-					<RX.View style={styles.clearWrapper} onPress={this.onDeletePress}>
-						<RX.Image
-							source={ImageSource.Clear}
-							style={styles.clear}
-						/>
-					</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View>
+						<RX.View
+							style={[styles.container, style]}
+						>
+							{/*Delete*/}
+							<RX.View style={styles.clearWrapper} onPress={this.onDeletePress}>
+								<RX.Image
+									source={ImageSource.Clear}
+									style={styles.clear}
+								/>
+							</RX.View>
 
-					<TextInputAutoGrow
-						value={text}
-						returnKeyType={'done'}
-						onChangeText={(newText) => this.props.onChange({
-							...this.props.instruction,
-							text: newText,
-						})}
-						style={styles.textInput}
-						wrapperStyle={{ flex: 1 }}
-					/>
-				</RX.View>
-			</RX.View>
+							<TextInputAutoGrow
+								value={text}
+								returnKeyType={'done'}
+								onChangeText={(newText) => this.props.onChange({
+									...this.props.instruction,
+									text: newText,
+								})}
+								style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
+								wrapperStyle={{ flex: 1 }}
+							/>
+						</RX.View>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
 
 const styles = {
 	name: RX.Styles.createTextStyle({
-		[theme.styles.marginStart]: theme.styles.spacing,
+		[Styles.values.marginStart]: Styles.values.spacing,
 	}),
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingBottom: theme.styles.spacing / 2,
+		paddingBottom: Styles.values.spacing / 2,
 		flex: 1
 	}),
 	thumbnail: RX.Styles.createImageStyle({
 		width: IMAGE_DIMENSIONS,
 		height: IMAGE_DIMENSIONS,
 		borderRadius: IMAGE_DIMENSIONS / 2,
-		marginRight: theme.styles.spacing,
+		marginRight: Styles.values.spacing,
 	}),
 	clear: RX.Styles.createImageStyle({
 		width: CLEAR_DIMENSIONS,
@@ -81,7 +86,6 @@ const styles = {
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		padding: 5,
-		backgroundColor: theme.colors.createRecipeTextInputBG,
 		borderRadius: 5,
 		flex: 1,
 	})

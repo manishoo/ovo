@@ -5,7 +5,8 @@
 
 import LocalizedText from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { fullWidth } from 'src/ts/utilities'
 
 interface IntroductionButtonProps {
@@ -73,26 +74,31 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
 					flexDirection: 'row-reverse',
 					cursor: large ? 'pointer' : 'default',
 				}}>
-					<RX.Animated.View
-						onPress={large ? this.shrink : () => null}
-						activeOpacity={large ? 0.7 : 1}
-						style={[
-							styles.baseMessage,
-							{ width: this._widthAnimated },
-							style,
-							large ? {} : { [theme.styles.borderBottomEndRadius]: 5 }
-						]}
-					>
-						<RX.Text
-							style={{
-								color: theme.colors.assistantUserMessageTextColor,
-								flex: 1,
-								textAlign: 'center',
-								fontSize: large ? theme.fontSizes.size16 : theme.fontSizes.size14,
-								font: large ? theme.fonts.displayBold : theme.fonts.displayRegular,
-							}}
-						><LocalizedText>hiAssistant</LocalizedText></RX.Text>
-					</RX.Animated.View>
+					<ThemeContext.Consumer>
+						{({ theme }) => (
+							<RX.Animated.View
+								onPress={large ? this.shrink : () => null}
+								activeOpacity={large ? 0.7 : 1}
+								style={[
+									styles.baseMessage,
+									{ width: this._widthAnimated },
+									{ backgroundColor: theme.colors.assistantUserMessageBG },
+									style,
+									large ? {} : { [Styles.values.borderBottomEndRadius]: 5 }
+								]}
+							>
+								<RX.Text
+									style={{
+										color: theme.colors.assistantUserMessageTextColor,
+										flex: 1,
+										textAlign: 'center',
+										fontSize: large ? Styles.fontSizes.size16 : Styles.fontSizes.size14,
+										font: large ? Styles.fonts.displayBold : Styles.fonts.displayRegular,
+									}}
+								><LocalizedText>hiAssistant</LocalizedText></RX.Text>
+							</RX.Animated.View>
+						)}
+					</ThemeContext.Consumer>
 				</RX.View>
 			]
 		)
@@ -106,7 +112,6 @@ const styles = {
 		minHeight: 30,
 		borderRadius: 25,
 		margin: 5,
-		[theme.styles.marginEnd]: 10,
-		backgroundColor: theme.colors.assistantUserMessageBG,
+		[Styles.values.marginEnd]: 10,
 	}),
 }

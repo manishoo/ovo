@@ -10,7 +10,8 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import theme from 'src/ts/app/Theme'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import LinearGradient from 'src/ts/common/LinearGradient/LinearGradient'
 import { Routes } from 'src/ts/navigator/routes'
 import LocationStore from 'src/ts/stores/LocationStore'
@@ -136,73 +137,77 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 				`}
 			>
 				{(setupConversation, { loading }) => (
-					[
-						<KeyboardAvoidable
-							keyboardVerticalOffset={20}
-							key={1}
-							enabled={keyboardAvoidableEnabled}
-							style={[styles.container, style]}
-						>
-							{false && <LinearGradient
-                colors={[theme.colors.assistantLinearGradient1, theme.colors.assistantLinearGradient2]}
-              />}
-							<ChatBox
-								ref={ref => this.chatBox = ref}
-								loading={loading || assistantTalking}
-								bottomMargin={chatBoxMarginBottom}
-								bottomPadding={chatBoxPaddingBottom}
-								style={[
-									isForm ? styles.chatBoxWithForm : {}
-								]}
-								scrollEnabled={!showIntro}
-								messages={messages}
-								introductionWidth={this.props.introductionWidth || this.state.width}
-								introductionHeight={this.props.introductionHeight || this.state.height}
-								onIntroduction={this.getStartedPress(setupConversation)}
-							/>
+					<ThemeContext.Consumer>
+						{({ theme }) => (
+							[
+								<KeyboardAvoidable
+									keyboardVerticalOffset={20}
+									key={1}
+									enabled={keyboardAvoidableEnabled}
+									style={[styles.container, style]}
+								>
+									{false && <LinearGradient
+                    colors={[theme.colors.assistantLinearGradient1, theme.colors.assistantLinearGradient2]}
+                  />}
+									<ChatBox
+										ref={ref => this.chatBox = ref}
+										loading={loading || assistantTalking}
+										bottomMargin={chatBoxMarginBottom}
+										bottomPadding={chatBoxPaddingBottom}
+										style={[
+											isForm ? styles.chatBoxWithForm : {}
+										]}
+										scrollEnabled={!showIntro}
+										messages={messages}
+										introductionWidth={this.props.introductionWidth || this.state.width}
+										introductionHeight={this.props.introductionHeight || this.state.height}
+										onIntroduction={this.getStartedPress(setupConversation)}
+									/>
 
-							{
-								false &&
-								this.renderIntro()
-							}
+									{
+										false &&
+										this.renderIntro(theme)
+									}
 
-							{
-								!showIntro &&
-                <ChatInput
-                  style={styles.chatInput}
-                  loading={loading || assistantTalking}
-                  input={getLastInputType(messages)}
-                  onSubmit={this.sendMessage(setupConversation)}
-                  onHeightChange={this.onHeightChange}
-                  toggleMainKeyboardAvoidable={this.onMainKeyboardAvoidableToggle}
-                  onOpenMealPlan={() => {
-										return //FIXME
-										UserStore.getAndSetUser()
-											.then(() => {
-												LocationStore.navigate(this.props, Routes.mealPlan)
-											})
+									{
+										!showIntro &&
+                    <ChatInput
+                      style={styles.chatInput}
+                      loading={loading || assistantTalking}
+                      input={getLastInputType(messages)}
+                      onSubmit={this.sendMessage(setupConversation)}
+                      onHeightChange={this.onHeightChange}
+                      toggleMainKeyboardAvoidable={this.onMainKeyboardAvoidableToggle}
+                      onOpenMealPlan={() => {
+												return //FIXME
+												UserStore.getAndSetUser()
+													.then(() => {
+														LocationStore.navigate(this.props, Routes.mealPlan)
+													})
+											}}
+                      introductionWidth={this.props.introductionWidth || this.state.width}
+                    />
+									}
+								</KeyboardAvoidable>,
+								<RX.View
+									key={2}
+									style={{
+										position: 'absolute',
+										top: -25,
+										left: 0,
+										right: 0,
+										marginTop: 20,
+										justifyContent: 'center',
+										alignItems: 'center',
 									}}
-                  introductionWidth={this.props.introductionWidth || this.state.width}
-                />
-							}
-						</KeyboardAvoidable>,
-						<RX.View
-							key={2}
-							style={{
-								position: 'absolute',
-								top: -25,
-								left: 0,
-								right: 0,
-								marginTop: 20,
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-						>
-							<Assistant
-								size={90}
-							/>
-						</RX.View>
-					]
+								>
+									<Assistant
+										size={90}
+									/>
+								</RX.View>
+							]
+						)}
+					</ThemeContext.Consumer>
 				)}
 			</Mutation>
     )
@@ -312,7 +317,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 		})
 	}
 
-	private renderIntro = () => (
+	private renderIntro = (theme: Theme) => (
 		<RX.View
 			style={{
 				margin: 24,

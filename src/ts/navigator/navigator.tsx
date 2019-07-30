@@ -14,7 +14,9 @@ import { Route, RouteProps, Router, Switch } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { User } from 'src/ts/models/FoodModels'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -72,69 +74,54 @@ function trimSlashes(s: string) {
 }
 
 export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { history: any }, WebAppRouterState> {
-	private _searchInput: any
-	private _drawerClosedValue = AppConfig.isRTL() ? theme.styles.drawerWidth : -theme.styles.drawerWidth
-	private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
-	private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
-	private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
-	private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
-	private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{ translateX: this._drawerAnimationLeftValue }],
-	})
-	private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{ translateY: this._navbarAnimationTopValue }],
-	})
-	private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		transform: [{ translateY: this._searchContainerAnimationTopValue }],
-	})
-	private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
-		opacity: this._searchContainerBackDropAnimationOpacityValue,
-	})
-
 	render() {
 		const Navbar = this._renderNavbar()
 
 		return (
-			<Router history={this.props.history}>
-				<RX.View
-					style={[styles.container, { paddingTop: (this.state.mode === 'navbar' && Navbar) ? NAVBAR_HEIGHT : 0 }]}>
-					<RX.View style={{ flexDirection: 'row' }}>
-						{
-							(this.state.mode === 'drawer' && !this.state.isLanding) &&
-              <RX.Animated.View style={{ height: 100, width: theme.styles.drawerWidth }} />
-						}
-						<RX.ScrollView
-							style={[styles.innerContainer, { height: this.state.height }]}
-						>
-							<Switch>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<Router history={this.props.history}>
+						<RX.View
+							style={[styles.container, { paddingTop: (this.state.mode === 'navbar' && Navbar) ? NAVBAR_HEIGHT : 0 }]}>
+							<RX.View style={{ flexDirection: 'row' }}>
 								{
-									this.state.routes.map(route => (
-										<Route
-											{...route}
-										/>
-									))
+									(this.state.mode === 'drawer' && !this.state.isLanding) &&
+                  <RX.Animated.View style={{ height: 100, width: Styles.values.drawerWidth }} />
 								}
-							</Switch>
-						</RX.ScrollView>
-					</RX.View>
+								<RX.ScrollView
+									style={[styles.innerContainer, { height: this.state.height }]}
+								>
+									<Switch>
+										{
+											this.state.routes.map(route => (
+												<Route
+													{...route}
+												/>
+											))
+										}
+									</Switch>
+								</RX.ScrollView>
+							</RX.View>
 
-					{Navbar}
-					{this._renderTabBar()}
-					{this._renderDrawer()}
-					{this._renderSearch()}
-					<RX.Text>{this.state.mode}</RX.Text>
+							{Navbar}
+							{this._renderTabBar(theme)}
+							{this._renderDrawer(theme)}
+							{this._renderSearch(theme)}
+							<RX.Text>{this.state.mode}</RX.Text>
 
-					{/* Modals */}
+							{/* Modals */}
 
-					{
-						this.state.routes.filter(r => r.modal).map(route => (
-							<Route
-								{...route}
-							/>
-						))
-					}
-				</RX.View>
-			</Router>
+							{
+								this.state.routes.filter(r => r.modal).map(route => (
+									<Route
+										{...route}
+									/>
+								))
+							}
+						</RX.View>
+					</Router>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
@@ -236,11 +223,14 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		}
 	}
 
-	private _renderDrawer = () => {
+	private _renderDrawer = (theme: Theme) => {
 		if (this.state.isLanding && !this.state.userLoggedIn) return null
 
 		return (
-			<RX.Animated.View style={[styles.drawer.container, { height: this.state.height }, this._drawerAnimationStyle]}>
+			<RX.Animated.View style={[styles.drawer.container, {
+				height: this.state.height,
+				backgroundColor: theme.colors.drawerBg
+			}, this._drawerAnimationStyle]}>
 				<Image
 					source={ImageSource.Brand}
 					style={styles.drawer.logo}
@@ -252,7 +242,7 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 							return [
 								<Link
 									to={`/${this.state.userLoggedIn.username}`}
-									style={{ alignSelf: 'center', marginVertical: theme.styles.spacing, }}
+									style={{ alignSelf: 'center', marginVertical: Styles.values.spacing, }}
 								>
 									<Image source={this.state.userLoggedIn.avatar.url} style={styles.drawer.avatar} />
 								</Link>,
@@ -285,14 +275,26 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		const { title, back } = foundRoute.navOptions as NavOptions
 
 		return (
-			<RX.Animated.View style={[styles.navbarContainer, this._navbarAnimationStyle]}>
-				<Text>{back ? '<' : ''}</Text>
-				<Text>{title}</Text>
-			</RX.Animated.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.Animated.View
+						style={[
+							styles.navbarContainer,
+							{
+								backgroundColor: theme.colors.drawerBg,
+								borderColor: theme.colors.drawerBorderColor,
+							},
+							this._navbarAnimationStyle,
+						]}>
+						<Text>{back ? '<' : ''}</Text>
+						<Text>{title}</Text>
+					</RX.Animated.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
-	private _renderTabBar = () => {
+	private _renderTabBar = (theme: Theme) => {
 		if (this.state.mode === 'drawer') return null
 		if (!this.state.userLoggedIn) return null
 
@@ -321,7 +323,8 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 
 		return (
 			<RX.View style={styles.tabBar.container}>
-				<RX.View style={[styles.tabBar.innerContainer, { width: this.state.width }]}>
+				<RX.View
+					style={[styles.tabBar.innerContainer, { width: this.state.width, backgroundColor: theme.colors.tabBarBG, }]}>
 					<Image
 						source={activePath === 'feed' ? ImageSource.SearchActive : ImageSource.Search}
 						style={{
@@ -348,7 +351,7 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		)
 	}
 
-	private _renderSearch = () => {
+	private _renderSearch = (theme: Theme) => {
 		return null // FIXME
 
 		const match = matchPath(this.state.currentPath, {
@@ -369,7 +372,10 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 		}
 
 		return [
-			<RX.View onPress={toggleModal(true)} style={[styles.search.iconContainer, { opacity: match ? 0 : 1 }]}>
+			<RX.View onPress={toggleModal(true)} style={[styles.search.iconContainer, {
+				opacity: match ? 0 : 1,
+				backgroundColor: theme.colors.searchIconBG,
+			}]}>
 				<Image
 					source={ImageSource.SearchIcon}
 					style={styles.search.icon}
@@ -381,6 +387,9 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 				onPress={toggleModal(false)}
 				style={[
 					styles.search.backDrop,
+					{
+						backgroundColor: theme.colors.searchContainerBackdropBG,
+					},
 					this._searchContainerBackDropAnimationStyle,
 				]}
 			/>,
@@ -389,12 +398,13 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 					styles.search.container,
 					{
 						height: this.state.mode === 'drawer' ? SEARCH_CONTAINER_HEIGHT : this.state.height,
+						backgroundColor: theme.colors.searchContainerBG,
 					},
 					this._searchContainerAnimationStyle,
 				]}
 			>
 				{this.state.mode === 'navbar' &&
-        <RX.Text style={{ padding: theme.styles.spacing, fontSize: 20 }} onPress={toggleModal(false)}>x</RX.Text>}
+        <RX.Text style={{ padding: Styles.values.spacing, fontSize: 20 }} onPress={toggleModal(false)}>x</RX.Text>}
 
 				<ExploreSearch ref={(ref: any) => this._searchInput = ref} onSubmit={toggleModal(false)} />
 			</RX.Animated.View>
@@ -455,6 +465,26 @@ export default class WebAppRoutes extends ComponentBase<RX.CommonProps & { histo
 			this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate)
 		}
 	}
+
+	private _searchInput: any
+	private _drawerClosedValue = AppConfig.isRTL() ? Styles.values.drawerWidth : -Styles.values.drawerWidth
+	private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
+	private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
+	private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
+	private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
+	private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateX: this._drawerAnimationLeftValue }],
+	})
+	private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateY: this._navbarAnimationTopValue }],
+	})
+	private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		transform: [{ translateY: this._searchContainerAnimationTopValue }],
+	})
+	private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
+		opacity: this._searchContainerBackDropAnimationOpacityValue,
+	})
+	static contextType = ThemeContext
 }
 
 
@@ -473,16 +503,13 @@ const styles = {
 		left: 0,
 		right: 0,
 		borderWidth: 1,
-		backgroundColor: theme.colors.drawerBg,
-		borderColor: theme.colors.drawerBorderColor,
 	}),
 	drawer: {
 		container: RX.Styles.createViewStyle({
-			padding: theme.styles.spacingLarge,
-			width: theme.styles.drawerWidth,
+			padding: Styles.values.spacingLarge,
+			width: Styles.values.drawerWidth,
 			position: 'absolute',
-			[theme.styles.start]: 0,
-			backgroundColor: theme.colors.drawerBg,
+			[Styles.values.start]: 0,
 			shadowColor: 'rgba(0, 0, 0, .12)',
 			shadowOffset: {
 				width: 0,
@@ -496,8 +523,8 @@ const styles = {
 			alignSelf: 'center',
 		}),
 		link: RX.Styles.createTextStyle({
-			[theme.styles.paddingStart]: theme.styles.spacing,
-			paddingVertical: theme.styles.spacing / 2,
+			[Styles.values.paddingStart]: Styles.values.spacing,
+			paddingVertical: Styles.values.spacing / 2,
 		}),
 		avatar: RX.Styles.createImageStyle({
 			width: 80,
@@ -510,8 +537,7 @@ const styles = {
 			top: 0,
 			left: 0,
 			right: 0,
-			backgroundColor: theme.colors.searchContainerBG,
-			padding: theme.styles.spacing,
+			padding: Styles.values.spacing,
 		}),
 		backDrop: RX.Styles.createViewStyle({
 			position: 'absolute',
@@ -519,16 +545,14 @@ const styles = {
 			left: 0,
 			right: 0,
 			bottom: 0,
-			backgroundColor: theme.colors.searchContainerBackdropBG,
 		}),
 		iconContainer: RX.Styles.createViewStyle({
 			position: 'absolute',
-			[theme.styles.end]: theme.styles.spacing * 2,
-			top: theme.styles.spacing * 2,
+			[Styles.values.end]: Styles.values.spacing * 2,
+			top: Styles.values.spacing * 2,
 			width: SEARCH_ICON_SIZE,
 			height: SEARCH_ICON_SIZE,
 			borderRadius: SEARCH_ICON_SIZE / 2,
-			backgroundColor: theme.colors.searchIconBG,
 			shadowColor: 'rgba(0, 0, 0, .12)',
 			shadowRadius: 10,
 			justifyContent: 'center',
@@ -547,20 +571,19 @@ const styles = {
 			right: 0,
 			justifyContent: 'center',
 			alignItems: 'center',
-			padding: theme.styles.spacing,
+			padding: Styles.values.spacing,
 		}),
 		innerContainer: RX.Styles.createViewStyle({
 			flex: 1,
 			height: TAB_BAR_HEIGHT,
 			maxWidth: TAB_BAR_MAX_WIDTH,
-			backgroundColor: theme.colors.tabBarBG,
 			borderRadius: TAB_BAR_HEIGHT / 2,
 			shadowColor: 'rgba(0, 0, 0, .12)',
 			shadowRadius: 10,
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			paddingHorizontal: theme.styles.spacing * 2,
+			paddingHorizontal: Styles.values.spacing * 2,
 		})
 	}
 }

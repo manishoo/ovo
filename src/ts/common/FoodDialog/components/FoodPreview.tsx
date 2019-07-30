@@ -13,7 +13,9 @@ import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import client from 'src/ts/app/client'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Food, MealItem, Weight } from 'src/ts/models/FoodModels'
 import { FoodFragment } from 'src/ts/models/GraphQLModels'
 
@@ -59,18 +61,22 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 				`}
 			>
 				{({ data, loading }) => (
-					<RX.View
-						style={[styles.previewContainer, style]}
-					>
-						{this._renderContent(data, loading)}
+					<ThemeContext.Consumer>
+						{({ theme }) => (
+							<RX.View
+								style={[styles.previewContainer, style]}
+							>
+								{this._renderContent(theme, data, loading)}
 
-						<RX.View
-							onPress={this._dismiss}
-							style={styles.cancelSelectedMealContainer}
-						>
-							<Text translate style={styles.cancelText}>Cancel</Text>
-						</RX.View>
-					</RX.View>
+								<RX.View
+									onPress={this._dismiss}
+									style={styles.cancelSelectedMealContainer}
+								>
+									<Text translate style={[styles.cancelText, { color: theme.colors.primary }]}>Cancel</Text>
+								</RX.View>
+							</RX.View>
+						)}
+					</ThemeContext.Consumer>
 				)}
 			</Query>
     )
@@ -92,7 +98,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 		)
 	}
 
-	private _renderContent = (data: { getFoodVariety: Food }, loading: boolean) => {
+	private _renderContent = (theme: Theme, data: { getFoodVariety: Food }, loading: boolean) => {
 		if (loading) {
 			return this._renderLoading()
 		}
@@ -101,7 +107,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 			return this._renderNotAvailable()
 		}
 
-		return this._renderAmountSelection(data.getFoodVariety)
+		return this._renderAmountSelection(theme, data.getFoodVariety)
 	}
 
 	private _renderLoading = () => {
@@ -110,7 +116,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 		)
 	}
 
-	private _renderAmountSelection = (food: Food) => {
+	private _renderAmountSelection = (theme: Theme, food: Food) => {
 		const { inputRef } = this.props
 
 		return [
@@ -131,7 +137,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 						>{food.name}</RX.Text>
 					</RX.View>
 					<RX.Text
-						style={styles.subtitle}
+						style={[styles.subtitle, { color: theme.colors.subtitle }]}
 					>{food.foodGroup.map(i => i.name).join(', ')}</RX.Text>
 				</RX.View>
 			</RX.View>,
@@ -149,7 +155,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 						label={getLocalizedText('Amount')}
 						keyboardType={'number-pad'}
 					/>
-					<Text translate style={styles.label}>Unit</Text>
+					<Text translate style={[styles.label, { color: theme.colors.labelInput }]}>Unit</Text>
 					<RX.View style={styles.selectContainer} onPress={() => this.props.onSelectPress(food.weights || [])}
 									 activeOpacity={0.4}>
 						<RX.Text>{this.getSelectedWeight()}</RX.Text>
@@ -159,7 +165,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 					style={styles.chartContainer}
 				>
 					<RX.Text
-						style={styles.chartTextContainer}
+						style={[styles.chartTextContainer, { color: theme.colors.subtitle }]}
 					>MacroNutrients Chart</RX.Text>
 				</RX.View>
 			</RX.View>,
@@ -190,22 +196,21 @@ const styles = {
 		top: 0,
 		left: 0,
 		right: 0,
-		padding: theme.styles.spacing,
+		padding: Styles.values.spacing,
 		// paddingTop: 70,
 	}),
 	cancelSelectedMealContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
-		[theme.styles.end]: theme.styles.spacing,
-		top: theme.styles.spacing,
+		[Styles.values.end]: Styles.values.spacing,
+		top: Styles.values.spacing,
 		// width: 50,
 		// height: 50,
 		justifyContent: 'center',
 		alignItems: 'center',
-		padding: theme.styles.spacing,
+		padding: Styles.values.spacing,
 		cursor: 'pointer',
 	}),
 	cancelText: RX.Styles.createTextInputStyle({
-		color: theme.colors.primary,
 		fontWeight: 'bold',
 	}),
 	firstRow: RX.Styles.createViewStyle({
@@ -216,7 +221,7 @@ const styles = {
 		// flex: 1,
 		flexDirection: 'row',
 		alignItems: 'flex-end',
-		[theme.styles.marginEnd]: 50
+		[Styles.values.marginEnd]: 50
 	}),
 	bigTitle: RX.Styles.createTextStyle({
 		fontSize: 25,
@@ -229,7 +234,6 @@ const styles = {
 	}),
 	subtitle: RX.Styles.createTextStyle({
 		fontSize: 12,
-		color: theme.colors.subtitle,
 	}),
 	secondRow: RX.Styles.createViewStyle({
 		flexDirection: 'row',
@@ -250,7 +254,6 @@ const styles = {
 	}),
 	chartTextContainer: RX.Styles.createTextStyle({
 		fontSize: 12,
-		color: theme.colors.subtitle,
 		width: 100,
 		textAlign: 'center',
 	}),
@@ -262,11 +265,10 @@ const styles = {
 		backgroundColor: '#eee'
 	}),
 	addToMeal: RX.Styles.createViewStyle({
-		marginTop: theme.styles.spacing,
+		marginTop: Styles.values.spacing,
 		flex: 1,
 	}),
 	label: RX.Styles.createTextStyle({
-		color: theme.colors.labelInput,
 		fontWeight: '500',
 	}),
 	selectContainer: RX.Styles.createViewStyle({
@@ -280,13 +282,7 @@ const styles = {
 		height: 80,
 		borderRadius: 40,
 		backgroundColor: '#ddd',
-		marginBottom: theme.styles.spacing,
-		[theme.styles.marginEnd]: theme.styles.spacing,
+		marginBottom: Styles.values.spacing,
+		[Styles.values.marginEnd]: Styles.values.spacing,
 	}),
-	foodVarietyRow: RX.Styles.createViewStyle({
-		padding: theme.styles.spacing,
-		borderBottomWidth: 1,
-		borderColor: theme.colors.previewRowBorderColor,
-		cursor: 'pointer',
-	})
 }
