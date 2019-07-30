@@ -10,7 +10,9 @@ import Link from 'common/Link/Link'
 import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Recipe } from 'src/ts/models/FoodModels'
 import { navigate, withNavigation } from 'src/ts/utilities'
 
@@ -34,66 +36,70 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
 	render() {
 		const { recipe } = this.props
 		return (
-			<RX.View
-				onMouseEnter={this._onHoverStart}
-				onMouseLeave={this._onHoverEnd}
-				style={[
-					styles.container,
-					this.props.wrapperStyle,
-					{
-						width: this.props.size,
-						// height: this.props.size * 1.25,
-						// borderRadius: this.props.size / 12,
-					},
-				]}
-			>
-				<RX.View
-					onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
-					style={{
-						width: this.props.size,
-						height: this.props.size * 1.3,
-						borderRadius: this.props.size / 12,
-						backgroundColor: theme.colors.recipeCardImagePlaceholderBG,
-					}}
-				>
-					{
-						recipe.coverImage &&
-            <RX.Animated.Image
-              source={recipe.coverImage.url}
-              style={[styles.image, this._previewAnimatedStyle]}
-              resizeMode={'cover'}
-            />
-					}
-				</RX.View>
-
-				<Text
-					onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
-					style={styles.title}
-				>{recipe.title}</Text>
-
-				{
-					!this.props.hideAvatar &&
-          <Link to={`/${recipe.author.username}`} style={styles.avatarContainer}>
-            <Image
-              source={recipe.author.avatar.url}
-              style={{
-								width: this.props.size / 5,
-								height: this.props.size / 5,
-								borderRadius: this.props.size / 50,
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						onMouseEnter={this._onHoverStart}
+						onMouseLeave={this._onHoverEnd}
+						style={[
+							styles.container,
+							this.props.wrapperStyle,
+							{
+								width: this.props.size,
+								// height: this.props.size * 1.25,
+								// borderRadius: this.props.size / 12,
+							},
+						]}
+					>
+						<RX.View
+							onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
+							style={{
+								width: this.props.size,
+								height: this.props.size * 1.3,
+								borderRadius: this.props.size / 12,
+								backgroundColor: theme.colors.recipeCardImagePlaceholderBG,
 							}}
-            />
-          </Link>
-				}
+						>
+							{
+								recipe.coverImage &&
+                <RX.Animated.Image
+                  source={recipe.coverImage.url}
+                  style={[styles.image, this._previewAnimatedStyle]}
+                  resizeMode={'cover'}
+                />
+							}
+						</RX.View>
 
-				{this._renderLikes()}
-				{this._renderTime()}
-				{/*<Text>likesCount: {recipe.likesCount}</Text>*/}
-				{/*<Text>likedByUser: {recipe.likedByUser}</Text>*/}
-			</RX.View>
+						<Text
+							onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
+							style={styles.title}
+						>{recipe.title}</Text>
+
+						{
+							!this.props.hideAvatar &&
+              <Link to={`/${recipe.author.username}`} style={styles.avatarContainer}>
+                <Image
+                  source={recipe.author.avatar.url}
+                  style={{
+										width: this.props.size / 5,
+										height: this.props.size / 5,
+										borderRadius: this.props.size / 50,
+									}}
+                />
+              </Link>
+						}
+
+						{this._renderLikes(theme)}
+						{this._renderTime(theme)}
+						{/*<Text>likesCount: {recipe.likesCount}</Text>*/}
+						{/*<Text>likedByUser: {recipe.likedByUser}</Text>*/}
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
-	private _renderLikes = () => {
+	private _renderLikes = (theme: Theme) => {
 		return // TODO
 
 		let size = this.props.size / 4
@@ -110,16 +116,18 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
 
 					}}
 				/>
-				<Text style={styles.likeText}>{this.props.recipe.likesCount}</Text>
+				<Text
+					style={[styles.likeText, { color: theme.colors.recipeCardLikeText }]}>{this.props.recipe.likesCount}</Text>
 			</RX.View>
 		)
 	}
 
-	private _renderTime = () => {
+	private _renderTime = (theme: Theme) => {
 		return (
 			<RX.View style={[styles.timingContainer, { top: ((this.props.size * 1.3) - 30) }]}>
-				<Text translate style={styles.timingUnit}>min</Text>
-				<Text style={styles.timingNumber}>{this.props.recipe.timing.totalTime}</Text>
+				<Text translate style={[styles.timingUnit, { color: theme.colors.recipeCardTimingUnitColor }]}>min</Text>
+				<Text
+					style={[styles.timingNumber, { color: theme.colors.recipeCardTimingNumberColor, }]}>{this.props.recipe.timing.totalTime}</Text>
 			</RX.View>
 		)
 	}
@@ -146,7 +154,7 @@ const styles = {
 		// borderWidth: 1,
 		// borderColor: '#eee',
 		cursor: 'pointer',
-		paddingBottom: theme.styles.spacing,
+		paddingBottom: Styles.values.spacing,
 	}),
 	innerContainer: RX.Styles.createViewStyle({
 		// height: 200,
@@ -160,9 +168,9 @@ const styles = {
 		bottom: 0,
 	}),
 	title: RX.Styles.createTextStyle({
-		marginTop: theme.styles.spacingLarge / 2,
-		font: theme.fonts.displayBold,
-		fontSize: theme.fontSizes.size16,
+		marginTop: Styles.values.spacingLarge / 2,
+		font: Styles.fonts.displayBold,
+		fontSize: Styles.fontSizes.size16,
 	}),
 	avatarImage: RX.Styles.createImageStyle({
 		width: 50,
@@ -172,34 +180,31 @@ const styles = {
 	avatarContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
 		top: 10,
-		[theme.styles.end]: 10,
+		[Styles.values.end]: 10,
 	}),
 	likesContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
-		[theme.styles.end]: -10,
+		[Styles.values.end]: -10,
 		flexDirection: AppConfig.isRTL() ? 'row-reverse' : 'row',
 		alignItems: 'center',
 	}),
 	likeText: RX.Styles.createTextStyle({
-		font: theme.fonts.displayLight,
-		color: theme.colors.recipeCardLikeText,
+		font: Styles.fonts.displayLight,
 		top: 2,
-		[theme.styles.end]: -15,
-		fontSize: theme.fontSizes.size16,
+		[Styles.values.end]: -15,
+		fontSize: Styles.fontSizes.size16,
 	}),
 	timingContainer: RX.Styles.createViewStyle({
 		flexDirection: AppConfig.isRTL() ? 'row-reverse' : 'row',
 		position: 'absolute',
-		[theme.styles.start]: 16,
+		[Styles.values.start]: 16,
 	}),
 	timingUnit: RX.Styles.createTextStyle({
-		color: theme.colors.recipeCardTimingUnitColor,
-		font: theme.fonts.displayLight,
+		font: Styles.fonts.displayLight,
 	}),
 	timingNumber: RX.Styles.createTextStyle({
-		color: theme.colors.recipeCardTimingNumberColor,
-		font: theme.fonts.displayBold,
-		fontSize: theme.fontSizes.size16,
-		[theme.styles.marginEnd]: 5,
+		font: Styles.fonts.displayBold,
+		fontSize: Styles.fontSizes.size16,
+		[Styles.values.marginEnd]: 5,
 	}),
 }

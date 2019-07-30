@@ -10,7 +10,7 @@ import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { Ingredient } from 'src/ts/models/FoodModels'
 
 const IMAGE_DIMENSIONS = 50
@@ -88,7 +88,7 @@ export default class IngredientRow extends RX.Component<IngredientRowProps, Ingr
 						<Text translate>{this._getUnit(ingredient)}</Text> :
 						<Input
 							value={this.state.customUnit || ''}
-							style={{ width: 50, marginBottom: 0, [theme.styles.marginStart]: theme.styles.spacing }}
+							style={{ width: 50, marginBottom: 0, [Styles.values.marginStart]: Styles.values.spacing }}
 							onChange={value => this.setState({ customUnit: value }, this._onChange)}
 						/>
 				}
@@ -128,17 +128,17 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginBottom: theme.styles.spacingLarge / 2
+		marginBottom: Styles.values.spacingLarge / 2
 	}),
 	name: RX.Styles.createTextStyle({
-		[theme.styles.marginEnd]: theme.styles.spacing,
+		[Styles.values.marginEnd]: Styles.values.spacing,
 	}),
 	thumbnail: RX.Styles.createImageStyle({
 		width: IMAGE_DIMENSIONS,
 		height: IMAGE_DIMENSIONS,
 		borderRadius: IMAGE_DIMENSIONS / 2,
-		[theme.styles.marginEnd]: theme.styles.spacing,
-		[theme.styles.marginStart]: theme.styles.spacing / 2,
+		[Styles.values.marginEnd]: Styles.values.spacing,
+		[Styles.values.marginStart]: Styles.values.spacing / 2,
 	}),
 	clear: RX.Styles.createImageStyle({
 		width: CLEAR_DIMENSIONS,
@@ -151,7 +151,7 @@ const styles = {
 	}),
 	input: RX.Styles.createTextInputStyle({
 		flex: 1,
-		marginHorizontal: theme.styles.spacing,
+		marginHorizontal: Styles.values.spacing,
 		marginBottom: 0,
 	})
 }

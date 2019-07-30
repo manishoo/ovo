@@ -5,63 +5,10 @@
 
 import { default as FontRefs } from 'modules/fonts'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
 
 export class Theme {
 	constructor(public mode: 'dark' | 'light' = 'dark') {
 		// noop
-	}
-
-	public styles = {
-		spacing: 16,
-		spacingLarge: 20,
-		navBarHeight: 50,
-		drawerWidth: 250,
-		mainContentMaxWidth: 975,
-		defaultShadow: {
-			shadowColor: 'rgba(0, 0, 0, .12)',
-			shadowRadius: 10,
-		},
-		get start() {
-			return AppConfig.isRTL() ? 'right' : 'left'
-		},
-		get end() {
-			return AppConfig.isRTL() ? 'left' : 'right'
-		},
-
-		get Start() {
-			return AppConfig.isRTL() ? 'Right' : 'Left'
-		},
-		get End() {
-			return AppConfig.isRTL() ? 'Left' : 'Right'
-		},
-
-		get marginStart() {
-			return `margin${this.Start}`
-		},
-		get marginEnd() {
-			return `margin${this.End}`
-		},
-		get paddingStart() {
-			return `padding${this.Start}`
-		},
-		get paddingEnd() {
-			return `padding${this.End}`
-		},
-
-		get borderTopEndRadius() {
-			return `borderTop${this.End}Radius`
-		},
-		get borderTopStartRadius() {
-			return `borderTop${this.Start}Radius`
-		},
-
-		get borderBottomEndRadius() {
-			return `borderBottom${this.End}Radius`
-		},
-		get borderBottomStartRadius() {
-			return `borderBottom${this.Start}Radius`
-		},
 	}
 
 	public get colors() {
@@ -178,7 +125,3 @@ export class Theme {
 		} as RX.Types.FontInfo,
 	}
 }
-
-const theme = new Theme()
-
-export default theme

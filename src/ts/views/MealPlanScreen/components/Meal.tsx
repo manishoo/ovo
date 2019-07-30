@@ -4,7 +4,7 @@
  */
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Meal as MealType } from 'src/ts/models/FoodModels'
 import MealItem from './MealItem'
 
@@ -18,18 +18,22 @@ export default class Meal extends RX.Component<MealProps> {
 		const { style } = this.props
 
 		return (
-			<RX.View
-				style={[styles.container, style]}
-			>
-				<RX.Text style={styles.mealName}>{this.props.meal.name}</RX.Text>
-				{
-					this.props.meal.items.map(mealItem => (
-						<MealItem
-							mealItem={mealItem}
-						/>
-					))
-				}
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						style={[styles.container, { backgroundColor: theme.colors.mealCardBackgroundColor }, style]}
+					>
+						<RX.Text style={styles.mealName}>{this.props.meal.name}</RX.Text>
+						{
+							this.props.meal.items.map(mealItem => (
+								<MealItem
+									mealItem={mealItem}
+								/>
+							))
+						}
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -37,7 +41,6 @@ export default class Meal extends RX.Component<MealProps> {
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
-		backgroundColor: theme.colors.mealCardBackgroundColor,
 		borderRadius: 25,
 		borderColor: '#ECECEC',
 		borderWidth: 1,

@@ -7,7 +7,7 @@ import ImageSource from 'modules/images'
 import moment from 'moment-timezone'
 import RX from 'reactxp'
 import { VirtualListView } from 'reactxp-virtuallistview'
-import theme from 'src/ts/app/Theme'
+import { Theme } from 'src/ts/app/Theme'
 import { EVENT_CONTAINER_HEIGHT } from '../Event'
 import { ListViewProps, ListViewState } from './types'
 
@@ -104,7 +104,7 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 	}
 
 	// @ts-ignore
-	private _renderGoToToday = () => {
+	private _renderGoToToday = (theme: Theme) => {
 		if (!this.state.centerEvent) return
 		const closestMeal = this.props.findClosestMeal()
 		if (!closestMeal) return null
@@ -115,7 +115,8 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 		if (moment(this.state.centerEvent.datetime).isAfter(moment())) {
 			// current day was in the past
 			return (
-				<RX.View style={[styles.goToToday, { top: 32 }]} onPress={() => this._scrollToCurrentMeal(true)}>
+				<RX.View style={[styles.goToToday, { borderColor: theme.colors.goToTodayBorder, top: 32 }]}
+								 onPress={() => this._scrollToCurrentMeal(true)}>
 					<RX.Image
 						source={ImageSource.Back}
 						style={{
@@ -130,7 +131,8 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 		} else {
 			// current day is in the future
 			return (
-				<RX.View style={[styles.goToToday, { bottom: 100 }]} onPress={() => this._scrollToCurrentMeal(true)}>
+				<RX.View style={[styles.goToToday, { borderColor: theme.colors.goToTodayBorder, bottom: 100 }]}
+								 onPress={() => this._scrollToCurrentMeal(true)}>
 					<RX.Image
 						source={ImageSource.Back}
 						style={{
@@ -153,7 +155,6 @@ const styles = {
 		height: 50,
 		borderRadius: 25,
 		borderWidth: 2,
-		borderColor: theme.colors.goToTodayBorder,
 		alignSelf: 'center',
 		justifyContent: 'center',
 		alignItems: 'center',

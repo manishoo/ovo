@@ -6,7 +6,8 @@
 import Image from 'common/Image/Image'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 function getRandomFromArray(array: any[]): any {
 	return array[Math.floor(Math.random() * array.length)]
@@ -44,32 +45,36 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
 		const { style, size } = this.props
 
 		return (
-			<RX.View
-				onPress={this.props.onPress}
-				activeOpacity={1}
-				onMouseOver={this.props.onMouseOver}
-				onMouseLeave={this.props.onMouseLeave}
-				style={[
-					styles.container,
-					style,
-					{
-						width: this.props.size * 2,
-						height: this.props.size * 2,
-						padding: -this.props.size * 2
-					}
-				]}
-			>
-				{this._renderExtra()}
-				<Image
-					source={ImageSource.Assistant}
-					style={{
-						width: size,
-						height: size,
-					}}
-				/>
-				{/*{this._renderMouth()}*/}
-				{this._renderEyeLids()}
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({theme}) => (
+					<RX.View
+						onPress={this.props.onPress}
+						activeOpacity={1}
+						onMouseOver={this.props.onMouseOver}
+						onMouseLeave={this.props.onMouseLeave}
+						style={[
+							styles.container,
+							style,
+							{
+								width: this.props.size * 2,
+								height: this.props.size * 2,
+								padding: -this.props.size * 2
+							}
+						]}
+					>
+						{this._renderExtra()}
+						<Image
+							source={ImageSource.Assistant}
+							style={{
+								width: size,
+								height: size,
+							}}
+						/>
+						{/*{this._renderMouth()}*/}
+						{this._renderEyeLids(theme)}
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
@@ -142,15 +147,15 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
 		})
 	}
 
-	private _renderEyeLids = () => {
+	private _renderEyeLids = (theme: Theme) => {
 		if (!this.state.eyesClosed) return null
 
 		const eyeLidSize = (this.props.size || 65) / 3
 
 		return (
 			<RX.View style={[styles.eyeContainer, { width: this.props.size }]}>
-				<RX.View style={[styles.eyeLid, { width: eyeLidSize, height: eyeLidSize * 1.2 }]} />
-				<RX.View style={[styles.eyeLid, { width: eyeLidSize, height: eyeLidSize * 1.2 }]} />
+				<RX.View style={[styles.eyeLid, { width: eyeLidSize, height: eyeLidSize * 1.2, backgroundColor: theme.colors.assistantFaceColor, }]} />
+				<RX.View style={[styles.eyeLid, { width: eyeLidSize, height: eyeLidSize * 1.2, backgroundColor: theme.colors.assistantFaceColor, }]} />
 			</RX.View>
 		)
 	}
@@ -163,7 +168,6 @@ const styles = {
 	}),
 	eyeLid: RX.Styles.createViewStyle({
 		borderRadius: 40,
-		backgroundColor: theme.colors.assistantFaceColor,
 	}),
 	eyeContainer: RX.Styles.createViewStyle({
 		position: 'absolute',

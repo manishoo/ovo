@@ -5,7 +5,8 @@
 
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import HoverButton from 'src/ts/common/HoverButton/HoverButton'
 
 interface FilledButtonProps {
@@ -22,23 +23,32 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
 		const { style, containerStyle, label, onPress, fontSize, disabled } = this.props
 
 		return (
-			<HoverButton
-				style={containerStyle}
-				onRenderChild={isHovering => (
-					<RX.View
-						style={[
-							styles.container,
-							isHovering && !disabled ? styles.hoverStyle : undefined,
-							disabled ? styles.disabled : undefined,
-							style,
-						]}
-						onPress={onPress}
-						activeOpacity={0.7}
-					>
-						<RX.Text style={[styles.text, { fontSize }]}>{label}</RX.Text>
-					</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<HoverButton
+						style={containerStyle}
+						onRenderChild={isHovering => (
+							<RX.View
+								style={[
+									styles.container,
+									{ backgroundColor: theme.colors.filledButtonBG, },
+									isHovering && !disabled ? { backgroundColor: theme.colors.filledButtonHoverBG } : undefined,
+									disabled ? styles.disabled : undefined,
+									style,
+								]}
+								onPress={onPress}
+								activeOpacity={0.7}
+							>
+								<RX.Text style={[{
+									color: theme.colors.filledButtonText,
+									font: Styles.fonts.displayBold,
+									fontSize: Styles.fontSizes.size14,
+								}, { fontSize }]}>{label}</RX.Text>
+							</RX.View>
+						)}
+					/>
 				)}
-			/>
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -46,7 +56,6 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
 const styles = {
 	container: RX.Styles.createViewStyle({
 		borderRadius: 50,
-		backgroundColor: theme.colors.filledButtonBG,
 		padding: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -59,15 +68,7 @@ const styles = {
 		shadowRadius: 6,
 		margin: 10,
 	}),
-	hoverStyle: RX.Styles.createViewStyle({
-		backgroundColor: theme.colors.filledButtonHoverBG,
-	}),
 	disabled: RX.Styles.createViewStyle({
 		opacity: 0.7
-	}),
-	text: RX.Styles.createTextStyle({
-		color: theme.colors.filledButtonText,
-		font: theme.fonts.displayBold,
-		fontSize: 14,
 	}),
 }

@@ -6,7 +6,7 @@
 import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 
 interface GoDownIndicatorProps {
 	style?: any,
@@ -22,7 +22,7 @@ export default class GoDownIndicator extends RX.Component<GoDownIndicatorProps> 
 		const { style } = this.props
 
 		return (
-			<RX.View style={{ flexDirection: 'row', padding: theme.styles.spacing }}>
+			<RX.View style={{ flexDirection: 'row', padding: Styles.values.spacing }}>
 				<RX.Animated.Image
 					source={ImageSource.ArrowDownCircle}
 					style={[
@@ -67,8 +67,8 @@ const styles = {
 		//
 	}),
 	text: RX.Styles.createTextStyle({
-		font: theme.fonts.displayLight,
+		font: Styles.fonts.displayLight,
 		color: '#BBBBBB',
-		marginHorizontal: theme.styles.spacing / 2,
+		marginHorizontal: Styles.values.spacing / 2,
 	})
 }

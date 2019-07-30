@@ -4,7 +4,7 @@
  */
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 
 interface PickerProps {
 	style?: any,
@@ -59,6 +59,6 @@ const styles = {
 	}),
 	picker: RX.Styles.createPickerStyle({
 		flex: 1,
-		marginHorizontal: theme.styles.spacing
+		marginHorizontal: Styles.values.spacing
 	})
 }

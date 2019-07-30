@@ -11,7 +11,7 @@ import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
 import { Mutation } from 'react-apollo'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { User } from 'src/ts/models/FoodModels'
 import { SelfUserFragment } from 'src/ts/models/GraphQLModels'
 import { Routes } from 'src/ts/navigator/routes'
@@ -121,11 +121,11 @@ const styles = {
 		//
 	}),
 	submitButton: RX.Styles.createViewStyle({
-		marginTop: theme.styles.spacing * 2
+		marginTop: Styles.values.spacing * 2
 	}),
 	logo: RX.Styles.createImageStyle({
 		width: 150,
 		height: 50,
-		marginBottom: theme.styles.spacing * 2
+		marginBottom: Styles.values.spacing * 2
 	})
 }

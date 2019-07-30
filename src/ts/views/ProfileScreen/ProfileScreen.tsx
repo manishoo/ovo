@@ -12,7 +12,8 @@ import { Query, QueryResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Recipe } from 'src/ts/models/FoodModels'
 import { RecipeFragment } from 'src/ts/models/GraphQLModels'
 import { Routes } from 'src/ts/navigator/routes'
@@ -39,31 +40,35 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
 				query={PROFILE_RECIPES_QUERY}
 			>
 				{(queryData) => (
-					<RX.ScrollView
-						style={[styles.container, { height: this.state.height }]}
-						onScroll={this._onScroll(queryData)}
-					>
-						{
-							(AppConfig.getPlatformType() !== 'web') &&
-              <RX.View
-                style={styles.avatarContainer}
-              >
-                <Avatar
-                  source={''}
-                  dimensions={75}
-                  borderColor={theme.colors.primary}
-                />
-								{this.renderSettingsIcon()}
-              </RX.View>
-						}
+					<ThemeContext.Consumer>
+						{({ theme }) => (
+							<RX.ScrollView
+								style={[styles.container, { height: this.state.height }]}
+								onScroll={this._onScroll(queryData)}
+							>
+								{
+									(AppConfig.getPlatformType() !== 'web') &&
+                  <RX.View
+                    style={styles.avatarContainer}
+                  >
+                    <Avatar
+                      source={''}
+                      dimensions={75}
+                      borderColor={theme.colors.primary}
+                    />
+										{this.renderSettingsIcon()}
+                  </RX.View>
+								}
 
-						<FilledButton label={getLocalizedText('ProfileSettings')}
-													onPress={() => navigate(this.props, Routes.settings)} />
-						{/*<Text translate style={styles.title}>Dishes</Text>*/}
-						<RX.View style={styles.innerContainer}>
-							{this._renderContent(queryData)}
-						</RX.View>
-					</RX.ScrollView>
+								<FilledButton label={getLocalizedText('ProfileSettings')}
+															onPress={() => navigate(this.props, Routes.settings)} />
+								{/*<Text translate style={styles.title}>Dishes</Text>*/}
+								<RX.View style={styles.innerContainer}>
+									{this._renderContent(queryData)}
+								</RX.View>
+							</RX.ScrollView>
+						)}
+					</ThemeContext.Consumer>
 				)}
 			</Query>
 		)
@@ -168,7 +173,7 @@ const styles = {
 	container: RX.Styles.createViewStyle({
 		// FIXME width: fullWidth(),
 		flex: 1,
-		padding: theme.styles.spacingLarge,
+		padding: Styles.values.spacingLarge,
 		backgroundColor: '#fff',
 		alignSelf: 'center',
 	}),
@@ -195,6 +200,6 @@ const styles = {
 		// fontWeight: 'bold',
 		fontWeight: 'bold',
 		color: '#e7e7e7',
-		marginBottom: theme.styles.spacing,
+		marginBottom: Styles.values.spacing,
 	}),
 }

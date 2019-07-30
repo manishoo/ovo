@@ -7,7 +7,7 @@
 import { Option } from 'common/Select/Select'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import { fullHeight } from 'src/ts/utilities'
 
@@ -47,31 +47,35 @@ export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.C
 		const { style } = this.props
 
 		return (
-			<RX.View style={styles.topContainer}>
-				<RX.Animated.View
-					onPress={this._dismiss}
-					style={[styles.backDrop, this._backDropAnimationStyle]}
-				/>
-				<RX.Animated.View
-					style={[
-						{
-							position: 'absolute',
-							bottom: 0,
-							left: 0,
-							right: 0,
-						},
-						this._containerAnimationStyle,
-					]}
-				>
-					<RX.View style={[styles.container, style]}>
-						{
-							this.props.options.map(option => (
-								this._renderOption(option)
-							))
-						}
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View style={styles.topContainer}>
+						<RX.Animated.View
+							onPress={this._dismiss}
+							style={[styles.backDrop, this._backDropAnimationStyle]}
+						/>
+						<RX.Animated.View
+							style={[
+								{
+									position: 'absolute',
+									bottom: 0,
+									left: 0,
+									right: 0,
+								},
+								this._containerAnimationStyle,
+							]}
+						>
+							<RX.View style={[styles.container, { backgroundColor: theme.colors.white }, style]}>
+								{
+									this.props.options.map(option => (
+										this._renderOption(option)
+									))
+								}
+							</RX.View>
+						</RX.Animated.View>
 					</RX.View>
-				</RX.Animated.View>
-			</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
@@ -134,18 +138,10 @@ const styles = {
 		height: RX.UserInterface.measureWindow().height,
 	}),
 	container: RX.Styles.createViewStyle({
-		backgroundColor: theme.colors.white,
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
 		paddingTop: 80,
 		padding: 20,
-	}),
-	inputContainer: RX.Styles.createViewStyle({
-		alignSelf: 'stretch',
-		borderRadius: 10,
-		backgroundColor: theme.colors.foodDialogSearchBG,
-		paddingHorizontal: 10,
-		justifyContent: 'center',
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		borderBottomWidth: 0,
@@ -157,9 +153,6 @@ const styles = {
 		position: 'absolute',
 		top: 40,
 		left: 20,
-	}),
-	cancelText: RX.Styles.createTextStyle({
-		color: theme.colors.labelInput,
 	}),
 	searchResultItemContainer: RX.Styles.createViewStyle({
 		height: 40,

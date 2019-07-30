@@ -5,7 +5,7 @@
 
 import Text from 'common/Text/Text'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { Ingredient } from 'src/ts/models/FoodModels'
 
 const IngredientItem = ({ ingredient, unitsVisible = true }: { ingredient: Ingredient, unitsVisible: boolean }) => {
@@ -55,14 +55,14 @@ const styles = {
 		backgroundColor: '#ddd',
 		justifyContent: 'center',
 		alignItems: 'center',
-		[theme.styles.marginEnd]: theme.styles.spacing,
-		marginVertical: theme.styles.spacingLarge / 4,
+		[Styles.values.marginEnd]: Styles.values.spacing,
+		marginVertical: Styles.values.spacingLarge / 4,
 	}),
 	title: RX.Styles.createTextStyle({
-		[theme.styles.marginEnd]: theme.styles.spacingLarge,
+		[Styles.values.marginEnd]: Styles.values.spacingLarge,
 	}),
 	amountText: RX.Styles.createTextStyle({
-		marginLeft: theme.styles.spacing / 2,
+		marginLeft: Styles.values.spacing / 2,
 	})
 }
 
