@@ -19,8 +19,8 @@ const isProd = process.env.NODE_ENV === 'production'
 const publicPath = devWebpackConfig.output.publicPath
 
 const app = express()
-const port = process.env.PORT || 9090
-const hostname = process.env.HOST_NAME || 'localhost'
+const port = process.env.CLIENT_SERVER_PORT || 9090
+const hostname = process.env.CLIENT_SERVER_URL || 'localhost'
 
 const serve = (path, cache) => express.static(path, {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
