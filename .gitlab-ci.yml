@@ -16,6 +16,8 @@ build staging image:
     DOCKER_TLS_CERTDIR: "/certs"
     API_ADDRESS: "$STAGING_API_ADDRESS"
     GRAPHQL_ENDPOINT: "$STAGING_API_GRAPHQL_ENDPOINT"
+  before_script:
+    - git config --global url."https://".insteadOf git://
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t registry.gitlab.com/ouranos-studio/pantheon:$CI_COMMIT_SHORT_SHA .
