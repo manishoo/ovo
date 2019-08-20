@@ -17,8 +17,7 @@ build staging image:
     API_ADDRESS: "$STAGING_API_ADDRESS"
     GRAPHQL_ENDPOINT: "$STAGING_API_GRAPHQL_ENDPOINT"
   before_script:
-    - apk update && apk upgrade && \
-      apk add --no-cache bash git openssh
+    - apk add --no-cache git
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t registry.gitlab.com/ouranos-studio/pantheon:$CI_COMMIT_SHORT_SHA .
