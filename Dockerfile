@@ -5,7 +5,7 @@ WORKDIR /home/supernova
 
 COPY src src
 COPY package.json .
-COPY package-lock.json .
+#COPY package-lock.json .
 COPY tsconfig.json .
 COPY webpack webpack
 COPY locales locales
