@@ -5,7 +5,6 @@ WORKDIR /home/supernova
 
 COPY src src
 COPY package.json .
-#COPY package-lock.json .
 COPY tsconfig.json .
 COPY webpack webpack
 COPY locales locales
@@ -16,6 +15,20 @@ COPY buildconfig.js .
 COPY gulpfile.js .
 COPY shim-browser.js .
 
+# for image webpack loader
+RUN apk add --no-cache --virtual .build-deps \
+		python \
+		g++ \
+		gcc \
+		make \
+		libpng \
+		libpng-dev \
+		libjpeg-turbo \
+		libjpeg-turbo-dev \
+		build-base \
+		file \
+		nasm \
+		autoconf
 RUN npm install
 RUN npm run build:web
 
