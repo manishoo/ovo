@@ -17,6 +17,7 @@ COPY shim-browser.js .
 
 # for image webpack loader
 RUN apk add --no-cache --virtual .build-deps \
+        git \
 		python \
 		g++ \
 		gcc \
