@@ -60,6 +60,8 @@ const commonConfig = merge(
         '__IOS__': false,
         '__WINDOWS__': false,
         '__MACOS__': false,
+        'process.env.API_URL': JSON.stringify(process.env.API_URL),
+        'process.env.GRAPHQL_ENDPOINT': JSON.stringify(process.env.GRAPHQL_ENDPOINT),
       })
     ],
   },
@@ -95,7 +97,7 @@ const productionConfig = merge(
 
 const developmentConfig = merge(
   {
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
       new webpack.DefinePlugin({

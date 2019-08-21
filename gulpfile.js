@@ -475,9 +475,9 @@ gulp.task('build', function(callback) {
     runSequence(['copy', 'compile-rn'], callback);
 });
 
-gulp.task('webpack-js', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }));
-gulp.task('webpack-js-server', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.server.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }));
-gulp.task('webpack-js-watch', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --watch --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }));
+gulp.task('webpack-js', shell.task('node ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }));
+gulp.task('webpack-js-server', shell.task('node ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.server.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }));
+gulp.task('webpack-js-watch', shell.task('node ./node_modules/webpack/bin/webpack.js --watch --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }));
 
 gulp.task('run-once', function (callback) {
     runSequence('clean', 'lint', 'copy', 'build', 'apply-aliases', usesWebpack() ? 'webpack-js' : 'noop', usesWebpack() ? 'webpack-js-server' : 'noop', callback);

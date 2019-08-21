@@ -163,7 +163,7 @@ exports.optimizeImages = ({ include, exclude } = {}) => ({
   module: {
     rules: [
       {
-        test: /\.(gif|png|jpe?g|svg)$/i,
+        test: /\.(png|jpe?g|svg)$/i,
 
         include,
         exclude,
@@ -174,6 +174,7 @@ exports.optimizeImages = ({ include, exclude } = {}) => ({
 
           options: {
             progressive: true,
+            disable: true,
 
             // optimizationLevel: 7,
 
@@ -255,7 +256,7 @@ exports.loadJS = () => ({
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+      // { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
     ],
   },
   // externals: {
