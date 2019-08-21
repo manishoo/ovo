@@ -5,12 +5,10 @@ stages:
 build staging image:
   stage: build
   image: docker:latest
-#  only:
-#    - develop
+  only:
+    - develop
   services:
     - docker:dind
-#  tags:
-#    - typescript
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
@@ -28,8 +26,6 @@ build production image:
     - master
   services:
     - docker:dind
-#  tags:
-#    - typescript
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
@@ -46,8 +42,8 @@ deploy to staging:
   stage: deploy
   image: docker:latest
   when: manual
-#  only:
-#    - develop
+  only:
+    - develop
   services:
     - docker:dind
   variables:
