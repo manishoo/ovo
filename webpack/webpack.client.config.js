@@ -10,9 +10,7 @@ const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const CleanPlugin = require('clean-webpack-plugin')
 
 const baseConfig = require('./webpack.base.config')
-const parts = require('./webpack.parts')
 const paths = require('./paths')
-const publicPath = baseConfig.output.publicPath
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -28,7 +26,7 @@ const productionConfig = merge(
       ),
       new ManifestPlugin({
         fileName: 'assets.json',
-        publicPath
+        publicPath: process.env.PUBLIC_PATH
       }),
       new SWPrecachePlugin({
         // change it to your app's cache name

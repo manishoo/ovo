@@ -11,12 +11,12 @@ const express = require('express')
 const compression = require('compression')
 const chalk = require('chalk')
 const favicon = require('serve-favicon')
-const devWebpackConfig = require('./webpack/webpack.client.config')
 const paths = require('./webpack/paths')
 const shimBrowser = require('./shim-browser')
 
+const publicPath = process.env.PUBLIC_PATH
+
 const isProd = process.env.NODE_ENV === 'production'
-const publicPath = devWebpackConfig.output.publicPath
 
 const app = express()
 const port = process.env.CLIENT_SERVER_PORT || 9090
