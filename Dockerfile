@@ -9,6 +9,7 @@ COPY tsconfig.json .
 COPY webpack webpack
 COPY locales locales
 COPY buildtools buildtools
+COPY web web
 COPY .babelrc .
 COPY server.js .
 COPY buildconfig.js .
