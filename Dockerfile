@@ -3,10 +3,10 @@ MAINTAINER Ouranos Studio
 
 WORKDIR /home/supernova
 
-RUN echo "API ADDRESS =====>>> $API_ADDRESS"
+RUN echo "=====>>>"
+RUN echo $PUBLIC_PATH
 RUN echo $API_ADDRESS
-RUN echo "DOCKER_TLS_CERTDIR =====>>> $DOCKER_TLS_CERTDIR"
-RUN echo $DOCKER_TLS_CERTDIR
+RUN echo $GRAPHQL_ENDPOINT
 COPY src src
 COPY package.json .
 COPY tsconfig.json .
