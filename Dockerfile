@@ -4,9 +4,10 @@ MAINTAINER Ouranos Studio
 WORKDIR /home/supernova
 
 RUN echo "=====>>>"
-RUN echo $PUBLIC_PATH
-RUN echo $API_ADDRESS
-RUN echo $GRAPHQL_ENDPOINT
+RUN echo $PUBLIC_PATH >> testfile
+RUN echo $API_ADDRESS >> testfile
+RUN echo $GRAPHQL_ENDPOINT >> testfile
+RUN cat testfile
 COPY src src
 COPY package.json .
 COPY tsconfig.json .
