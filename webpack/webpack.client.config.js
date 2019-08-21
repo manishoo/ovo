@@ -55,7 +55,7 @@ const developmentConfig = {
     'webpack-hot-middleware/client?noInfo=false&reload=true&overlay=true',
     paths.entryClient
   ],
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-source-map',
   output: {
     filename: 'app.js',
     devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',

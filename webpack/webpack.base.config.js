@@ -97,7 +97,7 @@ const productionConfig = merge(
 
 const developmentConfig = merge(
   {
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
       new webpack.DefinePlugin({
