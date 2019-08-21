@@ -25,9 +25,9 @@ build staging image:
       --build-arg no_proxy=$no_proxy
       --build-arg VCS_REF=$CI_COMMIT_SHA
       --build-arg VCS_URL=$CI_PROJECT_URL
-      --build-arg PUBLIC_PATH=$PUBLIC_PATH
-      --build-arg API_ADDRESS=$API_ADDRESS
-      --build-arg GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+      --build-arg PUBLIC_PATH=$STAGING_API_ADDRESS
+      --build-arg API_ADDRESS=http://localhost:8009
+      --build-arg GRAPHQL_ENDPOINT=$STAGING_API_GRAPHQL_ENDPOINT
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
       .
