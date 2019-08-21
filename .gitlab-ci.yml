@@ -16,10 +16,21 @@ build staging image:
     API_ADDRESS: $STAGING_API_ADDRESS
     GRAPHQL_ENDPOINT: $STAGING_API_GRAPHQL_ENDPOINT
   script:
-    - echo "$API_ADDRESS"
-    - echo "$STAGING_API_ADDRESS"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA .
+    - >
+      docker build -t registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+      --pull
+      --build-arg http_proxy=$http_proxy
+      --build-arg https_proxy=$https_proxy
+      --build-arg no_proxy=$no_proxy
+      --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL
+      --build-arg PUBLIC_PATH=$PUBLIC_PATH
+      --build-arg API_ADDRESS=$API_ADDRESS
+      --build-arg GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      .
     - docker push registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
 
 build production image:
