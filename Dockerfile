@@ -31,9 +31,6 @@ RUN apk add --no-cache --virtual .build-deps \
   nasm \
   autoconf
 RUN npm install
-RUN ls node_modules/reactxp
-RUN ls node_modules/reactxp/dist
-RUN ls node_modules/reactxp/dist/web
 RUN npm run build:web
 
 RUN rm -rf src
