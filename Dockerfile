@@ -3,6 +3,8 @@ MAINTAINER Ouranos Studio
 
 WORKDIR /home/supernova
 
+RUN echo "API ADDRESS =====>>>"
+RUN echo "$API_ADDRESS"
 COPY src src
 COPY package.json .
 COPY tsconfig.json .
