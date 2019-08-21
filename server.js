@@ -14,7 +14,7 @@ const favicon = require('serve-favicon')
 const paths = require('./webpack/paths')
 const shimBrowser = require('./shim-browser')
 
-const publicPath = process.env.PUBLIC_PATH
+const publicPath = process.env.PUBLIC_PATH || '/static/'
 
 const isProd = process.env.NODE_ENV === 'production'
 

@@ -18,7 +18,7 @@ const productionConfig = merge(
   {
     entry: ['@babel/polyfill', paths.entryClient],
     plugins: [
-      new CleanPlugin(),
+      // new CleanPlugin(),
       new webpack.HashedModuleIdsPlugin(),
       new webpack.NormalModuleReplacementPlugin(
         /\.\/sync/,
@@ -26,7 +26,7 @@ const productionConfig = merge(
       ),
       new ManifestPlugin({
         fileName: 'assets.json',
-        publicPath: process.env.PUBLIC_PATH
+        publicPath: process.env.PUBLIC_PATH || '/static/',
       }),
       new SWPrecachePlugin({
         // change it to your app's cache name
@@ -59,6 +59,9 @@ const developmentConfig = {
     devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
   },
   plugins: [
+    // new CleanPlugin({
+    //   root: process.cwd(),
+    // }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()

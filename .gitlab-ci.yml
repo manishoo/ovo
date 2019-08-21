@@ -12,7 +12,7 @@ build staging image:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    PUBLIC_PATH: "/static/"
+    PUBLIC_PATH: /static/
     API_ADDRESS: $STAGING_API_ADDRESS
     GRAPHQL_ENDPOINT: $STAGING_API_GRAPHQL_ENDPOINT
   script:
@@ -30,7 +30,7 @@ build production image:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    PUBLIC_PATH: "/static/"
+    PUBLIC_PATH: /static/
     API_ADDRESS: $PRODUCTION_API_ADDRESS
     GRAPHQL_ENDPOINT: $PRODUCTION_API_GRAPHQL_ENDPOINT
   before_script:
@@ -43,7 +43,7 @@ build production image:
 deploy to staging:
   stage: deploy
   image: docker:latest
-  when: manual
+#  when: manual
   only:
     - develop
   services:

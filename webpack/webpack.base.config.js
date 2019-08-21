@@ -23,7 +23,7 @@ const commonConfig = merge(
       path: paths.build,
       chunkFilename: '[name].[chunkhash:8].js',
       filename: '[name].[chunkhash:8].js',
-      publicPath: process.env.PUBLIC_PATH,
+      publicPath: process.env.PUBLIC_PATH || '/static/',
     },
     // module: {
     //   rules: [{
