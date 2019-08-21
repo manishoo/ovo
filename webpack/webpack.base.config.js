@@ -60,7 +60,7 @@ const commonConfig = merge(
         '__IOS__': false,
         '__WINDOWS__': false,
         '__MACOS__': false,
-        'process.env.API_URL': JSON.stringify(process.env.API_URL),
+        'process.env.API_ADDRESS': JSON.stringify(process.env.API_ADDRESS),
         'process.env.GRAPHQL_ENDPOINT': JSON.stringify(process.env.GRAPHQL_ENDPOINT),
       })
     ],
@@ -100,11 +100,6 @@ const developmentConfig = merge(
     devtool: 'cheap-module-source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
-      new webpack.DefinePlugin({
-        'process.env': {
-          'API_URL': process.env.API_URL,
-        }
-      })
     ]
   },
   parts.loadImages({ include: paths.src })
