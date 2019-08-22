@@ -109,7 +109,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 			<Mutation
 				mutation={gql`
 					mutation IntroductionMutation($token: String, $message: String, $data: String) {
-						setupConversation(token: $token, message: $message, data: $data) {
+						setup(token: $token, message: $message, data: $data) {
 							token
 							messages {
 								id

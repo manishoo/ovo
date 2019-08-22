@@ -3,10 +3,6 @@ MAINTAINER Ouranos Studio
 
 WORKDIR /home/supernova
 
-RUN echo "API ADDRESS =====>>> $API_ADDRESS"
-RUN echo $API_ADDRESS
-RUN echo "DOCKER_TLS_CERTDIR =====>>> $DOCKER_TLS_CERTDIR"
-RUN echo $DOCKER_TLS_CERTDIR
 COPY src src
 COPY package.json .
 COPY tsconfig.json .
@@ -36,6 +32,10 @@ RUN apk add --no-cache --virtual .build-deps \
   nasm \
   autoconf
 RUN npm install
+# get args
+ARG PUBLIC_PATH
+ARG API_ADDRESS
+ARG GRAPHQL_ENDPOINT
 RUN npm run build:web
 
 RUN rm -rf src
