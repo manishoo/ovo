@@ -4,3 +4,6 @@ node_modules/
 .env
 .DS_Store
 *.hot-update.*
+web/build/
+web/fonts/
+web/images/

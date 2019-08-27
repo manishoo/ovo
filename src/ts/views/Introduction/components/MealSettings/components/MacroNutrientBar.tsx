@@ -4,7 +4,7 @@
  */
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 interface MacroNutrientBarProps {
 	style?: any,
@@ -66,30 +66,34 @@ export default class MacroNutrientBar extends RX.Component<MacroNutrientBarProps
 		} = this.props
 
 		return (
-			<RX.View
-				style={[styles.container, style]}
-			>
-				<RX.View
-					style={styles.container1}
-				>
-					<RX.Text style={styles.label}>{label}</RX.Text>
-					<RX.Text style={{ color }}>%{Math.ceil(value * 100)}</RX.Text>
-					<RX.Text style={{ color: '#ccc', fontSize: 12 }}>~{Math.ceil(value * tdee)} calories</RX.Text>
-				</RX.View>
-				<RX.View
-					style={styles.container2}
-					onResponderMove={this.onResponderMove}
-					onResponderEnd={this.onResponderEnd}
-					onResponderRelease={this.onResponderEnd}
-					onStartShouldSetResponder={() => {
-						console.log('setting shit')
-						return true
-					}}
-					onMoveShouldSetResponder={() => false}
-				>
-					{this.renderBar(value * 100, color)}
-				</RX.View>
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						style={[styles.container, style]}
+					>
+						<RX.View
+							style={styles.container1}
+						>
+							<RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>
+							<RX.Text style={{ color }}>%{Math.ceil(value * 100)}</RX.Text>
+							<RX.Text style={{ color: '#ccc', fontSize: 12 }}>~{Math.ceil(value * tdee)} calories</RX.Text>
+						</RX.View>
+						<RX.View
+							style={styles.container2}
+							onResponderMove={this.onResponderMove}
+							onResponderEnd={this.onResponderEnd}
+							onResponderRelease={this.onResponderEnd}
+							onStartShouldSetResponder={() => {
+								console.log('setting shit')
+								return true
+							}}
+							onMoveShouldSetResponder={() => false}
+						>
+							{this.renderBar(value * 100, color)}
+						</RX.View>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -97,7 +101,6 @@ export default class MacroNutrientBar extends RX.Component<MacroNutrientBarProps
 const styles = {
 	label: RX.Styles.createTextStyle({
 		fontSize: 18,
-		color: theme.colors.labelInput,
 		fontWeight: 'bold',
 	}),
 	container: RX.Styles.createViewStyle({

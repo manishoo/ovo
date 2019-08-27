@@ -10,8 +10,8 @@ interface InitParams {
 }
 
 class AppConfig {
-	public graphQLAddress = 'http://5.253.24.16:4003/gql'
-	public serverAddress = 'http://5.253.24.16:4003'
+	public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
+	public get graphQLAddress() {return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT}`}
 	public locale = 'fa'
 	private _appVersion: string
 	private readonly _frontendHost: string

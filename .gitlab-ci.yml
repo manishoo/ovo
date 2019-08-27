@@ -1,0 +1,119 @@
+stages:
+  - build
+  - deploy
+
+build staging image:
+  stage: build
+  image: docker:latest
+  only:
+    - develop
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+    PUBLIC_PATH: /static/
+    API_ADDRESS: $STAGING_API_ADDRESS
+    GRAPHQL_ENDPOINT: $STAGING_API_GRAPHQL_ENDPOINT
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker build -t registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+      --pull
+      --build-arg http_proxy=$http_proxy
+      --build-arg https_proxy=$https_proxy
+      --build-arg no_proxy=$no_proxy
+      --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL
+      --build-arg PUBLIC_PATH=$PUBLIC_PATH
+      --build-arg API_ADDRESS=$API_ADDRESS
+      --build-arg GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      .
+    - docker push registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+
+build production image:
+  stage: build
+  image: docker:latest
+  only:
+    - master
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+    PUBLIC_PATH: /static/
+    API_ADDRESS: $PRODUCTION_API_ADDRESS
+    GRAPHQL_ENDPOINT: $PRODUCTION_API_GRAPHQL_ENDPOINT
+  before_script:
+    - apk update && apk add git
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - >
+      docker build -t registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+      --pull
+      --build-arg http_proxy=$http_proxy
+      --build-arg https_proxy=$https_proxy
+      --build-arg no_proxy=$no_proxy
+      --build-arg VCS_REF=$CI_COMMIT_SHA
+      --build-arg VCS_URL=$CI_PROJECT_URL
+      --build-arg PUBLIC_PATH=$PUBLIC_PATH
+      --build-arg API_ADDRESS=$API_ADDRESS
+      --build-arg GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+      .
+    - docker push registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+
+deploy to staging:
+  stage: deploy
+  image: docker:latest
+  only:
+    - develop
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  environment:
+    name: staging
+  before_script:
+    - apk --update add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$STAGING_SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+    - docker tag registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/supernova:staging
+    - docker push registry.gitlab.com/ouranos-studio/supernova:staging
+    - ssh $STAGING_SERVER_SSH_USER@$STAGING_SERVER_SSH_URL "$STAGING_DEPLOY_SCRIPT"
+
+
+deploy to production:
+  stage: deploy
+  image: docker:latest
+  when: manual
+  only:
+    - master
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  environment:
+    name: production
+  before_script:
+    - apk --update add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$PRODUCTION_SSH_PRIVATE_KEY" | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA
+    - docker tag registry.gitlab.com/ouranos-studio/supernova:$CI_COMMIT_SHORT_SHA registry.gitlab.com/ouranos-studio/supernova:production
+    - docker push registry.gitlab.com/ouranos-studio/supernova:production
+    - ssh $PRODUCTION_SERVER_SSH_USER@$PRODUCTION_SERVER_SSH_URL "$PRODUCTION_DEPLOY_SCRIPT"

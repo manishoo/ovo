@@ -23,7 +23,7 @@ const commonConfig = merge(
       path: paths.build,
       chunkFilename: '[name].[chunkhash:8].js',
       filename: '[name].[chunkhash:8].js',
-      publicPath: '/static/',
+      publicPath: process.env.PUBLIC_PATH || '/static/',
     },
     // module: {
     //   rules: [{
@@ -60,6 +60,8 @@ const commonConfig = merge(
         '__IOS__': false,
         '__WINDOWS__': false,
         '__MACOS__': false,
+        'process.env.API_ADDRESS': JSON.stringify(process.env.API_ADDRESS),
+        'process.env.GRAPHQL_ENDPOINT': JSON.stringify(process.env.GRAPHQL_ENDPOINT),
       })
     ],
   },
@@ -95,14 +97,9 @@ const productionConfig = merge(
 
 const developmentConfig = merge(
   {
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
-      new webpack.DefinePlugin({
-        'process.env': {
-          'API_URL': process.env.API_URL,
-        }
-      })
     ]
   },
   parts.loadImages({ include: paths.src })

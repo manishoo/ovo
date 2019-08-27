@@ -7,7 +7,8 @@ import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import _ from 'lodash'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Food } from 'src/ts/models/FoodModels'
 import { generateHeightRange, generateWeightRange } from 'src/ts/utilities'
 import { EXPECTATIONS, Item, MessageType } from '../types'
@@ -153,157 +154,165 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 			default:
 				const SelectContainer = (items && items.length <= 2) ? RX.View : RX.ScrollView
 
-				return [
-					((MessageType.select === inputType) && (items)) && <SelectContainer
-            key='sc'
-            style={[
-							styles.selectItemContainer,
-							{ width: this.props.introductionWidth },
-							(items && items.length <= 2) ? {
-								justifyContent: 'center',
-								alignItems: 'center',
-							} : {},
-						]}
-						// @ts-ignore
-            contentContainerStyle={(items && items.length <= 2) ? {
-							justifyContent: 'center',
-							alignItems: 'center',
-						} : {}}
-            horizontal={AppConfig.getPlatformType() !== 'web'}
-            vertical={AppConfig.getPlatformType() === 'web'}
-          >
-						{
-							items.map(item => (
-								<RX.View
-									key={item.text}
-									style={styles.selectItem}
-									onPress={this.onSelectSubmit(item)}
-									activeOpacity={0.8}
+				return (
+					<ThemeContext.Consumer>
+						{({ theme }) => (
+							[
+								((MessageType.select === inputType) && (items)) && <SelectContainer
+                  key='sc'
+                  style={[
+										styles.selectItemContainer,
+										{ width: this.props.introductionWidth },
+										(items && items.length <= 2) ? {
+											justifyContent: 'center',
+											alignItems: 'center',
+										} : {},
+									]}
+									// @ts-ignore
+                  contentContainerStyle={(items && items.length <= 2) ? {
+										justifyContent: 'center',
+										alignItems: 'center',
+									} : {}}
+                  horizontal={AppConfig.getPlatformType() !== 'web'}
+                  vertical={AppConfig.getPlatformType() === 'web'}
+                >
+									{
+										items.map(item => (
+											<RX.View
+												key={item.text}
+												style={[styles.selectItem, { backgroundColor: theme.colors.assistantUserMessageBG }]}
+												onPress={this.onSelectSubmit(item)}
+												activeOpacity={0.8}
+											>
+												<RX.Text
+													style={[styles.selectItemText, { color: theme.colors.assistantUserMessageTextColor }]}>{item.text}</RX.Text>
+											</RX.View>
+										))
+									}
+                </SelectContainer>,
+								<RX.Animated.View
+									key='scs'
+									style={[
+										createViewStyle(),
+										{ backgroundColor: theme.colors.white },
+										animatedStyle,
+									]}
 								>
-									<RX.Text style={styles.selectItemText}>{item.text}</RX.Text>
-								</RX.View>
-							))
-						}
-          </SelectContainer>,
-					<RX.Animated.View
-						key='scs'
-						style={[
-							createViewStyle(),
-							animatedStyle,
-						]}
-					>
-						{
-							(() => {
-								if (MessageType.form === inputType) {
-									return (
-										<InputForm
-											onSubmit={this.onFormSubmit}
-										/>
-									)
-								}
-								if (MessageType.mealPlanSettings === inputType) {
-									return (
-										<MealSettings
-											onSubmit={this.onMealSettingsSubmit}
-											settings={mealPlanSettings}
-										/>
-									)
-								}
+									{
+										(() => {
+											if (MessageType.form === inputType) {
+												return (
+													<InputForm
+														onSubmit={this.onFormSubmit}
+													/>
+												)
+											}
+											if (MessageType.mealPlanSettings === inputType) {
+												return (
+													<MealSettings
+														onSubmit={this.onMealSettingsSubmit}
+														settings={mealPlanSettings}
+													/>
+												)
+											}
 
-								if (MessageType.weight === inputType) {
-									return [
-										<Picker
-											key='picker'
-											ref={ref => this.picker = ref}
-											defaultValues={[
-												'70',
-												'kg'
-											]}
-											pickers={[
-												generateWeightRange(),
-												[
-													{
-														label: 'kg',
-														value: 'kg',
-													},
-													{
-														label: 'pound',
-														value: 'pound',
-													},
-												],
-											]}
-										/>,
-										<SubmitButton
-											key='button'
-											disabled={loading}
-											style={[
-												styles.submitButton,
-												{ top: 206 }
-											]}
-											onPress={this.onPickerSubmit}
-										/>
-									]
-								}
+											if (MessageType.weight === inputType) {
+												return [
+													<Picker
+														key='picker'
+														ref={ref => this.picker = ref}
+														defaultValues={[
+															'70',
+															'kg'
+														]}
+														pickers={[
+															generateWeightRange(),
+															[
+																{
+																	label: 'kg',
+																	value: 'kg',
+																},
+																{
+																	label: 'pound',
+																	value: 'pound',
+																},
+															],
+														]}
+													/>,
+													<SubmitButton
+														key='button'
+														disabled={loading}
+														style={[
+															styles.submitButton,
+															{ top: 206 }
+														]}
+														onPress={this.onPickerSubmit}
+													/>
+												]
+											}
 
-								if (MessageType.height === inputType) {
-									return [
-										<Picker
-											key='h-picker'
-											ref={ref => this.picker = ref}
-											defaultValues={[
-												'170',
-												'cm'
-											]}
-											pickers={[
-												generateHeightRange(),
-												[
-													{
-														label: 'cm',
-														value: 'cm',
-													},
-												],
-											]}
-										/>,
-										<SubmitButton
-											key='button'
-											style={[
-												styles.submitButton,
-												{ top: 206 }
-											]}
-											onPress={this.onPickerSubmit}
-											disabled={loading}
-										/>
-									]
-								}
+											if (MessageType.height === inputType) {
+												return [
+													<Picker
+														key='h-picker'
+														ref={ref => this.picker = ref}
+														defaultValues={[
+															'170',
+															'cm'
+														]}
+														pickers={[
+															generateHeightRange(),
+															[
+																{
+																	label: 'cm',
+																	value: 'cm',
+																},
+															],
+														]}
+													/>,
+													<SubmitButton
+														key='button'
+														style={[
+															styles.submitButton,
+															{ top: 206 }
+														]}
+														onPress={this.onPickerSubmit}
+														disabled={loading}
+													/>
+												]
+											}
 
-								return (
-									<RX.View
-										style={styles.textInputContainer}
-									>
-										<RX.TextInput
-											key='textinput'
-											value={message}
-											keyboardType={getKeyboardType(inputType)}
-											// multiline
-											placeholder={loading ? getLocalizedText('AssistantInputPlaceholder') : getPlaceholder(expect)}
-											returnKeyType='send'
-											secureTextEntry={MessageType.password == inputType}
-											style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
-											onChangeText={this.onChangeText}
-											onSubmitEditing={this.onTextSubmit}
-										/>
-										<SubmitButton
-											skip={skip ? 'Nope' : undefined}
-											style={styles.submitButton}
-											onPress={this.onTextSubmit}
-											disabled={loading || !message}
-										/>
-									</RX.View>
-								)
-							})()
-						}
-					</RX.Animated.View>
-				]
+											return (
+												<RX.View
+													style={styles.textInputContainer}
+												>
+													<RX.TextInput
+														key='textinput'
+														value={message}
+														keyboardType={getKeyboardType(inputType)}
+														// multiline
+														placeholder={loading ? getLocalizedText('AssistantInputPlaceholder') : getPlaceholder(expect)}
+														returnKeyType='send'
+														secureTextEntry={MessageType.password == inputType}
+														style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
+														onChangeText={this.onChangeText}
+														onSubmitEditing={this.onTextSubmit}
+													/>
+													<SubmitButton
+														skip={skip ? 'Nope' : undefined}
+														style={styles.submitButton}
+														onPress={this.onTextSubmit}
+														disabled={loading || !message}
+													/>
+												</RX.View>
+											)
+										})()
+									}
+								</RX.Animated.View>
+							]
+						)}
+					</ThemeContext.Consumer>
+				)
 		}
 	}
 
@@ -477,7 +486,6 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 
 const containerStyle: RX.Types.ViewStyle = {
 	position: 'absolute',
-	backgroundColor: theme.colors.white,
 	borderTopLeftRadius: 15,
 	borderTopRightRadius: 15,
 	borderWidth: 1,
@@ -491,14 +499,14 @@ const containerStyle: RX.Types.ViewStyle = {
 const styles = {
 	textInputContainer: RX.Styles.createViewStyle({
 		flexDirection: 'row',
-		[theme.styles.paddingStart]: theme.styles.spacing * 3,
+		[Styles.values.paddingStart]: Styles.values.spacing * 3,
 		minHeight: 50,
 	}),
 	textInput: RX.Styles.createTextInputStyle({
 		borderBottomWidth: 1,
 		borderColor: '#eee',
 		fontSize: 16,
-		[theme.styles.marginStart]: 10,
+		[Styles.values.marginStart]: 10,
 	}),
 	selectItemContainer: RX.Styles.createViewStyle({
 		position: 'absolute',
@@ -513,20 +521,15 @@ const styles = {
 	selectItem: RX.Styles.createViewStyle({
 		padding: 15,
 		borderWidth: 1,
-		backgroundColor: theme.colors.assistantUserMessageBG,
 		borderRadius: 100,
 		marginBottom: 5,
 		justifyContent: 'center',
 		alignItems: 'center',
 	}),
 	selectItemText: RX.Styles.createTextStyle({
-		color: theme.colors.assistantUserMessageTextColor,
 		fontWeight: 'bold',
 		fontSize: 18,
 	}),
-	inputContainer: RX.Styles.createViewStyle(containerStyle),
-	formContainer: RX.Styles.createViewStyle(containerStyle),
-	pickerContainer: RX.Styles.createViewStyle(containerStyle),
 	submitButton: RX.Styles.createViewStyle({
 		position: 'absolute',
 		right: 10,

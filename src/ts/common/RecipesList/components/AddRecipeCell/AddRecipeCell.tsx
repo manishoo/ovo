@@ -6,7 +6,7 @@
 import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { Routes } from 'src/ts/navigator/routes'
 import { navigate, withNavigation } from 'src/ts/utilities'
 
@@ -56,7 +56,7 @@ const styles = {
 		borderStyle: 'dashed',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginBottom: theme.styles.spacingLarge / 2,
+		marginBottom: Styles.values.spacingLarge / 2,
 	}),
 	imageStyle: RX.Styles.createImageStyle({
 		width: 25,

@@ -5,7 +5,7 @@
 
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 
 import HoverButton from '../HoverButton/HoverButton'
 
@@ -42,8 +42,7 @@ const _styles = {
 		backgroundColor: Colors.simpleButtonBackgroundHover
 	}),
 	text: RX.Styles.createTextStyle({
-		// font: Fonts.displayRegular,
-		fontSize: theme.fontSizes.size16,
+		fontSize: Styles.fontSizes.size16,
 		color: Colors.simpleButtonText
 	}),
 	textHover: RX.Styles.createTextStyle({

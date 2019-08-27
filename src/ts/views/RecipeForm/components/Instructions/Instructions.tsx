@@ -5,7 +5,7 @@
 
 import FilledButton from 'common/FilledButton/FilledButton'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { Instruction } from 'src/ts/models/FoodModels'
 import InstructionRow from './components/InstructionRow/InstructionRow'
 
@@ -38,7 +38,7 @@ export default class Instructions extends RX.Component<InstructionsProps> {
 
 				{/*Add new*/}
 				<FilledButton label={'Add Instruction'} onPress={this.props.onAddNewInstruction}
-											containerStyle={{ marginTop: theme.styles.spacing }} />
+											containerStyle={{ marginTop: Styles.values.spacing }} />
 			</RX.View>
 		)
 	}

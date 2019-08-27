@@ -5,7 +5,7 @@
 
 import TotalTime from 'common/TotalTime/TotalTime'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { MealItem as MealItemType } from 'src/ts/models/FoodModels'
 import { navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
 
@@ -31,18 +31,23 @@ export default class MealItem extends RX.Component<MealItemProps> {
 		const { style } = this.props
 
 		return (
-			<RX.View
-				onPress={this.onPress}
-				activeOpacity={0.7}
-				style={[styles.container, style]}
-			>
-				{renderImageOrPlaceholder(this.props.mealItem.thumbnail, styles.image)}
-				<RX.View style={styles.textsContainer}>
-					<RX.Text style={styles.title}>{this.props.mealItem.title}</RX.Text>
-					<RX.Text style={styles.subtitle}>{this.props.mealItem.subtitle}</RX.Text>
-					{!!this.props.mealItem.totalTime && <TotalTime totalTime={this.props.mealItem.totalTime} />}
-				</RX.View>
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						onPress={this.onPress}
+						activeOpacity={0.7}
+						style={[styles.container, style]}
+					>
+						{renderImageOrPlaceholder(this.props.mealItem.thumbnail, styles.image)}
+						<RX.View style={styles.textsContainer}>
+							<RX.Text style={styles.title}>{this.props.mealItem.title}</RX.Text>
+							<RX.Text
+								style={[styles.subtitle, { color: theme.colors.mealItemSubtitle }]}>{this.props.mealItem.subtitle}</RX.Text>
+							{!!this.props.mealItem.totalTime && <TotalTime totalTime={this.props.mealItem.totalTime} />}
+						</RX.View>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -71,7 +76,6 @@ const styles = {
 		fontWeight: '100',
 		fontSize: 11,
 		marginTop: 2,
-		color: theme.colors.mealItemSubtitle
 	}),
 	moreButton: RX.Styles.createViewStyle({
 		position: 'absolute',

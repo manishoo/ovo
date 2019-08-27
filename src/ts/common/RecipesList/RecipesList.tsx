@@ -5,7 +5,7 @@
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { Recipe } from 'src/ts/models/FoodModels'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import AddRecipeCell from './components/AddRecipeCell/AddRecipeCell'
@@ -55,9 +55,9 @@ export default class RecipesList extends ComponentBase<RecipesListProps, Recipes
 
 	private _getMaximum1024 = (width: number) => (width > WINDOW_MAX_WIDTH ? WINDOW_MAX_WIDTH : width) // maximum 1024
 
-	private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - theme.styles.drawerWidth)
+	private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 
-	private _getCellSize = () => (this._getWindowWidthConsideringDrawer() - ((theme.styles.spacing * 2) * this.state.columns)) / this.state.columns
+	private _getCellSize = () => (this._getWindowWidthConsideringDrawer() - ((Styles.values.spacing * 2) * this.state.columns)) / this.state.columns
 
 	private _renderRecipeCell = (recipe: Recipe) => {
 		return (
@@ -87,7 +87,7 @@ const styles = {
 		maxWidth: WINDOW_MAX_WIDTH
 	}),
 	item: RX.Styles.createViewStyle({
-		marginHorizontal: theme.styles.spacing / 2,
-		marginBottom: theme.styles.spacing / 2,
+		marginHorizontal: Styles.values.spacing / 2,
+		marginBottom: Styles.values.spacing / 2,
 	})
 }

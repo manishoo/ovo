@@ -16,7 +16,9 @@ import { Mutation } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
+import { Theme } from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Recipe as RecipeType, User } from 'src/ts/models/FoodModels'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -41,47 +43,51 @@ interface RecipeState {
 export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 	render() {
 		return (
-			<RX.View style={{ flex: 1 }}>
-				<RX.ScrollView
-					style={[
-						styles.container,
-						{
-							width: this._getWindowWidthConsideringDrawer(),
-							padding: this.state.isSmallOrTiny ? 0 : theme.styles.spacing
-						}
-					]}
-				>
-					{this._renderControlBar()}
-					<RX.View
-						style={[
-							styles.coverContainer,
-							{
-								height: this._getWindowWidthConsideringDrawer() / 2,
-								borderRadius: this.state.isSmallOrTiny ? 0 : 20,
-							}
-						]}
-					>
-						<RX.Image
-							source={this.props.recipe.coverImage ? this.props.recipe.coverImage.url : ''}
-							resizeMode={'cover'}
-							style={styles.coverImage}
-						/>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View style={{ flex: 1 }}>
+						<RX.ScrollView
+							style={[
+								styles.container,
+								{
+									width: this._getWindowWidthConsideringDrawer(),
+									padding: this.state.isSmallOrTiny ? 0 : Styles.values.spacing
+								}
+							]}
+						>
+							{this._renderControlBar()}
+							<RX.View
+								style={[
+									styles.coverContainer,
+									{
+										height: this._getWindowWidthConsideringDrawer() / 2,
+										borderRadius: this.state.isSmallOrTiny ? 0 : 20,
+									}
+								]}
+							>
+								<RX.Image
+									source={this.props.recipe.coverImage ? this.props.recipe.coverImage.url : ''}
+									resizeMode={'cover'}
+									style={styles.coverImage}
+								/>
+							</RX.View>
+
+							<RX.View style={styles.innerContainer}>
+								<Text style={styles.title}>{this.props.recipe.title}</Text>
+
+								{this._renderAuthorAndDescriptionSection(theme)}
+
+								{this._renderIngredientsSection(theme)}
+
+								{this._renderInstructionsSection(theme)}
+
+							</RX.View>
+
+							<Navbar />
+						</RX.ScrollView>
 					</RX.View>
-
-					<RX.View style={styles.innerContainer}>
-						<Text style={styles.title}>{this.props.recipe.title}</Text>
-
-						{this._renderAuthorAndDescriptionSection()}
-
-						{this._renderIngredientsSection()}
-
-						{this._renderInstructionsSection()}
-
-					</RX.View>
-
-					<Navbar />
-				</RX.ScrollView>
-			</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 
@@ -94,13 +100,14 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 		}
 	}
 
-	private _renderIngredientsSection = () => {
+	private _renderIngredientsSection = (theme: Theme) => {
 		const recipe = this.props.recipe
 
 		return (
-			<RX.View style={styles.ingredients.container}>
+			<RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
 				<RX.View style={{ flexDirection: 'row' }}>
-					<Text translate style={[styles.label, { [theme.styles.marginEnd]: theme.styles.spacing }]}>Ingredients</Text>
+					<Text translate
+								style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}>Ingredients</Text>
 					<Text translate variables={{ number: '2' /*TODO use state*/ }}
 								style={styles.subLabel}>IngredientsYieldLabel</Text>
 				</RX.View>
@@ -118,23 +125,24 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 		)
 	}
 
-	private _renderInstructionsSection = () => {
+	private _renderInstructionsSection = (theme: Theme) => {
 		const recipe = this.props.recipe
 
 		return (
-			<RX.View style={styles.instructions.container}>
+			<RX.View style={[styles.instructions.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
 				<Text translate style={styles.label}>Instructions</Text>
 				<Instructions instructions={recipe.instructions} />
 			</RX.View>
 		)
 	}
 
-	private _renderAuthorAndDescriptionSection = () => {
+	private _renderAuthorAndDescriptionSection = (theme: Theme) => {
 		const recipe = this.props.recipe
 
 		return (
-			<RX.View style={styles.authorAndDescriptionSection.container}>
-				<RX.View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: theme.styles.spacing }}>
+			<RX.View
+				style={[styles.authorAndDescriptionSection.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
+				<RX.View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: Styles.values.spacing }}>
 					<Link to={`/${recipe.author.username}/`}>
 						<Image
 							source={recipe.author.avatar.url}
@@ -151,7 +159,7 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 				}
 
 				<Text
-					style={styles.authorAndDescriptionSection.date}
+					style={[styles.authorAndDescriptionSection.date, { color: theme.colors.authorAndDescriptionSectionDateColor }]}
 				>
 					{moment(recipe.createdAt).format(AppConfig.locale === 'en' ? 'jMMM jDo jYYYY' : 'jYYYY/jM/jD')}
 				</Text>
@@ -204,34 +212,25 @@ export default class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 		return null
   }
 
-	private _getMaximum1024 = (width: number) => (width > theme.styles.mainContentMaxWidth ? theme.styles.mainContentMaxWidth : width) // maximum 1024
-	private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - theme.styles.drawerWidth)
-}
-
-const dashedTopLine = {
-	borderTopWidth: 1,
-	borderStyle: 'dashed',
-	borderColor: theme.colors.recipeSeparatorBorderColor,
-	padding: theme.styles.spacing * 2,
+	private _getMaximum1024 = (width: number) => (width > Styles.values.mainContentMaxWidth ? Styles.values.mainContentMaxWidth : width) // maximum 1024
+	private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 }
 
 const styles = {
 	container: RX.Styles.createViewStyle({
 		flex: 1,
-		// minHeight: 400,
-		maxWidth: theme.styles.mainContentMaxWidth,
+		maxWidth: Styles.values.mainContentMaxWidth,
 		alignSelf: 'center',
-
 	}),
 	innerContainer: RX.Styles.createViewStyle({
-		padding: theme.styles.spacing,
+		padding: Styles.values.spacing,
 	}),
 	coverContainer: RX.Styles.createViewStyle({}),
 	coverImage: RX.Styles.createImageStyle({
 		flex: 1,
 	}),
 	title: RX.Styles.createTextStyle({
-		fontSize: theme.fontSizes.size32,
+		fontSize: Styles.fontSizes.size32,
 		fontWeight: '500',
 		marginBottom: 10,
 	}),
@@ -241,15 +240,16 @@ const styles = {
 		marginBottom: 10,
 	}),
 	subLabel: RX.Styles.createTextStyle({
-		fontSize: theme.fontSizes.size12,
+		fontSize: Styles.fontSizes.size12,
 		fontWeight: '300',
 	}),
 	authorAndDescriptionSection: {
-		// @ts-ignore
 		container: RX.Styles.createViewStyle({
 			alignItems: 'flex-start',
-			...dashedTopLine,
-			paddingBottom: theme.styles.spacing * 4,
+			borderTopWidth: 1,
+			borderStyle: 'dashed',
+			padding: Styles.values.spacing * 2,
+			paddingBottom: Styles.values.spacing * 4,
 		}),
 		avatar: RX.Styles.createImageStyle({
 			width: 80,
@@ -258,23 +258,24 @@ const styles = {
 		}),
 		date: RX.Styles.createTextStyle({
 			position: 'absolute',
-			fontSize: theme.fontSizes.size12,
+			fontSize: Styles.fontSizes.size12,
 			fontWeight: '100',
-			color: theme.colors.authorAndDescriptionSectionDateColor,
-			bottom: theme.styles.spacing,
-			[theme.styles.end]: theme.styles.spacing,
+			bottom: Styles.values.spacing,
+			[Styles.values.end]: Styles.values.spacing,
 		}),
 	},
 	ingredients: {
-		// @ts-ignore
 		container: RX.Styles.createViewStyle({
-			...dashedTopLine,
+			borderTopWidth: 1,
+			borderStyle: 'dashed',
+			padding: Styles.values.spacing * 2,
 		})
 	},
 	instructions: {
-		// @ts-ignore
 		container: RX.Styles.createViewStyle({
-			...dashedTopLine,
+			borderTopWidth: 1,
+			borderStyle: 'dashed',
+			padding: Styles.values.spacing * 2,
 		})
 	}
 }

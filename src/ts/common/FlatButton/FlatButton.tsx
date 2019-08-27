@@ -5,7 +5,7 @@
 
 
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 interface FlatButtonProps {
 	style?: any,
@@ -19,13 +19,17 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
 		const { style, label, onPress, labelStyle } = this.props
 
 		return (
-			<RX.View
-				style={[styles.container, style]}
-				onPress={onPress}
-				activeOpacity={0.7}
-			>
-				<RX.Text style={[styles.text, labelStyle]}>{label}</RX.Text>
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View
+						style={[styles.container, { borderColor: theme.colors.yellow }, style]}
+						onPress={onPress}
+						activeOpacity={0.7}
+					>
+						<RX.Text style={[styles.text, { color: theme.colors.orange }, labelStyle]}>{label}</RX.Text>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -33,7 +37,6 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
 const styles = {
 	container: RX.Styles.createViewStyle({
 		borderRadius: 50,
-		borderColor: theme.colors.yellow,
 		borderWidth: 1,
 		padding: 20,
 		justifyContent: 'center',
@@ -41,7 +44,6 @@ const styles = {
 		cursor: 'pointer'
 	}),
 	text: RX.Styles.createTextStyle({
-		color: theme.colors.orange,
 		fontSize: 18,
 	})
 }

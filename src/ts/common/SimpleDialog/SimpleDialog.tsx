@@ -8,7 +8,7 @@ import * as _ from 'lodash'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import * as SyncTasks from 'synctasks'
 
 import KeyCodes from '../../utilities/KeyCodes'
@@ -62,14 +62,14 @@ const _styles = {
 	}),
 	titleText: RX.Styles.createTextStyle({
 		// font: Fonts.displaySemibold,
-		fontSize: theme.fontSizes.size16,
+		fontSize: Styles.fontSizes.size16,
 		color: Colors.simpleDialogText,
 		textAlign: 'center',
 		paddingVertical: _modalPadding
 	}),
 	contentText: RX.Styles.createTextStyle({
 		// font: Fonts.displayRegular,
-		fontSize: theme.fontSizes.size16,
+		fontSize: Styles.fontSizes.size16,
 		color: Colors.simpleDialogText,
 		textAlign: 'left',
 		paddingVertical: _modalPadding
@@ -89,12 +89,12 @@ const _styles = {
 	}),
 	panelHeader: RX.Styles.createTextStyle({
 		// font: Fonts.displayBold,
-		fontSize: theme.fontSizes.size16,
+		fontSize: Styles.fontSizes.size16,
 		color: Colors.gray66
 	}),
 	displayText: RX.Styles.createTextStyle({
 		// font: Fonts.displayRegular,
-		fontSize: theme.fontSizes.size16,
+		fontSize: Styles.fontSizes.size16,
 		color: Colors.gray66
 	})
 }

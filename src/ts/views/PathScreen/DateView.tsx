@@ -6,7 +6,7 @@
 
 import moment from 'moment'
 import RX from 'reactxp'
-import theme from 'src/ts/app/Theme'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 interface DateViewProps {
 	date: string,
@@ -17,10 +17,15 @@ export default class DateView extends RX.Component<DateViewProps> {
 		const { date } = this.props
 
 		return (
-			<RX.View style={styles.container}>
-				<RX.Text style={styles.dayName}>{moment.weekdays()[moment(date).weekday()]}</RX.Text>
-				<RX.Text style={styles.date}>{moment.months()[moment(date).month()]} {moment(date).format('D')}</RX.Text>
-			</RX.View>
+			<ThemeContext.Consumer>
+				{({ theme }) => (
+					<RX.View style={styles.container}>
+						<RX.Text style={styles.dayName}>{moment.weekdays()[moment(date).weekday()]}</RX.Text>
+						<RX.Text
+							style={[styles.date, { color: theme.colors.pathDateSubtitle }]}>{moment.months()[moment(date).month()]} {moment(date).format('D')}</RX.Text>
+					</RX.View>
+				)}
+			</ThemeContext.Consumer>
 		)
 	}
 }
@@ -38,6 +43,5 @@ const styles = {
 	date: RX.Styles.createTextStyle({
 		fontSize: 12,
 		fontWeight: '200',
-		color: theme.colors.pathDateSubtitle
 	})
 }

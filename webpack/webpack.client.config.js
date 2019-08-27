@@ -10,9 +10,7 @@ const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const CleanPlugin = require('clean-webpack-plugin')
 
 const baseConfig = require('./webpack.base.config')
-const parts = require('./webpack.parts')
 const paths = require('./paths')
-const publicPath = baseConfig.output.publicPath
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -20,7 +18,7 @@ const productionConfig = merge(
   {
     entry: ['@babel/polyfill', paths.entryClient],
     plugins: [
-      new CleanPlugin(),
+      // new CleanPlugin(),
       new webpack.HashedModuleIdsPlugin(),
       new webpack.NormalModuleReplacementPlugin(
         /\.\/sync/,
@@ -28,7 +26,7 @@ const productionConfig = merge(
       ),
       new ManifestPlugin({
         fileName: 'assets.json',
-        publicPath
+        publicPath: process.env.PUBLIC_PATH || '/static/',
       }),
       new SWPrecachePlugin({
         // change it to your app's cache name
@@ -55,12 +53,15 @@ const developmentConfig = {
     'webpack-hot-middleware/client?noInfo=false&reload=true&overlay=true',
     paths.entryClient
   ],
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-source-map',
   output: {
     filename: 'app.js',
     devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
   },
   plugins: [
+    // new CleanPlugin({
+    //   root: process.cwd(),
+    // }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()

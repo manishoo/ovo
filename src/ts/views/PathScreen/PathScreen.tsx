@@ -3,9 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import theme from 'src/ts/app/Theme'
+import Styles from 'src/ts/app/Styles'
 import { Event } from 'src/ts/models/FoodModels'
 import { Routes } from 'src/ts/navigator/routes'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -14,7 +15,6 @@ import { fullHeight, navigate } from 'src/ts/utilities'
 import DateView from './DateView'
 import EventComponent from './Event'
 import ListView from './ListView/ListView'
-import ImageSource from 'modules/images'
 
 interface PathState {
 	activeMeal?: Event,
@@ -80,7 +80,7 @@ export default class PathScreen extends ComponentBase<PathProps, PathState> {
 		let pureWidth = ResponsiveWidthStore.getWidth()
 
 		if (!ResponsiveWidthStore.isSmallOrTinyScreenSize()) {
-			pureWidth = pureWidth - theme.styles.drawerWidth
+			pureWidth = pureWidth - Styles.values.drawerWidth
 		}
 
 		if (_initialBuild) {
@@ -147,7 +147,7 @@ const styles = {
 	}),
 	shoppingListIcon: RX.Styles.createViewStyle({
 		position: 'absolute',
-		top: theme.styles.spacing,
+		top: Styles.values.spacing,
 		right: 20,
 		justifyContent: 'center',
 		alignItems: 'center',
