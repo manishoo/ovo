@@ -1,12 +1,12 @@
 /*
- * MealItem.tsx
+ * DishItem.tsx
  * Copyright: Ouranos Studio 2019
  */
 
 import TotalTime from 'common/TotalTime/TotalTime'
 import RX from 'reactxp'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { MealItem as MealItemType } from 'src/ts/models/FoodModels'
+import { DishItem as MealItemType } from 'src/ts/models/FoodModels'
 import { navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
 
 interface MealItemProps {

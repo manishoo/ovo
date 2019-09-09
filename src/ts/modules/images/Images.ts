@@ -51,4 +51,6 @@ export interface ImageSourceBase {
 	Back: string;
 	ShoppingList: string;
 	Finger: string;
+
+	KitchenIllustration: string;
 }

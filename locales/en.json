@@ -52,6 +52,9 @@
   "yes": "Yes",
   "no": "No",
 
+  "weightName": "Unit name",
+  "gramWeight": "Weight (grams)",
+
   "landingTitle": "Smart assistant",
   "landingSubtitle": "is good",
   "LandingStartFree": "Start Free! \uD83D\uDCB8",
@@ -84,5 +87,13 @@
   "mealItemExample": "e.g Banana",
   "yesSure": "Yes, Sure",
   "noContinueSetup": "No, continue to the setup",
-  "homeIntro1": "This is the Path of a family of 3. They can see their upcoming meals and activities here"
+  "homeIntro1": "This is the Path of a family of 3. They can see their upcoming meals and activities here",
+
+  "AddIngredient": "Add Ingredient",
+  "UploadImage": "Upload Image",
+  "Search foods": "Search foods",
+  "Describe the story behind your recipe": "Describe the story behind your recipe",
+  "Add Tag": "Add Tag",
+  "Tell us more about the recipe": "Tell us more about the recipe",
+  "e.g Easy Sesame Chicken": "e.g Easy Sesame Chicken"
 }

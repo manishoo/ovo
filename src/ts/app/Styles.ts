@@ -12,13 +12,17 @@ export default class Styles {
 		spacing: 16,
 		spacingLarge: 20,
 		navBarHeight: 50,
-		drawerWidth: 250,
+		drawerWidth: 200,
 		mainContentMaxWidth: 975,
 		defaultShadow: {
 			shadowColor: 'rgba(0, 0, 0, .12)',
 			shadowRadius: 10,
 		},
+
+    normalBorderRadius: 5,
+
 		get start() {
+			console.log('AppConfig.isRTL()', AppConfig.isRTL())
 			return AppConfig.isRTL() ? 'right' : 'left'
 		},
 		get end() {

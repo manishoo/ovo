@@ -11,7 +11,7 @@ const PropTypes = require('prop-types')
 const isProd = process.env.NODE_ENV === 'production'
 
 const Html = props => {
-  const { assets, chunkNames, state = {} } = props
+  const { assets, chunkNames, lang, state = {} } = props
 
   let { content } = props
   let scripts
@@ -30,7 +30,6 @@ const Html = props => {
     scripts = []
     preloadLinks = []
 
-    console.log('URLS: ', urls)
     urls.forEach(url => {
       scripts.push(<script src={url} />)
       preloadLinks.push(<link rel='preload' as='script' href={url} />)
@@ -38,11 +37,10 @@ const Html = props => {
   } else {
     content = <div className="app-container" />
     scripts = <script src='/static/app.js' />
-
   }
 
   return (
-    <html lang='fa' dir='rtl'>
+    <html lang={lang || 'en'} dir={lang === 'fa' ? 'rtl' : 'ltr'}>
     <head>
       <meta charSet='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -70,6 +68,7 @@ Html.propTypes = {
   assets: PropTypes.object,
   chunkNames: PropTypes.array,
   content: PropTypes.string,
+  lang: PropTypes.string,
 }
 
 module.exports = Html

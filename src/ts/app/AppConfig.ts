@@ -4,87 +4,97 @@
  */
 
 import RX from 'reactxp'
+import { LanguageCode } from 'src/ts/models/global-types'
+
 
 interface InitParams {
-	appVersion?: string;
+  appVersion?: string;
 }
 
 class AppConfig {
-	public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
-	public get graphQLAddress() {return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT}`}
-	public locale = 'fa'
-	private _appVersion: string
-	private readonly _frontendHost: string
-	private readonly _platformType: RX.Types.PlatformType
-	private readonly _isTouchInterface: boolean
-	private readonly _startupTime: number
+  public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
 
-	constructor() {
-		this._appVersion = '0.0.0.1'
-		this._frontendHost = (typeof document !== 'undefined') && document.location ? document.location.host : ''
-		this._platformType = RX.Platform.getType()
-		this._isTouchInterface = this._platformType === 'ios' || this._platformType === 'android'
-		this._startupTime = Date.now()
-	}
+  public get graphQLAddress() {
+    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
+  }
 
-	initialize(params: InitParams) {
-		if (params.appVersion) {
-			this._appVersion = params.appVersion
-		}
-	}
+  public locale: LanguageCode = LanguageCode.fa
+  private _appVersion: string
+  private readonly _frontendHost: string
+  private readonly _platformType: RX.Types.PlatformType
+  private readonly _isTouchInterface: boolean
+  private readonly _startupTime: number
 
-	isDevelopmentBuild(): boolean {
-		return __DEV__
-	}
+  constructor() {
+    this._appVersion = '0.0.0.1'
+    this._frontendHost = (typeof document !== 'undefined') && document.location ? document.location.host : ''
+    this._platformType = RX.Platform.getType()
+    this._isTouchInterface = this._platformType === 'ios' || this._platformType === 'android'
+    this._startupTime = Date.now()
+  }
 
-	getPlatformType(): RX.Types.PlatformType {
-		return this._platformType
-	}
+  initialize(params: InitParams) {
+    if (params.appVersion) {
+      this._appVersion = params.appVersion
+    }
+  }
 
-	isTouchInterface(): boolean {
-		return this._isTouchInterface
-	}
+  isDevelopmentBuild(): boolean {
+    return __DEV__
+  }
 
-	getStartupTime(): number {
-		return this._startupTime
-	}
+  getPlatformType(): RX.Types.PlatformType {
+    return this._platformType
+  }
 
-	getAppVersion(): string {
-		return this._appVersion
-	}
+  isTouchInterface(): boolean {
+    return this._isTouchInterface
+  }
 
-	getFrontendHost(): string {
-		return this._frontendHost
-	}
+  getStartupTime(): number {
+    return this._startupTime
+  }
 
-	getProtocol(): string {
-		if (this.getPlatformType() === 'web' &&
-			typeof location !== 'undefined' &&
-			typeof location.protocol !== 'undefined') {
-			return location.protocol
-		}
-		return 'https:'
-	}
+  getAppVersion(): string {
+    return this._appVersion
+  }
 
-	getFrontendBaseUrl(): string {
-		return this.getProtocol() + '//' + this._frontendHost
-	}
+  getFrontendHost(): string {
+    return this._frontendHost
+  }
 
-	getDocRoot(): string {
-		return '/'
-	}
+  getProtocol(): string {
+    if (this.getPlatformType() === 'web' &&
+      typeof location !== 'undefined' &&
+      typeof location.protocol !== 'undefined') {
+      return location.protocol
+    }
+    return 'https:'
+  }
 
-	getImagePath(imageName = ''): string {
-		return this.getDocRoot() + 'images/' + imageName
-	}
+  getFrontendBaseUrl(): string {
+    return this.getProtocol() + '//' + this._frontendHost
+  }
 
-	isRTL(): boolean {
-		return RX.International.isRTL()
-	}
+  getDocRoot(): string {
+    return '/'
+  }
 
-	isNode(): boolean {
-		return process.env.isNode == 'true'
-	}
+  getImagePath(imageName = ''): string {
+    return this.getDocRoot() + 'images/' + imageName
+  }
+
+  isRTL(): boolean {
+    return RX.International.isRTL()
+  }
+
+  isNode(): boolean {
+    return process.env.isNode == 'true'
+  }
+
+  setLocale(locale: LanguageCode) {
+    this.locale = locale
+  }
 }
 
 export default new AppConfig()

@@ -6,7 +6,7 @@
 import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
-import { Routes } from 'src/ts/navigator/routes'
+import { Routes } from 'src/ts/models/common'
 import * as SyncTasks from 'synctasks'
 
 @AutoSubscribeStore

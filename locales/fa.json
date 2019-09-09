@@ -9,6 +9,9 @@
   "thursday": "پنجشنبه",
   "friday": "جمعه",
 
+  "Email": "ایمیل",
+  "PasswordAgain": "تکرار گذرواژه",
+
   "Username": "نام کاربری",
   "Password": "گذرواژه",
   "Login": "ورود",
@@ -49,6 +52,9 @@
   "yes": "آره",
   "no": "نه",
 
+  "weightName": "نام واحد اندازه‌گیری",
+  "gramWeight": "وزن (گرم)",
+
   "Path": "راه من",
   "MealPlan": "برنامه غذایی",
 
@@ -88,5 +94,13 @@
   "editMealSettings": "تنظیمات وعده‌ غذایی",
   "viewAlternatives": "مشاهده دیگر گزینه‌ها",
   "recurOn": "تکرار در ...",
-  "mealItemExample": "مثلا موز، گوشت قرمز، زردچوبه، ..."
+  "mealItemExample": "مثلا موز، گوشت قرمز، زردچوبه، ...",
+
+  "AddIngredient": "اضافه کردن ماده غذایی",
+  "UploadImage": "بارگزاری عکس غذا",
+  "Search foods": "گشتن در غذا ها",
+  "Describe the story behind your recipe": "داستان غذاتو بگو",
+  "Add Tag": "تگ بزن",
+  "Tell us more about the recipe": "از رسپی بگو",
+  "e.g Easy Sesame Chicken": "مثلا ته‌چین مرغ"
 }

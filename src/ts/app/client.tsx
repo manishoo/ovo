@@ -63,6 +63,7 @@ function sendToLoggingService(errors: any) {
 
 function logoutUser() {
 	//
+	console.log('LOGOUT USER')
 }
 
 const client = new ApolloClient({

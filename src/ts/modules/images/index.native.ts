@@ -168,6 +168,10 @@ class ImageSource implements ImageSourceBase {
 	get Finger() {
 		return require('../../../images/Finger.png')
 	}
+
+	get KitchenIllustration() {
+		return require('../../../images/KitchenIllustration.png')
+	}
 }
 
 export default new ImageSource()

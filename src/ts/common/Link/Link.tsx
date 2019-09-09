@@ -10,6 +10,7 @@ import { navigate, withNavigation } from 'src/ts/utilities'
 interface LinkProps {
 	style?: any,
 	to: string,
+	onPress?: () => void,
 }
 
 @withNavigation
@@ -24,7 +25,10 @@ export default class Link extends RX.Component<LinkProps> {
 						onClick={e => {
 							e.stopPropagation()
 							e.preventDefault()
-							navigate(this.props, this.props.to)
+              setTimeout(() => {
+                navigate(this.props, this.props.to)
+                if (this.props.onPress) this.props.onPress()
+              }, 0)
 						}}
 					>
 						{this.props.children}

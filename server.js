@@ -19,7 +19,7 @@ const publicPath = process.env.PUBLIC_PATH || '/static/'
 const isProd = process.env.NODE_ENV === 'production'
 
 const app = express()
-const port = process.env.CLIENT_SERVER_PORT || 9090
+const port = process.env.CLIENT_SERVER_PORT || 8080
 const hostname = process.env.CLIENT_SERVER_URL || 'localhost'
 
 const serve = (path, cache) => express.static(path, {
@@ -35,6 +35,11 @@ app.use('/app.css', serve(paths.appCss, true))
 app.use('/sw.js', serve(paths.buildSW))
 app.use(favicon(paths.favicon))
 
+const supportedLanguages = [
+  'en',
+  'fa',
+]
+
 if (isProd) {
   const assets = require('./web/build/assets.json')
 
@@ -43,7 +48,12 @@ if (isProd) {
   app.get('*', require('./web/build/server-bundle').default(assets))
 } else {
   require('@babel/register')
-  app.get('*', require('./src/ts/app/web/render-dev-app'))
+
+  supportedLanguages.map(lang => {
+    app.get('/' + lang + '/*', (req, res) => {
+      return require('./src/ts/app/web/render-dev-app')(res, lang)
+    })
+  })
 }
 
 app.use((err, req, res, next) => {

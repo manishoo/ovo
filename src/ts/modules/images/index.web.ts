@@ -45,12 +45,14 @@ class ImageSource implements ImageSourceBase {
 	InstagramIcon = AppConfig.getImagePath('IN.svg')
 	TelegramIcon = AppConfig.getImagePath('TEL.svg')
 
-	Clear = AppConfig.getImagePath('Clear.png')
+	Clear = AppConfig.getImagePath('Clear.svg')
 	More = AppConfig.getImagePath('More.png')
 
 	Back = AppConfig.getImagePath('Back.png')
 	ShoppingList = AppConfig.getImagePath('ShoppingList.png')
 	Finger = AppConfig.getImagePath('Finger.png')
+
+	KitchenIllustration = AppConfig.getImagePath('KitchenIllustration.png')
 }
 
 export default new ImageSource()
