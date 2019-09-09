@@ -172,6 +172,14 @@ class ImageSource implements ImageSourceBase {
 	get KitchenIllustration() {
 		return require('../../../images/KitchenIllustration.png')
 	}
+
+	get Camera() {
+		return require('../../../images/Camera.png')
+	}
+
+	get RemoveIconWhite() {
+		return require('../../../images/RemoveIconWhite.png')
+	}
 }
 
 export default new ImageSource()

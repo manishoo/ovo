@@ -159,9 +159,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             scrollViewProps={{
               ref: ref => this._scrollView = ref,
             }}
-            innermostViewStyle={{
-              padding: Styles.values.spacing * 2,
-            }}
           >
             {this._renderFormContent(theme)}
             {this._renderFormExtraContent()}
@@ -377,9 +374,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <FilePicker
           label={this.state.coverImagePreview ? 'Replace Image' : undefined}
           onImageChange={coverImage => this.setState({ coverImage })}
-          onImagePreviewChange={coverImagePreview => {
-            this.setState({ coverImagePreview })
-          }}
+          onImagePreviewChange={coverImagePreview => this.setState({ coverImagePreview })}
           style={{
             flex: 1,
             height: 400,
@@ -813,7 +808,7 @@ const styles = {
     //
   }),
   smallInput: RX.Styles.createTextInputStyle({
-    width: 150,
+    width: 160,
     [Styles.values.marginEnd]: Styles.values.spacing / 2,
   }),
   coverImage: RX.Styles.createImageStyle({

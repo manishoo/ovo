@@ -18,7 +18,7 @@ class AppConfig {
     return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
   }
 
-  public locale: LanguageCode = LanguageCode.fa
+  public locale: LanguageCode = LanguageCode.en
   private _appVersion: string
   private readonly _frontendHost: string
   private readonly _platformType: RX.Types.PlatformType

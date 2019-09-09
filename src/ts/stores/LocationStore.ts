@@ -53,13 +53,13 @@ class LocationStore extends StoreBase implements IPersistableStore {
 				routeName = routeName.replace(`/:${key}`, `/${params[key]}`)
 			})
 
-			this.setPath(routeName)
-
 			if (routeName === 'back') {
 				return this.history.goBack()
 			}
 
-			this.history.push(routeName)
+      this.setPath(routeName)
+
+      this.history.push(routeName)
 		} else {
 			Object.keys(params).forEach(key => {
 				routeName = routeName.replace(`/:${key}`, '')

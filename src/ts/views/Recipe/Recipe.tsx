@@ -4,6 +4,7 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
+import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
 import SelectFoodContainer from 'common/FoodDialog/SelectFood'
 import Image from 'common/Image/Image'
@@ -54,16 +55,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <RX.ScrollView
-            style={[
-              styles.container,
-              {
-                width: this._getWindowWidthConsideringDrawer(),
-                height: this.state.windowHeight,
-                padding: this.state.isSmallOrTiny ? 0 : Styles.values.spacing
-              }
-            ]}
-          >
+          <CenterAlignedPageView>
             {this._renderControlBar()}
             <RX.View
               style={[
@@ -93,7 +85,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
             </RX.View>
 
             <Navbar />
-          </RX.ScrollView>
+          </CenterAlignedPageView>
         )}
       </ThemeContext.Consumer>
     )
@@ -118,7 +110,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}>Ingredients</Text>
           <IngredientServingControl
             serving={this.state.serving || recipe.serving}
-            onServingChange={serving => this.setState({serving})}
+            onServingChange={serving => this.setState({ serving })}
           />
         </RX.View>
 
@@ -195,8 +187,11 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
               recipeId: this.props.recipe.id,
             }}
             update={(cache) => {
-              // @ts-ignore
-              const { recipes } = cache.readQuery({ query: PROFILE_RECIPES_QUERY })
+              const { recipes } = cache.readQuery({
+                query: PROFILE_RECIPES_QUERY, variables: {
+                  userId: this.state.user && this.state.user.id,
+                }
+              })
 
               cache.writeQuery({
                 query: PROFILE_RECIPES_QUERY,
@@ -220,6 +215,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
             {(mutate) => (
               <FilledButton
                 label={'Delete Recipe'}
+                mode={FilledButton.mode.danger}
                 onPress={() => RX.Alert.show(getLocalizedText('deleteRecipe?'), undefined, [{
                   text: getLocalizedText('yes'),
                   onPress: () => mutate().then(() => navigate(this.props, 'back'))

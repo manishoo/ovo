@@ -14,6 +14,7 @@ interface CenterAlignedPageViewProps {
   scrollViewProps?: RX.Types.ScrollViewProps,
   outermostViewStyle?: RX.Types.ViewStyle,
   innermostViewStyle?: RX.Types.ViewStyle,
+  maxWidth?: number
 }
 
 interface CenterAlignedPageViewState {
@@ -45,27 +46,48 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     return (
       <RX.ScrollView
         {...this.props.scrollViewProps}
-        style={[styles.container, {
-          height: this.state.height,
-          width: this._getWindowTrueWidth()
-        }, this.props.scrollViewProps ? this.props.scrollViewProps.style : {}]}
+        style={[
+          styles.container, {
+            height: this.state.height,
+            width: this._getWindowTrueWidth()
+          },
+          this.props.scrollViewProps ? this.props.scrollViewProps.style : {}
+        ]}
       >
-        <RX.View
-          style={[{
-            width: this._getWindowTrueWidth(),
-            alignItems: 'center',
-          }, this.props.outermostViewStyle]}
+        <RX.Animated.View
+          style={[
+            {
+              width: this._getWindowTrueWidth(),
+              alignItems: 'center',
+            },
+            this._animatedStyle,
+            this.props.outermostViewStyle,
+          ]}
         >
           <RX.View
             style={[{
-              width: this.state.width < Styles.values.mainContentMaxWidth ? this.state.width : Styles.values.mainContentMaxWidth,
+              width: this.state.width < this._getMaxWidth() ? this.state.width : this._getMaxWidth(),
+              padding: Styles.values.spacing * 2,
             }, this.props.innermostViewStyle]}
           >
             {this.props.children}
           </RX.View>
-        </RX.View>
+        </RX.Animated.View>
       </RX.ScrollView>
     )
+  }
+
+  componentDidMount() {
+    RX.Animated.timing(this._animatedValue, {
+      toValue: 1,
+      duration: 500,
+    }).start()
+  }
+
+  private _getMaxWidth = () => {
+    if (this.props.maxWidth) return this.props.maxWidth
+
+    return Styles.values.mainContentMaxWidth
   }
 
   private _getWindowTrueWidth = () => {
@@ -75,6 +97,11 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
 
     return this.state.width - Styles.values.drawerWidth
   }
+
+  private _animatedValue = RX.Animated.createValue(0.99)
+  private _animatedStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{scale: this._animatedValue}]
+  })
 }
 
 const styles = {

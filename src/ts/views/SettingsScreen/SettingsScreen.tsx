@@ -4,6 +4,8 @@
  */
 
 import { useMutation } from '@apollo/react-hooks'
+import CenterAlignedPageView from 'common/CenterAlignedPageView'
+import FilePicker from 'common/FilePicker/FilePicker'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
@@ -13,17 +15,20 @@ import Text from 'common/Text/Text'
 import TextInputAutoGrow from 'common/TextInputAutoGrow/TextInputAutoGrow'
 import gql from 'graphql-tag'
 import _set from 'lodash/set'
+import ImageSource from 'modules/images'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { Gender, UserUpdateInput } from 'src/ts/models/global-types'
+import LocationStore from 'src/ts/stores/LocationStore'
 import UserStore from 'src/ts/stores/UserStore'
-import trimTypeName from 'src/ts/utilities/trim-type-name'
 import { RegisterForm } from 'src/ts/views/Register/RegisterForm'
 import { Me } from 'src/ts/views/Register/types/Me'
 import { SettingsMutation, SettingsMutationVariables } from 'src/ts/views/SettingsScreen/types/SettingsMutation'
 
+
+const AVATAR_SIZE = 150
 
 interface SettingsProps {
   style?: any,
@@ -32,6 +37,9 @@ interface SettingsProps {
 
 interface SettingsState {
   me?: Me,
+
+  avatarImage?: any,
+  avatarImagePreview?: any,
 
   newPassword: string,
   password: string,
@@ -50,15 +58,12 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
   }
 
   render() {
-    const { style } = this.props
     const { me } = this.state
 
     return (
-      <RX.ScrollView
-        style={[styles.container, style]}
-      >
+      <CenterAlignedPageView maxWidth={500}>
         <Text translate type={Text.types.title}>Edit Profile</Text>
-        <Image source={me.imageUrl!.url} style={styles.avatar} />
+        {this._renderAvatar()}
         <Text translate type={Text.types.title}>Account Info</Text>
 
         <Input
@@ -148,7 +153,58 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
         />
 
         <FilledButton label={getLocalizedText('Submit')} onPress={this._onUpdate} />
-      </RX.ScrollView>
+
+      </CenterAlignedPageView>
+    )
+  }
+
+  private _renderAvatar = () => {
+    const { me } = this.state
+
+    return (
+      <RX.View style={{ alignItems: 'center' }}>
+        <RX.View
+          style={{
+            width: AVATAR_SIZE,
+            justifyContent: 'center'
+          }}
+        >
+          <Image source={this.state.avatarImagePreview || me.imageUrl!.url} style={styles.avatar} />
+
+          <RX.View
+            style={[styles.avatarIcon, { [Styles.values.end]: Styles.values.spacing, }]}
+          >
+            <FilePicker
+              onImageChange={avatarImage => this.setState({ avatarImage })}
+              onImagePreviewChange={avatarImagePreview => this.setState({ avatarImagePreview })}
+            >
+              <Image
+                source={ImageSource.Camera}
+                style={{
+                  width: 23,
+                  height: 20,
+                }}
+              />
+            </FilePicker>
+          </RX.View>
+
+          {
+            this.state.avatarImagePreview &&
+            <RX.View
+              style={[styles.avatarIcon, { [Styles.values.start]: Styles.values.spacing, }]}
+              onPress={() => this.setState({ avatarImagePreview: undefined, avatarImage: undefined })}
+            >
+              <Image
+                source={ImageSource.RemoveIconWhite}
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+              />
+            </RX.View>
+          }
+        </RX.View>
+      </RX.View>
     )
   }
 
@@ -156,7 +212,6 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
     const me = { ...this.state.me }
 
     _set(me, fieldNameAddress, value)
-    console.log('value', value, 'fieldNameAddress', fieldNameAddress.join('.'))
     this.setState({
       me
     })
@@ -165,16 +220,22 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
   private _getUser = (): UserUpdateInput => {
     const { me } = this.state
 
-    return trimTypeName({
+    return {
       bio: me.bio,
       email: me.email,
       firstName: me.firstName,
       gender: me.gender,
       lastName: me.lastName,
       middleName: me.middleName,
-      socialNetworks: me.socialNetworks,
+      socialNetworks: {
+        instagram: me.socialNetworks.instagram,
+        twitter: me.socialNetworks.twitter,
+        pinterest: me.socialNetworks.pinterest,
+        website: me.socialNetworks.website,
+      },
       username: me.username,
-    } as UserUpdateInput)
+      imageUrl: this.state.avatarImage,
+    }
   }
 
   private _onUpdate = () => {
@@ -182,7 +243,16 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       id: this.state.me.id,
       user: this._getUser()
     })
-      // .then(() => alert('FINISH'))
+      .then(() => {
+        LocationStore.navigate(this.props, 'back')
+
+        /**
+         * If profile image changed, reload the page
+         * */
+        if (this.state.avatarImage) {
+          window.location.reload()
+        }
+      })
   }
 }
 
@@ -215,7 +285,15 @@ const styles = {
     padding: Styles.values.spacing,
   }),
   avatar: RX.Styles.createImageStyle({
-    width: 80,
-    height: 80,
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_SIZE / 2,
+  }),
+  avatarIcon: RX.Styles.createViewStyle({
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0, 0.3)',
+    padding: 5,
+    borderRadius: 100,
+    cursor: 'pointer',
   })
 }

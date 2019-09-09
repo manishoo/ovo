@@ -173,5 +173,6 @@ const styles = {
   avatar: RX.Styles.createImageStyle({
     width: 80,
     height: 80,
+    borderRadius: 80 / 2,
   })
 }

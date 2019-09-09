@@ -53,4 +53,7 @@ export interface ImageSourceBase {
 	Finger: string;
 
 	KitchenIllustration: string;
+
+	Camera: string;
+  RemoveIconWhite: string;
 }

@@ -518,7 +518,9 @@ html {
 }
 
 html:lang(en) {
-    font-family: roboto, sans-serif;
+    /*font-family: roboto, sans-serif;*/
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Lucida Grande", "Segoe UI";
 }
 html:lang(fa) {
     font-family: iranyekan, sans-serif;

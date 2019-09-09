@@ -124,9 +124,8 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
 	private _renderTime = (theme: Theme) => {
 		return (
 			<RX.View style={[styles.timingContainer, { top: ((this.props.size * 1.3) - 30) }]}>
+				<Text style={[styles.timingNumber, { color: theme.colors.recipeCardTimingNumberColor, }]}>{this.props.recipe.timing.totalTime}</Text>
 				<Text translate style={[styles.timingUnit, { color: theme.colors.recipeCardTimingUnitColor }]}>min</Text>
-				<Text
-					style={[styles.timingNumber, { color: theme.colors.recipeCardTimingNumberColor, }]}>{this.props.recipe.timing.totalTime}</Text>
 			</RX.View>
 		)
 	}
@@ -196,6 +195,7 @@ const styles = {
 	timingContainer: RX.Styles.createViewStyle({
 		flexDirection: AppConfig.isRTL() ? 'row-reverse' : 'row',
 		position: 'absolute',
+		alignItems: 'flex-end',
 		[Styles.values.start]: 16,
 	}),
 	timingUnit: RX.Styles.createTextStyle({
@@ -204,6 +204,6 @@ const styles = {
 	timingNumber: RX.Styles.createTextStyle({
 		font: Styles.fonts.displayBold,
 		fontSize: Styles.fontSizes.size16,
-		[Styles.values.marginEnd]: 5,
+		[Styles.values.marginEnd]: 3,
 	}),
 }

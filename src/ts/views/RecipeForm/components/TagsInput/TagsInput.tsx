@@ -107,13 +107,7 @@ export function TagsInput(props: TagsInputProps) {
 
         return (
           <RX.View
-            style={{
-              marginBottom: Styles.values.spacing,
-              padding: Styles.values.spacing,
-              borderWidth: 1,
-              borderColor: '#eee',
-              borderRadius: 8,
-            }}
+            style={styles.panel}
           >
             <Text style={{ fontSize: 16, marginBottom: Styles.values.spacing }}>{capitalize(key)}</Text>
 
@@ -133,23 +127,28 @@ export function TagsInput(props: TagsInputProps) {
           </RX.View>
         )
       })}
-      <TagInput
-        onSubmit={tag => props.onTagsChange([
-          ...props.selectedTags,
-          tag.slug,
-        ])}
-      />
+      <RX.View
+        style={styles.panel}
+      >
+        <TagInput
+          onSubmit={tag => props.onTagsChange([
+            ...props.selectedTags,
+            tag.slug,
+          ])}
+        />
+      </RX.View>
     </RX.View>
   )
 }
 
 export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => any }) {
-  const [tag, setTag] = useState<TagsInputQuery_tags>({
+  const defaultState = {
     type: TagType.other,
     title: [],
     info: [],
     slug: null,
-  })
+  }
+  const [tag, setTag] = useState<TagsInputQuery_tags>(defaultState)
   const [addTag] = useMutation<TagInputMutation, TagInputMutationVariables>(gql`
     mutation TagInputMutation($tag: TagInput!) {
       addTag(tag: $tag) {
@@ -175,6 +174,7 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
         }
       })
       props.onSubmit(data.addTag)
+      setTag(defaultState)
     }
   })
 
@@ -188,7 +188,8 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
         })}
         style={{
           minWidth: 200,
-          [Styles.values.marginEnd]: Styles.values.spacing / 2
+          [Styles.values.marginEnd]: Styles.values.spacing / 2,
+          marginBottom: 0,
         }}
       />
       <Select
@@ -209,10 +210,21 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
         })}
         style={{
           minWidth: 100,
-          [Styles.values.marginEnd]: Styles.values.spacing / 2
+          [Styles.values.marginEnd]: Styles.values.spacing / 2,
+          marginBottom: 0,
         }}
       />
-      <FilledButton label={getLocalizedText('Add Tag')} onPress={addTag} />
+      <FilledButton label={getLocalizedText('Add Tag')} onPress={addTag} style={{padding: 7}} />
     </RX.View>
   )
+}
+
+const styles = {
+  panel: RX.Styles.createViewStyle({
+    marginBottom: Styles.values.spacing,
+    padding: Styles.values.spacing,
+    borderWidth: 1,
+    borderColor: '#eee',
+    borderRadius: 8,
+  }),
 }

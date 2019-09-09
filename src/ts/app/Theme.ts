@@ -47,6 +47,7 @@ export class Theme {
           largeHeading: '#cecece',
 
           red: '#d32f2f',
+          darkerRed: '#a92626',
 
           mealCardBackgroundColor: '#fff',
           mealItemSubtitle: '#4A4A4A',

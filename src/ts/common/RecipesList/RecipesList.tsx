@@ -13,7 +13,7 @@ import AddRecipeCell from './components/AddRecipeCell/AddRecipeCell'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 
-const WINDOW_MAX_WIDTH = 975
+// const WINDOW_MAX_WIDTH = 975
 
 interface RecipesListProps extends RX.CommonProps {
   style?: any,
@@ -55,7 +55,7 @@ export default class RecipesList extends ComponentBase<RecipesListProps, Recipes
     }
   }
 
-  private _getMaximum1024 = (width: number) => (width > WINDOW_MAX_WIDTH ? WINDOW_MAX_WIDTH : width) // maximum 1024
+  private _getMaximum1024 = (width: number) => (width > Styles.values.mainContentMaxWidth ? Styles.values.mainContentMaxWidth : width) // maximum 1024
 
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 
@@ -86,7 +86,7 @@ const styles = {
   container: RX.Styles.createViewStyle({
     flexDirection: 'row',
     flexWrap: 'wrap',
-    maxWidth: WINDOW_MAX_WIDTH
+    maxWidth: Styles.values.mainContentMaxWidth
   }),
   item: RX.Styles.createViewStyle({
     marginHorizontal: Styles.values.spacing / 2,

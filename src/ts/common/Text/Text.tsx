@@ -7,6 +7,7 @@ import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
 import { ImportantForAccessibility } from 'reactxp/dist/common/Types'
 import AppConfig from 'src/ts/app/AppConfig'
+import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Translation } from 'src/ts/models/common'
@@ -43,13 +44,19 @@ export default class Text extends RX.Component<TextProps> {
           <Component
             {...this.props}
             importantForAccessibility={ImportantForAccessibility.Yes}
-            style={[styles.container, this._getStyle(theme), style]}
+            style={[styles.container, this._getFont(), this._getStyle(theme), style]}
           >
             {this._getValue()}
           </Component>
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _getFont = () => {
+    return {
+      fontFamily: Styles.fonts[AppConfig.locale].displayRegular.fontFamily,
+    }
   }
 
   private _getStyle = (theme: Theme) => {
@@ -65,7 +72,8 @@ export default class Text extends RX.Component<TextProps> {
     if (this.props.type === TextType.title) {
       style = {
         ...style,
-        fontSize: 18,
+        fontSize: 20,
+        marginBottom: 16,
         fontWeight: 'bold',
       }
     }
@@ -82,7 +90,7 @@ export default class Text extends RX.Component<TextProps> {
     if (this.props.type === TextType.body) {
       style = {
         ...style,
-        fontWeight: 'light',
+        fontWeight: 100,
       }
     }
 
@@ -116,7 +124,7 @@ export default class Text extends RX.Component<TextProps> {
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
-    //
+  container: RX.Styles.createTextStyle({
+    font: Styles.fonts.displayRegular,
   }),
 }

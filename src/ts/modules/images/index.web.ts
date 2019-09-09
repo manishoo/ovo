@@ -53,6 +53,9 @@ class ImageSource implements ImageSourceBase {
 	Finger = AppConfig.getImagePath('Finger.png')
 
 	KitchenIllustration = AppConfig.getImagePath('KitchenIllustration.png')
+
+	Camera = AppConfig.getImagePath('Camera.png')
+	RemoveIconWhite = AppConfig.getImagePath('RemoveIconWhite.png')
 }
 
 export default new ImageSource()

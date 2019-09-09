@@ -46,7 +46,7 @@ export default class AddRecipeCell extends RX.Component<AddRecipeCellProps> {
             <Text
               translate
               onPress={() => navigate(this.props, `${Routes.recipeForm}`)}
-              style={{fontWeight: 'bold', color: 'inherit'}}
+              style={{color: 'inherit'}}
             >CreateNewRecipe</Text>
           </RX.View>
         )}

@@ -23,6 +23,7 @@ interface FilledButtonProps {
 enum ButtonMode {
   primary = 'primary',
   default = 'default',
+  danger = 'danger',
 }
 
 export default class FilledButton extends RX.Component<FilledButtonProps> {
@@ -82,12 +83,12 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
       }
     }
 
-    if (this.props.mode === ButtonMode.primary) {
+    if (this.props.mode === ButtonMode.primary || this.props.mode === ButtonMode.danger) {
       style = {
         ...style,
         borderWidth: 1,
         borderColor: 'transparent',
-        backgroundColor: theme.colors.filledButtonBG
+        backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
       }
       labelStyle = {
         ...labelStyle,
@@ -95,7 +96,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
       }
       hoverStyle = {
         ...hoverStyle,
-        backgroundColor: theme.colors.filledButtonHoverBG,
+        backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
       }
     }
 

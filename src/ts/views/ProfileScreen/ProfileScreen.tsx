@@ -63,9 +63,6 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
             scrollViewProps={{
               onScroll: this._onScroll(this._handleOnReachEnd),
             }}
-            innermostViewStyle={{
-              padding: Styles.values.spacing * 2,
-            }}
           >
             {
               (AppConfig.getPlatformType() !== 'web') &&
@@ -178,7 +175,7 @@ const styles = {
   }),
   innerContainer: RX.Styles.createViewStyle({
     flex: 1,
-    alignItems: 'center',
+    // alignItems: 'center',
     marginTop: Styles.values.spacing
   }),
   avatarContainer: RX.Styles.createViewStyle({
