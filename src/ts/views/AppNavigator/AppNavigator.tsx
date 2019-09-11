@@ -116,6 +116,15 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                   />
                 ))
               }
+
+              <Text
+                style={{
+                  position: 'absolute',
+                  bottom: 16,
+                  [Styles.values.end]: 16,
+                  color: theme.colors.subtitle,
+                }}
+              >{AppConfig.version}</Text>
             </RX.View>
           </Router>
         )}

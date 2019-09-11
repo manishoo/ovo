@@ -13,6 +13,7 @@ interface InitParams {
 
 class AppConfig {
   public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
+  public version = process.env.TAG || ''
 
   public get graphQLAddress() {
     return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`

@@ -759,7 +759,7 @@ export default function (props: {}) {
       onUpdate={(variables, userId) => updateRecipe({
         variables,
         update: (proxy, { data }) => {
-          const { recipes } = proxy.readQuery({
+          const {recipes} = proxy.readQuery({
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
@@ -772,14 +772,25 @@ export default function (props: {}) {
               userId,
             },
             data: {
-              ...recipes,
-              recipes: recipes.recipes.map((r: any) => {
-                if (r.id === data.updateRecipe.id) {
-                  return Object.assign({}, r, data.updateRecipe)
-                }
+              recipes: {
+                ...recipes,
+                recipes: recipes.recipes.map((r: any) => {
+                  if (r.id === data.updateRecipe.id) {
+                    return Object.assign({}, r, data.updateRecipe)
+                  }
 
-                return r
-              })
+                  return r
+                })
+              },
+              // ...recipes,
+              // @ts-ignore
+              // recipes: recipes.recipes.map((r: any) => {
+              //   if (r.id === data.updateRecipe.id) {
+              //     return Object.assign({}, r, data.updateRecipe)
+              //   }
+              //
+              //   return r
+              // })
             }
           })
           LocationStore.navigate(props, 'back')

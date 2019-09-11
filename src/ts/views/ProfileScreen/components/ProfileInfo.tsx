@@ -27,13 +27,12 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
   render() {
     const { style, me } = this.props
 
-    // @ts-ignore
     return (
       <RX.View
         style={[styles.container, style]}
       >
         <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text type={Text.types.title}>{me.firstName} {me.lastName}</Text>
+          <Text type={Text.types.title}>{this._getName()}</Text>
           <FilledButton
             mode={FilledButton.mode.default}
             label={getLocalizedText('ProfileSettings')}
@@ -106,6 +105,14 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
         </RX.View>
       </RX.View>
     )
+  }
+
+  private _getName = () => {
+    const { me } = this.props
+
+    if (!me.firstName && !me.lastName) return me.username
+
+    return `${me.firstName} ${me.lastName}`
   }
 }
 

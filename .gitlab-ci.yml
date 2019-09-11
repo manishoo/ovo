@@ -6,7 +6,9 @@ build staging image:
   stage: build
   image: docker:latest
   only:
-    - develop
+    - /.*-staging$/
+  except:
+    - branches
   services:
     - docker:dind
   variables:
@@ -28,6 +30,7 @@ build staging image:
       --build-arg PUBLIC_PATH=$PUBLIC_PATH
       --build-arg API_ADDRESS=$API_ADDRESS
       --build-arg GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+      --build-arg TAG=$CI_COMMIT_TAG
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
       .
@@ -37,7 +40,9 @@ build production image:
   stage: build
   image: docker:latest
   only:
-    - master
+    - tags
+  except:
+    - /.*-staging$/
   services:
     - docker:dind
   variables:
@@ -61,6 +66,7 @@ build production image:
       --build-arg PUBLIC_PATH=$PUBLIC_PATH
       --build-arg API_ADDRESS=$API_ADDRESS
       --build-arg GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT
+      --build-arg TAG=$CI_COMMIT_TAG
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
       .
@@ -70,7 +76,7 @@ deploy to staging:
   stage: deploy
   image: docker:latest
   only:
-    - develop
+    - /.*-staging$/
   services:
     - docker:dind
   variables:
@@ -97,7 +103,9 @@ deploy to production:
   image: docker:latest
   when: manual
   only:
-    - master
+    - tags
+  except:
+    - /.*-staging$/
   services:
     - docker:dind
   variables:

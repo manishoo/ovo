@@ -33,7 +33,7 @@ export default function TagsInputContainer(props: TagsInputCommonProps) {
   return (
     <TagsInput
       {...props}
-      tags={data ? data.tags : []}
+      tags={data && data.tags && data.tags.length > 0 ? data.tags : []}
     />
   )
 }
