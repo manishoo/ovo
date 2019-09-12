@@ -6,7 +6,7 @@
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
-import Text from 'common/Text/Text'
+// import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
@@ -39,7 +39,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
 
   render() {
     const { user } = this.props
-    const { activeLink } = this.state
+    // const { activeLink } = this.state
 
     return (
       <RX.View style={{ padding: Styles.values.spacingLarge }}>
@@ -61,7 +61,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 >
                   <Image source={user.imageUrl!.url} style={styles.avatar} />
                 </Link>,
-                <Link
+                /*<Link
                   key={1}
                   onPress={this._handleActiveChange(1)}
                   to={`/`}
@@ -84,7 +84,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                   onPress={this._handleActiveChange(4)}
                   to={`/${user.username}`}
                   style={Object.assign({}, styles.link, { color: activeLink === 4 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>Profile</Text></Link>,
+                  translate>Profile</Text></Link>,*/
               ]
             } else {
               return <FilledButton onPress={() => navigate(this.props, Routes.login)} label={'LoginForm'} />

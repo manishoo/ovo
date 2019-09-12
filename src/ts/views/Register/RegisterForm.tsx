@@ -187,6 +187,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           website
           pinterest
         }
+        role
       }
     `
   }

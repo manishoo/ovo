@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserUpdateInput, Gender } from "./../../../models/global-types";
+import { UserUpdateInput, Gender, UserRole } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: SettingsMutation
@@ -46,6 +46,7 @@ export interface SettingsMutation_updateUser {
   height: SettingsMutation_updateUser_height | null;
   caloriesPerDay: number | null;
   socialNetworks: SettingsMutation_updateUser_socialNetworks;
+  role: UserRole;
 }
 
 export interface SettingsMutation {

@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserRegistrationInput, Gender } from "./../../../models/global-types";
+import { UserRegistrationInput, Gender, UserRole } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: RegisterMutation
@@ -46,6 +46,7 @@ export interface RegisterMutation_registerUser_user {
   height: RegisterMutation_registerUser_user_height | null;
   caloriesPerDay: number | null;
   socialNetworks: RegisterMutation_registerUser_user_socialNetworks;
+  role: UserRole;
 }
 
 export interface RegisterMutation_registerUser {

@@ -44,8 +44,15 @@ if (isProd) {
   const assets = require('./web/build/assets.json')
 
   // TODO should handle multiple languages probably based on request
-  shimBrowser('fa', 'rtl')
-  app.get('*', require('./web/build/server-bundle').default(assets))
+  // app.get('*', require('./web/build/server-bundle').default(assets))
+
+  supportedLanguages.map(lang => {
+    app.get('/' + lang + '/*', (req, res) => {
+      shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
+      return require('./web/build/server-bundle').default(assets)(req, res, lang)
+    })
+  })
+
 } else {
   require('@babel/register')
 

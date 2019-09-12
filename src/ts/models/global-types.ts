@@ -45,6 +45,14 @@ export enum TagType {
   recipe = "recipe",
 }
 
+/**
+ * User roles
+ */
+export enum UserRole {
+  operator = "operator",
+  user = "user",
+}
+
 export interface IngredientInput {
   food?: string | null;
   amount: number;

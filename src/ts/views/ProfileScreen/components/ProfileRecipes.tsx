@@ -8,16 +8,19 @@ import RecipesList from 'common/RecipesList/RecipesList'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import client from 'src/ts/app/client'
+import { UserRole } from 'src/ts/models/global-types'
 import {
   RecipesListQuery,
   RecipesListQuery_recipes_recipes,
   RecipesListQueryVariables
 } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { Me } from 'src/ts/views/Register/types/Me'
 
 
 interface ProfileRecipesProps {
-  userId: string,
+  // userId: string,
   onHeightChange: (height: number) => void,
+  me: Me,
 }
 
 interface ProfileRecipesState {
@@ -39,7 +42,7 @@ export default class ProfileRecipes extends RX.Component<ProfileRecipesProps, Pr
       <RecipesList
         recipes={this.state.recipes}
         showAddRecipe
-        hideAvatar
+        hideAvatar={this.props.me.role === UserRole.user}
         onLayout={e => this.props.onHeightChange(e.height)}
       />
     )
@@ -59,7 +62,7 @@ export default class ProfileRecipes extends RX.Component<ProfileRecipesProps, Pr
       query: PROFILE_RECIPES_QUERY,
       fetchPolicy: 'cache-first',
       variables: {
-        userId: this.props.userId,
+        userId: this.props.me.id,
         lastId
       },
     })

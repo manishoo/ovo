@@ -7,7 +7,7 @@
 // ====================================================
 
 export interface RecipeDeleteMutation {
-  deleteRecipe: boolean;
+  deleteRecipe: string;
 }
 
 export interface RecipeDeleteMutationVariables {

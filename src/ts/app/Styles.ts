@@ -23,7 +23,6 @@ export default class Styles {
     normalBorderRadius: 5,
 
     get start() {
-      console.log('AppConfig.isRTL()', AppConfig.isRTL())
       return AppConfig.isRTL() ? 'right' : 'left'
     },
     get end() {

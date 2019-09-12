@@ -43,66 +43,76 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
         </RX.View>
 
         <Text type={Text.types.subtitle}>@{me.username}</Text>
-        <Text type={Text.types.body}
-              style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>{me.bio}</Text>
+        {
+          me.bio &&
+          <Text type={Text.types.body}
+                style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>{me.bio}</Text>
+        }
 
-        <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
-          {
-            me.socialNetworks.instagram && <Link
-              openInNewTab
-              to={`https://instagram.com/${me.socialNetworks.instagram}`}
-              style={styles.socialMediaIconWrapper}
-            >
-              <Image
-                source={ImageSource.InstagramIcon}
-                style={{
-                  width: SOCIAL_MEDIA_ICON_SIZE,
-                  height: SOCIAL_MEDIA_ICON_SIZE,
-                }}
-              />
-            </Link>
-          }
-          {
-            me.socialNetworks.twitter && <Link
-              openInNewTab
-              to={`https://twitter.com/${me.socialNetworks.twitter}`}
-              style={styles.socialMediaIconWrapper}
-            >
-              <Image
-                source={ImageSource.TwitterIcon}
-                style={{
-                  width: SOCIAL_MEDIA_ICON_SIZE,
-                  height: SOCIAL_MEDIA_ICON_SIZE,
-                }}
-              />
-            </Link>
-          }
-          {
-            me.socialNetworks.pinterest && <Link
-              openInNewTab
-              to={`https://pinterest.com/${me.socialNetworks.pinterest}`}
-              style={styles.socialMediaIconWrapper}
-            >
-              <Image
-                source={ImageSource.PinterestIcon}
-                style={{
-                  width: SOCIAL_MEDIA_ICON_SIZE,
-                  height: SOCIAL_MEDIA_ICON_SIZE,
-                }}
-              />
-            </Link>
-          }
+        {
+          /**
+           * If any social media accounts were added
+           * */
+          Object.keys(me.socialNetworks).filter(k => me.socialNetworks[k] && (k !== '__typename')).length > 0 &&
+          <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
+            {
+              me.socialNetworks.instagram && <Link
+                openInNewTab
+                to={`https://instagram.com/${me.socialNetworks.instagram}`}
+                style={styles.socialMediaIconWrapper}
+              >
+                <Image
+                  source={ImageSource.InstagramIcon}
+                  style={{
+                    width: SOCIAL_MEDIA_ICON_SIZE,
+                    height: SOCIAL_MEDIA_ICON_SIZE,
+                  }}
+                />
+              </Link>
+            }
+            {
+              me.socialNetworks.twitter && <Link
+                openInNewTab
+                to={`https://twitter.com/${me.socialNetworks.twitter}`}
+                style={styles.socialMediaIconWrapper}
+              >
+                <Image
+                  source={ImageSource.TwitterIcon}
+                  style={{
+                    width: SOCIAL_MEDIA_ICON_SIZE,
+                    height: SOCIAL_MEDIA_ICON_SIZE,
+                  }}
+                />
+              </Link>
+            }
+            {
+              me.socialNetworks.pinterest && <Link
+                openInNewTab
+                to={`https://pinterest.com/${me.socialNetworks.pinterest}`}
+                style={styles.socialMediaIconWrapper}
+              >
+                <Image
+                  source={ImageSource.PinterestIcon}
+                  style={{
+                    width: SOCIAL_MEDIA_ICON_SIZE,
+                    height: SOCIAL_MEDIA_ICON_SIZE,
+                  }}
+                />
+              </Link>
+            }
 
-          {
-            me.socialNetworks.website &&
-            <Link
-              openInNewTab
-              to={`http://${me.socialNetworks.website}`}
-            >
-              {me.socialNetworks.website}
-            </Link>
-          }
-        </RX.View>
+            {
+              me.socialNetworks.website &&
+              <Link
+                openInNewTab
+                to={`http://${me.socialNetworks.website}`}
+              >
+                {me.socialNetworks.website}
+              </Link>
+            }
+          </RX.View>
+        }
+
       </RX.View>
     )
   }

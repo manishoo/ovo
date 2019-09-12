@@ -23,7 +23,7 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { User } from 'src/ts/models/FoodModels'
+import { UserRole } from 'src/ts/models/global-types'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
@@ -34,6 +34,7 @@ import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientS
 import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from 'src/ts/views/Recipe/types/RecipeDeleteMutation'
 import { RecipeQuery, RecipeQueryVariables } from 'src/ts/views/Recipe/types/RecipeQuery'
+import { Me } from 'src/ts/views/Register/types/Me'
 import Instructions from './components/Instructions'
 
 
@@ -46,7 +47,7 @@ interface RecipeState {
   windowHeight: number,
   windowWidth: number,
   isSmallOrTiny: boolean,
-  user?: User,
+  user?: Me,
   serving: number,
 }
 
@@ -179,7 +180,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
   }
 
   private _renderControlBar = () => {
-    if (this.state.user && this.state.user.id === this.props.recipe.author.id) {
+    if (this.state.user && ((this.state.user.id === this.props.recipe.author.id) || (this.state.user.role === UserRole.operator))) {
       return (
         <RX.View style={{ flexDirection: 'row', paddingBottom: Styles.values.spacing }}>
           <Mutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>

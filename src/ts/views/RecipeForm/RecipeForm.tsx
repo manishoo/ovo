@@ -57,7 +57,7 @@ interface RecipeFormProps {
   style?: any,
   recipe?: Recipe,
   fieldErrors: { [k: string]: string }
-  onCreate: (variables: RecipeFormCreateMutationVariables) => Promise<ExecutionResult<RecipeFormCreateMutation>>,
+  onCreate: (variables: RecipeFormCreateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormCreateMutation>>,
   onUpdate: (variables: RecipeFormUpdateMutationVariables, userId: string) => Promise<any>,
 }
 
@@ -630,7 +630,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
   private _handleCreate = () => {
     this.props.onCreate({
       recipe: this._getRecipe(),
-    })
+    }, this.state.me.id)
       .then(({ data }) => {
         if (data) {
           this._setUI()
@@ -755,11 +755,37 @@ export default function (props: {}) {
     <RecipeForm
       recipe={data && data.recipe}
       fieldErrors={getGraphQLUserInputErrors(error || createRecipeError || updateRecipeError)}
-      onCreate={variables => createRecipe({ variables })}
+      onCreate={(variables, userId) => createRecipe({
+        variables,
+        update: (proxy, { data }) => {
+          const { recipes } = proxy.readQuery({
+            query: PROFILE_RECIPES_QUERY,
+            variables: {
+              userId,
+            },
+          })
+
+          proxy.writeQuery({
+            query: PROFILE_RECIPES_QUERY,
+            variables: {
+              userId,
+            },
+            data: {
+              recipes: {
+                ...recipes,
+                recipes: [
+                  data.createRecipe,
+                  ...recipes.recipes,
+                ]
+              },
+            }
+          })
+        }
+      })}
       onUpdate={(variables, userId) => updateRecipe({
         variables,
         update: (proxy, { data }) => {
-          const {recipes} = proxy.readQuery({
+          const { recipes } = proxy.readQuery({
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
@@ -782,15 +808,6 @@ export default function (props: {}) {
                   return r
                 })
               },
-              // ...recipes,
-              // @ts-ignore
-              // recipes: recipes.recipes.map((r: any) => {
-              //   if (r.id === data.updateRecipe.id) {
-              //     return Object.assign({}, r, data.updateRecipe)
-              //   }
-              //
-              //   return r
-              // })
             }
           })
           LocationStore.navigate(props, 'back')

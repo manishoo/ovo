@@ -84,7 +84,7 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
                   style={{
 										width: this.props.size / 5,
 										height: this.props.size / 5,
-										borderRadius: this.props.size / 50,
+										borderRadius: 100,
 									}}
                 />
               </Link>

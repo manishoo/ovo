@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender } from "./../../../models/global-types";
+import { Gender, UserRole } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: Me
@@ -46,4 +46,5 @@ export interface Me {
   height: Me_height | null;
   caloriesPerDay: number | null;
   socialNetworks: Me_socialNetworks;
+  role: UserRole;
 }

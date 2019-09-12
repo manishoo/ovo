@@ -82,14 +82,14 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
               me={this.state.me}
             />
 
-            <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing }}>
+            <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing / 2 }}>
               <FilledButton
                 label={getLocalizedText('Recipes')}
                 onPress={() => this.setState({ activeTab: 0 })}
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
                 containerStyle={styles.tabButton}
               />
-              <FilledButton
+              {/*<FilledButton
                 label={getLocalizedText('Meals')}
                 onPress={() => this.setState({ activeTab: 1 })}
                 mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
@@ -100,13 +100,13 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
                 onPress={() => this.setState({ activeTab: 2 })}
                 mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
                 containerStyle={styles.tabButton}
-              />
+              />*/}
             </RX.View>
 
             <RX.View style={styles.innerContainer}>
               <ProfileRecipes
                 ref={ref => this._recipes = ref}
-                userId={this.state.me.id}
+                me={this.state.me}
                 onHeightChange={height => this.recipesListHeight = height}
               />
             </RX.View>

@@ -126,7 +126,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
     }
   }
 
-  private _onChangeText = async (v: any) => {
+  private _onChangeText = async (v: string) => {
     if (this.state.isPristine) {
       this.setState({
         isPristine: false,

@@ -71,7 +71,13 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           onChange={this._onChange(['firstName'])}
           label={getLocalizedText('First Name')}
         />
+        <Input
+          value={me.lastName}
+          onChange={this._onChange(['lastName'])}
+          label={getLocalizedText('Last Name')}
+        />
         <Select
+          label={getLocalizedText('Gender')}
           value={me.gender}
           options={[
             { value: null, text: <Text>Select gender</Text> },
@@ -81,11 +87,6 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
             }))
           ]}
           onChange={this._onChange(['gender'])}
-        />
-        <Input
-          value={me.lastName}
-          onChange={this._onChange(['lastName'])}
-          label={getLocalizedText('Last Name')}
         />
         <Input
           value={me.email}
