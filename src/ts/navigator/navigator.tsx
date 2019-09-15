@@ -11,7 +11,7 @@ import { trimSlashes } from 'src/ts/utilities/trim-slashes'
 import AppNavigator from 'src/ts/views/AppNavigator/AppNavigator'
 import { Me } from 'src/ts/views/Register/types/Me'
 import {
-  LandingScreen,
+  // LandingScreen,
   LoginScreen,
   MealPlanScreen,
   PathScreen,
@@ -121,7 +121,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: '/',
             exact: false,
-            component: this.state.user ? PathScreen : LandingScreen,
+            component: this.state.user ? PathScreen : LoginScreen,
           },
         ]}
       />

@@ -105,6 +105,9 @@ export default class Text extends RX.Component<TextProps> {
     }
 
     if (translations && translations.length > 0) {
+      const foundTranslation = translations.find(p => p.locale === AppConfig.locale)
+      if (foundTranslation) return foundTranslation.text
+
       return translations[0].text
     }
 

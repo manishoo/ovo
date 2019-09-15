@@ -43,24 +43,26 @@ const supportedLanguages = [
 if (isProd) {
   const assets = require('./web/build/assets.json')
 
-  // TODO should handle multiple languages probably based on request
-  // app.get('*', require('./web/build/server-bundle').default(assets))
-
   supportedLanguages.map(lang => {
-    app.get('/' + lang + '/*', (req, res) => {
+    app.get('/' + lang + '*', (req, res) => {
       shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
       return require('./web/build/server-bundle').default(assets)(req, res, lang)
     })
   })
 
+  // fallback on en
+  app.get('/', (req, res) => res.redirect('/en/'))
 } else {
   require('@babel/register')
 
   supportedLanguages.map(lang => {
-    app.get('/' + lang + '/*', (req, res) => {
+    app.get('/' + lang + '*', (req, res) => {
       return require('./src/ts/app/web/render-dev-app')(res, lang)
     })
   })
+
+  // fallback on en
+  app.get('/', (req, res) => res.redirect('/en/'))
 }
 
 app.use((err, req, res, next) => {
