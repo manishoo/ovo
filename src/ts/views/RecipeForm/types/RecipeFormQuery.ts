@@ -90,7 +90,7 @@ export interface RecipeFormQuery_recipe_ingredients_weight {
 
 export interface RecipeFormQuery_recipe_ingredients {
   name: RecipeFormQuery_recipe_ingredients_name[] | null;
-  amount: number;
+  amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
   thumbnail: RecipeFormQuery_recipe_ingredients_thumbnail | null;

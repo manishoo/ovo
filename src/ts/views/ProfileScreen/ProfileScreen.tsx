@@ -53,7 +53,7 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
     }
   }
 
-  private recipesListHeight: number | undefined
+  private _recipesListHeight: number | undefined
 
   render() {
     return (
@@ -89,13 +89,13 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
                 containerStyle={styles.tabButton}
               />
-              {/*<FilledButton
+              <FilledButton
                 label={getLocalizedText('Meals')}
                 onPress={() => this.setState({ activeTab: 1 })}
                 mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
                 containerStyle={styles.tabButton}
               />
-              <FilledButton
+              {/*<FilledButton
                 label={getLocalizedText('Collections')}
                 onPress={() => this.setState({ activeTab: 2 })}
                 mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
@@ -104,16 +104,44 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
             </RX.View>
 
             <RX.View style={styles.innerContainer}>
-              <ProfileRecipes
-                ref={ref => this._recipes = ref}
-                me={this.state.me}
-                onHeightChange={height => this.recipesListHeight = height}
-              />
+              {
+                this._renderTabContent()
+              }
             </RX.View>
           </CenterAlignedPageView>
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _renderTabContent = () => {
+    switch (this.state.activeTab) {
+      case 0:
+        return (
+          <ProfileRecipes
+            ref={ref => this._recipes = ref}
+            onHeightChange={this._onHeightChange}
+          />
+        )
+      case 1:
+        return null
+      default:
+        return null
+    }
+  }
+
+  private _onHeightChange = (height: number) => {
+    this._recipesListHeight = height
+
+    this._checkIfRecipesHeightWasShorter()
+  }
+
+  private _checkIfRecipesHeightWasShorter = () => {
+    const { height } = this.state
+
+    if (height > this._recipesListHeight) {
+      this._recipes.fetchMore()
+    }
   }
 
   private renderSettingsIcon = () => {
@@ -142,7 +170,7 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
       case 1:
       case 0:
       default:
-        if ((bottomOfViewPoint + OFFSET) >= this.recipesListHeight) {
+        if ((bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
           onReachEnd()
         }
     }

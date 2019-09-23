@@ -3,12 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SelectFoodContainer from 'common/FoodDialog/SelectFood'
 import RecipesList from 'common/RecipesList/RecipesList'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import { UserRole } from 'src/ts/models/global-types'
+import UserStore from 'src/ts/stores/UserStore'
+import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipesFragments'
 import {
   RecipesListQuery,
   RecipesListQuery_recipes_recipes,
@@ -20,17 +22,22 @@ import { Me } from 'src/ts/views/Register/types/Me'
 interface ProfileRecipesProps {
   // userId: string,
   onHeightChange: (height: number) => void,
-  me: Me,
 }
 
 interface ProfileRecipesState {
   recipes: RecipesListQuery_recipes_recipes[],
-  hasNext?: boolean
+  hasNext?: boolean,
+  me: Me,
+  fetching: boolean,
 }
 
-export default class ProfileRecipes extends RX.Component<ProfileRecipesProps, ProfileRecipesState> {
-  state: ProfileRecipesState = {
-    recipes: [],
+export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, ProfileRecipesState> {
+  protected _buildInitialState(): Readonly<ProfileRecipesState> {
+    return {
+      recipes: [],
+      me: UserStore.getUser(),
+      fetching: false,
+    }
   }
 
   componentDidMount() {
@@ -42,14 +49,15 @@ export default class ProfileRecipes extends RX.Component<ProfileRecipesProps, Pr
       <RecipesList
         recipes={this.state.recipes}
         showAddRecipe
-        hideAvatar={this.props.me.role === UserRole.user}
+        hideAvatar={this.state.me.role === UserRole.user}
         onLayout={e => this.props.onHeightChange(e.height)}
       />
     )
   }
 
   public fetchMore = () => {
-    if (!this.state.hasNext && this.state.recipes.length > 0) return
+    if (!this.state.hasNext && this.state.recipes.length > 0) return null
+    if (this.state.fetching) return null
 
     let lastId
 
@@ -58,88 +66,31 @@ export default class ProfileRecipes extends RX.Component<ProfileRecipesProps, Pr
       lastId = lastItem.id
     }
 
-    client.query<RecipesListQuery, RecipesListQueryVariables>({
-      query: PROFILE_RECIPES_QUERY,
-      fetchPolicy: 'cache-first',
-      variables: {
-        userId: this.props.me.id,
-        lastId
-      },
-    })
-      .then(({ data }) => {
-        if (data) {
-          this.setState({
-            recipes: [
-              ...this.state.recipes,
-              ...data.recipes.recipes
-            ],
-            hasNext: data.recipes.pagination.hasNext,
+    return new Promise(((resolve, reject) => {
+      this.setState({ fetching: true }, () => {
+        client.query<RecipesListQuery, RecipesListQueryVariables>({
+          query: PROFILE_RECIPES_QUERY,
+          fetchPolicy: 'cache-first',
+          variables: {
+            userId: this.state.me.id,
+            lastId
+          },
+        })
+          .then(({ data }) => {
+            if (data) {
+              this.setState({
+                fetching: false,
+                recipes: [
+                  ...this.state.recipes,
+                  ...data.recipes.recipes
+                ],
+                hasNext: data.recipes.pagination.hasNext,
+              }, resolve)
+            }
           })
-        }
+          .catch(reject)
       })
-  }
-
-  static fragments = {
-    myRecipe: gql`
-      fragment MyRecipe on Recipe {
-        id
-        title {
-          text
-          locale
-        }
-        serving
-        slug
-        author {
-          id
-          username
-          imageUrl { url }
-        }
-        likesCount
-        userLikedRecipe
-        timing {
-          prepTime
-          cookTime
-          totalTime
-        }
-        ingredients {
-          name {
-            text
-            locale
-          }
-          amount
-          customUnit
-          gramWeight
-          thumbnail {
-            url
-          }
-          description {
-            text
-            locale
-          }
-          food {...SelectFoodFood}
-          weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-        }
-        instructions {
-          step
-          text { text locale }
-          image { url }
-          notes { text locale }
-        }
-        difficulty
-        description { text locale }
-        coverImage { url }
-        tags
-        createdAt
-        updatedAt
-      }
-
-      ${SelectFoodContainer.fragments.food}
-    `
+    }))
   }
 }
 
@@ -156,5 +107,5 @@ export const PROFILE_RECIPES_QUERY = gql`
     }
   }
 
-  ${ProfileRecipes.fragments.myRecipe}
+  ${ProfileRecipesFragments.myRecipe}
 `

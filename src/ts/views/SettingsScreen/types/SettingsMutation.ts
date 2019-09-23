@@ -45,7 +45,7 @@ export interface SettingsMutation_updateUser {
   weight: SettingsMutation_updateUser_weight | null;
   height: SettingsMutation_updateUser_height | null;
   caloriesPerDay: number | null;
-  socialNetworks: SettingsMutation_updateUser_socialNetworks;
+  socialNetworks: SettingsMutation_updateUser_socialNetworks | null;
   role: UserRole;
 }
 

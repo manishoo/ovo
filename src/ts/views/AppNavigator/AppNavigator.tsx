@@ -15,15 +15,15 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
+import { Routes } from 'src/ts/models/common'
 import { User } from 'src/ts/models/FoodModels'
 import { NavOptions } from 'src/ts/navigator/navigator'
-import { Routes } from 'src/ts/models/common'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { trimSlashes } from 'src/ts/utilities/trim-slashes'
 import AppDrawer from 'src/ts/views/AppNavigator/components/AppDrawer'
-import ExploreSearch from 'src/ts/views/ExploreSearch/ExploreSearch'
+import AppSearchComponent from 'src/ts/views/AppNavigator/components/AppSearchComponent'
 
 
 const NAVBAR_HEIGHT = 50
@@ -242,8 +242,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   }
 
   private _renderSearch = (theme: Theme) => {
-    return null // FIXME
-
     const match = matchPath(this.state.currentPath, {
       path: '/recipes/',
       exact: false,
@@ -296,7 +294,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
         {this.state.mode === 'navbar' &&
         <RX.Text style={{ padding: Styles.values.spacing, fontSize: 20 }} onPress={toggleModal(false)}>x</RX.Text>}
 
-        <ExploreSearch ref={(ref: any) => this._searchInput = ref} onSubmit={toggleModal(false)} />
+        <AppSearchComponent
+          onSubmit={toggleModal(false)}
+        />
       </RX.Animated.View>
     ]
   }

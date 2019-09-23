@@ -90,7 +90,7 @@ export interface RecipeFormCreateMutation_createRecipe_ingredients_weight {
 
 export interface RecipeFormCreateMutation_createRecipe_ingredients {
   name: RecipeFormCreateMutation_createRecipe_ingredients_name[] | null;
-  amount: number;
+  amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
   thumbnail: RecipeFormCreateMutation_createRecipe_ingredients_thumbnail | null;

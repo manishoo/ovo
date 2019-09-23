@@ -45,7 +45,7 @@ export interface RegisterMutation_registerUser_user {
   weight: RegisterMutation_registerUser_user_weight | null;
   height: RegisterMutation_registerUser_user_height | null;
   caloriesPerDay: number | null;
-  socialNetworks: RegisterMutation_registerUser_user_socialNetworks;
+  socialNetworks: RegisterMutation_registerUser_user_socialNetworks | null;
   role: UserRole;
 }
 

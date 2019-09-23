@@ -11,7 +11,7 @@ import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { User } from 'src/ts/models/FoodModels'
-import ProfileRecipes from 'src/ts/views/ProfileScreen/components/ProfileRecipes'
+import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipesFragments'
 
 
 interface ProfileProps {
@@ -71,7 +71,7 @@ export const PROFILE_RECIPES_QUERY = gql`
     }
   }
 
-  ${ProfileRecipes.fragments.myRecipe}
+  ${ProfileRecipesFragments.myRecipe}
 `
 
 const styles = {

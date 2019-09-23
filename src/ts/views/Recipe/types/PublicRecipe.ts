@@ -90,7 +90,7 @@ export interface PublicRecipe_ingredients_weight {
 
 export interface PublicRecipe_ingredients {
   name: PublicRecipe_ingredients_name[] | null;
-  amount: number;
+  amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
   thumbnail: PublicRecipe_ingredients_thumbnail | null;

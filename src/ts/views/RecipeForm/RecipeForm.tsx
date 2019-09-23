@@ -36,7 +36,8 @@ import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
-import ProfileRecipes, { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes'
+import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes'
+import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipesFragments'
 import {
   RecipesListQuery_recipes_recipes,
   RecipesListQuery_recipes_recipes_ingredients,
@@ -728,7 +729,7 @@ export default function (props: {}) {
       }
     }
 
-    ${ProfileRecipes.fragments.myRecipe}
+    ${ProfileRecipesFragments.myRecipe}
   `, {
     variables: {
       slug: getParam(props, 'slug'),
@@ -741,14 +742,14 @@ export default function (props: {}) {
       createRecipe(recipe: $recipe) { ...MyRecipe }
     }
 
-    ${ProfileRecipes.fragments.myRecipe}
+    ${ProfileRecipesFragments.myRecipe}
   `)
   const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormExtraUpdateMutation, RecipeFormExtraUpdateMutationVariables>(gql`
     mutation RecipeFormUpdateMutation($id: String!, $recipe: RecipeInput!) {
       updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
     }
 
-    ${ProfileRecipes.fragments.myRecipe}
+    ${ProfileRecipesFragments.myRecipe}
   `)
 
   return (

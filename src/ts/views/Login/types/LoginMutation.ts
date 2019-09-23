@@ -45,7 +45,7 @@ export interface LoginMutation_loginUser_user {
   weight: LoginMutation_loginUser_user_weight | null;
   height: LoginMutation_loginUser_user_height | null;
   caloriesPerDay: number | null;
-  socialNetworks: LoginMutation_loginUser_user_socialNetworks;
+  socialNetworks: LoginMutation_loginUser_user_socialNetworks | null;
   role: UserRole;
 }
 

@@ -45,6 +45,6 @@ export interface Me {
   weight: Me_weight | null;
   height: Me_height | null;
   caloriesPerDay: number | null;
-  socialNetworks: Me_socialNetworks;
+  socialNetworks: Me_socialNetworks | null;
   role: UserRole;
 }

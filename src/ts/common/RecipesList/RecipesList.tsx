@@ -12,7 +12,6 @@ import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/typ
 import AddRecipeCell from './components/AddRecipeCell/AddRecipeCell'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
-
 // const WINDOW_MAX_WIDTH = 975
 
 interface RecipesListProps extends RX.CommonProps {

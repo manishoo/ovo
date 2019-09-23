@@ -38,6 +38,7 @@ export enum RecipeDifficulty {
 export enum TagType {
   cuisine = "cuisine",
   diet = "diet",
+  imported = "imported",
   ingredient = "ingredient",
   meal = "meal",
   occasion = "occasion",
