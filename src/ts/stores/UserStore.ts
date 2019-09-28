@@ -48,7 +48,7 @@ class UserStore extends StoreBase implements IPersistableStore {
     // return client.query({
     //   query: gql`
     // 		query Me {
-    // 		  me {
+    // 		  user {
     // 		    id
     // 		    username
     // 		    email
@@ -82,16 +82,22 @@ class UserStore extends StoreBase implements IPersistableStore {
     // 		}
     //  	`
     // })
-    // .then(({ data: { me } }) => {
-    // 	this.user = me
+    // .then(({ data: { user } }) => {
+    // 	this.user = user
     // 	RX.Storage.setItem(STORAGE_KEYS.user, JSON.stringify(this.user)) // FIXME are you sure?
     // 	this.trigger()
     // })
   }
 
-  setUser(user: Me) {
-    RX.Storage.setItem(STORAGE_KEYS.user, JSON.stringify(user))
-    this.user = user
+  setUser(user?: Me) {
+    if (user) {
+      RX.Storage.setItem(STORAGE_KEYS.user, JSON.stringify(user))
+      this.user = user
+    } else {
+      RX.Storage.removeItem(STORAGE_KEYS.user)
+      this.user = null
+    }
+
     this.trigger()
   }
 
@@ -106,8 +112,14 @@ class UserStore extends StoreBase implements IPersistableStore {
     return this.user
   }
 
-  setSession(session: string) {
-    RX.Storage.setItem(STORAGE_KEYS.token, session)
+  setSession(session?: string) {
+    if (session) {
+      RX.Storage.setItem(STORAGE_KEYS.token, session)
+    } else {
+      RX.Storage.removeItem(STORAGE_KEYS.token)
+    }
+
+    this.trigger()
   }
 
   @autoSubscribe

@@ -3,8 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Link from 'common/Link/Link'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
+import { Routes } from 'src/ts/models/common'
 import ImageSource from 'src/ts/modules/images/index.web'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import LoginForm from './LoginForm'
@@ -35,6 +37,7 @@ export default class LoginScreen extends ComponentBase<LoginScreenProps, LoginSc
           style={styles.brand}
         />
         <LoginForm />
+        <Link to={Routes.register}>Register</Link>
       </RX.View>
     )
   }

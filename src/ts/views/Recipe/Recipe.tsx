@@ -28,7 +28,7 @@ import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam, navigate } from 'src/ts/utilities'
-import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes'
+import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
 import { RecipesListQueryVariables } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
 import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
@@ -119,7 +119,9 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           {
             recipe.ingredients.map(ingredient => (
               <IngredientCard
-                ingredient={{ ...ingredient, key: String(Math.random()) }}
+                // key={ingredient.i}
+                onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
+                ingredient={ingredient}
                 size={200}
               />
             ))
@@ -147,16 +149,19 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
       <RX.View
         style={[styles.authorAndDescriptionSection.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
         <RX.View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Styles.values.spacing }}>
-          <Link to={`/${recipe.author.username}/`}>
+          <Link to={`/${recipe.author.username}`}>
             <Image
               source={recipe.author.imageUrl!.url}
               style={styles.authorAndDescriptionSection.avatar}
             />
           </Link>
+
           <RX.View style={{ [Styles.values.marginStart]: Styles.values.spacing }}>
-            <Text onPress={() => {
-            }}>{`@${recipe.author.username}`}</Text>
-            <Text type={Text.types.subtitle}>Editor at Chickanga</Text>
+            <Link to={`/${recipe.author.username}`}>
+              <Text onPress={() => {
+              }}>{`@${recipe.author.username}`}</Text>
+              <Text type={Text.types.subtitle}>Editor at Chickanga</Text>
+            </Link>
           </RX.View>
         </RX.View>
         {

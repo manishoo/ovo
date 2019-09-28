@@ -9,7 +9,11 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
 import LocationStore from 'src/ts/stores/LocationStore'
-import PublicProfileScreen from './PublicProfileScreen'
+import {
+  PublicProfileScreenQuery,
+  PublicProfileScreenQueryVariables
+} from 'src/ts/views/ProfileScreen/types/PublicProfileScreenQuery'
+import ProfileScreen from './ProfileScreen'
 
 
 export default class PublicProfileScreenContainer extends ComponentBase<RX.CommonProps, { path: string }> {
@@ -20,30 +24,28 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
 
   render() {
     return (
-      <Query
+      <Query<PublicProfileScreenQuery, PublicProfileScreenQueryVariables>
         variables={{
           username: this._username,
         }}
         query={gql`
           query PublicProfileScreenQuery($username: String, $userId: String) {
             user(userId: $userId, username: $username) {
-              ...User
+              ...ProfileUser
             }
           }
 
-          fragment User on BaseUser {
-            id
-          }
+          ${ProfileScreen.fragments.user}
         `}
       >
         {({ data, loading }) => {
           if (loading) return <RX.Text>Loading</RX.Text>
           if (!data) return null
-          if (!data.getUser) return null
+          if (!data.user) return null
 
           return (
-            <PublicProfileScreen
-              user={data.getUser}
+            <ProfileScreen
+              user={data.user}
             />
           )
         }}

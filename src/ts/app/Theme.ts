@@ -17,7 +17,7 @@ export class Theme {
       case 'dark':
       default:
       case 'light': {
-        const primary = '#00BA72'
+        const primary = '#00BA72' //#00c54f
 
         return {
           primary,
@@ -54,7 +54,7 @@ export class Theme {
           mealPlanDayName: '#fff',
           submitButtonBorderColor: '#eee',
           submitButtonBackgroundColor: '#fff',
-          navbarBackButtonColor: '#000',
+          navbarBackButtonColor: primary,
           authLoadingBg: '#fff',
           pathLine: '#D33131',
           pathDateSubtitle: '#9B9B9B',
@@ -69,7 +69,7 @@ export class Theme {
           loginModalBG: '#fff',
           // inputBorderColor: '#e3e3e3',
           termsText: '#838383',
-          checkboxFilled: '#FFDE34',
+          checkboxFilled: primary,
           mutedText: '#c0c0c0',
 
           filledButtonBG: primary,
@@ -93,10 +93,12 @@ export class Theme {
           recipeCardTimingUnitColor: '#fff',
           recipeCardTimingNumberColor: '#fff',
           recipeCardImagePlaceholderBG: '#F5F5F8',
+          recipeCardImagePlaceholderBGOnHover: '#e5e5e8',
 
-          addRecipeCardBorder: '#FDCE0B',
+          addCardBorder: '#FDCE0B',
           addRecipeCardCircleBG: '#FDCE0B',
           addRecipeCardCirclePlus: '#fff',
+          addRecipeCardText: '#fdb926',
 
           recipeIngredientUnitBG: primary,
           recipeIngredientUnitTextColor: '#fff',

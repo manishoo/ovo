@@ -29,13 +29,13 @@ export interface RecipeFormUpdateMutation_updateRecipe_timing {
   totalTime: number;
 }
 
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_thumbnail {
+  url: string;
+}
+
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_name {
   text: string;
   locale: LanguageCode;
-}
-
-export interface RecipeFormUpdateMutation_updateRecipe_ingredients_thumbnail {
-  url: string;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_description {
@@ -44,6 +44,11 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_description {
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_description {
   text: string;
   locale: LanguageCode;
 }
@@ -71,6 +76,7 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnai
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food {
   id: string;
   name: RecipeFormUpdateMutation_updateRecipe_ingredients_food_name[];
+  description: RecipeFormUpdateMutation_updateRecipe_ingredients_food_description[] | null;
   weights: RecipeFormUpdateMutation_updateRecipe_ingredients_food_weights[];
   imageUrl: RecipeFormUpdateMutation_updateRecipe_ingredients_food_imageUrl;
   thumbnailUrl: RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnailUrl;
@@ -89,12 +95,12 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_weight {
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients {
+  thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_thumbnail | null;
   name: RecipeFormUpdateMutation_updateRecipe_ingredients_name[] | null;
+  description: RecipeFormUpdateMutation_updateRecipe_ingredients_description[] | null;
   amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
-  thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_thumbnail | null;
-  description: RecipeFormUpdateMutation_updateRecipe_ingredients_description[] | null;
   food: RecipeFormUpdateMutation_updateRecipe_ingredients_food | null;
   weight: RecipeFormUpdateMutation_updateRecipe_ingredients_weight | null;
 }

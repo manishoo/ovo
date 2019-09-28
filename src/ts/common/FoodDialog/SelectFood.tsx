@@ -5,13 +5,18 @@
 
 import { useQuery } from '@apollo/react-hooks'
 import FlatButton from 'common/FlatButton/FlatButton'
+import RecipePreview from 'common/FoodDialog/components/RecipePreview'
+import { SelectFoodFood, SelectFoodFood_weights } from 'common/FoodDialog/types/SelectFoodFood'
 import {
   SelectFoodQuery,
   SelectFoodQuery_foods_foods,
   SelectFoodQuery_foods_foods_weights,
+  SelectFoodQuery_recipes_recipes,
   SelectFoodQueryVariables
 } from 'common/FoodDialog/types/SelectFoodQuery'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
+import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { useState } from 'react'
@@ -23,44 +28,49 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Translation } from 'src/ts/models/common'
-import { DishItem, Weight } from 'src/ts/models/FoodModels'
+import { FoodTypes, Weight } from 'src/ts/models/FoodModels'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import FoodPreview from './components/FoodPreview'
-// import FoodPreview from './components/FoodPreview'
+
 
 const WINDOW_MAX_WIDTH = 500
-
-enum SelectFoodMode {
-  foods = 'foods',
-  recipes = 'recipes',
-}
 
 const LIST_ITEM_HEIGHT = 50
 const INNER_CONTAINER_HEIGHT = 500
 
+export interface SelectFoodMealItem {
+  amount?: number
+  food?: SelectFoodFood
+  recipe?: RecipeCardRecipe
+  weight?: SelectFoodFood_weights
+  id: string,
+  customUnit?: string
+  gramWeight?: number
+  description?: Translation[]
+}
+
 interface SelectFoodCommonProps {
   style?: any,
   onDismiss: () => void,
-  onSubmit: (dishItem: DishItem) => any,
+  onSubmit: (mealItem: SelectFoodMealItem) => any,
+  foodTypes: FoodTypes[],
 }
 
 interface SelectFoodProps extends SelectFoodCommonProps {
   nameSearchQuery: string
-  // autoFocus: boolean,
-  // foodTypes: FoodTypes[],
-  // _onSubmit: (mealItem: DishItem, amount: number, weight?: Weight) => void,
 
   foods: SelectFoodQuery_foods_foods[],
+  recipes: SelectFoodQuery_recipes_recipes[],
   onSearch: (nameSearchQuery: string) => void,
 }
 
 interface SelectFoodState {
   width?: number,
   height?: number,
-  selectedItem?: DishItem,
+  selectedItem?: SelectFoodMealItem,
 
   weights: Weight[],
-  mode: SelectFoodMode,
+  mode: FoodTypes,
 }
 
 class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectFoodState> {
@@ -69,7 +79,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
 
     this.state = {
       weights: [],
-      mode: SelectFoodMode.foods,
+      mode: FoodTypes.food,
     }
   }
 
@@ -91,8 +101,6 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               styles.container,
               { backgroundColor: theme.colors.white },
               {
-                // flex: 1,
-                // width: this.state.width,
                 height: this.state.height,
                 maxHeight: INNER_CONTAINER_HEIGHT,
               },
@@ -126,35 +134,21 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                 {this.state.selectedItem && this._renderPreview(this.state.selectedItem)}
               </RX.Animated.View>
 
-              <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>
-                <FlatButton
-                  label={'Foods'}
-                  onPress={() => this.setState({ mode: SelectFoodMode.foods })}
-                  {...this._getModeButtonStyle(theme, SelectFoodMode.foods)}
-                />
-                <FlatButton
-                  label={'Recipes'}
-                  onPress={() => this.setState({ mode: SelectFoodMode.recipes })}
-                  {...this._getModeButtonStyle(theme, SelectFoodMode.recipes)}
-                />
+              <RX.View
+                style={{ flexDirection: 'row', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>
+                {
+                  this.props.foodTypes.map(foodType => (
+                    <FlatButton
+                      label={foodType}
+                      onPress={() => this.setState({ mode: foodType })}
+                      {...this._getModeButtonStyle(theme, foodType)}
+                    />
+                  ))
+                }
               </RX.View>
 
               {
-                (() => {
-                  return (
-                    <RX.View
-                      style={{
-                        height: INNER_CONTAINER_HEIGHT - (77 + 64),
-                      }}
-                    >
-                      <VirtualListView
-                        keyboardShouldPersistTaps
-                        itemList={this._getItemList()}
-                        renderItem={this._renderDishItem}
-                      />
-                    </RX.View>
-                  )
-                })()
+                this._renderTabContent()
               }
 
             </RX.View>
@@ -186,30 +180,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     )
   }
 
-  private _getItemList = () => {
-    const itemInfo = {
-      height: LIST_ITEM_HEIGHT,
-      template: '_mealItem',
-    }
-
-    if (this.state.mode === SelectFoodMode.foods) {
-      return this.props.foods.map((i: any) => ({
-        food: i,
-        key: i.id,
-        ...itemInfo,
-      }))
-    } else if (this.state.mode === SelectFoodMode.recipes) {
-      // this.props.recipes.map((i: any) => ({
-      //   ...i,
-      //   key: i.id,
-      //   ...itemInfo,
-      // }))
-    }
-
-    return []
-  }
-
-  private _getModeButtonStyle = (theme: Theme, itemMode: SelectFoodMode) => {
+  private _getModeButtonStyle = (theme: Theme, itemMode: FoodTypes) => {
     const { mode } = this.state
 
     return {
@@ -223,37 +194,84 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     }
   }
 
-  private _renderDishItem = (item: VirtualListViewItemInfo & DishItem) => {
-    if (item.food) {
-      return (
-        <RX.View
-          style={styles.searchResultItemContainer}
-          onPress={this._onResultPress(item)}
-        >
-          <Text translations={item.food.name} />
-          {/*<Text style={{ color: '#e4e4e4' }}>
-          {item.subtitle}
-        </Text>*/}
-        </RX.View>
-      )
-    } else if (item.recipe) {
-      return (
-        <RX.View
-          style={styles.searchResultItemContainer}
-          onPress={this._onResultPress(item)}
-        >
-          {/*<Text translations={item.name} />*/}
-          {/*<Text style={{ color: '#e4e4e4' }}>
-          {item.subtitle}
-        </Text>*/}
-        </RX.View>
-      )
+  private _renderTabContent = () => {
+    const { mode } = this.state
+
+    const itemInfo = {
+      height: LIST_ITEM_HEIGHT,
+      template: '_mealItem',
+    }
+
+    switch (mode) {
+      case FoodTypes.food:
+        return (
+          <RX.View
+            style={{
+              height: INNER_CONTAINER_HEIGHT - (77 + 64),
+            }}
+          >
+            <VirtualListView
+              key={1}
+              keyboardShouldPersistTaps
+              itemList={this.props.foods.map(f => ({
+                id: f.id,
+                food: f,
+                key: f.id,
+                ...itemInfo,
+              }))}
+              renderItem={this._renderFoodItem}
+            />
+          </RX.View>
+        )
+      case FoodTypes.recipe:
+        return (
+          <RX.View
+            style={{
+              height: INNER_CONTAINER_HEIGHT - (77 + 64),
+            }}
+          >
+            <VirtualListView
+              key={2}
+              keyboardShouldPersistTaps
+              itemList={this.props.recipes.map(r => ({
+                id: r.id,
+                recipe: r,
+                key: r.id,
+                ...itemInfo,
+              }))}
+              renderItem={this._renderRecipeItem}
+            />
+          </RX.View>
+        )
     }
 
     throw new Error('no food or recipe')
   }
 
-  private _renderPreview = (item: DishItem) => {
+  private _renderRecipeItem = (item: VirtualListViewItemInfo & SelectFoodMealItem) => (
+    <RX.View
+      style={styles.searchResultItemContainer}
+      onPress={this._onResultPress(item)}
+    >
+      <Text translations={item.recipe.title} />
+    </RX.View>
+  )
+
+  private _renderFoodItem = (item: VirtualListViewItemInfo & SelectFoodMealItem) => (
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <RX.View
+          style={styles.searchResultItemContainer}
+          onPress={this._onResultPress(item)}
+        >
+          <Text translations={item.food.name} />
+          <Text translations={item.food.description} style={{[Styles.values.marginStart]: Styles.values.spacing / 2, color: theme.colors.subtitle}} />
+        </RX.View>
+      )}
+    </ThemeContext.Consumer>
+  )
+
+  private _renderPreview = (item: SelectFoodMealItem) => {
     if (!item) return null
 
     if (item.food) {
@@ -262,9 +280,19 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
           item={item}
           inputRef={(ref: any) => this.previewInput = ref}
           onDismiss={this._cancelSelection}
-          onSelectPress={(weights) => {
-          }/*this.setState({ selectDialogVisible: true, weights })*/}
-          onSubmit={this._onSubmit}
+          onSubmit={this._onFoodSubmit}
+          height={INNER_CONTAINER_HEIGHT}
+        />
+      )
+    }
+
+    if (item.recipe) {
+      return (
+        <RecipePreview
+          onDismiss={this._cancelSelection}
+          inputRef={(ref: any) => this.previewInput = ref}
+          recipe={item.recipe}
+          onSubmit={this._onRecipeSubmit}
           height={INNER_CONTAINER_HEIGHT}
         />
       )
@@ -273,7 +301,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     return null
   }
 
-  private _onResultPress = (item: DishItem) => async () => {
+  private _onResultPress = (item: SelectFoodMealItem) => async () => {
     // showFoodPreviewModal({
     //   item,
     //   inputRef: (ref: any) => this.previewInput = ref,
@@ -309,29 +337,28 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     })
   }
 
-  private _onSubmit = (food: SelectFoodQuery_foods_foods, amount: number, weight?: SelectFoodQuery_foods_foods_weights, customUnit?: string, gramWeight?: number, description?: Translation[]) => {
+  private _onFoodSubmit = (food: SelectFoodQuery_foods_foods, amount: number, weight?: SelectFoodQuery_foods_foods_weights, customUnit?: string, gramWeight?: number, description?: Translation[]) => {
     if (!this.state.selectedItem) return
 
-    // const id = String(Math.random())
     this.props.onSubmit({
-        food,
-        amount,
-        weight,
-        customUnit: weight ? undefined : customUnit,
-        gramWeight: weight ? undefined : gramWeight,
-        description,
-      }
-      //   {
-      //   title: food.name,
-      //   weights: food.weights || [],
-      //   key: id,
-      //   type: 'food',
-      //   thumbnail: food.thumbnail,
-      //   id: food.id,
-      //   subtitle: food.foodGroup.join(', '),
-      //   slug: food.id,
-      // }, amount, weight
-    )
+      id: String(Math.random()),
+      food,
+      amount,
+      weight,
+      customUnit: weight ? undefined : customUnit,
+      gramWeight: weight ? undefined : gramWeight,
+      description,
+    })
+  }
+
+  private _onRecipeSubmit = (recipe: SelectFoodQuery_recipes_recipes, serving: number) => {
+    if (!this.state.selectedItem) return
+
+    this.props.onSubmit({
+      id: String(Math.random()),
+      recipe,
+      amount: serving,
+    })
   }
 
   textInput: any
@@ -348,12 +375,15 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
           ...SelectFoodFood
         }
       }
+      recipes (nameSearchQuery: $nameSearchQuery) {
+        recipes { ...RecipeCardRecipe }
+      }
     }
-    
+
     ${SelectFoodContainer.fragments.food}
+    ${RecipeCard.fragments.recipe}
   `, {
     skip: nameSearchQuery.length === 0,
-    // fetchPolicy: 'network-only',
     variables: {
       nameSearchQuery
     },
@@ -365,6 +395,7 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
       {...props}
       nameSearchQuery={nameSearchQuery}
       foods={(data && data.foods && data.foods.foods) || []}
+      recipes={(data && data.recipes && data.recipes.recipes) || []}
       onSearch={searchQuery => setNameSearchQuery(searchQuery)}
     />
   )
@@ -375,6 +406,7 @@ SelectFoodContainer.fragments = {
     fragment SelectFoodFood on Food {
       id
       name { text locale }
+      description { text locale }
       weights {
         amount
         gramWeight
@@ -424,11 +456,12 @@ const styles = {
     height: 20,
   }),
   searchResultItemContainer: RX.Styles.createViewStyle({
+    flexDirection: 'row',
     height: LIST_ITEM_HEIGHT,
     padding: Styles.values.spacing / 2,
     borderBottomWidth: 1,
     borderColor: '#eee',
-    justifyContent: 'center',
+    alignItems: 'center',
     cursor: 'pointer',
   }),
   createNewFoodButton: RX.Styles.createViewStyle({

@@ -7,6 +7,7 @@ import {
   SelectFoodQuery_foods_foods,
   SelectFoodQuery_foods_foods_weights
 } from 'common/FoodDialog/types/SelectFoodQuery'
+import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import { Translation } from 'src/ts/models/common'
 import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import { Me_height, Me_imageUrl, Me_weight } from 'src/ts/views/Register/types/Me'
@@ -132,10 +133,10 @@ export interface RecipeUnit {
   eaters: Eater[]
 }
 
-export interface DishItem {
+export interface MealItem {
   amount?: number
   food?: SelectFoodQuery_foods_foods
-  recipe?: Recipe
+  recipe?: RecipeCardRecipe
   weight?: SelectFoodQuery_foods_foods_weights
   id?: string,
   customUnit?: string
@@ -144,7 +145,7 @@ export interface DishItem {
 
   // DEPRECATED
   title?: string,
-  type?: 'recipe' | 'food' | 'dish',
+  type?: 'recipe' | 'food' | 'meal',
   unitDescription?: string,
   subtitle?: string,
   thumbnail?: Image,
@@ -162,7 +163,7 @@ export interface Meal {
   availableTime: number
   mealFor?: number
   cook: boolean
-  items: DishItem[]
+  items: MealItem[]
 }
 
 export interface Recipe extends RecipesListQuery_recipes_recipes {
@@ -241,8 +242,9 @@ export interface Image {
 }
 
 export enum FoodTypes {
-  food = 'food',
-  recipe = 'recipe',
+  food = 'Foods',
+  recipe = 'Recipes',
+  meal = 'Meals',
 }
 
 export interface Tag {

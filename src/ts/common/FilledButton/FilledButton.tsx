@@ -112,7 +112,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    borderRadius: 8,
+    borderRadius: 100,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',

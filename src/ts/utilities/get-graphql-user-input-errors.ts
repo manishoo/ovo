@@ -16,12 +16,11 @@ export default function getGraphQLUserInputErrors(error?: ApolloError) {
       if (e.extensions) {
         switch (e.extensions.code) {
           case 'BAD_USER_INPUT':
-          default:
             fieldErrors = e.extensions.exception.fieldErrors
         }
       }
     })
   }
 
-  return fieldErrors
+  return fieldErrors || {}
 }

@@ -6,6 +6,7 @@
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -14,30 +15,33 @@ import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import UserStore from 'src/ts/stores/UserStore'
 import { navigate } from 'src/ts/utilities'
-import ProfileInfo from 'src/ts/views/ProfileScreen/components/ProfileInfo'
-import ProfileRecipes from 'src/ts/views/ProfileScreen/components/ProfileRecipes'
-import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
+import { ProfileInfoUser } from 'src/ts/views/ProfileScreen/components/types/ProfileInfoUser'
 import Avatar from './components/Avatar'
+import ProfileInfo from './components/ProfileInfo'
+import ProfileMeals from './components/ProfileMeals/ProfileMeals'
+import ProfileRecipes from './components/ProfileRecipes/ProfileRecipes'
+import { RecipesListQuery_recipes_recipes } from './types/RecipesListQuery'
 
+
+interface ProfileScreenProps extends RX.CommonProps {
+  user: ProfileInfoUser & {id: string},
+  isMyProfile?: boolean,
+}
 
 interface ProfileState {
   height: number,
   width: number,
   recipes: RecipesListQuery_recipes_recipes[],
-  me: Me,
-  activeTab: number
+  activeTab: number,
 }
 
-export default class ProfileScreen extends ComponentBase<RX.CommonProps, ProfileState> {
-  constructor(props: RX.CommonProps) {
+export default class ProfileScreen extends ComponentBase<ProfileScreenProps, ProfileState> {
+  constructor(props: ProfileScreenProps) {
     super(props)
 
     this.state = {
       activeTab: 0,
-      me: UserStore.getUser(),
       width: ResponsiveWidthStore.getHeight(),
       height: ResponsiveWidthStore.getHeight(),
       recipes: [],
@@ -46,16 +50,21 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
 
   protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileState> | undefined {
     return {
-      me: UserStore.getUser(),
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
       recipes: initialBuild ? [] : this.state.recipes,
     }
   }
 
-  private _recipesListHeight: number | undefined
+  componentWillMount() {
+    if (this.props.isMyProfile) {
+      this._loadStateFromStorage()
+    }
+  }
 
   render() {
+    const { user } = this.props
+
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -79,28 +88,31 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
             }
 
             <ProfileInfo
-              me={this.state.me}
+              user={user}
+              isMyProfile={this.props.isMyProfile}
             />
 
-            <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing / 2 }}>
+            <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing * 2 }}>
               <FilledButton
                 label={getLocalizedText('Recipes')}
-                onPress={() => this.setState({ activeTab: 0 })}
+                onPress={() => this.setState({ activeTab: 0 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
+                style={{
+                  padding: 16
+                }}
+                fontSize={16}
                 containerStyle={styles.tabButton}
               />
               <FilledButton
                 label={getLocalizedText('Meals')}
-                onPress={() => this.setState({ activeTab: 1 })}
+                onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
                 mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
+                style={{
+                  padding: 16
+                }}
+                fontSize={16}
                 containerStyle={styles.tabButton}
               />
-              {/*<FilledButton
-                label={getLocalizedText('Collections')}
-                onPress={() => this.setState({ activeTab: 2 })}
-                mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
-                containerStyle={styles.tabButton}
-              />*/}
             </RX.View>
 
             <RX.View style={styles.innerContainer}>
@@ -115,32 +127,45 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
   }
 
   private _renderTabContent = () => {
+    const { user } = this.props
+
     switch (this.state.activeTab) {
       case 0:
         return (
           <ProfileRecipes
+            showAddRecipe={this.props.isMyProfile}
+            userId={user.id}
             ref={ref => this._recipes = ref}
-            onHeightChange={this._onHeightChange}
+            onHeightChange={this._onRecipesHeightChange}
           />
         )
       case 1:
-        return null
+        return (
+          <ProfileMeals
+            showAddMeal={this.props.isMyProfile}
+            userId={user.id}
+            ref={ref => this._meals = ref}
+            onHeightChange={this._onMealsHeightChange}
+          />
+        )
       default:
         return null
     }
   }
 
-  private _onHeightChange = (height: number) => {
+  private _onRecipesHeightChange = (height: number) => {
     this._recipesListHeight = height
-
-    this._checkIfRecipesHeightWasShorter()
-  }
-
-  private _checkIfRecipesHeightWasShorter = () => {
-    const { height } = this.state
 
     if (height > this._recipesListHeight) {
       this._recipes.fetchMore()
+    }
+  }
+
+  private _onMealsHeightChange = (height: number) => {
+    this._mealsListHeight = height
+
+    if (height > this._mealsListHeight) {
+      this._meals.fetchMore()
     }
   }
 
@@ -168,6 +193,10 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
     switch (activeTab) {
       case 2:
       case 1:
+        if ((bottomOfViewPoint + OFFSET) >= this._mealsListHeight) {
+          onReachEnd()
+        }
+        break
       case 0:
       default:
         if ((bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
@@ -182,13 +211,56 @@ export default class ProfileScreen extends ComponentBase<RX.CommonProps, Profile
     switch (activeTab) {
       case 2:
       case 1:
+        this._meals.fetchMore()
+        break
       case 0:
       default:
         this._recipes.fetchMore()
     }
   }
 
+  private _saveStateToStorage = () => {
+    const { activeTab } = this.state
+
+    RX.Storage.setItem(ProfileScreen.storageKeys.activeTab, String(activeTab))
+  }
+
+  private _loadStateFromStorage = async () => {
+    const activeTabStringified = await RX.Storage.getItem(ProfileScreen.storageKeys.activeTab)
+
+    let activeTab
+
+    if (activeTabStringified) {
+      activeTab = Number(activeTabStringified)
+    }
+
+    if (activeTab) {
+      this.setState({
+        activeTab,
+      })
+    }
+  }
+
+  static storageKeys = {
+    activeTab: '_ProfileScreen_activeTab'
+  }
+
+  static fragments = {
+    user: gql`
+      fragment ProfileUser on BaseUser {
+        id
+        ...ProfileInfoUser
+      }
+      
+      ${ProfileInfo.fragments.user}
+    `
+  }
+
   private _recipes: any
+  private _recipesListHeight: number | undefined
+
+  private _meals: any
+  private _mealsListHeight: number | undefined
 }
 
 const styles = {

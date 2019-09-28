@@ -1,5 +1,5 @@
 /*
- * ProfileRecipesList.tsx
+ * ProfileRecipes.tsx
  * Copyright: Ouranos Studio 2019
  */
 
@@ -10,7 +10,7 @@ import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import { UserRole } from 'src/ts/models/global-types'
 import UserStore from 'src/ts/stores/UserStore'
-import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipesFragments'
+import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
 import {
   RecipesListQuery,
   RecipesListQuery_recipes_recipes,
@@ -20,8 +20,9 @@ import { Me } from 'src/ts/views/Register/types/Me'
 
 
 interface ProfileRecipesProps {
-  // userId: string,
+  userId: string,
   onHeightChange: (height: number) => void,
+  showAddRecipe?: boolean,
 }
 
 interface ProfileRecipesState {
@@ -48,7 +49,7 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
     return (
       <RecipesList
         recipes={this.state.recipes}
-        showAddRecipe
+        showAddRecipe={this.props.showAddRecipe}
         hideAvatar={this.state.me.role === UserRole.user}
         onLayout={e => this.props.onHeightChange(e.height)}
       />
@@ -72,7 +73,7 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
           query: PROFILE_RECIPES_QUERY,
           fetchPolicy: 'cache-first',
           variables: {
-            userId: this.state.me.id,
+            userId: this.props.userId,
             lastId
           },
         })

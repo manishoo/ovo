@@ -31,7 +31,7 @@ export default class SearchResultFilter extends RX.Component<SearchResultFilterP
       >
         <RX.View style={{flexDirection: 'row'}}>
           <FilledButton label={'Calories'} onPress={() => this.setState({ activeTab: 2 })} mode={activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}/>
-          <FilledButton label={'Dish Types'} onPress={() => this.setState({ activeTab: 3 })} mode={activeTab === 3 ? FilledButton.mode.primary : FilledButton.mode.default}/>
+          <FilledButton label={'Meal Types'} onPress={() => this.setState({ activeTab: 3 })} mode={activeTab === 3 ? FilledButton.mode.primary : FilledButton.mode.default}/>
         </RX.View>
 
         <RX.View>

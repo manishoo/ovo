@@ -48,6 +48,11 @@ export interface PublicRecipe_ingredients_food_name {
   locale: LanguageCode;
 }
 
+export interface PublicRecipe_ingredients_food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface PublicRecipe_ingredients_food_weights_name {
   text: string;
   locale: LanguageCode;
@@ -71,6 +76,7 @@ export interface PublicRecipe_ingredients_food_thumbnailUrl {
 export interface PublicRecipe_ingredients_food {
   id: string;
   name: PublicRecipe_ingredients_food_name[];
+  description: PublicRecipe_ingredients_food_description[] | null;
   weights: PublicRecipe_ingredients_food_weights[];
   imageUrl: PublicRecipe_ingredients_food_imageUrl;
   thumbnailUrl: PublicRecipe_ingredients_food_thumbnailUrl;

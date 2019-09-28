@@ -9,13 +9,13 @@ import ExploreSearch from 'src/ts/views/ExploreSearch/ExploreSearch'
 import { SearchResultQueryVariables } from 'src/ts/views/SearchResult/types/SearchResultQuery'
 
 
-const AppSearchComponent = ({ onSubmit }) => {
+const AppSearchComponent = ({ onSubmit, inputRef }) => {
   const defaultState = { nameSearchQuery: '' }
   const [variables, setVariables] = useState<SearchResultQueryVariables>(defaultState)
 
   return (
     <ExploreSearch
-      ref={(ref: any) => this._searchInput = ref}
+      ref={inputRef}
       variables={{
         nameSearchQuery: variables.nameSearchQuery,
       }}

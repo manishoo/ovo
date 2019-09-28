@@ -4,25 +4,29 @@
  */
 
 import { showFoodPreviewModal } from 'common/FoodDialog/components/FoodPreview'
+import SelectFood from 'common/FoodDialog/SelectFood'
 import Image from 'common/Image/Image'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { IngredientWithKey } from 'src/ts/views/RecipeForm/RecipeForm'
+import { IngredientCardIngredient } from './types/IngredientCardIngredient'
 
-// const INGREDIENT_CARD_WIDTH = 100
-// const INGREDIENT_CARD_HEIGHT = 100
+
 const CLEAR_ICON_DIMENSION = 20
 
 interface IngredientCardProps {
   style?: any,
-  ingredient: IngredientWithKey,
-  onIngredientChange?: (ingredient: IngredientWithKey) => void,
+  ingredient: IngredientCardIngredient,
+  onIngredientChange?: (ingredient: IngredientCardIngredient) => void,
   onDelete?: () => void,
-  size: number
+  onPress?: (e: RX.Types.SyntheticEvent) => void,
+  size: number,
+  hideUnits?: boolean,
+  hideTitle?: boolean,
 }
 
 export default class IngredientCard extends RX.Component<IngredientCardProps> {
@@ -33,9 +37,11 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.Animated.View
+            onMouseEnter={this._onHoverStart}
+            onMouseLeave={this._onHoverEnd}
             style={[
               styles.container,
-              { width: this.props.size, paddingTop: this.props.size },
+              { width: this.props.size },
               this._containerAnimationStyle,
               style,
             ]}
@@ -43,53 +49,83 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
             {/**
              * Food Image
              * */}
+            <RX.View
+              onPress={this.props.onPress}
+              style={{
+                width: this.props.size,
+                height: this.props.size,
+                borderRadius: this.props.size / 20,
+                backgroundColor: theme.colors.recipeCardImagePlaceholderBG,
+              }}
+            >
+              {
+                ingredient.thumbnail &&
+                <RX.Animated.Image
+                  source={ingredient.thumbnail.url}
+                  style={[styles.image, this._previewAnimatedStyle]}
+                  resizeMode={'cover'}
+                />
+              }
+            </RX.View>
+            {/*
             <Image
               source={ingredient.thumbnail ? ingredient.thumbnail.url : ''}
               style={[styles.image, { height: this.props.size }]}
             />
+            */}
 
             {/**
              * Food name
              * */}
-            <Text translations={ingredient.name!} style={styles.name} />{/*FIXME remove !*/}
-            {ingredient.description &&
-            <Text translations={ingredient.description} style={{ color: theme.colors.subtitle, marginBottom: 5, }} />}
+            {
+              !this.props.hideTitle &&
+              <>
+                <Text translations={ingredient.name!} style={styles.name} />{/*FIXME remove !*/}
+                {ingredient.description &&
+                <Text translations={ingredient.description}
+                      style={{ color: theme.colors.subtitle, marginBottom: 5, }} />}
+              </>
+            }
 
             {/**
              * Food unit
              * */}
-            <RX.View
-              onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
-              style={[styles.unitWrapper, {
-                cursor: this.props.onIngredientChange ? 'pointer' : 'default',
-                backgroundColor: theme.colors.recipeIngredientUnitBG
-              }]}
-            >
-              <Text style={[{
-                color: theme.colors.recipeIngredientUnitTextColor,
-                fontSize: Styles.fontSizes.size12
-              }]}>{ingredient.amount}</Text>
-              {
-                ingredient.weight ?
-                  <Text
-                    translations={ingredient.weight.name}
-                    style={[
-                      styles.unitText,
-                      {
-                        color: theme.colors.recipeIngredientUnitTextColor,
-                      }
-                    ]}
-                  /> :
-                  <Text
-                    style={[
-                      styles.unitText,
-                      {
-                        color: theme.colors.recipeIngredientUnitTextColor,
-                      }
-                    ]}
-                  >{ingredient.customUnit || getLocalizedText('g')}</Text>
-              }
-            </RX.View>
+            {
+              !this.props.hideUnits &&
+              <RX.View
+                onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
+                style={[styles.unitWrapper, {
+                  cursor: this.props.onIngredientChange ? 'pointer' : 'default',
+                  backgroundColor: theme.colors.recipeIngredientUnitBG
+                }]}
+              >
+                <Text style={[{
+                  color: theme.colors.recipeIngredientUnitTextColor,
+                  fontSize: Styles.fontSizes.size12
+                }]}>{ingredient.amount}</Text>
+                {
+                  ingredient.weight ?
+                    <Text
+                      translations={ingredient.weight.name}
+                      style={[
+                        styles.unitText,
+                        {
+                          color: theme.colors.recipeIngredientUnitTextColor,
+                        }
+                      ]}
+                    /> :
+                    <Text
+                      style={[
+                        styles.unitText,
+                        {
+                          color: theme.colors.recipeIngredientUnitTextColor,
+                        }
+                      ]}
+                    >{ingredient.customUnit || getLocalizedText('g')}</Text>
+                }
+              </RX.View>
+            }
+
 
             {/**
              * Delete button
@@ -138,6 +174,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
   private _handleUnitPress = () => {
     showFoodPreviewModal({
       item: {
+        id: String(Math.random()),
         amount: this.props.ingredient.amount,
         food: this.props.ingredient.food!,
         weight: this.props.ingredient.weight || undefined,
@@ -147,7 +184,6 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
       },
       inputRef: () => null,
       onDismiss: () => null,
-      onSelectPress: () => null,
       onSubmit: ((food, amount, weight, customUnit, gramWeight, description) => {
         this.props.onIngredientChange!({
           ...this.props.ingredient,
@@ -164,32 +200,74 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
     return
   }
 
+  private _setUI = (isHovering: boolean) => {
+    RX.Animated.timing(this._previewScaleAnimatedValue, {
+      toValue: isHovering ? 1.1 : 1,
+      duration: 500,
+    }).start()
+  }
+
+  private _onHoverStart = () => {
+    this._setUI(true)
+  }
+
+  private _onHoverEnd = () => {
+    this._setUI(false)
+  }
+
+  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ scale: this._previewScaleAnimatedValue }]
+  })
   private _containerAnimatedScale = RX.Animated.createValue(0)
   private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{
       scale: this._containerAnimatedScale
     }]
   })
+
+  static fragments = {
+    ingredient: gql`
+      fragment IngredientCardIngredient on Ingredient {
+        thumbnail {url}
+        name {text locale}
+        description {text locale}
+        amount
+        customUnit
+        gramWeight
+        food { ...SelectFoodFood }
+        weight {
+          amount
+          gramWeight
+          id
+          name { text locale }
+        }
+      }
+
+      ${SelectFood.fragments.food}
+    `
+  }
 }
 
 const styles = {
   container: RX.Styles.createViewStyle({
     position: 'relative',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    cursor: 'pointer',
   }),
   name: RX.Styles.createTextStyle({
     marginVertical: Styles.values.spacing / 4,
   }),
   image: RX.Styles.createImageStyle({
-    // width: INGREDIENT_CARD_WIDTH,
-    // height: INGREDIENT_CARD_HEIGHT,
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#FAFAFA',
-    borderRadius: 8,
+    bottom: 0,
+    // backgroundColor: '#FAFAFA',
+    // borderRadius: 8,
   }),
+
   clearIcon: RX.Styles.createImageStyle({
     width: CLEAR_ICON_DIMENSION,
     height: CLEAR_ICON_DIMENSION,
@@ -200,6 +278,7 @@ const styles = {
     [Styles.values.start]: Styles.values.spacing / 2,
     cursor: 'pointer',
   }),
+
   unitWrapper: RX.Styles.createViewStyle({
     padding: 5,
     paddingHorizontal: 8,

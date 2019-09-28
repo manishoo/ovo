@@ -48,6 +48,11 @@ export interface RecipeQuery_recipe_ingredients_food_name {
   locale: LanguageCode;
 }
 
+export interface RecipeQuery_recipe_ingredients_food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface RecipeQuery_recipe_ingredients_food_weights_name {
   text: string;
   locale: LanguageCode;
@@ -71,6 +76,7 @@ export interface RecipeQuery_recipe_ingredients_food_thumbnailUrl {
 export interface RecipeQuery_recipe_ingredients_food {
   id: string;
   name: RecipeQuery_recipe_ingredients_food_name[];
+  description: RecipeQuery_recipe_ingredients_food_description[] | null;
   weights: RecipeQuery_recipe_ingredients_food_weights[];
   imageUrl: RecipeQuery_recipe_ingredients_food_imageUrl;
   thumbnailUrl: RecipeQuery_recipe_ingredients_food_thumbnailUrl;

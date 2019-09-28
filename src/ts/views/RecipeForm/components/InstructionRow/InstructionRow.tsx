@@ -4,6 +4,7 @@
  */
 
 import IntlInput from 'common/Input/IntlInput'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
@@ -22,6 +23,7 @@ interface IngredientRowProps {
   onEnterPressed: (instruction: RecipesListQuery_recipes_recipes_instructions) => void,
   onDeletePressed: (instruction: RecipesListQuery_recipes_recipes_instructions) => void,
   onDelete: (step: number) => void,
+  step: number,
 }
 
 export default class InstructionRow extends RX.Component<IngredientRowProps> {
@@ -47,6 +49,7 @@ export default class InstructionRow extends RX.Component<IngredientRowProps> {
                   ...this.props.instruction,
                   text: translations,
                 })}
+                placeholder={this.props.step === 1 && getLocalizedText('e.g. Cook the Rice...')}
                 returnKeyType={'done'}
                 style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
                 onKeyPress={e => {

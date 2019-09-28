@@ -22,13 +22,18 @@ module.exports = {
     includes: [
       './src/ts/views/Register/*',
       './src/ts/views/LoginForm/*',
-      './src/ts/views/ProfileScreen/*',
+      './src/ts/views/ProfileScreen/**/*',
       './src/ts/views/RecipeForm/**/*',
       './src/ts/views/Recipe/*',
       './src/ts/views/Login/*',
       './src/ts/views/SettingsScreen/*',
+      './src/ts/views/SearchResult/*',
+      './src/ts/views/MealForm/*',
+      './src/ts/views/MealScreen/*',
 
-      './src/ts/common/FoodDialog/*',
+      './src/ts/common/FoodDialog/**/*',
+      './src/ts/common/RecipesList/**/*',
+      './src/ts/common/recipe/**/*',
     ],
   }
 }

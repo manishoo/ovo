@@ -7,7 +7,7 @@ import moment from 'moment'
 import RX from 'reactxp'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Event, Meal, DishItem } from 'src/ts/models/FoodModels'
+import { Event, Meal, MealItem } from 'src/ts/models/FoodModels'
 import { Routes } from 'src/ts/models/common'
 import { fullHeight, navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
 
@@ -133,7 +133,7 @@ export default class EventComponent extends RX.Component<EventProps> {
 				style={[styles.meal, { width: pureDimension, height: pureDimension }, { transform: [{ scale: relativeSize }] }]}
 			>
 				{
-					meal.items.map((mealItem: DishItem, index: number) => {
+					meal.items.map((mealItem: MealItem, index: number) => {
 						return (
 							<RX.Animated.View
 								style={{

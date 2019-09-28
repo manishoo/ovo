@@ -12,6 +12,7 @@ import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
 import IntlInput from 'common/Input/IntlInput'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Navbar from 'common/Navbar/Navbar'
 import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
 import Select from 'common/Select/Select'
 import Text from 'common/Text/Text'
@@ -23,7 +24,7 @@ import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { DishItem, FoodTypes, Recipe, User } from 'src/ts/models/FoodModels'
+import { FoodTypes, MealItem, User } from 'src/ts/models/FoodModels'
 import {
   IngredientInput,
   InstructionInput,
@@ -36,13 +37,9 @@ import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
-import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes'
-import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipesFragments'
-import {
-  RecipesListQuery_recipes_recipes,
-  RecipesListQuery_recipes_recipes_ingredients,
-  RecipesListQuery_recipes_recipes_instructions
-} from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
+import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
+import { RecipesListQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import { RecipeFormExtra } from 'src/ts/views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
 import {
   RecipeFormExtraUpdateMutation,
@@ -50,23 +47,28 @@ import {
 } from 'src/ts/views/RecipeForm/components/RecipeFormExtra/types/RecipeFormExtraUpdateMutation'
 import InstructionRow from './components/InstructionRow/InstructionRow'
 import { RecipeFormCreateMutation, RecipeFormCreateMutationVariables } from './types/RecipeFormCreateMutation'
-import { RecipeFormQuery, RecipeFormQueryVariables } from './types/RecipeFormQuery'
+import {
+  RecipeFormQuery,
+  RecipeFormQuery_recipe,
+  RecipeFormQuery_recipe_ingredients,
+  RecipeFormQueryVariables
+} from './types/RecipeFormQuery'
 import { RecipeFormUpdateMutationVariables } from './types/RecipeFormUpdateMutation'
 
 
 interface RecipeFormProps {
   style?: any,
-  recipe?: Recipe,
+  recipe?: RecipeFormQuery_recipe,
   fieldErrors: { [k: string]: string }
   onCreate: (variables: RecipeFormCreateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormCreateMutation>>,
   onUpdate: (variables: RecipeFormUpdateMutationVariables, userId: string) => Promise<any>,
 }
 
-export type IngredientWithKey = (RecipesListQuery_recipes_recipes_ingredients & { key: string })
+export type IngredientWithKey = (RecipeFormQuery_recipe_ingredients & { key: string })
 
 interface RecipeFormState {
   ingredientModalOpen: boolean,
-  recipe: Omit<RecipesListQuery_recipes_recipes, 'ingredients'> & { ingredients: IngredientWithKey[] },
+  recipe: Omit<RecipeFormQuery_recipe, 'ingredients'> & { ingredients: IngredientWithKey[] },
   slugEdited: boolean,
   coverImagePreview?: any,
   difficulty?: string,
@@ -161,6 +163,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               ref: ref => this._scrollView = ref,
             }}
           >
+            <Navbar title={getLocalizedText('Create Recipe')} />
             {this._renderFormContent(theme)}
             {this._renderFormExtraContent()}
           </CenterAlignedPageView>
@@ -209,7 +212,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <IntlInput
           autoFocus
           label={getLocalizedText('Name')}
-          placeholder={getLocalizedText('e.g Easy Sesame Chicken')}
+          placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
           translations={this.state.recipe.title || []}
           errorMessage={fieldErrors['title']}
           onTranslationsChange={(title) => this.setState(prevState => ({
@@ -237,6 +240,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
                 size={200}
                 ingredient={ingredient}
                 onDelete={this._onIngredientDelete(index)}
+                onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
                 onIngredientChange={this._onIngredientChange}
                 style={{
                   [Styles.values.marginEnd]: Styles.values.spacing,
@@ -251,7 +255,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
          * */}
         <Input
           label={getLocalizedText('Ingredients')}
-          placeholder={getLocalizedText('Search foods')}
+          placeholder={getLocalizedText('e.g. Rice')}
           onFocus={() => showFoodModal({
             autoFocus: true,
             foodTypes: [FoodTypes.food],
@@ -270,6 +274,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           this.state.recipe.instructions.map(instruction => (
             <InstructionRow
               key={instruction.step}
+              step={instruction.step}
               instruction={instruction}
               onEnterPressed={this._onInstructionAdd}
               onDeletePressed={ins => this._handleInstructionDelete(ins)}
@@ -467,18 +472,18 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _onIngredientAdd = (dishItem: DishItem) => {
+  private _onIngredientAdd = (mealItem: MealItem) => {
     const ingredients: IngredientWithKey[] = [...this.state.recipe.ingredients]
     ingredients.push({
       key: String(Math.random()),
-      amount: dishItem.amount!,
-      food: dishItem.food!,
-      name: dishItem.food!.name,
-      customUnit: dishItem.customUnit || null,
-      description: dishItem.description || [],
-      gramWeight: dishItem.gramWeight || null,
-      thumbnail: dishItem.food!.thumbnailUrl || null,
-      weight: dishItem.weight || null,
+      amount: mealItem.amount!,
+      food: mealItem.food!,
+      name: mealItem.food!.name,
+      customUnit: mealItem.customUnit || null,
+      description: mealItem.description || [],
+      gramWeight: mealItem.gramWeight || null,
+      thumbnail: mealItem.food!.thumbnailUrl || null,
+      weight: mealItem.weight || null,
     })
     this.setState(prevState => ({
       recipe: {
@@ -820,6 +825,7 @@ export default function (props: {}) {
 
 const styles = {
   container: RX.Styles.createViewStyle({
+    flex: 1,
     padding: Styles.values.spacing * 2,
     // paddingTop: Styles.values.navBarHeight,
     // flex: 1,

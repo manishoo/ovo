@@ -28,7 +28,7 @@
 // export interface SearchResultItem {
 // 	id: string,
 // 	title: string,
-// 	type: 'recipe' | 'food' | 'dish',
+// 	type: 'recipe' | 'food' | 'meal',
 // 	subtitle?: string,
 // 	imageUrl?: string,
 // 	height: number,
@@ -124,7 +124,7 @@
 //
 // 					</RX.View>
 // 				)
-// 			case 'dish':
+// 			case 'meal':
 // 				return null
 // 		}
 // 	}
@@ -197,7 +197,7 @@
 // 																	labelStyle={{ color: theme.colors.secondary, fontSize: 16 }}
 // 																/>,
 // 																<FlatButton
-// 																	label={'Create A New Dish'}
+// 																	label={'Create A New Meal'}
 // 																	onPress={() => {
 // 																		//
 // 																	}}

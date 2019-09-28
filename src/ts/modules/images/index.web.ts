@@ -48,7 +48,7 @@ class ImageSource implements ImageSourceBase {
 	Clear = AppConfig.getImagePath('Clear.svg')
 	More = AppConfig.getImagePath('More.png')
 
-	Back = AppConfig.getImagePath('Back.png')
+	Back = AppConfig.getImagePath('Back.svg')
 	ShoppingList = AppConfig.getImagePath('ShoppingList.png')
 	Finger = AppConfig.getImagePath('Finger.png')
 

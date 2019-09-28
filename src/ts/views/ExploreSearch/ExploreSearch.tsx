@@ -40,7 +40,7 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
             ...this.props.variables,
             nameSearchQuery,
           }) : () => {}}
-          placeholder={getLocalizedText('SearchRecipes')}
+          placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
           onKeyPress={(e) => {
             if (e.keyCode === Keys.Return) {
               if (this.props.onSubmit) {

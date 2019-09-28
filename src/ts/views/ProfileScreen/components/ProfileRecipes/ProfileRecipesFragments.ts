@@ -1,8 +1,9 @@
 /*
- * SearchResultRecipes.ts
+ * ProfileRecipesFragments.ts
  * Copyright: Ouranos Studio 2019
  */
 
+import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
 import gql from 'graphql-tag'
 
 
@@ -29,29 +30,7 @@ const ProfileRecipesFragments = {
           cookTime
           totalTime
         }
-        ingredients {
-          name {
-            text
-            locale
-          }
-          amount
-          customUnit
-          gramWeight
-          thumbnail {
-            url
-          }
-          description {
-            text
-            locale
-          }
-          food {...myRecipeFood}
-          weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-        }
+        ingredients { ...IngredientCardIngredient }
         instructions {
           step
           text { text locale }
@@ -66,23 +45,9 @@ const ProfileRecipesFragments = {
         updatedAt
       }
 
-      ${this.myRecipeFood}
+      ${IngredientCard.fragments.ingredient}
     `
-  },
-  myRecipeFood: gql`
-    fragment myRecipeFood on Food {
-      id
-      name { text locale }
-      weights {
-        amount
-        gramWeight
-        id
-        name { text locale }
-      }
-      imageUrl {url}
-      thumbnailUrl {url}
-    }
-  `
+  }
 }
 
 export {

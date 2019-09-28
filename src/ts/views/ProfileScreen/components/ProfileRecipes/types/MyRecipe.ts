@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeDifficulty } from "./../../../models/global-types";
+import { LanguageCode, RecipeDifficulty } from "./../../../../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: MyRecipe
@@ -29,13 +29,13 @@ export interface MyRecipe_timing {
   totalTime: number;
 }
 
+export interface MyRecipe_ingredients_thumbnail {
+  url: string;
+}
+
 export interface MyRecipe_ingredients_name {
   text: string;
   locale: LanguageCode;
-}
-
-export interface MyRecipe_ingredients_thumbnail {
-  url: string;
 }
 
 export interface MyRecipe_ingredients_description {
@@ -44,6 +44,11 @@ export interface MyRecipe_ingredients_description {
 }
 
 export interface MyRecipe_ingredients_food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyRecipe_ingredients_food_description {
   text: string;
   locale: LanguageCode;
 }
@@ -71,6 +76,7 @@ export interface MyRecipe_ingredients_food_thumbnailUrl {
 export interface MyRecipe_ingredients_food {
   id: string;
   name: MyRecipe_ingredients_food_name[];
+  description: MyRecipe_ingredients_food_description[] | null;
   weights: MyRecipe_ingredients_food_weights[];
   imageUrl: MyRecipe_ingredients_food_imageUrl;
   thumbnailUrl: MyRecipe_ingredients_food_thumbnailUrl;
@@ -89,12 +95,12 @@ export interface MyRecipe_ingredients_weight {
 }
 
 export interface MyRecipe_ingredients {
+  thumbnail: MyRecipe_ingredients_thumbnail | null;
   name: MyRecipe_ingredients_name[] | null;
-  amount: number;
+  description: MyRecipe_ingredients_description[] | null;
+  amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
-  thumbnail: MyRecipe_ingredients_thumbnail | null;
-  description: MyRecipe_ingredients_description[] | null;
   food: MyRecipe_ingredients_food | null;
   weight: MyRecipe_ingredients_weight | null;
 }

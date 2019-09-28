@@ -4,13 +4,12 @@
  */
 
 import Modal from 'common/Modal/Modal'
-import SelectDialog from 'common/Select/components/SelectDialog'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { DishItem, FoodTypes, Weight } from 'src/ts/models/FoodModels'
+import { FoodTypes } from 'src/ts/models/FoodModels'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import { fullHeight } from 'src/ts/utilities'
-import SelectFood from './SelectFood'
+import SelectFood, { SelectFoodMealItem } from './SelectFood'
 
 
 interface FoodDialogProps {
@@ -18,19 +17,17 @@ interface FoodDialogProps {
   onDismiss: () => void,
   autoFocus: boolean,
   foodTypes: FoodTypes[],
-  onSubmit: (dishItem: DishItem) => void,
+  onSubmit: (mealItem: SelectFoodMealItem) => void,
 }
 
 interface FoodDialogState {
   width?: number,
   height?: number,
-  searchText: string,
-  searchResults: DishItem[],
-  selectedItem?: DishItem,
+  // searchText: string,
 
-  weights: Weight[],
-  selectedWeight?: Weight,
-  selectDialogVisible: boolean,
+  // weights: Weight[],
+  // selectedWeight?: Weight,
+  // selectDialogVisible: boolean,
 }
 
 export const MODAL_ID = 'foodDialog'
@@ -45,20 +42,18 @@ export function showFoodModal(props: FoodDialogProps) {
 }
 
 export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.CommonProps, FoodDialogState> {
-  textInput: any
+  // textInput: any
   _opacityAnimatedValue = RX.Animated.createValue(fullHeight())
-  _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ translateY: this._opacityAnimatedValue }],
-  })
+  // _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+  //   transform: [{ translateY: this._opacityAnimatedValue }],
+  // })
 
   constructor(props: FoodDialogProps) {
     super(props)
 
     this.state = {
-      searchText: '',
-      searchResults: [],
-      selectDialogVisible: false,
-      weights: [],
+      // selectDialogVisible: false,
+      // weights: [],
     }
   }
 
@@ -87,35 +82,35 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
         <RX.View>
           <SelectFood
             onDismiss={this.dismiss}
-            onSubmit={(dishItem) => {
-              this.props.onSubmit(dishItem)
+            foodTypes={this.props.foodTypes}
+            onSubmit={(mealItem) => {
+              this.props.onSubmit(mealItem)
               this.dismiss()
             }}
           />
-          {this._renderSelectDialog()}
+          {/*{this._renderSelectDialog()}*/}
         </RX.View>
       </Modal>
     )
   }
 
-  _renderSelectDialog = () => {
-    if (!this.state.selectedItem) return null
-    if (!this.state.selectDialogVisible) return null
-
-    return (
-      <SelectDialog
-        options={[
-          { value: 'g', text: 'gram' },
-          ...this.state.weights.map(w => ({
-            text: w.description,
-            value: w.id,
-          })),
-        ]}
-        onOptionSelect={option => this.setState({ selectedWeight: this.state.weights.find(p => p.id === option.value) })}
-        onDismiss={() => this.setState({ selectDialogVisible: false })}
-      />
-    )
-  }
+  // _renderSelectDialog = () => {
+  //   if (!this.state.selectDialogVisible) return null
+  //
+  //   return (
+  //     <SelectDialog
+  //       options={[
+  //         { value: 'g', text: 'gram' },
+  //         ...this.state.weights.map(w => ({
+  //           text: w.description,
+  //           value: w.id,
+  //         })),
+  //       ]}
+  //       onOptionSelect={option => this.setState({ selectedWeight: this.state.weights.find(p => p.id === option.value) })}
+  //       onDismiss={() => this.setState({ selectDialogVisible: false })}
+  //     />
+  //   )
+  // }
 
   dismiss = () => {
     const { onDismiss } = this.props
@@ -125,11 +120,4 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
         onDismiss()
       })
   }
-}
-
-// @ts-ignore
-const styles = {
-  wrapper: RX.Styles.createViewStyle({
-    //
-  }),
 }

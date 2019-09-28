@@ -72,24 +72,39 @@ export interface InstructionInput {
   image?: any | null;
 }
 
+export interface MealInput {
+  name?: TranslationInput[] | null;
+  description?: TranslationInput[] | null;
+  items: MealItemInput[];
+}
+
+export interface MealItemInput {
+  amount: number;
+  food?: string | null;
+  recipe?: string | null;
+  weight?: string | null;
+  alternativeMealItems?: MealItemInputBase[] | null;
+}
+
+export interface MealItemInputBase {
+  amount: number;
+  food?: string | null;
+  recipe?: string | null;
+  weight?: string | null;
+}
+
 export interface RecipeInput {
   title: TranslationInput[];
   ingredients: IngredientInput[];
   instructions: InstructionInput[];
   serving: number;
-  timing: RecipeTimingInput;
+  timing: TimingInput;
   difficulty?: RecipeDifficulty | null;
   slug?: string | null;
   description?: TranslationInput[] | null;
   coverImage?: any | null;
   thumbnail?: any | null;
   tags?: string[] | null;
-}
-
-export interface RecipeTimingInput {
-  prepTime?: number | null;
-  cookTime?: number | null;
-  totalTime: number;
 }
 
 export interface SocialNetworksInput {
@@ -104,6 +119,12 @@ export interface TagInput {
   title: TranslationInput[];
   info?: TranslationInput[] | null;
   type: TagType;
+}
+
+export interface TimingInput {
+  prepTime?: number | null;
+  cookTime?: number | null;
+  totalTime: number;
 }
 
 export interface TranslationInput {

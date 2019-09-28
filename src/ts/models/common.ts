@@ -13,8 +13,19 @@ export enum Routes {
   selectDialog = 'selectDialog',
   mealPlan = '/meal-plan',
   settings = '/settings',
+
+  /**
+   * Recipes
+   * */
   recipe = '/recipe',
   recipeForm = '/create-recipe',
+
+  /**
+   * Meals
+   * */
+  meal = '/meal',
+  mealForm = '/create-meal',
+
   home = '/',
   // profile = '/',
   feed = 'feed',

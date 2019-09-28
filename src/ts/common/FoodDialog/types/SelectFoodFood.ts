@@ -13,6 +13,11 @@ export interface SelectFoodFood_name {
   locale: LanguageCode;
 }
 
+export interface SelectFoodFood_description {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface SelectFoodFood_weights_name {
   text: string;
   locale: LanguageCode;
@@ -36,6 +41,7 @@ export interface SelectFoodFood_thumbnailUrl {
 export interface SelectFoodFood {
   id: string;
   name: SelectFoodFood_name[];
+  description: SelectFoodFood_description[] | null;
   weights: SelectFoodFood_weights[];
   imageUrl: SelectFoodFood_imageUrl;
   thumbnailUrl: SelectFoodFood_thumbnailUrl;

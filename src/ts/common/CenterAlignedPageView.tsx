@@ -30,7 +30,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     this.state = {
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
-      hideDrawer: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
     }
   }
 
@@ -38,7 +38,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     return {
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
-      hideDrawer: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
     }
   }
 
@@ -80,7 +80,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
   componentDidMount() {
     RX.Animated.timing(this._animatedValue, {
       toValue: 1,
-      duration: 500,
+      duration: 300,
     }).start()
   }
 
@@ -98,9 +98,9 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     return this.state.width - Styles.values.drawerWidth
   }
 
-  private _animatedValue = RX.Animated.createValue(0.99)
+  private _animatedValue = RX.Animated.createValue(0)
   private _animatedStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{scale: this._animatedValue}]
+    opacity: this._animatedValue
   })
 }
 
@@ -109,6 +109,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     // padding: Styles.values.spacingLarge,
     backgroundColor: '#fff',
   }),

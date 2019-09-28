@@ -7,7 +7,7 @@ import Image from 'common/Image/Image'
 import Text from 'common/Text/Text'
 import { Action } from 'history'
 import ImageSource from 'modules/images'
-import { matchPath } from 'react-router'
+import { matchPath, Redirect } from 'react-router'
 import { Route, RouteProps, Router, Switch } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -15,7 +15,6 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Routes } from 'src/ts/models/common'
 import { User } from 'src/ts/models/FoodModels'
 import { NavOptions } from 'src/ts/navigator/navigator'
 import LocationStore from 'src/ts/stores/LocationStore'
@@ -28,24 +27,31 @@ import AppSearchComponent from 'src/ts/views/AppNavigator/components/AppSearchCo
 
 const NAVBAR_HEIGHT = 50
 const SEARCH_ICON_SIZE = 56
-const SEARCH_CONTAINER_HEIGHT = 400
+const SEARCH_CONTAINER_HEIGHT = 70
 const SEARCH_ICON_IMAGE_SIZE = 30
 const TAB_BAR_HEIGHT = 50
 const TAB_BAR_MAX_WIDTH = 350
 
+type AppRoute = RouteProps & {
+  modal?: boolean,
+  redirectTo?: string,
+  immersive?: boolean,
+  navOptions?: NavOptions,
+}
+
 interface AppNavigatorProps extends RX.CommonProps {
-  routes: (RouteProps & { modal?: boolean, navOptions?: NavOptions })[]
+  routes: AppRoute[]
 }
 
 interface WebAppRouterState {
   mode: 'drawer' | 'navbar',
-  userLoggedIn?: User,
+  user?: User,
   hideDrawer: boolean,
   currentPath: string,
   height: number,
   width: number,
   searchModalShowing?: boolean,
-  routes: (RouteProps & { modal?: boolean, navOptions?: NavOptions })[]
+  routes: AppRoute[]
 }
 
 export default class AppNavigator extends ComponentBase<AppNavigatorProps & { history: any }, WebAppRouterState> {
@@ -64,11 +70,12 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
     return {
       mode,
-      userLoggedIn: user,
+      user,
       currentPath,
       height: ResponsiveWidthStore.getHeight(),
       width: ResponsiveWidthStore.getWidth(),
       routes: props.routes,
+      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
     }
   }
 
@@ -82,10 +89,14 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
             <RX.View
               style={[styles.container, { paddingTop: (this.state.mode === 'navbar' && Navbar) ? NAVBAR_HEIGHT : 0 }]}>
               <RX.View style={{ flexDirection: 'row' }}>
-                {
-                  (this.state.mode === 'drawer' && !this.state.hideDrawer) &&
-                  <RX.Animated.View style={{ height: 100, width: Styles.values.drawerWidth }} />
-                }
+                <RX.Animated.View
+                  style={[
+                    {
+                      height: 1,
+                    },
+                    this._drawerSpacingAnimationStyle,
+                  ]}
+                />
                 <RX.View
                   style={[styles.innerContainer, { height: this.state.height }]}
                 >
@@ -94,7 +105,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                       this.state.routes.filter(r => !r.modal).map(route => (
                         <Route
                           {...route}
-                        />
+                        >
+                          {route.redirectTo && <Redirect to={route.redirectTo} />}
+                        </Route>
                       ))
                     }
                   </Switch>
@@ -105,11 +118,11 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
               {this._renderTabBar(theme)}
               {this._renderDrawer(theme)}
               {this._renderSearch(theme)}
-              <RX.Text>{this.state.mode}</RX.Text>
-
-              {/* Modals */}
 
               {
+                /**
+                 * Modals
+                 * */
                 this.state.routes.filter(r => r.modal).map(route => (
                   <Route
                     {...route}
@@ -139,14 +152,14 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   }
 
   private _renderDrawer = (theme: Theme) => {
-    if (this.state.hideDrawer && !this.state.userLoggedIn) return null
+    if (this.state.hideDrawer && !this.state.user) return null
 
     return (
       <RX.Animated.View style={[styles.drawer.container, {
         height: this.state.height,
         // backgroundColor: theme.colors.drawerBg
       }, this._drawerAnimationStyle]}>
-        <AppDrawer user={this.state.userLoggedIn} />
+        <AppDrawer user={this.state.user} />
       </RX.Animated.View>
     )
   }
@@ -186,7 +199,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
   private _renderTabBar = (theme: Theme) => {
     if (this.state.mode === 'drawer') return null
-    if (!this.state.userLoggedIn) return null
+    if (!this.state.user) return null
 
     let { currentPath } = this.state
 
@@ -202,7 +215,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       exact: false,
     })) activePath = 'feed'
 
-    if (this.state.userLoggedIn && (this.state.userLoggedIn.username === trimSlashes(currentPath))) {
+    if (this.state.user && (this.state.user.username === trimSlashes(currentPath))) {
       activePath = 'profile'
     }
 
@@ -249,17 +262,20 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
     const toggleModal = (show: boolean) => () => {
       RX.Animated.parallel([
-        RX.Animated.timing(this._searchContainerAnimationTopValue, { toValue: show ? 0 : -this.state.height }),
-        RX.Animated.timing(this._searchContainerBackDropAnimationOpacityValue, { toValue: show ? 1 : 0 }),
+        RX.Animated.timing(this._searchContainerAnimationTopValue, { toValue: show ? 0 : -SEARCH_CONTAINER_HEIGHT, duration: 300 }),
+        RX.Animated.timing(this._searchContainerBackDropAnimationOpacityValue, { toValue: show ? 1 : 0, duration: 300 }),
       ]).start(() => {
         this.setState({ searchModalShowing: show })
-        if (this._searchInput) {
+        if (show && this._searchInput) {
           this._searchInput.focus()
         }
       })
     }
 
     return [
+      /**
+       * Search Icon
+       * */
       <RX.View onPress={toggleModal(true)} style={[styles.search.iconContainer, {
         opacity: match ? 0 : 1,
         backgroundColor: theme.colors.searchIconBG,
@@ -270,6 +286,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
           resizeMode={'contain'}
         />
       </RX.View>,
+      /**
+       * Backdrop
+       * */
       <RX.Animated.View
         ignorePointerEvents={!this.state.searchModalShowing}
         onPress={toggleModal(false)}
@@ -281,6 +300,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
           this._searchContainerBackDropAnimationStyle,
         ]}
       />,
+      /**
+       * Container
+       * */
       <RX.Animated.View
         style={[
           styles.search.container,
@@ -295,6 +317,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
         <RX.Text style={{ padding: Styles.values.spacing, fontSize: 20 }} onPress={toggleModal(false)}>x</RX.Text>}
 
         <AppSearchComponent
+          inputRef={ref => this._searchInput = ref}
           onSubmit={toggleModal(false)}
         />
       </RX.Animated.View>
@@ -315,44 +338,37 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       RX.Animated.timing(this._navbarAnimationTopValue, {
         toValue: showNavbar ? 0 : -NAVBAR_HEIGHT,
         duration: animate ? 500 : 0,
-      })
+      }),
+      RX.Animated.timing(this._drawerSpacingAnimationWidthValue, {
+        toValue: showDrawer ? Styles.values.drawerWidth : 0,
+        duration: animate ? 500 : 1,
+      }),
     ]).start()
   }
 
   private _handleDrawerVisibility = (pathname?: string, animate: boolean = true) => {
     const currentPath = this.state.currentPath
-    const match = matchPath(pathname || currentPath, {
-      path: Routes.home,
-      exact: true,
-      strict: false
-    }) || matchPath(pathname || currentPath, {
-      path: Routes.login,
-      exact: false,
-      strict: false
-    }) || matchPath(pathname || currentPath, {
-      path: Routes.register,
-      exact: false,
-      strict: false
+    let hideDrawer = false
+
+    this.state.routes.map(route => {
+      if (route.immersive && matchPath(pathname || currentPath, route)) {
+        hideDrawer = true
+      }
     })
 
-    if (match) {
-      this.setState({
-        hideDrawer: !this.state.userLoggedIn,
-      })
+    if (hideDrawer) {
+      ResponsiveWidthStore.toggleDrawerVisibility(false)
+      setTimeout(() => this._setUI(false, this.state.mode === 'navbar', animate), 0)
 
-      // hide the drawer if landing
-      if (this.state.userLoggedIn) {
-        this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate)
-      } else {
-        this._setUI(false, false, animate)
-      }
+      // // hide the drawer if landing
+      // if (this.state.user) {
+      //   this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate)
+      // } else {
+      //   this._setUI(false, false, animate)
+      // }
     } else {
-      // set the state
-      this.setState({
-        hideDrawer: false,
-      })
-
-      this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate)
+      ResponsiveWidthStore.toggleDrawerVisibility(true)
+      setTimeout(() => this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate), 0)
     }
   }
 
@@ -362,6 +378,8 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
   private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
   private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
+  private _drawerSpacingAnimationWidthValue = RX.Animated.createValue(0)
+
   private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ translateX: this._drawerAnimationLeftValue }],
   })
@@ -373,6 +391,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   })
   private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
     opacity: this._searchContainerBackDropAnimationOpacityValue,
+  })
+  private _drawerSpacingAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    width: this._drawerSpacingAnimationWidthValue,
   })
   static contextType = ThemeContext
 }
@@ -420,6 +441,7 @@ const styles = {
       shadowRadius: 10,
       justifyContent: 'center',
       alignItems: 'center',
+      cursor: 'pointer',
     }),
     icon: RX.Styles.createImageStyle({
       width: SEARCH_ICON_IMAGE_SIZE,

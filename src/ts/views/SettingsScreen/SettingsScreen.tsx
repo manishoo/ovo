@@ -10,6 +10,7 @@ import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Navbar from 'common/Navbar/Navbar'
 import Select from 'common/Select/Select'
 import Text from 'common/Text/Text'
 import TextInputAutoGrow from 'common/TextInputAutoGrow/TextInputAutoGrow'
@@ -62,7 +63,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
 
     return (
       <CenterAlignedPageView maxWidth={500}>
-        <Text translate type={Text.types.title}>Edit Profile</Text>
+        <Navbar title={getLocalizedText('Edit Profile')} />
         {this._renderAvatar()}
         <Text translate type={Text.types.title}>Account Info</Text>
 

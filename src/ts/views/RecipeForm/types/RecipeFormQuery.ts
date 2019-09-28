@@ -29,13 +29,13 @@ export interface RecipeFormQuery_recipe_timing {
   totalTime: number;
 }
 
+export interface RecipeFormQuery_recipe_ingredients_thumbnail {
+  url: string;
+}
+
 export interface RecipeFormQuery_recipe_ingredients_name {
   text: string;
   locale: LanguageCode;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_thumbnail {
-  url: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_description {
@@ -44,6 +44,11 @@ export interface RecipeFormQuery_recipe_ingredients_description {
 }
 
 export interface RecipeFormQuery_recipe_ingredients_food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_food_description {
   text: string;
   locale: LanguageCode;
 }
@@ -71,6 +76,7 @@ export interface RecipeFormQuery_recipe_ingredients_food_thumbnailUrl {
 export interface RecipeFormQuery_recipe_ingredients_food {
   id: string;
   name: RecipeFormQuery_recipe_ingredients_food_name[];
+  description: RecipeFormQuery_recipe_ingredients_food_description[] | null;
   weights: RecipeFormQuery_recipe_ingredients_food_weights[];
   imageUrl: RecipeFormQuery_recipe_ingredients_food_imageUrl;
   thumbnailUrl: RecipeFormQuery_recipe_ingredients_food_thumbnailUrl;
@@ -89,12 +95,12 @@ export interface RecipeFormQuery_recipe_ingredients_weight {
 }
 
 export interface RecipeFormQuery_recipe_ingredients {
+  thumbnail: RecipeFormQuery_recipe_ingredients_thumbnail | null;
   name: RecipeFormQuery_recipe_ingredients_name[] | null;
+  description: RecipeFormQuery_recipe_ingredients_description[] | null;
   amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
-  thumbnail: RecipeFormQuery_recipe_ingredients_thumbnail | null;
-  description: RecipeFormQuery_recipe_ingredients_description[] | null;
   food: RecipeFormQuery_recipe_ingredients_food | null;
   weight: RecipeFormQuery_recipe_ingredients_weight | null;
 }

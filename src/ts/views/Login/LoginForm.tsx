@@ -11,7 +11,6 @@ import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
-import { Routes } from 'src/ts/models/common'
 import UserStore from 'src/ts/stores/UserStore'
 import { navigate } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
@@ -95,7 +94,7 @@ export class LoginForm extends RX.Component<LoginProps> {
          * */
         UserStore.setUser(data.loginUser.user)
         UserStore.setSession(data.loginUser.session)
-        return navigate(this.props, Routes.home, {
+        return navigate(this.props, `/${data.loginUser.user.username}`, {
           replace: true,
         })
       })

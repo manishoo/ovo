@@ -8,24 +8,25 @@ import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
+import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { Routes } from 'src/ts/models/common'
 import { navigate } from 'src/ts/utilities'
-import { Me } from 'src/ts/views/Register/types/Me'
+import { ProfileInfoUser } from 'src/ts/views/ProfileScreen/components/types/ProfileInfoUser'
 
 
 const SOCIAL_MEDIA_ICON_SIZE = 20
 
 interface ProfileInfoProps {
   style?: any,
-  me: Me,
+  user: ProfileInfoUser,
 }
 
 export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
   render() {
-    const { style, me } = this.props
+    const { style, user } = this.props
 
     return (
       <RX.View
@@ -42,23 +43,23 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
           />
         </RX.View>
 
-        <Text type={Text.types.subtitle}>@{me.username}</Text>
+        <Text type={Text.types.subtitle}>@{user.username}</Text>
         {
-          me.bio &&
+          user.bio &&
           <Text type={Text.types.body}
-                style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>{me.bio}</Text>
+                style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>{user.bio}</Text>
         }
 
         {
           /**
            * If any social media accounts were added
            * */
-          Object.keys(me.socialNetworks).filter(k => me.socialNetworks[k] && (k !== '__typename')).length > 0 &&
+          Object.keys(user.socialNetworks).filter(k => user.socialNetworks[k] && (k !== '__typename')).length > 0 &&
           <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
             {
-              me.socialNetworks.instagram && <Link
+              user.socialNetworks.instagram && <Link
                 openInNewTab
-                to={`https://instagram.com/${me.socialNetworks.instagram}`}
+                to={`https://instagram.com/${user.socialNetworks.instagram}`}
                 style={styles.socialMediaIconWrapper}
               >
                 <Image
@@ -71,9 +72,9 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
               </Link>
             }
             {
-              me.socialNetworks.twitter && <Link
+              user.socialNetworks.twitter && <Link
                 openInNewTab
-                to={`https://twitter.com/${me.socialNetworks.twitter}`}
+                to={`https://twitter.com/${user.socialNetworks.twitter}`}
                 style={styles.socialMediaIconWrapper}
               >
                 <Image
@@ -86,9 +87,9 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
               </Link>
             }
             {
-              me.socialNetworks.pinterest && <Link
+              user.socialNetworks.pinterest && <Link
                 openInNewTab
-                to={`https://pinterest.com/${me.socialNetworks.pinterest}`}
+                to={`https://pinterest.com/${user.socialNetworks.pinterest}`}
                 style={styles.socialMediaIconWrapper}
               >
                 <Image
@@ -102,12 +103,12 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
             }
 
             {
-              me.socialNetworks.website &&
+              user.socialNetworks.website &&
               <Link
                 openInNewTab
-                to={`http://${me.socialNetworks.website}`}
+                to={`http://${user.socialNetworks.website}`}
               >
-                {me.socialNetworks.website}
+                {user.socialNetworks.website}
               </Link>
             }
           </RX.View>
@@ -118,11 +119,28 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
   }
 
   private _getName = () => {
-    const { me } = this.props
+    const { user } = this.props
 
-    if (!me.firstName && !me.lastName) return me.username
+    if (!user.firstName && !user.lastName) return user.username
 
-    return `${me.firstName} ${me.lastName}`
+    return `${user.firstName} ${user.lastName}`
+  }
+
+  static fragments = {
+    user: gql`
+      fragment ProfileInfoUser on BaseUser {
+        bio
+        username
+        firstName
+        lastName
+        socialNetworks {
+          instagram
+          pinterest
+          twitter
+          website
+        }
+      }
+    `
   }
 }
 

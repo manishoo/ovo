@@ -20,7 +20,7 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Translation } from 'src/ts/models/common'
-import { DishItem } from 'src/ts/models/FoodModels'
+import { MealItem } from 'src/ts/models/FoodModels'
 
 
 const MODAL_ID = 'FoodPreview'
@@ -30,8 +30,7 @@ interface FoodPreviewProps {
   style?: any,
   onDismiss: () => any,
   inputRef: (ref: any) => any,
-  item: DishItem,
-  onSelectPress: (weights: SelectFoodQuery_foods_foods_weights[]) => void,
+  item: MealItem,
   onSubmit: (food: SelectFoodQuery_foods_foods, amount: number, weight?: SelectFoodQuery_foods_foods_weights, customUnit?: string, gramWeight?: number, description?: Translation[]) => void,
   height: number
 }

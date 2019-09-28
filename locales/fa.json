@@ -27,7 +27,10 @@
   "Profile": "پروفایل",
   "Dishes": "دیش ها",
   "CreateRecipe": "دیش جدید",
+  "CreateNewMeal": "سفره جدید",
+
   "Feed": "برای من",
+  "Back": "بازگشت",
   "ensureSafeAccount": "To ensure a safe account, we require your password to be at least 8 characters, including an uppercase letter and a number.",
   "terms": "By creating a new account or signing in, You are agreeing to Caloria’s Terms of Service and Privacy Policy.",
   "MealPlan&ShoppingList": "برنامه غذایی و لیست خرید",
@@ -99,9 +102,23 @@
 
   "AddIngredient": "اضافه کردن ماده غذایی",
   "UploadImage": "بارگزاری عکس غذا",
-  "Search foods": "گشتن در غذا ها",
+  "e.g. Rice": "مثلا برنج",
+  "e.g. Banana": "مثلا موز",
   "Describe the story behind your recipe": "داستان غذاتو بگو",
   "Add Tag": "تگ بزن",
   "Tell us more about the recipe": "از رسپی بگو",
-  "e.g Easy Sesame Chicken": "مثلا ته‌چین مرغ"
+  "e.g. Easy Sesame Chicken": "مثلا ته‌چین مرغ",
+
+  "areyousure?": "مطمئنی؟",
+
+  "areYouSureYouWantToLeave": "مطمئنی میخوای بری؟",
+
+
+  "______Create_Recipe_Page______": "//",
+  "Create Recipe": "ساخت رسپی",
+  "e.g. Cook the Rice...": "مثلا برنج را بپزید...",
+
+  "______Create_Meal_Page______": "//",
+  "Meal Items": "آیتم های سفره",
+  "Create Meal": "ساخت سفره"
 }

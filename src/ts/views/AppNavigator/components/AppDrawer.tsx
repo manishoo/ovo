@@ -4,8 +4,10 @@
  */
 
 import FilledButton from 'common/FilledButton/FilledButton'
+import FlatButton from 'common/FlatButton/FlatButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 // import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -14,6 +16,8 @@ import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
 import { User } from 'src/ts/models/FoodModels'
 import ImageSource from 'src/ts/modules/images/index.web'
+import LocationStore from 'src/ts/stores/LocationStore'
+import UserStore from 'src/ts/stores/UserStore'
 import { navigate } from 'src/ts/utilities'
 
 
@@ -42,7 +46,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     // const { activeLink } = this.state
 
     return (
-      <RX.View style={{ padding: Styles.values.spacingLarge }}>
+      <RX.View style={{ flex: 1, padding: Styles.values.spacingLarge }}>
         <Image
           source={ImageSource.Brand}
           style={styles.logo}
@@ -91,8 +95,36 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
             }
           })()
         }
+
+        <RX.View
+          style={{
+            position: 'absolute',
+            bottom: Styles.values.spacing,
+            right: 0,
+            left: 0,
+            alignItems: 'center',
+          }}
+        >
+          <FlatButton
+            onPress={this._onLogout}
+            label={getLocalizedText('Logout')}
+            style={{
+              borderWidth: 0,
+              // width: 30,
+              // height: 30,
+            }}
+          />
+        </RX.View>
       </RX.View>
     )
+  }
+
+  private _onLogout = () => {
+    UserStore.setUser()
+    UserStore.setSession()
+    RX.Storage.clear()
+
+    LocationStore.navigate(this.props, Routes.login)
   }
 
   private _handleActiveChange = (index: number) => () => {

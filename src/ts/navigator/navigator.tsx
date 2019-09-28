@@ -11,10 +11,10 @@ import { trimSlashes } from 'src/ts/utilities/trim-slashes'
 import AppNavigator from 'src/ts/views/AppNavigator/AppNavigator'
 import { Me } from 'src/ts/views/Register/types/Me'
 import {
-  // LandingScreen,
+  LandingScreen,
   LoginScreen,
+  MealForm,
   MealPlanScreen,
-  PathScreen,
   ProfileScreen,
   PublicProfileScreen,
   Recipe,
@@ -59,9 +59,13 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
       <AppNavigator
         history={this.props.history}
         routes={[
+          /**
+           * Recipes
+           * */
           {
             path: `/recipe/:slug/edit`,
             exact: false,
+            redirectTo: this.state.user ? undefined: Routes.login,
             component: RecipeForm,
             navOptions: {
               ...defaultNavOptions,
@@ -83,45 +87,89 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `${Routes.recipeForm}/`,
             exact: false,
+            immersive: true,
             component: RecipeForm,
+            redirectTo: this.state.user ? undefined: Routes.login,
             navOptions: {
               ...defaultNavOptions,
               title: 'Create Recipe',
             },
           },
+
+          /**
+           * Meals
+           * */
+          // {
+          //   path: `${Routes.meal}/:id/edit`,
+          //   exact: false,
+          //   component: RecipeForm,
+          //   navOptions: {
+          //     ...defaultNavOptions,
+          //     title: 'Edit Meal',
+          //   },
+          // },
+          {
+            // path: `${Routes.meal}/:id/`,
+            path: `${Routes.mealForm}/:id`,
+            exact: false,
+            immersive: true,
+            redirectTo: this.state.user ? undefined: Routes.login,
+            component: MealForm,
+            navOptions: {
+              ...defaultNavOptions,
+              title: 'Edit Meal',
+            },
+          },
+          {
+            path: `${Routes.mealForm}/`,
+            exact: false,
+            immersive: true,
+            redirectTo: this.state.user ? undefined: Routes.login,
+            component: MealForm,
+            navOptions: {
+              ...defaultNavOptions,
+              title: 'Create Meal',
+            },
+          },
           {
             path: `${Routes.mealPlan}/`,
             exact: false,
+            redirectTo: this.state.user ? undefined: Routes.login,
             component: MealPlanScreen,
             navOptions: defaultNavOptions,
           },
           {
             path: `${Routes.settings}/`,
             exact: false,
+            immersive: true,
+            redirectTo: this.state.user ? undefined: Routes.login,
             component: SettingsScreen,
             navOptions: defaultNavOptions,
           },
           {
             path: Routes.login,
+            immersive: true,
             exact: true,
             component: LoginScreen,
             modal: false,
           },
           {
             path: Routes.register,
+            immersive: true,
             exact: false,
             component: RegisterScreen,
             modal: false,
           },
           {
-            path: '/:username/',
+            path: '/:username',
             exact: false,
             component: (this.state.user && (this.state.user.username === trimSlashes(this.state.currentPath!))) ? ProfileScreen : PublicProfileScreen,
           },
           {
             path: '/',
             exact: false,
-            component: this.state.user ? PathScreen : LoginScreen,
+            component: LandingScreen,
+            redirectTo: this.state.user && Routes.login
           },
         ]}
       />
