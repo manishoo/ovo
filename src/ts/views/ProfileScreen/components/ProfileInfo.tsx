@@ -22,6 +22,7 @@ const SOCIAL_MEDIA_ICON_SIZE = 20
 interface ProfileInfoProps {
   style?: any,
   user: ProfileInfoUser,
+  isMyProfile?: boolean,
 }
 
 export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
@@ -33,17 +34,34 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
         style={[styles.container, style]}
       >
         <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text type={Text.types.title}>{this._getName()}</Text>
-          <FilledButton
-            mode={FilledButton.mode.default}
-            label={getLocalizedText('ProfileSettings')}
-            onPress={() => navigate(this.props, Routes.settings)}
-            style={{ [Styles.values.marginStart]: Styles.values.spacing }}
-            // labelStyle={{ fontSize: 14 }}
-          />
+          {
+            !this.props.isMyProfile &&
+            <Image
+              source={user.imageUrl!.url}
+              style={[
+                styles.avatar,
+                {
+                  [Styles.values.marginEnd]: Styles.values.spacing / 2,
+                }
+              ]}
+            />
+          }
+
+          <RX.View style={{ flexDirection: 'row' }}>
+            <RX.View>
+              <Text type={Text.types.title} style={{marginBottom: Styles.values.spacing / 2}}>{this._getName()}</Text>
+              <Text type={Text.types.subtitle}>@{user.username}</Text>
+            </RX.View>
+            <FilledButton
+              mode={FilledButton.mode.default}
+              label={getLocalizedText('ProfileSettings')}
+              onPress={() => navigate(this.props, Routes.settings)}
+              style={{ [Styles.values.marginStart]: Styles.values.spacing }}
+              // labelStyle={{ fontSize: 14 }}
+            />
+          </RX.View>
         </RX.View>
 
-        <Text type={Text.types.subtitle}>@{user.username}</Text>
         {
           user.bio &&
           <Text type={Text.types.body}
@@ -123,7 +141,18 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
 
     if (!user.firstName && !user.lastName) return user.username
 
-    return `${user.firstName} ${user.lastName}`
+    let name = ''
+    if (user.firstName) {
+      name += user.firstName
+    }
+    if (user.lastName) {
+      if (name.length > 0) {
+        name += ` ${user.lastName}`
+      } else {
+        name += user.lastName
+      }
+    }
+    return name
   }
 
   static fragments = {
@@ -133,6 +162,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
         username
         firstName
         lastName
+        imageUrl { url }
         socialNetworks {
           instagram
           pinterest
@@ -151,5 +181,10 @@ const styles = {
   socialMediaIconWrapper: RX.Styles.createViewStyle({
     [Styles.values.marginEnd]: Styles.values.spacing,
     cursor: 'pointer',
+  }),
+  avatar: RX.Styles.createImageStyle({
+    width: 80,
+    height: 80,
+    borderRadius: 80 / 2,
   })
 }

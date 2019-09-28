@@ -3,10 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AddCell from 'common/AddCell/AddCell'
 import CardList from 'common/CardList/CardList'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
-import AddMealCell from 'src/ts/views/ProfileScreen/components/MealsList/components/AddMealCell/AddMealCell'
+import { Routes } from 'src/ts/models/common'
+import LocationStore from 'src/ts/stores/LocationStore'
 import MealCell from 'src/ts/views/ProfileScreen/components/MealsList/components/MealCell/MealCell'
 import { ProfileMealsQuery_meals_meals } from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 
@@ -46,9 +48,10 @@ export default class MealsList extends RX.Component<RecipesListProps> {
 
   private _renderAddRecipeCell = (size: number) => {
     return (
-      <AddMealCell
+      <AddCell
+        translatedText='CreateNewMeal'
         size={size}
-        wrapperStyle={styles.item}
+        onPress={() => LocationStore.navigate(this.props, `${Routes.mealForm}`)}
       />
     )
   }

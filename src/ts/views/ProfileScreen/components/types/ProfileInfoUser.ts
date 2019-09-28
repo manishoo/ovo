@@ -6,6 +6,10 @@
 // GraphQL fragment: ProfileInfoUser
 // ====================================================
 
+export interface ProfileInfoUser_imageUrl {
+  url: string;
+}
+
 export interface ProfileInfoUser_socialNetworks {
   instagram: string | null;
   pinterest: string | null;
@@ -18,5 +22,6 @@ export interface ProfileInfoUser {
   username: string;
   firstName: string | null;
   lastName: string | null;
+  imageUrl: ProfileInfoUser_imageUrl | null;
   socialNetworks: ProfileInfoUser_socialNetworks | null;
 }

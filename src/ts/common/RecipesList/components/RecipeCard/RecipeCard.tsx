@@ -22,7 +22,7 @@ import { navigate, withNavigation } from 'src/ts/utilities'
 
 const CLEAR_ICON_DIMENSION = 20
 
-interface AddRecipeCellProps {
+interface RecipeCellProps {
   wrapperStyle?: any,
   size: number,
   recipe: RecipeCardRecipe,
@@ -34,8 +34,16 @@ interface AddRecipeCellProps {
   onPress?: () => void
 }
 
+interface RecipeCellState {
+  isHovering?: boolean,
+}
+
 @withNavigation
-export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
+export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCellState> {
+  state = {
+    isHovering: false,
+  }
+
   render() {
     const { recipe } = this.props
 
@@ -63,7 +71,7 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
                 height: this.props.size,
                 // height: this.props.size * 1.3,
                 borderRadius: this.props.size / 20,
-                backgroundColor: theme.colors.recipeCardImagePlaceholderBG,
+                backgroundColor: this.state.isHovering ? theme.colors.recipeCardImagePlaceholderBGOnHover: theme.colors.recipeCardImagePlaceholderBG,
               }}
             >
               {
@@ -197,6 +205,11 @@ export default class RecipeCard extends RX.Component<AddRecipeCellProps> {
   }
 
   private _setUI = (isHovering: boolean) => {
+    if (!this.props.recipe.coverImage) {
+      this.setState({
+        isHovering,
+      })
+    }
     RX.Animated.timing(this._previewScaleAnimatedValue, {
       toValue: isHovering ? 1.1 : 1,
       duration: 500,
