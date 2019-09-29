@@ -5,8 +5,8 @@
   "scripts": {
     "rn-dev-server": "node node_modules/react-native/local-cli/cli.js -- start",
     "test:debug": "node --inspect-brk node_modules/.bin/jest -c jest/jest.config.js --runInBand",
-    "build:web": "cross-env PUBLIC_PATH=/static/ API_ADDRESS=http://localhost:4003 GRAPHQL_ENDPOINT=gql NODE_ENV=production node node_modules/gulp/bin/gulp run-once --platform=web",
-    "serve:web": "cross-env PUBLIC_PATH=/static/ API_ADDRESS=http://localhost:4003 GRAPHQL_ENDPOINT=gql NODE_ENV=production node server.js",
+    "build:web": "cross-env NODE_ENV=production node node_modules/gulp/bin/gulp run-once --platform=web",
+    "serve:web": "cross-env NODE_ENV=production node server.js",
     "start:web": "npm run _gulp-web",
     "serve:web:dev": "cross-env NODE_ENV=development node server.js",
     "start-ios": "npm install && npm run _gulp-ios",
