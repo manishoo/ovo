@@ -483,7 +483,7 @@ gulp.task('webpack-js-server', shell.task(environments + ' node ./node_modules/w
 gulp.task('webpack-js-watch', shell.task(environments + ' node ./node_modules/webpack/bin/webpack.js --watch --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }))
 
 gulp.task('run-once', function (callback) {
-  runSequence('clean', 'lint', 'copy', 'build', 'apply-aliases'/*, usesWebpack() ? 'webpack-js' : 'noop'*/, usesWebpack() ? 'webpack-js-server' : 'noop', callback)
+  runSequence('clean', 'lint', 'copy', 'build', 'apply-aliases', usesWebpack() ? 'webpack-js' : 'noop', usesWebpack() ? 'webpack-js-server' : 'noop', callback)
 })
 
 gulp.task('noop', function () {
