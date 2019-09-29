@@ -49,6 +49,19 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
   constructor(props: FoodPreviewProps) {
     super(props)
 
+
+    let selectedWeightValue
+
+    if (props.item.customUnit && !props.item.weight) {
+      selectedWeightValue = 'custom'
+    }
+
+    if (props.item.weight) {
+      selectedWeightValue = props.item.weight.id
+    }
+
+
+
     this.state = {
       amount: props.item.amount || 1,
       description: props.item.description || [],
@@ -60,7 +73,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
       },
       gramWeight: props.item.gramWeight || 1,
       customUnit: props.item.customUnit,
-      selectedWeightValue: (props.item.customUnit && !props.item.weight) ? 'custom' : undefined
+      selectedWeightValue,
+      selectedWeight: props.item.weight,
     }
   }
 

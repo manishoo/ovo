@@ -20,6 +20,9 @@ export interface PublicRecipe_author_imageUrl {
 export interface PublicRecipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
+  bio: string | null;
   imageUrl: PublicRecipe_author_imageUrl | null;
 }
 
@@ -29,13 +32,13 @@ export interface PublicRecipe_timing {
   totalTime: number;
 }
 
+export interface PublicRecipe_ingredients_thumbnail {
+  url: string;
+}
+
 export interface PublicRecipe_ingredients_name {
   text: string;
   locale: LanguageCode;
-}
-
-export interface PublicRecipe_ingredients_thumbnail {
-  url: string;
 }
 
 export interface PublicRecipe_ingredients_description {
@@ -95,12 +98,12 @@ export interface PublicRecipe_ingredients_weight {
 }
 
 export interface PublicRecipe_ingredients {
+  thumbnail: PublicRecipe_ingredients_thumbnail | null;
   name: PublicRecipe_ingredients_name[] | null;
+  description: PublicRecipe_ingredients_description[] | null;
   amount: number | null;
   customUnit: string | null;
   gramWeight: number | null;
-  thumbnail: PublicRecipe_ingredients_thumbnail | null;
-  description: PublicRecipe_ingredients_description[] | null;
   food: PublicRecipe_ingredients_food | null;
   weight: PublicRecipe_ingredients_weight | null;
 }
@@ -126,6 +129,51 @@ export interface PublicRecipe_instructions {
   notes: PublicRecipe_instructions_notes[] | null;
 }
 
+export interface PublicRecipe_nutrition_calories {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublicRecipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublicRecipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublicRecipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublicRecipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublicRecipe_nutrition_fats {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublicRecipe_nutrition {
+  calories: PublicRecipe_nutrition_calories | null;
+  proteins: PublicRecipe_nutrition_proteins | null;
+  totalCarbs: PublicRecipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: PublicRecipe_nutrition_totalAvailableCarbs | null;
+  carbsByDifference: PublicRecipe_nutrition_carbsByDifference | null;
+  fats: PublicRecipe_nutrition_fats | null;
+}
+
 export interface PublicRecipe_description {
   text: string;
   locale: LanguageCode;
@@ -146,6 +194,7 @@ export interface PublicRecipe {
   timing: PublicRecipe_timing;
   ingredients: PublicRecipe_ingredients[];
   instructions: PublicRecipe_instructions[];
+  nutrition: PublicRecipe_nutrition | null;
   difficulty: RecipeDifficulty | null;
   description: PublicRecipe_description[] | null;
   coverImage: PublicRecipe_coverImage | null;

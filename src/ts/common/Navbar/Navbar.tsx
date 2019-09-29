@@ -28,10 +28,13 @@ export default class Navbar extends RX.Component<NavbarProps> {
           <RX.View
             style={[styles.container, { height: Styles.values.navBarHeight }, style]}
           >
-            {this.renderBackButton(theme)}
-            <RX.Text style={styles.titleContainer}>
-              <RX.Text style={[styles.title, { fontSize: 18, }]}>{this.props.title}</RX.Text>
-            </RX.Text>
+            <RX.View style={{ flexDirection: 'row' }}>
+              {this.renderBackButton(theme)}
+              <RX.Text style={styles.titleContainer}>
+                <RX.Text style={[styles.title, { fontSize: 18, }]}>{this.props.title}</RX.Text>
+              </RX.Text>
+            </RX.View>
+            {this.props.children}
           </RX.View>
         )}
       </ThemeContext.Consumer>
@@ -40,7 +43,7 @@ export default class Navbar extends RX.Component<NavbarProps> {
 
   private renderBackButton = (theme: Theme) => (
     <RX.View
-      style={{ flexDirection: 'row', alignItems: 'center' }}
+      style={{ flexDirection: 'row', alignItems: 'center', cursor: 'pointer' }}
       onPress={() => navigate(this.props, 'back')}
     >
       <RX.Image
@@ -60,6 +63,7 @@ const styles = {
     // right: 0,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingBottom: Styles.values.spacing * 2,
     // backgroundColor: 'red',
   }),

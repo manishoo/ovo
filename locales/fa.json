@@ -111,8 +111,18 @@
 
   "areyousure?": "مطمئنی؟",
 
+  "prepTime": "زمان آماده سازی",
+  "cookTime": "زمان پخت",
+  "totalTime": "زمان کل",
+
   "areYouSureYouWantToLeave": "مطمئنی میخوای بری؟",
 
+  "______Recipe_Page______": "//",
+  "Nutrition (per serving)": "اطلاعات تغذیه‌ای (برای هر وعده)",
+  "calories": "کالری",
+  "proteins": "پروتئین",
+  "totalCarbs": "کربوهیدرات",
+  "fats": "چربی",
 
   "______Create_Recipe_Page______": "//",
   "Create Recipe": "ساخت رسپی",

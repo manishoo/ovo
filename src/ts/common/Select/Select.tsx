@@ -42,6 +42,7 @@ export default class Select extends RX.Component<SelectProps> {
             anchorOffset={anchorOffset}
             popupWidth={popupWidth}
             popupHeight={popupHeight}
+            value={this.props.value}
             onOptionSelect={(option => {
               this.props.onChange(option.value)
               this._popupDisplayed = false
@@ -88,6 +89,7 @@ export default class Select extends RX.Component<SelectProps> {
     } else {
       showSelectDialog({
         onOptionSelect: (option => this.props.onChange(option.value)),
+        value: this.props.value,
         options: this.props.options,
       })
     }

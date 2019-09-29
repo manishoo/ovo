@@ -658,6 +658,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       id: this.state.recipe.id,
       recipe: this._getRecipe(),
     }, this.state.me.id)
+      .then(() => {
+        LocationStore.navigate(this.props, 'back')
+      })
   }
 
   private _onIngredientChange = (ingredient: IngredientWithKey) => {
@@ -816,7 +819,6 @@ export default function (props: {}) {
               },
             }
           })
-          LocationStore.navigate(props, 'back')
         }
       })}
     />

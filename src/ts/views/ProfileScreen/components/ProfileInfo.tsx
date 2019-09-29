@@ -49,7 +49,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
 
           <RX.View style={{ flexDirection: 'row' }}>
             <RX.View>
-              <Text type={Text.types.title} style={{marginBottom: Styles.values.spacing / 2}}>{this._getName()}</Text>
+              <Text type={Text.types.title} style={{ marginBottom: Styles.values.spacing / 2 }}>{this._getName()}</Text>
               <Text type={Text.types.subtitle}>@{user.username}</Text>
             </RX.View>
             <FilledButton
@@ -64,8 +64,10 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
 
         {
           user.bio &&
-          <Text type={Text.types.body}
-                style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}>{user.bio}</Text>
+          <Text
+            type={Text.types.body}
+            style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
+          >{user.bio}</Text>
         }
 
         {
@@ -73,7 +75,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
            * If any social media accounts were added
            * */
           Object.keys(user.socialNetworks).filter(k => user.socialNetworks[k] && (k !== '__typename')).length > 0 &&
-          <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
+          <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing }}>
             {
               user.socialNetworks.instagram && <Link
                 openInNewTab

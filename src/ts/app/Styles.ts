@@ -12,7 +12,7 @@ export default class Styles {
   public static values = {
     spacing: 16,
     spacingLarge: 20,
-    navBarHeight: 50,
+    navBarHeight: 72,
     drawerWidth: 200,
     mainContentMaxWidth: 975,
     defaultShadow: {

@@ -57,35 +57,43 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
       <ThemeContext.Consumer>
         {({ theme }) => (
           <CenterAlignedPageView>
-            {this._renderControlBar()}
-            <RX.View
-              style={[
-                styles.coverContainer,
-                {
-                  height: this._getWindowWidthConsideringDrawer() / 2,
-                  borderRadius: this.state.isSmallOrTiny ? 0 : 20,
-                }
-              ]}
-            >
-              <RX.Image
-                source={this.props.recipe.coverImage ? this.props.recipe.coverImage.url : ''}
-                resizeMode={'cover'}
-                style={styles.coverImage}
-              />
-            </RX.View>
+            <Navbar>
+              {this._renderControlBar()}
+            </Navbar>
+
+            {
+              this.props.recipe.coverImage &&
+              <RX.View
+                style={[
+                  styles.coverContainer,
+                  {
+                    height: this._getWindowWidthConsideringDrawer() / 2,
+                    borderRadius: this.state.isSmallOrTiny ? 0 : 20,
+                  }
+                ]}
+              >
+                <RX.Image
+                  source={this.props.recipe.coverImage.url}
+                  resizeMode={'cover'}
+                  style={styles.coverImage}
+                />
+              </RX.View>
+            }
 
             <RX.View style={styles.innerContainer}>
               <Text style={styles.title} translations={this.props.recipe.title} />
 
               {this._renderAuthorAndDescriptionSection(theme)}
 
+              {this._renderRecipeTimingAndComplexity(theme)}
+
               {this._renderIngredientsSection(theme)}
 
               {this._renderInstructionsSection(theme)}
 
-            </RX.View>
+              {this._renderNutritionInfo(theme)}
 
-            <Navbar />
+            </RX.View>
           </CenterAlignedPageView>
         )}
       </ThemeContext.Consumer>
@@ -99,6 +107,79 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       user: UserStore.getUser(),
     }
+  }
+
+  private _renderRecipeTimingAndComplexity = (theme: Theme) => {
+    const recipe = this.props.recipe
+
+    return (
+      <RX.View style={[styles.instructions.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
+        {
+          recipe.difficulty && [
+            <Text translate style={styles.label}>Complexity</Text>,
+            <Text type={Text.types.body} style={{ marginBottom: Styles.values.spacing * 2 }}>{recipe.difficulty}</Text>
+          ]
+        }
+
+        {(Object.keys(recipe.timing).length > 0) && <Text translate style={styles.label}>Timing</Text>}
+        {
+          recipe.timing.prepTime !== null &&
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('prepTime')}: {recipe.timing.prepTime}</Text>
+        }
+        {
+          recipe.timing.cookTime !== null &&
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('cookTime')}: {recipe.timing.cookTime}</Text>
+        }
+        {
+          recipe.timing.totalTime !== null &&
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('totalTime')}: {recipe.timing.totalTime}</Text>
+        }
+      </RX.View>
+    )
+  }
+
+  private _renderNutritionInfo = (theme: Theme) => {
+    const recipe = this.props.recipe
+
+    const carbs = (recipe.nutrition.totalCarbs || recipe.nutrition.totalAvailableCarbs || recipe.nutrition.carbsByDifference)
+
+    return (
+      <RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
+        <RX.View>
+          <Text
+            translate
+            type={Text.types.title}
+            style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}
+          >Nutrition (per serving)</Text>
+
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('calories')}: {recipe.nutrition.calories.amount.toFixed()} {recipe.nutrition.calories.unit}</Text>
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {recipe.nutrition.proteins.unit}</Text>
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('totalCarbs')}: {carbs.amount.toFixed()} {carbs.unit}</Text>
+          <Text
+            type={Text.types.body}
+            style={{ marginBottom: 5 }}
+          >{getLocalizedText('fats')}: {recipe.nutrition.fats.amount.toFixed()} {recipe.nutrition.fats.unit}</Text>
+        </RX.View>
+      </RX.View>
+    )
   }
 
   private _renderIngredientsSection = (theme: Theme) => {
@@ -145,6 +226,8 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
   private _renderAuthorAndDescriptionSection = (theme: Theme) => {
     const recipe = this.props.recipe
 
+    const authorName = this._getAuthorName({ firstName: recipe.author.firstName, lastName: recipe.author.lastName })
+
     return (
       <RX.View
         style={[styles.authorAndDescriptionSection.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
@@ -157,11 +240,19 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           </Link>
 
           <RX.View style={{ [Styles.values.marginStart]: Styles.values.spacing }}>
+            {
+              authorName &&
+              <Text style={{ fontSize: 16, paddingBottom: Styles.values.spacing / 2 }}>{authorName}</Text>
+            }
             <Link to={`/${recipe.author.username}`}>
               <Text onPress={() => {
               }}>{`@${recipe.author.username}`}</Text>
-              <Text type={Text.types.subtitle}>Editor at Chickanga</Text>
             </Link>
+            {
+              recipe.author.bio &&
+              <Text type={Text.types.subtitle}
+                    style={{ fontSize: 12, paddingTop: Styles.values.spacing / 2 }}>{recipe.author.bio}</Text>
+            }
           </RX.View>
         </RX.View>
         {
@@ -174,20 +265,36 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           </Text>
         }
 
-
         <Text
           style={[styles.authorAndDescriptionSection.date, { color: theme.colors.authorAndDescriptionSectionDateColor }]}
         >
-          {moment(recipe.createdAt).format(AppConfig.locale === 'en' ? 'jMMM jDo jYYYY' : 'jYYYY/jM/jD')}
+          {moment(recipe.createdAt).format(AppConfig.locale === 'fa' ? 'jYYYY/jMM/jDD hh:mm' : 'YYYY/MM/DD hh:mm')}
         </Text>
       </RX.View>
     )
   }
 
+  private _getAuthorName = (user: { firstName, lastName }) => {
+    if (!user.firstName && !user.lastName) return null
+
+    let name = ''
+    if (user.firstName) {
+      name += user.firstName
+    }
+    if (user.lastName) {
+      if (name.length > 0) {
+        name += ` ${user.lastName}`
+      } else {
+        name += user.lastName
+      }
+    }
+    return name
+  }
+
   private _renderControlBar = () => {
     if (this.state.user && ((this.state.user.id === this.props.recipe.author.id) || (this.state.user.role === UserRole.operator))) {
       return (
-        <RX.View style={{ flexDirection: 'row', paddingBottom: Styles.values.spacing }}>
+        <RX.View style={{ flexDirection: 'row' }}>
           <Mutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>
             variables={{
               recipeId: this.props.recipe.id,
@@ -285,6 +392,9 @@ RecipeContainer.fragments = {
       author {
         id
         username
+        firstName
+        lastName
+        bio
         imageUrl { url }
       }
       likesCount
@@ -294,34 +404,20 @@ RecipeContainer.fragments = {
         cookTime
         totalTime
       }
-      ingredients {
-        name {
-          text
-          locale
-        }
-        amount
-        customUnit
-        gramWeight
-        thumbnail {
-          url
-        }
-        description {
-          text
-          locale
-        }
-        food {...SelectFoodFood}
-        weight {
-          amount
-          gramWeight
-          id
-          name { text locale }
-        }
-      }
+      ingredients { ...IngredientCardIngredient }
       instructions {
         step
         text { text locale }
         image { url }
         notes { text locale }
+      }
+      nutrition {
+        calories {...NutrientUnit}
+        proteins {...NutrientUnit}
+        totalCarbs {...NutrientUnit}
+        totalAvailableCarbs {...NutrientUnit}
+        carbsByDifference {...NutrientUnit}
+        fats {...NutrientUnit}
       }
       difficulty
       description { text locale }
@@ -330,6 +426,13 @@ RecipeContainer.fragments = {
       updatedAt
     }
 
+    fragment NutrientUnit on NutrientUnit {
+      amount
+      id
+      unit
+    }
+
+    ${IngredientCard.fragments.ingredient}
     ${SelectFoodContainer.fragments.food}
   `
 }
@@ -369,7 +472,9 @@ const styles = {
       borderTopWidth: 1,
       borderStyle: 'dashed',
       // padding: Styles.values.spacing * 2,
-      paddingVertical: Styles.values.spacing * 2,
+      marginTop: Styles.values.spacing,
+      paddingTop: Styles.values.spacing * 2,
+      paddingBottom: Styles.values.spacing * 3,
     }),
     avatar: RX.Styles.createImageStyle({
       width: 80,

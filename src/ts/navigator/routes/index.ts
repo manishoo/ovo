@@ -34,7 +34,7 @@ export const RecipeForm = loadComponent('RecipeForm')
 export const Recipe = loadComponent('Recipe')
 
 export const MealForm = loadComponent('MealForm')
-export const MealScreen = loadComponent('MealScreen')
+export const FoodScreen = loadComponent('FoodScreen')
 
 // export const RecipeFormContainer = loadComponent('RecipeForm', 'RecipeFormContainer')
 export const SettingsScreen = loadComponent('SettingsScreen')

@@ -22,6 +22,7 @@ import {
   RegisterScreen,
   SearchResult,
   SettingsScreen,
+  FoodScreen,
 } from './routes'
 
 
@@ -97,19 +98,20 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           },
 
           /**
+           * Foods
+           * */
+
+          {
+            path: `${Routes.food}/:id`,
+            exact: false,
+            component: FoodScreen,
+            navOptions: defaultNavOptions,
+          },
+
+          /**
            * Meals
            * */
-          // {
-          //   path: `${Routes.meal}/:id/edit`,
-          //   exact: false,
-          //   component: RecipeForm,
-          //   navOptions: {
-          //     ...defaultNavOptions,
-          //     title: 'Edit Meal',
-          //   },
-          // },
           {
-            // path: `${Routes.meal}/:id/`,
             path: `${Routes.mealForm}/:id`,
             exact: false,
             immersive: true,

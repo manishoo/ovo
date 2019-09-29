@@ -30,6 +30,7 @@ module.exports = {
       './src/ts/views/SearchResult/*',
       './src/ts/views/MealForm/*',
       './src/ts/views/MealScreen/*',
+      './src/ts/views/FoodScreen/*',
 
       './src/ts/common/FoodDialog/**/*',
       './src/ts/common/RecipesList/**/*',

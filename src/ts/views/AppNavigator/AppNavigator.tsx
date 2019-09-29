@@ -16,6 +16,7 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { User } from 'src/ts/models/FoodModels'
+import { WidthBreakPoints } from 'src/ts/models/ResponsiveWidthModels'
 import { NavOptions } from 'src/ts/navigator/navigator'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -82,6 +83,12 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   render() {
     const Navbar = this._renderNavbar()
 
+    if (this.state.width < WidthBreakPoints.small) return (
+      <RX.Text style={{ padding: 16 }}>
+        This application does not currently support mobile size. Please use a desktop browser
+      </RX.Text>
+    )
+
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -117,7 +124,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
               {Navbar}
               {this._renderTabBar(theme)}
               {this._renderDrawer(theme)}
-              {this._renderSearch(theme)}
+              {false && this._renderSearch(theme)}
 
               {
                 /**
@@ -262,8 +269,14 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
     const toggleModal = (show: boolean) => () => {
       RX.Animated.parallel([
-        RX.Animated.timing(this._searchContainerAnimationTopValue, { toValue: show ? 0 : -SEARCH_CONTAINER_HEIGHT, duration: 300 }),
-        RX.Animated.timing(this._searchContainerBackDropAnimationOpacityValue, { toValue: show ? 1 : 0, duration: 300 }),
+        RX.Animated.timing(this._searchContainerAnimationTopValue, {
+          toValue: show ? 0 : -SEARCH_CONTAINER_HEIGHT,
+          duration: 300
+        }),
+        RX.Animated.timing(this._searchContainerBackDropAnimationOpacityValue, {
+          toValue: show ? 1 : 0,
+          duration: 300
+        }),
       ]).start(() => {
         this.setState({ searchModalShowing: show })
         if (show && this._searchInput) {

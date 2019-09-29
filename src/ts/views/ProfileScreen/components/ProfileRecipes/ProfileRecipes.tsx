@@ -12,10 +12,10 @@ import { UserRole } from 'src/ts/models/global-types'
 import UserStore from 'src/ts/stores/UserStore'
 import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
 import {
-  RecipesListQuery,
-  RecipesListQuery_recipes_recipes,
-  RecipesListQueryVariables
-} from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+  ProfileRecipesQuery,
+  ProfileRecipesQueryVariables
+} from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import { Me } from 'src/ts/views/Register/types/Me'
 
 
@@ -69,11 +69,12 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
 
     return new Promise(((resolve, reject) => {
       this.setState({ fetching: true }, () => {
-        client.query<RecipesListQuery, RecipesListQueryVariables>({
+        client.query<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
           query: PROFILE_RECIPES_QUERY,
           fetchPolicy: 'cache-first',
           variables: {
             userId: this.props.userId,
+            size: 20,
             lastId
           },
         })
@@ -96,8 +97,8 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
 }
 
 export const PROFILE_RECIPES_QUERY = gql`
-  query ProfileRecipesQuery($lastId: String, $userId: String) {
-    recipes(lastId: $lastId, userId: $userId) {
+  query ProfileRecipesQuery($lastId: String, $userId: String, $size: Int) {
+    recipes(lastId: $lastId, userId: $userId, size: $size) {
       recipes {
         ...MyRecipe
       }

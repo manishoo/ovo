@@ -20,6 +20,7 @@ class AppConfig {
   }
 
   public locale: LanguageCode = LanguageCode.en
+  public panelAddress: string = 'http://pantheon.mycaloria.com'
   private _appVersion: string
   private readonly _frontendHost: string
   private readonly _platformType: RX.Types.PlatformType

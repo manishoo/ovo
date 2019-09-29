@@ -4,6 +4,7 @@
  */
 
 import { Option } from 'common/Select/Select'
+import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
@@ -14,6 +15,7 @@ import { fullHeight } from 'src/ts/utilities'
 
 interface SelectDialogProps {
   style?: any,
+  value?: string
   onDismiss?: () => void,
   options: Option[],
   onOptionSelect: (option: Option) => void,
@@ -34,16 +36,25 @@ export function showSelectDialog(props: SelectDialogProps) {
   )
 }
 
-const OptionItem = ({ option, onOptionPress }: { option: Option, onOptionPress: (option: Option) => void }) => {
+const OptionItem = ({ option, onOptionPress, active }: { option: Option, onOptionPress: (option: Option) => void, active?: boolean }) => {
   return (
-    <RX.View
-      style={styles.searchResultItemContainer}
-      onPress={() => onOptionPress(option)}
-    >
-      <RX.Text>
-        {option.text}
-      </RX.Text>
-    </RX.View>
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <RX.View
+          style={styles.searchResultItemContainer}
+          onPress={() => onOptionPress(option)}
+        >
+          <Text
+            style={{
+              color: active ? theme.colors.selectBorderColor : undefined,
+              fontWeight: active ? 'bold' : undefined
+            }}
+          >
+            {option.text}
+          </Text>
+        </RX.View>
+      )}
+    </ThemeContext.Consumer>
   )
 }
 
@@ -52,9 +63,18 @@ export class SelectPopup extends RX.Component<SelectDialogProps & { anchorPositi
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <RX.View style={[styles.container, { backgroundColor: theme.colors.white, borderColor: theme.colors.selectBorderColor }, this.props.style]}>
+          <RX.View style={[styles.container, {
+            backgroundColor: theme.colors.white,
+            borderColor: theme.colors.selectBorderColor
+          }, this.props.style]}>
             {
-              this.props.options.map(option => <OptionItem option={option} onOptionPress={this.props.onOptionSelect} />)
+              this.props.options.map(option => (
+                <OptionItem
+                  option={option}
+                  active={this.props.value === option.value}
+                  onOptionPress={this.props.onOptionSelect}
+                />
+              ))
             }
           </RX.View>
         )}
