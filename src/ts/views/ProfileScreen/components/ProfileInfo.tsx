@@ -52,13 +52,18 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
               <Text type={Text.types.title} style={{ marginBottom: Styles.values.spacing / 2 }}>{this._getName()}</Text>
               <Text type={Text.types.subtitle}>@{user.username}</Text>
             </RX.View>
-            <FilledButton
-              mode={FilledButton.mode.default}
-              label={getLocalizedText('ProfileSettings')}
-              onPress={() => navigate(this.props, Routes.settings)}
-              style={{ [Styles.values.marginStart]: Styles.values.spacing }}
-              // labelStyle={{ fontSize: 14 }}
-            />
+
+            {
+              this.props.isMyProfile &&
+              <FilledButton
+                mode={FilledButton.mode.default}
+                label={getLocalizedText('ProfileSettings')}
+                onPress={() => navigate(this.props, Routes.settings)}
+                style={{ [Styles.values.marginStart]: Styles.values.spacing }}
+                // labelStyle={{ fontSize: 14 }}
+              />
+            }
+
           </RX.View>
         </RX.View>
 

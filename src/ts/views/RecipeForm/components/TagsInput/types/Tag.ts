@@ -23,4 +23,5 @@ export interface Tag {
   title: Tag_title[] | null;
   info: Tag_info[] | null;
   type: TagType;
+  user: string | null;
 }

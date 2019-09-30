@@ -6,6 +6,7 @@
 import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
+import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
@@ -43,7 +44,11 @@ export default class Navbar extends RX.Component<NavbarProps> {
 
   private renderBackButton = (theme: Theme) => (
     <RX.View
-      style={{ flexDirection: 'row', alignItems: 'center', cursor: 'pointer' }}
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        cursor: 'pointer',
+      }}
       onPress={() => navigate(this.props, 'back')}
     >
       <RX.Image
@@ -69,11 +74,12 @@ const styles = {
   }),
   backText: RX.Styles.createTextStyle({
     fontWeight: '500',
-    marginLeft: 5,
+    [Styles.values.marginStart]: 5,
   }),
   backImage: RX.Styles.createImageStyle({
     width: 12,
     height: 21,
+    transform: [{rotate: AppConfig.isRTL() ? '180deg' : '0deg'}]
   }),
   titleContainer: RX.Styles.createViewStyle({
     // position: 'absolute',

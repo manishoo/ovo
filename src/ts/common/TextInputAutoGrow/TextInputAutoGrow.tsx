@@ -85,6 +85,7 @@ const styles = {
   wrapper: RX.Styles.createViewStyle({
     borderRadius: 8,
     padding: Styles.values.spacing / 2,
+    marginBottom: Styles.values.spacing,
   }),
   textInput: RX.Styles.createViewStyle({
     //

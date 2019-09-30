@@ -23,6 +23,7 @@ export interface TagsInputQuery_tags {
   title: TagsInputQuery_tags_title[] | null;
   info: TagsInputQuery_tags_info[] | null;
   type: TagType;
+  user: string | null;
 }
 
 export interface TagsInputQuery {

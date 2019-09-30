@@ -15,6 +15,7 @@ class ImageSource implements ImageSourceBase {
 	CrossIcon = AppConfig.getImagePath('CrossIcon.png')
 	HeartAnimationEdge = AppConfig.getImagePath('web_heart_animation_edge.png')
 	Search = AppConfig.getImagePath('Search.svg')
+	SearchWhite = AppConfig.getImagePath('SearchWhite.svg')
 	SearchActive = AppConfig.getImagePath('SearchActive.svg')
 	Rectangle = AppConfig.getImagePath('Rectangle.svg')
 	RectangleActive = AppConfig.getImagePath('RectangleActive.svg')

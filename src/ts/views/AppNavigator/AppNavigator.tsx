@@ -45,7 +45,7 @@ interface AppNavigatorProps extends RX.CommonProps {
 }
 
 interface WebAppRouterState {
-  mode: 'drawer' | 'navbar',
+  mode: string,
   user?: User,
   hideDrawer: boolean,
   currentPath: string,
@@ -56,6 +56,16 @@ interface WebAppRouterState {
 }
 
 export default class AppNavigator extends ComponentBase<AppNavigatorProps & { history: any }, WebAppRouterState> {
+  state: WebAppRouterState = {
+    mode: ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer',
+    user: UserStore.getUser(),
+    currentPath: LocationStore.getPath(),
+    height: ResponsiveWidthStore.getHeight(),
+    width: ResponsiveWidthStore.getWidth(),
+    routes: [],
+    hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
+  }
+
   protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
     const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
     const user = UserStore.getUser()
@@ -153,9 +163,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   }
 
   componentDidMount(): void {
-    this._handleDrawerVisibility(undefined, false)
-
     this.props.history.listen(this._handleLocationChange) // FIXME better place to call this maybe
+
+    this._handleDrawerVisibility()
   }
 
   private _renderDrawer = (theme: Theme) => {
@@ -338,7 +348,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   }
 
   private _handleLocationChange = (location: Location, action: Action) => {
-    LocationStore.setPath(location.pathname) // FIXME do something better maybe
+    // LocationStore.setPath(location.pathname) // FIXME do something better maybe
     this._handleDrawerVisibility(location.pathname)
   }
 
@@ -370,6 +380,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     })
 
     if (hideDrawer) {
+      console.log('ResponsiveWidthStore.toggleDrawerVisibility(false)')
       ResponsiveWidthStore.toggleDrawerVisibility(false)
       setTimeout(() => this._setUI(false, this.state.mode === 'navbar', animate), 0)
 
@@ -380,6 +391,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       //   this._setUI(false, false, animate)
       // }
     } else {
+      console.log('ResponsiveWidthStore.toggleDrawerVisibility(true)')
       ResponsiveWidthStore.toggleDrawerVisibility(true)
       setTimeout(() => this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate), 0)
     }

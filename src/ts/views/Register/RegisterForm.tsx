@@ -100,7 +100,6 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
   }
 
   private _onChange = (fieldName: string) => (value: any) => {
-    console.log('fieldName', fieldName, 'value', value)
     this.setState({
       [fieldName]: value,
     })

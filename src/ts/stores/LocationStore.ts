@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { History } from 'history'
+import { Action, History, Location } from 'history'
 import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
@@ -22,13 +22,19 @@ class LocationStore extends StoreBase implements IPersistableStore {
 
     deferred.resolve(void 0)
     window.addEventListener('popstate', e => this._onUrlChange(e))
-    // 	history.listen(this._handleLocationChange)
 
     return deferred.promise()
   }
 
+  private _handleLocationChange = (location: Location, action?: Action) => {
+    this.setPath(location.pathname)
+  }
+
   setHistory(history: any) {
     this.history = history
+
+    this.history.listen(this._handleLocationChange)
+
     this.trigger()
   }
 
@@ -91,7 +97,7 @@ class LocationStore extends StoreBase implements IPersistableStore {
   }
 
   private _onUrlChange(e: any) {
-    //
+    console.log('POPSTATE')
   }
 }
 

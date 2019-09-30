@@ -53,7 +53,7 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
 
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 
-  private _getCellSize = () => (this._getWindowWidthConsideringDrawer() - ((Styles.values.spacing * 2) * this.state.columns)) / this.state.columns
+  private _getCellSize = () => (this._getWindowWidthConsideringDrawer() - ((Styles.values.spacing * 2) * this.state.columns) - (Styles.values.spacing * 2)) / this.state.columns
 }
 
 const styles = {

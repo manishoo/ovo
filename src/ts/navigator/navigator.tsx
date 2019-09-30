@@ -11,6 +11,7 @@ import { trimSlashes } from 'src/ts/utilities/trim-slashes'
 import AppNavigator from 'src/ts/views/AppNavigator/AppNavigator'
 import { Me } from 'src/ts/views/Register/types/Me'
 import {
+  FoodScreen,
   LandingScreen,
   LoginScreen,
   MealForm,
@@ -22,7 +23,6 @@ import {
   RegisterScreen,
   SearchResult,
   SettingsScreen,
-  FoodScreen,
 } from './routes'
 
 
@@ -45,6 +45,11 @@ interface NavigatorState {
 }
 
 export default class Navigator extends ComponentBase<NavigatorProps, NavigatorState> {
+  state = {
+    user: UserStore.getUser(),
+    currentPath: LocationStore.getPath(),
+  }
+
   protected _buildState(props: NavigatorProps, initialBuild: boolean): Partial<NavigatorState> | undefined {
     const user = UserStore.getUser()
     const currentPath = LocationStore.getPath()
@@ -56,6 +61,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
   }
 
   render() {
+    console.log('this.state.currentPath', this.state.currentPath)
     return (
       <AppNavigator
         history={this.props.history}
@@ -66,7 +72,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `/recipe/:slug/edit`,
             exact: false,
-            redirectTo: this.state.user ? undefined: Routes.login,
+            redirectTo: this.state.user ? undefined : Routes.login,
             component: RecipeForm,
             navOptions: {
               ...defaultNavOptions,
@@ -79,9 +85,10 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: Recipe,
             navOptions: defaultNavOptions,
           },
+
           {
-            path: `/recipes/`,
-            exact: false,
+            path: Routes.searchRecipes,
+            exact: true,
             component: SearchResult,
             navOptions: defaultNavOptions,
           },
@@ -90,7 +97,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             exact: false,
             immersive: true,
             component: RecipeForm,
-            redirectTo: this.state.user ? undefined: Routes.login,
+            redirectTo: this.state.user ? undefined : Routes.login,
             navOptions: {
               ...defaultNavOptions,
               title: 'Create Recipe',
@@ -115,7 +122,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             path: `${Routes.mealForm}/:id`,
             exact: false,
             immersive: true,
-            redirectTo: this.state.user ? undefined: Routes.login,
+            redirectTo: this.state.user ? undefined : Routes.login,
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
@@ -126,7 +133,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             path: `${Routes.mealForm}/`,
             exact: false,
             immersive: true,
-            redirectTo: this.state.user ? undefined: Routes.login,
+            redirectTo: this.state.user ? undefined : Routes.login,
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
@@ -136,7 +143,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `${Routes.mealPlan}/`,
             exact: false,
-            redirectTo: this.state.user ? undefined: Routes.login,
+            redirectTo: this.state.user ? undefined : Routes.login,
             component: MealPlanScreen,
             navOptions: defaultNavOptions,
           },
@@ -144,34 +151,33 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             path: `${Routes.settings}/`,
             exact: false,
             immersive: true,
-            redirectTo: this.state.user ? undefined: Routes.login,
+            redirectTo: this.state.user ? undefined : Routes.login,
             component: SettingsScreen,
             navOptions: defaultNavOptions,
           },
           {
             path: Routes.login,
             immersive: true,
-            exact: true,
+            exact: false,
             component: LoginScreen,
-            modal: false,
           },
           {
             path: Routes.register,
             immersive: true,
             exact: false,
             component: RegisterScreen,
-            modal: false,
           },
           {
             path: '/:username',
-            exact: false,
-            component: (this.state.user && (this.state.user.username === trimSlashes(this.state.currentPath!))) ? ProfileScreen : PublicProfileScreen,
+            exact: true,
+            component: (this.state.user && (this.state.user.username === trimSlashes(this.state.currentPath))) ? ProfileScreen : PublicProfileScreen,
           },
           {
             path: '/',
-            exact: false,
+            exact: true,
+            immersive: true,
             component: LandingScreen,
-            redirectTo: this.state.user && Routes.login
+            redirectTo: this.state.user ? this.state.user.username : Routes.login
           },
         ]}
       />

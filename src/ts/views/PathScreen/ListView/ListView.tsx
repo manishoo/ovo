@@ -20,8 +20,6 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 	constructor(props: ListViewProps) {
 		super(props)
 
-		console.log(JSON.stringify(props.path, null, 2))
-
 		this.state = {
 			path: props.path.map(e => ({
 				key: e.id,

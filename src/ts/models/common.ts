@@ -18,6 +18,7 @@ export enum Routes {
    * */
   recipe = '/recipe',
   recipeForm = '/create-recipe',
+  searchRecipes = '/recipes',
 
   /**
    * Foods

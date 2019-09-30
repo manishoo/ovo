@@ -90,7 +90,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
         <RX.View style={{ flexDirection: 'row' }}>
           <Link to={`${AppConfig.panelAddress}/food-class/${this.props.food.foodClass.id}`} openInNewTab>
             <FilledButton
-              label={'Edit Recipe'}
+              label={'Edit Food'}
               onPress={() => null}
               style={{
                 [Styles.values.marginStart]: Styles.values.spacing / 2

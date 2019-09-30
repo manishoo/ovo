@@ -46,6 +46,12 @@ export class Theme {
           inputErrorColor: '#d32f2f',
           largeHeading: '#cecece',
 
+          toast: {
+            success: '#00BA72',
+            error: '#d32f2f',
+            default: '#4a4a4a',
+          },
+
           red: '#d32f2f',
           darkerRed: '#a92626',
 

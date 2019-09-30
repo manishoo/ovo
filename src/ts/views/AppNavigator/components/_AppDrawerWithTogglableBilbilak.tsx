@@ -23,8 +23,8 @@ import UserStore from 'src/ts/stores/UserStore'
 import { navigate } from 'src/ts/utilities'
 
 
-const BRAND_IMAGE_WIDTH = 135
-const BRAND_IMAGE_HEIGHT = 50
+const BRAND_IMAGE_WIDTH = 120
+const BRAND_IMAGE_HEIGHT = 35
 const ACTIVE_INDICATOR_WIDTH = Styles.values.drawerWidth + Styles.values.spacing * 2
 
 interface AppDrawerProps {

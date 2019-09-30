@@ -120,10 +120,14 @@
   "e.g. Easy Sesame Chicken": "e.g. Easy Sesame Chicken",
 
   "areyousure?": "Are you sure about this action?",
+  "deleteTag?": "Are you sure about this action?",
 
   "prepTime": "Prep Time",
   "cookTime": "Cook Time",
   "totalTime": "Total Time",
 
-  "areYouSureYouWantToLeave": "Are you sure you want to leave? You have unsaved changes."
+  "areYouSureYouWantToLeave": "Are you sure you want to leave? You have unsaved changes.",
+
+  "RecipeCreationSuccess": "Recipe Created Successfully",
+  "RecipeUpdateSuccess": "Recipe Updated Successfully"
 }

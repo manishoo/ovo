@@ -24,7 +24,7 @@ import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { FoodTypes, MealItem, User } from 'src/ts/models/FoodModels'
+import { FoodTypes, MealItem } from 'src/ts/models/FoodModels'
 import {
   IngredientInput,
   InstructionInput,
@@ -34,6 +34,7 @@ import {
 } from 'src/ts/models/global-types'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
@@ -45,6 +46,7 @@ import {
   RecipeFormExtraUpdateMutation,
   RecipeFormExtraUpdateMutationVariables
 } from 'src/ts/views/RecipeForm/components/RecipeFormExtra/types/RecipeFormExtraUpdateMutation'
+import { Me } from 'src/ts/views/Register/types/Me'
 import InstructionRow from './components/InstructionRow/InstructionRow'
 import { RecipeFormCreateMutation, RecipeFormCreateMutationVariables } from './types/RecipeFormCreateMutation'
 import {
@@ -74,7 +76,7 @@ interface RecipeFormState {
   difficulty?: string,
   totalTimeSet?: boolean,
   height?: number,
-  me?: User,
+  me?: Me,
   hideForm?: boolean
   coverImage?: any,
 }
@@ -174,7 +176,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
 
   private _renderFormExtraContent = () => {
     if (this.state.recipe.id === 'new') return null
-
     return (
       <RX.Animated.View
         style={[
@@ -185,6 +186,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           recipe={this.state.recipe}
           userId={this.state.me.id}
           selectedTags={this.state.recipe.tags}
+          me={this.state.me}
           onTagsChange={selectedTags => this.setState(prevState => ({
             recipe: {
               ...prevState.recipe,
@@ -212,6 +214,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <IntlInput
           autoFocus
           label={getLocalizedText('Name')}
+          required
           placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
           translations={this.state.recipe.title || []}
           errorMessage={fieldErrors['title']}
@@ -256,6 +259,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <Input
           label={getLocalizedText('Ingredients')}
           placeholder={getLocalizedText('e.g. Rice')}
+          required
           onFocus={() => showFoodModal({
             autoFocus: true,
             foodTypes: [FoodTypes.food],
@@ -302,6 +306,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: Styles.values.spacing * 2 }}>
           <Input
             label={getLocalizedText('Serving')}
+            required
             value={this.state.recipe.serving ? String(this.state.recipe.serving) : ''}
             onChange={(serving: string) => this.setState(prevState => ({
               recipe: {
@@ -341,6 +346,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           />
           <Input
             label={getLocalizedText('TotalTime')}
+            required
             value={this.state.recipe.timing.totalTime ? String(this.state.recipe.timing.totalTime) : ''}
             onChange={(totalTime: string) => this.setState(prevState => ({
               totalTimeSet: true,
@@ -614,7 +620,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         amount: ingredient.amount,
         weight: ingredient.weight ? ingredient.weight.id : undefined,
         customUnit: ingredient.customUnit,
-        description: ingredient.description,
+        description: ingredient.description.map(i => ({ locale: i.locale, text: i.text })),
       }) as IngredientInput),
       instructions: this.state.recipe.instructions.map(instruction => ({
         text: instruction.text.map(i => ({ locale: i.locale, text: i.text })),
@@ -640,6 +646,10 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       .then(({ data }) => {
         if (data) {
           this._setUI()
+          ToastStore.toast({
+            message: getLocalizedText('RecipeCreationSuccess'),
+            type: ToastTypes.Success,
+          })
           this.setState({
             recipe: {
               ...data.createRecipe,
@@ -659,6 +669,10 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       recipe: this._getRecipe(),
     }, this.state.me.id)
       .then(() => {
+        ToastStore.toast({
+          message: getLocalizedText('RecipeUpdateSuccess'),
+          type: ToastTypes.Success,
+        })
         LocationStore.navigate(this.props, 'back')
       })
   }
@@ -771,6 +785,7 @@ export default function (props: {}) {
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
+              size: 20,
             },
           })
 
@@ -778,6 +793,7 @@ export default function (props: {}) {
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
+              size: 20,
             },
             data: {
               recipes: {
@@ -798,6 +814,7 @@ export default function (props: {}) {
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
+              size: 20,
             },
           })
 
@@ -805,6 +822,7 @@ export default function (props: {}) {
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
+              size: 20,
             },
             data: {
               recipes: {

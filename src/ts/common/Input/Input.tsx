@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Text from 'common/Text/Text'
 import { debounce } from 'lodash'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
@@ -52,7 +53,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
       label,
       textInputStyle,
       inputRef,
-      autoGrow,
+      required,
       errorMessage,
       ...props
     } = this.props
@@ -63,7 +64,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
           <RX.View
             style={[styles.container, style]}
           >
-            {!!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }, this._getLabelStyle(theme)]}>{label}</RX.Text>}
+            {!!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }, this._getLabelStyle(theme)]}>{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
             <RX.TextInput
               ref={inputRef}
               value={value}
@@ -81,6 +82,12 @@ export default class Input extends RX.Component<InputProps, InputState> {
           </RX.View>
         )}
       </ThemeContext.Consumer>
+    )
+  }
+
+  private _renderRequiredStart = (theme: Theme) => {
+    return (
+      <Text style={{color: theme.colors.red}}>*</Text>
     )
   }
 

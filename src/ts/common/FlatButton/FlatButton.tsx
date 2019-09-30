@@ -39,6 +39,7 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
                 activeOpacity={0.7}
               >
                 <Text style={[styles.text, { color: theme.colors.flatButtonTextColor }, labelStyle]} translations={labelTranslations}>{label}</Text>
+                {this.props.children}
               </RX.View>
             )}
           />
@@ -53,8 +54,9 @@ const styles = {
     borderRadius: 50,
     borderWidth: 1,
     padding: Styles.values.spacing / 2,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    flexDirection: 'row',
     // cursor: 'pointer'
   }),
   text: RX.Styles.createTextStyle({

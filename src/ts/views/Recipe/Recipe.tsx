@@ -28,7 +28,12 @@ import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam, navigate } from 'src/ts/utilities'
+import trimTypeName from 'src/ts/utilities/trim-type-name'
 import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
+import {
+  ProfileRecipesQuery,
+  ProfileRecipesQueryVariables
+} from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import { RecipesListQueryVariables } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
 import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
@@ -106,6 +111,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
       windowWidth: ResponsiveWidthStore.getWidth(),
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       user: UserStore.getUser(),
+      serving: props.recipe.serving,
     }
   }
 
@@ -150,6 +156,8 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
   private _renderNutritionInfo = (theme: Theme) => {
     const recipe = this.props.recipe
 
+    if (Object.values(trimTypeName(recipe.nutrition)).filter(Boolean).length === 0) return null
+
     const carbs = (recipe.nutrition.totalCarbs || recipe.nutrition.totalAvailableCarbs || recipe.nutrition.carbsByDifference)
 
     return (
@@ -192,7 +200,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}>Ingredients</Text>
           <IngredientServingControl
             serving={this.state.serving || recipe.serving}
-            onServingChange={serving => this.setState({ serving })}
+            onServingChange={serving => serving > 0 && this.setState({ serving })}
           />
         </RX.View>
 
@@ -202,7 +210,10 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
               <IngredientCard
                 // key={ingredient.i}
                 onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
-                ingredient={ingredient}
+                ingredient={{
+                  ...ingredient,
+                  amount: ingredient.amount * this.state.serving,
+                }}
                 size={200}
               />
             ))
@@ -300,22 +311,25 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
               recipeId: this.props.recipe.id,
             }}
             update={(cache) => {
-              const { recipes } = cache.readQuery({
-                query: PROFILE_RECIPES_QUERY, variables: {
+              const { recipes } = cache.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
+                query: PROFILE_RECIPES_QUERY,
+                variables: {
                   userId: this.state.user && this.state.user.id,
+                  size: 20,
                 }
               })
 
-              cache.writeQuery({
+              cache.writeQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
                 query: PROFILE_RECIPES_QUERY,
                 data: {
                   recipes: {
                     ...recipes,
-                    recipes: recipes.recipes.filter((i: any) => i.id !== this.props.recipe.id)
+                    recipes: recipes.recipes.filter(i => i.id !== this.props.recipe.id)
                   }
                 },
                 variables: {
                   userId: this.state.user && this.state.user.id,
+                  size: 20,
                 } as RecipesListQueryVariables
               })
             }}

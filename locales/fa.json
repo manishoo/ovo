@@ -110,6 +110,7 @@
   "e.g. Easy Sesame Chicken": "مثلا ته‌چین مرغ",
 
   "areyousure?": "مطمئنی؟",
+  "deleteTag?": "مطمئنی؟",
 
   "prepTime": "زمان آماده سازی",
   "cookTime": "زمان پخت",
@@ -130,5 +131,8 @@
 
   "______Create_Meal_Page______": "//",
   "Meal Items": "آیتم های سفره",
-  "Create Meal": "ساخت سفره"
+  "Create Meal": "ساخت سفره",
+
+  "RecipeCreationSuccess": "Recipe Created Successfully",
+  "RecipeUpdateSuccess": "Recipe Updated Successfully"
 }

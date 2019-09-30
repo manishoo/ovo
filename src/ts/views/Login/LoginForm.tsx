@@ -55,14 +55,12 @@ export class LoginForm extends RX.Component<LoginProps> {
             secureTextEntry
           />
 
-          <RX.View style={{ flexDirection: 'row' }}>
-            <FilledButton
-              label={getLocalizedText('Login')}
-              onPress={this._handleSubmit}
-              disabled={!this._isValid()}
-              containerStyle={styles.submitButton}
-            />
-          </RX.View>
+          <FilledButton
+            label={getLocalizedText('Login')}
+            onPress={this._handleSubmit}
+            disabled={!this._isValid()}
+            containerStyle={styles.submitButton}
+          />
         </RX.View>
       </RX.View>
     )

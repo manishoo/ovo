@@ -67,6 +67,7 @@ export default abstract class AppBootstrapper {
   private _startCriticalServices(): SyncTasks.Promise<void> {
     let servicesToStart: Service[] = [
       UserStore,
+      // LocationStore,
     ]
 
     if (AppConfig.getPlatformType() === 'web') {

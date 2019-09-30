@@ -45,6 +45,10 @@ class ImageSource implements ImageSourceBase {
 		return require('../../../images/Search.png')
 	}
 
+	get SearchWhite() {
+		return require('../../../images/SearchWhite.png')
+	}
+
 	get SearchActive() {
 		return require('../../../images/SearchActive.png')
 	}

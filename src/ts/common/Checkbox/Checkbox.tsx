@@ -22,7 +22,7 @@ export default class Checkbox extends RX.Component<CheckboxProps, RX.Stateless> 
   public static defaultProps = {
     size: 20,
     emptyColor: '#fff',
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: '#eee',
   }
 

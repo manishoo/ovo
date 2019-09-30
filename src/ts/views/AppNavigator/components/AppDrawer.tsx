@@ -8,9 +8,13 @@ import FlatButton from 'common/FlatButton/FlatButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Text from 'common/Text/Text'
+import { Action, Location } from 'history'
+import { matchPath } from 'react-router'
 // import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
+import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
@@ -21,29 +25,41 @@ import UserStore from 'src/ts/stores/UserStore'
 import { navigate } from 'src/ts/utilities'
 
 
-const BRAND_IMAGE_WIDTH = 135
-const BRAND_IMAGE_HEIGHT = 50
+const BRAND_IMAGE_WIDTH = 120
+const BRAND_IMAGE_HEIGHT = 35
+const ACTIVE_INDICATOR_WIDTH = Styles.values.drawerWidth + Styles.values.spacing * 2
 
 interface AppDrawerProps {
   user?: User,
 }
 
 interface AppDrawerState {
-  activeLink: number
+  path: string,
+  me: { username: string },
 }
 
 export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerState> {
   constructor(props: AppDrawerProps) {
     super(props)
 
+    const history = LocationStore.getHistory()
+    history.listen(this._handleLocationChange)
     this.state = {
-      activeLink: 0,
+      path: LocationStore.getPath(),
+      me: UserStore.getUser(),
+    }
+    this._handleActiveChange(this.state.path, false)
+  }
+
+  protected _buildState(props: AppDrawerProps, initialBuild: boolean): Partial<AppDrawerState> | undefined {
+    return {
+      path: LocationStore.getPath(),
+      me: UserStore.getUser(),
     }
   }
 
   render() {
     const { user } = this.props
-    // const { activeLink } = this.state
 
     return (
       <RX.View style={{ flex: 1, padding: Styles.values.spacingLarge }}>
@@ -59,19 +75,27 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 this._renderActiveIndicator(),
                 <Link
                   key={0}
-                  onPress={this._handleActiveChange(0)}
+                  // onPress={this._handleActiveChange(0)}
                   to={`/${user.username}`}
                   style={{ alignSelf: 'center', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
                 >
                   <Image source={user.imageUrl!.url} style={styles.avatar} />
                 </Link>,
-                /*<Link
-                  key={1}
-                  onPress={this._handleActiveChange(1)}
-                  to={`/`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 1 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>Path</Text></Link>,
                 <Link
+                  key={1}
+                  // onPress={this._handleActiveChange(1)}
+                  to={Routes.searchRecipes}
+                  style={Object.assign({}, styles.link, { color: this._isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
+                >
+                  <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image
+                      source={this._isActive(Routes.searchRecipes) ? ImageSource.SearchWhite : ImageSource.Search}
+                      style={styles.icon}
+                    />
+                    <Text translate style={{ fontWeight: 'bold' }}>Search</Text>
+                  </RX.View>
+                </Link>,
+                /*<Link
                   key={2}
                   onPress={this._handleActiveChange(2)}
                   to={`${Routes.mealPlan}`}
@@ -119,6 +143,54 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     )
   }
 
+  private _isActive = (pathname: string): boolean => {
+    return !!matchPath(this.state.path, {
+      path: pathname,
+      exact: true,
+    })
+  }
+
+  private _handleLocationChange = (location: Location, action?: Action) => {
+    this._handleActiveChange(location.pathname, true)
+  }
+
+  private _handleActiveChange = (pathname: string, animated?: boolean) => {
+    let topValue = 0
+    let startValue = -32
+
+    if (this.state.me && matchPath(pathname, {
+      path: `/${this.state.me.username}`,
+      exact: true,
+    })) {
+      topValue = 90 + Styles.values.spacing
+    }
+
+    if (matchPath(pathname, {
+      path: Routes.searchRecipes,
+      // exact: true,
+    })) {
+      topValue = 152 + (Styles.values.spacing * 2)
+    }
+
+    if (topValue == 0) {
+      startValue = -ACTIVE_INDICATOR_WIDTH
+    }
+
+    setTimeout(() => {
+      RX.Animated.parallel([
+        topValue !== 0 && RX.Animated.timing(this._activeIndicatorTop, {
+          toValue: topValue,
+          duration: animated ? 500 : 0,
+        }),
+        RX.Animated.timing(this._activeIndicatorStart, {
+          toValue: startValue,
+          duration: 500,
+        })
+      ].filter(Boolean)).start()
+
+    }, 0)
+  }
+
   private _onLogout = () => {
     UserStore.setUser()
     UserStore.setSession()
@@ -127,36 +199,36 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     LocationStore.navigate(this.props, Routes.login)
   }
 
-  private _handleActiveChange = (index: number) => () => {
-    let toValue = 0
-
-    switch (index) {
-      case 0:
-        toValue = 90 + Styles.values.spacing
-        break
-      case 1:
-        toValue = 152 + (Styles.values.spacing * 2)
-        break
-      case 2:
-        toValue = 206 + (Styles.values.spacing * 2)
-        break
-      case 3:
-        toValue = 261 + (Styles.values.spacing * 2)
-        break
-      case 4:
-        toValue = 315 + (Styles.values.spacing * 2)
-        break
-    }
-
-    this.setState({
-      activeLink: index,
-    })
-    RX.Animated.timing(this._activeIndicatorTop, {
-      toValue,
-      duration: 500,
-    })
-      .start()
-  }
+  // private _handleActiveChange = (index: number) => () => {
+  //   let toValue = 0
+  //
+  //   switch (index) {
+  //     case 0:
+  //       toValue = 90 + Styles.values.spacing
+  //       break
+  //     case 1:
+  //       toValue = 152 + (Styles.values.spacing * 2)
+  //       break
+  //     case 2:
+  //       toValue = 206 + (Styles.values.spacing * 2)
+  //       break
+  //     case 3:
+  //       toValue = 261 + (Styles.values.spacing * 2)
+  //       break
+  //     case 4:
+  //       toValue = 315 + (Styles.values.spacing * 2)
+  //       break
+  //   }
+  //
+  //   this.setState({
+  //     activeLink: index,
+  //   })
+  //   RX.Animated.timing(this._activeIndicatorTop, {
+  //     toValue,
+  //     duration: 500,
+  //   })
+  //     .start()
+  // }
 
   private _renderActiveIndicator = () => {
     return (
@@ -175,14 +247,16 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
   }
 
   private _activeIndicatorTop = RX.Animated.createValue(90 + Styles.values.spacing)
+  private _activeIndicatorStart = RX.Animated.createValue(-32)
   private _activeIndicatorAnimationStyle = RX.Styles.createAnimatedViewStyle({
     top: this._activeIndicatorTop,
+    [Styles.values.start]: this._activeIndicatorStart,
   })
 }
 
 const styles = {
   activeIndicator: RX.Styles.createViewStyle({
-    width: Styles.values.drawerWidth + Styles.values.spacing * 2,
+    width: ACTIVE_INDICATOR_WIDTH,
     height: 50,
     position: 'absolute',
     [Styles.values.start]: -32,
@@ -193,18 +267,26 @@ const styles = {
   logo: RX.Styles.createImageStyle({
     width: BRAND_IMAGE_WIDTH,
     height: BRAND_IMAGE_HEIGHT,
+    marginBottom: Styles.values.spacing,
     alignSelf: 'center',
   }),
   link: RX.Styles.createTextStyle({
     // @ts-ignore
     transition: 'color 0.5s',
+    flexDirection: 'row',
     fontSize: Styles.fontSizes.size16,
-    [Styles.values.paddingStart]: Styles.values.spacing,
+    // [Styles.values.paddingStart]: Styles.values.spacing,
     paddingVertical: Styles.values.spacing,
   }),
   avatar: RX.Styles.createImageStyle({
     width: 80,
     height: 80,
     borderRadius: 80 / 2,
+  }),
+  icon: RX.Styles.createImageStyle({
+    width: 20,
+    height: 20,
+    [Styles.values.marginEnd]: Styles.values.spacing / 2,
+    transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }]
   })
 }

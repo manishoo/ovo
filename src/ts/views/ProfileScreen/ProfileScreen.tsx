@@ -6,6 +6,7 @@
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Navbar from 'common/Navbar/Navbar'
 import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
@@ -25,7 +26,7 @@ import { RecipesListQuery_recipes_recipes } from './types/RecipesListQuery'
 
 
 interface ProfileScreenProps extends RX.CommonProps {
-  user: ProfileInfoUser & {id: string},
+  user: ProfileInfoUser & { id: string },
   isMyProfile?: boolean,
 }
 
@@ -74,6 +75,11 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
             }}
           >
             {
+              !this.props.isMyProfile &&
+              <Navbar />
+            }
+
+            {
               (AppConfig.getPlatformType() !== 'web') &&
               <RX.View
                 style={styles.avatarContainer}
@@ -103,16 +109,19 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
                 fontSize={16}
                 containerStyle={styles.tabButton}
               />
-              <FilledButton
-                label={getLocalizedText('Meals')}
-                onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
-                mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
-                style={{
-                  padding: 16
-                }}
-                fontSize={16}
-                containerStyle={styles.tabButton}
-              />
+              {
+                this.props.isMyProfile &&
+                <FilledButton
+                  label={getLocalizedText('Meals')}
+                  onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
+                  mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
+                  style={{
+                    padding: 16
+                  }}
+                  fontSize={16}
+                  containerStyle={styles.tabButton}
+                />
+              }
             </RX.View>
 
             <RX.View style={styles.innerContainer}>
@@ -251,7 +260,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
         id
         ...ProfileInfoUser
       }
-      
+
       ${ProfileInfo.fragments.user}
     `
   }

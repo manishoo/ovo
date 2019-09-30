@@ -14,7 +14,7 @@ interface FilledButtonProps {
   style?: any,
   containerStyle?: any,
   label: any,
-  onPress: any,
+  onPress: (e: RX.Types.SyntheticEvent) => void,
   disabled?: boolean,
   fontSize?: number,
   mode?: ButtonMode
