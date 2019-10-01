@@ -7,6 +7,7 @@ import Input from 'common/Input/Input'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
+import { Routes } from 'src/ts/models/common'
 import { navigate } from 'src/ts/utilities'
 import Keys from 'src/ts/utilities/KeyCodes'
 import { SearchResultQueryVariables } from 'src/ts/views/SearchResult/types/SearchResultQuery'
@@ -51,7 +52,7 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
               }
 
               // FIXME FOR NATIVE
-              navigate(this.props, `/recipes/?q=${this.props.variables.nameSearchQuery}`)
+              navigate(this.props, `${Routes.searchRecipes}?q=${this.props.variables.nameSearchQuery}`)
             }
           }}
           textInputStyle={{
