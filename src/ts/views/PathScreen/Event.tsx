@@ -8,7 +8,7 @@ import RX from 'reactxp'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Event, Meal, MealItem } from 'src/ts/models/FoodModels'
-import { Routes } from 'src/ts/navigator/routes'
+import { Routes } from 'src/ts/models/common'
 import { fullHeight, navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
 
 interface EventProps {

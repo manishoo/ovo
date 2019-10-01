@@ -36,6 +36,7 @@ RUN npm install
 ARG PUBLIC_PATH
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
+ARG TAG
 RUN npm run build:web
 
 RUN rm -rf src

@@ -45,6 +45,10 @@ class ImageSource implements ImageSourceBase {
 		return require('../../../images/Search.png')
 	}
 
+	get SearchWhite() {
+		return require('../../../images/SearchWhite.png')
+	}
+
 	get SearchActive() {
 		return require('../../../images/SearchActive.png')
 	}
@@ -167,6 +171,18 @@ class ImageSource implements ImageSourceBase {
 
 	get Finger() {
 		return require('../../../images/Finger.png')
+	}
+
+	get KitchenIllustration() {
+		return require('../../../images/KitchenIllustration.png')
+	}
+
+	get Camera() {
+		return require('../../../images/Camera.png')
+	}
+
+	get RemoveIconWhite() {
+		return require('../../../images/RemoveIconWhite.png')
 	}
 }
 

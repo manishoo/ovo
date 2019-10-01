@@ -34,7 +34,7 @@ export default class MacroNutrientBar extends RX.Component<MacroNutrientBarProps
 
 	onResponderMove = (e: RX.Types.SyntheticEvent): void => {
 		const { value, onChange } = this.props
-		console.log(e.nativeEvent)
+
 		if (e.nativeEvent.pageX === this.prevLocationX) return undefined
 		if (this.prevLocationX) {
 			const locationXDiff = e.nativeEvent.pageX - this.prevLocationX
@@ -84,7 +84,6 @@ export default class MacroNutrientBar extends RX.Component<MacroNutrientBarProps
 							onResponderEnd={this.onResponderEnd}
 							onResponderRelease={this.onResponderEnd}
 							onStartShouldSetResponder={() => {
-								console.log('setting shit')
 								return true
 							}}
 							onMoveShouldSetResponder={() => false}

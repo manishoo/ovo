@@ -32,7 +32,7 @@ export default class ShoppingList extends RX.Component<LoginProps> {
 		return mutate()
 			.then(async ({ data: { login } }: { data: { login: any } }) => {
 				/**
-				 * Login Success
+				 * LoginForm Success
 				 * */
 				await RX.Storage.setItem('token', login.session)
 			})

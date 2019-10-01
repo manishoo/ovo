@@ -8,7 +8,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { Event } from 'src/ts/models/FoodModels'
-import { Routes } from 'src/ts/navigator/routes'
+import { Routes } from 'src/ts/models/common'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { fullHeight, navigate } from 'src/ts/utilities'
@@ -64,7 +64,7 @@ export default class PathScreen extends ComponentBase<PathProps, PathState> {
 				}
 			}
 		})
-		if (nextMealIndex === undefined) return
+		if (nextMealIndex === undefined) return null
 
 		this.setState({ activeMeal: nextMeal })
 
@@ -85,7 +85,7 @@ export default class PathScreen extends ComponentBase<PathProps, PathState> {
 
 		if (_initialBuild) {
 			return {
-				path: user ? user.path : [],
+				path: user ? [] : [],
 				activeMeal: undefined,
 				activeDateTime: String(new Date()),
 				height: ResponsiveWidthStore.getHeight(), //FIXME optimize

@@ -62,6 +62,7 @@ const commonConfig = merge(
         '__MACOS__': false,
         'process.env.API_ADDRESS': JSON.stringify(process.env.API_ADDRESS),
         'process.env.GRAPHQL_ENDPOINT': JSON.stringify(process.env.GRAPHQL_ENDPOINT),
+        'process.env.TAG': JSON.stringify(process.env.TAG),
       })
     ],
   },

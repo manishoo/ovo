@@ -206,7 +206,7 @@ export const RecipeFragment = `
   instructions ${InstructionFragment}
   author ${UserFragment}
   likesCount
-  likedByUser
+  userLikedRecipe
   description
   timing {
     prepTime

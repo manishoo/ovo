@@ -152,27 +152,26 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 			case MessageType.number:
 			case MessageType.form:
 			default:
-				const SelectContainer = (items && items.length <= 2) ? RX.View : RX.ScrollView
-
 				return (
 					<ThemeContext.Consumer>
 						{({ theme }) => (
 							[
-								((MessageType.select === inputType) && (items)) && <SelectContainer
+								((MessageType.select === inputType) && (items)) && <RX.ScrollView
+									scrollEnabled={!(items && items.length <= 2)}
                   key='sc'
                   style={[
 										styles.selectItemContainer,
 										{ width: this.props.introductionWidth },
 										(items && items.length <= 2) ? {
-											justifyContent: 'center',
-											alignItems: 'center',
+											// justifyContent: 'center',
+											// alignItems: 'center',
 										} : {},
 									]}
 									// @ts-ignore
-                  contentContainerStyle={(items && items.length <= 2) ? {
-										justifyContent: 'center',
-										alignItems: 'center',
-									} : {}}
+                  // contentContainerStyle={(items && items.length <= 2) ? {
+									// 	justifyContent: 'center',
+									// 	alignItems: 'center',
+									// } : {}}
                   horizontal={AppConfig.getPlatformType() !== 'web'}
                   vertical={AppConfig.getPlatformType() === 'web'}
                 >
@@ -189,7 +188,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 											</RX.View>
 										))
 									}
-                </SelectContainer>,
+                </RX.ScrollView>,
 								<RX.Animated.View
 									key='scs'
 									style={[
@@ -479,7 +478,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 		return !_.isEqual(nextProps.input, this.props.input) || !_.isEqual(nextState, this.state) || !_.isEqual(nextProps.loading, this.props.loading)
 	}
 
-	componentWillUpdate(nextProps: Readonly<IntroductionProps>): void {
+	UNSAFE_componentWillUpdate(nextProps: Readonly<IntroductionProps>): void {
 		this.controlInputPosition(nextProps.input.inputType)
 	}
 }

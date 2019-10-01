@@ -15,6 +15,7 @@ class ImageSource implements ImageSourceBase {
 	CrossIcon = AppConfig.getImagePath('CrossIcon.png')
 	HeartAnimationEdge = AppConfig.getImagePath('web_heart_animation_edge.png')
 	Search = AppConfig.getImagePath('Search.svg')
+	SearchWhite = AppConfig.getImagePath('SearchWhite.svg')
 	SearchActive = AppConfig.getImagePath('SearchActive.svg')
 	Rectangle = AppConfig.getImagePath('Rectangle.svg')
 	RectangleActive = AppConfig.getImagePath('RectangleActive.svg')
@@ -45,12 +46,17 @@ class ImageSource implements ImageSourceBase {
 	InstagramIcon = AppConfig.getImagePath('IN.svg')
 	TelegramIcon = AppConfig.getImagePath('TEL.svg')
 
-	Clear = AppConfig.getImagePath('Clear.png')
+	Clear = AppConfig.getImagePath('Clear.svg')
 	More = AppConfig.getImagePath('More.png')
 
-	Back = AppConfig.getImagePath('Back.png')
+	Back = AppConfig.getImagePath('Back.svg')
 	ShoppingList = AppConfig.getImagePath('ShoppingList.png')
 	Finger = AppConfig.getImagePath('Finger.png')
+
+	KitchenIllustration = AppConfig.getImagePath('KitchenIllustration.png')
+
+	Camera = AppConfig.getImagePath('Camera.png')
+	RemoveIconWhite = AppConfig.getImagePath('RemoveIconWhite.png')
 }
 
 export default new ImageSource()

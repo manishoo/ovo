@@ -20,8 +20,6 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 	constructor(props: ListViewProps) {
 		super(props)
 
-		console.log(JSON.stringify(props.path, null, 2))
-
 		this.state = {
 			path: props.path.map(e => ({
 				key: e.id,
@@ -105,7 +103,7 @@ export default class ListView extends RX.Component<ListViewProps, ListViewState>
 
 	// @ts-ignore
 	private _renderGoToToday = (theme: Theme) => {
-		if (!this.state.centerEvent) return
+		if (!this.state.centerEvent) return null
 		const closestMeal = this.props.findClosestMeal()
 		if (!closestMeal) return null
 		if (closestMeal.nextMeal === undefined) return null

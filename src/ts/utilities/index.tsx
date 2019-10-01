@@ -5,7 +5,7 @@
 
 import RX from 'reactxp'
 import { Image } from 'src/ts/models/FoodModels'
-import { Routes } from 'src/ts/navigator/routes'
+import { Routes } from 'src/ts/models/common'
 import LocationStore from 'src/ts/stores/LocationStore'
 import AppConfig from '../app/AppConfig'
 

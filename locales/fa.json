@@ -9,6 +9,10 @@
   "thursday": "پنجشنبه",
   "friday": "جمعه",
 
+  "Email": "ایمیل",
+  "Gender": "جنسیت",
+  "PasswordAgain": "تکرار گذرواژه",
+
   "Username": "نام کاربری",
   "Password": "گذرواژه",
   "Login": "ورود",
@@ -23,7 +27,10 @@
   "Profile": "پروفایل",
   "Dishes": "دیش ها",
   "CreateRecipe": "دیش جدید",
+  "CreateNewMeal": "سفره جدید",
+
   "Feed": "برای من",
+  "Back": "بازگشت",
   "ensureSafeAccount": "To ensure a safe account, we require your password to be at least 8 characters, including an uppercase letter and a number.",
   "terms": "By creating a new account or signing in, You are agreeing to Caloria’s Terms of Service and Privacy Policy.",
   "MealPlan&ShoppingList": "برنامه غذایی و لیست خرید",
@@ -48,6 +55,9 @@
   "deleteRecipe?": "آیا مطمئنید؟",
   "yes": "آره",
   "no": "نه",
+
+  "weightName": "نام واحد اندازه‌گیری",
+  "gramWeight": "وزن (گرم)",
 
   "Path": "راه من",
   "MealPlan": "برنامه غذایی",
@@ -88,5 +98,41 @@
   "editMealSettings": "تنظیمات وعده‌ غذایی",
   "viewAlternatives": "مشاهده دیگر گزینه‌ها",
   "recurOn": "تکرار در ...",
-  "mealItemExample": "مثلا موز، گوشت قرمز، زردچوبه، ..."
+  "mealItemExample": "مثلا موز، گوشت قرمز، زردچوبه، ...",
+
+  "AddIngredient": "اضافه کردن ماده غذایی",
+  "UploadImage": "بارگزاری عکس غذا",
+  "e.g. Rice": "مثلا برنج",
+  "e.g. Banana": "مثلا موز",
+  "Describe the story behind your recipe": "داستان غذاتو بگو",
+  "Add Tag": "تگ بزن",
+  "Tell us more about the recipe": "از رسپی بگو",
+  "e.g. Easy Sesame Chicken": "مثلا ته‌چین مرغ",
+
+  "areyousure?": "مطمئنی؟",
+  "deleteTag?": "مطمئنی؟",
+
+  "prepTime": "زمان آماده سازی",
+  "cookTime": "زمان پخت",
+  "totalTime": "زمان کل",
+
+  "areYouSureYouWantToLeave": "مطمئنی میخوای بری؟",
+
+  "______Recipe_Page______": "//",
+  "Nutrition (per serving)": "اطلاعات تغذیه‌ای (برای هر وعده)",
+  "calories": "کالری",
+  "proteins": "پروتئین",
+  "totalCarbs": "کربوهیدرات",
+  "fats": "چربی",
+
+  "______Create_Recipe_Page______": "//",
+  "Create Recipe": "ساخت رسپی",
+  "e.g. Cook the Rice...": "مثلا برنج را بپزید...",
+
+  "______Create_Meal_Page______": "//",
+  "Meal Items": "آیتم های سفره",
+  "Create Meal": "ساخت سفره",
+
+  "RecipeCreationSuccess": "Recipe Created Successfully",
+  "RecipeUpdateSuccess": "Recipe Updated Successfully"
 }

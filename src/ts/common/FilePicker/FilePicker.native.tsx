@@ -28,7 +28,7 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
 	}
 
 	private _openPicker = () => {
-		console.log('this._input', this._input)
+		//
 	}
 }
 

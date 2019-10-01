@@ -1,5 +1,5 @@
 /*
- * MealItem.tsx
+ * SelectFoodMealItem.tsx
  * Copyright: Ouranos Studio 2019
  */
 

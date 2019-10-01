@@ -11,6 +11,7 @@
   "friday": "Friday",
 
   "Email": "Email",
+  "Gender": "Gender",
   "Username": "Username",
   "Password": "Password",
   "PasswordAgain": "Password (again)",
@@ -23,7 +24,10 @@
   "Explore": "Explore",
   "Profile": "Profile",
   "Dishes": "Dishes",
+
   "CreateRecipe": "Create Dish",
+  "CreateNewMeal": "Create Meal",
+
   "Unit": "Unit",
   "Amount": "Amount",
   "Feed": "Feed",
@@ -52,6 +56,9 @@
   "yes": "Yes",
   "no": "No",
 
+  "weightName": "Unit name",
+  "gramWeight": "Weight (grams)",
+
   "landingTitle": "Smart assistant",
   "landingSubtitle": "is good",
   "LandingStartFree": "Start Free! \uD83D\uDCB8",
@@ -75,14 +82,52 @@
 
 
   "______Recipe_Page______": "//",
+  "Nutrition (per serving)": "Nutrition (per serving)",
+  "calories": "Calories",
+  "proteins": "Protein",
+  "totalCarbs": "Total Carbs",
+  "fats": "Fats",
+
+  "______Login_Page______": "//",
+  "Don't Have an account? Register": "Don't Have an account? Register",
+
+  "______Create_Recipe_Page______": "//",
+  "Create Recipe": "Create Recipe",
+  "e.g. Cook the Rice...": "e.g. Cook the Rice...",
+
+  "______Create_Meal_Page______": "//",
+  "Meal Items": "Meal Items",
+  "Create Meal": "Create Meal",
+
 
   "viewMealPlan": "View Meal Plan",
   "cancel": "Cancel",
   "editMealSettings": "Edit Meal Settings",
   "viewAlternatives": "View Alternatives",
   "recurOn": "Recur on ...",
-  "mealItemExample": "e.g Banana",
+  "mealItemExample": "e.g. Banana",
   "yesSure": "Yes, Sure",
   "noContinueSetup": "No, continue to the setup",
-  "homeIntro1": "This is the Path of a family of 3. They can see their upcoming meals and activities here"
+  "homeIntro1": "This is the Path of a family of 3. They can see their upcoming meals and activities here",
+
+  "AddIngredient": "Add Ingredient",
+  "UploadImage": "Upload Image",
+  "e.g. Rice": "e.g. Rice",
+  "e.g. Banana": "e.g. Banana",
+  "Describe the story behind your recipe": "Describe the story behind your recipe",
+  "Add Tag": "Add Tag",
+  "Tell us more about the recipe": "Tell us more about the recipe",
+  "e.g. Easy Sesame Chicken": "e.g. Easy Sesame Chicken",
+
+  "areyousure?": "Are you sure about this action?",
+  "deleteTag?": "Are you sure about this action?",
+
+  "prepTime": "Prep Time",
+  "cookTime": "Cook Time",
+  "totalTime": "Total Time",
+
+  "areYouSureYouWantToLeave": "Are you sure you want to leave? You have unsaved changes.",
+
+  "RecipeCreationSuccess": "Recipe Created Successfully",
+  "RecipeUpdateSuccess": "Recipe Updated Successfully"
 }
