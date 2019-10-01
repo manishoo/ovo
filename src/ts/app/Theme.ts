@@ -21,6 +21,9 @@ export class Theme {
 
         return {
           primary,
+
+          text: '#4a4a4a',
+
           assistantLinearGradient1: '#4856DC',
           assistantLinearGradient2: '#1F2CAA',
           secondary: '#22203E',

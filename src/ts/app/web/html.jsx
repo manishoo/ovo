@@ -45,7 +45,7 @@ const Html = props => {
       <meta charSet='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <meta name='theme-color' content='#606c76' />
-      <title>پرانا | دستیار هوشمند تغذیه</title>
+      <title>پرانا | ‌Prana</title>
       {isProd && preloadLinks}
       <link rel='manifest' href='/manifest.json' />
       <link rel='shortcut icon' href='/favicon.ico' />

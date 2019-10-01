@@ -176,7 +176,7 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   }
 
   private _onLongPressOutside = (e: RX.Types.SyntheticEvent) => {
-    // Do nothing, required to keep onPress from firing on long press.
+    // Do nothing, required to keep linkTo from firing on long press.
     e.stopPropagation()
   }
 

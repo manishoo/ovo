@@ -31,7 +31,7 @@ interface RecipeCellProps {
   hideAvatar?: boolean,
   onDelete?: () => void,
   imageOnly?: boolean,
-  onPress?: () => void
+  linkTo?: string
 }
 
 interface RecipeCellState {
@@ -47,7 +47,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   render() {
     const { recipe } = this.props
 
-    return (
+    const content = (
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.Animated.View
@@ -65,13 +65,12 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
             ]}
           >
             <RX.View
-              onPress={this.props.onPress}
               style={{
                 width: this.props.size,
                 height: this.props.size,
                 // height: this.props.size * 1.3,
                 borderRadius: this.props.size / 20,
-                backgroundColor: this.state.isHovering ? theme.colors.recipeCardImagePlaceholderBGOnHover: theme.colors.recipeCardImagePlaceholderBG,
+                backgroundColor: this.state.isHovering ? theme.colors.recipeCardImagePlaceholderBGOnHover : theme.colors.recipeCardImagePlaceholderBG,
               }}
             >
               {
@@ -88,7 +87,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               !this.props.imageOnly &&
               <Text
                 onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
-                style={styles.title}
+                style={[styles.title, {color: theme.colors.text}]}
                 translations={recipe.title}
               />
             }
@@ -148,6 +147,10 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
         )}
       </ThemeContext.Consumer>
     )
+
+    return this.props.linkTo ?
+      <Link to={this.props.linkTo}>{content}</Link> :
+      content
   }
 
   componentDidMount() {
@@ -280,7 +283,6 @@ const styles = {
   title: RX.Styles.createTextStyle({
     marginTop: Styles.values.spacingLarge / 2,
     font: Styles.fonts.displayLight,
-    color: 'inherit'
   }),
   avatarImage: RX.Styles.createImageStyle({
     width: 50,

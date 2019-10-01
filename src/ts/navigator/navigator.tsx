@@ -70,7 +70,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
            * Recipes
            * */
           {
-            path: `/recipe/:slug/edit`,
+            path: `/${Routes.recipe}/:slug/edit`,
             exact: false,
             redirectTo: this.state.user ? undefined : Routes.login,
             component: RecipeForm,
@@ -80,7 +80,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             },
           },
           {
-            path: `${Routes.recipe}/:slug/`,
+            path: `/${Routes.recipe}/:slug/`,
             exact: false,
             component: Recipe,
             navOptions: defaultNavOptions,

@@ -21,6 +21,9 @@ export default function UsernameInput(props: any) {
     }
   `, {
     fetchPolicy: 'network-only',
+    variables: {
+      username: props.value
+    },
     skip: (props.value || '').length === 0
   })
 

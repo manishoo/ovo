@@ -156,7 +156,7 @@
 // 											style={[styles.container, style]}
 // 										>
 // 											<RX.View
-// 												onPress={this.dismiss}
+// 												linkTo={this.dismiss}
 // 												style={styles.cancelButton}
 // 											>
 // 												<RX.Text style={{ color: theme.colors.labelInput }}>Back</RX.Text>
@@ -190,7 +190,7 @@
 // 															return [
 // 																<FlatButton
 // 																	label={'Browse Foods & Recipes'}
-// 																	onPress={() => {
+// 																	linkTo={() => {
 // 																		//
 // 																	}}
 // 																	style={{ borderWidth: 0, marginTop: 10, }}
@@ -198,7 +198,7 @@
 // 																/>,
 // 																<FlatButton
 // 																	label={'Create A New Meal'}
-// 																	onPress={() => {
+// 																	linkTo={() => {
 // 																		//
 // 																	}}
 // 																	style={{ borderWidth: 0 }}
@@ -242,7 +242,7 @@
 // 		return (
 // 			<RX.View
 // 				style={styles.searchResultItemContainer}
-// 				onPress={this.onResultPress(item)}
+// 				linkTo={this.onResultPress(item)}
 // 			>
 // 				<RX.Text>
 // 					{item.title}

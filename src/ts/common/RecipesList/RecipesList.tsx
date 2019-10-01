@@ -10,7 +10,6 @@ import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { Routes } from 'src/ts/models/common'
 import LocationStore from 'src/ts/stores/LocationStore'
-import { navigate } from 'src/ts/utilities'
 import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
@@ -43,7 +42,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
         recipe={recipe}
         hideAvatar={this.props.hideAvatar}
         size={size}
-        onPress={() => navigate(this.props, `/recipe/${recipe.slug}`)}
+        linkTo={`${Routes.recipe}/${recipe.slug}`}
         wrapperStyle={styles.item}
       />
     )

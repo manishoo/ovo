@@ -38,7 +38,7 @@
 // 						style={[styles.previewContainer, style]}
 // 					>
 // 						<RX.View
-// 							onPress={this.dismiss}
+// 							linkTo={this.dismiss}
 // 							style={styles.cancelSelectedMealContainer}
 // 						>
 // 							<RX.Text>X</RX.Text>
@@ -87,7 +87,7 @@
 //
 // 						<FilledButton
 // 							label='Add to Meal'
-// 							onPress={() => {
+// 							linkTo={() => {
 // 							}}
 // 							containerStyle={styles.addToMeal}
 // 						/>
