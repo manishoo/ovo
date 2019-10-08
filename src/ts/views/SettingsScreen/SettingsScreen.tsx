@@ -245,8 +245,8 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       id: this.state.me.id,
       user: this._getUser()
     })
-      .then(() => {
-        LocationStore.navigate(this.props, 'back')
+      .then(({data: {updateUser: {username}}}) => {
+        LocationStore.navigate(this.props, `/${username}`, {params: {replace: true}})
 
         /**
          * If profile image changed, reload the page
