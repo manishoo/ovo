@@ -40,12 +40,8 @@ import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
 import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
 import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
-import { RecipesListQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { MyRecipe_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/MyRecipe'
 import { RecipeFormExtra } from 'src/ts/views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
-import {
-  RecipeFormExtraUpdateMutation,
-  RecipeFormExtraUpdateMutationVariables
-} from 'src/ts/views/RecipeForm/components/RecipeFormExtra/types/RecipeFormExtraUpdateMutation'
 import { Me } from 'src/ts/views/Register/types/Me'
 import InstructionRow from './components/InstructionRow/InstructionRow'
 import { RecipeFormCreateMutation, RecipeFormCreateMutationVariables } from './types/RecipeFormCreateMutation'
@@ -55,7 +51,7 @@ import {
   RecipeFormQuery_recipe_ingredients,
   RecipeFormQueryVariables
 } from './types/RecipeFormQuery'
-import { RecipeFormUpdateMutationVariables } from './types/RecipeFormUpdateMutation'
+import { RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables } from './types/RecipeFormUpdateMutation'
 
 
 interface RecipeFormProps {
@@ -72,13 +68,13 @@ interface RecipeFormState {
   ingredientModalOpen: boolean,
   recipe: Omit<RecipeFormQuery_recipe, 'ingredients'> & { ingredients: IngredientWithKey[] },
   slugEdited: boolean,
-  coverImagePreview?: any,
+  imagePreview?: any,
   difficulty?: string,
   totalTimeSet?: boolean,
   height?: number,
   me?: Me,
   hideForm?: boolean
-  coverImage?: any,
+  image?: any,
 }
 
 class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
@@ -108,7 +104,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           serving: props.recipe.serving,
         },
         slugEdited: true,
-        coverImagePreview: props.recipe.coverImage ? props.recipe.coverImage.url : undefined,
+        imagePreview: props.recipe.image ? props.recipe.image.url : undefined,
         height: ResponsiveWidthStore.getHeight(),
         me: UserStore.getUser(),
       }
@@ -140,16 +136,16 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           author: {
             id: '',
             username: '',
-            imageUrl: {
+            avatar: {
               url: ''
             }
           },
           serving: 1,
-          coverImage: null,
+          image: null,
           tags: [],
         },
         slugEdited: false,
-        coverImagePreview: undefined,
+        imagePreview: undefined,
         height: ResponsiveWidthStore.getHeight(),
         me: UserStore.getUser(),
       }
@@ -384,9 +380,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         </RX.View>
 
         <FilePicker
-          label={this.state.coverImagePreview ? 'Replace Image' : undefined}
-          onImageChange={coverImage => this.setState({ coverImage })}
-          onImagePreviewChange={coverImagePreview => this.setState({ coverImagePreview })}
+          label={this.state.imagePreview ? 'Replace Image' : undefined}
+          onImageChange={image => this.setState({ image })}
+          onImagePreviewChange={imagePreview => this.setState({ imagePreview })}
           style={{
             flex: 1,
             height: 400,
@@ -403,10 +399,10 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             }}
           >
             {
-              this.state.coverImagePreview &&
+              this.state.imagePreview &&
               <Image
-                source={this.state.coverImagePreview}
-                style={styles.coverImage}
+                source={this.state.imagePreview}
+                style={styles.image}
                 resizeMode={'cover'}
               />
             }
@@ -426,7 +422,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               }}
             >
               {
-                !this.state.coverImagePreview &&
+                !this.state.imagePreview &&
                 <Text
                   translate
                   style={{
@@ -488,7 +484,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       customUnit: mealItem.customUnit || null,
       description: mealItem.description || [],
       gramWeight: mealItem.gramWeight || null,
-      thumbnail: mealItem.food!.thumbnailUrl || null,
+      thumbnail: mealItem.food!.thumbnail || null,
       weight: mealItem.weight || null,
     })
     this.setState(prevState => ({
@@ -499,7 +495,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _handleInstructionDelete = (instruction: RecipesListQuery_recipes_recipes_instructions) => {
+  private _handleInstructionDelete = (instruction: MyRecipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     /**
@@ -524,7 +520,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }
   }
 
-  private _onInstructionChange = (instruction: RecipesListQuery_recipes_recipes_instructions) => {
+  private _onInstructionChange = (instruction: MyRecipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     const foundInstruction = instructions.find(p => p.step === instruction.step)
@@ -569,7 +565,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _onInstructionAdd = (instruction: RecipesListQuery_recipes_recipes_instructions) => {
+  private _onInstructionAdd = (instruction: MyRecipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     instructions.splice(
@@ -635,7 +631,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       tags: this.state.recipe.tags,
       difficulty: this.state.recipe.difficulty,
       slug: this.state.recipe.slug,
-      coverImage: this.state.coverImage,
+      image: this.state.image,
     }
   }
 
@@ -766,7 +762,7 @@ export default function (props: {}) {
 
     ${ProfileRecipesFragments.myRecipe}
   `)
-  const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormExtraUpdateMutation, RecipeFormExtraUpdateMutationVariables>(gql`
+  const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables>(gql`
     mutation RecipeFormUpdateMutation($id: String!, $recipe: RecipeInput!) {
       updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
     }
@@ -866,7 +862,7 @@ const styles = {
     width: 160,
     [Styles.values.marginEnd]: Styles.values.spacing / 2,
   }),
-  coverImage: RX.Styles.createImageStyle({
+  image: RX.Styles.createImageStyle({
     position: 'absolute',
     left: 0,
     right: 0,

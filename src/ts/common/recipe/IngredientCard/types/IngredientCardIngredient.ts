@@ -44,11 +44,11 @@ export interface IngredientCardIngredient_food_weights {
   name: IngredientCardIngredient_food_weights_name[];
 }
 
-export interface IngredientCardIngredient_food_imageUrl {
+export interface IngredientCardIngredient_food_image {
   url: string;
 }
 
-export interface IngredientCardIngredient_food_thumbnailUrl {
+export interface IngredientCardIngredient_food_thumbnail {
   url: string;
 }
 
@@ -57,8 +57,8 @@ export interface IngredientCardIngredient_food {
   name: IngredientCardIngredient_food_name[];
   description: IngredientCardIngredient_food_description[] | null;
   weights: IngredientCardIngredient_food_weights[];
-  imageUrl: IngredientCardIngredient_food_imageUrl;
-  thumbnailUrl: IngredientCardIngredient_food_thumbnailUrl;
+  image: IngredientCardIngredient_food_image;
+  thumbnail: IngredientCardIngredient_food_thumbnail;
 }
 
 export interface IngredientCardIngredient_weight_name {

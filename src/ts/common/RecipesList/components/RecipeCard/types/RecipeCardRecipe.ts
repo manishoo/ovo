@@ -13,7 +13,7 @@ export interface RecipeCardRecipe_title {
   locale: LanguageCode;
 }
 
-export interface RecipeCardRecipe_coverImage {
+export interface RecipeCardRecipe_image {
   url: string;
 }
 
@@ -25,21 +25,21 @@ export interface RecipeCardRecipe_thumbnail {
   url: string;
 }
 
-export interface RecipeCardRecipe_author_imageUrl {
+export interface RecipeCardRecipe_author_avatar {
   url: string;
 }
 
 export interface RecipeCardRecipe_author {
   id: string;
   username: string;
-  imageUrl: RecipeCardRecipe_author_imageUrl | null;
+  avatar: RecipeCardRecipe_author_avatar | null;
 }
 
 export interface RecipeCardRecipe {
   id: string;
   slug: string;
   title: RecipeCardRecipe_title[];
-  coverImage: RecipeCardRecipe_coverImage | null;
+  image: RecipeCardRecipe_image | null;
   timing: RecipeCardRecipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;

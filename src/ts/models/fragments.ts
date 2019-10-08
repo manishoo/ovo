@@ -16,7 +16,7 @@ export const MeFragment = gql`
     firstName
     middleName
     lastName
-    imageUrl {
+    image {
       url
     }
     gender
@@ -46,7 +46,7 @@ export const PublicRecipeFragment = gql`
     author {
       id
       username
-      imageUrl { url }
+      image { url }
     }
     likesCount
     userLikedRecipe
@@ -85,7 +85,7 @@ export const PublicRecipeFragment = gql`
       notes { text locale }
     }
     description { text locale }
-    coverImage { url }
+    image { url }
     createdAt
     updatedAt
   }

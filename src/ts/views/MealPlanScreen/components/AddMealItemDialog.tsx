@@ -30,7 +30,7 @@
 // 	title: string,
 // 	type: 'recipe' | 'food' | 'meal',
 // 	subtitle?: string,
-// 	imageUrl?: string,
+// 	image?: string,
 // 	height: number,
 // 	template: string,
 // 	key: any

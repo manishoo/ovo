@@ -21,7 +21,7 @@ const ProfileRecipesFragments = {
         author {
           id
           username
-          imageUrl { url }
+          avatar { url }
         }
         likesCount
         userLikedRecipe
@@ -39,7 +39,7 @@ const ProfileRecipesFragments = {
         }
         difficulty
         description { text locale }
-        coverImage { url }
+        image { url }
         tags
         createdAt
         updatedAt

@@ -79,7 +79,7 @@ export default class MealItemGrid extends RX.Component<MealItemGridProps, MealIt
             food: mealItem.food,
             gramWeight: mealItem.gramWeight,
             name: mealItem.food.name,
-            thumbnail: mealItem.food.thumbnailUrl,
+            thumbnail: mealItem.food.thumbnail,
             weight: mealItem.weight,
           }}
         />

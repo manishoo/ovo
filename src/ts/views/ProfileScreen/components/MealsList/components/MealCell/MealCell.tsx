@@ -79,7 +79,7 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
               !this.props.hideAvatar &&
               <Link to={`/${meal.author.username}`} style={styles.avatarContainer}>
                 <Image
-                  source={meal.author.imageUrl!.url}
+                  source={meal.author.avatar!.url}
                   style={{
                     width: this.props.size / 5,
                     height: this.props.size / 5,

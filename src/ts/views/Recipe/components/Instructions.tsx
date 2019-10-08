@@ -6,10 +6,10 @@
 import Text from 'common/Text/Text'
 import RX from 'reactxp'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { RecipesListQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { ProfileRecipesQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 
 
-const Instructions = ({ instructions = [] }: { instructions: RecipesListQuery_recipes_recipes_instructions[] }) => (
+const Instructions = ({ instructions = [] }: { instructions: ProfileRecipesQuery_recipes_recipes_instructions[] }) => (
   <ThemeContext.Consumer>
     {({ theme }) => (
       <RX.View>

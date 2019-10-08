@@ -35,6 +35,8 @@ interface AssistantScreenState {
 
 export default class LandingScreen extends ComponentBase<AssistantScreenProps, AssistantScreenState> {
 	render() {
+		return null
+
 		const { style } = this.props
 
 		if (this.state.width < 950) {

@@ -10,7 +10,7 @@ import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import Keys from 'src/ts/utilities/KeyCodes'
-import { RecipesListQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { ProfileRecipesQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 
 
 const IMAGE_DIMENSIONS = 50
@@ -18,10 +18,10 @@ const CLEAR_DIMENSIONS = 20
 
 interface IngredientRowProps {
   style?: any,
-  instruction: RecipesListQuery_recipes_recipes_instructions,
-  onChange: (instruction: RecipesListQuery_recipes_recipes_instructions) => void,
-  onEnterPressed: (instruction: RecipesListQuery_recipes_recipes_instructions) => void,
-  onDeletePressed: (instruction: RecipesListQuery_recipes_recipes_instructions) => void,
+  instruction: ProfileRecipesQuery_recipes_recipes_instructions,
+  onChange: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
+  onEnterPressed: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
+  onDeletePressed: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
   onDelete: (step: number) => void,
   step: number,
 }

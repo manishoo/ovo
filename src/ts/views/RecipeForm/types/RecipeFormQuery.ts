@@ -13,14 +13,14 @@ export interface RecipeFormQuery_recipe_title {
   locale: LanguageCode;
 }
 
-export interface RecipeFormQuery_recipe_author_imageUrl {
+export interface RecipeFormQuery_recipe_author_avatar {
   url: string;
 }
 
 export interface RecipeFormQuery_recipe_author {
   id: string;
   username: string;
-  imageUrl: RecipeFormQuery_recipe_author_imageUrl | null;
+  avatar: RecipeFormQuery_recipe_author_avatar | null;
 }
 
 export interface RecipeFormQuery_recipe_timing {
@@ -65,11 +65,11 @@ export interface RecipeFormQuery_recipe_ingredients_food_weights {
   name: RecipeFormQuery_recipe_ingredients_food_weights_name[];
 }
 
-export interface RecipeFormQuery_recipe_ingredients_food_imageUrl {
+export interface RecipeFormQuery_recipe_ingredients_food_image {
   url: string;
 }
 
-export interface RecipeFormQuery_recipe_ingredients_food_thumbnailUrl {
+export interface RecipeFormQuery_recipe_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -78,8 +78,8 @@ export interface RecipeFormQuery_recipe_ingredients_food {
   name: RecipeFormQuery_recipe_ingredients_food_name[];
   description: RecipeFormQuery_recipe_ingredients_food_description[] | null;
   weights: RecipeFormQuery_recipe_ingredients_food_weights[];
-  imageUrl: RecipeFormQuery_recipe_ingredients_food_imageUrl;
-  thumbnailUrl: RecipeFormQuery_recipe_ingredients_food_thumbnailUrl;
+  image: RecipeFormQuery_recipe_ingredients_food_image;
+  thumbnail: RecipeFormQuery_recipe_ingredients_food_thumbnail;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_weight_name {
@@ -131,7 +131,7 @@ export interface RecipeFormQuery_recipe_description {
   locale: LanguageCode;
 }
 
-export interface RecipeFormQuery_recipe_coverImage {
+export interface RecipeFormQuery_recipe_image {
   url: string;
 }
 
@@ -148,7 +148,7 @@ export interface RecipeFormQuery_recipe {
   instructions: RecipeFormQuery_recipe_instructions[];
   difficulty: RecipeDifficulty | null;
   description: RecipeFormQuery_recipe_description[] | null;
-  coverImage: RecipeFormQuery_recipe_coverImage | null;
+  image: RecipeFormQuery_recipe_image | null;
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;

@@ -13,14 +13,14 @@ export interface ProfileRecipesQuery_recipes_recipes_title {
   locale: LanguageCode;
 }
 
-export interface ProfileRecipesQuery_recipes_recipes_author_imageUrl {
+export interface ProfileRecipesQuery_recipes_recipes_author_avatar {
   url: string;
 }
 
 export interface ProfileRecipesQuery_recipes_recipes_author {
   id: string;
   username: string;
-  imageUrl: ProfileRecipesQuery_recipes_recipes_author_imageUrl | null;
+  avatar: ProfileRecipesQuery_recipes_recipes_author_avatar | null;
 }
 
 export interface ProfileRecipesQuery_recipes_recipes_timing {
@@ -65,11 +65,11 @@ export interface ProfileRecipesQuery_recipes_recipes_ingredients_food_weights {
   name: ProfileRecipesQuery_recipes_recipes_ingredients_food_weights_name[];
 }
 
-export interface ProfileRecipesQuery_recipes_recipes_ingredients_food_imageUrl {
+export interface ProfileRecipesQuery_recipes_recipes_ingredients_food_image {
   url: string;
 }
 
-export interface ProfileRecipesQuery_recipes_recipes_ingredients_food_thumbnailUrl {
+export interface ProfileRecipesQuery_recipes_recipes_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -78,8 +78,8 @@ export interface ProfileRecipesQuery_recipes_recipes_ingredients_food {
   name: ProfileRecipesQuery_recipes_recipes_ingredients_food_name[];
   description: ProfileRecipesQuery_recipes_recipes_ingredients_food_description[] | null;
   weights: ProfileRecipesQuery_recipes_recipes_ingredients_food_weights[];
-  imageUrl: ProfileRecipesQuery_recipes_recipes_ingredients_food_imageUrl;
-  thumbnailUrl: ProfileRecipesQuery_recipes_recipes_ingredients_food_thumbnailUrl;
+  image: ProfileRecipesQuery_recipes_recipes_ingredients_food_image;
+  thumbnail: ProfileRecipesQuery_recipes_recipes_ingredients_food_thumbnail;
 }
 
 export interface ProfileRecipesQuery_recipes_recipes_ingredients_weight_name {
@@ -131,7 +131,7 @@ export interface ProfileRecipesQuery_recipes_recipes_description {
   locale: LanguageCode;
 }
 
-export interface ProfileRecipesQuery_recipes_recipes_coverImage {
+export interface ProfileRecipesQuery_recipes_recipes_image {
   url: string;
 }
 
@@ -148,7 +148,7 @@ export interface ProfileRecipesQuery_recipes_recipes {
   instructions: ProfileRecipesQuery_recipes_recipes_instructions[];
   difficulty: RecipeDifficulty | null;
   description: ProfileRecipesQuery_recipes_recipes_description[] | null;
-  coverImage: ProfileRecipesQuery_recipes_recipes_coverImage | null;
+  image: ProfileRecipesQuery_recipes_recipes_image | null;
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;

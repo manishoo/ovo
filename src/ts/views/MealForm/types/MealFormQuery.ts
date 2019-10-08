@@ -35,11 +35,11 @@ export interface MealFormQuery_meal_items_food_weights {
   name: MealFormQuery_meal_items_food_weights_name[];
 }
 
-export interface MealFormQuery_meal_items_food_imageUrl {
+export interface MealFormQuery_meal_items_food_image {
   url: string;
 }
 
-export interface MealFormQuery_meal_items_food_thumbnailUrl {
+export interface MealFormQuery_meal_items_food_thumbnail {
   url: string;
 }
 
@@ -48,8 +48,8 @@ export interface MealFormQuery_meal_items_food {
   name: MealFormQuery_meal_items_food_name[];
   description: MealFormQuery_meal_items_food_description[] | null;
   weights: MealFormQuery_meal_items_food_weights[];
-  imageUrl: MealFormQuery_meal_items_food_imageUrl;
-  thumbnailUrl: MealFormQuery_meal_items_food_thumbnailUrl;
+  image: MealFormQuery_meal_items_food_image;
+  thumbnail: MealFormQuery_meal_items_food_thumbnail;
 }
 
 export interface MealFormQuery_meal_items_recipe_title {
@@ -57,7 +57,7 @@ export interface MealFormQuery_meal_items_recipe_title {
   locale: LanguageCode;
 }
 
-export interface MealFormQuery_meal_items_recipe_coverImage {
+export interface MealFormQuery_meal_items_recipe_image {
   url: string;
 }
 
@@ -69,21 +69,21 @@ export interface MealFormQuery_meal_items_recipe_thumbnail {
   url: string;
 }
 
-export interface MealFormQuery_meal_items_recipe_author_imageUrl {
+export interface MealFormQuery_meal_items_recipe_author_avatar {
   url: string;
 }
 
 export interface MealFormQuery_meal_items_recipe_author {
   id: string;
   username: string;
-  imageUrl: MealFormQuery_meal_items_recipe_author_imageUrl | null;
+  avatar: MealFormQuery_meal_items_recipe_author_avatar | null;
 }
 
 export interface MealFormQuery_meal_items_recipe {
   id: string;
   slug: string;
   title: MealFormQuery_meal_items_recipe_title[];
-  coverImage: MealFormQuery_meal_items_recipe_coverImage | null;
+  image: MealFormQuery_meal_items_recipe_image | null;
   timing: MealFormQuery_meal_items_recipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;
@@ -130,11 +130,11 @@ export interface MealFormQuery_meal_items_alternativeMealItems_food_weights {
   name: MealFormQuery_meal_items_alternativeMealItems_food_weights_name[];
 }
 
-export interface MealFormQuery_meal_items_alternativeMealItems_food_imageUrl {
+export interface MealFormQuery_meal_items_alternativeMealItems_food_image {
   url: string;
 }
 
-export interface MealFormQuery_meal_items_alternativeMealItems_food_thumbnailUrl {
+export interface MealFormQuery_meal_items_alternativeMealItems_food_thumbnail {
   url: string;
 }
 
@@ -143,8 +143,8 @@ export interface MealFormQuery_meal_items_alternativeMealItems_food {
   name: MealFormQuery_meal_items_alternativeMealItems_food_name[];
   description: MealFormQuery_meal_items_alternativeMealItems_food_description[] | null;
   weights: MealFormQuery_meal_items_alternativeMealItems_food_weights[];
-  imageUrl: MealFormQuery_meal_items_alternativeMealItems_food_imageUrl;
-  thumbnailUrl: MealFormQuery_meal_items_alternativeMealItems_food_thumbnailUrl;
+  image: MealFormQuery_meal_items_alternativeMealItems_food_image;
+  thumbnail: MealFormQuery_meal_items_alternativeMealItems_food_thumbnail;
 }
 
 export interface MealFormQuery_meal_items_alternativeMealItems_description {
@@ -157,7 +157,7 @@ export interface MealFormQuery_meal_items_alternativeMealItems_recipe_title {
   locale: LanguageCode;
 }
 
-export interface MealFormQuery_meal_items_alternativeMealItems_recipe_coverImage {
+export interface MealFormQuery_meal_items_alternativeMealItems_recipe_image {
   url: string;
 }
 
@@ -169,21 +169,21 @@ export interface MealFormQuery_meal_items_alternativeMealItems_recipe_thumbnail 
   url: string;
 }
 
-export interface MealFormQuery_meal_items_alternativeMealItems_recipe_author_imageUrl {
+export interface MealFormQuery_meal_items_alternativeMealItems_recipe_author_avatar {
   url: string;
 }
 
 export interface MealFormQuery_meal_items_alternativeMealItems_recipe_author {
   id: string;
   username: string;
-  imageUrl: MealFormQuery_meal_items_alternativeMealItems_recipe_author_imageUrl | null;
+  avatar: MealFormQuery_meal_items_alternativeMealItems_recipe_author_avatar | null;
 }
 
 export interface MealFormQuery_meal_items_alternativeMealItems_recipe {
   id: string;
   slug: string;
   title: MealFormQuery_meal_items_alternativeMealItems_recipe_title[];
-  coverImage: MealFormQuery_meal_items_alternativeMealItems_recipe_coverImage | null;
+  image: MealFormQuery_meal_items_alternativeMealItems_recipe_image | null;
   timing: MealFormQuery_meal_items_alternativeMealItems_recipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;
@@ -224,14 +224,14 @@ export interface MealFormQuery_meal_items {
   alternativeMealItems: MealFormQuery_meal_items_alternativeMealItems[] | null;
 }
 
-export interface MealFormQuery_meal_author_imageUrl {
+export interface MealFormQuery_meal_author_avatar {
   url: string;
 }
 
 export interface MealFormQuery_meal_author {
   id: string;
   username: string;
-  imageUrl: MealFormQuery_meal_author_imageUrl | null;
+  avatar: MealFormQuery_meal_author_avatar | null;
 }
 
 export interface MealFormQuery_meal_timing {

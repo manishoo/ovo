@@ -13,14 +13,14 @@ export interface MyRecipe_title {
   locale: LanguageCode;
 }
 
-export interface MyRecipe_author_imageUrl {
+export interface MyRecipe_author_avatar {
   url: string;
 }
 
 export interface MyRecipe_author {
   id: string;
   username: string;
-  imageUrl: MyRecipe_author_imageUrl | null;
+  avatar: MyRecipe_author_avatar | null;
 }
 
 export interface MyRecipe_timing {
@@ -65,11 +65,11 @@ export interface MyRecipe_ingredients_food_weights {
   name: MyRecipe_ingredients_food_weights_name[];
 }
 
-export interface MyRecipe_ingredients_food_imageUrl {
+export interface MyRecipe_ingredients_food_image {
   url: string;
 }
 
-export interface MyRecipe_ingredients_food_thumbnailUrl {
+export interface MyRecipe_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -78,8 +78,8 @@ export interface MyRecipe_ingredients_food {
   name: MyRecipe_ingredients_food_name[];
   description: MyRecipe_ingredients_food_description[] | null;
   weights: MyRecipe_ingredients_food_weights[];
-  imageUrl: MyRecipe_ingredients_food_imageUrl;
-  thumbnailUrl: MyRecipe_ingredients_food_thumbnailUrl;
+  image: MyRecipe_ingredients_food_image;
+  thumbnail: MyRecipe_ingredients_food_thumbnail;
 }
 
 export interface MyRecipe_ingredients_weight_name {
@@ -131,7 +131,7 @@ export interface MyRecipe_description {
   locale: LanguageCode;
 }
 
-export interface MyRecipe_coverImage {
+export interface MyRecipe_image {
   url: string;
 }
 
@@ -148,7 +148,7 @@ export interface MyRecipe {
   instructions: MyRecipe_instructions[];
   difficulty: RecipeDifficulty | null;
   description: MyRecipe_description[] | null;
-  coverImage: MyRecipe_coverImage | null;
+  image: MyRecipe_image | null;
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;

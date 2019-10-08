@@ -74,9 +74,9 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               }}
             >
               {
-                recipe.coverImage &&
+                recipe.image &&
                 <RX.Animated.Image
-                  source={recipe.coverImage.url}
+                  source={recipe.image.url}
                   style={[styles.image, this._previewAnimatedStyle]}
                   resizeMode={'cover'}
                 />
@@ -115,7 +115,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               !this.props.hideAvatar &&
               <Link to={`/${recipe.author.username}`} style={styles.avatarContainer}>
                 <Image
-                  source={recipe.author.imageUrl!.url}
+                  source={recipe.author.avatar!.url}
                   style={{
                     width: this.props.size / 5,
                     height: this.props.size / 5,
@@ -208,7 +208,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   }
 
   private _setUI = (isHovering: boolean) => {
-    if (!this.props.recipe.coverImage) {
+    if (!this.props.recipe.image) {
       this.setState({
         isHovering,
       })
@@ -244,7 +244,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
         id
         slug
         title {text locale}
-        coverImage {url}
+        image {url}
         timing {
           totalTime
         }
@@ -254,7 +254,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
         author {
           id
           username
-          imageUrl {url}
+          avatar {url}
         }
       }
     `

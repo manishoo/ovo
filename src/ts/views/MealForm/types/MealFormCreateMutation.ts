@@ -35,11 +35,11 @@ export interface MealFormCreateMutation_createMeal_items_food_weights {
   name: MealFormCreateMutation_createMeal_items_food_weights_name[];
 }
 
-export interface MealFormCreateMutation_createMeal_items_food_imageUrl {
+export interface MealFormCreateMutation_createMeal_items_food_image {
   url: string;
 }
 
-export interface MealFormCreateMutation_createMeal_items_food_thumbnailUrl {
+export interface MealFormCreateMutation_createMeal_items_food_thumbnail {
   url: string;
 }
 
@@ -48,8 +48,8 @@ export interface MealFormCreateMutation_createMeal_items_food {
   name: MealFormCreateMutation_createMeal_items_food_name[];
   description: MealFormCreateMutation_createMeal_items_food_description[] | null;
   weights: MealFormCreateMutation_createMeal_items_food_weights[];
-  imageUrl: MealFormCreateMutation_createMeal_items_food_imageUrl;
-  thumbnailUrl: MealFormCreateMutation_createMeal_items_food_thumbnailUrl;
+  image: MealFormCreateMutation_createMeal_items_food_image;
+  thumbnail: MealFormCreateMutation_createMeal_items_food_thumbnail;
 }
 
 export interface MealFormCreateMutation_createMeal_items_recipe_title {
@@ -57,7 +57,7 @@ export interface MealFormCreateMutation_createMeal_items_recipe_title {
   locale: LanguageCode;
 }
 
-export interface MealFormCreateMutation_createMeal_items_recipe_coverImage {
+export interface MealFormCreateMutation_createMeal_items_recipe_image {
   url: string;
 }
 
@@ -69,21 +69,21 @@ export interface MealFormCreateMutation_createMeal_items_recipe_thumbnail {
   url: string;
 }
 
-export interface MealFormCreateMutation_createMeal_items_recipe_author_imageUrl {
+export interface MealFormCreateMutation_createMeal_items_recipe_author_avatar {
   url: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_recipe_author {
   id: string;
   username: string;
-  imageUrl: MealFormCreateMutation_createMeal_items_recipe_author_imageUrl | null;
+  avatar: MealFormCreateMutation_createMeal_items_recipe_author_avatar | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_recipe {
   id: string;
   slug: string;
   title: MealFormCreateMutation_createMeal_items_recipe_title[];
-  coverImage: MealFormCreateMutation_createMeal_items_recipe_coverImage | null;
+  image: MealFormCreateMutation_createMeal_items_recipe_image | null;
   timing: MealFormCreateMutation_createMeal_items_recipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;
@@ -130,11 +130,11 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_fo
   name: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_weights_name[];
 }
 
-export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_food_imageUrl {
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_food_image {
   url: string;
 }
 
-export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_food_thumbnailUrl {
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_food_thumbnail {
   url: string;
 }
 
@@ -143,8 +143,8 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_fo
   name: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_name[];
   description: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_description[] | null;
   weights: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_weights[];
-  imageUrl: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_imageUrl;
-  thumbnailUrl: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_thumbnailUrl;
+  image: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_image;
+  thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_thumbnail;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_description {
@@ -157,7 +157,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_re
   locale: LanguageCode;
 }
 
-export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_coverImage {
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_image {
   url: string;
 }
 
@@ -169,21 +169,21 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_re
   url: string;
 }
 
-export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_author_imageUrl {
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_author_avatar {
   url: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_author {
   id: string;
   username: string;
-  imageUrl: MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_author_imageUrl | null;
+  avatar: MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_author_avatar | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe {
   id: string;
   slug: string;
   title: MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_title[];
-  coverImage: MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_coverImage | null;
+  image: MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_image | null;
   timing: MealFormCreateMutation_createMeal_items_alternativeMealItems_recipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;
@@ -224,14 +224,14 @@ export interface MealFormCreateMutation_createMeal_items {
   alternativeMealItems: MealFormCreateMutation_createMeal_items_alternativeMealItems[] | null;
 }
 
-export interface MealFormCreateMutation_createMeal_author_imageUrl {
+export interface MealFormCreateMutation_createMeal_author_avatar {
   url: string;
 }
 
 export interface MealFormCreateMutation_createMeal_author {
   id: string;
   username: string;
-  imageUrl: MealFormCreateMutation_createMeal_author_imageUrl | null;
+  avatar: MealFormCreateMutation_createMeal_author_avatar | null;
 }
 
 export interface MealFormCreateMutation_createMeal_timing {

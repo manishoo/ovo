@@ -15,7 +15,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
-import { UserRole } from 'src/ts/models/global-types'
+import { Role } from 'src/ts/models/global-types'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam } from 'src/ts/utilities'
@@ -67,7 +67,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
           ]}
         >
           <Image
-            source={this.props.food.imageUrl ? this.props.food.imageUrl.url : ''}
+            source={this.props.food.image ? this.props.food.image.url : ''}
             resizeMode={'cover'}
             style={{ flex: 1, borderRadius: this.state.isSmallOrTiny ? 0 : 20 }}
           />
@@ -85,7 +85,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.drawerVisible ? this.state.width : this.state.width - Styles.values.drawerWidth)
 
   private _renderControlBar = () => {
-    if (this.props.food && (AppConfig.getPlatformType() === 'web') && this.state.user && (this.state.user.role === UserRole.operator)) {
+    if (this.props.food && (AppConfig.getPlatformType() === 'web') && this.state.user && (this.state.user.role === Role.operator)) {
       return (
         <RX.View style={{ flexDirection: 'row' }}>
           <Link to={`${AppConfig.panelAddress}/food-class/${this.props.food.foodClass.id}`} openInNewTab>
@@ -110,7 +110,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
         id
         name {text locale}
         description {text locale}
-        imageUrl {url}
+        image {url}
         foodGroup {
           id
           name {text locale}

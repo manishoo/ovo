@@ -8,14 +8,14 @@ import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
-import { UserRole } from 'src/ts/models/global-types'
+import { Role } from 'src/ts/models/global-types'
 import UserStore from 'src/ts/stores/UserStore'
 import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
 import {
   ProfileRecipesQuery,
+  ProfileRecipesQuery_recipes_recipes,
   ProfileRecipesQueryVariables
 } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import { Me } from 'src/ts/views/Register/types/Me'
 
 
@@ -26,7 +26,7 @@ interface ProfileRecipesProps {
 }
 
 interface ProfileRecipesState {
-  recipes: RecipesListQuery_recipes_recipes[],
+  recipes: ProfileRecipesQuery_recipes_recipes[],
   hasNext?: boolean,
   me: Me,
   fetching: boolean,
@@ -50,7 +50,7 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
       <RecipesList
         recipes={this.state.recipes}
         showAddRecipe={this.props.showAddRecipe}
-        hideAvatar={this.state.me.role === UserRole.user}
+        hideAvatar={this.state.me.role === Role.user}
         onLayout={e => this.props.onHeightChange(e.height)}
       />
     )

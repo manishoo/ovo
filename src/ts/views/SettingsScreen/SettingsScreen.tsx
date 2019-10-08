@@ -171,7 +171,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
             justifyContent: 'center'
           }}
         >
-          <Image source={this.state.avatarImagePreview || me.imageUrl!.url} style={styles.avatar} />
+          <Image source={this.state.avatarImagePreview || me.avatar!.url} style={styles.avatar} />
 
           <RX.View
             style={[styles.avatarIcon, { [Styles.values.end]: Styles.values.spacing, }]}
@@ -236,7 +236,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
         website: me.socialNetworks.website,
       },
       username: me.username,
-      imageUrl: this.state.avatarImage,
+      avatar: this.state.avatarImage,
     }
   }
 

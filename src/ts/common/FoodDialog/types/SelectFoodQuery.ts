@@ -30,11 +30,11 @@ export interface SelectFoodQuery_foods_foods_weights {
   name: SelectFoodQuery_foods_foods_weights_name[];
 }
 
-export interface SelectFoodQuery_foods_foods_imageUrl {
+export interface SelectFoodQuery_foods_foods_image {
   url: string;
 }
 
-export interface SelectFoodQuery_foods_foods_thumbnailUrl {
+export interface SelectFoodQuery_foods_foods_thumbnail {
   url: string;
 }
 
@@ -43,8 +43,8 @@ export interface SelectFoodQuery_foods_foods {
   name: SelectFoodQuery_foods_foods_name[];
   description: SelectFoodQuery_foods_foods_description[] | null;
   weights: SelectFoodQuery_foods_foods_weights[];
-  imageUrl: SelectFoodQuery_foods_foods_imageUrl;
-  thumbnailUrl: SelectFoodQuery_foods_foods_thumbnailUrl;
+  image: SelectFoodQuery_foods_foods_image;
+  thumbnail: SelectFoodQuery_foods_foods_thumbnail;
 }
 
 export interface SelectFoodQuery_foods {
@@ -56,7 +56,7 @@ export interface SelectFoodQuery_recipes_recipes_title {
   locale: LanguageCode;
 }
 
-export interface SelectFoodQuery_recipes_recipes_coverImage {
+export interface SelectFoodQuery_recipes_recipes_image {
   url: string;
 }
 
@@ -68,21 +68,21 @@ export interface SelectFoodQuery_recipes_recipes_thumbnail {
   url: string;
 }
 
-export interface SelectFoodQuery_recipes_recipes_author_imageUrl {
+export interface SelectFoodQuery_recipes_recipes_author_avatar {
   url: string;
 }
 
 export interface SelectFoodQuery_recipes_recipes_author {
   id: string;
   username: string;
-  imageUrl: SelectFoodQuery_recipes_recipes_author_imageUrl | null;
+  avatar: SelectFoodQuery_recipes_recipes_author_avatar | null;
 }
 
 export interface SelectFoodQuery_recipes_recipes {
   id: string;
   slug: string;
   title: SelectFoodQuery_recipes_recipes_title[];
-  coverImage: SelectFoodQuery_recipes_recipes_coverImage | null;
+  image: SelectFoodQuery_recipes_recipes_image | null;
   timing: SelectFoodQuery_recipes_recipes_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;

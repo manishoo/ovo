@@ -201,7 +201,7 @@ export const RecipeFragment = `
   protein
   url
   slug
-  coverImage ${ImageFragment}
+  image ${ImageFragment}
   thumbnail ${ImageFragment}
   instructions ${InstructionFragment}
   author ${UserFragment}

@@ -79,7 +79,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                   to={`/${user.username}`}
                   style={{ alignSelf: 'center', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
                 >
-                  <Image source={user.imageUrl!.url} style={styles.avatar} />
+                  <Image source={user.avatar!.url} style={styles.avatar} />
                 </Link>,
                 /*<Link
                   key={1}

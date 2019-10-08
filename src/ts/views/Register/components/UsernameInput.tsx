@@ -11,7 +11,7 @@ import RX from 'reactxp'
 import {
   RegisterUsernameExistenceQuery,
   RegisterUsernameExistenceQueryVariables
-} from 'src/ts/views/Register/types/RegisterUsernameExistenceQuery'
+} from 'src/ts/views/Register/components/types/RegisterUsernameExistenceQuery'
 
 
 export default function UsernameInput(props: any) {

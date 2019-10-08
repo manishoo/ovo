@@ -91,7 +91,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             food: mealItem.food,
             gramWeight: mealItem.gramWeight,
             name: mealItem.food.name,
-            thumbnail: mealItem.food.thumbnailUrl,
+            thumbnail: mealItem.food.thumbnail,
             weight: mealItem.weight,
           }}
         />

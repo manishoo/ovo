@@ -9,10 +9,13 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import UserStore from 'src/ts/stores/UserStore'
-import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import { Me } from 'src/ts/views/Register/types/Me'
 import { SearchResultFragments } from 'src/ts/views/SearchResult/SearchResultFragments'
-import { SearchResultQuery, SearchResultQueryVariables } from 'src/ts/views/SearchResult/types/SearchResultQuery'
+import {
+  SearchResultQuery,
+  SearchResultQuery_recipes_recipes,
+  SearchResultQueryVariables
+} from 'src/ts/views/SearchResult/types/SearchResultQuery'
 
 
 interface SearchResultRecipesProps {
@@ -21,7 +24,7 @@ interface SearchResultRecipesProps {
 }
 
 interface SearchResultRecipesState {
-  recipes: RecipesListQuery_recipes_recipes[],
+  recipes: SearchResultQuery_recipes_recipes[],
   hasNext?: boolean,
   me: Me,
   fetching: boolean

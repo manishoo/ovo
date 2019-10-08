@@ -18,7 +18,7 @@ export interface FoodScreenFood_description {
   locale: LanguageCode;
 }
 
-export interface FoodScreenFood_imageUrl {
+export interface FoodScreenFood_image {
   url: string;
 }
 
@@ -61,7 +61,7 @@ export interface FoodScreenFood {
   id: string;
   name: FoodScreenFood_name[];
   description: FoodScreenFood_description[] | null;
-  imageUrl: FoodScreenFood_imageUrl;
+  image: FoodScreenFood_image;
   foodGroup: FoodScreenFood_foodGroup;
   nutrition: FoodScreenFood_nutrition;
   foodClass: FoodScreenFood_foodClass;

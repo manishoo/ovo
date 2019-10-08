@@ -23,7 +23,7 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { UserRole } from 'src/ts/models/global-types'
+import { Role } from 'src/ts/models/global-types'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
@@ -34,7 +34,6 @@ import {
   ProfileRecipesQuery,
   ProfileRecipesQueryVariables
 } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import { RecipesListQueryVariables } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
 import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from 'src/ts/views/Recipe/types/RecipeDeleteMutation'
@@ -67,7 +66,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
             </Navbar>
 
             {
-              this.props.recipe.coverImage &&
+              this.props.recipe.image &&
               <RX.View
                 style={[
                   styles.coverContainer,
@@ -78,9 +77,9 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 ]}
               >
                 <RX.Image
-                  source={this.props.recipe.coverImage.url}
+                  source={this.props.recipe.image.url}
                   resizeMode={'cover'}
-                  style={styles.coverImage}
+                  style={styles.image}
                 />
               </RX.View>
             }
@@ -245,7 +244,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
         <RX.View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Styles.values.spacing }}>
           <Link to={`/${recipe.author.username}`}>
             <Image
-              source={recipe.author.imageUrl!.url}
+              source={recipe.author.avatar!.url}
               style={styles.authorAndDescriptionSection.avatar}
             />
           </Link>
@@ -303,7 +302,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
   }
 
   private _renderControlBar = () => {
-    if (this.state.user && ((this.state.user.id === this.props.recipe.author.id) || (this.state.user.role === UserRole.operator))) {
+    if (this.state.user && ((this.state.user.id === this.props.recipe.author.id) || (this.state.user.role === Role.operator))) {
       return (
         <RX.View style={{ flexDirection: 'row' }}>
           <Mutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>
@@ -330,7 +329,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 variables: {
                   userId: this.state.user && this.state.user.id,
                   size: 20,
-                } as RecipesListQueryVariables
+                }
               })
             }}
             mutation={gql`
@@ -409,7 +408,7 @@ RecipeContainer.fragments = {
         firstName
         lastName
         bio
-        imageUrl { url }
+        avatar { url }
       }
       likesCount
       userLikedRecipe
@@ -435,7 +434,7 @@ RecipeContainer.fragments = {
       }
       difficulty
       description { text locale }
-      coverImage { url }
+      image { url }
       createdAt
       updatedAt
     }
@@ -462,7 +461,7 @@ const styles = {
     paddingVertical: Styles.values.spacing,
   }),
   coverContainer: RX.Styles.createViewStyle({}),
-  coverImage: RX.Styles.createImageStyle({
+  image: RX.Styles.createImageStyle({
     flex: 1,
   }),
   title: RX.Styles.createTextStyle({
