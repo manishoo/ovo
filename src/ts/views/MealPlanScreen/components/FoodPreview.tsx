@@ -47,9 +47,9 @@
 // 							style={styles.firstRow}
 // 						>
 // 							{
-// 								item.imageUrl &&
+// 								item.image &&
 //                 <RX.Image
-//                   source={item.imageUrl}
+//                   source={item.image}
 //                   style={imageStyle}
 //                 />
 // 							}

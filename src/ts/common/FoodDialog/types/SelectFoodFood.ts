@@ -30,11 +30,11 @@ export interface SelectFoodFood_weights {
   name: SelectFoodFood_weights_name[];
 }
 
-export interface SelectFoodFood_imageUrl {
+export interface SelectFoodFood_image {
   url: string;
 }
 
-export interface SelectFoodFood_thumbnailUrl {
+export interface SelectFoodFood_thumbnail {
   url: string;
 }
 
@@ -43,6 +43,6 @@ export interface SelectFoodFood {
   name: SelectFoodFood_name[];
   description: SelectFoodFood_description[] | null;
   weights: SelectFoodFood_weights[];
-  imageUrl: SelectFoodFood_imageUrl;
-  thumbnailUrl: SelectFoodFood_thumbnailUrl;
+  image: SelectFoodFood_image;
+  thumbnail: SelectFoodFood_thumbnail;
 }

@@ -123,7 +123,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
         style={styles.firstRow}
       >
         <Image
-          source={food.thumbnailUrl ? food.thumbnailUrl.url : ''}
+          source={food.thumbnail ? food.thumbnail.url : ''}
           style={styles.imageStyle}
           resizeMode={'cover'}
         />

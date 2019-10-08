@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
-import { UserRole } from 'src/ts/models/global-types'
+import { Role } from 'src/ts/models/global-types'
 import UserStore from 'src/ts/stores/UserStore'
 import MealsList from 'src/ts/views/ProfileScreen/components/MealsList/MealsList'
 import { ProfileMealsFragments } from 'src/ts/views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
@@ -50,7 +50,7 @@ export default class ProfileMeals extends ComponentBase<ProfileMealsProps, Profi
       <MealsList
         meals={this.state.meals}
         showAddMeal={this.props.showAddMeal}
-        hideAvatar={this.state.me.role === UserRole.user}
+        hideAvatar={this.state.me.role === Role.user}
         onLayout={e => this.props.onHeightChange(e.height)}
       />
     )

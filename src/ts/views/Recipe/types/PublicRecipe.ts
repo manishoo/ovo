@@ -13,7 +13,7 @@ export interface PublicRecipe_title {
   locale: LanguageCode;
 }
 
-export interface PublicRecipe_author_imageUrl {
+export interface PublicRecipe_author_avatar {
   url: string;
 }
 
@@ -23,7 +23,7 @@ export interface PublicRecipe_author {
   firstName: string | null;
   lastName: string | null;
   bio: string | null;
-  imageUrl: PublicRecipe_author_imageUrl | null;
+  avatar: PublicRecipe_author_avatar | null;
 }
 
 export interface PublicRecipe_timing {
@@ -68,11 +68,11 @@ export interface PublicRecipe_ingredients_food_weights {
   name: PublicRecipe_ingredients_food_weights_name[];
 }
 
-export interface PublicRecipe_ingredients_food_imageUrl {
+export interface PublicRecipe_ingredients_food_image {
   url: string;
 }
 
-export interface PublicRecipe_ingredients_food_thumbnailUrl {
+export interface PublicRecipe_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -81,8 +81,8 @@ export interface PublicRecipe_ingredients_food {
   name: PublicRecipe_ingredients_food_name[];
   description: PublicRecipe_ingredients_food_description[] | null;
   weights: PublicRecipe_ingredients_food_weights[];
-  imageUrl: PublicRecipe_ingredients_food_imageUrl;
-  thumbnailUrl: PublicRecipe_ingredients_food_thumbnailUrl;
+  image: PublicRecipe_ingredients_food_image;
+  thumbnail: PublicRecipe_ingredients_food_thumbnail;
 }
 
 export interface PublicRecipe_ingredients_weight_name {
@@ -179,7 +179,7 @@ export interface PublicRecipe_description {
   locale: LanguageCode;
 }
 
-export interface PublicRecipe_coverImage {
+export interface PublicRecipe_image {
   url: string;
 }
 
@@ -197,7 +197,7 @@ export interface PublicRecipe {
   nutrition: PublicRecipe_nutrition | null;
   difficulty: RecipeDifficulty | null;
   description: PublicRecipe_description[] | null;
-  coverImage: PublicRecipe_coverImage | null;
+  image: PublicRecipe_image | null;
   createdAt: any;
   updatedAt: any;
 }

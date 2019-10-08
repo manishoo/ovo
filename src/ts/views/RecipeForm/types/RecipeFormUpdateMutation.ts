@@ -13,14 +13,14 @@ export interface RecipeFormUpdateMutation_updateRecipe_title {
   locale: LanguageCode;
 }
 
-export interface RecipeFormUpdateMutation_updateRecipe_author_imageUrl {
+export interface RecipeFormUpdateMutation_updateRecipe_author_avatar {
   url: string;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_author {
   id: string;
   username: string;
-  imageUrl: RecipeFormUpdateMutation_updateRecipe_author_imageUrl | null;
+  avatar: RecipeFormUpdateMutation_updateRecipe_author_avatar | null;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_timing {
@@ -65,11 +65,11 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_weights 
   name: RecipeFormUpdateMutation_updateRecipe_ingredients_food_weights_name[];
 }
 
-export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_imageUrl {
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_image {
   url: string;
 }
 
-export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnailUrl {
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -78,8 +78,8 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food {
   name: RecipeFormUpdateMutation_updateRecipe_ingredients_food_name[];
   description: RecipeFormUpdateMutation_updateRecipe_ingredients_food_description[] | null;
   weights: RecipeFormUpdateMutation_updateRecipe_ingredients_food_weights[];
-  imageUrl: RecipeFormUpdateMutation_updateRecipe_ingredients_food_imageUrl;
-  thumbnailUrl: RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnailUrl;
+  image: RecipeFormUpdateMutation_updateRecipe_ingredients_food_image;
+  thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnail;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_weight_name {
@@ -131,7 +131,7 @@ export interface RecipeFormUpdateMutation_updateRecipe_description {
   locale: LanguageCode;
 }
 
-export interface RecipeFormUpdateMutation_updateRecipe_coverImage {
+export interface RecipeFormUpdateMutation_updateRecipe_image {
   url: string;
 }
 
@@ -148,7 +148,7 @@ export interface RecipeFormUpdateMutation_updateRecipe {
   instructions: RecipeFormUpdateMutation_updateRecipe_instructions[];
   difficulty: RecipeDifficulty | null;
   description: RecipeFormUpdateMutation_updateRecipe_description[] | null;
-  coverImage: RecipeFormUpdateMutation_updateRecipe_coverImage | null;
+  image: RecipeFormUpdateMutation_updateRecipe_image | null;
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;

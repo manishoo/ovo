@@ -35,11 +35,11 @@ export interface ProfileMealsQuery_meals_meals_items_food_weights {
   name: ProfileMealsQuery_meals_meals_items_food_weights_name[];
 }
 
-export interface ProfileMealsQuery_meals_meals_items_food_imageUrl {
+export interface ProfileMealsQuery_meals_meals_items_food_image {
   url: string;
 }
 
-export interface ProfileMealsQuery_meals_meals_items_food_thumbnailUrl {
+export interface ProfileMealsQuery_meals_meals_items_food_thumbnail {
   url: string;
 }
 
@@ -48,8 +48,8 @@ export interface ProfileMealsQuery_meals_meals_items_food {
   name: ProfileMealsQuery_meals_meals_items_food_name[];
   description: ProfileMealsQuery_meals_meals_items_food_description[] | null;
   weights: ProfileMealsQuery_meals_meals_items_food_weights[];
-  imageUrl: ProfileMealsQuery_meals_meals_items_food_imageUrl;
-  thumbnailUrl: ProfileMealsQuery_meals_meals_items_food_thumbnailUrl;
+  image: ProfileMealsQuery_meals_meals_items_food_image;
+  thumbnail: ProfileMealsQuery_meals_meals_items_food_thumbnail;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_recipe_title {
@@ -57,7 +57,7 @@ export interface ProfileMealsQuery_meals_meals_items_recipe_title {
   locale: LanguageCode;
 }
 
-export interface ProfileMealsQuery_meals_meals_items_recipe_coverImage {
+export interface ProfileMealsQuery_meals_meals_items_recipe_image {
   url: string;
 }
 
@@ -69,21 +69,21 @@ export interface ProfileMealsQuery_meals_meals_items_recipe_thumbnail {
   url: string;
 }
 
-export interface ProfileMealsQuery_meals_meals_items_recipe_author_imageUrl {
+export interface ProfileMealsQuery_meals_meals_items_recipe_author_avatar {
   url: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_recipe_author {
   id: string;
   username: string;
-  imageUrl: ProfileMealsQuery_meals_meals_items_recipe_author_imageUrl | null;
+  avatar: ProfileMealsQuery_meals_meals_items_recipe_author_avatar | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_recipe {
   id: string;
   slug: string;
   title: ProfileMealsQuery_meals_meals_items_recipe_title[];
-  coverImage: ProfileMealsQuery_meals_meals_items_recipe_coverImage | null;
+  image: ProfileMealsQuery_meals_meals_items_recipe_image | null;
   timing: ProfileMealsQuery_meals_meals_items_recipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;
@@ -130,11 +130,11 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_w
   name: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_weights_name[];
 }
 
-export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_imageUrl {
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_image {
   url: string;
 }
 
-export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_thumbnailUrl {
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_thumbnail {
   url: string;
 }
 
@@ -143,8 +143,8 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food {
   name: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_name[];
   description: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_description[] | null;
   weights: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_weights[];
-  imageUrl: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_imageUrl;
-  thumbnailUrl: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_thumbnailUrl;
+  image: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_image;
+  thumbnail: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_thumbnail;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_description {
@@ -157,7 +157,7 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe
   locale: LanguageCode;
 }
 
-export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_coverImage {
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_image {
   url: string;
 }
 
@@ -169,21 +169,21 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe
   url: string;
 }
 
-export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_author_imageUrl {
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_author_avatar {
   url: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_author {
   id: string;
   username: string;
-  imageUrl: ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_author_imageUrl | null;
+  avatar: ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_author_avatar | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe {
   id: string;
   slug: string;
   title: ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_title[];
-  coverImage: ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_coverImage | null;
+  image: ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_image | null;
   timing: ProfileMealsQuery_meals_meals_items_alternativeMealItems_recipe_timing;
   likesCount: number;
   userLikedRecipe: boolean | null;
@@ -224,14 +224,14 @@ export interface ProfileMealsQuery_meals_meals_items {
   alternativeMealItems: ProfileMealsQuery_meals_meals_items_alternativeMealItems[] | null;
 }
 
-export interface ProfileMealsQuery_meals_meals_author_imageUrl {
+export interface ProfileMealsQuery_meals_meals_author_avatar {
   url: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_author {
   id: string;
   username: string;
-  imageUrl: ProfileMealsQuery_meals_meals_author_imageUrl | null;
+  avatar: ProfileMealsQuery_meals_meals_author_avatar | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_timing {

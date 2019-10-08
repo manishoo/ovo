@@ -6,7 +6,7 @@
 // GraphQL fragment: ProfileUser
 // ====================================================
 
-export interface ProfileUser_imageUrl {
+export interface ProfileUser_avatar {
   url: string;
 }
 
@@ -23,6 +23,6 @@ export interface ProfileUser {
   username: string;
   firstName: string | null;
   lastName: string | null;
-  imageUrl: ProfileUser_imageUrl | null;
+  avatar: ProfileUser_avatar | null;
   socialNetworks: ProfileUser_socialNetworks | null;
 }

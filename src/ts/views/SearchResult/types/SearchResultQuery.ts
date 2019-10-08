@@ -13,14 +13,14 @@ export interface SearchResultQuery_recipes_recipes_title {
   locale: LanguageCode;
 }
 
-export interface SearchResultQuery_recipes_recipes_author_imageUrl {
+export interface SearchResultQuery_recipes_recipes_author_avatar {
   url: string;
 }
 
 export interface SearchResultQuery_recipes_recipes_author {
   id: string;
   username: string;
-  imageUrl: SearchResultQuery_recipes_recipes_author_imageUrl | null;
+  avatar: SearchResultQuery_recipes_recipes_author_avatar | null;
 }
 
 export interface SearchResultQuery_recipes_recipes_timing {
@@ -60,11 +60,11 @@ export interface SearchResultQuery_recipes_recipes_ingredients_food_weights {
   name: SearchResultQuery_recipes_recipes_ingredients_food_weights_name[];
 }
 
-export interface SearchResultQuery_recipes_recipes_ingredients_food_imageUrl {
+export interface SearchResultQuery_recipes_recipes_ingredients_food_image {
   url: string;
 }
 
-export interface SearchResultQuery_recipes_recipes_ingredients_food_thumbnailUrl {
+export interface SearchResultQuery_recipes_recipes_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -72,8 +72,8 @@ export interface SearchResultQuery_recipes_recipes_ingredients_food {
   id: string;
   name: SearchResultQuery_recipes_recipes_ingredients_food_name[];
   weights: SearchResultQuery_recipes_recipes_ingredients_food_weights[];
-  imageUrl: SearchResultQuery_recipes_recipes_ingredients_food_imageUrl;
-  thumbnailUrl: SearchResultQuery_recipes_recipes_ingredients_food_thumbnailUrl;
+  image: SearchResultQuery_recipes_recipes_ingredients_food_image;
+  thumbnail: SearchResultQuery_recipes_recipes_ingredients_food_thumbnail;
 }
 
 export interface SearchResultQuery_recipes_recipes_ingredients_weight_name {
@@ -125,7 +125,7 @@ export interface SearchResultQuery_recipes_recipes_description {
   locale: LanguageCode;
 }
 
-export interface SearchResultQuery_recipes_recipes_coverImage {
+export interface SearchResultQuery_recipes_recipes_image {
   url: string;
 }
 
@@ -142,7 +142,7 @@ export interface SearchResultQuery_recipes_recipes {
   instructions: SearchResultQuery_recipes_recipes_instructions[];
   difficulty: RecipeDifficulty | null;
   description: SearchResultQuery_recipes_recipes_description[] | null;
-  coverImage: SearchResultQuery_recipes_recipes_coverImage | null;
+  image: SearchResultQuery_recipes_recipes_image | null;
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;

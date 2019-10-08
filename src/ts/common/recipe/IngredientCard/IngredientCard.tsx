@@ -4,7 +4,6 @@
  */
 
 import { showFoodPreviewModal } from 'common/FoodDialog/components/FoodPreview'
-import SelectFood from 'common/FoodDialog/SelectFood'
 import Image from 'common/Image/Image'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
@@ -227,24 +226,41 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
   })
 
   static fragments = {
-    ingredient: gql`
-      fragment IngredientCardIngredient on Ingredient {
-        thumbnail {url}
-        name {text locale}
-        description {text locale}
-        amount
-        customUnit
-        gramWeight
-        food { ...SelectFoodFood }
-        weight {
+    get ingredient() {
+      return gql`
+        fragment IngredientCardIngredient on Ingredient {
+          thumbnail {url}
+          name {text locale}
+          description {text locale}
+          amount
+          customUnit
+          gramWeight
+          food { ...IngredientFood }
+          weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+        }
+
+        ${this.food}
+      `
+    },
+    food: gql`
+      fragment IngredientFood on IngredientFood {
+        id
+        name { text locale }
+        description { text locale }
+        weights {
           amount
           gramWeight
           id
           name { text locale }
         }
+        image {url}
+        thumbnail {url}
       }
-
-      ${SelectFood.fragments.food}
     `
   }
 }

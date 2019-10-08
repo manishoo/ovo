@@ -74,7 +74,7 @@ export function getParam(props: any, paramName: string) {
 	}
 }
 
-export function getImageUrl(imageObject?: Image) {
+export function getimage(imageObject?: Image) {
 	if (imageObject) {
 		return `${AppConfig.serverAddress}/${imageObject.url}`
 	}

@@ -16,7 +16,7 @@ import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { TagType, UserRole } from 'src/ts/models/global-types'
+import { TagType, Role } from 'src/ts/models/global-types'
 import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
 import { capitalize } from 'src/ts/utilities/capitalize'
 import {
@@ -152,7 +152,7 @@ export function TagsInput(props: TagsInputProps) {
                     {
                       (
                         tag.user === props.me.id ||
-                        props.me.role === UserRole.operator
+                        props.me.role === Role.operator
                       ) &&
                       <FilledButton
                         label={'x'}

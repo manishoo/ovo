@@ -13,14 +13,14 @@ export interface SearchResultRecipe_title {
   locale: LanguageCode;
 }
 
-export interface SearchResultRecipe_author_imageUrl {
+export interface SearchResultRecipe_author_avatar {
   url: string;
 }
 
 export interface SearchResultRecipe_author {
   id: string;
   username: string;
-  imageUrl: SearchResultRecipe_author_imageUrl | null;
+  avatar: SearchResultRecipe_author_avatar | null;
 }
 
 export interface SearchResultRecipe_timing {
@@ -60,11 +60,11 @@ export interface SearchResultRecipe_ingredients_food_weights {
   name: SearchResultRecipe_ingredients_food_weights_name[];
 }
 
-export interface SearchResultRecipe_ingredients_food_imageUrl {
+export interface SearchResultRecipe_ingredients_food_image {
   url: string;
 }
 
-export interface SearchResultRecipe_ingredients_food_thumbnailUrl {
+export interface SearchResultRecipe_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -72,8 +72,8 @@ export interface SearchResultRecipe_ingredients_food {
   id: string;
   name: SearchResultRecipe_ingredients_food_name[];
   weights: SearchResultRecipe_ingredients_food_weights[];
-  imageUrl: SearchResultRecipe_ingredients_food_imageUrl;
-  thumbnailUrl: SearchResultRecipe_ingredients_food_thumbnailUrl;
+  image: SearchResultRecipe_ingredients_food_image;
+  thumbnail: SearchResultRecipe_ingredients_food_thumbnail;
 }
 
 export interface SearchResultRecipe_ingredients_weight_name {
@@ -125,7 +125,7 @@ export interface SearchResultRecipe_description {
   locale: LanguageCode;
 }
 
-export interface SearchResultRecipe_coverImage {
+export interface SearchResultRecipe_image {
   url: string;
 }
 
@@ -142,7 +142,7 @@ export interface SearchResultRecipe {
   instructions: SearchResultRecipe_instructions[];
   difficulty: RecipeDifficulty | null;
   description: SearchResultRecipe_description[] | null;
-  coverImage: SearchResultRecipe_coverImage | null;
+  image: SearchResultRecipe_image | null;
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;

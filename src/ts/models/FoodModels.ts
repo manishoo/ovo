@@ -10,7 +10,7 @@ import {
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import { Translation } from 'src/ts/models/common'
 import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
-import { Me_height, Me_imageUrl, Me_weight } from 'src/ts/views/Register/types/Me'
+import { Me_height, Me_avatar, Me_weight } from 'src/ts/views/Register/types/Me'
 
 
 export enum TAG_TYPE {
@@ -107,7 +107,7 @@ export interface User {
   firstName: string | null;
   middleName: string | null;
   lastName: string | null;
-  imageUrl: Me_imageUrl | null;
+  avatar: Me_avatar | null;
   gender: string | null;
   bodyFat: number | null;
   age: number | null;
@@ -180,7 +180,7 @@ export interface Recipe extends RecipesListQuery_recipes_recipes {
 	// courses?: string[]
 	// cuisine?: string
 	// calories?: number
-	coverImage?: Image
+	image?: Image
 	// images?: Image[]
 	// dataVersion?: number
 	// additionalData?: any

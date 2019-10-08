@@ -37,7 +37,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
           {
             !this.props.isMyProfile &&
             <Image
-              source={user.imageUrl!.url}
+              source={user.avatar!.url}
               style={[
                 styles.avatar,
                 {
@@ -169,7 +169,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
         username
         firstName
         lastName
-        imageUrl { url }
+        avatar { url }
         socialNetworks {
           instagram
           pinterest

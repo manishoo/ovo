@@ -164,7 +164,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
         firstName
         middleName
         lastName
-        imageUrl {
+        avatar {
           url
         }
         gender

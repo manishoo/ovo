@@ -33,6 +33,15 @@ export enum RecipeDifficulty {
 }
 
 /**
+ * User Roles
+ */
+export enum Role {
+  admin = "admin",
+  operator = "operator",
+  user = "user",
+}
+
+/**
  * Tag types
  */
 export enum TagType {
@@ -44,14 +53,6 @@ export enum TagType {
   occasion = "occasion",
   other = "other",
   recipe = "recipe",
-}
-
-/**
- * User roles
- */
-export enum UserRole {
-  operator = "operator",
-  user = "user",
 }
 
 export interface IngredientInput {
@@ -79,6 +80,7 @@ export interface MealInput {
 }
 
 export interface MealItemInput {
+  id?: any | null;
   amount: number;
   food?: string | null;
   recipe?: string | null;
@@ -87,6 +89,7 @@ export interface MealItemInput {
 }
 
 export interface MealItemInputBase {
+  id?: any | null;
   amount: number;
   food?: string | null;
   recipe?: string | null;
@@ -102,7 +105,7 @@ export interface RecipeInput {
   difficulty?: RecipeDifficulty | null;
   slug?: string | null;
   description?: TranslationInput[] | null;
-  coverImage?: any | null;
+  image?: any | null;
   thumbnail?: any | null;
   tags?: string[] | null;
 }
@@ -149,7 +152,7 @@ export interface UserUpdateInput {
   middleName?: string | null;
   lastName?: string | null;
   gender?: Gender | null;
-  imageUrl?: any | null;
+  avatar?: any | null;
   socialNetworks: SocialNetworksInput;
   bio?: string | null;
   phoneNumber?: string | null;

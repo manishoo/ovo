@@ -12,6 +12,7 @@
     "start-ios": "npm install && npm run _gulp-ios",
     "start-android": "npm install && npm run gulp-android",
     "generate-types:watch": "apollo client:codegen types --target typescript --watch --globalTypesFile=src/ts/models/global-types.ts --no-addTypename",
+    "remove-generated-types": "rm -r `find ./ -name 'types'`",
     "_gulp-android": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=android",
     "_gulp-ios": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=ios",
     "_test": "jest -c jest/jest.config.js",

@@ -6,7 +6,7 @@
 // GraphQL query operation: PublicProfileScreenQuery
 // ====================================================
 
-export interface PublicProfileScreenQuery_user_imageUrl {
+export interface PublicProfileScreenQuery_user_avatar {
   url: string;
 }
 
@@ -23,7 +23,7 @@ export interface PublicProfileScreenQuery_user {
   username: string;
   firstName: string | null;
   lastName: string | null;
-  imageUrl: PublicProfileScreenQuery_user_imageUrl | null;
+  avatar: PublicProfileScreenQuery_user_avatar | null;
   socialNetworks: PublicProfileScreenQuery_user_socialNetworks | null;
 }
 

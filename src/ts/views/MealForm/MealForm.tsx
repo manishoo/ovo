@@ -19,7 +19,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { FoodTypes } from 'src/ts/models/FoodModels'
-import { MealInput, UserRole } from 'src/ts/models/global-types'
+import { MealInput, Role } from 'src/ts/models/global-types'
 import LocationStore from 'src/ts/stores/LocationStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { getParam } from 'src/ts/utilities'
@@ -160,7 +160,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           this.props.meal &&
           (
             this.state.me.id === this.props.meal.author.id ||
-            this.state.me.role === UserRole.operator
+            this.state.me.role === Role.operator
           ) &&
           <RX.View style={{ flexDirection: 'row', paddingBottom: Styles.values.spacing }}>
             <FilledButton
@@ -211,7 +211,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
 
         {
           !this.props.meal &&
-          this.state.me.role !== UserRole.user &&
+          this.state.me.role !== Role.user &&
           <RX.View
             style={{
               flexDirection: 'row',

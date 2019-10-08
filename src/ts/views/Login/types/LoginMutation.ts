@@ -2,13 +2,13 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, UserRole } from "./../../../models/global-types";
+import { Gender, Role } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: LoginMutation
 // ====================================================
 
-export interface LoginMutation_loginUser_user_imageUrl {
+export interface LoginMutation_loginUser_user_avatar {
   url: string;
 }
 
@@ -37,7 +37,7 @@ export interface LoginMutation_loginUser_user {
   firstName: string | null;
   middleName: string | null;
   lastName: string | null;
-  imageUrl: LoginMutation_loginUser_user_imageUrl | null;
+  avatar: LoginMutation_loginUser_user_avatar | null;
   gender: Gender | null;
   bodyFat: number | null;
   age: number | null;
@@ -46,7 +46,7 @@ export interface LoginMutation_loginUser_user {
   height: LoginMutation_loginUser_user_height | null;
   caloriesPerDay: number | null;
   socialNetworks: LoginMutation_loginUser_user_socialNetworks | null;
-  role: UserRole;
+  role: Role;
 }
 
 export interface LoginMutation_loginUser {

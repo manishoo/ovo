@@ -413,8 +413,8 @@ SelectFoodContainer.fragments = {
         id
         name { text locale }
       }
-      imageUrl {url}
-      thumbnailUrl {url}
+      image {url}
+      thumbnail {url}
     }
   `
 }

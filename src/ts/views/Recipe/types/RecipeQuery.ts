@@ -13,7 +13,7 @@ export interface RecipeQuery_recipe_title {
   locale: LanguageCode;
 }
 
-export interface RecipeQuery_recipe_author_imageUrl {
+export interface RecipeQuery_recipe_author_avatar {
   url: string;
 }
 
@@ -23,7 +23,7 @@ export interface RecipeQuery_recipe_author {
   firstName: string | null;
   lastName: string | null;
   bio: string | null;
-  imageUrl: RecipeQuery_recipe_author_imageUrl | null;
+  avatar: RecipeQuery_recipe_author_avatar | null;
 }
 
 export interface RecipeQuery_recipe_timing {
@@ -68,11 +68,11 @@ export interface RecipeQuery_recipe_ingredients_food_weights {
   name: RecipeQuery_recipe_ingredients_food_weights_name[];
 }
 
-export interface RecipeQuery_recipe_ingredients_food_imageUrl {
+export interface RecipeQuery_recipe_ingredients_food_image {
   url: string;
 }
 
-export interface RecipeQuery_recipe_ingredients_food_thumbnailUrl {
+export interface RecipeQuery_recipe_ingredients_food_thumbnail {
   url: string;
 }
 
@@ -81,8 +81,8 @@ export interface RecipeQuery_recipe_ingredients_food {
   name: RecipeQuery_recipe_ingredients_food_name[];
   description: RecipeQuery_recipe_ingredients_food_description[] | null;
   weights: RecipeQuery_recipe_ingredients_food_weights[];
-  imageUrl: RecipeQuery_recipe_ingredients_food_imageUrl;
-  thumbnailUrl: RecipeQuery_recipe_ingredients_food_thumbnailUrl;
+  image: RecipeQuery_recipe_ingredients_food_image;
+  thumbnail: RecipeQuery_recipe_ingredients_food_thumbnail;
 }
 
 export interface RecipeQuery_recipe_ingredients_weight_name {
@@ -179,7 +179,7 @@ export interface RecipeQuery_recipe_description {
   locale: LanguageCode;
 }
 
-export interface RecipeQuery_recipe_coverImage {
+export interface RecipeQuery_recipe_image {
   url: string;
 }
 
@@ -197,7 +197,7 @@ export interface RecipeQuery_recipe {
   nutrition: RecipeQuery_recipe_nutrition | null;
   difficulty: RecipeDifficulty | null;
   description: RecipeQuery_recipe_description[] | null;
-  coverImage: RecipeQuery_recipe_coverImage | null;
+  image: RecipeQuery_recipe_image | null;
   createdAt: any;
   updatedAt: any;
 }

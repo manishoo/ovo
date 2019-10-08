@@ -72,13 +72,13 @@ interface RecipeFormState {
   ingredientModalOpen: boolean,
   recipe: Omit<RecipeFormQuery_recipe, 'ingredients'> & { ingredients: IngredientWithKey[] },
   slugEdited: boolean,
-  coverImagePreview?: any,
+  imagePreview?: any,
   difficulty?: string,
   totalTimeSet?: boolean,
   height?: number,
   me?: Me,
   hideForm?: boolean
-  coverImage?: any,
+  image?: any,
 }
 
 class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
@@ -108,7 +108,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           serving: props.recipe.serving,
         },
         slugEdited: true,
-        coverImagePreview: props.recipe.coverImage ? props.recipe.coverImage.url : undefined,
+        imagePreview: props.recipe.image ? props.recipe.image.url : undefined,
         height: ResponsiveWidthStore.getHeight(),
         me: UserStore.getUser(),
       }
@@ -140,16 +140,16 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           author: {
             id: '',
             username: '',
-            imageUrl: {
+            image: {
               url: ''
             }
           },
           serving: 1,
-          coverImage: null,
+          image: null,
           tags: [],
         },
         slugEdited: false,
-        coverImagePreview: undefined,
+        imagePreview: undefined,
         height: ResponsiveWidthStore.getHeight(),
         me: UserStore.getUser(),
       }
@@ -384,9 +384,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         </RX.View>
 
         <FilePicker
-          label={this.state.coverImagePreview ? 'Replace Image' : undefined}
-          onImageChange={coverImage => this.setState({ coverImage })}
-          onImagePreviewChange={coverImagePreview => this.setState({ coverImagePreview })}
+          label={this.state.imagePreview ? 'Replace Image' : undefined}
+          onImageChange={image => this.setState({ image })}
+          onImagePreviewChange={imagePreview => this.setState({ imagePreview })}
           style={{
             flex: 1,
             height: 400,
@@ -403,10 +403,10 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             }}
           >
             {
-              this.state.coverImagePreview &&
+              this.state.imagePreview &&
               <Image
-                source={this.state.coverImagePreview}
-                style={styles.coverImage}
+                source={this.state.imagePreview}
+                style={styles.image}
                 resizeMode={'cover'}
               />
             }
@@ -426,7 +426,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               }}
             >
               {
-                !this.state.coverImagePreview &&
+                !this.state.imagePreview &&
                 <Text
                   translate
                   style={{
@@ -488,7 +488,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       customUnit: mealItem.customUnit || null,
       description: mealItem.description || [],
       gramWeight: mealItem.gramWeight || null,
-      thumbnail: mealItem.food!.thumbnailUrl || null,
+      thumbnail: mealItem.food!.thumbnail || null,
       weight: mealItem.weight || null,
     })
     this.setState(prevState => ({
@@ -635,7 +635,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       tags: this.state.recipe.tags,
       difficulty: this.state.recipe.difficulty,
       slug: this.state.recipe.slug,
-      coverImage: this.state.coverImage,
+      image: this.state.image,
     }
   }
 
@@ -866,7 +866,7 @@ const styles = {
     width: 160,
     [Styles.values.marginEnd]: Styles.values.spacing / 2,
   }),
-  coverImage: RX.Styles.createImageStyle({
+  image: RX.Styles.createImageStyle({
     position: 'absolute',
     left: 0,
     right: 0,

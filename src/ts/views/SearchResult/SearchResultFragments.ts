@@ -20,7 +20,7 @@ const SearchResultFragments = {
         author {
           id
           username
-          imageUrl { url }
+          avatar { url }
         }
         likesCount
         userLikedRecipe
@@ -60,7 +60,7 @@ const SearchResultFragments = {
         }
         difficulty
         description { text locale }
-        coverImage { url }
+        image { url }
         tags
         createdAt
         updatedAt
@@ -70,7 +70,7 @@ const SearchResultFragments = {
     `
   },
   SearchResultFood: gql`
-    fragment SearchResultFood on Food {
+    fragment SearchResultFood on IngredientFood {
       id
       name { text locale }
       weights {
@@ -79,8 +79,8 @@ const SearchResultFragments = {
         id
         name { text locale }
       }
-      imageUrl {url}
-      thumbnailUrl {url}
+      image {url}
+      thumbnail {url}
     }
   `
 }

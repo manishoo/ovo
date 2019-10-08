@@ -25,11 +25,11 @@ export interface SearchResultFood_weights {
   name: SearchResultFood_weights_name[];
 }
 
-export interface SearchResultFood_imageUrl {
+export interface SearchResultFood_image {
   url: string;
 }
 
-export interface SearchResultFood_thumbnailUrl {
+export interface SearchResultFood_thumbnail {
   url: string;
 }
 
@@ -37,6 +37,6 @@ export interface SearchResultFood {
   id: string;
   name: SearchResultFood_name[];
   weights: SearchResultFood_weights[];
-  imageUrl: SearchResultFood_imageUrl;
-  thumbnailUrl: SearchResultFood_thumbnailUrl;
+  image: SearchResultFood_image;
+  thumbnail: SearchResultFood_thumbnail;
 }
