@@ -81,7 +81,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           label={getLocalizedText('Gender')}
           value={me.gender}
           options={[
-            { value: null, text: <Text>Select gender</Text> },
+            { value: null, text: <Text translate>Select gender</Text> },
             ...Object.keys(Gender).map(k => ({
               value: Gender[k],
               text: <Text>{k}</Text>,

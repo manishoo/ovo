@@ -443,7 +443,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
            * */
           !this.props.recipe &&
           <FilledButton
-            label={'Submit'}
+            label={getLocalizedText('Submit')}
             onPress={this._handleCreate}
           />
         }

@@ -4,6 +4,7 @@
  */
 
 
+import Text from 'common/Text/Text'
 import RX from 'reactxp'
 
 // `path` should be relative to the `components/` folder
@@ -46,7 +47,7 @@ const loadComponentAsync = (path: string, secondaryPath?: string) => (
 
 			return Component
 				? <Component {...this.props} />
-				: <RX.Text>Loading</RX.Text>
+				: <Text translate>Loading</Text>
 		}
 	}
 )

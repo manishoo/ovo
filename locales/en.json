@@ -26,7 +26,18 @@
   "Dishes": "Dishes",
 
   "CreateRecipe": "Create Dish",
+  "Edit Recipe": "Edit Recipe",
+  "Edit Food": "Edit Food",
   "CreateNewMeal": "Create Meal",
+  "Edit Meal": "Edit Meal",
+  "Add Alternative": "Add Alternative",
+  "Bulk create": "Bulk Create",
+  "Foods": "Foods",
+  "Recipes": "Recipes",
+  "Meals": "Meals",
+  "Search": "Search",
+  "Logout": "Logout",
+  "Delete": "Delete",
 
   "Unit": "Unit",
   "Amount": "Amount",

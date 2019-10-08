@@ -164,7 +164,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           ) &&
           <RX.View style={{ flexDirection: 'row', paddingBottom: Styles.values.spacing }}>
             <FilledButton
-              label={getLocalizedText('delete')}
+              label={getLocalizedText('Delete')}
               onPress={this._onDelete}
               mode={FilledButton.mode.danger}
             />
@@ -226,6 +226,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
             />
             <Text
               style={{ [Styles.values.marginStart]: Styles.values.spacing / 2 }}
+              translate
             >Bulk create</Text>
           </RX.View>
         }

@@ -8,6 +8,7 @@ import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import Navbar from 'common/Navbar/Navbar'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
@@ -90,7 +91,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
         <RX.View style={{ flexDirection: 'row' }}>
           <Link to={`${AppConfig.panelAddress}/food-class/${this.props.food.foodClass.id}`} openInNewTab>
             <FilledButton
-              label={'Edit Food'}
+              label={getLocalizedText('Edit Food')}
               onPress={() => null}
               style={{
                 [Styles.values.marginStart]: Styles.values.spacing / 2
