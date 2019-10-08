@@ -10,13 +10,13 @@ import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { Routes } from 'src/ts/models/common'
 import LocationStore from 'src/ts/stores/LocationStore'
-import { RecipesListQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 
 interface RecipesListProps extends RX.CommonProps {
   style?: any,
-  recipes: RecipesListQuery_recipes_recipes[],
+  recipes: ProfileRecipesQuery_recipes_recipes[],
   showAddRecipe?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   hideAvatar?: boolean,

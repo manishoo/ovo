@@ -17,12 +17,12 @@ import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import { navigate } from 'src/ts/utilities'
+import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import { ProfileInfoUser } from 'src/ts/views/ProfileScreen/components/types/ProfileInfoUser'
 import Avatar from './components/Avatar'
 import ProfileInfo from './components/ProfileInfo'
 import ProfileMeals from './components/ProfileMeals/ProfileMeals'
 import ProfileRecipes from './components/ProfileRecipes/ProfileRecipes'
-import { RecipesListQuery_recipes_recipes } from './types/RecipesListQuery'
 
 
 interface ProfileScreenProps extends RX.CommonProps {
@@ -33,7 +33,7 @@ interface ProfileScreenProps extends RX.CommonProps {
 interface ProfileState {
   height: number,
   width: number,
-  recipes: RecipesListQuery_recipes_recipes[],
+  recipes: ProfileRecipesQuery_recipes_recipes[],
   activeTab: number,
 }
 

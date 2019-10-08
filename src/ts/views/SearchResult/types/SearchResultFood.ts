@@ -13,6 +13,11 @@ export interface SearchResultFood_name {
   locale: LanguageCode;
 }
 
+export interface SearchResultFood_description {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface SearchResultFood_weights_name {
   text: string;
   locale: LanguageCode;
@@ -36,6 +41,7 @@ export interface SearchResultFood_thumbnail {
 export interface SearchResultFood {
   id: string;
   name: SearchResultFood_name[];
+  description: SearchResultFood_description[] | null;
   weights: SearchResultFood_weights[];
   image: SearchResultFood_image;
   thumbnail: SearchResultFood_thumbnail;

@@ -34,7 +34,6 @@ import {
   ProfileRecipesQuery,
   ProfileRecipesQueryVariables
 } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import { RecipesListQueryVariables } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
 import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
 import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from 'src/ts/views/Recipe/types/RecipeDeleteMutation'
@@ -330,7 +329,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 variables: {
                   userId: this.state.user && this.state.user.id,
                   size: 20,
-                } as RecipesListQueryVariables
+                }
               })
             }}
             mutation={gql`

@@ -73,6 +73,7 @@ const SearchResultFragments = {
     fragment SearchResultFood on IngredientFood {
       id
       name { text locale }
+      description { text locale }
       weights {
         amount
         gramWeight

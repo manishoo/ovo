@@ -40,12 +40,8 @@ import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
 import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
 import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
-import { RecipesListQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/types/RecipesListQuery'
+import { MyRecipe_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/MyRecipe'
 import { RecipeFormExtra } from 'src/ts/views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
-import {
-  RecipeFormExtraUpdateMutation,
-  RecipeFormExtraUpdateMutationVariables
-} from 'src/ts/views/RecipeForm/components/RecipeFormExtra/types/RecipeFormExtraUpdateMutation'
 import { Me } from 'src/ts/views/Register/types/Me'
 import InstructionRow from './components/InstructionRow/InstructionRow'
 import { RecipeFormCreateMutation, RecipeFormCreateMutationVariables } from './types/RecipeFormCreateMutation'
@@ -55,7 +51,7 @@ import {
   RecipeFormQuery_recipe_ingredients,
   RecipeFormQueryVariables
 } from './types/RecipeFormQuery'
-import { RecipeFormUpdateMutationVariables } from './types/RecipeFormUpdateMutation'
+import { RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables } from './types/RecipeFormUpdateMutation'
 
 
 interface RecipeFormProps {
@@ -140,7 +136,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           author: {
             id: '',
             username: '',
-            image: {
+            avatar: {
               url: ''
             }
           },
@@ -499,7 +495,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _handleInstructionDelete = (instruction: RecipesListQuery_recipes_recipes_instructions) => {
+  private _handleInstructionDelete = (instruction: MyRecipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     /**
@@ -524,7 +520,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }
   }
 
-  private _onInstructionChange = (instruction: RecipesListQuery_recipes_recipes_instructions) => {
+  private _onInstructionChange = (instruction: MyRecipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     const foundInstruction = instructions.find(p => p.step === instruction.step)
@@ -569,7 +565,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _onInstructionAdd = (instruction: RecipesListQuery_recipes_recipes_instructions) => {
+  private _onInstructionAdd = (instruction: MyRecipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     instructions.splice(
@@ -766,7 +762,7 @@ export default function (props: {}) {
 
     ${ProfileRecipesFragments.myRecipe}
   `)
-  const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormExtraUpdateMutation, RecipeFormExtraUpdateMutationVariables>(gql`
+  const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables>(gql`
     mutation RecipeFormUpdateMutation($id: String!, $recipe: RecipeInput!) {
       updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
     }

@@ -48,6 +48,11 @@ export interface SearchResultRecipe_ingredients_food_name {
   locale: LanguageCode;
 }
 
+export interface SearchResultRecipe_ingredients_food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface SearchResultRecipe_ingredients_food_weights_name {
   text: string;
   locale: LanguageCode;
@@ -71,6 +76,7 @@ export interface SearchResultRecipe_ingredients_food_thumbnail {
 export interface SearchResultRecipe_ingredients_food {
   id: string;
   name: SearchResultRecipe_ingredients_food_name[];
+  description: SearchResultRecipe_ingredients_food_description[] | null;
   weights: SearchResultRecipe_ingredients_food_weights[];
   image: SearchResultRecipe_ingredients_food_image;
   thumbnail: SearchResultRecipe_ingredients_food_thumbnail;
