@@ -6,7 +6,6 @@
 import { useQuery } from '@apollo/react-hooks'
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
-import SelectFoodContainer from 'common/FoodDialog/SelectFood'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
@@ -446,7 +445,6 @@ RecipeContainer.fragments = {
     }
 
     ${IngredientCard.fragments.ingredient}
-    ${SelectFoodContainer.fragments.food}
   `
 }
 

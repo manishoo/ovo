@@ -101,7 +101,6 @@ deploy to staging:
 deploy to production:
   stage: deploy
   image: docker:latest
-  when: manual
   only:
     - tags
   except:
