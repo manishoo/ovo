@@ -2,6 +2,7 @@
  * copyright
  * */
 
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { Routes } from 'src/ts/models/common'
@@ -76,7 +77,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: RecipeForm,
             navOptions: {
               ...defaultNavOptions,
-              title: 'Edit Recipe',
+              title: getLocalizedText('Edit Recipe'),
             },
           },
           {
@@ -100,7 +101,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             redirectTo: this.state.user ? undefined : Routes.login,
             navOptions: {
               ...defaultNavOptions,
-              title: 'Create Recipe',
+              title: getLocalizedText('CreateRecipe'),
             },
           },
 
@@ -126,7 +127,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
-              title: 'Edit Meal',
+              title: getLocalizedText('Edit Meal'),
             },
           },
           {
@@ -137,7 +138,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
-              title: 'Create Meal',
+              title: getLocalizedText('Create Meal'),
             },
           },
           {

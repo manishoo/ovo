@@ -81,7 +81,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           label={getLocalizedText('Gender')}
           value={me.gender}
           options={[
-            { value: null, text: <Text>Select gender</Text> },
+            { value: null, text: <Text translate>Select gender</Text> },
             ...Object.keys(Gender).map(k => ({
               value: Gender[k],
               text: <Text>{k}</Text>,
@@ -245,8 +245,8 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       id: this.state.me.id,
       user: this._getUser()
     })
-      .then(() => {
-        LocationStore.navigate(this.props, 'back')
+      .then(({data: {updateUser: {username}}}) => {
+        LocationStore.navigate(this.props, `/${username}`, {params: {replace: true}})
 
         /**
          * If profile image changed, reload the page

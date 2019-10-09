@@ -6,7 +6,6 @@
 import { useQuery } from '@apollo/react-hooks'
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
-import SelectFoodContainer from 'common/FoodDialog/SelectFood'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
@@ -340,7 +339,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           >
             {(mutate) => (
               <FilledButton
-                label={'Delete Recipe'}
+                label={getLocalizedText('Delete Recipe')}
                 mode={FilledButton.mode.danger}
                 onPress={() => RX.Alert.show(getLocalizedText('deleteRecipe?'), undefined, [{
                   text: getLocalizedText('yes'),
@@ -350,7 +349,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
             )}
           </Mutation>
           <FilledButton
-            label={'Edit Recipe'}
+            label={getLocalizedText('Edit Recipe')}
             onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })}
             style={{
               [Styles.values.marginStart]: Styles.values.spacing / 2
@@ -386,7 +385,7 @@ export default function RecipeContainer(props: RecipeProps) {
   return (
     <RX.View>
       {!!data && !!data.recipe && <Recipe recipe={data.recipe} />}
-      {!!loading && <RX.Text>Loading</RX.Text>}
+      {!!loading && <Text translate>Loading</Text>}
       {!!error && <RX.Text>Error</RX.Text>}
     </RX.View>
   )
@@ -446,7 +445,6 @@ RecipeContainer.fragments = {
     }
 
     ${IngredientCard.fragments.ingredient}
-    ${SelectFoodContainer.fragments.food}
   `
 }
 

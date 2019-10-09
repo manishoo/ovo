@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
@@ -39,7 +40,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
         `}
       >
         {({ data, loading }) => {
-          if (loading) return <RX.Text>Loading</RX.Text>
+          if (loading) return <Text translate>Loading</Text>
           if (!data) return null
           if (!data.user) return null
 

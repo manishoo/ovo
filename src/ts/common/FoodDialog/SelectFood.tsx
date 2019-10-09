@@ -139,7 +139,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                 {
                   this.props.foodTypes.map(foodType => (
                     <FlatButton
-                      label={foodType}
+                      label={getLocalizedText(foodType)}
                       onPress={() => this.setState({ mode: foodType })}
                       {...this._getModeButtonStyle(theme, foodType)}
                     />
