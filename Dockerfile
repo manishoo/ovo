@@ -1,4 +1,10 @@
-FROM node:10-alpine
+#  ____        _ _     _   ____  _
+# | __ ) _   _(_) | __| | / ___|| |_ __ _  __ _  ___
+# |  _ \| | | | | |/ _` | \___ \| __/ _` |/ _` |/ _ \
+# | |_) | |_| | | | (_| |  ___) | || (_| | (_| |  __/
+# |____/ \__,_|_|_|\__,_| |____/ \__\__,_|\__, |\___|
+#                                         |___/
+FROM node:10-alpine AS build
 MAINTAINER Ouranos Studio
 
 WORKDIR /home/supernova
@@ -44,3 +50,15 @@ RUN rm package.json
 RUN rm tsconfig.json
 
 RUN npm prune --production
+
+#  ____                        ____  _
+# / ___|  ___ _ ____   _____  / ___|| |_ __ _  __ _  ___
+# \___ \ / _ \ '__\ \ / / _ \ \___ \| __/ _` |/ _` |/ _ \
+#  ___) |  __/ |   \ V /  __/  ___) | || (_| | (_| |  __/
+# |____/ \___|_|    \_/ \___| |____/ \__\__,_|\__, |\___|
+#                                             |___/
+FROM nginx:stable
+
+COPY --from=build /home/supernova/web/* /var/www
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+CMD ["nginx -g 'daemon off;'"]
