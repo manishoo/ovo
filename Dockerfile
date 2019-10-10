@@ -43,6 +43,7 @@ ARG PUBLIC_PATH
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
 ARG TAG
+ARG ENV
 RUN npm run build:web
 
 RUN rm -rf src
@@ -60,5 +61,5 @@ RUN npm prune --production
 FROM nginx:stable
 COPY --from=build /home/supernova/web/* /var/www/
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf/$ENV /etc/nginx/conf.d/default.conf
 CMD ["nginx -g 'daemon off;'"]
