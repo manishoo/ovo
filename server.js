@@ -26,13 +26,13 @@ const serve = (path, cache) => express.static(path, {
   maxAge: cache && isProd ? 1000 * 60 * 60 * 24 * 30 : 0
 })
 
-app.use(compression({ threshold: 0 }))
-app.use(publicPath.slice(0, -1), serve(paths.build, true))
-app.use('/fonts', serve(paths.fonts, true))
-app.use('/images', serve(paths.images, true))
-app.use('/manifest.json', serve(paths.manifest, true))
-app.use('/app.css', serve(paths.appCss, true))
-app.use('/sw.js', serve(paths.buildSW))
+// app.use(compression({ threshold: 0 }))
+// app.use(publicPath.slice(0, -1), serve(paths.build, true))
+// app.use('/fonts', serve(paths.fonts, true))
+// app.use('/images', serve(paths.images, true))
+// app.use('/manifest.json', serve(paths.manifest, true))
+// app.use('/app.css', serve(paths.appCss, true))
+// app.use('/sw.js', serve(paths.buildSW))
 app.use(favicon(paths.favicon))
 
 const supportedLanguages = [

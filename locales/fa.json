@@ -106,7 +106,7 @@
   "e.g. Banana": "مثلا موز...",
   "Describe the story behind your recipe": "داستان غذاتو بگو",
   "Add Tag": "تگ بزن",
-  "Tell us more about the recipe": "از رسپی بگو",
+  "Tell us more about the recipe": "از دستور تهیه بگو",
   "e.g. Easy Sesame Chicken": "مثلا خورش قیمه...",
 
   "areyousure?": "مطمئنی؟",
@@ -115,7 +115,7 @@
   "Bulk create": "ساخت تمام جایگشت ها",
 
   "Foods": "غذا ها",
-  "Recipes": "رسپی ها",
+  "Recipes": "دستور تهیه ها",
   "Meals": "سفره ها",
 
   "prepTime": "زمان آماده سازی",
@@ -134,8 +134,8 @@
   "Timing": "زمانبندی",
 
   "______Create_Recipe_Page______": "//",
-  "Create Recipe": "ساخت رسپی",
-  "Edit Recipe": "بروزرسانی رسپی",
+  "Create Recipe": "ساخت دستور تهیه",
+  "Edit Recipe": "بروزرسانی دستور تهیه",
   "e.g. Cook the Rice...": "مثلا برنج را بپزید...",
   "Delete Recipe": "حذف",
 
@@ -169,6 +169,6 @@
   "Unit": "واحد",
   "Amount": "مقدار",
 
-  "RecipeCreationSuccess": "رسپی با موفقیت ساخته شد",
-  "RecipeUpdateSuccess": "رسپی با موفقیت بروز رسانی شد"
+  "RecipeCreationSuccess": "دستور تهیه با موفقیت ساخته شد",
+  "RecipeUpdateSuccess": "دستور تهیه با موفقیت بروز رسانی شد"
 }
