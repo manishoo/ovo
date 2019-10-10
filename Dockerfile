@@ -58,7 +58,7 @@ RUN npm prune --production
 # |____/ \___|_|    \_/ \___| |____/ \__\__,_|\__, |\___|
 #                                             |___/
 FROM nginx:stable
+COPY --from=build /home/supernova/web/* /var/www/
 
-COPY --from=build /home/supernova/web/* /var/www
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 CMD ["nginx -g 'daemon off;'"]
