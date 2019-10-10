@@ -50,6 +50,7 @@ RUN npm prune --production
 
 COPY web /var/www/
 ARG ENV
-COPY nginx.conf/$ENV /etc/nginx/conf.d/default.conf
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY nginx.conf/$ENV /etc/nginx/conf.d/
 
 CMD ["nginx -g 'daemon off;'"]
