@@ -48,8 +48,8 @@ RUN rm tsconfig.json
 
 RUN npm prune --production
 
-COPY /home/supernova/public/* /var/www/
+COPY public /var/www/
 ARG ENV
-COPY /home/supernova/nginx.conf/$ENV /etc/nginx/conf.d/default.conf
+COPY nginx.conf/$ENV /etc/nginx/conf.d/default.conf
 
 CMD ["nginx -g 'daemon off;'"]
