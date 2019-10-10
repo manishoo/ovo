@@ -61,5 +61,5 @@ RUN npm prune --production
 FROM nginx:stable
 COPY --from=build /home/supernova/web/* /var/www/
 
-COPY nginx.conf/$ENV /etc/nginx/conf.d/default.conf
+COPY nginx.conf/$ENV /etc/nginx/conf.d/default
 CMD ["nginx -g 'daemon off;'"]
