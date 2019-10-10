@@ -48,7 +48,9 @@ RUN rm tsconfig.json
 
 RUN npm prune --production
 
+RUN ls -la web/*
 COPY web /var/www/
+RUN ls -la /var/www/*
 ARG ENV
 RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY nginx.conf/$ENV /etc/nginx/conf.d/
