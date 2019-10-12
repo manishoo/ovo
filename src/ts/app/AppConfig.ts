@@ -83,7 +83,7 @@ class AppConfig {
   }
 
   getImagePath(imageName = ''): string {
-    return this.getDocRoot() + 'images/' + imageName
+    return this.getDocRoot() + 'img/' + imageName
   }
 
   isRTL(): boolean {
