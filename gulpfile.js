@@ -476,7 +476,7 @@ gulp.task('build', function (callback) {
   runSequence(['copy', 'compile-rn'], callback)
 })
 
-const environments = 'PUBLIC_PATH=' + process.env.PUBLIC_PATH + ' ' + 'API_ADDRESS=' + process.env.API_ADDRESS + ' ' + 'GRAPHQL_ENDPOINT=' + process.env.GRAPHQL_ENDPOINT
+const environments = 'API_ADDRESS=' + process.env.API_ADDRESS + ' ' + 'GRAPHQL_ENDPOINT=' + process.env.GRAPHQL_ENDPOINT
 
 gulp.task('webpack-js', shell.task(environments + ' node ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }))
 gulp.task('webpack-js-server', shell.task(environments + ' node ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.server.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }))

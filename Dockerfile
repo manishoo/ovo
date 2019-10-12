@@ -33,7 +33,6 @@ RUN apk add --no-cache --virtual .build-deps \
   autoconf
 RUN npm install
 # get args
-ARG PUBLIC_PATH
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
 ARG TAG

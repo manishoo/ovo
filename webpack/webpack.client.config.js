@@ -26,7 +26,7 @@ const productionConfig = merge(
       ),
       new ManifestPlugin({
         fileName: 'assets.json',
-        publicPath: process.env.PUBLIC_PATH || '/static/',
+        publicPath: '/static/',
       }),
       new SWPrecachePlugin({
         // change it to your app's cache name
