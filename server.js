@@ -14,7 +14,7 @@ const favicon = require('serve-favicon')
 const paths = require('./webpack/paths')
 const shimBrowser = require('./shim-browser')
 
-const publicPath = process.env.PUBLIC_PATH || '/static/'
+const publicPath = '/static/'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -51,7 +51,7 @@ if (isProd) {
   })
 
   // fallback on en
-  app.get('/', (req, res) => res.redirect('/en/'))
+  app.get('/', (req, res) => res.redirect('/en'))
 } else {
   require('@babel/register')
 
@@ -62,7 +62,7 @@ if (isProd) {
   })
 
   // fallback on en
-  app.get('/', (req, res) => res.redirect('/en/'))
+  app.get('/', (req, res) => res.redirect('/en'))
 }
 
 app.use((err, req, res, next) => {
