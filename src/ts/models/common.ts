@@ -13,6 +13,8 @@ export enum Routes {
   mealPlan = '/meal-plan',
   settings = '/settings',
 
+  introduction = '/introduction',
+
   /**
    * Recipes
    * */

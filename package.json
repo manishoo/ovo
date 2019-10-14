@@ -6,19 +6,19 @@
   "scripts": {
     "start": "react-native start",
 
+    "start:web": "cross-env NODE_ENV=production node server.js",
     "build:web": "cross-env NODE_ENV=production node node_modules/gulp/bin/gulp run-once --platform=web",
-    "build:web:watch": "cross-env NODE_ENV=development API_ADDRESS=http://localhost:4003 GRAPHQL_ENDPOINT=gql node node_modules/gulp/bin/gulp run --platform=web"
-    "serve:web": "cross-env NODE_ENV=production node server.js",
-    "serve:web:dev": "cross-env NODE_ENV=development node server.js",
+    "start:web:dev": "cross-env NODE_ENV=development node server.js",
+    "build:web:watch": "cross-env NODE_ENV=development API_ADDRESS=http://localhost:4003 GRAPHQL_ENDPOINT=gql node node_modules/gulp/bin/gulp run --platform=web",
 
     "types:generate": "apollo client:codegen types --target typescript --watch --globalTypesFile=src/ts/models/global-types.ts --no-addTypename",
     "types:delete": "rm -r `find ./ -name 'types'`",
 
     "android": "react-native run-android",
-    "build-android": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=android",
+    "build:android": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=android",
 
     "ios": "react-native run-ios",
-    "build-ios": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=ios",
+    "build:ios": "cross-env NODE_ENV=development node node_modules/gulp/bin/gulp run --platform=ios",
 
     "test": "jest -c jest/jest.config.js",
     "test:debug": "node --inspect-brk node_modules/.bin/jest -c jest/jest.config.js --runInBand",

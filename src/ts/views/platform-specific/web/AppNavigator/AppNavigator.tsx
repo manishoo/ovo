@@ -22,8 +22,8 @@ import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { trimSlashes } from 'src/ts/utilities/trim-slashes'
-import AppDrawer from 'src/ts/views/AppNavigator/components/AppDrawer'
-import AppSearchComponent from 'src/ts/views/AppNavigator/components/AppSearchComponent'
+import AppDrawer from './components/AppDrawer'
+import AppSearchComponent from './components/AppSearchComponent'
 
 
 const NAVBAR_HEIGHT = 50

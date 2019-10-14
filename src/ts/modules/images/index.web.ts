@@ -58,6 +58,8 @@ class ImageSource implements ImageSourceBase {
 
   Camera = AppConfig.getImagePath('Camera.png')
   RemoveIconWhite = AppConfig.getImagePath('RemoveIconWhite.png')
+
+  Path = AppConfig.getImagePath('Path.png')
 }
 
 export default new ImageSource()

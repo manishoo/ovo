@@ -42,5 +42,7 @@ export const SettingsScreen = loadComponent('SettingsScreen')
 export const PublicProfileScreen = loadComponent('ProfileScreen', 'PublicProfileScreenContainer')
 export const MealPlanScreen = loadComponent('MealPlanScreen', 'MealPlanScreenContainer')
 export const PathScreen = loadComponent('PathScreen')
+export const AssistantScreen = loadComponent('AssistantScreen')
+export const AuthLoadingScreen = loadComponent('AuthLoadingScreen')
 
 export const SearchResult = loadComponent('SearchResult', 'SearchResultContainer')

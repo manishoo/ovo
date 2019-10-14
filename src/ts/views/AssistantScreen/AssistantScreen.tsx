@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Assistant from '../../src/ts/common/Assistant/Assistant'
-import FilledButton from '../../src/ts/common/FilledButton/FilledButton'
-import { getLocalizedText } from '../../src/ts/common/LocalizedText/LocalizedText'
-import Navbar from '../../src/ts/common/Navbar/Navbar'
+import Assistant from 'common/Assistant/Assistant'
+import FilledButton from 'common/FilledButton/FilledButton'
+import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import Navbar from 'common/Navbar/Navbar'
 import RX from 'reactxp'
-import { navigate } from '../../src/ts/utilities'
+import Styles from 'src/ts/app/Styles'
+import { navigate } from 'src/ts/utilities'
 import { AssistantMessage } from 'src/ts/views/Introduction/components/ChatBox'
-import Styles from '../../src/ts/app/Styles'
 
 
 interface AssistantScreenProps {

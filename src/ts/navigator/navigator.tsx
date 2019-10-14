@@ -9,7 +9,7 @@ import { Routes } from 'src/ts/models/common'
 import LocationStore from 'src/ts/stores/LocationStore'
 import UserStore from 'src/ts/stores/UserStore'
 import { trimSlashes } from 'src/ts/utilities/trim-slashes'
-import AppNavigator from 'src/ts/views/AppNavigator/AppNavigator'
+import AppNavigator from 'src/ts/views/platform-specific/web/AppNavigator/AppNavigator'
 import { Me } from 'src/ts/views/Register/types/Me'
 import {
   FoodScreen,

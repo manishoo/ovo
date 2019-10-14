@@ -56,4 +56,6 @@ export interface ImageSourceBase {
 
   Camera: string;
   RemoveIconWhite: string;
+
+  Path: string;
 }

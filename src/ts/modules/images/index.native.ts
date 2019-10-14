@@ -184,6 +184,10 @@ class ImageSource implements ImageSourceBase {
   get RemoveIconWhite() {
     return require('../../../images/RemoveIconWhite.png')
   }
+
+  get Path() {
+    return require('../../../images/Path.png')
+  }
 }
 
 export default new ImageSource()

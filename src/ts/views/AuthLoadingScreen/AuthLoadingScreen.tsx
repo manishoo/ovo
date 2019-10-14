@@ -4,8 +4,8 @@
  */
 
 import RX from 'reactxp'
-import { navigate } from '../../src/ts/utilities'
-import { ThemeContext } from '../../src/ts/app/ThemeContext'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
+import { navigate } from 'src/ts/utilities'
 
 
 export default class AuthLoadingScreen extends RX.Component {
