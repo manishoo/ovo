@@ -14,11 +14,6 @@ interface InitParams {
 class AppConfig {
   public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
   public version = process.env.TAG || ''
-
-  public get graphQLAddress() {
-    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
-  }
-
   public locale: LanguageCode = LanguageCode.en
   public panelAddress: string = 'http://pantheon.mycaloria.com'
   private _appVersion: string
@@ -33,6 +28,10 @@ class AppConfig {
     this._platformType = RX.Platform.getType()
     this._isTouchInterface = this._platformType === 'ios' || this._platformType === 'android'
     this._startupTime = Date.now()
+  }
+
+  public get graphQLAddress() {
+    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
   }
 
   initialize(params: InitParams) {

@@ -10,6 +10,7 @@
  * */
 import loadComponent from './sync'
 
+
 /**
  * use the default export to load components dynamically
  * (component-level code splitting)

@@ -51,18 +51,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
     currentPath: LocationStore.getPath(),
   }
 
-  protected _buildState(props: NavigatorProps, initialBuild: boolean): Partial<NavigatorState> | undefined {
-    const user = UserStore.getUser()
-    const currentPath = LocationStore.getPath()
-
-    return {
-      user,
-      currentPath,
-    }
-  }
-
-  render() {
-    console.log('this.state.currentPath', this.state.currentPath)
+  public render() {
     return (
       <AppNavigator
         history={this.props.history}
@@ -183,5 +172,15 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
         ]}
       />
     )
+  }
+
+  protected _buildState(props: NavigatorProps, initialBuild: boolean): Partial<NavigatorState> | undefined {
+    const user = UserStore.getUser()
+    const currentPath = LocationStore.getPath()
+
+    return {
+      user,
+      currentPath,
+    }
   }
 }

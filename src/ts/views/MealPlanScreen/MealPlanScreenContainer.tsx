@@ -10,7 +10,7 @@
 // import MealPlanScreen from 'src/ts/views/MealPlanScreen/MealPlanScreen'
 //
 // export default class MealPlanScreenContainer extends RX.Component {
-//   render() {
+//   public render() {
 //     return (
 // 			<Query
 // 				query={gql`

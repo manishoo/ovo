@@ -33,7 +33,7 @@ export default class SearchResultContainer extends RX.Component {
     }
   }
 
-  render() {
+  public render() {
     return (
       <SearchResult
         parameters={this.parameters}

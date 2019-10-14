@@ -56,6 +56,7 @@ interface WebAppRouterState {
 }
 
 export default class AppNavigator extends ComponentBase<AppNavigatorProps & { history: any }, WebAppRouterState> {
+  static contextType = ThemeContext
   state: WebAppRouterState = {
     mode: ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer',
     user: UserStore.getUser(),
@@ -65,32 +66,30 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     routes: [],
     hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
   }
+  private _searchInput: any
+  private _drawerClosedValue = AppConfig.isRTL() ? Styles.values.drawerWidth : -Styles.values.drawerWidth
+  private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
+  private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
+  private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
+  private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
+  private _drawerSpacingAnimationWidthValue = RX.Animated.createValue(0)
+  private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ translateX: this._drawerAnimationLeftValue }],
+  })
+  private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ translateY: this._navbarAnimationTopValue }],
+  })
+  private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ translateY: this._searchContainerAnimationTopValue }],
+  })
+  private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._searchContainerBackDropAnimationOpacityValue,
+  })
+  private _drawerSpacingAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    width: this._drawerSpacingAnimationWidthValue,
+  })
 
-  protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
-    const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
-    const user = UserStore.getUser()
-    const currentPath = LocationStore.getPath()
-
-    if (initialBuild || (this.state.mode !== mode)) {
-      if (mode === 'drawer') {
-        this._setUI(true, false, !initialBuild)
-      } else {
-        this._setUI(false, true, !initialBuild)
-      }
-    }
-
-    return {
-      mode,
-      user,
-      currentPath,
-      height: ResponsiveWidthStore.getHeight(),
-      width: ResponsiveWidthStore.getWidth(),
-      routes: props.routes,
-      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
-    }
-  }
-
-  render() {
+  public render() {
     const Navbar = this._renderNavbar()
 
     if (this.state.width < WidthBreakPoints.small) return (
@@ -166,6 +165,30 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     this.props.history.listen(this._handleLocationChange) // FIXME better place to call this maybe
 
     this._handleDrawerVisibility()
+  }
+
+  protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
+    const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
+    const user = UserStore.getUser()
+    const currentPath = LocationStore.getPath()
+
+    if (initialBuild || (this.state.mode !== mode)) {
+      if (mode === 'drawer') {
+        this._setUI(true, false, !initialBuild)
+      } else {
+        this._setUI(false, true, !initialBuild)
+      }
+    }
+
+    return {
+      mode,
+      user,
+      currentPath,
+      height: ResponsiveWidthStore.getHeight(),
+      width: ResponsiveWidthStore.getWidth(),
+      routes: props.routes,
+      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
+    }
   }
 
   private _renderDrawer = (theme: Theme) => {
@@ -396,31 +419,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       setTimeout(() => this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate), 0)
     }
   }
-
-  private _searchInput: any
-  private _drawerClosedValue = AppConfig.isRTL() ? Styles.values.drawerWidth : -Styles.values.drawerWidth
-  private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
-  private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
-  private _searchContainerAnimationTopValue = RX.Animated.createValue(-2000) // Since rendering on the server we don't know the user's height
-  private _searchContainerBackDropAnimationOpacityValue = RX.Animated.createValue(0)
-  private _drawerSpacingAnimationWidthValue = RX.Animated.createValue(0)
-
-  private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ translateX: this._drawerAnimationLeftValue }],
-  })
-  private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ translateY: this._navbarAnimationTopValue }],
-  })
-  private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ translateY: this._searchContainerAnimationTopValue }],
-  })
-  private _searchContainerBackDropAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._searchContainerBackDropAnimationOpacityValue,
-  })
-  private _drawerSpacingAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    width: this._drawerSpacingAnimationWidthValue,
-  })
-  static contextType = ThemeContext
 }
 
 const styles = {

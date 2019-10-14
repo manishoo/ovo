@@ -28,7 +28,7 @@ interface AddMealCellProps {
 
 @withNavigation
 export default class MealCell extends RX.Component<AddMealCellProps> {
-  render() {
+  public render() {
     const { meal } = this.props
 
     return (

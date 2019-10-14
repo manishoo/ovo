@@ -26,7 +26,7 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
   }
   _input: any
 
-  render() {
+  public render() {
     const { style } = this.props
 
     return (

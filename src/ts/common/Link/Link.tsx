@@ -17,7 +17,7 @@ interface LinkProps {
 
 @withNavigation
 export default class Link extends RX.Component<LinkProps> {
-  render() {
+  public render() {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (

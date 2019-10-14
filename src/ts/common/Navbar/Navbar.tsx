@@ -20,7 +20,7 @@ interface NavbarProps {
 
 @withNavigation
 export default class Navbar extends RX.Component<NavbarProps> {
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -79,7 +79,7 @@ const styles = {
   backImage: RX.Styles.createImageStyle({
     width: 12,
     height: 21,
-    transform: [{rotate: AppConfig.isRTL() ? '180deg' : '0deg'}]
+    transform: [{ rotate: AppConfig.isRTL() ? '180deg' : '0deg' }]
   }),
   titleContainer: RX.Styles.createViewStyle({
     // position: 'absolute',

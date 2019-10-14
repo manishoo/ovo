@@ -4,6 +4,6 @@
  */
 
 export interface LinearGradientProps {
-	style?: any,
-	colors: string[]
+  style?: any,
+  colors: string[]
 }

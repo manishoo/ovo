@@ -23,7 +23,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
   }
   private _username?: string
 
-  render() {
+  public render() {
     return (
       <Query<PublicProfileScreenQuery, PublicProfileScreenQueryVariables>
         variables={{

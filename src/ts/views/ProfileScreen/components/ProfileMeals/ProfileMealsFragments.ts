@@ -20,8 +20,8 @@ const ProfileMealsFragments = {
           amount
           food {
             ...SelectFoodFood
-#            thumbnail {url}
-#            name {text locale}
+            #            thumbnail {url}
+            #            name {text locale}
             #            customUnit
             #            gramWeight
           }

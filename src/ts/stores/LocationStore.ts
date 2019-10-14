@@ -26,10 +26,6 @@ class LocationStore extends StoreBase implements IPersistableStore {
     return deferred.promise()
   }
 
-  private _handleLocationChange = (location: Location, action?: Action) => {
-    this.setPath(location.pathname)
-  }
-
   setHistory(history: any) {
     this.history = history
 
@@ -94,6 +90,10 @@ class LocationStore extends StoreBase implements IPersistableStore {
 
   getHistory(): History | undefined {
     return this.history
+  }
+
+  private _handleLocationChange = (location: Location, action?: Action) => {
+    this.setPath(location.pathname)
   }
 
   private _onUrlChange(e: any) {

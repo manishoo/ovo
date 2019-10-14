@@ -25,6 +25,7 @@ export enum ToastTypes {
 @AutoSubscribeStore
 class ToastStore extends StoreBase implements IPersistableStore {
   public name = 'ToastStore'
+  public Types = ToastTypes
   private toasts: Toast[] = []
 
   startup(): SyncTasks.Thenable<void> {
@@ -56,8 +57,6 @@ class ToastStore extends StoreBase implements IPersistableStore {
   getToasts(): Toast[] {
     return this.toasts
   }
-
-  public Types = ToastTypes
 }
 
 export default new ToastStore()

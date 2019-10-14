@@ -24,30 +24,7 @@ export default class TextInputAutoGrow extends RX.Component<TextInputAutoGrowPro
     height: undefined,
   }
 
-  private _getValue = () => {
-    if (this.props.translations && this.props.translations.length > 0) {
-      return this.props.translations[0].text
-    }
-
-    return this.props.value
-  }
-
-  private _onChange = (value: string) => {
-    if (this.props.value) {
-      return this.props.onChangeText!(value)
-    }
-
-    if (this.props.translations) {
-      this.props.onTranslationsChange!([
-        {
-          text: value,
-          locale: AppConfig.locale
-        }
-      ])
-    }
-  }
-
-  render() {
+  public render() {
     const { wrapperStyle, style, value, ...props } = this.props
 
     return (
@@ -78,6 +55,29 @@ export default class TextInputAutoGrow extends RX.Component<TextInputAutoGrowPro
         ]}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _getValue = () => {
+    if (this.props.translations && this.props.translations.length > 0) {
+      return this.props.translations[0].text
+    }
+
+    return this.props.value
+  }
+
+  private _onChange = (value: string) => {
+    if (this.props.value) {
+      return this.props.onChangeText!(value)
+    }
+
+    if (this.props.translations) {
+      this.props.onTranslationsChange!([
+        {
+          text: value,
+          locale: AppConfig.locale
+        }
+      ])
+    }
   }
 }
 

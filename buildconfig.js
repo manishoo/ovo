@@ -1,6 +1,8 @@
-/*
+/**
  * buildconfig.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Microsoft 2018
+ *
+ * Configuration parameters for building the app.
  */
 
 'use strict'
@@ -155,7 +157,11 @@ function getConfigInternal() {
         './gulpfile.js',
         './buildconfig.js',
         './package.json',
-        './webpack.config.js'
+        './webpack/webpack.base.config.js',
+        './webpack/webpack.client.config.js',
+        './webpack/webpack.parts.js',
+        './webpack/paths.js',
+        './webpack/webpack.server.config.js',
       ],
       gulpfile: './gulpfile.js'
     },
@@ -163,11 +169,8 @@ function getConfigInternal() {
     // TypeScript
     // --------------------------------------------------------------------- //
     ts: {
-      src: [getSourcePath('**/*.{ts,tsx}')],
-      srcRoot: getSourcePath('*'),
-      definitions: [
-        getSourcePath('typings/**/*.d.ts') // internal
-      ],
+      src: [getSourcePath('ts/**/*.{ts,tsx}')],
+      srcRoot: getSourcePath('ts'),
       obj: getObjPath(''),
       config: './tsconfig.json',
       RNDest: getBuildPath('js')

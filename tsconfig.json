@@ -46,7 +46,7 @@
     ".vscode",
     ".web-build",
     ".idea",
-    "./src/ts/views-old"
+    "./views-old"
   ],
   "include": [
     "./src/ts/**/*"

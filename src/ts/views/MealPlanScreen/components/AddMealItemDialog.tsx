@@ -129,7 +129,7 @@
 // 		}
 // 	}
 //
-// 	render() {
+// 	public render() {
 // 		const { style } = this.props
 //
 // 		return (

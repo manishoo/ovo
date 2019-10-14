@@ -48,17 +48,7 @@ interface SettingsState {
 }
 
 class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
-  protected _buildState(props: SettingsProps, initialBuild: boolean): Partial<SettingsState> | undefined {
-    if (initialBuild) {
-      return {
-        me: UserStore.getUser(),
-      }
-    }
-
-    return null
-  }
-
-  render() {
+  public render() {
     const { me } = this.state
 
     return (
@@ -160,6 +150,16 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
     )
   }
 
+  protected _buildState(props: SettingsProps, initialBuild: boolean): Partial<SettingsState> | undefined {
+    if (initialBuild) {
+      return {
+        me: UserStore.getUser(),
+      }
+    }
+
+    return null
+  }
+
   private _renderAvatar = () => {
     const { me } = this.state
 
@@ -245,8 +245,8 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       id: this.state.me.id,
       user: this._getUser()
     })
-      .then(({data: {updateUser: {username}}}) => {
-        LocationStore.navigate(this.props, `/${username}`, {params: {replace: true}})
+      .then(({ data: { updateUser: { username } } }) => {
+        LocationStore.navigate(this.props, `/${username}`, { params: { replace: true } })
 
         /**
          * If profile image changed, reload the page

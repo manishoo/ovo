@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { RecipeInput, LanguageCode, RecipeDifficulty } from "./../../../models/global-types";
+import { LanguageCode, RecipeDifficulty, RecipeInput } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: RecipeFormCreateMutation

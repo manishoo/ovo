@@ -74,6 +74,10 @@ interface SelectFoodState {
 }
 
 class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectFoodState> {
+  textInput: any
+  previewInput: any
+  inputContainerAnimatedHeight = RX.Animated.createValue(50)
+
   constructor(props: SelectFoodProps & RX.CommonProps) {
     super(props)
 
@@ -83,14 +87,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     }
   }
 
-  protected _buildState(props: SelectFoodProps & RX.CommonProps, initialBuild: boolean): Partial<SelectFoodState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
-
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -180,6 +177,13 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     )
   }
 
+  protected _buildState(props: SelectFoodProps & RX.CommonProps, initialBuild: boolean): Partial<SelectFoodState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+      height: ResponsiveWidthStore.getHeight(),
+    }
+  }
+
   private _getModeButtonStyle = (theme: Theme, itemMode: FoodTypes) => {
     const { mode } = this.state
 
@@ -265,7 +269,8 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
           onPress={this._onResultPress(item)}
         >
           <Text translations={item.food.name} />
-          <Text translations={item.food.description} style={{[Styles.values.marginStart]: Styles.values.spacing / 2, color: theme.colors.subtitle}} />
+          <Text translations={item.food.description}
+                style={{ [Styles.values.marginStart]: Styles.values.spacing / 2, color: theme.colors.subtitle }} />
         </RX.View>
       )}
     </ThemeContext.Consumer>
@@ -360,10 +365,6 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
       amount: serving,
     })
   }
-
-  textInput: any
-  previewInput: any
-  inputContainerAnimatedHeight = RX.Animated.createValue(50)
 }
 
 function SelectFoodContainer(props: SelectFoodCommonProps) {

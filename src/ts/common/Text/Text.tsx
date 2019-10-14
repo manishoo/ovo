@@ -33,7 +33,9 @@ enum TextType {
 }
 
 export default class Text extends RX.Component<TextProps> {
-  render() {
+  static types = TextType
+
+  public render() {
     const { style } = this.props
 
     const Component = this._getComponent()
@@ -122,8 +124,6 @@ export default class Text extends RX.Component<TextProps> {
 
     return Component
   }
-
-  static types = TextType
 }
 
 const styles = {

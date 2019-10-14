@@ -55,7 +55,7 @@ interface RecipeState {
 }
 
 class Recipe extends ComponentBase<RecipeProps, RecipeState> {
-  render() {
+  public render() {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (

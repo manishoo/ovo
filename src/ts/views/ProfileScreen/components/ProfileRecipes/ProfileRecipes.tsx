@@ -33,19 +33,11 @@ interface ProfileRecipesState {
 }
 
 export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, ProfileRecipesState> {
-  protected _buildInitialState(): Readonly<ProfileRecipesState> {
-    return {
-      recipes: [],
-      me: UserStore.getUser(),
-      fetching: false,
-    }
-  }
-
   componentDidMount() {
     this.fetchMore()
   }
 
-  render() {
+  public render() {
     return (
       <RecipesList
         recipes={this.state.recipes}
@@ -93,6 +85,14 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
           .catch(reject)
       })
     }))
+  }
+
+  protected _buildInitialState(): Readonly<ProfileRecipesState> {
+    return {
+      recipes: [],
+      me: UserStore.getUser(),
+      fetching: false,
+    }
   }
 }
 

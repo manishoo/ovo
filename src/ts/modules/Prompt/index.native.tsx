@@ -14,7 +14,7 @@ interface PromptNativeProps {
  * TODO
  * */
 export default class PromptNative extends RX.Component<PromptNativeProps> {
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -28,7 +28,5 @@ export default class PromptNative extends RX.Component<PromptNativeProps> {
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
-
-  }),
+  container: RX.Styles.createViewStyle({}),
 }

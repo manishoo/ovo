@@ -78,6 +78,42 @@ interface RecipeFormState {
 }
 
 class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
+  private _mainFormOpacityAnimationValue = RX.Animated.createValue(1)
+  private _mainFormTranslateYAnimationValue = RX.Animated.createValue(0)
+  private _extraFormOpacityAnimationValue = RX.Animated.createValue(0)
+  private _extraFormTranslateYAnimationValue = RX.Animated.createValue(-100)
+  private _mainFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._mainFormOpacityAnimationValue,
+    transform: [{
+      translateY: this._mainFormTranslateYAnimationValue
+    }]
+  })
+  private _extraFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._extraFormOpacityAnimationValue,
+    transform: [{
+      translateY: this._extraFormTranslateYAnimationValue
+    }]
+  })
+  private _scrollView: any
+
+  public render() {
+    return (
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <CenterAlignedPageView
+            scrollViewProps={{
+              ref: ref => this._scrollView = ref,
+            }}
+          >
+            <Navbar title={getLocalizedText('Create Recipe')} />
+            {this._renderFormContent(theme)}
+            {this._renderFormExtraContent()}
+          </CenterAlignedPageView>
+        )}
+      </ThemeContext.Consumer>
+    )
+  }
+
   protected _buildState(props: RecipeFormProps, initialBuild: boolean): Partial<RecipeFormState> | undefined {
     if (!initialBuild) return null
 
@@ -150,24 +186,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         me: UserStore.getUser(),
       }
     }
-  }
-
-  render() {
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <CenterAlignedPageView
-            scrollViewProps={{
-              ref: ref => this._scrollView = ref,
-            }}
-          >
-            <Navbar title={getLocalizedText('Create Recipe')} />
-            {this._renderFormContent(theme)}
-            {this._renderFormExtraContent()}
-          </CenterAlignedPageView>
-        )}
-      </ThemeContext.Consumer>
-    )
   }
 
   private _renderFormExtraContent = () => {
@@ -717,26 +735,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     ])
       .start()
   }
-
-  private _mainFormOpacityAnimationValue = RX.Animated.createValue(1)
-  private _mainFormTranslateYAnimationValue = RX.Animated.createValue(0)
-  private _extraFormOpacityAnimationValue = RX.Animated.createValue(0)
-  private _extraFormTranslateYAnimationValue = RX.Animated.createValue(-100)
-
-  private _mainFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._mainFormOpacityAnimationValue,
-    transform: [{
-      translateY: this._mainFormTranslateYAnimationValue
-    }]
-  })
-  private _extraFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._extraFormOpacityAnimationValue,
-    transform: [{
-      translateY: this._extraFormTranslateYAnimationValue
-    }]
-  })
-
-  private _scrollView: any
 }
 
 export default function (props: {}) {

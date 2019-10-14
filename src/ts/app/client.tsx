@@ -11,7 +11,6 @@ import { ApolloLink, Observable } from 'apollo-link'
 import { onError } from 'apollo-link-error'
 import { withClientState } from 'apollo-link-state'
 import { createUploadLink } from 'apollo-upload-client'
-import fetch from 'isomorphic-fetch'
 import { cache } from 'src/ts/app/client-cache'
 import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
 import UserStore from 'src/ts/stores/UserStore'
@@ -104,7 +103,7 @@ const client = new ApolloClient({
     }),
     createUploadLink({
       uri: AppConfig.graphQLAddress,
-      fetch,
+      fetch: fetch,
     })
   ]),
   cache

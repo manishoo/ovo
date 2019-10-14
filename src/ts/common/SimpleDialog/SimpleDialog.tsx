@@ -117,7 +117,7 @@ export default class SimpleDialog extends ComponentBase<SimpleDialogProps, RX.St
     RX.Input.keyUpEvent.unsubscribe(this._onKeyUp)
   }
 
-  render() {
+  public render() {
     // Title Text
     let optionalTitleText: JSX.Element | undefined
     if (this.props.title) {

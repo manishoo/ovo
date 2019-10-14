@@ -5,16 +5,17 @@
 
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
+
 const cache = new InMemoryCache({
-	// cacheRedirects: {
-	//   Query: {
-	//     movie: (_, { id }, { getCacheKey }) =>
-	//       getCacheKey({ __typename: 'Movie', id }),
-	//   }
-	// },
-	dataIdFromObject: object => object.id,
+  // cacheRedirects: {
+  //   Query: {
+  //     movie: (_, { id }, { getCacheKey }) =>
+  //       getCacheKey({ __typename: 'Movie', id }),
+  //   }
+  // },
+  dataIdFromObject: object => object.id,
 })
 // @ts-ignore
-	.restore(window.__APOLLO_STATE__)
+  .restore(window.__APOLLO_STATE__)
 
 export { cache }

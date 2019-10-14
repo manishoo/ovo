@@ -40,11 +40,42 @@ interface RecipeCellState {
 
 @withNavigation
 export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCellState> {
+  static fragments = {
+    recipe: gql`
+      fragment RecipeCardRecipe on Recipe {
+        id
+        slug
+        title {text locale}
+        image {url}
+        timing {
+          totalTime
+        }
+        likesCount
+        userLikedRecipe
+        thumbnail {url}
+        author {
+          id
+          username
+          avatar {url}
+        }
+      }
+    `
+  }
   state = {
     isHovering: false,
   }
+  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ scale: this._previewScaleAnimatedValue }]
+  })
+  private _containerAnimatedScale = RX.Animated.createValue(0)
+  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{
+      scale: this._containerAnimatedScale
+    }]
+  })
 
-  render() {
+  public render() {
     const { recipe } = this.props
 
     const content = (
@@ -87,7 +118,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               !this.props.imageOnly &&
               <Text
                 onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
-                style={[styles.title, {color: theme.colors.text}]}
+                style={[styles.title, { color: theme.colors.text }]}
                 translations={recipe.title}
               />
             }
@@ -225,39 +256,6 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
 
   private _onHoverEnd = () => {
     this._setUI(false)
-  }
-
-  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
-  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ scale: this._previewScaleAnimatedValue }]
-  })
-  private _containerAnimatedScale = RX.Animated.createValue(0)
-  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{
-      scale: this._containerAnimatedScale
-    }]
-  })
-
-  static fragments = {
-    recipe: gql`
-      fragment RecipeCardRecipe on Recipe {
-        id
-        slug
-        title {text locale}
-        image {url}
-        timing {
-          totalTime
-        }
-        likesCount
-        userLikedRecipe
-        thumbnail {url}
-        author {
-          id
-          username
-          avatar {url}
-        }
-      }
-    `
   }
 }
 

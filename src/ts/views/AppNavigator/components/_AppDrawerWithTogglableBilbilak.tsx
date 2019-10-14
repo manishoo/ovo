@@ -38,6 +38,13 @@ interface AppDrawerState {
 }
 
 export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerState> {
+  private _activeIndicatorTop = RX.Animated.createValue(90 + Styles.values.spacing)
+  private _activeIndicatorStart = RX.Animated.createValue(-32)
+  private _activeIndicatorAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    top: this._activeIndicatorTop,
+    [Styles.values.start]: this._activeIndicatorStart,
+  })
+
   constructor(props: AppDrawerProps) {
     super(props)
 
@@ -50,14 +57,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     }
   }
 
-  protected _buildState(props: AppDrawerProps, initialBuild: boolean): Partial<AppDrawerState> | undefined {
-    return {
-      me: UserStore.getUser(),
-      path: LocationStore.getPath(),
-    }
-  }
-
-  render() {
+  public render() {
     const { user } = this.props
     // const { activeLink } = this.state
 
@@ -135,6 +135,44 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     )
   }
 
+  protected _buildState(props: AppDrawerProps, initialBuild: boolean): Partial<AppDrawerState> | undefined {
+    return {
+      me: UserStore.getUser(),
+      path: LocationStore.getPath(),
+    }
+  }
+
+  // private _handleActiveChange = (index: number) => () => {
+  //   let toValue = 0
+  //
+  //   switch (index) {
+  //     case 0:
+  //       toValue = 90 + Styles.values.spacing
+  //       break
+  //     case 1:
+  //       toValue = 152 + (Styles.values.spacing * 2)
+  //       break
+  //     case 2:
+  //       toValue = 206 + (Styles.values.spacing * 2)
+  //       break
+  //     case 3:
+  //       toValue = 261 + (Styles.values.spacing * 2)
+  //       break
+  //     case 4:
+  //       toValue = 315 + (Styles.values.spacing * 2)
+  //       break
+  //   }
+  //
+  //   this.setState({
+  //     activeLink: index,
+  //   })
+  //   RX.Animated.timing(this._activeIndicatorTop, {
+  //     toValue,
+  //     duration: 500,
+  //   })
+  //     .start()
+  // }
+
   private _handleLocationChange = (location: Location, action: Action) => {
     // LocationStore.setPath(location.pathname) // FIXME do something better maybe
     // this._handleDrawerVisibility(location.pathname)
@@ -181,37 +219,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     ].filter(Boolean)).start()
   }
 
-  // private _handleActiveChange = (index: number) => () => {
-  //   let toValue = 0
-  //
-  //   switch (index) {
-  //     case 0:
-  //       toValue = 90 + Styles.values.spacing
-  //       break
-  //     case 1:
-  //       toValue = 152 + (Styles.values.spacing * 2)
-  //       break
-  //     case 2:
-  //       toValue = 206 + (Styles.values.spacing * 2)
-  //       break
-  //     case 3:
-  //       toValue = 261 + (Styles.values.spacing * 2)
-  //       break
-  //     case 4:
-  //       toValue = 315 + (Styles.values.spacing * 2)
-  //       break
-  //   }
-  //
-  //   this.setState({
-  //     activeLink: index,
-  //   })
-  //   RX.Animated.timing(this._activeIndicatorTop, {
-  //     toValue,
-  //     duration: 500,
-  //   })
-  //     .start()
-  // }
-
   private _renderActiveIndicator = () => {
     return (
       <ThemeContext.Consumer>
@@ -227,13 +234,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
       </ThemeContext.Consumer>
     )
   }
-
-  private _activeIndicatorTop = RX.Animated.createValue(90 + Styles.values.spacing)
-  private _activeIndicatorStart = RX.Animated.createValue(-32)
-  private _activeIndicatorAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    top: this._activeIndicatorTop,
-    [Styles.values.start]: this._activeIndicatorStart,
-  })
 }
 
 const styles = {

@@ -62,7 +62,7 @@ export default abstract class AppBootstrapper {
 
   protected abstract _renderRootView(): any
 
-  protected abstract _getInitialUrl(): SyncTasks.Promise<string | undefined>;
+  protected abstract _getInitialUrl(): Promise<string | undefined>;
 
   private _startCriticalServices(): SyncTasks.Promise<void> {
     let servicesToStart: Service[] = [

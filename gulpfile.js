@@ -1,36 +1,37 @@
-/*
+/**
  * gulpfile.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Microsoft 2018
+ *
+ * Script for building the app.
  */
-var _ = require('lodash')
-var argv = require('yargs').argv
-var async = require('async')
-var buildConfig = require('./buildconfig')
-var cached = require('gulp-cached')
-var del = require('del')
-var eol = require('gulp-eol')
-var eventStream = require('event-stream')
-var fs = require('fs')
-var gulp = require('gulp')
-var gutil = require('gulp-util')
-var jshint = require('gulp-jshint')
-var notifier = require('node-notifier')
-var os = require('os')
-var path = require('path')
-var prettyTime = require('pretty-hrtime')
-var rename = require('gulp-rename')
-var replaceWithSM = require('gulp-replace-with-sourcemaps')//
-var runSequence = require('run-sequence')
-var shell = require('gulp-shell')
-var sourcemaps = require('gulp-sourcemaps')
-var stylish = require('jshint-stylish')
-var ts = require('gulp-typescript')
-var tslint = require('gulp-tslint')
-var tslintEng = require('tslint')
-var util = require('util')
-var watch = require('gulp-watch')
+const _ = require('lodash')
+const argv = require('yargs').argv
+const async = require('async')
+const buildConfig = require('./buildconfig')
+const cached = require('gulp-cached')
+const del = require('del')
+const eol = require('gulp-eol')
+const eventStream = require('event-stream')
+const fs = require('fs')
+const gulp = require('gulp')
+const gutil = require('gulp-util')
+const jshint = require('gulp-jshint')
+const notifier = require('node-notifier')
+const os = require('os')
+const path = require('path')
+const prettyTime = require('pretty-hrtime')
+const rename = require('gulp-rename')
+const replaceWithSM = require('gulp-replace-with-sourcemaps')
+const shell = require('gulp-shell')
+const sourcemaps = require('gulp-sourcemaps')
+const stylish = require('jshint-stylish')
+const ts = require('gulp-typescript')
+const tslint = require('gulp-tslint')
+const tslintEng = require('tslint')
+const util = require('util')
+const watch = require('gulp-watch')
 
-var PLATFORMS = {
+const PLATFORMS = {
   WEB: 'web',
   IOS: 'ios',
   ANDROID: 'android',
@@ -42,7 +43,7 @@ var PLATFORMS = {
 // Configurations
 // --------------------------------------------------------------------- //
 
-var webpackEnv = _.merge({
+const webpackEnv = _.merge({
   PLATFORM: platform,
   USESOURCEMAPS: argv.usesourcemaps,
   USECODECOVERAGE: argv.usecodecoverage,
@@ -54,7 +55,7 @@ var webpackEnv = _.merge({
 // --------------------------------------------------------------------- //
 
 function getPlatform() {
-  var targetPlatform = argv.platform
+  const targetPlatform = argv.platform
 
   if (!targetPlatform) {
     return PLATFORMS.WEB
@@ -71,17 +72,17 @@ function getPlatform() {
 var platform = getPlatform()
 gutil.log(gutil.colors.yellow('platform: ' + platform))
 
-var isDevEnv = (process.env.NODE_ENV === 'development')
+const isDevEnv = (process.env.NODE_ENV === 'development')
 gutil.log(gutil.colors.yellow('developer mode: ' + (isDevEnv ? 'enabled' : 'disabled')))
 
-var enableSrcMaps = (argv.usesourcemaps !== 'no')
+const enableSrcMaps = (argv.usesourcemaps !== 'no')
 gutil.log(gutil.colors.yellow('source maps: ' + enableSrcMaps))
 
 // Compute the build config
-var config = buildConfig(platform, isDevEnv)
+const config = buildConfig(platform, isDevEnv)
 
 // Define a generic error handler.
-var handleError = function (err) {
+const handleError = function (err) {
   console.log(err.toString())
 
   beepOnce()
@@ -105,16 +106,16 @@ var notifyOnce = _.throttle(notifier.notify.bind(notifier), 3000, { trailing: fa
 gulp.setMaxListeners(100)
 
 // Workaround for https://github.com/gulpjs/gulp/issues/71
-var origSrc = gulp.src
+const origSrc = gulp.src
 gulp.src = function () {
   return fixPipe(origSrc.apply(this, arguments))
 }
 
 function fixPipe(stream) {
-  var origPipe = stream.pipe
+  const origPipe = stream.pipe
   stream.pipe = function (dest) {
     arguments[0] = dest.on('error', function (error) { // jshint ignore:line
-      var nextStreams = dest._nextStreams
+      const nextStreams = dest._nextStreams
       if (nextStreams) {
         nextStreams.forEach(function (nextStream) {
           nextStream.emit('error', error)
@@ -131,10 +132,10 @@ function fixPipe(stream) {
 }
 
 // Get a list of file config from config entry in their pre-copy location.
-var getFilePathsFromConfig = _.memoize(function (configEntry) {
-  var files = []
+const getFilePathsFromConfig = _.memoize(function (configEntry) {
+  let files = []
 
-  for (var copyOrderKey in configEntry) {
+  for (let copyOrderKey in configEntry) {
     if (configEntry.hasOwnProperty(copyOrderKey)) {
       if (typeof configEntry[copyOrderKey].files === 'string') {
         files.push(configEntry[copyOrderKey].files)
@@ -152,7 +153,7 @@ function usesWebpack() {
 }
 
 function getPlatformSpecificResources() {
-  var configKey = {
+  const configKey = {
     'ios': 'iOS',
     'android': 'android',
     'windows': 'windows',
@@ -162,10 +163,8 @@ function getPlatformSpecificResources() {
   return config[configKey] || {}
 }
 
-var tsProject = ts.createProject(config.ts.config)
-
-var defaultFormatter = new tslintEng.Formatters.StylishFormatter()
-var createCacheInvalidator = function (cacheName) {
+const defaultFormatter = new tslintEng.Formatters.StylishFormatter()
+const createCacheInvalidator = function (cacheName) {
   function formatter() {
   }
 
@@ -173,10 +172,10 @@ var createCacheInvalidator = function (cacheName) {
     // Remove affected files from the cache.
     if (ruleFailures && ruleFailures.length && cached.caches[cacheName]) {
       ruleFailures.forEach(function (ruleFailure) {
-        var path = ruleFailure.path || ruleFailure.fileName
+        const path = ruleFailure.path || ruleFailure.fileName
         // Note: The path does not always use the same folder separator as the cache's key.
-        var pathForwards = path.replace(/\\/g, '/')
-        var pathBackwards = path.replace(/\//g, '\\')
+        const pathForwards = path.replace(/\\/g, '/')
+        const pathBackwards = path.replace(/\//g, '\\')
         delete cached.caches[cacheName][path]
         delete cached.caches[cacheName][pathForwards]
         delete cached.caches[cacheName][pathBackwards]
@@ -190,26 +189,26 @@ var createCacheInvalidator = function (cacheName) {
 }
 
 // Note: Cannot have multiple instances of a gulp.task running at the same time. Pass the last parameter to make this print like a task.
-var tslintRunning = false
-var tslintNeedsRun = true
+let tslintRunning = false
+let tslintNeedsRun = true
 
 function _runTsLintInternal(src, cacheName, fakeTaskName) {
   if (tslintRunning) {
     tslintNeedsRun = true
-    return
+    return Promise.resolve()
   }
 
   tslintRunning = true
   tslintNeedsRun = false
 
   // Setup for fake gulp.task.
-  var start = process.hrtime()
+  const start = process.hrtime()
   if (fakeTaskName) {
     gutil.log('Starting \'' + gutil.colors.cyan(fakeTaskName) + '\'...')
   }
 
   // Run tslint.
-  var stream = gulp.src(src, { base: './' }) // specify base to preserve folder structure
+  let stream = gulp.src(src, { base: './' }) // specify base to preserve folder structure
     .pipe(cached(cacheName, { optimizeMemory: true }))
     .pipe(tslint({
       tslint: tslintEng,
@@ -226,7 +225,7 @@ function _runTsLintInternal(src, cacheName, fakeTaskName) {
   // Print duration for the fake gulp.task.
   if (fakeTaskName) {
     stream = stream.on('end', function () {
-      var time = process.hrtime(start)
+      const time = process.hrtime(start)
       gutil.log('Finished \'' + gutil.colors.cyan(fakeTaskName) + '\' after ',
         gutil.colors.magenta(prettyTime(time)))
     })
@@ -248,8 +247,8 @@ function _debounceTsLintRunner(runner, fakeTaskName) {
 }
 
 function runTsLint(fakeTaskName) {
-  var src = config.ts.src
-  var tsLintCacheName = 'tsLint'
+  const src = config.ts.src
+  const tsLintCacheName = 'tsLint'
   return _runTsLintInternal(src, tsLintCacheName, fakeTaskName)
 }
 
@@ -262,7 +261,7 @@ function copyMultiple(copyList, callback) {
     if (!copyOrder) {
       return
     }
-    var dests = (_.isArray(copyOrder.dest) ? copyOrder.dest : [copyOrder.dest])
+    const dests = (_.isArray(copyOrder.dest) ? copyOrder.dest : [copyOrder.dest])
     async.each(dests, function (dest, innerCallback) {
       gulp.src(copyOrder.src, copyOrder.options)
         .pipe(rename(function (path) {
@@ -287,12 +286,12 @@ function normalizePath(mypath) {
 // Search for absolute require paths that correspond to specified aliases and
 // replace them with the corresponding relative path.
 function aliasify(aliases) {
-  var reqPattern = new RegExp(/require\(['"]([^'"]+)['"]\)/g) // matches requires
+  const reqPattern = new RegExp(/require\(['"]([^'"]+)['"]\)/g) // matches requires
 
   // for all files in the stream apply the replacer
   return eventStream.map(function (file, done) {
     if (!file.isNull()) {
-      var fileContent = file.contents.toString()
+      const fileContent = file.contents.toString()
       if (reqPattern.test(fileContent)) {
         file.contents = new Buffer(fileContent.replace(reqPattern, function (req, oldPath) {
           if (!aliases[oldPath]) {
@@ -300,9 +299,9 @@ function aliasify(aliases) {
           }
 
           if (aliases[oldPath][0] === '.') {
-            var oldFolder = path.dirname(path.resolve(file.path))
-            var targetFile = path.resolve(aliases[oldPath])
-            var newPath = path.relative(oldFolder, targetFile)
+            const oldFolder = path.dirname(path.resolve(file.path))
+            const targetFile = path.resolve(aliases[oldPath])
+            const newPath = path.relative(oldFolder, targetFile)
 
             return 'require(\'' + normalizePath(newPath) + '\')'
           } else {
@@ -339,7 +338,7 @@ function fixRelativePathGlob(pathOrGlob) {
   }
 
   if (pathOrGlob && typeof pathOrGlob === 'string' && pathOrGlob.length >= 2) {
-    var parsed = path.parse(pathOrGlob)
+    const parsed = path.parse(pathOrGlob)
     if (parsed && pathOrGlob.search(/^\.[\/\\]/) === 0) {
       // Looks like a relative path starting with './'!
       // Remove './' since 'foo.js' does not match the glob './foo.js' and that breaks gulp-watch.
@@ -351,17 +350,17 @@ function fixRelativePathGlob(pathOrGlob) {
 }
 
 function watcher(glob, callback) {
-  var fixedGlob = fixRelativePathGlob(glob)
+  const fixedGlob = fixRelativePathGlob(glob)
   watch(fixedGlob, { read: false }, callback)
 }
 
 // Gulp Tasks
 // --------------------------------------------------------------------- //
-gulp.task('watch', function () {
+gulp.task('watch', function (callback) {
   // Watch for changes in the gulpfile or other package lists.
   // If changes are made, notify the user.
   watcher(config.infrastructure.files, function (file) {
-    var stats = fs.statSync(file.path)
+    const stats = fs.statSync(file.path)
 
     if (!stats || !stats.isFile()) {
       return
@@ -383,24 +382,14 @@ gulp.task('watch', function () {
   })
 
   // Watch external files to copy.
-  watcher(getFilePathsFromConfig(config.copy), function () {
-    runSequence('copy')
-  })
+  watcher(getFilePathsFromConfig(config.copy), gulp.series('copy'))
 
   if (!usesWebpack()) {
     // Watch for ts change & run linter
-    watcher(config.ts.src, function () {
-      // On web/desktop webpack builds the bundle
-      runSequence('compile-rn', 'apply-aliases', runTsLintFromWatcher)
-    })
+    watcher(config.ts.src, gulp.series('compile-rn', 'apply-aliases', 'apply-tscpaths', runTsLintFromWatcher))
   }
 
-  gutil.log(gutil.colors.yellow('gulp watch enabled'))
-
-  if (usesWebpack() && isDevEnv) {
-    // Start the webpack bundler, which will also be watching for changes.
-    runSequence('webpack-js-watch')
-  }
+  callback()
 })
 
 gulp.task('clean', function () {
@@ -412,28 +401,29 @@ gulp.task('ts-lint', function () {
   if (!usesWebpack()) {
     return runTsLint()
   }
+  return Promise.resolve()
 })
 
-// gulp.task('gulpfile-lint', function() {
-//     return gulp.src(config.infrastructure.gulpfile)
-//         .pipe(jshint())
-//         .pipe(jshint.reporter(stylish))
-//         .on('error', handleError);
-// });
+gulp.task('gulpfile-lint', function () {
+  return gulp.src(config.infrastructure.gulpfile)
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish))
+    .on('error', handleError)
+})
 
 gulp.task('compile-rn', function () {
   if (platform === PLATFORMS.WEB || platform === PLATFORMS.TESTS) {
-    return
+    return Promise.resolve()
   }
 
-  var rnSource = config.ts.src.concat(config.ts.definitions)
-  var stream = gulp.src(rnSource)
-    .pipe(cached('typescript'))
+  const tsProject = ts.createProject(config.ts.config)
+  const rnSource = config.ts.src
+  let stream = gulp.src(rnSource)
     .pipe(eol(os.EOL, false))
     .pipe(enableSrcMaps ? sourcemaps.init() : gutil.noop())
     .pipe(tsProject())
 
-  var shouldAssert = isDevEnv || (!isCandidateBuild && !isPublicRelease && !isInsidersRelease)
+  const shouldAssert = isDevEnv || (!isCandidateBuild && !isPublicRelease && !isInsidersRelease)
   if (!shouldAssert) {
     stream = stream
       .pipe(unassert())
@@ -451,8 +441,8 @@ gulp.task('compile-rn', function () {
 })
 
 gulp.task('apply-aliases', function () {
-  var aliases = _.assign({}, config.bundling.aliases, getPlatformSpecificResources().aliases)
-  var stream = gulp.src(path.join(config.ts.obj, '**/*.{js,js.map}'))
+  const aliases = _.assign({}, config.bundling.aliases, getPlatformSpecificResources().aliases)
+  let stream = gulp.src(path.join(config.ts.obj, '**/*.{js,js.map}'))
     .pipe(cached('aliases', { optimizeMemory: true }))
     .pipe(aliasify(aliases))
 
@@ -464,32 +454,25 @@ gulp.task('apply-aliases', function () {
     .on('error', handleError)
 })
 
+gulp.task('apply-tscpaths', shell.task('tscpaths -p tsconfig.json -s src/ts -o temp/ios/rnapp/js'))
+
 gulp.task('copy', function (callback) {
   copyMultiple(config.copy, callback)
 })
 
-gulp.task('lint', function (callback) {
-  runSequence('ts-lint', callback)
-})
+gulp.task('lint', gulp.series('ts-lint', 'gulpfile-lint'))
 
-gulp.task('build', function (callback) {
-  runSequence(['copy', 'compile-rn'], callback)
-})
+gulp.task('build', gulp.series('copy', 'compile-rn'))
 
-const environments = 'API_ADDRESS=' + process.env.API_ADDRESS + ' ' + 'GRAPHQL_ENDPOINT=' + process.env.GRAPHQL_ENDPOINT
+gulp.task('webpack-js', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules', { env: webpackEnv }))
+gulp.task('webpack-js-watch', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --watch --hide-modules', { env: webpackEnv }))
 
-gulp.task('webpack-js', shell.task(environments + ' node ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }))
-gulp.task('webpack-js-server', shell.task(environments + ' node ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.server.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }))
-gulp.task('webpack-js-watch', shell.task(environments + ' node ./node_modules/webpack/bin/webpack.js --watch --hide-modules --config ./webpack/webpack.client.config.js --progress --colors --mode=' + process.env.NODE_ENV, { env: webpackEnv }))
-
-gulp.task('run-once', function (callback) {
-  runSequence('clean', 'lint', 'copy', 'build', 'apply-aliases', usesWebpack() ? 'webpack-js' : 'noop', usesWebpack() ? 'webpack-js-server' : 'noop', callback)
-})
-
-gulp.task('noop', function () {
+gulp.task('noop', function (callback) {
   // NOOP!
+  callback()
 })
 
-gulp.task('run', function (callback) {
-  runSequence('clean', 'copy', 'build', 'apply-aliases', 'watch', 'lint', callback)
-})
+gulp.task('run-once', gulp.series('clean', 'lint', 'copy', 'build', 'apply-aliases', usesWebpack() ? 'webpack-js' : 'apply-tscpaths'))
+
+gulp.task('run', gulp.series('clean', 'copy', 'build', 'apply-aliases', 'watch',
+  (usesWebpack() ? 'webpack-js-watch' : 'apply-tscpaths')))

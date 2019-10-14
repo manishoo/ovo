@@ -7,10 +7,9 @@ COPY src src
 COPY package.json .
 COPY tsconfig.json .
 COPY webpack webpack
-COPY locales locales
 COPY buildtools buildtools
 COPY web web
-COPY .babelrc .
+COPY babel.config.js .
 COPY server.js .
 COPY buildconfig.js .
 COPY gulpfile.js .

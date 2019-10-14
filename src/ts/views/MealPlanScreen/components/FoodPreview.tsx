@@ -28,7 +28,7 @@
 // 		this.props.onDismiss()
 // 	}
 //
-// 	render() {
+// 	public render() {
 // 		const { style, item } = this.props
 //
 // 		return (

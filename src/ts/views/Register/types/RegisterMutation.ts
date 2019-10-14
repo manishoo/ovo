@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserRegistrationInput, Gender, Role } from "./../../../models/global-types";
+import { Gender, Role, UserRegistrationInput } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: RegisterMutation

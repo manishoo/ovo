@@ -46,7 +46,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
     }
   }
 
-  render() {
+  public render() {
     const {
       style,
       value,
@@ -64,7 +64,8 @@ export default class Input extends RX.Component<InputProps, InputState> {
           <RX.View
             style={[styles.container, style]}
           >
-            {!!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }, this._getLabelStyle(theme)]}>{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
+            {!!label && <RX.Text
+              style={[styles.label, { color: theme.colors.labelInput }, this._getLabelStyle(theme)]}>{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
             <RX.TextInput
               ref={inputRef}
               value={value}
@@ -78,7 +79,8 @@ export default class Input extends RX.Component<InputProps, InputState> {
               {...props}
             />
             {!!errorMessage &&
-            <RX.Text style={[styles.label, styles.errorLabel, { color: theme.colors.inputErrorColor }]}>{errorMessage}</RX.Text>}
+            <RX.Text
+              style={[styles.label, styles.errorLabel, { color: theme.colors.inputErrorColor }]}>{errorMessage}</RX.Text>}
           </RX.View>
         )}
       </ThemeContext.Consumer>
@@ -87,7 +89,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
 
   private _renderRequiredStart = (theme: Theme) => {
     return (
-      <Text style={{color: theme.colors.red}}>*</Text>
+      <Text style={{ color: theme.colors.red }}>*</Text>
     )
   }
 

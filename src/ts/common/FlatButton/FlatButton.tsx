@@ -21,7 +21,7 @@ interface FlatButtonProps {
 }
 
 export default class FlatButton extends RX.Component<FlatButtonProps> {
-  render() {
+  public render() {
     const { style, containerStyle, label, labelTranslations, onPress, labelStyle } = this.props
 
     return (
@@ -38,7 +38,8 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
                 onPress={onPress}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.text, { color: theme.colors.flatButtonTextColor }, labelStyle]} translations={labelTranslations}>{label}</Text>
+                <Text style={[styles.text, { color: theme.colors.flatButtonTextColor }, labelStyle]}
+                      translations={labelTranslations}>{label}</Text>
                 {this.props.children}
               </RX.View>
             )}

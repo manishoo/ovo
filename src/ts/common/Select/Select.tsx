@@ -30,6 +30,26 @@ export default class Select extends RX.Component<SelectProps> {
   // @ts-ignore
   private _popupDisplayed: boolean = false
 
+  public render() {
+    const { style, label } = this.props
+
+    return (
+      <ThemeContext.Consumer>
+        {({ theme }) => [
+          !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>,
+          <RX.View
+            style={[styles.selectContainer, { backgroundColor: theme.colors.textInputBg }, style]}
+            onPress={this._handleOnPress}
+            activeOpacity={0.4}
+            ref={ref => this._mountedButton = ref}
+          >
+            <Text>{this.props.options.find(p => p.value === this.props.value)!.text}</Text>
+          </RX.View>
+        ]}
+      </ThemeContext.Consumer>
+    )
+  }
+
   private _showPopup = () => {
     let popupOptions: RX.Types.PopupOptions = {
       getAnchor: () => {
@@ -61,26 +81,6 @@ export default class Select extends RX.Component<SelectProps> {
 
     RX.Popup.show(popupOptions, POPUP_ID)
     this._popupDisplayed = true
-  }
-
-  render() {
-    const { style, label } = this.props
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => [
-          !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>,
-          <RX.View
-            style={[styles.selectContainer, { backgroundColor: theme.colors.textInputBg }, style]}
-            onPress={this._handleOnPress}
-            activeOpacity={0.4}
-            ref={ref => this._mountedButton = ref}
-          >
-            <Text>{this.props.options.find(p => p.value === this.props.value)!.text}</Text>
-          </RX.View>
-        ]}
-      </ThemeContext.Consumer>
-    )
   }
 
   private _handleOnPress = () => {

@@ -8,6 +8,36 @@ import RX from 'reactxp'
 
 
 export class Theme {
+  public fontSizes = {
+    size12: 12,
+    size14: 14,
+    size16: 16,
+    size20: 20,
+    size32: 32,
+
+    menuItem: 16
+  }
+  public fonts = {
+    monospace: {
+      fontFamily: FontRefs.monospace,
+    } as RX.Types.FontInfo,
+    displayLight: {
+      fontFamily: FontRefs.displayLight,
+    } as RX.Types.FontInfo,
+    displayRegular: {
+      fontFamily: FontRefs.displayRegular,
+      fontWeight: '400'
+    } as RX.Types.FontInfo,
+    displaySemibold: {
+      fontFamily: FontRefs.displaySemibold,
+      fontWeight: '600'
+    } as RX.Types.FontInfo,
+    displayBold: {
+      fontFamily: FontRefs.displayBold,
+      fontWeight: '700'
+    } as RX.Types.FontInfo,
+  }
+
   constructor(public mode: 'dark' | 'light' = 'dark') {
     // noop
   }
@@ -112,7 +142,6 @@ export class Theme {
           recipeIngredientUnitBG: primary,
           recipeIngredientUnitTextColor: '#fff',
 
-
           tabBarBG: '#fff',
           loginButtonTextColor: 'red',
           assistantBG: '#1F2CAA',
@@ -137,36 +166,5 @@ export class Theme {
         }
       }
     }
-  }
-
-  public fontSizes = {
-    size12: 12,
-    size14: 14,
-    size16: 16,
-    size20: 20,
-    size32: 32,
-
-    menuItem: 16
-  }
-
-  public fonts = {
-    monospace: {
-      fontFamily: FontRefs.monospace,
-    } as RX.Types.FontInfo,
-    displayLight: {
-      fontFamily: FontRefs.displayLight,
-    } as RX.Types.FontInfo,
-    displayRegular: {
-      fontFamily: FontRefs.displayRegular,
-      fontWeight: '400'
-    } as RX.Types.FontInfo,
-    displaySemibold: {
-      fontFamily: FontRefs.displaySemibold,
-      fontWeight: '600'
-    } as RX.Types.FontInfo,
-    displayBold: {
-      fontFamily: FontRefs.displayBold,
-      fontWeight: '700'
-    } as RX.Types.FontInfo,
   }
 }
