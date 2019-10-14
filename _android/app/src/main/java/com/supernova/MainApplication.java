@@ -3,6 +3,10 @@ package com.supernova;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.beefe.picker.PickerViewPackage;
+import com.wenkesj.voice.VoicePackage;
+import com.cmcewen.blurview.BlurViewPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,8 +26,17 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+            new PickerViewPackage(),
+            new VoicePackage(),
+            new BlurViewPackage(),
+            new RNGestureHandlerPackage()
       );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
     }
   };
 
