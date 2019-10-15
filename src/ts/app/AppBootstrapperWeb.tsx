@@ -7,6 +7,7 @@ import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import { ApolloProvider } from 'react-apollo'
 import RX from 'reactxp'
 import client from 'src/ts/app/client'
+import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import RootView from 'src/ts/views/RootView/RootView'
 // Do shimming before anything else.
@@ -32,17 +33,21 @@ AppConfig.initialize({
   appVersion
 })
 
+const history = createBrowserHistory({ basename: `/${AppConfig.locale}` })
+LocationStore.setHistory(history)
+
 class AppBootstrapperWeb extends AppBootstrapper {
   protected async _getInitialUrl(): Promise<string | undefined> {
     return window.location.pathname
   }
 
   protected _renderRootView(): any {
+
     return (
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
           <RootView
-            history={createBrowserHistory({ basename: `/${AppConfig.locale}` })}
+            history={history}
             onLayout={this._onLayoutRootView}
           />
         </ApolloHooksProvider>

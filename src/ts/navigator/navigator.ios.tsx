@@ -95,17 +95,17 @@ const AppStack = createStackNavigator(
 
 const AuthStack = createStackNavigator(
   {
-    introduction: {
+    [Routes.introduction]: {
       path: Routes.introduction,
       screen: Introduction,
     },
-    login: {
+    [Routes.login]: {
       path: Routes.login,
       screen: LoginScreen,
     },
   },
   {
-    initialRouteName: Routes.introduction,
+    initialRouteName: Routes.login,
     headerMode: 'none',
     cardStyle: {
       backgroundColor: '#fff',

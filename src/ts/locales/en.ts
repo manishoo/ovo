@@ -1,4 +1,4 @@
-const en = {
+export default {
   'hello': 'Hello!',
   'hiCaloria': 'Hi Caloria \uD83D\uDC4B',
   'IAlreadyHaveAnAccount': 'I already have an account',
@@ -137,7 +137,7 @@ const en = {
   'areYouSureYouWantToLeave': 'Are you sure you want to leave? You have unsaved changes.',
 
   'RecipeCreationSuccess': 'Recipe Created Successfully',
-  'RecipeUpdateSuccess': 'Recipe Updated Successfully'
-}
+  'RecipeUpdateSuccess': 'Recipe Updated Successfully',
 
-export default en
+  'Enter your username': 'Enter your username'
+}

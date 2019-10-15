@@ -44,7 +44,7 @@
     "node_modules",
     "temp",
     ".vscode",
-    ".web-build",
+    "web",
     ".idea",
     "./views-old"
   ],

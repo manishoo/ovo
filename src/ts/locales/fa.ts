@@ -1,4 +1,4 @@
-const fa = {
+export default {
   'hello': 'سلام',
   'getStarted': 'شروع!',
   'saturday': 'شنبه',
@@ -170,7 +170,7 @@ const fa = {
   'Amount': 'مقدار',
 
   'RecipeCreationSuccess': 'دستور تهیه با موفقیت ساخته شد',
-  'RecipeUpdateSuccess': 'دستور تهیه با موفقیت بروز رسانی شد'
-}
+  'RecipeUpdateSuccess': 'دستور تهیه با موفقیت بروز رسانی شد',
 
-export default fa
+  'Enter your username': 'نام کاربری خود را وارد کنید'
+}

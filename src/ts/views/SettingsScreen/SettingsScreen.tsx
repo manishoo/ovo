@@ -108,16 +108,19 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           value={me.socialNetworks.instagram}
           onChange={this._onChange(['socialNetworks', 'instagram'])}
           label={getLocalizedText('Instagram')}
+          placeholder={getLocalizedText('Enter your username')}
         />
         <Input
           value={me.socialNetworks.twitter}
           onChange={this._onChange(['socialNetworks', 'twitter'])}
           label={getLocalizedText('Twitter')}
+          placeholder={getLocalizedText('Enter your username')}
         />
         <Input
           value={me.socialNetworks.pinterest}
           onChange={this._onChange(['socialNetworks', 'pinterest'])}
           label={getLocalizedText('Pinterest')}
+          placeholder={getLocalizedText('Enter your username')}
         />
 
         <Text translate type={Text.types.title}>Change Password</Text>

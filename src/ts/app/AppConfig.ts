@@ -6,13 +6,12 @@
 import RX from 'reactxp'
 import { LanguageCode } from 'src/ts/models/global-types'
 
-
 interface InitParams {
   appVersion?: string;
 }
 
 class AppConfig {
-  public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
+  public serverAddress = process.env.API_ADDRESS || 'http://api.prana.global'
   public version = process.env.TAG || ''
   public locale: LanguageCode = LanguageCode.en
   public panelAddress: string = 'http://pantheon.mycaloria.com'
