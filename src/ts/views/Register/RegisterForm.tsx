@@ -29,6 +29,42 @@ interface RegisterFormProps {
 }
 
 export class RegisterForm extends RX.Component<RegisterFormProps> {
+  static fragments = {
+    me: gql`
+      fragment Me on User {
+        id
+        username
+        session
+        email
+        firstName
+        middleName
+        lastName
+        avatar {
+          url
+        }
+        gender
+        bodyFat
+        age
+        bio
+        weight {
+          value
+          unit
+        }
+        height {
+          value
+          unit
+        }
+        caloriesPerDay
+        socialNetworks {
+          instagram
+          twitter
+          website
+          pinterest
+        }
+        role
+      }
+    `
+  }
   state = {
     username: '',
     password: '',
@@ -40,7 +76,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
     emailValid: false,
   }
 
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -153,43 +189,6 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
       </RX.View>
     )
   }
-
-  static fragments = {
-    me: gql`
-      fragment Me on User {
-        id
-        username
-        session
-        email
-        firstName
-        middleName
-        lastName
-        avatar {
-          url
-        }
-        gender
-        bodyFat
-        age
-        bio
-        weight {
-          value
-          unit
-        }
-        height {
-          value
-          unit
-        }
-        caloriesPerDay
-        socialNetworks {
-          instagram
-          twitter
-          website
-          pinterest
-        }
-        role
-      }
-    `
-  }
 }
 
 export default function (props: {}) {
@@ -202,7 +201,7 @@ export default function (props: {}) {
         session
       }
     }
-    
+
     ${RegisterForm.fragments.me}
   `)
 

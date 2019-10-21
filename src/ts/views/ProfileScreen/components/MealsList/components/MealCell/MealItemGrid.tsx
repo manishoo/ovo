@@ -32,7 +32,7 @@ export default class MealItemGrid extends RX.Component<MealItemGridProps, MealIt
     }
   }
 
-  render() {
+  public render() {
     const { style } = this.props
 
     if (this.props.mealItems.length < 4) return this._renderMealItem(this.props.mealItems[0], this.props.size)

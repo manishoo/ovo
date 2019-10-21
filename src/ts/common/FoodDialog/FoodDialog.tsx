@@ -57,13 +57,6 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
     }
   }
 
-  protected _buildState(props: FoodDialogProps, initialBuild: boolean): Partial<FoodDialogState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
-
   componentDidMount(): void {
     RX.Animated.timing(this._opacityAnimatedValue, {
       toValue: 0,
@@ -72,7 +65,7 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
     })
   }
 
-  render() {
+  public render() {
     return (
       <Modal
         modalId={MODAL_ID}
@@ -94,6 +87,15 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
     )
   }
 
+  dismiss = () => {
+    const { onDismiss } = this.props
+
+    Modal.dismissAnimated(MODAL_ID)
+      .then(() => {
+        onDismiss()
+      })
+  }
+
   // _renderSelectDialog = () => {
   //   if (!this.state.selectDialogVisible) return null
   //
@@ -112,12 +114,10 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
   //   )
   // }
 
-  dismiss = () => {
-    const { onDismiss } = this.props
-
-    Modal.dismissAnimated(MODAL_ID)
-      .then(() => {
-        onDismiss()
-      })
+  protected _buildState(props: FoodDialogProps, initialBuild: boolean): Partial<FoodDialogState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+      height: ResponsiveWidthStore.getHeight(),
+    }
   }
 }

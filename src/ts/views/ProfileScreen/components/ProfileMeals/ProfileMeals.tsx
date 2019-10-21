@@ -33,19 +33,11 @@ interface ProfileMealsState {
 }
 
 export default class ProfileMeals extends ComponentBase<ProfileMealsProps, ProfileMealsState> {
-  protected _buildInitialState(): Readonly<ProfileMealsState> {
-    return {
-      meals: [],
-      me: UserStore.getUser(),
-      fetching: false,
-    }
-  }
-
   componentDidMount() {
     this.fetchMore()
   }
 
-  render() {
+  public render() {
     return (
       <MealsList
         meals={this.state.meals}
@@ -92,6 +84,14 @@ export default class ProfileMeals extends ComponentBase<ProfileMealsProps, Profi
           .catch(reject)
       })
     }))
+  }
+
+  protected _buildInitialState(): Readonly<ProfileMealsState> {
+    return {
+      meals: [],
+      me: UserStore.getUser(),
+      fetching: false,
+    }
   }
 }
 

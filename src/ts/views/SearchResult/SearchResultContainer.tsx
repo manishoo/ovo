@@ -10,7 +10,7 @@ import SearchResult from './SearchResult'
 
 
 export interface SearchResultParameters {
-  q: string
+  q?: string
 }
 
 export default class SearchResultContainer extends RX.Component {
@@ -33,7 +33,7 @@ export default class SearchResultContainer extends RX.Component {
     }
   }
 
-  render() {
+  public render() {
     return (
       <SearchResult
         parameters={this.parameters}

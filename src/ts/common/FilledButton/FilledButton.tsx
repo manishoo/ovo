@@ -27,7 +27,12 @@ enum ButtonMode {
 }
 
 export default class FilledButton extends RX.Component<FilledButtonProps> {
-  render() {
+  static defaultProps = {
+    mode: ButtonMode.primary,
+  }
+  static mode = ButtonMode
+
+  public render() {
     const { style, containerStyle, label, onPress, fontSize, disabled } = this.props
 
     return (
@@ -40,7 +45,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
                 style={[
                   styles.container,
                   this._getStyle(theme).style,
-                  isHovering && !disabled ? this._getStyle(theme).hoverStyle: undefined,
+                  isHovering && !disabled ? this._getStyle(theme).hoverStyle : undefined,
                   disabled ? { backgroundColor: theme.colors.filledButtonDisabledBG } : undefined,
                   style,
                 ]}
@@ -102,12 +107,6 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
 
     return { style, labelStyle, hoverStyle }
   }
-
-  static defaultProps = {
-    mode: ButtonMode.primary,
-  }
-
-  static mode = ButtonMode
 }
 
 const styles = {

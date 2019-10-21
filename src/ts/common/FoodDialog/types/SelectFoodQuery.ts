@@ -43,8 +43,8 @@ export interface SelectFoodQuery_foods_foods {
   name: SelectFoodQuery_foods_foods_name[];
   description: SelectFoodQuery_foods_foods_description[] | null;
   weights: SelectFoodQuery_foods_foods_weights[];
-  image: SelectFoodQuery_foods_foods_image;
-  thumbnail: SelectFoodQuery_foods_foods_thumbnail;
+  image: SelectFoodQuery_foods_foods_image | null;
+  thumbnail: SelectFoodQuery_foods_foods_thumbnail | null;
 }
 
 export interface SelectFoodQuery_foods {

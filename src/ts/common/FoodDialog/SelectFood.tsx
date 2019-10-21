@@ -17,11 +17,12 @@ import {
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import VirtualListViewWithoutScrollBar from 'common/VirtualListViewWithoutScrollBar/VirtualListViewWithoutScrollBar'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
-import { VirtualListView, VirtualListViewItemInfo } from 'reactxp-virtuallistview'
+import { VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import Styles from 'src/ts/app/Styles'
@@ -74,6 +75,10 @@ interface SelectFoodState {
 }
 
 class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectFoodState> {
+  textInput: any
+  previewInput: any
+  inputContainerAnimatedHeight = RX.Animated.createValue(50)
+
   constructor(props: SelectFoodProps & RX.CommonProps) {
     super(props)
 
@@ -83,14 +88,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     }
   }
 
-  protected _buildState(props: SelectFoodProps & RX.CommonProps, initialBuild: boolean): Partial<SelectFoodState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
-
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -180,6 +178,13 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     )
   }
 
+  protected _buildState(props: SelectFoodProps & RX.CommonProps, initialBuild: boolean): Partial<SelectFoodState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+      height: ResponsiveWidthStore.getHeight(),
+    }
+  }
+
   private _getModeButtonStyle = (theme: Theme, itemMode: FoodTypes) => {
     const { mode } = this.state
 
@@ -210,7 +215,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListView
+            <VirtualListViewWithoutScrollBar
               key={1}
               keyboardShouldPersistTaps
               itemList={this.props.foods.map(f => ({
@@ -230,7 +235,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListView
+            <VirtualListViewWithoutScrollBar
               key={2}
               keyboardShouldPersistTaps
               itemList={this.props.recipes.map(r => ({
@@ -248,7 +253,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     throw new Error('no food or recipe')
   }
 
-  private _renderRecipeItem = (item: VirtualListViewItemInfo & SelectFoodMealItem) => (
+  private _renderRecipeItem = ({ item }: VirtualListViewCellRenderDetails<any> & SelectFoodMealItem) => (
     <RX.View
       style={styles.searchResultItemContainer}
       onPress={this._onResultPress(item)}
@@ -257,7 +262,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     </RX.View>
   )
 
-  private _renderFoodItem = (item: VirtualListViewItemInfo & SelectFoodMealItem) => (
+  private _renderFoodItem = ({ item }: VirtualListViewCellRenderDetails<any> & SelectFoodMealItem) => (
     <ThemeContext.Consumer>
       {({ theme }) => (
         <RX.View
@@ -265,7 +270,8 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
           onPress={this._onResultPress(item)}
         >
           <Text translations={item.food.name} />
-          <Text translations={item.food.description} style={{[Styles.values.marginStart]: Styles.values.spacing / 2, color: theme.colors.subtitle}} />
+          <Text translations={item.food.description}
+                style={{ [Styles.values.marginStart]: Styles.values.spacing / 2, color: theme.colors.subtitle }} />
         </RX.View>
       )}
     </ThemeContext.Consumer>
@@ -360,10 +366,6 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
       amount: serving,
     })
   }
-
-  textInput: any
-  previewInput: any
-  inputContainerAnimatedHeight = RX.Animated.createValue(50)
 }
 
 function SelectFoodContainer(props: SelectFoodCommonProps) {

@@ -23,24 +23,24 @@ interface LoginScreenState {
 }
 
 export default class LoginScreen extends ComponentBase<LoginScreenProps, LoginScreenState> {
-  protected _buildState(props: LoginScreenProps, initialBuild: boolean): Partial<LoginScreenState> | undefined {
-    return {
-      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
-
-  render() {
+  public render() {
     return (
       <RX.View style={[styles.wrapper, { height: this.state.height }]}>
         <RX.Image
           source={ImageSource.Brand}
           style={styles.brand}
         />
-        <LoginForm />
+        <LoginForm {...this.props} />
         <Link to={Routes.register}><Text translate>Don't Have an account? Register</Text></Link>
       </RX.View>
     )
+  }
+
+  protected _buildState(props: LoginScreenProps, initialBuild: boolean): Partial<LoginScreenState> | undefined {
+    return {
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      height: ResponsiveWidthStore.getHeight(),
+    }
   }
 }
 

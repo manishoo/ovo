@@ -26,7 +26,7 @@ interface RecipesListState {
 }
 
 export default class CardList extends ComponentBase<RecipesListProps, RecipesListState> {
-  render() {
+  public render() {
     const { style } = this.props
 
     return (

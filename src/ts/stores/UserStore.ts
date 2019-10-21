@@ -24,7 +24,7 @@ class UserStore extends StoreBase implements IPersistableStore {
     let deferred = SyncTasks.Defer<void>()
 
     RX.Storage.getItem(STORAGE_KEYS.user)
-      .thenAsync(userJSONString => {
+      .then(userJSONString => {
         if (!userJSONString) {
           deferred.resolve(void 0)
           return

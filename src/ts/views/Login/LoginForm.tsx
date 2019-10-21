@@ -32,7 +32,7 @@ export class LoginForm extends RX.Component<LoginProps> {
     password: '',
   }
 
-  render() {
+  public render() {
     const { style, fieldErrors } = this.props
 
     return (

@@ -16,7 +16,7 @@ import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { TagType, Role } from 'src/ts/models/global-types'
+import { Role, TagType } from 'src/ts/models/global-types'
 import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
 import { capitalize } from 'src/ts/utilities/capitalize'
 import {

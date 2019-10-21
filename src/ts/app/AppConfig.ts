@@ -6,7 +6,6 @@
 import RX from 'reactxp'
 import { LanguageCode } from 'src/ts/models/global-types'
 
-
 interface InitParams {
   appVersion?: string;
 }
@@ -14,13 +13,8 @@ interface InitParams {
 class AppConfig {
   public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
   public version = process.env.TAG || ''
-
-  public get graphQLAddress() {
-    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
-  }
-
   public locale: LanguageCode = LanguageCode.en
-  public panelAddress: string = 'http://pantheon.mycaloria.com'
+  public panelAddress: string = 'http://panel.prana.global'
   private _appVersion: string
   private readonly _frontendHost: string
   private readonly _platformType: RX.Types.PlatformType
@@ -33,6 +27,10 @@ class AppConfig {
     this._platformType = RX.Platform.getType()
     this._isTouchInterface = this._platformType === 'ios' || this._platformType === 'android'
     this._startupTime = Date.now()
+  }
+
+  public get graphQLAddress() {
+    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
   }
 
   initialize(params: InitParams) {

@@ -48,8 +48,8 @@ export interface MyMeal_items_food {
   name: MyMeal_items_food_name[];
   description: MyMeal_items_food_description[] | null;
   weights: MyMeal_items_food_weights[];
-  image: MyMeal_items_food_image;
-  thumbnail: MyMeal_items_food_thumbnail;
+  image: MyMeal_items_food_image | null;
+  thumbnail: MyMeal_items_food_thumbnail | null;
 }
 
 export interface MyMeal_items_recipe_title {
@@ -143,8 +143,8 @@ export interface MyMeal_items_alternativeMealItems_food {
   name: MyMeal_items_alternativeMealItems_food_name[];
   description: MyMeal_items_alternativeMealItems_food_description[] | null;
   weights: MyMeal_items_alternativeMealItems_food_weights[];
-  image: MyMeal_items_alternativeMealItems_food_image;
-  thumbnail: MyMeal_items_alternativeMealItems_food_thumbnail;
+  image: MyMeal_items_alternativeMealItems_food_image | null;
+  thumbnail: MyMeal_items_alternativeMealItems_food_thumbnail | null;
 }
 
 export interface MyMeal_items_alternativeMealItems_description {

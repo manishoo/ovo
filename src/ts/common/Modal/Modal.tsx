@@ -117,7 +117,7 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     assert.ok(newProps.modalId === this.props.modalId)
   }
 
-  render() {
+  public render() {
     const modalBoxStyles = [_styles.modalBox, this.state.widthStyle]
     const modalContentStyles = [_styles.modalContainer, this._contentScaleAnimationStyle, this.state.heightStyle]
 

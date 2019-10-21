@@ -26,7 +26,7 @@ export default class Checkbox extends RX.Component<CheckboxProps, RX.Stateless> 
     borderColor: '#eee',
   }
 
-  render() {
+  public render() {
     const { style } = this.props
 
     return (

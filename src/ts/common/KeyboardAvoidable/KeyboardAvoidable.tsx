@@ -5,21 +5,22 @@
 
 import RX from 'reactxp'
 
-interface KeyboardAvoidableProps {
-	enabled?: boolean,
-	style?: any,
 
-	[k: string]: any,
+interface KeyboardAvoidableProps {
+  enabled?: boolean,
+  style?: any,
+
+  [k: string]: any,
 }
 
 export default class KeyboardAvoidable extends RX.Component<KeyboardAvoidableProps> {
-	render() {
-		const { children, ...props } = this.props
+  public render() {
+    const { children, ...props } = this.props
 
-		return (
-			<RX.View {...props}>
-				{children}
-			</RX.View>
-		)
-	}
+    return (
+      <RX.View {...props}>
+        {children}
+      </RX.View>
+    )
+  }
 }

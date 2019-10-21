@@ -5,7 +5,6 @@
 
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilePicker from 'common/FilePicker/FilePicker'
 import FilledButton from 'common/FilledButton/FilledButton'
 import { showFoodModal } from 'common/FoodDialog/FoodDialog'
 import Image from 'common/Image/Image'
@@ -18,6 +17,7 @@ import Select from 'common/Select/Select'
 import Text from 'common/Text/Text'
 import TextInputAutoGrow from 'common/TextInputAutoGrow/TextInputAutoGrow'
 import gql from 'graphql-tag'
+import FilePicker from 'modules/FilePicker'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -30,7 +30,8 @@ import {
   InstructionInput,
   LanguageCode,
   RecipeDifficulty,
-  RecipeInput
+  RecipeInput,
+  RecipeStatus
 } from 'src/ts/models/global-types'
 import LocationStore from 'src/ts/stores/LocationStore'
 import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
@@ -75,9 +76,46 @@ interface RecipeFormState {
   me?: Me,
   hideForm?: boolean
   image?: any,
+  thumbnail?: any,
 }
 
 class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
+  private _mainFormOpacityAnimationValue = RX.Animated.createValue(1)
+  private _mainFormTranslateYAnimationValue = RX.Animated.createValue(0)
+  private _extraFormOpacityAnimationValue = RX.Animated.createValue(0)
+  private _extraFormTranslateYAnimationValue = RX.Animated.createValue(-100)
+  private _mainFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._mainFormOpacityAnimationValue,
+    transform: [{
+      translateY: this._mainFormTranslateYAnimationValue
+    }]
+  })
+  private _extraFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._extraFormOpacityAnimationValue,
+    transform: [{
+      translateY: this._extraFormTranslateYAnimationValue
+    }]
+  })
+  private _scrollView: any
+
+  public render() {
+    return (
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <CenterAlignedPageView
+            scrollViewProps={{
+              ref: ref => this._scrollView = ref,
+            }}
+          >
+            <Navbar title={getLocalizedText('Create Recipe')} />
+            {this._renderFormContent(theme)}
+            {this._renderFormExtraContent()}
+          </CenterAlignedPageView>
+        )}
+      </ThemeContext.Consumer>
+    )
+  }
+
   protected _buildState(props: RecipeFormProps, initialBuild: boolean): Partial<RecipeFormState> | undefined {
     if (!initialBuild) return null
 
@@ -143,6 +181,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           serving: 1,
           image: null,
           tags: [],
+          status: RecipeStatus.private,
         },
         slugEdited: false,
         imagePreview: undefined,
@@ -150,24 +189,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         me: UserStore.getUser(),
       }
     }
-  }
-
-  render() {
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <CenterAlignedPageView
-            scrollViewProps={{
-              ref: ref => this._scrollView = ref,
-            }}
-          >
-            <Navbar title={getLocalizedText('Create Recipe')} />
-            {this._renderFormContent(theme)}
-            {this._renderFormExtraContent()}
-          </CenterAlignedPageView>
-        )}
-      </ThemeContext.Consumer>
-    )
   }
 
   private _renderFormExtraContent = () => {
@@ -225,11 +246,29 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         />
 
         {/**
+         * Ingredients Search Input
+         * */}
+        <Input
+          label={getLocalizedText('Ingredients')}
+          placeholder={getLocalizedText('e.g. Rice')}
+          required
+          onFocus={() => showFoodModal({
+            autoFocus: true,
+            foodTypes: [FoodTypes.food],
+            onDismiss: () => null,
+            onSubmit: this._onIngredientAdd,
+          })}
+          errorMessage={fieldErrors['ingredients']}
+          style={{ marginBottom: Styles.values.spacing * 2 }}
+        />
+
+        {/**
          * Ingredients
          * */}
         <RX.View
           style={{
             flexDirection: 'row',
+            flexWrap: 'wrap',
             marginBottom: this.state.recipe.ingredients.length > 0 ? Styles.values.spacing : 0
           }}
         >
@@ -248,23 +287,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             ))
           }
         </RX.View>
-
-        {/**
-         * Ingredient input
-         * */}
-        <Input
-          label={getLocalizedText('Ingredients')}
-          placeholder={getLocalizedText('e.g. Rice')}
-          required
-          onFocus={() => showFoodModal({
-            autoFocus: true,
-            foodTypes: [FoodTypes.food],
-            onDismiss: () => null,
-            onSubmit: this._onIngredientAdd,
-          })}
-          errorMessage={fieldErrors['ingredients']}
-          style={{ marginBottom: Styles.values.spacing * 2 }}
-        />
 
         {/**
          * Instructions
@@ -380,9 +402,10 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         </RX.View>
 
         <FilePicker
-          label={this.state.imagePreview ? 'Replace Image' : undefined}
-          onImageChange={image => this.setState({ image })}
+          onImageChange={(image, thumbnail) => this.setState({ image, thumbnail })}
           onImagePreviewChange={imagePreview => this.setState({ imagePreview })}
+          compress
+          withThumbnail
           style={{
             flex: 1,
             height: 400,
@@ -632,6 +655,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       difficulty: this.state.recipe.difficulty,
       slug: this.state.recipe.slug,
       image: this.state.image,
+      thumbnail: this.state.thumbnail,
     }
   }
 
@@ -717,26 +741,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     ])
       .start()
   }
-
-  private _mainFormOpacityAnimationValue = RX.Animated.createValue(1)
-  private _mainFormTranslateYAnimationValue = RX.Animated.createValue(0)
-  private _extraFormOpacityAnimationValue = RX.Animated.createValue(0)
-  private _extraFormTranslateYAnimationValue = RX.Animated.createValue(-100)
-
-  private _mainFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._mainFormOpacityAnimationValue,
-    transform: [{
-      translateY: this._mainFormTranslateYAnimationValue
-    }]
-  })
-  private _extraFormAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._extraFormOpacityAnimationValue,
-    transform: [{
-      translateY: this._extraFormTranslateYAnimationValue
-    }]
-  })
-
-  private _scrollView: any
 }
 
 export default function (props: {}) {

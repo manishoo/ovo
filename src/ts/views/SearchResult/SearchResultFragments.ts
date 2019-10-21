@@ -64,6 +64,7 @@ const SearchResultFragments = {
         tags
         createdAt
         updatedAt
+        status
       }
 
       ${this.SearchResultFood}

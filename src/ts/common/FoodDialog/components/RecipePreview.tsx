@@ -43,7 +43,7 @@ export default class RecipePreview extends RX.Component<RecipePreviewProps, Reci
     }
   }
 
-  render() {
+  public render() {
     const { style } = this.props
 
     return (

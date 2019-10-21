@@ -118,38 +118,13 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     }
   }
 
-  protected _buildState(props: MealFormProps, initialBuild: boolean): Partial<MealFormState> | undefined {
-    if (props.meal && this.state.mealItems.length === 0) {
-      return {
-        mealItems: props.meal.items.map(mealItem => ({
-          amount: mealItem.amount,
-          food: mealItem.food,
-          recipe: mealItem.recipe,
-          weight: mealItem.weight,
-          alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
-            ...altMealItem,
-            id: String(Math.random()),
-          })),
-          customUnit: mealItem.customUnit,
-          gramWeight: mealItem.gramWeight,
-          description: mealItem.description,
-          id: String(Math.random()),
-        })),
-      }
-    }
-
-    return {
-      me: UserStore.getUser(),
-    }
-  }
-
   public componentWillMount(): void {
     if (!this.props.meal) {
       this._loadStateFromStorage()
     }
   }
 
-  render() {
+  public render() {
     const { fieldErrors } = this.props
 
     return (
@@ -234,6 +209,31 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         <FilledButton label={'Submit'} onPress={this._onSubmit} />
       </CenterAlignedPageView>
     )
+  }
+
+  protected _buildState(props: MealFormProps, initialBuild: boolean): Partial<MealFormState> | undefined {
+    if (props.meal && this.state.mealItems.length === 0) {
+      return {
+        mealItems: props.meal.items.map(mealItem => ({
+          amount: mealItem.amount,
+          food: mealItem.food,
+          recipe: mealItem.recipe,
+          weight: mealItem.weight,
+          alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
+            ...altMealItem,
+            id: String(Math.random()),
+          })),
+          customUnit: mealItem.customUnit,
+          gramWeight: mealItem.gramWeight,
+          description: mealItem.description,
+          id: String(Math.random()),
+        })),
+      }
+    }
+
+    return {
+      me: UserStore.getUser(),
+    }
   }
 
   private _getMeal = (): MealInput => {

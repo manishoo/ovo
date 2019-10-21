@@ -24,6 +24,11 @@ interface CenterAlignedPageViewState {
 }
 
 export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPageViewProps, CenterAlignedPageViewState> {
+  private _animatedValue = RX.Animated.createValue(0)
+  private _animatedStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._animatedValue
+  })
+
   constructor(props) {
     super(props)
 
@@ -34,15 +39,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     }
   }
 
-  protected _buildState(props: CenterAlignedPageViewProps, initialBuild: boolean): Partial<CenterAlignedPageViewState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
-    }
-  }
-
-  render() {
+  public render() {
     return (
       <RX.ScrollView
         {...this.props.scrollViewProps}
@@ -84,6 +81,14 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     }).start()
   }
 
+  protected _buildState(props: CenterAlignedPageViewProps, initialBuild: boolean): Partial<CenterAlignedPageViewState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+      height: ResponsiveWidthStore.getHeight(),
+      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
+    }
+  }
+
   private _getMaxWidth = () => {
     if (this.props.maxWidth) return this.props.maxWidth
 
@@ -97,18 +102,13 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
 
     return this.state.width - Styles.values.drawerWidth
   }
-
-  private _animatedValue = RX.Animated.createValue(0)
-  private _animatedStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._animatedValue
-  })
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
+  container: RX.Styles.createScrollViewStyle({
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     alignSelf: 'center',
     // padding: Styles.values.spacingLarge,
     backgroundColor: '#fff',

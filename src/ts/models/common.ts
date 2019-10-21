@@ -7,11 +7,12 @@ import { LanguageCode } from 'src/ts/models/global-types'
 
 
 export enum Routes {
-  Home = 'Home',
   mealDetails = 'mealDetails',
   selectDialog = 'selectDialog',
   mealPlan = '/meal-plan',
   settings = '/settings',
+
+  introduction = '/introduction',
 
   /**
    * Recipes
@@ -19,6 +20,8 @@ export enum Routes {
   recipe = 'recipe',
   recipeForm = '/create-recipe',
   searchRecipes = '/recipes',
+
+  assistant = '/assistant',
 
   /**
    * Foods

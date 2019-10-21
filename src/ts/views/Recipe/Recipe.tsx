@@ -34,6 +34,7 @@ import {
   ProfileRecipesQueryVariables
 } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
+import PublishRecipe from 'src/ts/views/Recipe/components/PublishRecipe'
 import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from 'src/ts/views/Recipe/types/RecipeDeleteMutation'
 import { RecipeQuery, RecipeQueryVariables } from 'src/ts/views/Recipe/types/RecipeQuery'
@@ -55,7 +56,7 @@ interface RecipeState {
 }
 
 class Recipe extends ComponentBase<RecipeProps, RecipeState> {
-  render() {
+  public render() {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -350,11 +351,22 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           </Mutation>
           <FilledButton
             label={getLocalizedText('Edit Recipe')}
+            mode={FilledButton.mode.default}
             onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })}
             style={{
               [Styles.values.marginStart]: Styles.values.spacing / 2
             }}
           />
+          {
+            (
+              this.state.user.role === Role.operator ||
+              this.state.user.role === Role.admin
+            ) &&
+            <PublishRecipe
+              recipe={this.props.recipe}
+              userId={this.state.user.id}
+            />
+          }
         </RX.View>
       )
     }
@@ -436,6 +448,7 @@ RecipeContainer.fragments = {
       image { url }
       createdAt
       updatedAt
+      status
     }
 
     fragment NutrientUnit on NutrientUnit {
