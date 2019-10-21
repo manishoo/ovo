@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from './../../../../../models/global-types'
+import { LanguageCode } from "./../../../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: ProfileMealsQuery
@@ -48,8 +48,8 @@ export interface ProfileMealsQuery_meals_meals_items_food {
   name: ProfileMealsQuery_meals_meals_items_food_name[];
   description: ProfileMealsQuery_meals_meals_items_food_description[] | null;
   weights: ProfileMealsQuery_meals_meals_items_food_weights[];
-  image: ProfileMealsQuery_meals_meals_items_food_image;
-  thumbnail: ProfileMealsQuery_meals_meals_items_food_thumbnail;
+  image: ProfileMealsQuery_meals_meals_items_food_image | null;
+  thumbnail: ProfileMealsQuery_meals_meals_items_food_thumbnail | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_recipe_title {
@@ -143,8 +143,8 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_food {
   name: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_name[];
   description: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_description[] | null;
   weights: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_weights[];
-  image: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_image;
-  thumbnail: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_thumbnail;
+  image: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_image | null;
+  thumbnail: ProfileMealsQuery_meals_meals_items_alternativeMealItems_food_thumbnail | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_description {

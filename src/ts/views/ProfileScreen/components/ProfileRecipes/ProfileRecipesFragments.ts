@@ -43,6 +43,7 @@ const ProfileRecipesFragments = {
         tags
         createdAt
         updatedAt
+        status
       }
 
       ${IngredientCard.fragments.ingredient}

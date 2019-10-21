@@ -5,7 +5,7 @@
 
 import { useMutation } from '@apollo/react-hooks'
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilePicker from 'common/FilePicker/FilePicker'
+import FilePicker from 'modules/FilePicker'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
@@ -181,6 +181,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           >
             <FilePicker
               onImageChange={avatarImage => this.setState({ avatarImage })}
+              compress
               onImagePreviewChange={avatarImagePreview => this.setState({ avatarImagePreview })}
             >
               <Image

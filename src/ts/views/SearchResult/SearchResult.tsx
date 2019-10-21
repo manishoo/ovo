@@ -16,7 +16,7 @@ import { SearchResultParameters } from './SearchResultContainer'
 
 
 interface SearchResultProps {
-  parameters: SearchResultParameters,
+  parameters?: SearchResultParameters,
 }
 
 interface SearchResultState {
@@ -90,7 +90,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     return {
       height: ResponsiveWidthStore.getHeight(),
       variables: {
-        nameSearchQuery: this.props.parameters.q,
+        nameSearchQuery: this.props.parameters ? this.props.parameters.q : '',
       },
       filterVisible: false,
     }

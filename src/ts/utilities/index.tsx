@@ -44,22 +44,6 @@ export function map(minRange: number, maxRange: number, minDomain: number, maxDo
   return minDomain + (maxDomain - minDomain) * (value - minRange) / (maxRange - minRange)
 }
 
-export function withNavigation(T: any) {
-  const type = RX.Platform.getType()
-
-  let M
-  if (type == 'web') {
-    const { withRouter } = require('react-router-dom')
-    M = withRouter(T)
-  } else {
-    // const {withNavigation} = require('react-navigation')
-
-    // M = withNavigation(T)
-  }
-
-  return M
-}
-
 export function navigate(props: any, route: Routes | string, config: any = { params: {} }): void {
   console.warn('navigate is DEPRECATED! use LocationStore.navigate')
   return LocationStore.navigate(props, route, config)

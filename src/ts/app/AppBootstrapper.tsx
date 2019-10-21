@@ -55,12 +55,15 @@ export default abstract class AppBootstrapper {
                 // init the app
                 RX.UserInterface.setMainView(this._renderRootView())
                 RX.International.forceRTL(AppConfig.isRTL())
+                this._hideSplash()
               })
           })
       })
   }
 
   protected abstract _renderRootView(): any
+
+  protected abstract _hideSplash(): any
 
   protected abstract _getInitialUrl(): Promise<string | undefined>;
 

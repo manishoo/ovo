@@ -3,13 +3,15 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { withNavigation } from 'modules/navigator'
 import moment from 'moment'
 import RX from 'reactxp'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
 import { Event, Meal, MealItem } from 'src/ts/models/FoodModels'
-import { fullHeight, navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
+import LocationStore from 'src/ts/stores/LocationStore'
+import { fullHeight, renderImageOrPlaceholder } from 'src/ts/utilities'
 
 
 interface EventProps {
@@ -164,7 +166,7 @@ export default class EventComponent extends RX.Component<EventProps> {
   }
 
   private onEventPress = () => {
-    navigate(this.props, Routes.mealDetails, {
+    LocationStore.navigate(this.props, Routes.mealDetails, {
       params: {
         meal: this.props.item.meal,
         datetime: this.props.item.datetime,

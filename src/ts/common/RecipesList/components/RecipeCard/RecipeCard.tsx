@@ -11,13 +11,14 @@ import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
+import { withNavigation } from 'modules/navigator'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import ImageSource from 'src/ts/modules/images/index.web'
-import { navigate, withNavigation } from 'src/ts/utilities'
+import { navigate } from 'src/ts/utilities'
 
 
 const CLEAR_ICON_DIMENSION = 20

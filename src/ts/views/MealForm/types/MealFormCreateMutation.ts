@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, MealInput } from './../../../models/global-types'
+import { MealInput, LanguageCode } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: MealFormCreateMutation
@@ -48,8 +48,8 @@ export interface MealFormCreateMutation_createMeal_items_food {
   name: MealFormCreateMutation_createMeal_items_food_name[];
   description: MealFormCreateMutation_createMeal_items_food_description[] | null;
   weights: MealFormCreateMutation_createMeal_items_food_weights[];
-  image: MealFormCreateMutation_createMeal_items_food_image;
-  thumbnail: MealFormCreateMutation_createMeal_items_food_thumbnail;
+  image: MealFormCreateMutation_createMeal_items_food_image | null;
+  thumbnail: MealFormCreateMutation_createMeal_items_food_thumbnail | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_recipe_title {
@@ -143,8 +143,8 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_fo
   name: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_name[];
   description: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_description[] | null;
   weights: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_weights[];
-  image: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_image;
-  thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_thumbnail;
+  image: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_image | null;
+  thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_food_thumbnail | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_description {

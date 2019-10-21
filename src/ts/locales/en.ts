@@ -139,5 +139,17 @@ export default {
   'RecipeCreationSuccess': 'Recipe Created Successfully',
   'RecipeUpdateSuccess': 'Recipe Updated Successfully',
 
-  'Enter your username': 'Enter your username'
+  'Enter your username': 'Enter your username',
+
+  'Difficulty': 'Difficulty',
+  'Select': 'Select',
+  'easy': 'easy',
+  'medium': 'medium',
+  'hard': 'hard',
+  'expert': 'expert',
+
+  'Publishing': 'Publishing',
+  'Publish Recipe': 'Publish Recipe',
+  'UnPublishing': 'UnPublishing',
+  'UnPublish Recipe': 'UnPublish Recipe',
 }

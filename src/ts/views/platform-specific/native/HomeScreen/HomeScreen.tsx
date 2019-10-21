@@ -9,8 +9,13 @@ import { __ } from 'common/LocalizedText/LocalizedText'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { fullWidth, getParam, map, navigate } from 'src/ts/utilities'
+import { Routes } from 'src/ts/models/common'
+import LocationStore from 'src/ts/stores/LocationStore'
+import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import { getParam, map } from 'src/ts/utilities'
 import { AssistantMessage } from 'src/ts/views/Introduction/components/ChatBox'
+import ProfileScreenContainer from 'src/ts/views/ProfileScreen/ProfileScreenContainer'
+import SearchResult from 'src/ts/views/SearchResult/SearchResult'
 import TabBar from './components/TabBar/TabBar'
 
 
@@ -20,6 +25,8 @@ interface HomeScreenState {
   exploreIconOpacity: number,
   profileIconOpacity: number,
   assistantBottom: number,
+
+  width: number,
 }
 
 export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
@@ -29,13 +36,20 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
     exploreIconOpacity: 0,
     profileIconOpacity: 0,
     assistantBottom: 16,
+    width: ResponsiveWidthStore.getWidth(),
   }
 
   // refs
   _scrollView: any
 
+  protected _buildState(props: {}, initialBuild: boolean): Partial<HomeScreenState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+    }
+  }
+
   componentDidMount(): void {
-    this._scrollView.setScrollLeft(fullWidth(), false)
+    this._scrollView.setScrollLeft(this.state.width, false)
   }
 
   render() {
@@ -46,9 +60,9 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
       profileIconOpacity,
     } = this.state
 
-    const onProfileIconPress = () => this._scrollView.setScrollLeft(fullWidth() * 2, true)
+    const onProfileIconPress = () => this._scrollView.setScrollLeft(this.state.width * 2, true)
     const onExploreIconPress = () => this._scrollView.setScrollLeft(0, true)
-    const onPathIconPress = () => this._scrollView.setScrollLeft(fullWidth(), true)
+    const onPathIconPress = () => this._scrollView.setScrollLeft(this.state.width, true)
 
     return (
       <RX.View style={styles.container}>
@@ -69,9 +83,15 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
           {/*<Explore {...this.props} />
 					<Path {...this.props} />
 					<Profile {...this.props} />*/}
-          <RX.View />
-          <RX.View />
-          <RX.View />
+          <RX.View style={{ width: this.state.width }}>
+            <SearchResult />
+          </RX.View>
+          <RX.View style={{ width: this.state.width }}>
+
+          </RX.View>
+          <RX.View style={{ width: this.state.width }}>
+            <ProfileScreenContainer />
+          </RX.View>
         </RX.ScrollView>
 
         {
@@ -91,8 +111,8 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
         }
 
         <Assistant
-          size={100}
-          onPress={() => navigate(this.props, 'assistant')}
+          size={80}
+          onPress={() => LocationStore.navigate(this.props, Routes.assistant)}
           style={{
             position: 'absolute',
             bottom: this.state.assistantBottom,
@@ -104,13 +124,15 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
   }
 
   private onScroll = (_scrollTop: number, scrollLeft: number) => {
+    const fullWidth = this.state.width
+
     // orchestrate TabBar animation based on main scroll view scroll
     this.setState({
-      tabBarMargin: map(0, 375, 16, 48, Math.abs(fullWidth() - scrollLeft)),
-      tabBarBackgroundOpacity: map(0, 375, 0, 1, Math.abs(fullWidth() - scrollLeft)),
-      exploreIconOpacity: (fullWidth() - scrollLeft) > 0 ? map(0, 375, 0, 1, Math.abs(fullWidth() - scrollLeft)) : 0,
-      profileIconOpacity: (fullWidth() - scrollLeft) < 0 ? map(0, 375, 0, 1, Math.abs(fullWidth() - scrollLeft)) : 0,
-      assistantBottom: map(0, 375, 16, -100, Math.abs(fullWidth() - scrollLeft)),
+      tabBarMargin: map(0, 375, 16, 48, Math.abs(fullWidth - scrollLeft)),
+      tabBarBackgroundOpacity: map(0, 375, 0, 1, Math.abs(fullWidth - scrollLeft)),
+      exploreIconOpacity: (fullWidth - scrollLeft) > 0 ? map(0, 375, 0, 1, Math.abs(fullWidth - scrollLeft)) : 0,
+      profileIconOpacity: (fullWidth - scrollLeft) < 0 ? map(0, 375, 0, 1, Math.abs(fullWidth - scrollLeft)) : 0,
+      assistantBottom: map(0, 375, 16, -200, Math.abs(fullWidth - scrollLeft)),
     })
   }
 

@@ -3,9 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { withNavigation } from 'modules/navigator'
 import RX from 'reactxp'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { navigate, withNavigation } from 'src/ts/utilities'
+import LocationStore from 'src/ts/stores/LocationStore'
 
 
 interface LinkProps {
@@ -31,7 +32,7 @@ export default class Link extends RX.Component<LinkProps> {
                 e.preventDefault()
 
                 setTimeout(() => {
-                  navigate(this.props, this.props.to)
+                  LocationStore.navigate(this.props, this.props.to)
                   if (this.props.onPress) this.props.onPress()
                 }, 0)
               }

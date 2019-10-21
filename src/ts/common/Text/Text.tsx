@@ -84,7 +84,7 @@ export default class Text extends RX.Component<TextProps> {
       style = {
         ...style,
         fontSize: 12,
-        fontWeight: 'light',
+        fontWeight: '100',
         color: theme.colors.subtitle,
       }
     }

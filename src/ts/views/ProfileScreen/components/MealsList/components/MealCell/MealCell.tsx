@@ -7,6 +7,7 @@ import Image from 'common/Image/Image'
 import LikeButton from 'common/LikeButton/LikeButton'
 import Link from 'common/Link/Link'
 import Text from 'common/Text/Text'
+import { withNavigation } from 'modules/navigator'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
@@ -14,7 +15,6 @@ import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
 import LocationStore from 'src/ts/stores/LocationStore'
-import { navigate, withNavigation } from 'src/ts/utilities'
 import MealItemGrid from 'src/ts/views/ProfileScreen/components/MealsList/components/MealCell/MealItemGrid'
 import { ProfileMealsQuery_meals_meals } from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 
@@ -61,7 +61,7 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
               {
                 meal.items.map(mealItem => [
                   <Text
-                    onPress={() => navigate(this.props, `/meal/${meal.id}/`)}
+                    onPress={() => LocationStore.navigate(this.props, `/meal/${meal.id}/`)}
                     style={styles.title}
                     translations={
                       mealItem.food ?

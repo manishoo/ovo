@@ -7,7 +7,10 @@ import TotalTime from 'common/TotalTime/TotalTime'
 import RX from 'reactxp'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { MealItem as MealItemType } from 'src/ts/models/FoodModels'
-import { navigate, renderImageOrPlaceholder, withNavigation } from 'src/ts/utilities'
+import LocationStore from 'src/ts/stores/LocationStore'
+import { renderImageOrPlaceholder } from 'src/ts/utilities'
+import { withNavigation } from 'modules/navigator'
+
 
 
 interface MealItemProps {
@@ -20,7 +23,7 @@ export default class MealItem extends RX.Component<MealItemProps> {
   onPress = () => {
     const type = this.props.mealItem.type
     // either food or recipe. Send to their corresponding routes
-    navigate(this.props, `${type}/${this.props.mealItem.slug}`, {
+    LocationStore.navigate(this.props, `${type}/${this.props.mealItem.slug}`, {
       params: {
         [`${type}Id`]: this.props.mealItem.id,
       },

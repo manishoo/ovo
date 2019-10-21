@@ -9,7 +9,7 @@ import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import Navigator from 'src/ts/navigator/navigator'
+import Navigator from 'modules/navigator'
 
 
 interface RootViewProps extends RX.CommonProps {

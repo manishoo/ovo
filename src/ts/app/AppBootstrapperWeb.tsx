@@ -41,6 +41,10 @@ class AppBootstrapperWeb extends AppBootstrapper {
     return window.location.pathname
   }
 
+  protected _hideSplash(): any {
+    //
+  }
+
   protected _renderRootView(): any {
 
     return (

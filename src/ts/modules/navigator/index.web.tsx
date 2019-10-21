@@ -25,7 +25,11 @@ import {
   SearchResult,
   SettingsScreen,
 } from './routes'
+import {withRouter} from 'react-router-dom'
 
+export function withNavigation(T: any): any {
+  return withRouter(T)
+}
 
 export interface NavOptions {
   back?: boolean,

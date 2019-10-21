@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from './../../../models/global-types'
+import { LanguageCode } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: MealFormQuery
@@ -48,8 +48,8 @@ export interface MealFormQuery_meal_items_food {
   name: MealFormQuery_meal_items_food_name[];
   description: MealFormQuery_meal_items_food_description[] | null;
   weights: MealFormQuery_meal_items_food_weights[];
-  image: MealFormQuery_meal_items_food_image;
-  thumbnail: MealFormQuery_meal_items_food_thumbnail;
+  image: MealFormQuery_meal_items_food_image | null;
+  thumbnail: MealFormQuery_meal_items_food_thumbnail | null;
 }
 
 export interface MealFormQuery_meal_items_recipe_title {
@@ -143,8 +143,8 @@ export interface MealFormQuery_meal_items_alternativeMealItems_food {
   name: MealFormQuery_meal_items_alternativeMealItems_food_name[];
   description: MealFormQuery_meal_items_alternativeMealItems_food_description[] | null;
   weights: MealFormQuery_meal_items_alternativeMealItems_food_weights[];
-  image: MealFormQuery_meal_items_alternativeMealItems_food_image;
-  thumbnail: MealFormQuery_meal_items_alternativeMealItems_food_thumbnail;
+  image: MealFormQuery_meal_items_alternativeMealItems_food_image | null;
+  thumbnail: MealFormQuery_meal_items_alternativeMealItems_food_thumbnail | null;
 }
 
 export interface MealFormQuery_meal_items_alternativeMealItems_description {

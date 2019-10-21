@@ -10,7 +10,8 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { navigate, withNavigation } from 'src/ts/utilities'
+import { withNavigation } from 'modules/navigator'
+import LocationStore from 'src/ts/stores/LocationStore'
 
 
 interface NavbarProps {
@@ -49,7 +50,7 @@ export default class Navbar extends RX.Component<NavbarProps> {
         alignItems: 'center',
         cursor: 'pointer',
       }}
-      onPress={() => navigate(this.props, 'back')}
+      onPress={() => LocationStore.navigate(this.props, 'back')}
     >
       <RX.Image
         source={ImageSource.Back}

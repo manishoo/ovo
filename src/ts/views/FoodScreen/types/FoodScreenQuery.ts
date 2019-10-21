@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from './../../../models/global-types'
+import { LanguageCode } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: FoodScreenQuery
@@ -61,7 +61,7 @@ export interface FoodScreenQuery_food {
   id: string;
   name: FoodScreenQuery_food_name[];
   description: FoodScreenQuery_food_description[] | null;
-  image: FoodScreenQuery_food_image;
+  image: FoodScreenQuery_food_image | null;
   foodGroup: FoodScreenQuery_food_foodGroup;
   nutrition: FoodScreenQuery_food_nutrition;
   foodClass: FoodScreenQuery_food_foodClass;

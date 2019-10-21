@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeDifficulty } from './../../../models/global-types'
+import { LanguageCode, RecipeDifficulty, RecipeStatus } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: RecipeFormQuery
@@ -78,8 +78,8 @@ export interface RecipeFormQuery_recipe_ingredients_food {
   name: RecipeFormQuery_recipe_ingredients_food_name[];
   description: RecipeFormQuery_recipe_ingredients_food_description[] | null;
   weights: RecipeFormQuery_recipe_ingredients_food_weights[];
-  image: RecipeFormQuery_recipe_ingredients_food_image;
-  thumbnail: RecipeFormQuery_recipe_ingredients_food_thumbnail;
+  image: RecipeFormQuery_recipe_ingredients_food_image | null;
+  thumbnail: RecipeFormQuery_recipe_ingredients_food_thumbnail | null;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_weight_name {
@@ -152,6 +152,7 @@ export interface RecipeFormQuery_recipe {
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;
+  status: RecipeStatus;
 }
 
 export interface RecipeFormQuery {

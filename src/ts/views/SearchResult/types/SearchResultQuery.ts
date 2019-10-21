@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeDifficulty } from './../../../models/global-types'
+import { LanguageCode, RecipeDifficulty, RecipeStatus } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: SearchResultQuery
@@ -78,8 +78,8 @@ export interface SearchResultQuery_recipes_recipes_ingredients_food {
   name: SearchResultQuery_recipes_recipes_ingredients_food_name[];
   description: SearchResultQuery_recipes_recipes_ingredients_food_description[] | null;
   weights: SearchResultQuery_recipes_recipes_ingredients_food_weights[];
-  image: SearchResultQuery_recipes_recipes_ingredients_food_image;
-  thumbnail: SearchResultQuery_recipes_recipes_ingredients_food_thumbnail;
+  image: SearchResultQuery_recipes_recipes_ingredients_food_image | null;
+  thumbnail: SearchResultQuery_recipes_recipes_ingredients_food_thumbnail | null;
 }
 
 export interface SearchResultQuery_recipes_recipes_ingredients_weight_name {
@@ -152,6 +152,7 @@ export interface SearchResultQuery_recipes_recipes {
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;
+  status: RecipeStatus;
 }
 
 export interface SearchResultQuery_recipes_pagination {

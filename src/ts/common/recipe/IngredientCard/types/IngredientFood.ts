@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from './../../../../models/global-types'
+import { LanguageCode } from "./../../../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: IngredientFood
@@ -43,6 +43,6 @@ export interface IngredientFood {
   name: IngredientFood_name[];
   description: IngredientFood_description[] | null;
   weights: IngredientFood_weights[];
-  image: IngredientFood_image;
-  thumbnail: IngredientFood_thumbnail;
+  image: IngredientFood_image | null;
+  thumbnail: IngredientFood_thumbnail | null;
 }

@@ -4,28 +4,32 @@
  */
 
 import SelectDialog from 'common/Select/components/SelectDialog'
-import { createStackNavigator, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator, createSwitchNavigator, withNavigation as withNav } from 'react-navigation'
 import { Routes } from 'src/ts/models/common'
 import AssistantScreen from 'src/ts/views/AssistantScreen/AssistantScreen'
 import AuthLoadingScreen from 'src/ts/views/AuthLoadingScreen/AuthLoadingScreen'
+import FoodScreen from 'src/ts/views/FoodScreen/FoodScreen'
 import Introduction from 'src/ts/views/Introduction/Introduction'
 import LoginScreen from 'src/ts/views/Login/LoginScreen'
 import HomeScreen from 'src/ts/views/platform-specific/native/HomeScreen/HomeScreen'
 import RecipeScreenContainer from 'src/ts/views/Recipe/Recipe'
-import RecipeForm from 'src/ts/views/RecipeForm/RecipeForm'
+// import RecipeForm from 'src/ts/views/RecipeForm/RecipeForm'
 import SettingsScreen from 'src/ts/views/SettingsScreen/SettingsScreen'
 import ShoppingList from 'src/ts/views/ShoppingList/ShoppingList'
-import FoodScreen from 'src/ts/views/FoodScreen/FoodScreen'
 
+
+export function withNavigation(T: any) {
+  return withNav(T)
+}
 
 const CardStack = createStackNavigator(
   {
-    home: {
-      path: 'home',
+    [Routes.home]: {
+      path: Routes.home,
       screen: HomeScreen,
     },
-    settings: {
-      path: 'settings',
+    [Routes.settings]: {
+      path: Routes.settings,
       screen: SettingsScreen,
     },
     recipe: {
@@ -46,14 +50,14 @@ const CardStack = createStackNavigator(
     },
     [Routes.recipeForm]: {
       path: 'recipeForm',
-      screen: RecipeForm,
+      screen: SettingsScreen,
     },
     // MealDetails,
     // MealPlanInput,
   },
   {
     // mode: 'modal',
-    initialRouteName: Routes.recipeForm,
+    initialRouteName: Routes.home,
     headerMode: 'none',
     cardStyle: {
       backgroundColor: '#fff',
@@ -71,8 +75,8 @@ const AppStack = createStackNavigator(
     //   path: 'mealPlan',
     //   screen: MealPlanContainer,
     // },
-    assistant: {
-      path: 'assistant',
+    [Routes.assistant]: {
+      path: Routes.assistant,
       screen: AssistantScreen,
     },
     [Routes.selectDialog]: {
@@ -105,7 +109,7 @@ const AuthStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: Routes.login,
+    initialRouteName: Routes.introduction,
     headerMode: 'none',
     cardStyle: {
       backgroundColor: '#fff',

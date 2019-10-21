@@ -10,49 +10,57 @@
  * Gender
  */
 export enum Gender {
-  female = 'female',
-  male = 'male',
+  female = "female",
+  male = "male",
 }
 
 /**
  * Language codes
  */
 export enum LanguageCode {
-  en = 'en',
-  fa = 'fa',
+  en = "en",
+  fa = "fa",
 }
 
 /**
  * Recipe difficulty
  */
 export enum RecipeDifficulty {
-  easy = 'easy',
-  expert = 'expert',
-  hard = 'hard',
-  medium = 'medium',
+  easy = "easy",
+  expert = "expert",
+  hard = "hard",
+  medium = "medium",
+}
+
+/**
+ * Recipe Status
+ */
+export enum RecipeStatus {
+  private = "private",
+  public = "public",
 }
 
 /**
  * User Roles
  */
 export enum Role {
-  admin = 'admin',
-  operator = 'operator',
-  user = 'user',
+  admin = "admin",
+  operator = "operator",
+  user = "user",
 }
 
 /**
  * Tag types
  */
 export enum TagType {
-  cuisine = 'cuisine',
-  diet = 'diet',
-  imported = 'imported',
-  ingredient = 'ingredient',
-  meal = 'meal',
-  occasion = 'occasion',
-  other = 'other',
-  recipe = 'recipe',
+  cuisine = "cuisine",
+  diet = "diet",
+  imported = "imported",
+  ingredient = "ingredient",
+  meal = "meal",
+  occasion = "occasion",
+  other = "other",
+  recipe = "recipe",
 }
 
 export interface IngredientInput {
@@ -108,6 +116,7 @@ export interface RecipeInput {
   image?: any | null;
   thumbnail?: any | null;
   tags?: string[] | null;
+  status?: RecipeStatus | null;
 }
 
 export interface SocialNetworksInput {

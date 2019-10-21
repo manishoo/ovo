@@ -6,7 +6,7 @@
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { withNavigation } from 'src/ts/utilities'
+import { withNavigation } from 'modules/navigator'
 
 
 interface AddRecipeCellProps {

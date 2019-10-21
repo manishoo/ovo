@@ -30,7 +30,7 @@ export default class LoginScreen extends ComponentBase<LoginScreenProps, LoginSc
           source={ImageSource.Brand}
           style={styles.brand}
         />
-        <LoginForm />
+        <LoginForm {...this.props} />
         <Link to={Routes.register}><Text translate>Don't Have an account? Register</Text></Link>
       </RX.View>
     )

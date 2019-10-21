@@ -8,7 +8,7 @@ import moment from 'moment'
 import RX from 'reactxp'
 import theme from 'src/ts/app/Theme'
 import { Event, Meal, MealItem } from 'src/ts/models/FoodModels'
-import { Routes } from '../../src/ts/navigator/routes'
+import { Routes } from '../../src/ts/modules/navigator/routes'
 import { fullHeight, fullWidth, getImageUrl, navigate, withNavigation } from '../../src/ts/utilities'
 
 

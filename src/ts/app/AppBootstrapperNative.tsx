@@ -13,6 +13,7 @@ import RootView from 'src/ts/views/RootView/RootView'
 import * as ShimHelpers from '../utilities/ShimHelpers'
 import AppBootstrapper from './AppBootstrapper'
 import AppConfig from './AppConfig'
+import Splash from 'react-native-splash-screen'
 
 
 ShimHelpers.shimEnvironment(__DEV__, true)
@@ -23,6 +24,10 @@ AppConfig.initialize({})
 class AppBootstrapperNative extends AppBootstrapper {
   protected async _getInitialUrl(): Promise<string | undefined> {
     return RX.Linking.getInitialUrl()
+  }
+
+  protected _hideSplash(): any {
+    Splash.hide()
   }
 
   protected _renderRootView(): any {

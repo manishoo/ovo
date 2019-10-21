@@ -11,10 +11,10 @@ interface InitParams {
 }
 
 class AppConfig {
-  public serverAddress = process.env.API_ADDRESS || 'http://api.prana.global'
+  public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
   public version = process.env.TAG || ''
   public locale: LanguageCode = LanguageCode.en
-  public panelAddress: string = 'http://pantheon.mycaloria.com'
+  public panelAddress: string = 'http://panel.prana.global'
   private _appVersion: string
   private readonly _frontendHost: string
   private readonly _platformType: RX.Types.PlatformType

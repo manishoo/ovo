@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, Role, UserUpdateInput } from './../../../models/global-types'
+import { UserUpdateInput, Gender, Role } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: SettingsMutation

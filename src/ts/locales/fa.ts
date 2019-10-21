@@ -172,5 +172,17 @@ export default {
   'RecipeCreationSuccess': 'دستور تهیه با موفقیت ساخته شد',
   'RecipeUpdateSuccess': 'دستور تهیه با موفقیت بروز رسانی شد',
 
-  'Enter your username': 'نام کاربری خود را وارد کنید'
+  'Enter your username': 'نام کاربری خود را وارد کنید',
+
+  'Difficulty': 'سطح سختی',
+  'Select': 'انتخاب کنید',
+  'easy': 'آسان',
+  'medium': 'متوسط',
+  'hard': 'سخت',
+  'expert': 'حرفه‌ای',
+
+  'Publishing': 'در حال انتشار',
+  'Publish Recipe': 'انتشار',
+  'UnPublishing': 'در حال خصوصی سازی',
+  'UnPublish Recipe': 'خصوصی سازی',
 }

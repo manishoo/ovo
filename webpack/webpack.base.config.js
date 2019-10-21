@@ -18,7 +18,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const commonConfig = merge(
   {
-    entry: paths.src,
+    entry: paths.entryClient,
     output: {
       path: paths.build,
       chunkFilename: '[name].[chunkhash:8].js',
