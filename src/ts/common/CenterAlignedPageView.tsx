@@ -105,10 +105,10 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
+  container: RX.Styles.createScrollViewStyle({
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     alignSelf: 'center',
     // padding: Styles.values.spacingLarge,
     backgroundColor: '#fff',

@@ -62,7 +62,12 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
                 meal.items.map(mealItem => [
                   <Text
                     onPress={() => LocationStore.navigate(this.props, `/meal/${meal.id}/`)}
-                    style={styles.title}
+                    style={[
+                      styles.title,
+                      {
+                        color: theme.colors.text,
+                      }
+                    ]}
                     translations={
                       mealItem.food ?
                         mealItem.food.name
@@ -153,7 +158,6 @@ const styles = {
   title: RX.Styles.createTextStyle({
     // marginTop: Styles.values.spacingLarge / 2,
     font: Styles.fonts.displayLight,
-    color: 'inherit'
   }),
   avatarImage: RX.Styles.createImageStyle({
     width: 50,

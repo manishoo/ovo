@@ -17,11 +17,12 @@ import {
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import VirtualListViewWithoutScrollBar from 'common/VirtualListViewWithoutScrollBar/VirtualListViewWithoutScrollBar'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
-import { VirtualListView, VirtualListViewItemInfo } from 'reactxp-virtuallistview'
+import { VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import Styles from 'src/ts/app/Styles'
@@ -214,7 +215,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListView
+            <VirtualListViewWithoutScrollBar
               key={1}
               keyboardShouldPersistTaps
               itemList={this.props.foods.map(f => ({
@@ -234,7 +235,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListView
+            <VirtualListViewWithoutScrollBar
               key={2}
               keyboardShouldPersistTaps
               itemList={this.props.recipes.map(r => ({
@@ -252,7 +253,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     throw new Error('no food or recipe')
   }
 
-  private _renderRecipeItem = (item: VirtualListViewItemInfo & SelectFoodMealItem) => (
+  private _renderRecipeItem = ({ item }: VirtualListViewCellRenderDetails<any> & SelectFoodMealItem) => (
     <RX.View
       style={styles.searchResultItemContainer}
       onPress={this._onResultPress(item)}
@@ -261,7 +262,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     </RX.View>
   )
 
-  private _renderFoodItem = (item: VirtualListViewItemInfo & SelectFoodMealItem) => (
+  private _renderFoodItem = ({ item }: VirtualListViewCellRenderDetails<any> & SelectFoodMealItem) => (
     <ThemeContext.Consumer>
       {({ theme }) => (
         <RX.View
