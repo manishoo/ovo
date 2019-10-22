@@ -3,6 +3,7 @@
  * */
 
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { Routes } from 'src/ts/models/common'
@@ -25,7 +26,7 @@ import {
   SearchResult,
   SettingsScreen,
 } from './routes'
-import {withRouter} from 'react-router-dom'
+
 
 export function withNavigation(T: any): any {
   return withRouter(T)
@@ -169,7 +170,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: '/',
             exact: true,
-            immersive: true,
+            immersive: !this.state.user,
             component: LandingScreen,
             redirectTo: this.state.user ? this.state.user.username : Routes.login
           },

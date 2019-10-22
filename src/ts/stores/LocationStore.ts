@@ -76,6 +76,7 @@ class LocationStore extends StoreBase implements IPersistableStore {
       if (replace) {
         return props.navigation.replace(routeName, params)
       }
+
       props.navigation.navigate({
         routeName,
         params,

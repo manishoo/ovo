@@ -5,7 +5,7 @@
 
 import Image from 'common/Image/Image'
 import Text from 'common/Text/Text'
-import { Action } from 'history'
+import { Action, Location } from 'history'
 import ImageSource from 'modules/images'
 import { matchPath, Redirect } from 'react-router'
 import { Route, RouteProps, Router, Switch } from 'react-router-dom'
@@ -162,7 +162,8 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   }
 
   componentDidMount(): void {
-    this.props.history.listen(this._handleLocationChange) // FIXME better place to call this maybe
+    const history = LocationStore.getHistory()
+    history.listen(this._handleLocationChange) // FIXME better place to call this maybe
 
     this._handleDrawerVisibility()
   }
@@ -171,6 +172,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
     const user = UserStore.getUser()
     const currentPath = LocationStore.getPath()
+    const hideDrawer = !ResponsiveWidthStore.isDrawerVisible()
 
     if (initialBuild || (this.state.mode !== mode)) {
       if (mode === 'drawer') {
@@ -187,7 +189,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       height: ResponsiveWidthStore.getHeight(),
       width: ResponsiveWidthStore.getWidth(),
       routes: props.routes,
-      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
+      hideDrawer,
     }
   }
 
@@ -370,8 +372,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     ]
   }
 
-  private _handleLocationChange = (location: Location, action: Action) => {
+  private _handleLocationChange = (location: Location<any>, action: Action) => {
     // LocationStore.setPath(location.pathname) // FIXME do something better maybe
+    console.log('location.pathname in AppNavigator', location.pathname)
     this._handleDrawerVisibility(location.pathname)
   }
 

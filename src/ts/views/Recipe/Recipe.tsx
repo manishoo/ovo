@@ -211,7 +211,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
                 ingredient={{
                   ...ingredient,
-                  amount: (ingredient.amount / recipe.serving) * this.state.serving,
+                  amount: Number(Number((ingredient.amount / recipe.serving) * this.state.serving).toFixed(1)),
                 }}
                 size={200}
               />
