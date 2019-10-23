@@ -4,7 +4,7 @@
  */
 
 
-import KeyboardAvoidable from '../../src/ts/common/KeyboardAvoidable/KeyboardAvoidable'
+import KeyboardAvoidable from '../../src/ts/modules/KeyboardAvoidable/index.web'
 import LocalizedText from '../../src/ts/common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
 import Mutation from 'react-apollo/Mutation'

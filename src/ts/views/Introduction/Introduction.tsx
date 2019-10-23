@@ -4,7 +4,7 @@
  */
 
 import Assistant from 'common/Assistant/Assistant'
-import KeyboardAvoidable from 'common/KeyboardAvoidable/KeyboardAvoidable'
+import KeyboardAvoidable from 'modules/KeyboardAvoidable'
 import LocalizedText, { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
