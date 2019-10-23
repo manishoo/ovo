@@ -34,7 +34,7 @@ RUN npm install
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
 ARG TAG
-RUN npm run build:web
+RUN npm run build:web:prod
 
 RUN rm -rf src
 RUN rm package.json
