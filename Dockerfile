@@ -1,11 +1,13 @@
-FROM node:13-alpine
+FROM node:10-alpine
 MAINTAINER Ouranos Studio
 
 WORKDIR /home/supernova
 
 COPY src src
 COPY package.json .
+COPY yarn.lock .
 COPY tsconfig.json .
+COPY tslint.json .
 COPY webpack webpack
 COPY buildtools buildtools
 COPY web web
@@ -28,8 +30,9 @@ RUN apk add --no-cache --virtual .build-deps \
   build-base \
   file \
   nasm \
-  autoconf
-RUN npm install
+  autoconf \
+  yarn
+RUN yarn
 # get args
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT

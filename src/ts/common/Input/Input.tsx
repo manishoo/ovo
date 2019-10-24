@@ -4,7 +4,7 @@
  */
 
 import Text from 'common/Text/Text'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'

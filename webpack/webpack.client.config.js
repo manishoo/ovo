@@ -8,6 +8,7 @@ const merge = require('webpack-merge')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const SWPrecachePlugin = require('sw-precache-webpack-plugin')
 const CleanPlugin = require('clean-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const baseConfig = require('./webpack.base.config')
 const paths = require('./paths')
@@ -41,7 +42,7 @@ const productionConfig = merge(
             handler: 'networkFirst'
           }
         ]
-      }),
+      })
     ]
   },
 )
@@ -64,7 +65,8 @@ const developmentConfig = {
     // }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new BundleAnalyzerPlugin()
   ],
 }
 

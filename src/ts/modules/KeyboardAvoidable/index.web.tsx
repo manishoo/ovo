@@ -15,10 +15,10 @@ interface KeyboardAvoidableProps {
 
 export default class KeyboardAvoidable extends RX.Component<KeyboardAvoidableProps> {
   public render() {
-    const { children, style } = this.props
+    const { children, ...props } = this.props
 
     return (
-      <RX.View style={style}>
+      <RX.View {...props}>
         {children}
       </RX.View>
     )
