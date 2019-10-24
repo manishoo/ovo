@@ -3,7 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import * as _ from 'lodash'
+import map from 'lodash/map'
+import each from 'lodash/each'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -148,7 +149,7 @@ export default class SimpleDialog extends ComponentBase<SimpleDialogProps, RX.St
     // Buttons
     let optionalButtonsContainer: JSX.Element | undefined
     if (this.props.buttons && this.props.buttons.length > 0) {
-      const optionalButtons = _.map(this.props.buttons, this._renderButton)
+      const optionalButtons = map(this.props.buttons, this._renderButton)
 
       optionalButtonsContainer = (
         <RX.View style={_styles.buttonContainer}>
@@ -203,7 +204,7 @@ export default class SimpleDialog extends ComponentBase<SimpleDialogProps, RX.St
     let buttonToCall: SimpleDialogButton | undefined
 
     if (event.keyCode === KeyCodes.Escape) {
-      _.each(this.props.buttons, button => {
+      each(this.props.buttons, button => {
         if (button.isCancel) {
           buttonToCall = button
         }
@@ -222,7 +223,7 @@ export default class SimpleDialog extends ComponentBase<SimpleDialogProps, RX.St
     let buttonToCall: SimpleDialogButton | undefined
 
     // Map the hardware back button to "cancel".
-    _.each(this.props.buttons, button => {
+    each(this.props.buttons, button => {
       if (button.isCancel) {
         buttonToCall = button
       }

@@ -4,7 +4,11 @@
  */
 
 import * as assert from 'assert'
-import * as _ from 'lodash'
+import map from 'lodash/map'
+import find from 'lodash/find'
+import noop from 'lodash/noop'
+import attempt from 'lodash/attempt'
+import isError from 'lodash/isError'
 import * as SyncTasks from 'synctasks'
 
 
@@ -25,7 +29,7 @@ export default class ServiceManager {
   private static _serviceInfos: ServiceInfo[] = []
 
   static registerService(service: Service, name: string, dependencies: Service[] = []) {
-    if (_.find(ServiceManager._serviceInfos, info => info.service === service)) {
+    if (find(ServiceManager._serviceInfos, info => info.service === service)) {
       assert.ok(false, 'Duplicate startup registration for object: ' + ServiceManager._getName(service))
       return
     }
@@ -42,18 +46,18 @@ export default class ServiceManager {
   }
 
   static hasStarted(startupable: Service): boolean {
-    let startupInfo = _.find(ServiceManager._serviceInfos, info => info.service === startupable)
+    let startupInfo = find(ServiceManager._serviceInfos, info => info.service === startupable)
     assert.ok(startupInfo, 'Service not found in hasStarted: ' + ServiceManager._getName(startupable))
     return startupInfo!.isComplete
   }
 
   static ensureStarted(services: Service[]): SyncTasks.Promise<void> {
-    return SyncTasks.all(_.map(services, service =>
-      ServiceManager.ensureStartedSingle(service))).then(_.noop)
+    return SyncTasks.all(map(services, service =>
+      ServiceManager.ensureStartedSingle(service))).then(noop)
   }
 
   static ensureStartedSingle(service: Service): SyncTasks.Promise<void> {
-    let foundInfo = _.find(ServiceManager._serviceInfos, info => info.service === service)
+    let foundInfo = find(ServiceManager._serviceInfos, info => info.service === service)
     if (!foundInfo) {
       assert.ok(false, 'Service not registered for startup: ' + ServiceManager._getName(service))
       return SyncTasks.Rejected<void>('Service not registered for startup: ' +
@@ -74,11 +78,11 @@ export default class ServiceManager {
 
     // Make sure all dependencies have launched.
     ServiceManager.ensureStarted(startupInfo.dependencies).then(() => {
-      const startupPromise = _.attempt(() => {
+      const startupPromise = attempt(() => {
         return service.startup()
       })
 
-      if (_.isError(startupPromise)) {
+      if (isError(startupPromise)) {
         return SyncTasks.Rejected<void>(startupPromise)
       } else {
         return startupPromise
@@ -95,7 +99,7 @@ export default class ServiceManager {
   }
 
   private static _getName(service: Service): string {
-    const startupInfo = _.find(ServiceManager._serviceInfos, info => info.service === service)
+    const startupInfo = find(ServiceManager._serviceInfos, info => info.service === service)
     if (startupInfo) {
       return startupInfo.name
     }

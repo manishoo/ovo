@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import * as _ from 'lodash'
+import map from 'lodash/map'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -128,7 +128,7 @@ export default class SimpleMenu extends ComponentBase<MenuProps, MenuState> {
   }
 
   public render() {
-    const menuItems = _.map(this.props.menuItems, (item, index) => {
+    const menuItems = map(this.props.menuItems, (item, index) => {
       const buttonContainerStyles = [_styles.menuItemContainer]
       if (item.text === '-') {
         return (

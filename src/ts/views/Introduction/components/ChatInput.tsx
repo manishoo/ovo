@@ -4,7 +4,7 @@
  */
 
 import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import _ from 'lodash'
+import isEqual from 'lodash/isEqual'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
@@ -476,7 +476,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
   }
 
   shouldComponentUpdate(nextProps: Readonly<IntroductionProps>, nextState: Readonly<IntroductionState>): boolean {
-    return !_.isEqual(nextProps.input, this.props.input) || !_.isEqual(nextState, this.state) || !_.isEqual(nextProps.loading, this.props.loading)
+    return !isEqual(nextProps.input, this.props.input) || !isEqual(nextState, this.state) || !isEqual(nextProps.loading, this.props.loading)
   }
 
   UNSAFE_componentWillUpdate(nextProps: Readonly<IntroductionProps>): void {
