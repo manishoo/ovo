@@ -22,7 +22,7 @@ function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: Lang
 
   return {
     locale: locale[0] as LanguageCode,
-    urlWithoutLocale: splitUrl.join('/')
+    urlWithoutLocale: splitUrl.join('/') || '/'
   }
 }
 

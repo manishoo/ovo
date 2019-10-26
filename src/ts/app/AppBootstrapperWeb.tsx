@@ -33,9 +33,6 @@ AppConfig.initialize({
   appVersion
 })
 
-const history = createBrowserHistory({ basename: `/${AppConfig.locale}` })
-LocationStore.setHistory(history)
-
 class AppBootstrapperWeb extends AppBootstrapper {
   protected async _getInitialUrl(): Promise<string | undefined> {
     return window.location.pathname
@@ -46,6 +43,8 @@ class AppBootstrapperWeb extends AppBootstrapper {
   }
 
   protected _renderRootView(): any {
+    const history = createBrowserHistory({ basename: `/${AppConfig.locale}` })
+    LocationStore.setHistory(history)
 
     return (
       <ApolloProvider client={client}>
