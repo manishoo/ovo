@@ -51,7 +51,7 @@ if (isProd) {
   })
 
   // fallback on en
-  app.get('/', (req, res) => res.redirect(`/${req.language}`))
+  app.get('/', (req, res) => res.redirect(`/${req.language || 'fa'}`))
 } else {
   require('@babel/register')
 
@@ -62,7 +62,7 @@ if (isProd) {
   })
 
   // fallback on en
-  app.get('/', (req, res) => res.redirect(`/${req.language}`))
+  app.get('/', (req, res) => res.redirect(`/${req.language || 'fa'}`))
 }
 
 app.use((err, req, res, next) => {

@@ -160,7 +160,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
                   value: w.id,
                   text: <Text translations={w.name} />,
                 })),
-                { value: 'custom', text: <Text>Custom Weight</Text> },
+                { value: 'custom', text: <Text translate>Custom Weight</Text> },
               ]}
               onChange={(value) => this.setState({
                 selectedWeightValue: value,

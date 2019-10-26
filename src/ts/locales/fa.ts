@@ -185,4 +185,6 @@ export default {
   'Publish Recipe': 'انتشار',
   'UnPublishing': 'در حال خصوصی سازی',
   'UnPublish Recipe': 'خصوصی سازی',
+
+  'Custom Weight': 'واحد جدید',
 }

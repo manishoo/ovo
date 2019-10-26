@@ -152,4 +152,6 @@ export default {
   'Publish Recipe': 'Publish Recipe',
   'UnPublishing': 'UnPublishing',
   'UnPublish Recipe': 'UnPublish Recipe',
+
+  'Custom Weight': 'New Weight',
 }
