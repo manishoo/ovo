@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-export default {
+module.exports = {
   defaultLocale: 'fa',
   supportedLanguages: [
     'en',
