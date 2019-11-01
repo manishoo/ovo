@@ -13,6 +13,7 @@ COPY buildtools buildtools
 COPY web web
 COPY babel.config.js .
 COPY server.js .
+COPY server.config.js .
 COPY gulpfile.js .
 COPY shim-browser.js .
 
