@@ -44,9 +44,9 @@
     "node_modules",
     "temp",
     ".vscode",
-    ".web-build",
+    "web",
     ".idea",
-    "./src/ts/views-old"
+    "./views-old"
   ],
   "include": [
     "./src/ts/**/*"

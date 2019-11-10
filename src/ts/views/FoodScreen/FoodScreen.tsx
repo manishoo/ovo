@@ -37,6 +37,28 @@ interface FoodScreenState {
 }
 
 class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
+  static fragments = {
+    food: gql`
+      fragment FoodScreenFood on Food {
+        id
+        name {text locale}
+        description {text locale}
+        image {url}
+        foodGroup {
+          id
+          name {text locale}
+        }
+        nutrition {
+          calories {amount unit}
+        }
+        foodClass {
+          id
+          name {text locale}
+          description {text locale}
+        }
+      }
+    `
+  }
   state = {
     user: UserStore.getUser(),
     drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
@@ -44,16 +66,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
     width: ResponsiveWidthStore.getWidth(),
   }
 
-  protected _buildState(props: FoodScreenProps, initialBuild: boolean): Partial<FoodScreenState> | undefined {
-    return {
-      user: UserStore.getUser(),
-      drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
-      isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      width: ResponsiveWidthStore.getWidth(),
-    }
-  }
-
-  render() {
+  public render() {
     return (
       <CenterAlignedPageView>
         <Navbar>
@@ -82,7 +95,17 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
     )
   }
 
+  protected _buildState(props: FoodScreenProps, initialBuild: boolean): Partial<FoodScreenState> | undefined {
+    return {
+      user: UserStore.getUser(),
+      drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
+      isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      width: ResponsiveWidthStore.getWidth(),
+    }
+  }
+
   private _getMaximum1024 = (width: number) => (width > Styles.values.mainContentMaxWidth ? Styles.values.mainContentMaxWidth : width) // maximum 1024
+
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.drawerVisible ? this.state.width : this.state.width - Styles.values.drawerWidth)
 
   private _renderControlBar = () => {
@@ -103,29 +126,6 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
     }
 
     return null
-  }
-
-  static fragments = {
-    food: gql`
-      fragment FoodScreenFood on Food {
-        id
-        name {text locale}
-        description {text locale}
-        image {url}
-        foodGroup {
-          id
-          name {text locale}
-        }
-        nutrition {
-          calories {amount unit}
-        }
-        foodClass {
-          id
-          name {text locale}
-          description {text locale}
-        }
-      }
-    `
   }
 }
 

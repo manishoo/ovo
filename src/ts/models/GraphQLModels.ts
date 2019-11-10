@@ -121,7 +121,6 @@ export const IngredientFragment = `
 }
 `
 
-
 export const MealItemFragment = `
 {
   id

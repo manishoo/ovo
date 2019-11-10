@@ -26,7 +26,25 @@ interface ProfileInfoProps {
 }
 
 export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
-  render() {
+  static fragments = {
+    user: gql`
+      fragment ProfileInfoUser on BaseUser {
+        bio
+        username
+        firstName
+        lastName
+        avatar { url }
+        socialNetworks {
+          instagram
+          pinterest
+          twitter
+          website
+        }
+      }
+    `
+  }
+
+  public render() {
     const { style, user } = this.props
 
     return (
@@ -160,24 +178,6 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
       }
     }
     return name
-  }
-
-  static fragments = {
-    user: gql`
-      fragment ProfileInfoUser on BaseUser {
-        bio
-        username
-        firstName
-        lastName
-        avatar { url }
-        socialNetworks {
-          instagram
-          pinterest
-          twitter
-          website
-        }
-      }
-    `
   }
 }
 

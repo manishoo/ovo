@@ -33,6 +33,14 @@ export enum RecipeDifficulty {
 }
 
 /**
+ * Recipe Status
+ */
+export enum RecipeStatus {
+  private = "private",
+  public = "public",
+}
+
+/**
  * User Roles
  */
 export enum Role {
@@ -108,6 +116,7 @@ export interface RecipeInput {
   image?: any | null;
   thumbnail?: any | null;
   tags?: string[] | null;
+  status?: RecipeStatus | null;
 }
 
 export interface SocialNetworksInput {

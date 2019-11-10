@@ -31,19 +31,11 @@ interface SearchResultRecipesState {
 }
 
 export default class SearchResultRecipes extends ComponentBase<SearchResultRecipesProps, SearchResultRecipesState> {
-  protected _buildInitialState(): Readonly<SearchResultRecipesState> {
-    return {
-      recipes: [],
-      me: UserStore.getUser(),
-      fetching: false,
-    }
-  }
-
   componentDidMount() {
     this.fetchMore(this.props.variables, true)
   }
 
-  render() {
+  public render() {
     return (
       <RecipesList
         recipes={this.state.recipes}
@@ -92,6 +84,14 @@ export default class SearchResultRecipes extends ComponentBase<SearchResultRecip
           .catch(reject)
       })
     }))
+  }
+
+  protected _buildInitialState(): Readonly<SearchResultRecipesState> {
+    return {
+      recipes: [],
+      me: UserStore.getUser(),
+      fetching: false,
+    }
   }
 }
 

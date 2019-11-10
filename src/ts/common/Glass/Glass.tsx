@@ -3,24 +3,24 @@
  * Copyright: Ouranos Studio 2019
  */
 
-
 import RX from 'reactxp'
 
+
 interface GlassProps {
-	style?: any,
-	blurType?: 'xlight' | 'light' | 'dark' | 'extraDark' | 'regular' | 'prominent',
+  style?: any,
+  blurType?: 'xlight' | 'light' | 'dark' | 'extraDark' | 'regular' | 'prominent',
 }
 
 export default class GlassIos extends RX.Component<GlassProps> {
-	render() {
-		const { style, children } = this.props
+  public render() {
+    const { style, children } = this.props
 
-		return (
-			<RX.View
-				style={style}
-			>
-				{children}
-			</RX.View>
-		)
-	}
+    return (
+      <RX.View
+        style={style}
+      >
+        {children}
+      </RX.View>
+    )
+  }
 }

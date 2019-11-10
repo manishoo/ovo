@@ -37,7 +37,7 @@ export default class LoginModal extends ComponentBase<{}, LoginModalState> {
     }).start(callback)
   }
 
-  render() {
+  public render() {
     const LoginWindow = () => (
       <ThemeContext.Consumer>
         {({ theme }) => (

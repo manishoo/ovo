@@ -10,7 +10,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const platform = process.env.PLATFORM || 'web'
 const isTest = (platform === 'tests')
 const isDev = (process.env.NODE_ENV === 'development')
-const getConfig = require('../buildconfig.js')
+const getConfig = require('../buildtools/buildconfig.js')
 const config = getConfig(platform, isDev)
 const parts = require('./webpack.parts')
 const paths = require('./paths')
@@ -18,7 +18,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const commonConfig = merge(
   {
-    entry: paths.src,
+    entry: paths.entryClient,
     output: {
       path: paths.build,
       chunkFilename: '[name].[chunkhash:8].js',

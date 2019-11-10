@@ -24,8 +24,10 @@ export default function IngredientServingControl(props: IngredientServingControl
             { borderColor: theme.colors.ingredientServingControlBorder }
           ]}
         >
-          <Text style={styles.control} onPress={() => props.onServingChange((props.serving - 1) < 0 ? 0 : (props.serving - 1))}>–</Text>
-          <Text translate variables={{ number: String(props.serving) }} style={styles.mainText}>IngredientsYieldLabel</Text>
+          <Text style={styles.control}
+                onPress={() => props.onServingChange((props.serving - 1) < 0 ? 0 : (props.serving - 1))}>–</Text>
+          <Text translate variables={{ number: String(props.serving) }}
+                style={styles.mainText}>IngredientsYieldLabel</Text>
           <Text style={styles.control} onPress={() => props.onServingChange(props.serving + 1)}>+</Text>
         </RX.View>
       )}

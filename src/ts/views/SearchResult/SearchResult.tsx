@@ -16,7 +16,7 @@ import { SearchResultParameters } from './SearchResultContainer'
 
 
 interface SearchResultProps {
-  parameters: SearchResultParameters,
+  parameters?: SearchResultParameters,
 }
 
 interface SearchResultState {
@@ -26,17 +26,10 @@ interface SearchResultState {
 }
 
 export default class SearchResult extends ComponentBase<SearchResultProps, SearchResultState> {
-  protected _buildInitialState(): Readonly<SearchResultState> {
-    return {
-      height: ResponsiveWidthStore.getHeight(),
-      variables: {
-        nameSearchQuery: this.props.parameters.q,
-      },
-      filterVisible: false,
-    }
-  }
+  private _recipesListHeight: number
+  private _recipes: any
 
-  render() {
+  public render() {
     return (
       <CenterAlignedPageView
         scrollViewProps={{
@@ -93,6 +86,16 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     )
   }
 
+  protected _buildInitialState(): Readonly<SearchResultState> {
+    return {
+      height: ResponsiveWidthStore.getHeight(),
+      variables: {
+        nameSearchQuery: this.props.parameters ? this.props.parameters.q : '',
+      },
+      filterVisible: false,
+    }
+  }
+
   private _onHeightChange = (height: number) => {
     this._recipesListHeight = height
 
@@ -121,9 +124,6 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
   private _handleOnReachEnd = () => {
     this._recipes.fetchMore()
   }
-
-  private _recipesListHeight: number
-  private _recipes: any
 }
 
 const styles = {

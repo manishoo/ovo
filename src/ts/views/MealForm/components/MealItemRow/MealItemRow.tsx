@@ -26,7 +26,7 @@ interface MealItemRowProps {
 }
 
 export default class MealItemRow extends RX.Component<MealItemRowProps> {
-  render() {
+  public render() {
     const { style } = this.props
 
     return (

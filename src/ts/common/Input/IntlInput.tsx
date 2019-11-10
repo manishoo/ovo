@@ -5,8 +5,8 @@
 
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
-import Input, { InputProps } from './Input'
 import { Translation } from 'src/ts/models/common'
+import Input, { InputProps } from './Input'
 
 
 interface IntlInputProps extends InputProps {

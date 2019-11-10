@@ -7,5 +7,5 @@ import AppBootstrapperWeb from './app/AppBootstrapperWeb'
 
 // This prevents bundlers/optimizers from stripping out the import above.
 if (AppBootstrapperWeb) {
-	console.log('App started')
+  console.log('App started')
 }

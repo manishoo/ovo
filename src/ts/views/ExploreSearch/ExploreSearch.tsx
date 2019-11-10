@@ -26,7 +26,7 @@ interface ExploreSearchState extends SearchResultQueryVariables {
 export default class ExploreSearch extends RX.Component<ExploreSearchProps, ExploreSearchState> {
   _input: any
 
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -40,7 +40,8 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
           onChange={nameSearchQuery => this.props.onChange ? this.props.onChange({
             ...this.props.variables,
             nameSearchQuery,
-          }) : () => {}}
+          }) : () => {
+          }}
           placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
           onKeyPress={(e) => {
             if (e.keyCode === Keys.Return) {

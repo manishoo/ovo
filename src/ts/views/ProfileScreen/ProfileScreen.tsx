@@ -38,6 +38,24 @@ interface ProfileState {
 }
 
 export default class ProfileScreen extends ComponentBase<ProfileScreenProps, ProfileState> {
+  static storageKeys = {
+    activeTab: '_ProfileScreen_activeTab'
+  }
+  static fragments = {
+    user: gql`
+      fragment ProfileUser on BaseUser {
+        id
+        ...ProfileInfoUser
+      }
+
+      ${ProfileInfo.fragments.user}
+    `
+  }
+  private _recipes: any
+  private _recipesListHeight: number | undefined
+  private _meals: any
+  private _mealsListHeight: number | undefined
+
   constructor(props: ProfileScreenProps) {
     super(props)
 
@@ -49,21 +67,13 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     }
   }
 
-  protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-      recipes: initialBuild ? [] : this.state.recipes,
-    }
-  }
-
   componentWillMount() {
     if (this.props.isMyProfile) {
       this._loadStateFromStorage()
     }
   }
 
-  render() {
+  public render() {
     const { user } = this.props
 
     return (
@@ -133,6 +143,14 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+      height: ResponsiveWidthStore.getHeight(),
+      recipes: initialBuild ? [] : this.state.recipes,
+    }
   }
 
   private _renderTabContent = () => {
@@ -249,27 +267,6 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
       })
     }
   }
-
-  static storageKeys = {
-    activeTab: '_ProfileScreen_activeTab'
-  }
-
-  static fragments = {
-    user: gql`
-      fragment ProfileUser on BaseUser {
-        id
-        ...ProfileInfoUser
-      }
-
-      ${ProfileInfo.fragments.user}
-    `
-  }
-
-  private _recipes: any
-  private _recipesListHeight: number | undefined
-
-  private _meals: any
-  private _mealsListHeight: number | undefined
 }
 
 const styles = {

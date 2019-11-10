@@ -11,7 +11,7 @@ interface MealFormProps {
 }
 
 export default class MealScreen extends RX.Component<MealFormProps> {
-  render() {
+  public render() {
     const { style } = this.props
 
     return (
@@ -25,7 +25,5 @@ export default class MealScreen extends RX.Component<MealFormProps> {
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
-
-  }),
+  container: RX.Styles.createViewStyle({}),
 }

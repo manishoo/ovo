@@ -43,6 +43,6 @@ export interface SearchResultFood {
   name: SearchResultFood_name[];
   description: SearchResultFood_description[] | null;
   weights: SearchResultFood_weights[];
-  image: SearchResultFood_image;
-  thumbnail: SearchResultFood_thumbnail;
+  image: SearchResultFood_image | null;
+  thumbnail: SearchResultFood_thumbnail | null;
 }

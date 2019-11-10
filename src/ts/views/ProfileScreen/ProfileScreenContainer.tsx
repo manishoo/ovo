@@ -23,18 +23,18 @@ export default class ProfileScreenContainer extends ComponentBase<RX.CommonProps
     }
   }
 
-  protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileScreenContainerState> | undefined {
-    return {
-      me: UserStore.getUser(),
-    }
-  }
-
-  render() {
+  public render() {
     return (
       <ProfileScreen
         user={this.state.me}
         isMyProfile
       />
     )
+  }
+
+  protected _buildState(props: RX.CommonProps, initialBuild: boolean): Partial<ProfileScreenContainerState> | undefined {
+    return {
+      me: UserStore.getUser(),
+    }
   }
 }

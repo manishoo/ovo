@@ -21,14 +21,7 @@ interface RegisterScreenState {
 }
 
 export default class RegisterScreen extends ComponentBase<RegisterScreenProps, RegisterScreenState> {
-  protected _buildState(props: RegisterScreenProps, initialBuild: boolean): Partial<RegisterScreenState> | undefined {
-    return {
-      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
-
-  render() {
+  public render() {
     return (
       <RX.View style={[styles.wrapper, { height: this.state.height }]}>
         {
@@ -45,6 +38,13 @@ export default class RegisterScreen extends ComponentBase<RegisterScreenProps, R
         <RegisterForm />
       </RX.View>
     )
+  }
+
+  protected _buildState(props: RegisterScreenProps, initialBuild: boolean): Partial<RegisterScreenState> | undefined {
+    return {
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      height: ResponsiveWidthStore.getHeight(),
+    }
   }
 }
 

@@ -5,42 +5,43 @@
 
 import RX from 'reactxp'
 
+
 interface LoginProps {
-	style?: any,
+  style?: any,
 }
 
 export default class ShoppingList extends RX.Component<LoginProps> {
-	state = {
-		username: '',
-		password: '',
-	}
+  state = {
+    username: '',
+    password: '',
+  }
 
-	onChange = (fieldName: string) => (value: string) => {
-		this.setState({
-			[fieldName]: value,
-		})
-	}
+  onChange = (fieldName: string) => (value: string) => {
+    this.setState({
+      [fieldName]: value,
+    })
+  }
 
-	isValid = () => {
-		return !!this.state.username && !!this.state.password
-	}
+  isValid = () => {
+    return !!this.state.username && !!this.state.password
+  }
 
-	handleSubmit = (mutate: any) => () => {
-		if (!this.isValid()) return () => {
-		}
+  handleSubmit = (mutate: any) => () => {
+    if (!this.isValid()) return () => {
+    }
 
-		return mutate()
-			.then(async ({ data: { login } }: { data: { login: any } }) => {
-				/**
-				 * LoginForm Success
-				 * */
-				await RX.Storage.setItem('token', login.session)
-			})
-	}
+    return mutate()
+      .then(async ({ data: { login } }: { data: { login: any } }) => {
+        /**
+         * LoginForm Success
+         * */
+        await RX.Storage.setItem('token', login.session)
+      })
+  }
 
-	render() {
-		return (
-			<RX.Text>This is Shopping list</RX.Text>
-		)
-	}
+  public render() {
+    return (
+      <RX.Text>This is Shopping list</RX.Text>
+    )
+  }
 }

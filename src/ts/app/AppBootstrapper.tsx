@@ -22,7 +22,7 @@ function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: Lang
 
   return {
     locale: locale[0] as LanguageCode,
-    urlWithoutLocale: splitUrl.join('/')
+    urlWithoutLocale: splitUrl.join('/') || '/'
   }
 }
 
@@ -55,6 +55,7 @@ export default abstract class AppBootstrapper {
                 // init the app
                 RX.UserInterface.setMainView(this._renderRootView())
                 RX.International.forceRTL(AppConfig.isRTL())
+                this._hideSplash()
               })
           })
       })
@@ -62,7 +63,9 @@ export default abstract class AppBootstrapper {
 
   protected abstract _renderRootView(): any
 
-  protected abstract _getInitialUrl(): SyncTasks.Promise<string | undefined>;
+  protected abstract _hideSplash(): any
+
+  protected abstract _getInitialUrl(): Promise<string | undefined>;
 
   private _startCriticalServices(): SyncTasks.Promise<void> {
     let servicesToStart: Service[] = [

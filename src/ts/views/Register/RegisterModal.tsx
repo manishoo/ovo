@@ -36,7 +36,7 @@ export default class RegisterModal extends ComponentBase<{}, RegisterModalState>
     }).start(callback)
   }
 
-  render() {
+  public render() {
     const RegisterWindow = () => (
       <ThemeContext.Consumer>
         {({ theme }) => (

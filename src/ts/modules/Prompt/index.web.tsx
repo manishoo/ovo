@@ -14,7 +14,7 @@ interface PromptWebProps {
 }
 
 export default class PromptWeb extends RX.Component<PromptWebProps> {
-  render() {
+  public render() {
     return (
       <Prompt
         when={this.props.when}

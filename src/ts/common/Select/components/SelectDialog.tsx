@@ -59,7 +59,7 @@ const OptionItem = ({ option, onOptionPress, active }: { option: Option, onOptio
 }
 
 export class SelectPopup extends RX.Component<SelectDialogProps & { anchorPosition: RX.Types.PopupPosition, anchorOffset: number, popupWidth: number, popupHeight: number }> {
-  render() {
+  public render() {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -93,7 +93,7 @@ export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.C
     opacity: this._backDropOpacityAnimatedValue,
   })
 
-  render() {
+  public render() {
     const { style } = this.props
 
     return (

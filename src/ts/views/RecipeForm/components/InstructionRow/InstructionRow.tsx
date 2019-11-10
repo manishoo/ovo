@@ -29,7 +29,7 @@ interface IngredientRowProps {
 export default class InstructionRow extends RX.Component<IngredientRowProps> {
   onDeletePress = () => this.props.onDelete(this.props.instruction.step)
 
-  render() {
+  public render() {
     const { style, instruction } = this.props
 
     return (

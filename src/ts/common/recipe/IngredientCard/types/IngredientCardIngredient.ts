@@ -57,8 +57,8 @@ export interface IngredientCardIngredient_food {
   name: IngredientCardIngredient_food_name[];
   description: IngredientCardIngredient_food_description[] | null;
   weights: IngredientCardIngredient_food_weights[];
-  image: IngredientCardIngredient_food_image;
-  thumbnail: IngredientCardIngredient_food_thumbnail;
+  image: IngredientCardIngredient_food_image | null;
+  thumbnail: IngredientCardIngredient_food_thumbnail | null;
 }
 
 export interface IngredientCardIngredient_weight_name {

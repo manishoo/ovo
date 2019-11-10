@@ -23,7 +23,7 @@ interface RecipesListProps extends RX.CommonProps {
 }
 
 export default class RecipesList extends RX.Component<RecipesListProps> {
-  render() {
+  public render() {
     return (
       <CardList
         items={this.props.recipes}

@@ -5,14 +5,15 @@ WORKDIR /home/supernova
 
 COPY src src
 COPY package.json .
+COPY yarn.lock .
 COPY tsconfig.json .
+COPY tslint.json .
 COPY webpack webpack
-COPY locales locales
 COPY buildtools buildtools
 COPY web web
-COPY .babelrc .
+COPY babel.config.js .
 COPY server.js .
-COPY buildconfig.js .
+COPY server.config.js .
 COPY gulpfile.js .
 COPY shim-browser.js .
 
@@ -30,13 +31,14 @@ RUN apk add --no-cache --virtual .build-deps \
   build-base \
   file \
   nasm \
-  autoconf
-RUN npm install
+  autoconf \
+  yarn
+RUN yarn
 # get args
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
 ARG TAG
-RUN npm run build:web
+RUN npm run build:web:prod
 
 RUN rm -rf src
 RUN rm package.json

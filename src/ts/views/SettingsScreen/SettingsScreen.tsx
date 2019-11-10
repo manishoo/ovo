@@ -5,7 +5,7 @@
 
 import { useMutation } from '@apollo/react-hooks'
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilePicker from 'common/FilePicker/FilePicker'
+import FilePicker from 'modules/FilePicker'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
@@ -48,17 +48,7 @@ interface SettingsState {
 }
 
 class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
-  protected _buildState(props: SettingsProps, initialBuild: boolean): Partial<SettingsState> | undefined {
-    if (initialBuild) {
-      return {
-        me: UserStore.getUser(),
-      }
-    }
-
-    return null
-  }
-
-  render() {
+  public render() {
     const { me } = this.state
 
     return (
@@ -118,16 +108,19 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           value={me.socialNetworks.instagram}
           onChange={this._onChange(['socialNetworks', 'instagram'])}
           label={getLocalizedText('Instagram')}
+          placeholder={getLocalizedText('Enter your username')}
         />
         <Input
           value={me.socialNetworks.twitter}
           onChange={this._onChange(['socialNetworks', 'twitter'])}
           label={getLocalizedText('Twitter')}
+          placeholder={getLocalizedText('Enter your username')}
         />
         <Input
           value={me.socialNetworks.pinterest}
           onChange={this._onChange(['socialNetworks', 'pinterest'])}
           label={getLocalizedText('Pinterest')}
+          placeholder={getLocalizedText('Enter your username')}
         />
 
         <Text translate type={Text.types.title}>Change Password</Text>
@@ -160,6 +153,16 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
     )
   }
 
+  protected _buildState(props: SettingsProps, initialBuild: boolean): Partial<SettingsState> | undefined {
+    if (initialBuild) {
+      return {
+        me: UserStore.getUser(),
+      }
+    }
+
+    return null
+  }
+
   private _renderAvatar = () => {
     const { me } = this.state
 
@@ -178,6 +181,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
           >
             <FilePicker
               onImageChange={avatarImage => this.setState({ avatarImage })}
+              compress
               onImagePreviewChange={avatarImagePreview => this.setState({ avatarImagePreview })}
             >
               <Image
@@ -245,8 +249,8 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       id: this.state.me.id,
       user: this._getUser()
     })
-      .then(({data: {updateUser: {username}}}) => {
-        LocationStore.navigate(this.props, `/${username}`, {params: {replace: true}})
+      .then(({ data: { updateUser: { username } } }) => {
+        LocationStore.navigate(this.props, `/${username}`, { params: { replace: true } })
 
         /**
          * If profile image changed, reload the page

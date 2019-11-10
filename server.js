@@ -13,6 +13,7 @@ const chalk = require('chalk')
 const favicon = require('serve-favicon')
 const paths = require('./webpack/paths')
 const shimBrowser = require('./shim-browser')
+const config = require('./server.config')
 
 const publicPath = '/static/'
 
@@ -35,15 +36,10 @@ app.use('/app.css', serve(paths.appCss, true))
 app.use('/sw.js', serve(paths.buildSW))
 app.use(favicon(paths.favicon))
 
-const supportedLanguages = [
-  'en',
-  'fa',
-]
-
 if (isProd) {
   const assets = require('./web/build/assets.json')
 
-  supportedLanguages.map(lang => {
+  config.supportedLanguages.map(lang => {
     app.get('/' + lang + '*', (req, res) => {
       shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
       return require('./web/build/server-bundle').default(assets)(req, res, lang)
@@ -51,18 +47,18 @@ if (isProd) {
   })
 
   // fallback on en
-  app.get('/', (req, res) => res.redirect('/en'))
+  app.get('/', (req, res) => res.redirect(`/${req.language || config.defaultLocale}`))
 } else {
   require('@babel/register')
 
-  supportedLanguages.map(lang => {
+  config.supportedLanguages.map(lang => {
     app.get('/' + lang + '*', (req, res) => {
       return require('./src/ts/app/web/render-dev-app')(res, lang)
     })
   })
 
   // fallback on en
-  app.get('/', (req, res) => res.redirect('/en'))
+  app.get('/', (req, res) => res.redirect(`/${req.language || config.defaultLocale}`))
 }
 
 app.use((err, req, res, next) => {

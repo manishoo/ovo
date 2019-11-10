@@ -29,7 +29,56 @@ interface IngredientCardProps {
 }
 
 export default class IngredientCard extends RX.Component<IngredientCardProps> {
-  render() {
+  static fragments = {
+    get ingredient() {
+      return gql`
+        fragment IngredientCardIngredient on Ingredient {
+          thumbnail {url}
+          name {text locale}
+          description {text locale}
+          amount
+          customUnit
+          gramWeight
+          food { ...IngredientFood }
+          weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+        }
+
+        ${this.food}
+      `
+    },
+    food: gql`
+      fragment IngredientFood on IngredientFood {
+        id
+        name { text locale }
+        description { text locale }
+        weights {
+          amount
+          gramWeight
+          id
+          name { text locale }
+        }
+        image {url}
+        thumbnail {url}
+      }
+    `
+  }
+  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ scale: this._previewScaleAnimatedValue }]
+  })
+  private _containerAnimatedScale = RX.Animated.createValue(0)
+  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{
+      scale: this._containerAnimatedScale
+    }]
+  })
+
+  public render() {
     const { style, ingredient } = this.props
 
     return (
@@ -212,56 +261,6 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
 
   private _onHoverEnd = () => {
     this._setUI(false)
-  }
-
-  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
-  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ scale: this._previewScaleAnimatedValue }]
-  })
-  private _containerAnimatedScale = RX.Animated.createValue(0)
-  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{
-      scale: this._containerAnimatedScale
-    }]
-  })
-
-  static fragments = {
-    get ingredient() {
-      return gql`
-        fragment IngredientCardIngredient on Ingredient {
-          thumbnail {url}
-          name {text locale}
-          description {text locale}
-          amount
-          customUnit
-          gramWeight
-          food { ...IngredientFood }
-          weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-        }
-
-        ${this.food}
-      `
-    },
-    food: gql`
-      fragment IngredientFood on IngredientFood {
-        id
-        name { text locale }
-        description { text locale }
-        weights {
-          amount
-          gramWeight
-          id
-          name { text locale }
-        }
-        image {url}
-        thumbnail {url}
-      }
-    `
   }
 }
 

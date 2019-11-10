@@ -6,7 +6,7 @@
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { withNavigation } from 'src/ts/utilities'
+import { withNavigation } from 'modules/navigator'
 
 
 interface AddRecipeCellProps {
@@ -18,7 +18,12 @@ interface AddRecipeCellProps {
 
 @withNavigation
 export default class AddCell extends RX.Component<AddRecipeCellProps> {
-  render() {
+  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ scale: this._previewScaleAnimatedValue }]
+  })
+
+  public render() {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -80,11 +85,6 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
   private _onHoverEnd = () => {
     this._setUI(false)
   }
-
-  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
-  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ scale: this._previewScaleAnimatedValue }]
-  })
 }
 
 const styles = {

@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeDifficulty } from "./../../../../../models/global-types";
+import { LanguageCode, RecipeDifficulty, RecipeStatus } from "./../../../../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: MyRecipe
@@ -78,8 +78,8 @@ export interface MyRecipe_ingredients_food {
   name: MyRecipe_ingredients_food_name[];
   description: MyRecipe_ingredients_food_description[] | null;
   weights: MyRecipe_ingredients_food_weights[];
-  image: MyRecipe_ingredients_food_image;
-  thumbnail: MyRecipe_ingredients_food_thumbnail;
+  image: MyRecipe_ingredients_food_image | null;
+  thumbnail: MyRecipe_ingredients_food_thumbnail | null;
 }
 
 export interface MyRecipe_ingredients_weight_name {
@@ -152,4 +152,5 @@ export interface MyRecipe {
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;
+  status: RecipeStatus;
 }

@@ -1,0 +1,76 @@
+/*
+ * MealDetails.tsx
+ * Copyright: Ouranos Studio 2019
+ */
+
+
+import Navbar from '../../src/ts/common/Navbar/Navbar'
+import moment from 'moment'
+import RX from 'reactxp'
+import theme from 'src/ts/app/Theme'
+import { Meal } from 'src/ts/models/FoodModels'
+import { getParam } from '../../src/ts/utilities'
+import MealItem from 'src/ts/views/MealPlan/components/MealItem'
+
+interface MealDetailsProps {
+	style?: any,
+}
+
+interface MealDetailsStates {
+	meal?: Meal,
+	datetime?: string,
+}
+
+export default class MealDetails extends RX.Component<MealDetailsProps, MealDetailsStates> {
+	constructor(props: MealDetailsProps) {
+		super(props)
+
+		const meal: Meal = getParam(props, 'meal')
+		const datetime: string = getParam(props, 'datetime')
+		console.log('MEAL', meal)
+		// @ts-ignore
+		console.log('this.props', props.navigation)
+
+		this.state = {
+			meal,
+			datetime,
+		}
+	}
+
+	getNavbarName = () => {
+		if (!this.state.meal) return ''
+		const weekDay = moment.weekdays(moment(this.state.datetime).weekday())
+		const mealName = this.state.meal.name
+
+		// TODO fix month for earlier or future dates
+		return `${weekDay}'s ${mealName}`
+	}
+
+	render() {
+		const { style } = this.props
+
+		if (!this.state.meal) return null
+
+		return (
+			<RX.View
+				style={[styles.container, style]}
+			>
+				<Navbar
+					title={this.getNavbarName()}
+				/>
+				<RX.ScrollView>
+					{
+						this.state.meal.items.map(mealItem => <MealItem key={mealItem.id} mealItem={mealItem} />)
+					}
+				</RX.ScrollView>
+			</RX.View>
+		)
+	}
+}
+
+const styles = {
+	container: RX.Styles.createViewStyle({
+		flex: 1,
+		paddingTop: theme.styles.navBarHeight,
+	}),
+}

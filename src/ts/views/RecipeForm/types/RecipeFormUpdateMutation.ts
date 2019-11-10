@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { RecipeInput, LanguageCode, RecipeDifficulty } from "./../../../models/global-types";
+import { RecipeInput, LanguageCode, RecipeDifficulty, RecipeStatus } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: RecipeFormUpdateMutation
@@ -78,8 +78,8 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_food {
   name: RecipeFormUpdateMutation_updateRecipe_ingredients_food_name[];
   description: RecipeFormUpdateMutation_updateRecipe_ingredients_food_description[] | null;
   weights: RecipeFormUpdateMutation_updateRecipe_ingredients_food_weights[];
-  image: RecipeFormUpdateMutation_updateRecipe_ingredients_food_image;
-  thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnail;
+  image: RecipeFormUpdateMutation_updateRecipe_ingredients_food_image | null;
+  thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_food_thumbnail | null;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_weight_name {
@@ -152,6 +152,7 @@ export interface RecipeFormUpdateMutation_updateRecipe {
   tags: string[] | null;
   createdAt: any;
   updatedAt: any;
+  status: RecipeStatus;
 }
 
 export interface RecipeFormUpdateMutation {

@@ -11,13 +11,14 @@ import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
+import { withNavigation } from 'modules/navigator'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import ImageSource from 'src/ts/modules/images/index.web'
-import { navigate, withNavigation } from 'src/ts/utilities'
+import { navigate } from 'src/ts/utilities'
 
 
 const CLEAR_ICON_DIMENSION = 20
@@ -40,11 +41,42 @@ interface RecipeCellState {
 
 @withNavigation
 export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCellState> {
+  static fragments = {
+    recipe: gql`
+      fragment RecipeCardRecipe on Recipe {
+        id
+        slug
+        title {text locale}
+        image {url}
+        timing {
+          totalTime
+        }
+        likesCount
+        userLikedRecipe
+        thumbnail {url}
+        author {
+          id
+          username
+          avatar {url}
+        }
+      }
+    `
+  }
   state = {
     isHovering: false,
   }
+  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{ scale: this._previewScaleAnimatedValue }]
+  })
+  private _containerAnimatedScale = RX.Animated.createValue(0)
+  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [{
+      scale: this._containerAnimatedScale
+    }]
+  })
 
-  render() {
+  public render() {
     const { recipe } = this.props
 
     const content = (
@@ -87,7 +119,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               !this.props.imageOnly &&
               <Text
                 onPress={() => navigate(this.props, `/recipe/${recipe.slug}/`)}
-                style={[styles.title, {color: theme.colors.text}]}
+                style={[styles.title, { color: theme.colors.text }]}
                 translations={recipe.title}
               />
             }
@@ -225,39 +257,6 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
 
   private _onHoverEnd = () => {
     this._setUI(false)
-  }
-
-  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
-  private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ scale: this._previewScaleAnimatedValue }]
-  })
-  private _containerAnimatedScale = RX.Animated.createValue(0)
-  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{
-      scale: this._containerAnimatedScale
-    }]
-  })
-
-  static fragments = {
-    recipe: gql`
-      fragment RecipeCardRecipe on Recipe {
-        id
-        slug
-        title {text locale}
-        image {url}
-        timing {
-          totalTime
-        }
-        likesCount
-        userLikedRecipe
-        thumbnail {url}
-        author {
-          id
-          username
-          avatar {url}
-        }
-      }
-    `
   }
 }
 
