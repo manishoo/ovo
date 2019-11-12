@@ -3,12 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import assert from 'assert'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 
 import KeyCodes from '../../utilities/KeyCodes'
 
@@ -127,20 +126,16 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
 
     let modalContent = (
       <RX.Animated.View style={modalContentStyles}>
-        <ThemeContext.Consumer>
-          {({ theme }) => (
-            <RX.View
-              style={[...modalBoxStyles, {backgroundColor: theme.colors.bg}]}
-              onPress={this._clickInside}
-              accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
-              restrictFocusWithin={true}
-              disableTouchOpacityAnimation={true}
-              tabIndex={-1}
-            >
-              {this.props.children}
-            </RX.View>
-          )}
-        </ThemeContext.Consumer>
+        <RX.View
+          style={modalBoxStyles}
+          onPress={this._clickInside}
+          accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
+          restrictFocusWithin={true}
+          disableTouchOpacityAnimation={true}
+          tabIndex={-1}
+        >
+          {this.props.children}
+        </RX.View>
       </RX.Animated.View>
     )
 

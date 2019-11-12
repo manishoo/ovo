@@ -4,6 +4,7 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import FlatButton from 'common/FlatButton/FlatButton'
 import RecipePreview from 'common/FoodDialog/components/RecipePreview'
 import { SelectFoodFood, SelectFoodFood_weights } from 'common/FoodDialog/types/SelectFoodFood'
@@ -17,12 +18,11 @@ import {
 import { translate } from 'common/LocalizedText/LocalizedText'
 import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import VirtualListViewWithoutScrollBar from 'common/VirtualListViewWithoutScrollBar/VirtualListViewWithoutScrollBar'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
-import { VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
+import { VirtualListView, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import Styles from 'src/ts/app/Styles'
@@ -30,7 +30,6 @@ import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Translation } from 'src/ts/models/common'
 import { FoodTypes, Weight } from 'src/ts/models/FoodModels'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import FoodPreview from './components/FoodPreview'
 
 
@@ -215,7 +214,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListViewWithoutScrollBar
+            <VirtualListView
               key={1}
               keyboardShouldPersistTaps
               itemList={this.props.foods.map(f => ({
@@ -235,7 +234,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListViewWithoutScrollBar
+            <VirtualListView
               key={2}
               keyboardShouldPersistTaps
               itemList={this.props.recipes.map(r => ({

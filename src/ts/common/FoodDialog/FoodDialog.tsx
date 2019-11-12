@@ -68,8 +68,6 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
     return (
       <Modal
         modalId={MODAL_ID}
-        // modalWidth={this.state.width}
-        // modalHeight={this.state.height}
       >
         <RX.View>
           <SelectFood
