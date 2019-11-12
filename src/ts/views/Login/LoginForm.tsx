@@ -6,12 +6,12 @@
 import { useMutation } from '@apollo/react-hooks'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
-import UserStore from 'src/ts/stores/UserStore'
+import UserStore from '@Services/UserStore'
 import { navigate } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
 import { LoginMutation, LoginMutationVariables } from 'src/ts/views/Login/types/LoginMutation'
@@ -43,20 +43,20 @@ export class LoginForm extends RX.Component<LoginProps> {
           <Input
             value={this.state.username}
             onChange={this._onChange('username')}
-            label={getLocalizedText('Username')}
+            label={translate('Username')}
             errorMessage={fieldErrors['username']}
             autoCapitalize='none'
           />
           <Input
             value={this.state.password}
             onChange={this._onChange('password')}
-            label={getLocalizedText('Password')}
+            label={translate('Password')}
             errorMessage={fieldErrors['password']}
             secureTextEntry
           />
 
           <FilledButton
-            label={getLocalizedText('Login')}
+            label={translate('Login')}
             onPress={this._handleSubmit}
             disabled={!this._isValid()}
             containerStyle={styles.submitButton}

@@ -10,7 +10,7 @@ import FilledButton from 'common/FilledButton/FilledButton'
 import { showFoodModal } from 'common/FoodDialog/FoodDialog'
 import { SelectFoodMealItem } from 'common/FoodDialog/SelectFood'
 import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Navbar from 'common/Navbar/Navbar'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
@@ -20,8 +20,8 @@ import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { FoodTypes } from 'src/ts/models/FoodModels'
 import { MealInput, Role } from 'src/ts/models/global-types'
-import LocationStore from 'src/ts/stores/LocationStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import UserStore from '@Services/UserStore'
 import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
 import MealItemRow from 'src/ts/views/MealForm/components/MealItemRow/MealItemRow'
@@ -129,7 +129,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
 
     return (
       <CenterAlignedPageView>
-        <Navbar title={getLocalizedText('Create Meal')} />
+        <Navbar title={translate('Create Meal')} />
 
         {
           this.props.meal &&
@@ -139,7 +139,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           ) &&
           <RX.View style={{ flexDirection: 'row', paddingBottom: Styles.values.spacing }}>
             <FilledButton
-              label={getLocalizedText('Delete')}
+              label={translate('Delete')}
               onPress={this._onDelete}
               mode={FilledButton.mode.danger}
             />
@@ -147,7 +147,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         }
 
         {/*<IntlInput
-            label={getLocalizedText('Name')}
+            label={translate('Name')}
             translations={meal.name}
             onTranslationsChange={translations => this.setState(ps => ({
               meal: {
@@ -161,8 +161,8 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
          * Ingredient input
          * */}
         <Input
-          label={getLocalizedText('Meal Items')}
-          placeholder={getLocalizedText('e.g. Banana')}
+          label={translate('Meal Items')}
+          placeholder={translate('e.g. Banana')}
           onFocus={() => showFoodModal({
             autoFocus: true,
             foodTypes: [FoodTypes.food, FoodTypes.recipe],
@@ -285,9 +285,9 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   }
 
   private _onDelete = () => {
-    RX.Alert.show(getLocalizedText('areyousure?'), undefined, [
+    RX.Alert.show(translate('areyousure?'), undefined, [
       {
-        text: getLocalizedText('Delete'),
+        text: translate('Delete'),
         style: 'cancel',
         onPress: () => this.props.onDelete({
           bulkDelete: false,
@@ -295,14 +295,14 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
       },
       {
-        text: getLocalizedText('Delete All Instances'),
+        text: translate('Delete All Instances'),
         style: 'cancel',
         onPress: () => this.props.onDelete({
           bulkDelete: true,
           id: this.props.meal.id,
         }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
       }, {
-        text: getLocalizedText('cancel'),
+        text: translate('cancel'),
         style: 'default',
       }
     ])
@@ -398,7 +398,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
 
 const MealFormContainer = (props: MealFormProps) => {
   const { data } = useQuery<MealFormQuery, MealFormQueryVariables>(gql`
-    query MealFormQuery($id: String!) {
+    query MealFormQuery($id: ObjectId!) {
       meal(id: $id) {
         ...MyMeal
       }
@@ -423,7 +423,7 @@ const MealFormContainer = (props: MealFormProps) => {
     ${ProfileMealsFragments.myMeal}
   `)
   const [updateMeal, { error: updateRecipeError }] = useMutation<MealFormUpdateMutation, MealFormUpdateMutationVariables>(gql`
-    mutation MealFormUpdateMutation ($id: String!, $meal: MealInput!) {
+    mutation MealFormUpdateMutation ($id: ObjectId!, $meal: MealInput!) {
       updateMeal(id: $id, data: $meal) {
         ...MyMeal
       }
@@ -432,7 +432,7 @@ const MealFormContainer = (props: MealFormProps) => {
     ${ProfileMealsFragments.myMeal}
   `)
   const [deleteMeal, { error: deleteMealError }] = useMutation<MealFormDeleteMutation, MealFormDeleteMutationVariables>(gql`
-    mutation MealFormDeleteMutation ($id: String!, $bulkDelete: Boolean) {
+    mutation MealFormDeleteMutation ($id: ObjectId!, $bulkDelete: Boolean) {
       deleteMeal(id: $id, bulkDelete: $bulkDelete)
     }
   `)

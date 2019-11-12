@@ -12,13 +12,17 @@ export interface ImageSourceBase {
   CrossIcon: string;
   HeartAnimationEdge: string;
 
-  // svg on web
   Search: string;
   SearchActive: string;
+
   Rectangle: string;
   RectangleActive: string;
-  Oval: string;
-  OvalActive: string;
+
+  Calendar: string;
+  CalendarActive: string;
+
+  ShoppingList: string;
+  ShoppingListActive: string;
 
   Brand: string;
   BrandWhite: string;
@@ -49,7 +53,8 @@ export interface ImageSourceBase {
   More: string;
 
   Back: string;
-  ShoppingList: string;
+  BackDark: string;
+  BackLight: string;
   Finger: string;
 
   KitchenIllustration: string;
@@ -58,4 +63,8 @@ export interface ImageSourceBase {
   RemoveIconWhite: string;
 
   Path: string;
+  Logo: string;
+
+  Trash: string;
+  Cog: string;
 }

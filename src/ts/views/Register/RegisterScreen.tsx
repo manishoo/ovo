@@ -7,7 +7,7 @@ import Image from 'common/Image/Image'
 import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RegisterForm from 'src/ts/views/Register/RegisterForm'
 
 

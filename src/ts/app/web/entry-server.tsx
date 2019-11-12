@@ -17,7 +17,7 @@ import { StaticRouter } from 'react-router'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import { LanguageCode } from 'src/ts/models/global-types'
-import LocationStore from '../../stores/LocationStore'
+import LocationStore from '@Services/LocationStore'
 import RootView from '../../views/RootView/RootView'
 import Html from './html'
 

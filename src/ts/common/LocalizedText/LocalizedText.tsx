@@ -22,7 +22,7 @@ const translations: { [index: string]: any } = {
   en: ENLocale,
 }
 
-export function getLocalizedText(key: string, variables?: { [k: string]: string }) {
+export function translate(key: string | ENLocale, variables?: { [k: string]: string }) {
   let v = translations[locale][key]
   if (v) {
     if (variables) {
@@ -37,6 +37,8 @@ export function getLocalizedText(key: string, variables?: { [k: string]: string 
 
   return key
 }
+
+translate.keys = ENLocale
 
 export function __(key: string) {
   return translations[locale][key]

@@ -7,7 +7,7 @@ import { showRecipePreviewModal } from 'common/FoodDialog/components/RecipePrevi
 import Image from 'common/Image/Image'
 import LikeButton from 'common/LikeButton/LikeButton'
 import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
@@ -137,7 +137,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
                   <Text style={[{
                     color: theme.colors.recipeIngredientUnitTextColor,
                     fontSize: Styles.fontSizes.size12
-                  }]}>{this.props.serving} {getLocalizedText('serving')}</Text>
+                  }]}>{this.props.serving} {translate('serving')}</Text>
                 </RX.View>
               </RX.View>
             }

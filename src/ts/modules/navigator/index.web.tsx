@@ -2,13 +2,13 @@
  * copyright
  * */
 
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import UserStore from '@Services/UserStore'
 import { trimSlashes } from 'src/ts/utilities/trim-slashes'
 import AppNavigator from 'src/ts/views/platform-specific/web/AppNavigator/AppNavigator'
 import { Me } from 'src/ts/views/Register/types/Me'
@@ -17,7 +17,6 @@ import {
   LandingScreen,
   LoginScreen,
   MealForm,
-  MealPlanScreen,
   ProfileScreen,
   PublicProfileScreen,
   Recipe,
@@ -25,6 +24,8 @@ import {
   RegisterScreen,
   SearchResult,
   SettingsScreen,
+  ShoppingList,
+  CalendarScreen,
 } from './routes'
 
 
@@ -71,7 +72,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: RecipeForm,
             navOptions: {
               ...defaultNavOptions,
-              title: getLocalizedText('Edit Recipe'),
+              title: translate('Edit Recipe'),
             },
           },
           {
@@ -95,7 +96,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             redirectTo: this.state.user ? undefined : Routes.login,
             navOptions: {
               ...defaultNavOptions,
-              title: getLocalizedText('CreateRecipe'),
+              title: translate('CreateRecipe'),
             },
           },
 
@@ -121,7 +122,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
-              title: getLocalizedText('Edit Meal'),
+              title: translate('Edit Meal'),
             },
           },
           {
@@ -132,15 +133,8 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
-              title: getLocalizedText('Create Meal'),
+              title: translate('Create Meal'),
             },
-          },
-          {
-            path: `${Routes.mealPlan}/`,
-            exact: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
-            component: MealPlanScreen,
-            navOptions: defaultNavOptions,
           },
           {
             path: `${Routes.settings}/`,
@@ -155,6 +149,18 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             immersive: true,
             exact: false,
             component: LoginScreen,
+          },
+          {
+            path: Routes.shoppingList,
+            immersive: true,
+            exact: true,
+            component: ShoppingList,
+          },
+          {
+            path: Routes.calendar,
+            immersive: false,
+            exact: true,
+            component: CalendarScreen,
           },
           {
             path: Routes.register,
@@ -172,7 +178,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             exact: true,
             immersive: !this.state.user,
             component: LandingScreen,
-            redirectTo: this.state.user ? this.state.user.username : Routes.login
+            redirectTo: this.state.user ? this.state.user.username : undefined
           },
         ]}
       />

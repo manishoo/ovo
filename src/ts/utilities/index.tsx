@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
 import { Routes } from 'src/ts/models/common'
 import { Image } from 'src/ts/models/FoodModels'
-import LocationStore from 'src/ts/stores/LocationStore'
 import AppConfig from '../app/AppConfig'
 
 
@@ -68,17 +68,17 @@ export function getimage(imageObject?: Image) {
 }
 
 const DAY_COLORS = [
-  { name: 'saturday', color: '#FFCC00' },
-  { name: 'sunday', color: '#F06292' },
-  { name: 'monday', color: '#43A047' },
-  { name: 'tuesday', color: '#FF9209' },
-  { name: 'wednesday', color: '#1E88E5' },
-  { name: 'thursday', color: '#5E35B1' },
-  { name: 'friday', color: '#E53935' },
+  { day: 6, color: '#5E35B1' }, // saturday
+  { day: 0, color: '#E53935' }, // sunday
+  { day: 1, color: '#FFCC00' },
+  { day: 2, color: '#F06292' },
+  { day: 3, color: '#43A047' },
+  { day: 4, color: '#FF9209' },
+  { day: 5, color: '#1E88E5' },
 ]
 
-export function getDayColor(dayName: string) {
-  const found = DAY_COLORS.find(p => p.name === dayName)
+export function getDayColor(date: Date) {
+  const found = DAY_COLORS.find(p => p.day === date.getDay())
   if (!found) return '#fff'
 
   return found.color

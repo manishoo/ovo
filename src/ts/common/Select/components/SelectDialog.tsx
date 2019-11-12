@@ -9,7 +9,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { fullHeight } from 'src/ts/utilities'
 
 

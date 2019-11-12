@@ -8,7 +8,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import { Role } from 'src/ts/models/global-types'
-import UserStore from 'src/ts/stores/UserStore'
+import UserStore from '@Services/UserStore'
 import MealsList from 'src/ts/views/ProfileScreen/components/MealsList/MealsList'
 import { ProfileMealsFragments } from 'src/ts/views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
 import {
@@ -96,7 +96,7 @@ export default class ProfileMeals extends ComponentBase<ProfileMealsProps, Profi
 }
 
 export const PROFILE_MEALS_QUERY = gql`
-  query ProfileMealsQuery($lastId: String, $userId: String) {
+  query ProfileMealsQuery($lastId: String, $userId: ObjectId) {
     meals(lastId: $lastId, authorId: $userId) {
       meals {
         ...MyMeal

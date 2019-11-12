@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
 import { ImportantForAccessibility } from 'reactxp/dist/common/Types'
 import AppConfig from 'src/ts/app/AppConfig'
@@ -11,12 +11,13 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Translation } from 'src/ts/models/common'
+import En from '../../locales/en'
 
 
 interface TextProps extends RX.Types.TextProps {
   style?: any,
   translations?: Translation[],
-  translate?: boolean,
+  translate?: En | string | boolean,
   variables?: { [k: string]: string },
   el?: 'h1',
   type?: TextType,
@@ -100,10 +101,14 @@ export default class Text extends RX.Component<TextProps> {
   }
 
   private _getValue = () => {
-    const { translate, translations, children, variables } = this.props
+    const { translate: tr, translations, children, variables } = this.props
 
-    if (translate) {
-      return getLocalizedText(String(children), variables)
+    if (tr) {
+      if (typeof tr === 'boolean') {
+        return translate(String(children), variables)
+      } else {
+        return translate(tr, variables)
+      }
     }
 
     if (translations && translations.length > 0) {

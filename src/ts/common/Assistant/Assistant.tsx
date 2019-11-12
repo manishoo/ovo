@@ -46,6 +46,16 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
     const { style, size } = this.props
 
     return (
+      <RX.Image
+        source={ImageSource.Logo}
+        style={{
+          width: size,
+          height: size,
+        }}
+      />
+    )
+
+    return (
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.View
@@ -79,10 +89,10 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
     )
   }
 
-  componentDidMount(): void {
-    this._blink()
-    this._glow(this._getGlowTime())
-  }
+  // componentDidMount(): void {
+  //   this._blink()
+  //   this._glow(this._getGlowTime())
+  // }
 
   private _renderExtra = () => {
     return (

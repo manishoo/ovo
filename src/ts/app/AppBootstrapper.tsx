@@ -3,12 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import CalendarStore from '@Services/CalendarStore'
 import { persistCache } from 'apollo-cache-persist'
 import RX from 'reactxp'
 import { cache } from 'src/ts/app/client-cache'
 import { LanguageCode } from 'src/ts/models/global-types'
-import LocationStore from 'src/ts/stores/LocationStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import UserStore from '@Services/UserStore'
 import * as SyncTasks from 'synctasks'
 import ServiceManager, { Service } from '../services/ServiceManager'
 import ServiceRegistrar from '../services/ServiceRegistrar'
@@ -70,6 +71,7 @@ export default abstract class AppBootstrapper {
   private _startCriticalServices(): SyncTasks.Promise<void> {
     let servicesToStart: Service[] = [
       UserStore,
+      CalendarStore,
       // LocationStore,
     ]
 

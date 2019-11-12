@@ -31,9 +31,13 @@ module.exports = {
       './src/ts/views/MealForm/**/*',
       './src/ts/views/MealScreen/**/*',
       './src/ts/views/FoodScreen/**/*',
+      './src/ts/views/MealSettingsScreen/**/*',
+      './src/ts/views/Introduction/**/*',
+      './src/ts/views/CalendarScreen/**/*',
 
       './src/ts/common/FoodDialog/**/*',
       './src/ts/common/RecipesList/**/*',
+      './src/ts/common/UserMeals/**/*',
       './src/ts/common/recipe/**/*',
     ],
   }

@@ -9,7 +9,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { Routes } from 'src/ts/models/common'
 import ImageSource from 'src/ts/modules/images/index.web'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import LoginForm from './LoginForm'
 
 
@@ -31,7 +31,7 @@ export default class LoginScreen extends ComponentBase<LoginScreenProps, LoginSc
           style={styles.brand}
         />
         <LoginForm {...this.props} />
-        <Link to={Routes.register}><Text translate>Don't Have an account? Register</Text></Link>
+        <Link to={Routes.register}><Text translate>dontHaveAnAccount</Text></Link>
       </RX.View>
     )
   }

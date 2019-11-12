@@ -14,7 +14,7 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
+import LocationStore from '@Services/LocationStore'
 import MealItemGrid from 'src/ts/views/ProfileScreen/components/MealsList/components/MealCell/MealItemGrid'
 import { ProfileMealsQuery_meals_meals } from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 

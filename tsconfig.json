@@ -30,6 +30,9 @@
       ],
       "common/*": [
         "./src/ts/common/*"
+      ],
+      "@Services/*": [
+        "./src/ts/services/*"
       ]
     },
     "typeRoots": [

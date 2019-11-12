@@ -4,7 +4,7 @@
  */
 
 import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { Routes } from 'src/ts/models/common'
@@ -42,7 +42,7 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
             nameSearchQuery,
           }) : () => {
           }}
-          placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
+          placeholder={translate('e.g. Easy Sesame Chicken')}
           onKeyPress={(e) => {
             if (e.keyCode === Keys.Return) {
               if (this.props.onSubmit) {

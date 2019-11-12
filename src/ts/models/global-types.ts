@@ -7,6 +7,29 @@
 //==============================================================
 
 /**
+ * AssistantExpectations
+ */
+export enum AssistantExpectations {
+  activity = "activity",
+  age = "age",
+  allergy = "allergy",
+  chooseDiet = "chooseDiet",
+  diet = "diet",
+  dislikedFoods = "dislikedFoods",
+  gender = "gender",
+  goal = "goal",
+  height = "height",
+  meal = "meal",
+  mealPlan = "mealPlan",
+  mealPlanSettings = "mealPlanSettings",
+  meals = "meals",
+  nickname = "nickname",
+  normalRoutine = "normalRoutine",
+  register = "register",
+  weight = "weight",
+}
+
+/**
  * Gender
  */
 export enum Gender {
@@ -20,6 +43,65 @@ export enum Gender {
 export enum LanguageCode {
   en = "en",
   fa = "fa",
+}
+
+/**
+ * Meal Available Time
+ */
+export enum MealAvailableTime {
+  littleTime = "littleTime",
+  lotsOfTime = "lotsOfTime",
+  moreTime = "moreTime",
+  noLimit = "noLimit",
+  noTime = "noTime",
+  someTime = "someTime",
+}
+
+/**
+ * Meal Size
+ */
+export enum MealSize {
+  big = "big",
+  huge = "huge",
+  normal = "normal",
+  small = "small",
+  tiny = "tiny",
+}
+
+/**
+ * Meal types
+ */
+export enum MealType {
+  breakfast = "breakfast",
+  dinner = "dinner",
+  lunch = "lunch",
+  snack = "snack",
+}
+
+/**
+ * Message Senders
+ */
+export enum MessageSenders {
+  assistant = "assistant",
+  user = "user",
+}
+
+/**
+ * Message Type
+ */
+export enum MessageType {
+  email = "email",
+  food = "food",
+  form = "form",
+  height = "height",
+  mealPlan = "mealPlan",
+  mealPlanSettings = "mealPlanSettings",
+  meals = "meals",
+  number = "number",
+  password = "password",
+  select = "select",
+  text = "text",
+  weight = "weight",
 }
 
 /**

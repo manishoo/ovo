@@ -12,6 +12,8 @@ export enum Routes {
   mealPlan = '/meal-plan',
   settings = '/settings',
 
+  calendar = '/timeline',
+
   introduction = '/introduction',
 
   /**
@@ -33,13 +35,14 @@ export enum Routes {
    * */
   meal = '/meal',
   mealForm = '/create-meal',
+  mealSettings = '/meal-settings',
 
   home = '/',
   // profile = '/',
   feed = 'feed',
   login = '/login',
-  register = '/join-caloria',
-  shoppingList = 'shopping-list',
+  register = '/join-prana',
+  shoppingList = '/shopping-list',
 }
 
 export interface Translation {

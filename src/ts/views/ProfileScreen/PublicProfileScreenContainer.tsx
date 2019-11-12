@@ -9,7 +9,7 @@ import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import AppConfig from 'src/ts/app/AppConfig'
-import LocationStore from 'src/ts/stores/LocationStore'
+import LocationStore from '@Services/LocationStore'
 import {
   PublicProfileScreenQuery,
   PublicProfileScreenQueryVariables
@@ -30,7 +30,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
           username: this._username,
         }}
         query={gql`
-          query PublicProfileScreenQuery($username: String, $userId: String) {
+          query PublicProfileScreenQuery($username: String, $userId: ObjectId) {
             user(userId: $userId, username: $username) {
               ...ProfileUser
             }

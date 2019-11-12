@@ -10,7 +10,7 @@ const path = require('path')
 const BabiliPlugin = require('babili-webpack-plugin')
 // const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const paths = require('./paths')
-
+const { CheckerPlugin } = require('awesome-typescript-loader')
 const localIdentName = '[name]_[local]_[hash:base64:5]'
 
 exports.localIdentName = localIdentName
@@ -32,6 +32,7 @@ exports.optimizeChunks = () => ({
       maxInitialRequests: 3,
       automaticNameDelimiter: '~',
       name: true,
+      noEmitOnErrors: true,
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -231,7 +232,7 @@ exports.loadJS = () => ({
         exclude: paths.nodeModules,
 
         loader: 'babel-loader',
-        options: /*JSON.parse(fs.readFileSync(path.resolve(__dirname, '../.babelrc')))*/
+        options: /*JSON.parse(fs.readFileSync(calendar.resolve(__dirname, '../.babelrc')))*/
           {
             cacheDirectory: true,
             // babelrc: true,
@@ -256,9 +257,12 @@ exports.loadJS = () => ({
       { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      // { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+      // { enforce: "pre", test: /\.tsx?$/, loader: "source-map-loader" },
     ],
   },
+  plugins: [
+    new CheckerPlugin()
+  ]
   // externals: {
   //   'react': 'React',
   //   'react-dom': 'ReactDOM'

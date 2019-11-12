@@ -19,7 +19,7 @@ export default function VirtualListViewWithoutScrollBar(props: VirtualListViewPr
     >
       <OriginalVirtualListView
         {...props}
-        onLayout={e => setScrollViewWidth(e.width)}
+        onLayout={e => scrollViewWidth === 0 && setScrollViewWidth(e.width)}
         style={[
           props.style,
           {

@@ -7,7 +7,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import FilledButton from 'common/FilledButton/FilledButton'
 import FlatButton from 'common/FlatButton/FlatButton'
 import IntlInput from 'common/Input/IntlInput'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Select from 'common/Select/Select'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
@@ -17,7 +17,7 @@ import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Role, TagType } from 'src/ts/models/global-types'
-import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
+import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import { capitalize } from 'src/ts/utilities/capitalize'
 import {
   TagsInputDeleteMutation,
@@ -160,8 +160,8 @@ export function TagsInput(props: TagsInputProps) {
                           e.stopPropagation()
                           e.preventDefault()
 
-                          RX.Alert.show(getLocalizedText('deleteTag?'), undefined, [{
-                            text: getLocalizedText('yes'),
+                          RX.Alert.show(translate('deleteTag?'), undefined, [{
+                            text: translate('yes'),
                             onPress: () => {
                               props.onTagDelete({
                                 slug: tag.slug,
@@ -174,7 +174,7 @@ export function TagsInput(props: TagsInputProps) {
                                   })
                                 })
                             }
-                          }, { text: getLocalizedText('no') }])
+                          }, { text: translate('no') }])
                         }}
                         style={{
                           [Styles.values.marginStart]: Styles.values.spacing / 2,
@@ -277,7 +277,7 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
           marginBottom: 0,
         }}
       />
-      <FilledButton label={getLocalizedText('Add Tag')} onPress={() => addTag()} style={{ padding: 7 }} />
+      <FilledButton label={translate('Add Tag')} onPress={() => addTag()} style={{ padding: 7 }} />
     </RX.View>
   )
 }

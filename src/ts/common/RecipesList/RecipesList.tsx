@@ -9,7 +9,7 @@ import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
+import LocationStore from '@Services/LocationStore'
 import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 

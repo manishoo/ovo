@@ -10,7 +10,7 @@ import { showFoodModal } from 'common/FoodDialog/FoodDialog'
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
 import IntlInput from 'common/Input/IntlInput'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Navbar from 'common/Navbar/Navbar'
 import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
 import Select from 'common/Select/Select'
@@ -33,10 +33,10 @@ import {
   RecipeInput,
   RecipeStatus
 } from 'src/ts/models/global-types'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import ToastStore, { ToastTypes } from '@Services/ToastStore'
+import UserStore from '@Services/UserStore'
 import { getParam } from 'src/ts/utilities'
 import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
 import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
@@ -107,7 +107,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               ref: ref => this._scrollView = ref,
             }}
           >
-            <Navbar title={getLocalizedText('Create Recipe')} />
+            <Navbar title={translate('Create Recipe')} />
             {this._renderFormContent(theme)}
             {this._renderFormExtraContent()}
           </CenterAlignedPageView>
@@ -230,9 +230,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       >
         <IntlInput
           autoFocus
-          label={getLocalizedText('Name')}
+          label={translate('Name')}
           required
-          placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
+          placeholder={translate('e.g. Easy Sesame Chicken')}
           translations={this.state.recipe.title || []}
           errorMessage={fieldErrors['title']}
           onTranslationsChange={(title) => this.setState(prevState => ({
@@ -249,8 +249,8 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
          * Ingredients Search Input
          * */}
         <Input
-          label={getLocalizedText('Ingredients')}
-          placeholder={getLocalizedText('e.g. Rice')}
+          label={translate('Ingredients')}
+          placeholder={translate('e.g. Rice')}
           required
           onFocus={() => showFoodModal({
             autoFocus: true,
@@ -308,9 +308,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
 
         <RX.View style={{ height: Styles.values.spacing * 2 }} />
         <TextInputAutoGrow
-          label={getLocalizedText('Description')}
+          label={translate('Description')}
           translations={this.state.recipe.description || []}
-          placeholder={getLocalizedText('Describe the story behind your recipe')}
+          placeholder={translate('Describe the story behind your recipe')}
           onTranslationsChange={description => this.setState(prevState => ({
             recipe: {
               ...prevState.recipe,
@@ -323,7 +323,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
 
         <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: Styles.values.spacing * 2 }}>
           <Input
-            label={getLocalizedText('Serving')}
+            label={translate('Serving')}
             required
             value={this.state.recipe.serving ? String(this.state.recipe.serving) : ''}
             onChange={(serving: string) => this.setState(prevState => ({
@@ -335,7 +335,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             style={[styles.input, styles.smallInput]}
           />
           <Input
-            label={getLocalizedText('PreparationTime')}
+            label={translate('PreparationTime')}
             value={this.state.recipe.timing.prepTime ? String(this.state.recipe.timing.prepTime) : ''}
             onChange={(prepTime: string) => this.setState(prevState => ({
               recipe: {
@@ -349,7 +349,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             style={[styles.input, styles.smallInput]}
           />
           <Input
-            label={getLocalizedText('CookingTime')}
+            label={translate('CookingTime')}
             value={this.state.recipe.timing.cookTime ? String(this.state.recipe.timing.cookTime) : ''}
             onChange={(cookTime: string) => this.setState(prevState => ({
               recipe: {
@@ -363,7 +363,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             style={[styles.input, styles.smallInput]}
           />
           <Input
-            label={getLocalizedText('TotalTime')}
+            label={translate('TotalTime')}
             required
             value={this.state.recipe.timing.totalTime ? String(this.state.recipe.timing.totalTime) : ''}
             onChange={(totalTime: string) => this.setState(prevState => ({
@@ -466,7 +466,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
            * */
           !this.props.recipe &&
           <FilledButton
-            label={getLocalizedText('Submit')}
+            label={translate('Submit')}
             onPress={this._handleCreate}
           />
         }
@@ -667,7 +667,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         if (data) {
           this._setUI()
           ToastStore.toast({
-            message: getLocalizedText('RecipeCreationSuccess'),
+            message: translate('RecipeCreationSuccess'),
             type: ToastTypes.Success,
           })
           this.setState({
@@ -690,7 +690,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }, this.state.me.id)
       .then(() => {
         ToastStore.toast({
-          message: getLocalizedText('RecipeUpdateSuccess'),
+          message: translate('RecipeUpdateSuccess'),
           type: ToastTypes.Success,
         })
         LocationStore.navigate(this.props, 'back')
@@ -767,7 +767,7 @@ export default function (props: {}) {
     ${ProfileRecipesFragments.myRecipe}
   `)
   const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables>(gql`
-    mutation RecipeFormUpdateMutation($id: String!, $recipe: RecipeInput!) {
+    mutation RecipeFormUpdateMutation($id: ObjectId!, $recipe: RecipeInput!) {
       updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
     }
 

@@ -5,7 +5,7 @@
 
 import { useMutation } from '@apollo/react-hooks'
 import FilledButton from 'common/FilledButton/FilledButton'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
@@ -27,7 +27,7 @@ interface PublishRecipeProps {
 
 export default function PublishRecipe({ recipe, userId }: PublishRecipeProps) {
   const [updateRecipe, { loading }] = useMutation<PublishRecipeUpdateMutation, PublishRecipeUpdateMutationVariables>(gql`
-    mutation PublishRecipeUpdateMutation($id: String!, $recipe: RecipeInput!) {
+    mutation PublishRecipeUpdateMutation($id: ObjectId!, $recipe: RecipeInput!) {
       updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
     }
 
@@ -104,17 +104,17 @@ export default function PublishRecipe({ recipe, userId }: PublishRecipeProps) {
   const _getLabel = () => {
     if (recipe.status === RecipeStatus.private) {
       if (loading) {
-        return getLocalizedText('Publishing')
+        return translate('Publishing')
       }
 
-      return getLocalizedText('Publish Recipe')
+      return translate('Publish Recipe')
     }
     if (recipe.status === RecipeStatus.public) {
       if (loading) {
-        return getLocalizedText('UnPublishing')
+        return translate('UnPublishing')
       }
 
-      return getLocalizedText('UnPublish Recipe')
+      return translate('UnPublish Recipe')
     }
   }
 

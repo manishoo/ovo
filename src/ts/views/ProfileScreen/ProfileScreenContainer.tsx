@@ -5,7 +5,7 @@
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import UserStore from 'src/ts/stores/UserStore'
+import UserStore from '@Services/UserStore'
 import { Me } from 'src/ts/views/Register/types/Me'
 import ProfileScreen from './ProfileScreen'
 

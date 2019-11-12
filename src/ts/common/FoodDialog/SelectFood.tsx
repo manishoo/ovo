@@ -14,7 +14,7 @@ import {
   SelectFoodQuery_recipes_recipes,
   SelectFoodQueryVariables
 } from 'common/FoodDialog/types/SelectFoodQuery'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import VirtualListViewWithoutScrollBar from 'common/VirtualListViewWithoutScrollBar/VirtualListViewWithoutScrollBar'
@@ -30,7 +30,7 @@ import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Translation } from 'src/ts/models/common'
 import { FoodTypes, Weight } from 'src/ts/models/FoodModels'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import FoodPreview from './components/FoodPreview'
 
 
@@ -124,7 +124,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                       onChangeText={this.props.onSearch}
                       style={styles.textInput}
                       autoFocus
-                      placeholder={getLocalizedText('mealItemExample')}
+                      placeholder={translate('mealItemExample')}
                     />
                   </>
                 }
@@ -137,7 +137,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                 {
                   this.props.foodTypes.map(foodType => (
                     <FlatButton
-                      label={getLocalizedText(foodType)}
+                      label={translate(foodType)}
                       onPress={() => this.setState({ mode: foodType })}
                       {...this._getModeButtonStyle(theme, foodType)}
                     />
@@ -154,7 +154,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
             {
               !this.state.selectedItem &&
               <FlatButton
-                label={getLocalizedText('createX', { name: this.props.nameSearchQuery })}
+                label={translate('createX', { name: this.props.nameSearchQuery })}
                 onPress={() => {
                   // const key = String(Math.random())
                   // this.props.onSubmit({
@@ -163,7 +163,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                   //   type: 'food',
                   //   // height: 40,
                   //   // template: '_mealItem',
-                  //   customUnit: getLocalizedText('g'),
+                  //   customUnit: translate('g'),
                   //   weights: [],
                   //   slug: key,
                   // }, 1)

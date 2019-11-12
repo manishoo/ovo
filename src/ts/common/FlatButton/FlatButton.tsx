@@ -55,7 +55,7 @@ const styles = {
     borderRadius: 50,
     borderWidth: 1,
     padding: Styles.values.spacing / 2,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     // cursor: 'pointer'

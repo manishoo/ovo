@@ -5,7 +5,7 @@
 
 import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Navbar from 'common/Navbar/Navbar'
 import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
@@ -15,7 +15,7 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { navigate } from 'src/ts/utilities'
 import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import { ProfileInfoUser } from 'src/ts/views/ProfileScreen/components/types/ProfileInfoUser'
@@ -110,7 +110,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
             <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing * 2 }}>
               <FilledButton
-                label={getLocalizedText('Recipes')}
+                label={translate('Recipes')}
                 onPress={() => this.setState({ activeTab: 0 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
                 style={{
@@ -122,7 +122,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
               {
                 this.props.isMyProfile &&
                 <FilledButton
-                  label={getLocalizedText('Meals')}
+                  label={translate('Meals')}
                   onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
                   mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{

@@ -474,7 +474,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.supernova;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ouranos.supernova;
 				PRODUCT_NAME = Supernova;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";

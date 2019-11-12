@@ -22,14 +22,14 @@ export interface FoodScreenFood_image {
   url: string;
 }
 
-export interface FoodScreenFood_foodGroup_name {
+export interface FoodScreenFood_origFoodGroups_name {
   text: string;
   locale: LanguageCode;
 }
 
-export interface FoodScreenFood_foodGroup {
+export interface FoodScreenFood_origFoodGroups {
   id: string;
-  name: FoodScreenFood_foodGroup_name[];
+  name: FoodScreenFood_origFoodGroups_name[];
 }
 
 export interface FoodScreenFood_nutrition_calories {
@@ -62,7 +62,7 @@ export interface FoodScreenFood {
   name: FoodScreenFood_name[];
   description: FoodScreenFood_description[] | null;
   image: FoodScreenFood_image | null;
-  foodGroup: FoodScreenFood_foodGroup;
+  origFoodGroups: FoodScreenFood_origFoodGroups[];
   nutrition: FoodScreenFood_nutrition;
   foodClass: FoodScreenFood_foodClass;
 }

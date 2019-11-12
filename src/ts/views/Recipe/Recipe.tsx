@@ -8,13 +8,12 @@ import CenterAlignedPageView from 'common/CenterAlignedPageView'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Navbar from 'common/Navbar/Navbar'
 import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
-// @ts-ignore
-import moment from 'moment-jalali'
+import { DateTime } from 'luxon'
 import { Mutation } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -23,9 +22,9 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Role } from 'src/ts/models/global-types'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import UserStore from '@Services/UserStore'
 import { getParam, navigate } from 'src/ts/utilities'
 import trimTypeName from 'src/ts/utilities/trim-type-name'
 import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
@@ -132,21 +131,21 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('prepTime')}: {recipe.timing.prepTime}</Text>
+          >{translate('prepTime')}: {recipe.timing.prepTime}</Text>
         }
         {
           recipe.timing.cookTime !== null &&
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('cookTime')}: {recipe.timing.cookTime}</Text>
+          >{translate('cookTime')}: {recipe.timing.cookTime}</Text>
         }
         {
           recipe.timing.totalTime !== null &&
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('totalTime')}: {recipe.timing.totalTime}</Text>
+          >{translate('totalTime')}: {recipe.timing.totalTime}</Text>
         }
       </RX.View>
     )
@@ -171,19 +170,19 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('calories')}: {recipe.nutrition.calories.amount.toFixed()} {recipe.nutrition.calories.unit}</Text>
+          >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {recipe.nutrition.calories.unit}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {recipe.nutrition.proteins.unit}</Text>
+          >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {recipe.nutrition.proteins.unit}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('totalCarbs')}: {carbs.amount.toFixed()} {carbs.unit}</Text>
+          >{translate('totalCarbs')}: {carbs.amount.toFixed()} {carbs.unit}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('fats')}: {recipe.nutrition.fats.amount.toFixed()} {recipe.nutrition.fats.unit}</Text>
+          >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {recipe.nutrition.fats.unit}</Text>
         </RX.View>
       </RX.View>
     )
@@ -278,7 +277,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
         <Text
           style={[styles.authorAndDescriptionSection.date, { color: theme.colors.authorAndDescriptionSectionDateColor }]}
         >
-          {moment(recipe.createdAt).format(AppConfig.locale === 'fa' ? 'jYYYY/jMM/jDD hh:mm' : 'YYYY/MM/DD hh:mm')}
+          {DateTime.local(recipe.createdAt).toFormat(AppConfig.locale === 'fa' ? 'jYYYY/jMM/jDD hh:mm' : 'YYYY/MM/DD hh:mm')}
         </Text>
       </RX.View>
     )
@@ -333,24 +332,24 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
               })
             }}
             mutation={gql`
-							mutation RecipeDeleteMutation($recipeId: String!) {
+							mutation RecipeDeleteMutation($recipeId: ObjectId!) {
 								deleteRecipe(recipeId: $recipeId)
 							}
 						`}
           >
             {(mutate) => (
               <FilledButton
-                label={getLocalizedText('Delete Recipe')}
+                label={translate('Delete Recipe')}
                 mode={FilledButton.mode.danger}
-                onPress={() => RX.Alert.show(getLocalizedText('deleteRecipe?'), undefined, [{
-                  text: getLocalizedText('yes'),
+                onPress={() => RX.Alert.show(translate('deleteRecipe?'), undefined, [{
+                  text: translate('yes'),
                   onPress: () => mutate().then(() => navigate(this.props, 'back'))
-                }, { text: getLocalizedText('no') }])}
+                }, { text: translate('no') }])}
               />
             )}
           </Mutation>
           <FilledButton
-            label={getLocalizedText('Edit Recipe')}
+            label={translate('Edit Recipe')}
             mode={FilledButton.mode.default}
             onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })}
             style={{

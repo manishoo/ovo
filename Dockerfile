@@ -3,21 +3,7 @@ MAINTAINER Ouranos Studio
 
 WORKDIR /home/supernova
 
-COPY src src
-COPY package.json .
-COPY yarn.lock .
-COPY tsconfig.json .
-COPY tslint.json .
-COPY webpack webpack
-COPY buildtools buildtools
-COPY web web
-COPY babel.config.js .
-COPY server.js .
-COPY server.config.js .
-COPY gulpfile.js .
-COPY shim-browser.js .
-
-# for image webpack loader
+# All for image webpack loader
 RUN apk add --no-cache --virtual .build-deps \
   git \
   python \
@@ -33,15 +19,24 @@ RUN apk add --no-cache --virtual .build-deps \
   nasm \
   autoconf \
   yarn
-RUN yarn
+COPY package.json .
+COPY yarn.lock .
+RUN yarn --production
+
+COPY src src
+COPY tsconfig.json .
+COPY tslint.json .
+COPY webpack webpack
+COPY buildtools buildtools
+COPY web web
+COPY babel.config.js .
+COPY server.js .
+COPY server.config.js .
+COPY gulpfile.js .
+COPY shim-browser.js .
+
 # get args
 ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
 ARG TAG
 RUN npm run build:web:prod
-
-RUN rm -rf src
-RUN rm package.json
-RUN rm tsconfig.json
-
-RUN npm prune --production

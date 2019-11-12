@@ -49,6 +49,7 @@ const commonConfig = merge(
       alias: Object.assign({}, {
         src: paths.src,
         common: paths.common,
+        '@Services': paths.services,
       }, config.bundling.aliases),
     },
     plugins: [
@@ -73,7 +74,6 @@ const commonConfig = merge(
       name: `${paths.buildFonts}/[name].[hash:8].[ext]`
     }
   }),
-  parts.optimizeChunks(),
 )
 
 const productionConfig = merge(
@@ -84,7 +84,7 @@ const productionConfig = merge(
       maxAssetSize: 450000 // in bytes
     }
   },
-  parts.minifyJS(),
+  // parts.minifyJS(),
   parts.loadImages({
     include: paths.src,
     options: {
@@ -93,12 +93,13 @@ const productionConfig = merge(
     }
   }),
   // should go after loading images
-  parts.optimizeImages()
+  parts.optimizeImages(),
+  // parts.optimizeChunks(),
 )
 
 const developmentConfig = merge(
   {
-    devtool: 'cheap-module-source-map',
+    devtool: 'source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
     ]

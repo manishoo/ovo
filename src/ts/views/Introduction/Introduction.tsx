@@ -4,57 +4,82 @@
  */
 
 import Assistant from 'common/Assistant/Assistant'
-import KeyboardAvoidable from 'modules/KeyboardAvoidable'
-import LocalizedText, { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import LocalizedText, { translate } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
-import { Mutation } from 'react-apollo'
+import KeyboardAvoidable from 'modules/KeyboardAvoidable'
+import { Mutation, MutationFn } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
+import AppConfig from 'src/ts/app/AppConfig'
+import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import LinearGradient from 'src/ts/common/LinearGradient/LinearGradient'
 import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import UserStore from 'src/ts/stores/UserStore'
-import { fullHeight, fullWidth, navigate } from 'src/ts/utilities'
+import { AssistantExpectations, MessageSenders, MessageType } from 'src/ts/models/global-types'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import UserStore from '@Services/UserStore'
+import { navigate } from 'src/ts/utilities'
+import {
+  IntroductionMutation,
+  IntroductionMutation_setup_messages,
+  IntroductionMutationVariables
+} from 'src/ts/views/Introduction/types/IntroductionMutation'
+import MealSettingsScreen from 'src/ts/views/MealSettingsScreen/MealSettingsScreen'
+import { RegisterForm } from 'src/ts/views/Register/RegisterForm'
 import ChatBox from './components/ChatBox'
 import ChatInput from './components/ChatInput'
-import { EXPECTATIONS, Message, MessageType, SENDERS } from './types'
 import { createMessage, getLastInputType } from './utils'
 
 
-const INITIAL_MESSAGES = [
+const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
   {
-    text: getLocalizedText('assistantIntro1'),
+    text: translate('assistantIntro1'),
     type: MessageType.text,
     timestamp: String(Date.now()),
-    sender: SENDERS.assistant,
+    sender: MessageSenders.assistant,
     id: String(Math.random()),
     data: {
-      expect: EXPECTATIONS.nickname,
-    }
+      expect: AssistantExpectations.nickname,
+      skip: false,
+      items: [],
+      mealPlanSettings: undefined,
+      meals: [],
+      user: null,
+    },
   },
   {
-    text: getLocalizedText('assistantIntro2'),
+    text: translate('assistantIntro2'),
     type: MessageType.text,
     timestamp: String(Date.now()),
-    sender: SENDERS.assistant,
+    sender: MessageSenders.assistant,
     id: String(Math.random()),
     data: {
-      expect: EXPECTATIONS.nickname,
-    }
+      expect: AssistantExpectations.nickname,
+      skip: false,
+      items: [],
+      mealPlanSettings: undefined,
+      meals: [],
+      user: null,
+    },
   },
   {
-    text: getLocalizedText('hiAssistant'),
+    text: translate('hiAssistant'),
     type: MessageType.text,
     timestamp: String(Date.now()),
-    sender: SENDERS.user,
+    sender: MessageSenders.user,
     id: String(Math.random()),
     data: {
-      expect: EXPECTATIONS.nickname,
+      expect: AssistantExpectations.nickname,
+      skip: false,
+      items: [],
+      mealPlanSettings: undefined,
+      meals: [],
+      user: null,
+      // @ts-ignore
       isIntroductionButton: true,
-    }
+    },
   }
 ]
 
@@ -68,7 +93,7 @@ interface IntroductionState {
   showButtons: boolean,
   chatBoxMarginBottom: number,
   chatBoxPaddingBottom: number,
-  messages: Message[],
+  messages: IntroductionMutation_setup_messages[],
   assistantTalking: boolean,
   keyboardAvoidableEnabled: boolean,
   width: number,
@@ -88,8 +113,8 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
       messages: INITIAL_MESSAGES,
       assistantTalking: false,
       keyboardAvoidableEnabled: true,
-      width: fullWidth(),
-      height: fullHeight(),
+      width: ResponsiveWidthStore.getWidth(),
+      height: ResponsiveWidthStore.getHeight(),
     }
   }
 
@@ -107,7 +132,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
     const isForm = getLastInputType(messages).inputType == MessageType.form
 
     return (
-      <Mutation
+      <Mutation<IntroductionMutation, IntroductionMutationVariables>
         mutation={gql`
 					mutation IntroductionMutation($token: String, $message: String, $data: String) {
 						setup(token: $token, message: $message, data: $data) {
@@ -127,6 +152,12 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 										protein
 										tdee
 									}
+									meals {
+									  ...MealSettingsMeal
+									}
+									user {
+									  ...Me
+									}
 									items {
 										text
 										value
@@ -135,6 +166,9 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 							}
 						}
 					}
+
+					${MealSettingsScreen.fragments.mealSettingsMeal}
+					${RegisterForm.fragments.me}
 				`}
       >
         {(setupConversation, { loading }) => (
@@ -156,7 +190,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
                     bottomMargin={chatBoxMarginBottom}
                     bottomPadding={chatBoxPaddingBottom}
                     style={[
-                      isForm ? styles.chatBoxWithForm : {}
+                      isForm ? styles.chatBoxWithForm : {},
                     ]}
                     scrollEnabled={!showIntro}
                     messages={messages}
@@ -179,12 +213,9 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
                       onSubmit={this.sendMessage(setupConversation)}
                       onHeightChange={this.onHeightChange}
                       toggleMainKeyboardAvoidable={this.onMainKeyboardAvoidableToggle}
-                      onOpenMealPlan={() => {
-                        return //FIXME
-                        UserStore.getAndSetUser()
-                          .then(() => {
-                            LocationStore.navigate(this.props, Routes.mealPlan)
-                          })
+                      onOpenMealPlan={(user) => {
+                        UserStore.setUser(user)
+                        LocationStore.navigate(this.props, Routes.calendar)
                       }}
                       introductionWidth={this.props.introductionWidth || this.state.width}
                     />
@@ -194,16 +225,35 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
                   key={2}
                   style={{
                     position: 'absolute',
-                    top: -25,
+                    top: 0,
                     left: 0,
                     right: 0,
-                    marginTop: 20,
-                    justifyContent: 'center',
+                    marginTop: Styles.values.spacing / 2,
+                    // borderTopWidth: 0,
+                    // borderLeftWidth: 0,
+                    // borderRightWidth: 0,
+                    // paddingTop: Styles.values.spacing / 2,
+                    // paddingBottom: Styles.values.spacing / 2,
+                    // borderBottomWidth: 1,
+                    // borderColor: theme.colors.borderLight,
                     alignItems: 'center',
+                    // backgroundColor: theme.colors.bg,
+                    paddingRight: Styles.values.spacing / 2,
+                    paddingLeft: Styles.values.spacing / 2,
+                    flexDirection: 'row-reverse',
                   }}
                 >
+                  {/*<RX.Image
+                    source={theme.mode === 'light' ? ImageSource.BackDark : ImageSource.BackLight}
+                    style={[
+                      styles.backImage,
+                      {
+                        [Styles.values.marginEnd]: Styles.values.spacing / 2,
+                      }
+                    ]}
+                  />*/}
                   <Assistant
-                    size={90}
+                    size={50}
                   />
                 </RX.View>
               ]
@@ -227,7 +277,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
     }
   }
 
-  private async addToMessagesSlowly(messages: Message[]) {
+  private async addToMessagesSlowly(messages: IntroductionMutation_setup_messages[]) {
     if (messages.length > 1) {
       this.onAssistantTalking(true)
       for (let i = 0; i < messages.length; i++) {
@@ -264,22 +314,26 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
     }
   }
 
-  private getStartedPress = (setupConversation: any) => async () => {
+  private getStartedPress = (setupConversation: MutationFn<IntroductionMutation, IntroductionMutationVariables>) => async () => {
     this.setState({
       showButtons: false,
     })
     await RX.Storage.removeItem('token')
-    const { data: { setupConversation: { token, messages } } } = await setupConversation({
+    const result = await setupConversation({
       variables: {
         token: undefined,
         message: undefined,
       }
     })
-    await RX.Storage.setItem('token', token)
-    this.addToMessagesSlowly(messages)
+
+    if (!result) return
+    if (!result.data) return
+
+    await RX.Storage.setItem('token', result.data.setup.token)
+    this.addToMessagesSlowly(result.data.setup.messages)
   }
 
-  private sendMessage = (sendMessage: any) => async ({ text, data }: { text: string, data: any }) => {
+  private sendMessage = (sendMessage: MutationFn<IntroductionMutation, IntroductionMutationVariables>) => async ({ text, data }: { text: string, data: any }) => {
     const token = await RX.Storage.getItem('token')
 
     this.setState(prevState => ({
@@ -288,7 +342,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
         createMessage(text, data),
       ]
     }))
-    const { data: { setupConversation: { messages } } } = await sendMessage({
+    const result = await sendMessage({
       variables: {
         message: text,
         token,
@@ -296,7 +350,10 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
       },
     })
 
-    this.addToMessagesSlowly(messages)
+    if (!result) return
+    if (!result.data) return
+
+    this.addToMessagesSlowly(result.data.setup.messages)
   }
 
   private onHeightChange = (bottomMargin: number, bottomPadding: number = 0) => {
@@ -339,7 +396,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
           textAlign: 'center',
           fontSize: 10,
           fontWeight: '300',
-        }}>By creating a new account or signing in, You are agreeing to Caloria’s Terms of Service and
+        }}>By creating a new account or signing in, You are agreeing to Prana’s Terms of Service and
            Privacy Policy.</RX.Text>
     </RX.View>
   )
@@ -363,5 +420,10 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0,
+  }),
+  backImage: RX.Styles.createImageStyle({
+    width: 12,
+    height: 21,
+    transform: [{ rotate: AppConfig.isRTL() ? '180deg' : '0deg' }]
   }),
 }

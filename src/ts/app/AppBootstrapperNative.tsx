@@ -7,7 +7,7 @@ import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import { ApolloProvider } from 'react-apollo'
 import RX from 'reactxp'
 import client from 'src/ts/app/client'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RootView from 'src/ts/views/RootView/RootView'
 // Do shimming before anything else.
 import * as ShimHelpers from '../utilities/ShimHelpers'

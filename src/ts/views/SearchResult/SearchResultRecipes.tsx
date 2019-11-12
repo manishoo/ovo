@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
-import UserStore from 'src/ts/stores/UserStore'
+import UserStore from '@Services/UserStore'
 import { Me } from 'src/ts/views/Register/types/Me'
 import { SearchResultFragments } from 'src/ts/views/SearchResult/SearchResultFragments'
 import {
@@ -96,7 +96,7 @@ export default class SearchResultRecipes extends ComponentBase<SearchResultRecip
 }
 
 export const SEARCH_RESULT_RECIPES_QUERY = gql`
-  query SearchResultQuery($nameSearchQuery: String!, $lastId: String, $tags: [String!]) {
+  query SearchResultQuery($nameSearchQuery: String!, $lastId: ObjectId, $tags: [String!]) {
     recipes(nameSearchQuery: $nameSearchQuery, lastId: $lastId, tags: $tags) {
       recipes {
         ...SearchResultRecipe

@@ -6,7 +6,7 @@
 import Text from 'common/Text/Text'
 import RX from 'reactxp'
 
-// `path` should be relative to the `components/` folder
+// `calendar` should be relative to the `components/` folder
 const loadComponentAsync = (path: string, secondaryPath?: string) => (
   class AsyncComponent extends RX.Component<any, any> {
     constructor(props: any) {

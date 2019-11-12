@@ -6,7 +6,7 @@
 import FlatButton from 'common/FlatButton/FlatButton'
 import { showFoodModal } from 'common/FoodDialog/FoodDialog'
 import { SelectFoodMealItem } from 'common/FoodDialog/SelectFood'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
 import { IngredientCardIngredient } from 'common/recipe/IngredientCard/types/IngredientCardIngredient'
 import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
@@ -14,7 +14,7 @@ import RX from 'reactxp'
 import Styles from 'src/ts/app/Styles'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { FoodTypes } from 'src/ts/models/FoodModels'
-import LocationStore from 'src/ts/stores/LocationStore'
+import LocationStore from '@Services/LocationStore'
 import { MyMealItem } from 'src/ts/views/MealForm/MealForm'
 
 
@@ -54,7 +54,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
                     onDismiss: () => null,
                     onSubmit: this._onMealItemAlternativeCreation,
                   })}
-                  label={getLocalizedText('Add Alternative')}
+                  label={translate('Add Alternative')}
                 />
               </RX.View>
 

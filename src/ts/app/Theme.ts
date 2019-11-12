@@ -51,8 +51,10 @@ export class Theme {
 
         return {
           primary,
+          bg: '#fff',
 
           text: '#4a4a4a',
+          borderLight: '#eee',
 
           assistantLinearGradient1: '#4856DC',
           assistantLinearGradient2: '#1F2CAA',
@@ -66,6 +68,12 @@ export class Theme {
           ingredientServingControlBorder: '#FAFAFA',
 
           selectBorderColor: primary,
+
+          userMealsMealItemBG: primary,
+          userMealsInputBG: 'rgba(255, 255, 255, 0.38)',
+          userMealsInputText: '#fff',
+
+          calendarDayName: '#fff∑',
 
           grey1: 'grey',
           subtitle: '#757575',
@@ -146,8 +154,8 @@ export class Theme {
           loginButtonTextColor: 'red',
           assistantBG: '#1F2CAA',
           assistantMessageBG: '#313EC0',
-          assistantUserMessageBG: '#fff',
-          assistantUserMessageTextColor: '#1B2492',
+          assistantUserMessageBG: primary,
+          assistantUserMessageTextColor: '#fff',
 
           assistantFaceColor: '#fefa03',
 

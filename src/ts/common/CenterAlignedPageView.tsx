@@ -6,7 +6,7 @@
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Styles from 'src/ts/app/Styles'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 
 
 interface CenterAlignedPageViewProps {

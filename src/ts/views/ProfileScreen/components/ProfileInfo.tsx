@@ -6,7 +6,7 @@
 import FilledButton from 'common/FilledButton/FilledButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
@@ -75,7 +75,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
               this.props.isMyProfile &&
               <FilledButton
                 mode={FilledButton.mode.default}
-                label={getLocalizedText('ProfileSettings')}
+                label={translate('ProfileSettings')}
                 onPress={() => navigate(this.props, Routes.settings)}
                 style={{ [Styles.values.marginStart]: Styles.values.spacing }}
                 // labelStyle={{ fontSize: 14 }}

@@ -7,6 +7,8 @@ import assert from 'assert'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
+import { ThemeContext } from 'src/ts/app/ThemeContext'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 
 import KeyCodes from '../../utilities/KeyCodes'
 
@@ -15,7 +17,9 @@ interface ModalProps extends RX.CommonProps {
   modalId: string;
   children?: JSX.Element | JSX.Element[];
   modalWidth?: number;
+  fullWidth?: boolean;
   modalHeight?: number;
+  fullHeight?: boolean;
 }
 
 interface ModalState {
@@ -118,21 +122,25 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   }
 
   public render() {
-    const modalBoxStyles = [_styles.modalBox, this.state.widthStyle]
+    const modalBoxStyles = [_styles.modalBox, this.state.widthStyle, this.state.heightStyle]
     const modalContentStyles = [_styles.modalContainer, this._contentScaleAnimationStyle, this.state.heightStyle]
 
     let modalContent = (
       <RX.Animated.View style={modalContentStyles}>
-        <RX.View
-          style={modalBoxStyles}
-          onPress={this._clickInside}
-          accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
-          restrictFocusWithin={true}
-          disableTouchOpacityAnimation={true}
-          tabIndex={-1}
-        >
-          {this.props.children}
-        </RX.View>
+        <ThemeContext.Consumer>
+          {({ theme }) => (
+            <RX.View
+              style={[...modalBoxStyles, {backgroundColor: theme.colors.bg}]}
+              onPress={this._clickInside}
+              accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
+              restrictFocusWithin={true}
+              disableTouchOpacityAnimation={true}
+              tabIndex={-1}
+            >
+              {this.props.children}
+            </RX.View>
+          )}
+        </ThemeContext.Consumer>
       </RX.Animated.View>
     )
 
@@ -151,13 +159,30 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   protected _buildState(props: ModalProps, initialBuild: boolean): Partial<ModalState> {
     let newState: Partial<ModalState> = {}
 
-    newState.widthStyle = props.modalWidth ? RX.Styles.createViewStyle({
-      width: props.modalWidth
-    }, false) : undefined
+    newState.widthStyle = undefined
+    newState.heightStyle = undefined
 
-    newState.heightStyle = props.modalHeight ? RX.Styles.createViewStyle({
-      height: props.modalHeight
-    }, false) : undefined
+    if (props.modalWidth) {
+      newState.widthStyle = RX.Styles.createViewStyle({
+        width: props.modalWidth,
+      }, false)
+    }
+    if (props.fullWidth) {
+      newState.widthStyle = RX.Styles.createViewStyle({
+        width: ResponsiveWidthStore.getWidth(),
+      }, false)
+    }
+
+    if (props.modalHeight) {
+      newState.heightStyle = RX.Styles.createViewStyle({
+        height: props.modalHeight,
+      }, false)
+    }
+    if (props.fullHeight) {
+      newState.heightStyle = RX.Styles.createViewStyle({
+        height: ResponsiveWidthStore.getHeight(),
+      }, false)
+    }
 
     return newState
   }

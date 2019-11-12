@@ -54,15 +54,13 @@ const developmentConfig = {
     'webpack-hot-middleware/client?noInfo=false&reload=true&overlay=true',
     paths.entryClient
   ],
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   output: {
     filename: 'app.js',
-    devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
+    // devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-calendar]',
   },
   plugins: [
-    // new CleanPlugin({
-    //   root: process.cwd(),
-    // }),
+    new CleanPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

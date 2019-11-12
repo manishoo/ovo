@@ -7,7 +7,6 @@ import Modal from 'common/Modal/Modal'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { FoodTypes } from 'src/ts/models/FoodModels'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import { fullHeight } from 'src/ts/utilities'
 import SelectFood, { SelectFoodMealItem } from './SelectFood'
 
@@ -113,11 +112,4 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
   //     />
   //   )
   // }
-
-  protected _buildState(props: FoodDialogProps, initialBuild: boolean): Partial<FoodDialogState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
 }

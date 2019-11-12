@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="27px" viewBox="0 0 30 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>ShoppingList</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="First-Time" transform="translate(-215.000000, -619.000000)">
+            <g id="Group-2" transform="translate(0.000000, 597.000000)">
+                <g id="ShoppingList" transform="translate(228.500000, 35.500000) scale(-1, 1) translate(-228.500000, -35.500000) translate(215.000000, 22.000000)">
+                    <circle id="Oval" fill="#D8D8D8" cx="24" cy="3" r="3"></circle>
+                    <circle id="Oval" fill="#D8D8D8" cx="24" cy="14" r="3"></circle>
+                    <circle id="Oval" fill="#D8D8D8" cx="24" cy="24" r="3"></circle>
+                    <line x1="16.7424242" y1="14" x2="0.257575758" y2="14" id="Line-11" stroke="#DADADA" stroke-width="5" stroke-linecap="round"></line>
+                    <line x1="16.7424242" y1="24" x2="0.257575758" y2="24" id="Line-11" stroke="#DADADA" stroke-width="5" stroke-linecap="round"></line>
+                    <line x1="16.7424242" y1="3" x2="0.257575758" y2="3" id="Line-11" stroke="#DADADA" stroke-width="5" stroke-linecap="round"></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

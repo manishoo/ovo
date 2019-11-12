@@ -5,8 +5,10 @@
 
 import FilledButton from 'common/FilledButton/FilledButton'
 import Input from 'common/Input/Input'
-import moment from 'moment-timezone'
+import { translate } from 'common/LocalizedText/LocalizedText'
+import { DateTime } from 'luxon'
 import RX from 'reactxp'
+import Styles from 'src/ts/app/Styles'
 import { isEmailValid } from 'src/ts/utilities'
 
 
@@ -60,7 +62,7 @@ export default class InputForm extends RX.Component<InputFormProps, InputFormSta
         name: 'password',
         value: password,
       },
-      timeZone: moment.tz.guess(),
+      timeZone: DateTime.local().zoneName,
     })
   }
 
@@ -99,32 +101,32 @@ export default class InputForm extends RX.Component<InputFormProps, InputFormSta
         scrollEnabled={false}
       >
         <Input
-          label='Your username'
+          label={translate(translate.keys.Username)}
           autoCapitalize='none'
           value={username}
           onChange={this.onChange('username')}
         />
         <Input
-          label='Your email'
+          label={translate(translate.keys.Email)}
           autoCapitalize='none'
           keyboardType={'email-address'}
           value={email}
           onChange={this.onChange('email')}
         />
         <Input
-          label='Password'
+          label={translate(translate.keys.Password)}
           secureTextEntry
           value={password}
           onChange={this.onChange('password')}
         />
         <Input
-          label='Password Verification'
+          label={translate(translate.keys.PasswordAgain)}
           secureTextEntry
           value={passwordVerification}
           onChange={this.onChange('passwordVerification')}
         />
         <FilledButton
-          label='Send'
+          label={translate(translate.keys.Send)}
           onPress={this.isValid() ? this.handleSubmit : () => {
           }}
           containerStyle={[
@@ -141,9 +143,9 @@ export default class InputForm extends RX.Component<InputFormProps, InputFormSta
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    padding: 32,
+    padding: Styles.values.spacing,
   }),
   submitButton: RX.Styles.createViewStyle({
-    marginTop: 16,
+    marginTop: Styles.values.spacing,
   }),
 }

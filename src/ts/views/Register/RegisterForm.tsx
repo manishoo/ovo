@@ -6,7 +6,7 @@
 import { useMutation } from '@apollo/react-hooks'
 import FilledButton from 'common/FilledButton/FilledButton'
 import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
@@ -14,7 +14,7 @@ import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import Checkbox from 'src/ts/common/Checkbox/Checkbox'
 import { Routes } from 'src/ts/models/common'
-import UserStore from 'src/ts/stores/UserStore'
+import UserStore from '@Services/UserStore'
 import { navigate } from 'src/ts/utilities'
 import { RegisterMutation, RegisterMutationVariables } from 'src/ts/views/Register/types/RegisterMutation'
 import validator from 'validator'
@@ -87,7 +87,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           <Input
             value={this.state.email}
             onChange={this._onChange('email')}
-            label={getLocalizedText('Email')}
+            label={translate('Email')}
             autoCapitalize='none'
             validate={value => {
               const emailValid = validator.isEmail(value)
@@ -108,23 +108,23 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           <Input
             value={this.state.password}
             onChange={this._onChange('password')}
-            label={getLocalizedText('Password')}
+            label={translate('Password')}
             validate={value => value.length >= 4}
             secureTextEntry
           />
           <Input
             value={this.state.password2}
             onChange={this._onChange('password2')}
-            label={getLocalizedText('PasswordAgain')}
+            label={translate('PasswordAgain')}
             validate={value => value === this.state.password}
             secureTextEntry
           />
-          {/*<RX.Text style={[styles.ensureSafeAccountText, { color: theme.colors.mutedText }]}>{getLocalizedText('ensureSafeAccount')}</RX.Text>*/}
+          {/*<RX.Text style={[styles.ensureSafeAccountText, { color: theme.colors.mutedText }]}>{translate('ensureSafeAccount')}</RX.Text>*/}
           {/*{this.renderAcceptTerms(theme)}*/}
 
           <RX.View style={{ flexDirection: 'row' }}>
             <FilledButton
-              label={getLocalizedText('Register')}
+              label={translate('Register')}
               onPress={this._handleSubmit}
               disabled={!this._isValid()}
               containerStyle={styles.submitButton}
@@ -185,7 +185,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           value={this.state.termsAccepted}
           size={25}
         />
-        <RX.Text style={[styles.termsText, { color: theme.colors.mutedText }]}>{getLocalizedText('terms')}</RX.Text>
+        <RX.Text style={[styles.termsText, { color: theme.colors.mutedText }]}>{translate('terms')}</RX.Text>
       </RX.View>
     )
   }

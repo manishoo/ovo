@@ -15,13 +15,17 @@ class ImageSource implements ImageSourceBase {
   SearchIcon = AppConfig.getImagePath('SearchIcon.png')
   CrossIcon = AppConfig.getImagePath('CrossIcon.png')
   HeartAnimationEdge = AppConfig.getImagePath('web_heart_animation_edge.png')
-  Search = AppConfig.getImagePath('Search.svg')
   SearchWhite = AppConfig.getImagePath('SearchWhite.svg')
+
+  Search = AppConfig.getImagePath('Search.svg')
   SearchActive = AppConfig.getImagePath('SearchActive.svg')
   Rectangle = AppConfig.getImagePath('Rectangle.svg')
   RectangleActive = AppConfig.getImagePath('RectangleActive.svg')
-  Oval = AppConfig.getImagePath('Oval.svg')
-  OvalActive = AppConfig.getImagePath('OvalActive.svg')
+  Calendar = AppConfig.getImagePath('Calendar.svg')
+  CalendarActive = AppConfig.getImagePath('CalendarActive.svg')
+  ShoppingList = AppConfig.getImagePath('ShoppingList.svg')
+  ShoppingListActive = AppConfig.getImagePath('ShoppingListActive.svg')
+
   Brand = AppConfig.getImagePath('Brand.svg')
   BrandWhite = AppConfig.getImagePath('BrandWhite.svg')
   Phone = AppConfig.getImagePath('Phone.png')
@@ -51,7 +55,8 @@ class ImageSource implements ImageSourceBase {
   More = AppConfig.getImagePath('More.png')
 
   Back = AppConfig.getImagePath('Back.svg')
-  ShoppingList = AppConfig.getImagePath('ShoppingList.png')
+  BackDark = AppConfig.getImagePath('BackDark.svg')
+  BackLight = AppConfig.getImagePath('BackLight.svg')
   Finger = AppConfig.getImagePath('Finger.png')
 
   KitchenIllustration = AppConfig.getImagePath('KitchenIllustration.png')
@@ -60,6 +65,10 @@ class ImageSource implements ImageSourceBase {
   RemoveIconWhite = AppConfig.getImagePath('RemoveIconWhite.png')
 
   Path = AppConfig.getImagePath('Path.png')
+  Logo = AppConfig.getImagePath('Logo.png')
+
+  Trash = AppConfig.getImagePath('Trash.svg')
+  Cog = AppConfig.getImagePath('Cog.png')
 }
 
 export default new ImageSource()

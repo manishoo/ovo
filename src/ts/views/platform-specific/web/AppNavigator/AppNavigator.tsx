@@ -474,29 +474,6 @@ const styles = {
       height: SEARCH_ICON_IMAGE_SIZE,
     }),
   },
-  tabBar: {
-    container: RX.Styles.createViewStyle({
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: Styles.values.spacing,
-    }),
-    innerContainer: RX.Styles.createViewStyle({
-      flex: 1,
-      height: TAB_BAR_HEIGHT,
-      maxWidth: TAB_BAR_MAX_WIDTH,
-      borderRadius: TAB_BAR_HEIGHT / 2,
-      shadowColor: 'rgba(0, 0, 0, .12)',
-      shadowRadius: 10,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: Styles.values.spacing * 2,
-    })
-  },
   drawer: {
     container: RX.Styles.createViewStyle({
       width: Styles.values.drawerWidth,

@@ -7,7 +7,7 @@ import FilledButton from 'common/FilledButton/FilledButton'
 import FlatButton from 'common/FlatButton/FlatButton'
 import Image from 'common/Image/Image'
 import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
 import { Action, Location } from 'history'
 import { matchPath } from 'react-router'
@@ -20,8 +20,8 @@ import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { Routes } from 'src/ts/models/common'
 import { User } from 'src/ts/models/FoodModels'
 import ImageSource from 'src/ts/modules/images/index.web'
-import LocationStore from 'src/ts/stores/LocationStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import UserStore from '@Services/UserStore'
 import { navigate } from 'src/ts/utilities'
 
 
@@ -75,7 +75,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 this._renderActiveIndicator(),
                 <Link
                   key={0}
-                  // onPress={this._handleActiveChange(0)}
                   to={`/${user.username}`}
                   style={{ alignSelf: 'center', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
                 >
@@ -83,36 +82,37 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 </Link>,
                 <Link
                   key={1}
-                  // onPress={this._handleActiveChange(1)}
+                  to={Routes.calendar}
+                  style={Object.assign({},
+                    styles.link,
+                    {
+                      color: this._isActive(Routes.calendar) ? '#fff' : '#4a4a4a'
+                    })
+                  }
+                >
+                  <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image
+                      source={this._isActive(Routes.calendar) ? ImageSource.CalendarActive : ImageSource.Calendar}
+                      style={styles.icon}
+                      resizeMode={'contain'}
+                    />
+                    <Text translate={translate.keys.Path} style={{ fontWeight: 'bold' }} />
+                  </RX.View>
+                </Link>,
+                <Link
+                  key={2}
                   to={Routes.searchRecipes}
                   style={Object.assign({}, styles.link, { color: this._isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
                 >
                   <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                       source={this._isActive(Routes.searchRecipes) ? ImageSource.SearchWhite : ImageSource.Search}
-                      style={styles.icon}
+                      style={[styles.icon, { transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }] }]}
+                      resizeMode={'contain'}
                     />
                     <Text translate style={{ fontWeight: 'bold' }}>Search</Text>
                   </RX.View>
-                </Link>,
-                /*<Link
-                  key={2}
-                  onPress={this._handleActiveChange(2)}
-                  to={`${Routes.mealPlan}`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 2 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>MealPlan</Text></Link>,
-                <Link
-                  key={3}
-                  onPress={this._handleActiveChange(3)}
-                  to={`/explore`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 3 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>Explore</Text></Link>,
-                <Link
-                  key={4}
-                  onPress={this._handleActiveChange(4)}
-                  to={`/${user.username}`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 4 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>Profile</Text></Link>,*/
+                </Link>
               ]
             } else {
               return <FilledButton onPress={() => navigate(this.props, Routes.login)} label={'LoginForm'} />
@@ -131,7 +131,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
         >
           <FlatButton
             onPress={this._onLogout}
-            label={getLocalizedText('Logout')}
+            label={translate('Logout')}
             style={{
               borderWidth: 0,
               // width: 30,
@@ -204,10 +204,17 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     }
 
     if (matchPath(pathname, {
-      path: Routes.searchRecipes,
+      path: Routes.calendar,
       // exact: true,
     })) {
       topValue = 152 + (Styles.values.spacing * 2)
+    }
+
+    if (matchPath(pathname, {
+      path: Routes.searchRecipes,
+      // exact: true,
+    })) {
+      topValue = 204 + (Styles.values.spacing * 2)
     }
 
     if (topValue == 0) {
@@ -287,6 +294,5 @@ const styles = {
     width: 20,
     height: 20,
     [Styles.values.marginEnd]: Styles.values.spacing / 2,
-    transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }]
   })
 }

@@ -9,7 +9,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import client from 'src/ts/app/client'
 import { Role } from 'src/ts/models/global-types'
-import UserStore from 'src/ts/stores/UserStore'
+import UserStore from '@Services/UserStore'
 import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
 import {
   ProfileRecipesQuery,
@@ -97,7 +97,7 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
 }
 
 export const PROFILE_RECIPES_QUERY = gql`
-  query ProfileRecipesQuery($lastId: String, $userId: String, $size: Int) {
+  query ProfileRecipesQuery($lastId: ObjectId, $userId: ObjectId, $size: Int) {
     recipes(lastId: $lastId, userId: $userId, size: $size) {
       recipes {
         ...MyRecipe

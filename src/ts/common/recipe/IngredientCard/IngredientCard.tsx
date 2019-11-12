@@ -5,7 +5,7 @@
 
 import { showFoodPreviewModal } from 'common/FoodDialog/components/FoodPreview'
 import Image from 'common/Image/Image'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Text from 'common/Text/Text'
 import gql from 'graphql-tag'
 import ImageSource from 'modules/images'
@@ -169,7 +169,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
                           color: theme.colors.recipeIngredientUnitTextColor,
                         }
                       ]}
-                    >{ingredient.customUnit || getLocalizedText('g')}</Text>
+                    >{ingredient.customUnit || translate('g')}</Text>
                 }
               </RX.View>
             }

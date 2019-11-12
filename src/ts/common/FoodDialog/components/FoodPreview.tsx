@@ -11,7 +11,7 @@ import {
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
 import IntlInput from 'common/Input/IntlInput'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Modal from 'common/Modal/Modal'
 import Select from 'common/Select/Select'
 import Text from 'common/Text/Text'
@@ -146,7 +146,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
             inputRef={inputRef}
             value={String(this.state.amount)}
             onChange={(amount: string) => this.setState({ amount: Number(amount) })}
-            label={getLocalizedText('Amount')}
+            label={translate('Amount')}
             keyboardType={'number-pad'}
             style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
           />
@@ -179,7 +179,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               inputRef={inputRef}
               value={this.state.customUnit}
               onChangeText={customWeight => this.setState({ customUnit: customWeight })}
-              label={getLocalizedText('weightName')}
+              label={translate('weightName')}
               keyboardType={'number-pad'}
               style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
             />
@@ -187,7 +187,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               inputRef={inputRef}
               value={String(this.state.gramWeight)}
               onChangeText={gramWeight => this.setState({ gramWeight: Number(gramWeight) })}
-              label={getLocalizedText('gramWeight')}
+              label={translate('gramWeight')}
               keyboardType={'number-pad'}
               style={[styles.row, { [Styles.values.marginStart]: Styles.values.spacing / 2 }]}
             />
@@ -200,7 +200,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
             inputRef={inputRef}
             translations={this.state.description}
             onTranslationsChange={translations => this.setState({ description: translations })}
-            label={getLocalizedText('Description')}
+            label={translate('Description')}
             style={{ flex: 1 }}
           />
         </RX.View>
@@ -213,7 +213,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
         </RX.View>*/}
       </RX.View>,
       <FilledButton
-        label={getLocalizedText('AddIngredient')}
+        label={translate('AddIngredient')}
         onPress={this._onSubmit(food)}
         containerStyle={styles.addToMeal}
       />

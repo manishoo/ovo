@@ -3,23 +3,25 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import LocationStore from '@Services/LocationStore'
 import Text from 'common/Text/Text'
 import ImageSource from 'modules/images'
+import { withMobileNavigation } from 'modules/navigator'
 import RX from 'reactxp'
 import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { withNavigation } from 'modules/navigator'
-import LocationStore from 'src/ts/stores/LocationStore'
 
 
 interface NavbarProps {
   style?: any,
   title?: string,
+  inModal?: boolean,
+  onBackPress?: () => void,
 }
 
-@withNavigation
+@withMobileNavigation
 export default class Navbar extends RX.Component<NavbarProps> {
   public render() {
     const { style } = this.props
@@ -43,6 +45,16 @@ export default class Navbar extends RX.Component<NavbarProps> {
     )
   }
 
+  private _handleBack = () => {
+    const { inModal } = this.props
+
+    if (inModal) {
+      return this.props.onBackPress()
+    }
+
+    LocationStore.navigate(this.props, 'back')
+  }
+
   private renderBackButton = (theme: Theme) => (
     <RX.View
       style={{
@@ -50,7 +62,7 @@ export default class Navbar extends RX.Component<NavbarProps> {
         alignItems: 'center',
         cursor: 'pointer',
       }}
-      onPress={() => LocationStore.navigate(this.props, 'back')}
+      onPress={this._handleBack}
     >
       <RX.Image
         source={ImageSource.Back}

@@ -5,7 +5,7 @@
 
 import { useQuery } from '@apollo/react-hooks'
 import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import {
@@ -30,7 +30,7 @@ export default function UsernameInput(props: any) {
   return (
     <Input
       {...props}
-      label={getLocalizedText('Username')}
+      label={translate('Username')}
       usesNetwork
       validate={async (username) => {
         if (username.length === 0) return false

@@ -6,12 +6,11 @@
 import SelectDialog from 'common/Select/components/SelectDialog'
 import { createStackNavigator, createSwitchNavigator, withNavigation as withNav } from 'react-navigation'
 import { Routes } from 'src/ts/models/common'
-import AssistantScreen from 'src/ts/views/AssistantScreen/AssistantScreen'
 import AuthLoadingScreen from 'src/ts/views/AuthLoadingScreen/AuthLoadingScreen'
 import FoodScreen from 'src/ts/views/FoodScreen/FoodScreen'
 import Introduction from 'src/ts/views/Introduction/Introduction'
+import LandingScreen from 'src/ts/views/LandingScreen/LandingScreen'
 import LoginScreen from 'src/ts/views/Login/LoginScreen'
-import HomeScreen from 'src/ts/views/platform-specific/native/HomeScreen/HomeScreen'
 import RecipeScreenContainer from 'src/ts/views/Recipe/Recipe'
 // import RecipeForm from 'src/ts/views/RecipeForm/RecipeForm'
 import SettingsScreen from 'src/ts/views/SettingsScreen/SettingsScreen'
@@ -26,7 +25,7 @@ const CardStack = createStackNavigator(
   {
     [Routes.home]: {
       path: Routes.home,
-      screen: HomeScreen,
+      screen: LandingScreen,
     },
     [Routes.settings]: {
       path: Routes.settings,
@@ -41,7 +40,7 @@ const CardStack = createStackNavigator(
       screen: FoodScreen,
     },
     // mealPlan: {
-    //   path: 'mealPlan',
+    //   calendar: 'mealPlan',
     //   screen: MealPlanContainer,
     // },
     shoppingList: {
@@ -72,13 +71,13 @@ const AppStack = createStackNavigator(
   {
     main: CardStack,
     // mealPlan: {
-    //   path: 'mealPlan',
+    //   calendar: 'mealPlan',
     //   screen: MealPlanContainer,
     // },
-    [Routes.assistant]: {
-      path: Routes.assistant,
-      screen: AssistantScreen,
-    },
+    // [Routes.assistant]: {
+    //   path: Routes.assistant,
+    //   screen: AssistantScreen,
+    // },
     [Routes.selectDialog]: {
       path: 'selectDialog',
       screen: SelectDialog,

@@ -6,7 +6,7 @@
 import { withNavigation } from 'modules/navigator'
 import RX from 'reactxp'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
-import LocationStore from 'src/ts/stores/LocationStore'
+import LocationStore from '@Services/LocationStore'
 
 
 interface LinkProps {

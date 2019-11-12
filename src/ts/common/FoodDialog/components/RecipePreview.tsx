@@ -7,7 +7,7 @@ import FilledButton from 'common/FilledButton/FilledButton'
 import { SelectFoodQuery_recipes_recipes } from 'common/FoodDialog/types/SelectFoodQuery'
 import Image from 'common/Image/Image'
 import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import { translate } from 'common/LocalizedText/LocalizedText'
 import Modal from 'common/Modal/Modal'
 import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from 'common/Text/Text'
@@ -105,7 +105,7 @@ export default class RecipePreview extends RX.Component<RecipePreviewProps, Reci
             inputRef={inputRef}
             value={String(this.state.serving)}
             onChange={(amount: string) => this.setState({ serving: Number(amount) })}
-            label={getLocalizedText('Amount')}
+            label={translate('Amount')}
             keyboardType={'number-pad'}
             style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
           />
@@ -120,7 +120,7 @@ export default class RecipePreview extends RX.Component<RecipePreviewProps, Reci
         </RX.View>*/}
       </RX.View>,
       <FilledButton
-        label={getLocalizedText('AddIngredient')}
+        label={translate('AddIngredient')}
         onPress={this._onSubmit(recipe)}
         containerStyle={styles.addToMeal}
       />
