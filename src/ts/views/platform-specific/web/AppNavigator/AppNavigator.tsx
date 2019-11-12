@@ -7,6 +7,7 @@ import Image from 'common/Image/Image'
 import Text from 'common/Text/Text'
 import { Action, Location } from 'history'
 import ImageSource from 'modules/images'
+import { NavOptions } from 'modules/navigator'
 import { matchPath, Redirect } from 'react-router'
 import { Route, RouteProps, Router, Switch } from 'react-router-dom'
 import RX from 'reactxp'
@@ -15,23 +16,21 @@ import AppConfig from 'src/ts/app/AppConfig'
 import Styles from 'src/ts/app/Styles'
 import { Theme } from 'src/ts/app/Theme'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
+import { Routes } from 'src/ts/models/common'
 import { User } from 'src/ts/models/FoodModels'
-import { WidthBreakPoints } from 'src/ts/models/ResponsiveWidthModels'
-import { NavOptions } from 'modules/navigator'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import UserStore from 'src/ts/stores/UserStore'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import UserStore from '@Services/UserStore'
 import { trimSlashes } from 'src/ts/utilities/trim-slashes'
 import AppDrawer from './components/AppDrawer'
 import AppSearchComponent from './components/AppSearchComponent'
+import TabBar, { TabBarItems } from './components/TabBar'
 
 
 const NAVBAR_HEIGHT = 50
 const SEARCH_ICON_SIZE = 56
 const SEARCH_CONTAINER_HEIGHT = 70
 const SEARCH_ICON_IMAGE_SIZE = 30
-const TAB_BAR_HEIGHT = 50
-const TAB_BAR_MAX_WIDTH = 350
 
 type AppRoute = RouteProps & {
   modal?: boolean,
@@ -76,9 +75,9 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   private _drawerAnimationStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ translateX: this._drawerAnimationLeftValue }],
   })
-  private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{ translateY: this._navbarAnimationTopValue }],
-  })
+  // private _navbarAnimationStyle = RX.Styles.createAnimatedViewStyle({
+  //   transform: [{ translateY: this._navbarAnimationTopValue }],
+  // })
   private _searchContainerAnimationStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ translateY: this._searchContainerAnimationTopValue }],
   })
@@ -90,22 +89,25 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   })
 
   public render() {
-    const Navbar = this._renderNavbar()
-
-    if (this.state.width < WidthBreakPoints.small) return (
-      <RX.Text style={{ padding: 16 }}>
-        This application does not currently support mobile size. Please use a desktop browser
-      </RX.Text>
-    )
+    const TabBarElement = this._renderTabBar()
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
           <Router history={this.props.history}>
             <RX.View
-              style={[styles.container, { paddingTop: (this.state.mode === 'navbar' && Navbar) ? NAVBAR_HEIGHT : 0 }]}>
-              <RX.View style={{ flexDirection: 'row' }}>
+              importantForLayout
+              style={[
+                styles.container,
+                {
+                  paddingTop: 0,
+                  paddingBottom: TabBarElement ? TabBar.height : 0,
+                },
+              ]}
+            >
+              <RX.View importantForLayout style={{ flexDirection: 'row' }}>
                 <RX.Animated.View
+                  importantForLayout
                   style={[
                     {
                       height: 1,
@@ -114,6 +116,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                   ]}
                 />
                 <RX.View
+                  importantForLayout
                   style={[styles.innerContainer, { height: this.state.height }]}
                 >
                   <Switch>
@@ -130,8 +133,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                 </RX.View>
               </RX.View>
 
-              {Navbar}
-              {this._renderTabBar(theme)}
+              {TabBarElement}
               {this._renderDrawer(theme)}
               {false && this._renderSearch(theme)}
 
@@ -206,93 +208,78 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     )
   }
 
-  private _renderNavbar = () => {
-    const { currentPath, routes } = this.state
+  /*
+    private _renderNavbar = () => {
+      const { currentPath, routes } = this.state
+  
+      const foundRoute = routes.find(p => !!matchPath(currentPath, {
+        calendar: p.calendar,
+        exact: p.exact,
+      }))
+  
+      if (!foundRoute) return null
+      if (!foundRoute.navOptions) return null
+  
+      const { title, back } = foundRoute.navOptions as NavOptions
+  
+      return (
+        <ThemeContext.Consumer>
+          {({ theme }) => (
+            <RX.Animated.View
+              style={[
+                styles.navbarContainer,
+                {
+                  backgroundColor: theme.colors.drawerBg,
+                  borderColor: theme.colors.drawerBorderColor,
+                },
+                this._navbarAnimationStyle,
+              ]}>
+              <Text>{back ? '<' : ''}</Text>
+              <Text>{title}</Text>
+            </RX.Animated.View>
+          )}
+        </ThemeContext.Consumer>
+      )
+    }
+  */
 
-    const foundRoute = routes.find(p => !!matchPath(currentPath, {
-      path: p.path,
-      exact: p.exact,
-    }))
-
-    if (!foundRoute) return null
-    if (!foundRoute.navOptions) return null
-
-    const { title, back } = foundRoute.navOptions as NavOptions
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <RX.Animated.View
-            style={[
-              styles.navbarContainer,
-              {
-                backgroundColor: theme.colors.drawerBg,
-                borderColor: theme.colors.drawerBorderColor,
-              },
-              this._navbarAnimationStyle,
-            ]}>
-            <Text>{back ? '<' : ''}</Text>
-            <Text>{title}</Text>
-          </RX.Animated.View>
-        )}
-      </ThemeContext.Consumer>
-    )
-  }
-
-  private _renderTabBar = (theme: Theme) => {
+  private _renderTabBar = () => {
     if (this.state.mode === 'drawer') return null
     if (!this.state.user) return null
 
-    let { currentPath } = this.state
+    let { currentPath, width } = this.state
 
-    let activePath: string | undefined
-
-    if (matchPath(currentPath, {
-      path: '/',
-      exact: false,
-    })) activePath = 'path'
+    let activePath: TabBarItems | undefined
 
     if (matchPath(currentPath, {
-      path: '/explore',
+      path: Routes.calendar,
       exact: false,
-    })) activePath = 'feed'
+    })) activePath = TabBarItems.calendar
+
+    if (matchPath(currentPath, {
+      path: Routes.searchRecipes,
+      exact: false,
+    })) activePath = TabBarItems.feed
+
+    if (matchPath(currentPath, {
+      path: Routes.shoppingList,
+      exact: false,
+    })) activePath = TabBarItems.shoppingList
 
     if (this.state.user && (this.state.user.username === trimSlashes(currentPath))) {
-      activePath = 'profile'
+      activePath = TabBarItems.profile
     }
 
     // Only appear on Path, Feed and Profile
     if (!activePath) return null
 
-    const ICON_SIZE = 30
-
     return (
-      <RX.View style={styles.tabBar.container}>
-        <RX.View
-          style={[styles.tabBar.innerContainer, { width: this.state.width, backgroundColor: theme.colors.tabBarBG, }]}>
-          <Image
-            source={activePath === 'feed' ? ImageSource.SearchActive : ImageSource.Search}
-            style={{
-              width: ICON_SIZE,
-              height: ICON_SIZE,
-            }}
-          />
-          <Image
-            source={activePath === 'path' ? ImageSource.OvalActive : ImageSource.Oval}
-            style={{
-              width: ICON_SIZE,
-              height: ICON_SIZE,
-            }}
-          />
-          <Image
-            source={activePath === 'profile' ? ImageSource.RectangleActive : ImageSource.Rectangle}
-            style={{
-              width: ICON_SIZE,
-              height: ICON_SIZE,
-            }}
-          />
-        </RX.View>
-      </RX.View>
+      <TabBar
+        activeItem={activePath}
+        innerContainerStyle={{
+          width,
+        }}
+      />
     )
   }
 
@@ -399,6 +386,10 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     const currentPath = this.state.currentPath
     let hideDrawer = false
 
+    if (this.state.mode === 'navbar') {
+      hideDrawer = true
+    }
+
     this.state.routes.map(route => {
       if (route.immersive && matchPath(pathname || currentPath, route)) {
         hideDrawer = true
@@ -406,7 +397,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     })
 
     if (hideDrawer) {
-      console.log('ResponsiveWidthStore.toggleDrawerVisibility(false)')
       ResponsiveWidthStore.toggleDrawerVisibility(false)
       setTimeout(() => this._setUI(false, this.state.mode === 'navbar', animate), 0)
 
@@ -417,7 +407,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       //   this._setUI(false, false, animate)
       // }
     } else {
-      console.log('ResponsiveWidthStore.toggleDrawerVisibility(true)')
       ResponsiveWidthStore.toggleDrawerVisibility(true)
       setTimeout(() => this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate), 0)
     }

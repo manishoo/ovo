@@ -12,10 +12,13 @@ import Introduction from 'src/ts/views/Introduction/Introduction'
 import LandingScreen from 'src/ts/views/LandingScreen/LandingScreen'
 import LoginScreen from 'src/ts/views/Login/LoginScreen'
 import RecipeScreenContainer from 'src/ts/views/Recipe/Recipe'
-// import RecipeForm from 'src/ts/views/RecipeForm/RecipeForm'
 import SettingsScreen from 'src/ts/views/SettingsScreen/SettingsScreen'
 import ShoppingList from 'src/ts/views/ShoppingList/ShoppingList'
 
+
+export function withMobileNavigation(T: any): any {
+  return withNav(T)
+}
 
 export function withNavigation(T: any) {
   return withNav(T)

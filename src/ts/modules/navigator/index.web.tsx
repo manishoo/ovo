@@ -33,6 +33,10 @@ export function withNavigation(T: any): any {
   return withRouter(T)
 }
 
+export function withMobileNavigation(T: any): any {
+  return T
+}
+
 export interface NavOptions {
   back?: boolean,
   title?: string
