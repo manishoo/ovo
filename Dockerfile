@@ -21,7 +21,7 @@ RUN apk add --no-cache --virtual .build-deps \
   yarn
 COPY package.json .
 COPY yarn.lock .
-RUN yarn --production
+RUN yarn
 
 COPY src src
 COPY tsconfig.json .
