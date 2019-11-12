@@ -12,7 +12,7 @@ build staging image:
   services:
     - docker:dind
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key: $CI_COMMIT_REF_SLUG
     paths:
       - node_modules/
   variables:
@@ -48,7 +48,7 @@ build production image:
   services:
     - docker:dind
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key: $CI_COMMIT_REF_SLUG
     paths:
       - node_modules/
   variables:
