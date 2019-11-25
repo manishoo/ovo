@@ -2,6 +2,8 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { Role } from "./../../../models/global-types";
+
 // ====================================================
 // GraphQL query operation: PublicProfileScreenQuery
 // ====================================================
@@ -19,6 +21,7 @@ export interface PublicProfileScreenQuery_user_socialNetworks {
 
 export interface PublicProfileScreenQuery_user {
   id: string;
+  role: Role;
   bio: string | null;
   username: string;
   firstName: string | null;
@@ -33,5 +36,5 @@ export interface PublicProfileScreenQuery {
 
 export interface PublicProfileScreenQueryVariables {
   username?: string | null;
-  userId?: string | null;
+  userId?: any | null;
 }

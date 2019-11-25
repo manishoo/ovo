@@ -4,18 +4,18 @@
  */
 
 import { useMutation } from '@apollo/react-hooks'
-import FilledButton from 'common/FilledButton/FilledButton'
-import Input from 'common/Input/Input'
-import { translate } from 'common/LocalizedText/LocalizedText'
+import Styles from '@App/Styles'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import Input from '@Common/Input/Input'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import UserStore from '@Services/UserStore'
+import { navigate } from '@Utils'
+import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
+import { LoginMutation, LoginMutationVariables } from '@Views/Login/types/LoginMutation'
+import { RegisterForm } from '@Views/Register/RegisterForm'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import UserStore from '@Services/UserStore'
-import { navigate } from 'src/ts/utilities'
-import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
-import { LoginMutation, LoginMutationVariables } from 'src/ts/views/Login/types/LoginMutation'
-import { RegisterForm } from 'src/ts/views/Register/RegisterForm'
 
 
 const FORM_WIDTH = 270

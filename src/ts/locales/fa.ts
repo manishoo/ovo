@@ -19,7 +19,7 @@ enum FaLocale {
 
   'viewMealPlan' = 'مشاهده برنامه غذایی',
   'showMeMealPlan' = 'مشاهده برنامه غذایی',
-  'Instructions' = 'طرز تهیه',
+  'Instructions' = 'مراحل طرز تهیه',
   'Ingredients' = 'مواد لازم',
   'IngredientsYieldLabel' = 'برای {{number}} نفر',
   'ShoppingList' = 'لیست خرید',
@@ -105,8 +105,8 @@ enum FaLocale {
   'e.g. Rice' = 'مثلا برنج...',
   'e.g. Banana' = 'مثلا موز...',
   'Describe the story behind your recipe' = 'داستان غذاتو بگو',
-  'Add Tag' = 'تگ بزن',
-  'Tell us more about the recipe' = 'از دستور تهیه بگو',
+  'Add Tag' = 'ساخت تگ جدید',
+  'RecipeExtraGuide' = 'لطفا تگ های مناسب را برای این دستور تهیه وارد کنید و سپس دکمه ثبت را بزنید',
   'e.g. Easy Sesame Chicken' = 'مثلا خورش قیمه...',
 
   'areyousure?' = 'مطمئنی؟',
@@ -162,7 +162,10 @@ enum FaLocale {
   'Select gender' = 'انتخاب جنسیت',
   'Social Media' = 'فضای مجازی',
   'Change Password' = 'تغییر گذرواژه',
+  'submit' = 'ثبت',
   'Submit' = 'ثبت',
+  Submitting = 'در حال ثبت',
+
   'Loading' = 'در حال بارگذاری',
 
   'Search' = 'گشت‌و‌گذار',
@@ -191,7 +194,16 @@ enum FaLocale {
 
   'Custom Weight' = 'واحد جدید',
 
-  'Log out' = 'خروج'
+  'serving' = 'وعده',
+  'Serving' = 'وعده',
+  'kg' = 'کیلوگرم',
+  'lb' = 'پوند',
+  'mg' = 'میلی‌گرم',
+  'kcal' = 'کیلو کالری',
+
+  'Log out' = 'خروج',
+  ', and ' = '، و ',
+  Calories = 'کالری',
 }
 
 export default FaLocale

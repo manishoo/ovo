@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { AssistantExpectations, MessageSenders, MessageType } from 'src/ts/models/global-types'
-import { MessageInput } from 'src/ts/views/Introduction/components/ChatInput'
+import { AssistantExpectations, MessageSender, MessageType } from '@Models/global-types'
+import { MessageInput } from '@Views/Introduction/components/ChatInput'
 import {
   IntroductionMutation_setup_messages,
   IntroductionMutation_setup_messages_data_items
-} from 'src/ts/views/Introduction/types/IntroductionMutation'
+} from '@Views/Introduction/types/IntroductionMutation'
 
 
 export function getLastInputType(messages: IntroductionMutation_setup_messages[]): MessageInput {
@@ -37,8 +37,8 @@ export function getLastInputType(messages: IntroductionMutation_setup_messages[]
       mealPlanSettings = message.data.mealPlanSettings
     }
   })
-console.log('messages', messages)
-console.log('data', data)
+  console.log('messages', messages)
+  console.log('data', data)
   return {
     expect,
     inputType,
@@ -52,7 +52,7 @@ console.log('data', data)
 export function createMessage(text: string, data?: any): IntroductionMutation_setup_messages {
   return {
     id: String(Math.random()),
-    sender: MessageSenders.user,
+    sender: MessageSender.user,
     text,
     timestamp: String(Date.now()),
     type: MessageType.text,

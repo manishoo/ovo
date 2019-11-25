@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import LocalizedText from 'common/LocalizedText/LocalizedText'
-import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import LocalizedText from '@Common/LocalizedText/LocalizedText'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import RX from 'reactxp'
 
 
 interface IntroductionButtonProps {

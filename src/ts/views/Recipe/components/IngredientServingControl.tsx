@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 interface IngredientServingControlProps {

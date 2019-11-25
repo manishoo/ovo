@@ -9,7 +9,7 @@ import assert from 'assert'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
-import KeyCodes from '../../utilities/KeyCodes'
+import KeyCodes from '@Utils/KeyCodes'
 
 
 interface ModalProps extends RX.CommonProps {

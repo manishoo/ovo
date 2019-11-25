@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
+import ImageSource from '@Modules/images'
+import { withMobileNavigation } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
-import Text from 'common/Text/Text'
-import ImageSource from 'modules/images'
-import { withMobileNavigation } from 'modules/navigator'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 interface NavbarProps {

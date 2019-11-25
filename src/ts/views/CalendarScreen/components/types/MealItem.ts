@@ -23,11 +23,21 @@ export interface MealItem_recipe_timing {
   totalTime: number;
 }
 
+export interface MealItem_recipe_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MealItem_recipe_nutrition {
+  calories: MealItem_recipe_nutrition_calories | null;
+}
+
 export interface MealItem_recipe {
   id: string;
   thumbnail: MealItem_recipe_thumbnail | null;
   title: MealItem_recipe_title[];
   timing: MealItem_recipe_timing;
+  nutrition: MealItem_recipe_nutrition | null;
 }
 
 export interface MealItem_food_thumbnail {
@@ -39,10 +49,20 @@ export interface MealItem_food_name {
   locale: LanguageCode;
 }
 
+export interface MealItem_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MealItem_food_nutrition {
+  calories: MealItem_food_nutrition_calories | null;
+}
+
 export interface MealItem_food {
   id: string;
   thumbnail: MealItem_food_thumbnail | null;
   name: MealItem_food_name[];
+  nutrition: MealItem_food_nutrition;
 }
 
 export interface MealItem_description {

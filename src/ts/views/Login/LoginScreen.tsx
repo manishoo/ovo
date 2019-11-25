@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Link from 'common/Link/Link'
-import Text from 'common/Text/Text'
+import Link from '@Common/Link/Link'
+import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import ImageSource from '@Modules/images'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { Routes } from 'src/ts/models/common'
-import ImageSource from 'src/ts/modules/images/index.web'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import LoginForm from './LoginForm'
 
 

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
+import FilledButton from '@Common/FilledButton/FilledButton'
 import RX from 'reactxp'
 
 

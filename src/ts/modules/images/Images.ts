@@ -67,4 +67,7 @@ export interface ImageSourceBase {
 
   Trash: string;
   Cog: string;
+
+  Ellipsis: string;
+  Regenerate: string;
 }

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import AppConfig from 'src/ts/app/AppConfig'
+import AppConfig from '@App/AppConfig'
 
 
 export default function openLink(url: string) {

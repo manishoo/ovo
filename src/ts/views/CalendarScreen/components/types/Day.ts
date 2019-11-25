@@ -2,11 +2,16 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealType, LanguageCode } from "./../../../models/global-types";
+import { LanguageCode } from "./../../../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: Day
 // ====================================================
+
+export interface Day_meals_userMeal {
+  id: string;
+  name: string;
+}
 
 export interface Day_meals_items_recipe_thumbnail {
   url: string;
@@ -23,11 +28,21 @@ export interface Day_meals_items_recipe_timing {
   totalTime: number;
 }
 
+export interface Day_meals_items_recipe_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface Day_meals_items_recipe_nutrition {
+  calories: Day_meals_items_recipe_nutrition_calories | null;
+}
+
 export interface Day_meals_items_recipe {
   id: string;
   thumbnail: Day_meals_items_recipe_thumbnail | null;
   title: Day_meals_items_recipe_title[];
   timing: Day_meals_items_recipe_timing;
+  nutrition: Day_meals_items_recipe_nutrition | null;
 }
 
 export interface Day_meals_items_food_thumbnail {
@@ -39,10 +54,20 @@ export interface Day_meals_items_food_name {
   locale: LanguageCode;
 }
 
+export interface Day_meals_items_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface Day_meals_items_food_nutrition {
+  calories: Day_meals_items_food_nutrition_calories | null;
+}
+
 export interface Day_meals_items_food {
   id: string;
   thumbnail: Day_meals_items_food_thumbnail | null;
   name: Day_meals_items_food_name[];
+  nutrition: Day_meals_items_food_nutrition;
 }
 
 export interface Day_meals_items_description {
@@ -73,8 +98,8 @@ export interface Day_meals_items {
 }
 
 export interface Day_meals {
-  name: string;
-  type: MealType;
+  id: any;
+  userMeal: Day_meals_userMeal | null;
   time: any | null;
   items: Day_meals_items[];
 }

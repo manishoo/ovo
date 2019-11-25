@@ -3,17 +3,17 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SelectDialog from 'common/Select/components/SelectDialog'
+import SelectDialog from '@Common/Select/components/SelectDialog'
+import { Routes } from '@Models/common'
+import AuthLoadingScreen from '@Views/AuthLoadingScreen/AuthLoadingScreen'
+import FoodScreen from '@Views/FoodScreen/FoodScreen'
+import Introduction from '@Views/Introduction/Introduction'
+import LandingScreen from '@Views/LandingScreen/LandingScreen'
+import LoginScreen from '@Views/Login/LoginScreen'
+import RecipeScreenContainer from '@Views/Recipe/Recipe'
+import SettingsScreen from '@Views/SettingsScreen/SettingsScreen'
+import ShoppingList from '@Views/ShoppingList/ShoppingList'
 import { createStackNavigator, createSwitchNavigator, withNavigation as withNav } from 'react-navigation'
-import { Routes } from 'src/ts/models/common'
-import AuthLoadingScreen from 'src/ts/views/AuthLoadingScreen/AuthLoadingScreen'
-import FoodScreen from 'src/ts/views/FoodScreen/FoodScreen'
-import Introduction from 'src/ts/views/Introduction/Introduction'
-import LandingScreen from 'src/ts/views/LandingScreen/LandingScreen'
-import LoginScreen from 'src/ts/views/Login/LoginScreen'
-import RecipeScreenContainer from 'src/ts/views/Recipe/Recipe'
-import SettingsScreen from 'src/ts/views/SettingsScreen/SettingsScreen'
-import ShoppingList from 'src/ts/views/ShoppingList/ShoppingList'
 
 
 export function withMobileNavigation(T: any): any {

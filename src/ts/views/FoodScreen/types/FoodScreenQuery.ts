@@ -28,7 +28,7 @@ export interface FoodScreenQuery_food_origFoodGroups_name {
 }
 
 export interface FoodScreenQuery_food_origFoodGroups {
-  id: string;
+  id: any;
   name: FoodScreenQuery_food_origFoodGroups_name[];
 }
 
@@ -72,5 +72,5 @@ export interface FoodScreenQuery {
 }
 
 export interface FoodScreenQueryVariables {
-  id: string;
+  id: any;
 }

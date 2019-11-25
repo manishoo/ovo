@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import AddCell from 'common/AddCell/AddCell'
-import CardList from 'common/CardList/CardList'
-import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Routes } from 'src/ts/models/common'
+import Styles from '@App/Styles'
+import AddCell from '@Common/AddCell/AddCell'
+import CardList from '@Common/CardList/CardList'
+import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
-import MealCell from 'src/ts/views/ProfileScreen/components/MealsList/components/MealCell/MealCell'
-import { ProfileMealsQuery_meals_meals } from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import MealCell from '@Views/ProfileScreen/components/MealsList/components/MealCell/MealCell'
+import { ProfileMealsQuery_meals_meals } from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import RX from 'reactxp'
 
 
 interface RecipesListProps extends RX.CommonProps {

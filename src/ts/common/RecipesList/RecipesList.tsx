@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import AddCell from 'common/AddCell/AddCell'
-import CardList from 'common/CardList/CardList'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Routes } from 'src/ts/models/common'
+import Styles from '@App/Styles'
+import AddCell from '@Common/AddCell/AddCell'
+import CardList from '@Common/CardList/CardList'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
-import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import { ProfileRecipesQuery_recipes_recipes } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import RX from 'reactxp'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 

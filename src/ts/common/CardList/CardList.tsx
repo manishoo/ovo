@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 
 
 interface RecipesListProps extends RX.CommonProps {

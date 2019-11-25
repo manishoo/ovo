@@ -8,7 +8,7 @@ import RX from 'reactxp'
 
 // `calendar` should be relative to the `views/` folder
 const loadComponentSync = (path: string, secondaryPath?: string) => {
-  const mod = require(`src/ts/views/${path}/${secondaryPath || path}`)
+  const mod = require(`@Views/${path}/${secondaryPath || path}`)
   const Component = mod.default ? mod.default : mod // es6 module compat
 
   const SyncComponent = (props: any) => {

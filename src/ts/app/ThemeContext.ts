@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { Theme } from '@App/Theme'
 import React from 'react'
-import { Theme } from 'src/ts/app/Theme'
 
 
 export const ThemeContext = React.createContext({

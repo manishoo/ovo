@@ -13,7 +13,13 @@ module.exports = {
   root: appDirectory,
   src: resolveApp('src'),
   common: resolveApp('src/ts/common'),
+
   services: resolveApp('src/ts/services'),
+  views: resolveApp('src/ts/views'),
+  utils: resolveApp('src/ts/utils'),
+  models: resolveApp('src/ts/models'),
+  app: resolveApp('src/ts/app'),
+  locales: resolveApp('src/ts/locales'),
 
   entryClient: resolveApp('src/ts/index.web.tsx'),
   entryServer: resolveApp('src/ts/app/web/entry-server'),

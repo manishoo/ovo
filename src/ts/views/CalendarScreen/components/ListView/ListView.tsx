@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import ImageSource from 'modules/images'
+import { Theme } from '@App/Theme'
+import ImageSource from '@Modules/images'
 import moment from 'moment-timezone'
 import RX from 'reactxp'
 import { VirtualListView } from 'reactxp-virtuallistview'
-import { Theme } from 'src/ts/app/Theme'
 import { ListViewProps, ListViewState } from './types'
 
 // const _itemTemplate = 'event'

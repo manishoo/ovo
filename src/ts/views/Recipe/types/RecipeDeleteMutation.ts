@@ -11,5 +11,5 @@ export interface RecipeDeleteMutation {
 }
 
 export interface RecipeDeleteMutationVariables {
-  recipeId: string;
+  recipeId: any;
 }

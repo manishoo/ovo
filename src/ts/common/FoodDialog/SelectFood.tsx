@@ -4,32 +4,32 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import FlatButton from 'common/FlatButton/FlatButton'
-import RecipePreview from 'common/FoodDialog/components/RecipePreview'
-import { SelectFoodFood, SelectFoodFood_weights } from 'common/FoodDialog/types/SelectFoodFood'
+import client from '@App/client'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import FlatButton from '@Common/FlatButton/FlatButton'
+import RecipePreview from '@Common/FoodDialog/components/RecipePreview'
+import { SelectFoodFood, SelectFoodFood_weights } from '@Common/FoodDialog/types/SelectFoodFood'
 import {
   SelectFoodQuery,
   SelectFoodQuery_foods_foods,
   SelectFoodQuery_foods_foods_weights,
   SelectFoodQuery_recipes_recipes,
   SelectFoodQueryVariables
-} from 'common/FoodDialog/types/SelectFoodQuery'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import Text from 'common/Text/Text'
+} from '@Common/FoodDialog/types/SelectFoodQuery'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import Text from '@Common/Text/Text'
+import { Translation } from '@Models/common'
+import { FoodTypes, Weight } from '@Models/FoodModels'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
 import { VirtualListView, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
 import { ComponentBase } from 'resub'
-import client from 'src/ts/app/client'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Translation } from 'src/ts/models/common'
-import { FoodTypes, Weight } from 'src/ts/models/FoodModels'
 import FoodPreview from './components/FoodPreview'
 
 

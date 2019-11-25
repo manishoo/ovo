@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SelectFood from 'common/FoodDialog/SelectFood'
-import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
+import SelectFood from '@Common/FoodDialog/SelectFood'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
 import gql from 'graphql-tag'
 
 

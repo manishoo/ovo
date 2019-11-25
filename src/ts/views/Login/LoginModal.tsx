@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { navigate } from '@Utils'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import { navigate } from 'src/ts/utilities'
 import Login from './LoginForm'
 
 

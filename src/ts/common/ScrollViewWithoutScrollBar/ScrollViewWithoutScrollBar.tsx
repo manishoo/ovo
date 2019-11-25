@@ -3,9 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
 import { useState } from 'react'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
+
 
 export default function ScrollViewWithoutScrollBar(props: RX.Types.ScrollViewProps) {
   const [scrollViewWidth, setScrollViewWidth] = useState(0)

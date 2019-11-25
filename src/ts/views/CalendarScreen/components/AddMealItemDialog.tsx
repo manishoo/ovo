@@ -3,15 +3,15 @@
 //  * Copyright: Ouranos Studio 2019
 //  */
 //
-// import FlatButton from 'common/FlatButton/FlatButton'
-// import Glass from 'common/Glass/Glass'
-// import { translate } from 'common/LocalizedText/LocalizedText'
+// import FlatButton from '@Common/FlatButton/FlatButton'
+// import Glass from '@Common/Glass/Glass'
+// import { translate } from '@Common/LocalizedText/LocalizedText'
 // import gql from 'graphql-tag'
 // import { Query } from 'react-apollo'
 // import RX from 'reactxp'
 // import { VirtualListView } from 'reactxp-virtuallistview'
-// import client from 'src/ts/app/client'
-// import { ThemeContext } from 'src/ts/app/ThemeContext'
+// import client from '@App/client'
+// import { ThemeContext } from '@App/ThemeContext'
 // import FoodPreview from './FoodPreview'
 //
 // interface AddMealItemDialogProps {

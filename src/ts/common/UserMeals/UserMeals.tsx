@@ -3,22 +3,21 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
-import ImageSource from 'modules/images'
-import SortableList from 'modules/SortableList'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
+import Content from '@Locales/en'
+import ImageSource from '@Modules/images'
+import SortableList from '@Modules/SortableList'
+import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
+import { MealSettingsMeal } from '@Views/MealSettingsScreen/types/MealSettingsMeal'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import Content from 'src/ts/locales/en'
-import MealSettingsScreen from 'src/ts/views/MealSettingsScreen/MealSettingsScreen'
-import { MealSettingsMeal } from 'src/ts/views/MealSettingsScreen/types/MealSettingsMeal'
 
 
 interface UserMealsProps {
   style?: any,
   meals: MealSettingsMeal[],
-
 }
 
 interface UserMealsState {

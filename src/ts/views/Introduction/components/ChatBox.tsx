@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Markdown from 'common/Markdown/Markdown'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Markdown from '@Common/Markdown/Markdown'
+import { MessageSender } from '@Models/global-types'
+import IntroductionButton from '@Views/Introduction/components/IntroductionButton'
+import { IntroductionMutation_setup_messages } from '@Views/Introduction/types/IntroductionMutation'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { MessageSenders } from 'src/ts/models/global-types'
-import IntroductionButton from 'src/ts/views/Introduction/components/IntroductionButton'
-import { IntroductionMutation_setup_messages } from 'src/ts/views/Introduction/types/IntroductionMutation'
 import ChatTyping from './Typing'
 
 
@@ -67,9 +67,9 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 
   renderMessage(msg: Message) {
     switch (msg.sender) {
-      case MessageSenders.assistant:
+      case MessageSender.assistant:
         return this.renderAssistantMessage(msg)
-      case MessageSenders.user:
+      case MessageSender.user:
         return this.renderUserMessage(msg)
       default:
         return null

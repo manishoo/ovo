@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MessageSenders, MessageType, AssistantExpectations, MealAvailableTime, MealSize, Gender, Role } from "./../../../models/global-types";
+import { MessageSender, MessageType, AssistantExpectations, MealAvailableTime, MealSize, Gender, Role } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: IntroductionMutation
@@ -83,7 +83,7 @@ export interface IntroductionMutation_setup_messages {
   id: string;
   text: string;
   timestamp: string;
-  sender: MessageSenders;
+  sender: MessageSender;
   type: MessageType;
   data: IntroductionMutation_setup_messages_data | null;
 }

@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { Routes } from '@Models/common'
 import { Action, History, Location } from 'history'
 import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
-import { Routes } from 'src/ts/models/common'
 import * as SyncTasks from 'synctasks'
 
 

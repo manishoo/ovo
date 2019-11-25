@@ -69,6 +69,9 @@ class ImageSource implements ImageSourceBase {
 
   Trash = AppConfig.getImagePath('Trash.svg')
   Cog = AppConfig.getImagePath('Cog.png')
+
+  Ellipsis = AppConfig.getImagePath('Ellipsis.svg')
+  Regenerate = AppConfig.getImagePath('Regenerate.svg')
 }
 
 export default new ImageSource()

@@ -4,26 +4,27 @@
  */
 
 import { useMutation, useQuery } from '@apollo/react-hooks'
-import FilledButton from 'common/FilledButton/FilledButton'
-import FlatButton from 'common/FlatButton/FlatButton'
-import IntlInput from 'common/Input/IntlInput'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import Select from 'common/Select/Select'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import FlatButton from '@Common/FlatButton/FlatButton'
+import IntlInput from '@Common/Input/IntlInput'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Select from '@Common/Select/Select'
+import Text from '@Common/Text/Text'
+import { Role, TagType } from '@Models/global-types'
+import ToastStore, { ToastTypes } from '@Services/ToastStore'
+import authorized from '@Utils/authorized'
+import { capitalize } from '@Utils/capitalize'
+import {
+  TagsInputDeleteMutation,
+  TagsInputDeleteMutationVariables
+} from '@Views/RecipeForm/components/TagsInput/types/TagsInputDeleteMutation'
+import { Me } from '@Views/Register/types/Me'
 import gql from 'graphql-tag'
 import { useContext, useState } from 'react'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Role, TagType } from 'src/ts/models/global-types'
-import ToastStore, { ToastTypes } from '@Services/ToastStore'
-import { capitalize } from 'src/ts/utilities/capitalize'
-import {
-  TagsInputDeleteMutation,
-  TagsInputDeleteMutationVariables
-} from 'src/ts/views/RecipeForm/components/TagsInput/types/TagsInputDeleteMutation'
-import { Me } from 'src/ts/views/Register/types/Me'
 import { TagInputMutation, TagInputMutation_addTag, TagInputMutationVariables } from './types/TagInputMutation'
 import { TagsInputQuery, TagsInputQuery_tags } from './types/TagsInputQuery'
 
@@ -87,7 +88,7 @@ interface TagsInputCommonProps {
   style?: any,
   selectedTags: string[],
   onTagsChange: (selectedTags: string[]) => void,
-  me: Me,
+  user: Me,
 }
 
 interface TagsInputProps extends TagsInputCommonProps {
@@ -125,7 +126,7 @@ export function TagsInput(props: TagsInputProps) {
 
   return (
     <RX.View>
-      <Text style={{ fontSize: 16, marginBottom: Styles.values.spacing }}>Tell us more about the recipe</Text>
+      <Text translate style={{ fontSize: 16, marginBottom: Styles.values.spacing }}>RecipeExtraGuide</Text>
 
       {Object.keys(TagType).map(key => {
         const tags = props.tags.filter(i => i.type === TagType[key])
@@ -151,8 +152,8 @@ export function TagsInput(props: TagsInputProps) {
                   >
                     {
                       (
-                        tag.user === props.me.id ||
-                        props.me.role === Role.operator
+                        tag.user === props.user.id ||
+                        props.user.role === Role.operator
                       ) &&
                       <FilledButton
                         label={'x'}
@@ -190,16 +191,19 @@ export function TagsInput(props: TagsInputProps) {
           </RX.View>
         )
       })}
-      <RX.View
-        style={styles.panel}
-      >
-        <TagInput
-          onSubmit={tag => props.onTagsChange([
-            ...props.selectedTags,
-            tag.slug,
-          ])}
-        />
-      </RX.View>
+      {
+        authorized([Role.operator], props.user.role) &&
+        <RX.View
+          style={styles.panel}
+        >
+          <TagInput
+            onSubmit={tag => props.onTagsChange([
+              ...props.selectedTags,
+              tag.slug,
+            ])}
+          />
+        </RX.View>
+      }
     </RX.View>
   )
 }
@@ -285,9 +289,9 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
 const styles = {
   panel: RX.Styles.createViewStyle({
     marginBottom: Styles.values.spacing,
-    padding: Styles.values.spacing,
-    borderWidth: 1,
-    borderColor: '#eee',
-    borderRadius: 8,
+    paddingVertical: Styles.values.spacing,
+    // borderWidth: 1,
+    // borderColor: '#eee',
+    // borderRadius: 8,
   }),
 }

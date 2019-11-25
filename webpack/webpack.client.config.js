@@ -64,7 +64,7 @@ const developmentConfig = {
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin()
   ],
 }
 

@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Image from 'common/Image/Image'
-import ImageSource from 'modules/images'
+import Image from '@Common/Image/Image'
+import ImageSource from '@Modules/images'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import RegisterForm from '@Views/Register/RegisterForm'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import RegisterForm from 'src/ts/views/Register/RegisterForm'
 
 
 interface RegisterScreenProps extends RX.CommonProps {

@@ -3,11 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { User } from '@Models/FoodModels'
+import TagsInput from '@Views/RecipeForm/components/TagsInput/TagsInput'
+import { RecipeFormUpdateMutation_updateRecipe } from '@Views/RecipeForm/types/RecipeFormUpdateMutation'
+import { Me } from '@Views/Register/types/Me'
 import RX from 'reactxp'
-import TagsInput from 'src/ts/views/RecipeForm/components/TagsInput/TagsInput'
-import { RecipeFormUpdateMutation_updateRecipe } from 'src/ts/views/RecipeForm/types/RecipeFormUpdateMutation'
-import { Me } from 'src/ts/views/Register/types/Me'
 
 
 interface RecipeFormExtraProps {
@@ -15,9 +16,8 @@ interface RecipeFormExtraProps {
   recipe: RecipeFormUpdateMutation_updateRecipe,
   selectedTags: string[],
   onTagsChange: (tags: string[]) => void,
-  userId?: string
   onSubmit: (selectedTags: string[]) => void,
-  me: Me,
+  user: Me,
 }
 
 export function RecipeFormExtra(props: RecipeFormExtraProps) {
@@ -26,7 +26,7 @@ export function RecipeFormExtra(props: RecipeFormExtraProps) {
       style={[styles.container]}
     >
       <TagsInput
-        me={props.me}
+        user={props.user}
         onTagsChange={tags => props.onTagsChange(tags)}
         selectedTags={props.selectedTags}
       />

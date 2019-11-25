@@ -29,18 +29,6 @@ class SortableItem extends RX.Component<any> {
 }
 
 export default class SortableList extends RX.Component<SortableListProps> {
-  private _renderItem = ({ item, index, move, moveEnd }) => {
-    return (
-      <SortableItem
-        item={item}
-        index={index}
-        move={move}
-        moveEnd={moveEnd}
-        renderItem={this.props.renderItem}
-      />
-    )
-  }
-
   render() {
     return (
       <DraggableFlatList
@@ -49,6 +37,18 @@ export default class SortableList extends RX.Component<SortableListProps> {
         keyExtractor={(item) => `draggable-item-${item.id}`}
         scrollPercent={5}
         onMoveEnd={({ data }) => this.props.onItemsChange(data)}
+      />
+    )
+  }
+
+  private _renderItem = ({ item, index, move, moveEnd }) => {
+    return (
+      <SortableItem
+        item={item}
+        index={index}
+        move={move}
+        moveEnd={moveEnd}
+        renderItem={this.props.renderItem}
       />
     )
   }

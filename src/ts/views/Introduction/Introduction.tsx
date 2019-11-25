@@ -3,31 +3,31 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Assistant from 'common/Assistant/Assistant'
-import LocalizedText, { translate } from 'common/LocalizedText/LocalizedText'
-import gql from 'graphql-tag'
-import KeyboardAvoidable from 'modules/KeyboardAvoidable'
-import { Mutation, MutationFn } from 'react-apollo'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import LinearGradient from 'src/ts/common/LinearGradient/LinearGradient'
-import { Routes } from 'src/ts/models/common'
-import { AssistantExpectations, MessageSenders, MessageType } from 'src/ts/models/global-types'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Assistant from '@Common/Assistant/Assistant'
+import LinearGradient from '@Common/LinearGradient/LinearGradient'
+import LocalizedText, { translate } from '@Common/LocalizedText/LocalizedText'
+import { Routes } from '@Models/common'
+import { AssistantExpectations, MessageSender, MessageType } from '@Models/global-types'
+import KeyboardAvoidable from '@Modules/KeyboardAvoidable'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import UserStore from '@Services/UserStore'
-import { navigate } from 'src/ts/utilities'
+import { navigate } from '@Utils'
 import {
   IntroductionMutation,
   IntroductionMutation_setup_messages,
   IntroductionMutationVariables
-} from 'src/ts/views/Introduction/types/IntroductionMutation'
-import MealSettingsScreen from 'src/ts/views/MealSettingsScreen/MealSettingsScreen'
-import { RegisterForm } from 'src/ts/views/Register/RegisterForm'
+} from '@Views/Introduction/types/IntroductionMutation'
+import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
+import { RegisterForm } from '@Views/Register/RegisterForm'
+import gql from 'graphql-tag'
+import { Mutation, MutationFn } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import ChatBox from './components/ChatBox'
 import ChatInput from './components/ChatInput'
 import { createMessage, getLastInputType } from './utils'
@@ -38,7 +38,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
     text: translate('assistantIntro1'),
     type: MessageType.text,
     timestamp: String(Date.now()),
-    sender: MessageSenders.assistant,
+    sender: MessageSender.assistant,
     id: String(Math.random()),
     data: {
       expect: AssistantExpectations.nickname,
@@ -53,7 +53,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
     text: translate('assistantIntro2'),
     type: MessageType.text,
     timestamp: String(Date.now()),
-    sender: MessageSenders.assistant,
+    sender: MessageSender.assistant,
     id: String(Math.random()),
     data: {
       expect: AssistantExpectations.nickname,
@@ -68,7 +68,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
     text: translate('hiAssistant'),
     type: MessageType.text,
     timestamp: String(Date.now()),
-    sender: MessageSenders.user,
+    sender: MessageSender.user,
     id: String(Math.random()),
     data: {
       expect: AssistantExpectations.nickname,

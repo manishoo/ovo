@@ -3,23 +3,23 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Assistant from 'common/Assistant/Assistant'
-import FilledButton from 'common/FilledButton/FilledButton'
-import Image from 'common/Image/Image'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import Text from 'common/Text/Text'
-import ImageSource from 'modules/images'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Assistant from '@Common/Assistant/Assistant'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import HoverButton from '@Common/HoverButton/HoverButton'
+import Image from '@Common/Image/Image'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import ImageSource from '@Modules/images'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { navigate } from '@Utils'
+import Introduction from '@Views/Introduction/Introduction'
+import GoDownIndicator from '@Views/LandingScreen/components/GoDownIndicator'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import HoverButton from 'src/ts/common/HoverButton/HoverButton'
-import { Routes } from 'src/ts/models/common'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import { navigate } from 'src/ts/utilities'
-import Introduction from 'src/ts/views/Introduction/Introduction'
-import GoDownIndicator from 'src/ts/views/LandingScreen/components/GoDownIndicator'
 
 
 const HEADER_MAX_WIDTH = 950

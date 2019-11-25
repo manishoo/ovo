@@ -4,52 +4,44 @@
  */
 
 import { useMutation, useQuery } from '@apollo/react-hooks'
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import Checkbox from 'common/Checkbox/Checkbox'
-import FilledButton from 'common/FilledButton/FilledButton'
-import { showFoodModal } from 'common/FoodDialog/FoodDialog'
-import { SelectFoodMealItem } from 'common/FoodDialog/SelectFood'
-import Input from 'common/Input/Input'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import Navbar from 'common/Navbar/Navbar'
-import Text from 'common/Text/Text'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { FoodTypes } from 'src/ts/models/FoodModels'
-import { MealInput, Role } from 'src/ts/models/global-types'
+import Styles from '@App/Styles'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Checkbox from '@Common/Checkbox/Checkbox'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
+import { SelectFoodMealItem } from '@Common/FoodDialog/SelectFood'
+import Input from '@Common/Input/Input'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
+import Text from '@Common/Text/Text'
+import { FoodTypes } from '@Models/FoodModels'
+import { MealInput, Role } from '@Models/global-types'
 import LocationStore from '@Services/LocationStore'
 import UserStore from '@Services/UserStore'
-import { getParam } from 'src/ts/utilities'
-import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
-import MealItemRow from 'src/ts/views/MealForm/components/MealItemRow/MealItemRow'
-import {
-  MealFormCreateMutation,
-  MealFormCreateMutationVariables
-} from 'src/ts/views/MealForm/types/MealFormCreateMutation'
-import {
-  MealFormDeleteMutation,
-  MealFormDeleteMutationVariables
-} from 'src/ts/views/MealForm/types/MealFormDeleteMutation'
-import { MealFormQuery, MealFormQueryVariables } from 'src/ts/views/MealForm/types/MealFormQuery'
-import {
-  MealFormUpdateMutation,
-  MealFormUpdateMutationVariables
-} from 'src/ts/views/MealForm/types/MealFormUpdateMutation'
-import { PROFILE_MEALS_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileMeals/ProfileMeals'
-import { ProfileMealsFragments } from 'src/ts/views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
+import { getParam } from '@Utils'
+import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
+import trimTypeName from '@Utils/trim-type-name'
+import MealItemRow from '@Views/MealForm/components/MealItemRow/MealItemRow'
+import { MealFormCreateMutation, MealFormCreateMutationVariables } from '@Views/MealForm/types/MealFormCreateMutation'
+import { MealFormDeleteMutation, MealFormDeleteMutationVariables } from '@Views/MealForm/types/MealFormDeleteMutation'
+import { MealFormQuery, MealFormQueryVariables } from '@Views/MealForm/types/MealFormQuery'
+import { MealFormUpdateMutation, MealFormUpdateMutationVariables } from '@Views/MealForm/types/MealFormUpdateMutation'
+import { PROFILE_MEALS_QUERY } from '@Views/ProfileScreen/components/ProfileMeals/ProfileMeals'
+import { ProfileMealsFragments } from '@Views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
 import {
   MyMeal as RealMyMeal,
   MyMeal_items,
   MyMeal_items_alternativeMealItems
-} from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/MyMeal'
+} from '@Views/ProfileScreen/components/ProfileMeals/types/MyMeal'
 import {
   ProfileMealsQuery,
   ProfileMealsQueryVariables
-} from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
+} from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import { Me } from '@Views/Register/types/Me'
+import gql from 'graphql-tag'
+import { ExecutionResult } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 
 
 export interface MyMealItem extends Omit<MyMeal_items, 'alternativeMealItems'> {
@@ -212,24 +204,24 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   }
 
   protected _buildState(props: MealFormProps, initialBuild: boolean): Partial<MealFormState> | undefined {
-    if (props.meal && this.state.mealItems.length === 0) {
-      return {
-        mealItems: props.meal.items.map(mealItem => ({
-          amount: mealItem.amount,
-          food: mealItem.food,
-          recipe: mealItem.recipe,
-          weight: mealItem.weight,
-          alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
-            ...altMealItem,
-            id: String(Math.random()),
-          })),
-          customUnit: mealItem.customUnit,
-          gramWeight: mealItem.gramWeight,
-          description: mealItem.description,
-          id: String(Math.random()),
-        })),
-      }
-    }
+    // if (props.meal && this.state.mealItems.length === 0) {
+    //   return {
+    //     mealItems: props.meal.items.map(mealItem => ({
+    //       amount: mealItem.amount,
+    //       food: mealItem.food,
+    //       recipe: mealItem.recipe,
+    //       weight: mealItem.weight,
+    //       alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
+    //         ...altMealItem,
+    //         id: String(Math.random()),
+    //       })),
+    //       customUnit: mealItem.customUnit,
+    //       gramWeight: mealItem.gramWeight,
+    //       description: mealItem.description,
+    //       id: String(Math.random()),
+    //     })),
+    //   }
+    // }
 
     return {
       me: UserStore.getUser(),
@@ -245,7 +237,10 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         food: mealItem.food ? mealItem.food.id : undefined,
         recipe: mealItem.recipe ? mealItem.recipe.id : undefined,
         amount: mealItem.amount,
+        description: mealItem.description.map(t => trimTypeName(t)),
         weight: mealItem.weight ? mealItem.weight.id : undefined,
+        customUnit: mealItem.customUnit,
+        gramWeight: mealItem.gramWeight,
         alternativeMealItems: mealItem.alternativeMealItems.map(alternativeMealItem => ({
           food: alternativeMealItem.food ? alternativeMealItem.food.id : undefined,
           recipe: alternativeMealItem.recipe ? alternativeMealItem.recipe.id : undefined,
@@ -253,7 +248,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           weight: alternativeMealItem.weight ? alternativeMealItem.weight.id : undefined,
         }))
       }))
-    }
+    } as MealInput
   }
 
   private _onSubmit = () => {

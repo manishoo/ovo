@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { LanguageCode } from 'src/ts/models/global-types'
+import { LanguageCode } from '@Models/global-types'
 
 
 export enum Routes {

@@ -69,19 +69,9 @@ export enum MealSize {
 }
 
 /**
- * Meal types
- */
-export enum MealType {
-  breakfast = "breakfast",
-  dinner = "dinner",
-  lunch = "lunch",
-  snack = "snack",
-}
-
-/**
  * Message Senders
  */
-export enum MessageSenders {
+export enum MessageSender {
   assistant = "assistant",
   user = "user",
 }
@@ -120,6 +110,7 @@ export enum RecipeDifficulty {
 export enum RecipeStatus {
   private = "private",
   public = "public",
+  review = "review",
 }
 
 /**
@@ -175,6 +166,9 @@ export interface MealItemInput {
   food?: string | null;
   recipe?: string | null;
   weight?: string | null;
+  customUnit?: string | null;
+  gramWeight?: number | null;
+  description?: TranslationInput[] | null;
   alternativeMealItems?: MealItemInputBase[] | null;
 }
 
@@ -184,6 +178,9 @@ export interface MealItemInputBase {
   food?: string | null;
   recipe?: string | null;
   weight?: string | null;
+  customUnit?: string | null;
+  gramWeight?: number | null;
+  description?: TranslationInput[] | null;
 }
 
 export interface RecipeInput {
@@ -234,6 +231,7 @@ export interface UserRegistrationInput {
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
+  dietId?: any | null;
 }
 
 export interface UserUpdateInput {
@@ -247,6 +245,7 @@ export interface UserUpdateInput {
   socialNetworks: SocialNetworksInput;
   bio?: string | null;
   phoneNumber?: string | null;
+  dietId?: any | null;
 }
 
 //==============================================================

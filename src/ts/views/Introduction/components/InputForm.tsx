@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
-import Input from 'common/Input/Input'
-import { translate } from 'common/LocalizedText/LocalizedText'
+import Styles from '@App/Styles'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import Input from '@Common/Input/Input'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import { isEmailValid } from '@Utils'
 import { DateTime } from 'luxon'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { isEmailValid } from 'src/ts/utilities'
 
 
 interface InputFormProps {

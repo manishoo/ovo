@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
+import { Translation } from '@Models/common'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Translation } from 'src/ts/models/common'
 
 
 interface TextInputAutoGrowProps extends RX.Types.TextInputProps {

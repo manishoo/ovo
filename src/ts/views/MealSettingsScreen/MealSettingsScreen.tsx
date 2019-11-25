@@ -3,17 +3,17 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Input from 'common/Input/Input'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import Modal from 'common/Modal/Modal'
-import Navbar from 'common/Navbar/Navbar'
-import Select from 'common/Select/Select'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import Input from '@Common/Input/Input'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Modal from '@Common/Modal/Modal'
+import Navbar from '@Common/Navbar/Navbar'
+import Select from '@Common/Select/Select'
+import Text from '@Common/Text/Text'
+import { MealAvailableTime, MealSize } from '@Models/global-types'
+import { MealSettingsMeal } from '@Views/MealSettingsScreen/types/MealSettingsMeal'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { MealAvailableTime, MealSize } from 'src/ts/models/global-types'
-import { MealSettingsMeal } from 'src/ts/views/MealSettingsScreen/types/MealSettingsMeal'
 
 
 interface MealSettingsScreenProps {
@@ -29,6 +29,19 @@ interface MealSettingsScreenState {
 const MODAL_ID = 'mealSettingsModal'
 
 export default class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSettingsScreenState> {
+  static fragments = {
+    mealSettingsMeal: gql`
+      fragment MealSettingsMeal on UserMeal {
+        id
+        availableTime
+        size
+        cook
+        time
+        name
+      }
+    `
+  }
+
   constructor(props) {
     super(props)
 
@@ -43,6 +56,21 @@ export default class MealSettingsScreen extends RX.Component<MealSettingsScreenP
       }
     }
   }
+
+  static showModal = (props: MealSettingsScreenProps) => (
+    RX.Modal.show(
+      <Modal
+        modalId={MODAL_ID}
+        fullWidth
+        fullHeight
+      >
+        <MealSettingsScreen
+          {...props}
+        />
+      </Modal>,
+      MODAL_ID,
+    )
+  )
 
   render() {
     const { meal } = this.state
@@ -117,40 +145,11 @@ export default class MealSettingsScreen extends RX.Component<MealSettingsScreenP
       </RX.View>
     )
   }
-
-  static fragments = {
-    mealSettingsMeal: gql`
-      fragment MealSettingsMeal on UserMeal {
-        id
-        availableTime
-        size
-        cook
-        time
-        name
-      }
-    `
-  }
-
-  static showModal = (props: MealSettingsScreenProps) => (
-    RX.Modal.show(
-      <Modal
-        modalId={MODAL_ID}
-        fullWidth
-        fullHeight
-      >
-        <MealSettingsScreen
-          {...props}
-        />
-      </Modal>,
-      MODAL_ID,
-    )
-  )
 }
 
 const styles = {
   container: RX.Styles.createViewStyle({
     padding: Styles.values.spacing,
   }),
-  innerContainer: RX.Styles.createViewStyle({
-  })
+  innerContainer: RX.Styles.createViewStyle({})
 }

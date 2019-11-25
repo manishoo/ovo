@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { translate } from 'common/LocalizedText/LocalizedText'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import { Translation } from '@Models/common'
 import RX from 'reactxp'
 import { ImportantForAccessibility } from 'reactxp/dist/common/Types'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Translation } from 'src/ts/models/common'
 import En from '../../locales/en'
 
 

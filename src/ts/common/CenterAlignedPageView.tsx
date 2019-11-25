@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 
 
 interface CenterAlignedPageViewProps {
@@ -33,20 +33,22 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     super(props)
 
     this.state = {
-      width: ResponsiveWidthStore.getWidth(),
+      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
       height: ResponsiveWidthStore.getHeight(),
       hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
     }
   }
 
   public render() {
+    const { width } = this.state
+
     return (
       <RX.ScrollView
         {...this.props.scrollViewProps}
         style={[
           styles.container, {
             height: this.state.height,
-            width: this._getWindowTrueWidth()
+            width
           },
           this.props.scrollViewProps ? this.props.scrollViewProps.style : {}
         ]}
@@ -54,7 +56,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
         <RX.Animated.View
           style={[
             {
-              width: this._getWindowTrueWidth(),
+              width,
               alignItems: 'center',
             },
             this._animatedStyle,
@@ -93,14 +95,6 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     if (this.props.maxWidth) return this.props.maxWidth
 
     return Styles.values.mainContentMaxWidth
-  }
-
-  private _getWindowTrueWidth = () => {
-    if (this.state.hideDrawer) {
-      return this.state.width
-    }
-
-    return this.state.width - Styles.values.drawerWidth
   }
 }
 

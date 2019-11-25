@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { default as FontRefs } from 'modules/fonts'
+import AppConfig from '@App/AppConfig'
+import { default as FontRefs } from '@Modules/fonts'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
 
 
 export default class Styles {
@@ -18,7 +18,7 @@ export default class Styles {
     defaultShadow: {
       shadowColor: 'rgba(0, 0, 0, .4)',
       shadowRadius: 5,
-      shadowOffset: {width: 0, height: 2},
+      shadowOffset: { width: 0, height: 2 },
       shadowOpacity: -1
     },
 

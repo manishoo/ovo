@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
+import ToastStore, { Toast } from '@Services/ToastStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ToastStore, { Toast } from '@Services/ToastStore'
 
 
 interface ToastProps {

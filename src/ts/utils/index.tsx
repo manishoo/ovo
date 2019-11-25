@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { Routes } from '@Models/common'
+import { Image } from '@Models/FoodModels'
 import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
-import { Routes } from 'src/ts/models/common'
-import { Image } from 'src/ts/models/FoodModels'
 import AppConfig from '../app/AppConfig'
 
 

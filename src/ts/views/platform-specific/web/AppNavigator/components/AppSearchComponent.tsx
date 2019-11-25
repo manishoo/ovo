@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
+import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
 import { useState } from 'react'
 import RX from 'reactxp'
-import ExploreSearch from 'src/ts/views/ExploreSearch/ExploreSearch'
-import { SearchResultQueryVariables } from 'src/ts/views/SearchResult/types/SearchResultQuery'
 
 
 const AppSearchComponent = ({ onSubmit, inputRef }) => {

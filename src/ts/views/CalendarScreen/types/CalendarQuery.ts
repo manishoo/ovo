@@ -2,11 +2,16 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealType, LanguageCode } from "./../../../models/global-types";
+import { LanguageCode } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: CalendarQuery
 // ====================================================
+
+export interface CalendarQuery_calendar_meals_userMeal {
+  id: string;
+  name: string;
+}
 
 export interface CalendarQuery_calendar_meals_items_recipe_thumbnail {
   url: string;
@@ -23,11 +28,21 @@ export interface CalendarQuery_calendar_meals_items_recipe_timing {
   totalTime: number;
 }
 
+export interface CalendarQuery_calendar_meals_items_recipe_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface CalendarQuery_calendar_meals_items_recipe_nutrition {
+  calories: CalendarQuery_calendar_meals_items_recipe_nutrition_calories | null;
+}
+
 export interface CalendarQuery_calendar_meals_items_recipe {
   id: string;
   thumbnail: CalendarQuery_calendar_meals_items_recipe_thumbnail | null;
   title: CalendarQuery_calendar_meals_items_recipe_title[];
   timing: CalendarQuery_calendar_meals_items_recipe_timing;
+  nutrition: CalendarQuery_calendar_meals_items_recipe_nutrition | null;
 }
 
 export interface CalendarQuery_calendar_meals_items_food_thumbnail {
@@ -39,10 +54,20 @@ export interface CalendarQuery_calendar_meals_items_food_name {
   locale: LanguageCode;
 }
 
+export interface CalendarQuery_calendar_meals_items_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface CalendarQuery_calendar_meals_items_food_nutrition {
+  calories: CalendarQuery_calendar_meals_items_food_nutrition_calories | null;
+}
+
 export interface CalendarQuery_calendar_meals_items_food {
   id: string;
   thumbnail: CalendarQuery_calendar_meals_items_food_thumbnail | null;
   name: CalendarQuery_calendar_meals_items_food_name[];
+  nutrition: CalendarQuery_calendar_meals_items_food_nutrition;
 }
 
 export interface CalendarQuery_calendar_meals_items_description {
@@ -73,8 +98,8 @@ export interface CalendarQuery_calendar_meals_items {
 }
 
 export interface CalendarQuery_calendar_meals {
-  name: string | null;
-  type: MealType;
+  id: any;
+  userMeal: CalendarQuery_calendar_meals_userMeal | null;
   time: any | null;
   items: CalendarQuery_calendar_meals_items[];
 }

@@ -3,20 +3,20 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import gql from 'graphql-tag'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import client from 'src/ts/app/client'
-import { Role } from 'src/ts/models/global-types'
+import client from '@App/client'
+import { Role } from '@Models/global-types'
 import UserStore from '@Services/UserStore'
-import MealsList from 'src/ts/views/ProfileScreen/components/MealsList/MealsList'
-import { ProfileMealsFragments } from 'src/ts/views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
+import MealsList from '@Views/ProfileScreen/components/MealsList/MealsList'
+import { ProfileMealsFragments } from '@Views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
 import {
   ProfileMealsQuery,
   ProfileMealsQuery_meals_meals,
   ProfileMealsQueryVariables
-} from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
+} from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import { Me } from '@Views/Register/types/Me'
+import gql from 'graphql-tag'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 
 
 interface ProfileMealsProps {
@@ -63,7 +63,6 @@ export default class ProfileMeals extends ComponentBase<ProfileMealsProps, Profi
       this.setState({ fetching: true }, () => {
         client.query<ProfileMealsQuery, ProfileMealsQueryVariables>({
           query: PROFILE_MEALS_QUERY,
-          fetchPolicy: 'cache-first',
           variables: {
             userId: this.props.userId,
             lastId

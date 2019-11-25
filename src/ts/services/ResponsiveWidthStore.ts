@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
 import RX from 'reactxp'
 import { AutoSubscribeStore, autoSubscribeWithKey, disableWarnings, StoreBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
 
 import { ResponsiveWidth, WidthBreakPoints } from '../models/ResponsiveWidthModels'
 

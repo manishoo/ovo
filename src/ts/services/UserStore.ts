@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { Me } from '@Views/Register/types/Me'
 import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
-import { Me } from 'src/ts/views/Register/types/Me'
 import * as SyncTasks from 'synctasks'
 
 

@@ -3,8 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { LanguageCode } from '@Models/global-types'
 import RX from 'reactxp'
-import { LanguageCode } from 'src/ts/models/global-types'
+
 
 interface InitParams {
   appVersion?: string;
@@ -15,6 +16,7 @@ class AppConfig {
   public version = process.env.TAG || ''
   public locale: LanguageCode = LanguageCode.en
   public panelAddress: string = 'http://panel.prana.global'
+  public calorieMeasurementUnit: 'kcal' | 'kJ' = 'kcal'
   private _appVersion: string
   private readonly _frontendHost: string
   private readonly _platformType: RX.Types.PlatformType

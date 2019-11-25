@@ -3,19 +3,19 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FlatButton from 'common/FlatButton/FlatButton'
-import { showFoodModal } from 'common/FoodDialog/FoodDialog'
-import { SelectFoodMealItem } from 'common/FoodDialog/SelectFood'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
-import { IngredientCardIngredient } from 'common/recipe/IngredientCard/types/IngredientCardIngredient'
-import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
-import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { FoodTypes } from 'src/ts/models/FoodModels'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import FlatButton from '@Common/FlatButton/FlatButton'
+import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
+import { SelectFoodMealItem } from '@Common/FoodDialog/SelectFood'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
+import { IngredientCardIngredient } from '@Common/recipe/IngredientCard/types/IngredientCardIngredient'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
+import { FoodTypes } from '@Models/FoodModels'
 import LocationStore from '@Services/LocationStore'
-import { MyMealItem } from 'src/ts/views/MealForm/MealForm'
+import { MyMealItem } from '@Views/MealForm/MealForm'
+import RX from 'reactxp'
 
 
 interface MealItemRowProps {

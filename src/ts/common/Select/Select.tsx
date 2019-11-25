@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { SelectPopup, showSelectDialog } from 'common/Select/components/SelectDialog'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import { SelectPopup, showSelectDialog } from '@Common/Select/components/SelectDialog'
+import Text from '@Common/Text/Text'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 const POPUP_ID = 'Select'

@@ -11,9 +11,9 @@
     "target": "es2015",
     "experimentalDecorators": true,
     "sourceMap": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "esModuleInterop": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": false,
@@ -21,18 +21,36 @@
     "outDir": "./web/js/",
     "baseUrl": ".",
     "paths": {
-      "modules/*": [
+      "@Modules/*": [
         "./src/ts/modules/*/index.web",
         "./src/ts/modules/*/index"
       ],
       "src/*": [
         "./src/*"
       ],
-      "common/*": [
+      "@Common/*": [
         "./src/ts/common/*"
       ],
       "@Services/*": [
         "./src/ts/services/*"
+      ],
+      "@Views/*": [
+        "./src/ts/views/*"
+      ],
+      "@Utils": [
+        "./src/ts/utils"
+      ],
+      "@Utils/*": [
+        "./src/ts/utils/*"
+      ],
+      "@Models/*": [
+        "./src/ts/models/*"
+      ],
+      "@App/*": [
+        "./src/ts/app/*"
+      ],
+      "@Locales/*": [
+        "./src/ts/locales/*"
       ]
     },
     "typeRoots": [

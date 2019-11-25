@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Image from 'common/Image/Image'
-import ImageSource from 'modules/images'
+import Image from '@Common/Image/Image'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
 
 

@@ -47,9 +47,14 @@ const commonConfig = merge(
       //   {name: 'common', alias: paths.common,},
       // ],
       alias: Object.assign({}, {
-        src: paths.src,
-        common: paths.common,
+        'src': paths.src,
+        '@Common': paths.common,
         '@Services': paths.services,
+        '@Views': paths.views,
+        '@Utils': paths.utils,
+        '@Models': paths.models,
+        '@App': paths.app,
+        '@Locales': paths.locales,
       }, config.bundling.aliases),
     },
     plugins: [

@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Input from 'common/Input/Input'
-import { translate } from 'common/LocalizedText/LocalizedText'
+import Styles from '@App/Styles'
+import Input from '@Common/Input/Input'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import { Routes } from '@Models/common'
+import { navigate } from '@Utils'
+import Keys from '@Utils/KeyCodes'
+import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Routes } from 'src/ts/models/common'
-import { navigate } from 'src/ts/utilities'
-import Keys from 'src/ts/utilities/KeyCodes'
-import { SearchResultQueryVariables } from 'src/ts/views/SearchResult/types/SearchResultQuery'
 
 
 interface ExploreSearchProps {

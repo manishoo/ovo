@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { Option } from 'common/Select/Select'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import { Option } from '@Common/Select/Select'
+import Text from '@Common/Text/Text'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { fullHeight } from '@Utils'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import { fullHeight } from 'src/ts/utilities'
 
 
 interface SelectDialogProps {

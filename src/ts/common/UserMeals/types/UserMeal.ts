@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealAvailableTime } from "./../../../models/global-types";
+import { MealAvailableTime } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: UserMeal

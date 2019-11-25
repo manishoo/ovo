@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { default as FontRefs } from 'modules/fonts'
+import { default as FontRefs } from '@Modules/fonts'
 import RX from 'reactxp'
 
 
@@ -55,6 +55,7 @@ export class Theme {
 
           text: '#4a4a4a',
           borderLight: '#eee',
+          mealItemBorder: 'rgba(0, 186, 114, 0.5)',
 
           assistantLinearGradient1: '#4856DC',
           assistantLinearGradient2: '#1F2CAA',

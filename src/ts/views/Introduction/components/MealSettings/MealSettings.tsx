@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import ImageSource from 'modules/images'
+import Input from '@Common/Input/Input'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import Input from 'src/ts/common/Input/Input'
 import SubmitButton from '../SubmitButton'
 import MacroNutrientBar from './components/MacroNutrientBar'
 

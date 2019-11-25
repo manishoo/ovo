@@ -1,19 +1,17 @@
 /*
- * CalendarStore.ts
+ * CalendarService.ts
  * Copyright: Ouranos Studio 2019
  */
 
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { Day } from '@Views/CalendarScreen/components/types/Day'
+import { DayMeal } from '@Views/CalendarScreen/components/types/DayMeal'
+import { MealItem } from '@Views/CalendarScreen/components/types/MealItem'
 import { DateTime } from 'luxon'
 import RX from 'reactxp'
-import { VirtualListViewItemInfo } from 'reactxp-virtuallistview/src/VirtualListView'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
-import { Day } from 'src/ts/views/CalendarScreen/types/Day'
 import * as SyncTasks from 'synctasks'
 
-
-export type DayItem = VirtualListViewItemInfo & Day
 
 export enum DayTemplate {
   empty = 'empty',
@@ -33,45 +31,17 @@ export enum TriggerKeys {
 }
 
 @AutoSubscribeStore
-class CalendarStore extends StoreBase implements IPersistableStore {
-  public name = 'CalendarStore'
-  private calendar: DayItem[] = []
+class CalendarService extends StoreBase implements IPersistableStore {
+  public name = 'CalendarService'
+  private calendar: Day[] = []
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
 
-    const height = ResponsiveWidthStore.getHeight()
-
     RX.Storage.getItem(STORAGE_KEYS.calendar)
       .then(CalendarJSONString => {
-        if (!CalendarJSONString) {
-          for (let i = 0; i < (365 * 2); i++) {
-            const id = String(Math.random()) + String(Date.now())
-            this.calendar.push({
-              id,
-              date: DateTime.local().plus({day: i}).toJSDate(),
-              meals: [],
-              measureHeight: false,
-              template: DayTemplate.empty,
-              height,
-              key: id,
-              // isNavigable: false,
-              // disableTouchOpacityAnimation: false,
-            })
-          }
-
-          RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
-
-          deferred.resolve(void 0)
-          return
-        }
-
         try {
-          const calendar = JSON.parse(CalendarJSONString) as DayItem[]
-          this.calendar = calendar.map(day => ({
-            ...day,
-            date: new Date(day.date),
-          }))
+          this.calendar = JSON.parse(CalendarJSONString) as Day[]
         } catch (e) {
           RX.Storage.removeItem(STORAGE_KEYS.calendar)
         }
@@ -84,7 +54,7 @@ class CalendarStore extends StoreBase implements IPersistableStore {
     return deferred.promise()
   }
 
-  setCalendar(calendar?: DayItem[]) {
+  setCalendar(calendar?: Day[]) {
     if (calendar) {
       RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(calendar))
       this.calendar = calendar
@@ -96,7 +66,7 @@ class CalendarStore extends StoreBase implements IPersistableStore {
     this.trigger()
   }
 
-  setDay(day: DayItem) {
+  setDay(day: Day) {
     const foundDayIndex = this.calendar.findIndex(p => DateTime.fromJSDate(p.date).toISODate() === DateTime.fromJSDate(day.date).toISODate())
 
     if (foundDayIndex !== -1) {
@@ -107,11 +77,48 @@ class CalendarStore extends StoreBase implements IPersistableStore {
     }
 
     RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
-
     this.trigger()
   }
 
-  updateDay(day: DayItem) {
+  setMeal(dayId: string, meal: DayMeal) {
+    const foundDay = this.calendar.find(p => p.id === dayId)
+    if (!foundDay) throw new Error('day not found')
+
+    foundDay.meals = foundDay.meals.map(m => {
+      if (m.id === meal.id) {
+        return meal
+      }
+      return m
+    })
+
+    RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
+    this.trigger()
+  }
+
+  setMealItem(dayId: string, mealId: string, mealItem: MealItem) {
+    const foundDay = this.calendar.find(p => p.id === dayId)
+    if (!foundDay) throw new Error('day not found')
+
+    foundDay.meals = foundDay.meals.map(meal => {
+      if (meal.id === mealId) {
+        return {
+          ...meal,
+          items: meal.items.map(mi => {
+            if (mi.id === mealItem.id) {
+              return mealItem
+            }
+
+            return mi
+          })
+        }
+      }
+      return meal
+    })
+    RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
+    this.trigger()
+  }
+
+  updateDay(day: Day) {
 
   }
 
@@ -122,9 +129,9 @@ class CalendarStore extends StoreBase implements IPersistableStore {
   }
 
   @autoSubscribe
-  getCalendar(): DayItem[] {
+  getCalendar(): Day[] {
     return this.calendar
   }
 }
 
-export default new CalendarStore()
+export default new CalendarService()

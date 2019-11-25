@@ -3,20 +3,20 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RecipesList from 'common/RecipesList/RecipesList'
-import gql from 'graphql-tag'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import client from 'src/ts/app/client'
-import { Role } from 'src/ts/models/global-types'
+import client from '@App/client'
+import RecipesList from '@Common/RecipesList/RecipesList'
+import { Role } from '@Models/global-types'
 import UserStore from '@Services/UserStore'
-import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
+import { ProfileRecipesFragments } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
 import {
   ProfileRecipesQuery,
   ProfileRecipesQuery_recipes_recipes,
   ProfileRecipesQueryVariables
-} from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
+} from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import { Me } from '@Views/Register/types/Me'
+import gql from 'graphql-tag'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 
 
 interface ProfileRecipesProps {
@@ -63,7 +63,6 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
       this.setState({ fetching: true }, () => {
         client.query<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
           query: PROFILE_RECIPES_QUERY,
-          fetchPolicy: 'cache-first',
           variables: {
             userId: this.props.userId,
             size: 20,

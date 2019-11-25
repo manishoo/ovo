@@ -4,11 +4,11 @@
  */
 
 import * as assert from 'assert'
-import map from 'lodash/map'
-import find from 'lodash/find'
-import noop from 'lodash/noop'
 import attempt from 'lodash/attempt'
+import find from 'lodash/find'
 import isError from 'lodash/isError'
+import map from 'lodash/map'
+import noop from 'lodash/noop'
 import * as SyncTasks from 'synctasks'
 
 

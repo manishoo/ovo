@@ -2,17 +2,18 @@
  * copyright
  * */
 
-import { translate } from 'common/LocalizedText/LocalizedText'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import { Routes } from '@Models/common'
+import LocationStore from '@Services/LocationStore'
+import UserStore from '@Services/UserStore'
+import { trimSlashes } from '@Utils/trim-slashes'
+import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator'
+import { Me } from '@Views/Register/types/Me'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { Routes } from 'src/ts/models/common'
-import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
-import { trimSlashes } from 'src/ts/utilities/trim-slashes'
-import AppNavigator from 'src/ts/views/platform-specific/web/AppNavigator/AppNavigator'
-import { Me } from 'src/ts/views/Register/types/Me'
 import {
+  CalendarScreen,
   FoodScreen,
   LandingScreen,
   LoginScreen,
@@ -25,7 +26,6 @@ import {
   SearchResult,
   SettingsScreen,
   ShoppingList,
-  CalendarScreen,
 } from './routes'
 
 

@@ -28,7 +28,7 @@ export interface FoodScreenFood_origFoodGroups_name {
 }
 
 export interface FoodScreenFood_origFoodGroups {
-  id: string;
+  id: any;
   name: FoodScreenFood_origFoodGroups_name[];
 }
 

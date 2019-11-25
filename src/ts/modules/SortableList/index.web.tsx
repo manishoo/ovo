@@ -9,13 +9,13 @@ import RX from 'reactxp'
 import SortableListProps from './types'
 
 
-const SortableItem = SortableElement(({children}) => <div>{children}</div>)
+const SortableItem = SortableElement(({ children }) => <div>{children}</div>)
 
 const InnerSortableList = SortableContainer(({ items, renderItem }) => {
   return (
     <div>
       {items.map((value, index) => (
-        <SortableItem key={`item-${value.id}`} index={index} >
+        <SortableItem key={`item-${value.id}`} index={index}>
           {renderItem(value)}
         </SortableItem>
       ))}

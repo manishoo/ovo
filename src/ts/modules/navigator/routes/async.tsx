@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import Text from '@Common/Text/Text'
 import RX from 'reactxp'
 
 // `calendar` should be relative to the `components/` folder
@@ -23,7 +23,7 @@ const loadComponentAsync = (path: string, secondaryPath?: string) => (
       import(
         /* webpackChunkName: "[request]" */
         /* webpackPreload: true */
-        `src/ts/views/${path}/${secondaryPath || path}`
+        `@Views/${path}/${secondaryPath || path}`
         )
         .then(mod => {
           if (mod.default) {

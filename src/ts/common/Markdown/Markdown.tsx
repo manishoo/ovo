@@ -10,8 +10,8 @@ import RX from 'reactxp'
 const Markdown = ({ children, style, ...props }: any) => {
   return (
     <RX.View style={style} {...props}>
-			<ReactMarkdown source={children} />
-		</RX.View>
+      <ReactMarkdown source={children} />
+    </RX.View>
   )
 }
 

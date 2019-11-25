@@ -3,10 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
 import { useState } from 'react'
 import RX from 'reactxp'
-import {VirtualListView as OriginalVirtualListView, VirtualListViewProps} from 'reactxp-virtuallistview'
-import Styles from 'src/ts/app/Styles'
+import { VirtualListView as OriginalVirtualListView, VirtualListViewProps } from 'reactxp-virtuallistview'
+
 
 export default function VirtualListViewWithoutScrollBar(props: VirtualListViewProps<any>) {
   const [scrollViewWidth, setScrollViewWidth] = useState(0)

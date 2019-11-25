@@ -3,12 +3,12 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
 import debounce from 'lodash/debounce'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 export interface InputProps extends RX.Types.TextInputProps {

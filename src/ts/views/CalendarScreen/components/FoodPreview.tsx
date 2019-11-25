@@ -3,9 +3,9 @@
 //  * Copyright: Ouranos Studio 2019
 //  */
 //
-// import FilledButton from 'common/FilledButton/FilledButton'
+// import FilledButton from '@Common/FilledButton/FilledButton'
 // import RX from 'reactxp'
-// import { ThemeContext } from 'src/ts/app/ThemeContext'
+// import { ThemeContext } from '@App/ThemeContext'
 // import { SearchResultItem } from './AddMealItemDialog'
 //
 // interface FoodPreviewProps {

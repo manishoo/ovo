@@ -3,17 +3,17 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
-import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
+import AppConfig from '@App/AppConfig'
+import Text from '@Common/Text/Text'
 import LocationStore from '@Services/LocationStore'
 import {
   PublicProfileScreenQuery,
   PublicProfileScreenQueryVariables
-} from 'src/ts/views/ProfileScreen/types/PublicProfileScreenQuery'
+} from '@Views/ProfileScreen/types/PublicProfileScreenQuery'
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import ProfileScreen from './ProfileScreen'
 
 

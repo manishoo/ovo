@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Modal from 'common/Modal/Modal'
+import Modal from '@Common/Modal/Modal'
+import { FoodTypes } from '@Models/FoodModels'
+import { fullHeight } from '@Utils'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { FoodTypes } from 'src/ts/models/FoodModels'
-import { fullHeight } from 'src/ts/utilities'
 import SelectFood, { SelectFoodMealItem } from './SelectFood'
 
 

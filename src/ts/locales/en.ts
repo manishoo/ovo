@@ -84,6 +84,12 @@ enum Content {
   'LandingReadMore' = 'Read More',
   '______Recipe_Page______' = '//',
   'Nutrition (per serving)' = 'Nutrition (per serving)',
+  'Serving' = 'Serving',
+  'serving' = 'serving',
+  'kg' = 'kg',
+  'lb' = 'lb',
+  'mg' = 'mg',
+  'kcal' = 'kcal',
   'calories' = 'Calories',
   'proteins' = 'Protein',
   'totalCarbs' = 'Total Carbs',
@@ -111,7 +117,7 @@ enum Content {
   'e.g. Banana' = 'e.g. Banana',
   'Describe the story behind your recipe' = 'Describe the story behind your recipe',
   'Add Tag' = 'Add Tag',
-  'Tell us more about the recipe' = 'Tell us more about the recipe',
+  'RecipeExtraGuide' = 'Tell us more about the recipe',
   'e.g. Easy Sesame Chicken' = 'e.g. Easy Sesame Chicken',
   'areyousure?' = 'Are you sure about this action?',
   'deleteTag?' = 'Are you sure about this action?',
@@ -140,7 +146,11 @@ enum Content {
   Save = 'Save',
   CreateUserMeal = 'New Meal',
   commaAnd = ', and ',
-  Send = 'Send'
+  Send = 'Send',
+  Submit = 'Submit',
+  Submitting = 'Submitting',
+  ', and ' = ', and ',
+  Calories = 'Calories',
 }
 
 export default Content

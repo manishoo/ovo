@@ -3,20 +3,23 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { translate } from 'common/LocalizedText/LocalizedText'
-import UserMeals from 'common/UserMeals/UserMeals'
-import isEqual from 'lodash/isEqual'
-import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Food } from 'src/ts/models/FoodModels'
-import { AssistantExpectations, MessageType } from 'src/ts/models/global-types'
-import { generateHeightRange, generateWeightRange } from 'src/ts/utilities'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Input from '@Common/Input/Input'
+import InputNumber from '@Common/Input/InputNumber'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import UserMeals from '@Common/UserMeals/UserMeals'
+import { Food } from '@Models/FoodModels'
+import { AssistantExpectations, MessageType } from '@Models/global-types'
+import { generateHeightRange, generateWeightRange } from '@Utils'
 import {
   IntroductionMutation_setup_messages_data,
-  IntroductionMutation_setup_messages_data_items, IntroductionMutation_setup_messages_data_user
-} from 'src/ts/views/Introduction/types/IntroductionMutation'
+  IntroductionMutation_setup_messages_data_items,
+  IntroductionMutation_setup_messages_data_user
+} from '@Views/Introduction/types/IntroductionMutation'
+import isEqual from 'lodash/isEqual'
+import RX from 'reactxp'
 import FoodAutocomplete from './FoodAutocomplete'
 import InputForm from './InputForm'
 import MealSettings from './MealSettings/MealSettings'
@@ -331,22 +334,42 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
                         ]
                       }
 
+                      let inputComponent
+
+                      if (inputType === MessageType.number) {
+                        inputComponent = <InputNumber
+                          key='textinputnumber'
+                          value={Number(message)}
+                          keyboardType={getKeyboardType(inputType)}
+                          // multiline
+                          placeholder={loading ? translate('AssistantInputPlaceholder') : getPlaceholder(expect)}
+                          returnKeyType='send'
+                          textInputStyle={{ flex: 1, backgroundColor: 'transparent', borderWidth: 0 }}
+                          style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
+                          onChange={num => this.setState({ message: String(num) })}
+                          onSubmitEditing={this.onTextSubmit}
+                        />
+                      } else {
+                        inputComponent = <Input
+                          key='textinput'
+                          value={message}
+                          keyboardType={getKeyboardType(inputType)}
+                          // multiline
+                          placeholder={loading ? translate('AssistantInputPlaceholder') : getPlaceholder(expect)}
+                          returnKeyType='send'
+                          textInputStyle={{ flex: 1, backgroundColor: 'transparent', borderWidth: 0 }}
+                          secureTextEntry={MessageType.password == inputType}
+                          style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
+                          onChangeText={this.onChangeText}
+                          onSubmitEditing={this.onTextSubmit}
+                        />
+                      }
+
                       return (
                         <RX.View
                           style={styles.textInputContainer}
                         >
-                          <RX.TextInput
-                            key='textinput'
-                            value={message}
-                            keyboardType={getKeyboardType(inputType)}
-                            // multiline
-                            placeholder={loading ? translate('AssistantInputPlaceholder') : getPlaceholder(expect)}
-                            returnKeyType='send'
-                            secureTextEntry={MessageType.password == inputType}
-                            style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
-                            onChangeText={this.onChangeText}
-                            onSubmitEditing={this.onTextSubmit}
-                          />
+                          {inputComponent}
                           <SubmitButton
                             skip={skip ? 'Nope' : undefined}
                             style={styles.submitButton}
@@ -572,9 +595,11 @@ const styles = {
     minHeight: 50,
   }),
   textInput: RX.Styles.createTextInputStyle({
-    borderBottomWidth: 1,
-    borderColor: '#eee',
+    flex: 1,
+    // borderBottomWidth: 1,
+    // borderColor: '#eee',
     [Styles.values.marginStart]: Styles.values.spacing,
+    marginBottom: 0,
   }),
   selectItemContainer: RX.Styles.createViewStyle({
     position: 'absolute',

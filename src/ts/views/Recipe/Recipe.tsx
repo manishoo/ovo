@@ -4,40 +4,41 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilledButton from 'common/FilledButton/FilledButton'
-import Image from 'common/Image/Image'
-import Link from 'common/Link/Link'
-import { translate } from 'common/LocalizedText/LocalizedText'
-import Navbar from 'common/Navbar/Navbar'
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
-import Text from 'common/Text/Text'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
+import Text from '@Common/Text/Text'
+import { Role } from '@Models/global-types'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import UserStore from '@Services/UserStore'
+import { getParam, navigate } from '@Utils'
+import authorized from '@Utils/authorized'
+import trimTypeName from '@Utils/trim-type-name'
+import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
+import {
+  ProfileRecipesQuery,
+  ProfileRecipesQueryVariables
+} from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import IngredientServingControl from '@Views/Recipe/components/IngredientServingControl'
+import PublishRecipe from '@Views/Recipe/components/PublishRecipe'
+import { PublicRecipe } from '@Views/Recipe/types/PublicRecipe'
+import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from '@Views/Recipe/types/RecipeDeleteMutation'
+import { RecipeQuery, RecipeQueryVariables } from '@Views/Recipe/types/RecipeQuery'
+import { Me } from '@Views/Register/types/Me'
 import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
 import { Mutation } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Role } from 'src/ts/models/global-types'
-import LocationStore from '@Services/LocationStore'
-import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import UserStore from '@Services/UserStore'
-import { getParam, navigate } from 'src/ts/utilities'
-import trimTypeName from 'src/ts/utilities/trim-type-name'
-import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
-import {
-  ProfileRecipesQuery,
-  ProfileRecipesQueryVariables
-} from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
-import PublishRecipe from 'src/ts/views/Recipe/components/PublishRecipe'
-import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
-import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from 'src/ts/views/Recipe/types/RecipeDeleteMutation'
-import { RecipeQuery, RecipeQueryVariables } from 'src/ts/views/Recipe/types/RecipeQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
 import Instructions from './components/Instructions'
 
 
@@ -170,19 +171,19 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {recipe.nutrition.calories.unit}</Text>
+          >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {translate(recipe.nutrition.calories.unit)}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {recipe.nutrition.proteins.unit}</Text>
+          >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {translate(recipe.nutrition.proteins.unit)}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{translate('totalCarbs')}: {carbs.amount.toFixed()} {carbs.unit}</Text>
+          >{translate('totalCarbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {recipe.nutrition.fats.unit}</Text>
+          >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {translate(recipe.nutrition.fats.unit)}</Text>
         </RX.View>
       </RX.View>
     )
@@ -357,13 +358,10 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
             }}
           />
           {
-            (
-              this.state.user.role === Role.operator ||
-              this.state.user.role === Role.admin
-            ) &&
+            authorized([Role.operator], this.state.user.role) &&
             <PublishRecipe
               recipe={this.props.recipe}
-              userId={this.state.user.id}
+              user={this.state.user}
             />
           }
         </RX.View>

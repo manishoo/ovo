@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SafeArea from 'common/SafeArea/SafeArea'
-import ToastContainer from 'common/ToastContainer/ToastContainer'
+import AppConfig from '@App/AppConfig'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import SafeArea from '@Common/SafeArea/SafeArea'
+import ToastContainer from '@Common/ToastContainer/ToastContainer'
+import Navigator from '@Modules/navigator'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import Navigator from 'modules/navigator'
 
 
 interface RootViewProps extends RX.CommonProps {

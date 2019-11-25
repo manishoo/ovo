@@ -108,7 +108,7 @@ function getModuleAliases(targetPlatform) {
 
     const modulePath = (targetPlatform === 'web' || targetPlatform === 'tests' || targetPlatform === 'electron') ?
       getSourcePath('ts/modules') : './' + getObjPath('modules')
-    aliases['modules/' + moduleName] = modulePath + '/' + moduleName + '/' + moduleVariant
+    aliases['@Modules/' + moduleName] = modulePath + '/' + moduleName + '/' + moduleVariant
   })
 
   return aliases

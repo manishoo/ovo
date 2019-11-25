@@ -63,6 +63,8 @@ class ImageSource implements ImageSourceBase {
   get Path() {return require('../../../images/Path.png')}
   get Trash() {return require('../../../images/Trash.png')}
   get Cog() {return require('../../../images/Cog.png')}
+  get Ellipsis() {return require('../../../images/Ellipsis.png')}
+  get Regenerate() {return require('../../../images/Regenerate.png')}
 }
 
 export default new ImageSource()

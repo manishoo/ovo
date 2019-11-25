@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AppConfig from '@App/AppConfig'
 import RX from 'reactxp'
 import { default as RXI18n } from 'reactxp-i18n'
-import AppConfig from 'src/ts/app/AppConfig'
 import ENLocale from '../../locales/en'
 import FALocale from '../../locales/fa'
 

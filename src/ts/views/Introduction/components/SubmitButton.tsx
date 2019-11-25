@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import ImageSource from 'modules/images'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 interface SubmitButtonProps {

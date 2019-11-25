@@ -253,6 +253,6 @@ export interface MealFormUpdateMutation {
 }
 
 export interface MealFormUpdateMutationVariables {
-  id: string;
+  id: any;
   meal: MealInput;
 }

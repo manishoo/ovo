@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Image from 'common/Image/Image'
-import Link from 'common/Link/Link'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import { Routes } from '@Models/common'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Routes } from 'src/ts/models/common'
-import ImageSource from 'src/ts/modules/images/index.web'
 
 
 const TAB_BAR_HEIGHT = 50

@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SelectFoodContainer from 'common/FoodDialog/SelectFood'
+import SelectFoodContainer from '@Common/FoodDialog/SelectFood'
 import gql from 'graphql-tag'
 
 
