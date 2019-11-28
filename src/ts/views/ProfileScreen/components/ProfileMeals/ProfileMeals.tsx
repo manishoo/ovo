@@ -44,6 +44,7 @@ export default class ProfileMeals extends ComponentBase<ProfileMealsProps, Profi
         showAddMeal={this.props.showAddMeal}
         hideAvatar={this.state.me.role === Role.user}
         onLayout={e => this.props.onHeightChange(e.height)}
+        loading={this.state.fetching}
       />
     )
   }

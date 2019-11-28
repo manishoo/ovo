@@ -40,6 +40,7 @@ export default class ReviewRecipes extends ComponentBase<ReviewRecipesProps, Rev
       <RecipesList
         recipes={this.state.recipes}
         onLayout={e => this.props.onHeightChange(e.height)}
+        loading={this.state.fetching}
       />
     )
   }

@@ -194,7 +194,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 
     return (
       <RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
-        <RX.View style={{ flexDirection: 'row' }}>
+        <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing / 2 }}>
           <Text translate type={Text.types.title}
                 style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}>Ingredients</Text>
           <IngredientServingControl
@@ -212,6 +212,10 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 ingredient={{
                   ...ingredient,
                   amount: Number(Number((ingredient.amount / recipe.serving) * this.state.serving).toFixed(1)),
+                }}
+                style={{
+                  [Styles.values.marginEnd]: Styles.values.spacing,
+                  marginBottom: Styles.values.spacing,
                 }}
                 size={200}
               />
@@ -278,7 +282,12 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
         <Text
           style={[styles.authorAndDescriptionSection.date, { color: theme.colors.authorAndDescriptionSectionDateColor }]}
         >
-          {DateTime.local(recipe.createdAt).toFormat(AppConfig.locale === 'fa' ? 'jYYYY/jMM/jDD hh:mm' : 'YYYY/MM/DD hh:mm')}
+          {
+            DateTime.fromISO(recipe.createdAt)
+              .reconfigure({ outputCalendar: AppConfig.calendarSystem })
+              .setLocale(AppConfig.locale)
+              .toLocaleString(DateTime.DATE_FULL)
+          }
         </Text>
       </RX.View>
     )

@@ -29,10 +29,8 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     opacity: this._animatedValue
   })
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
+  protected _buildState(props: CenterAlignedPageViewProps, initialBuild: boolean): Partial<CenterAlignedPageViewState> | undefined {
+    return {
       width: ResponsiveWidthStore.getWidthConsideringDrawer(),
       height: ResponsiveWidthStore.getHeight(),
       hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
@@ -83,18 +81,10 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     }).start()
   }
 
-  protected _buildState(props: CenterAlignedPageViewProps, initialBuild: boolean): Partial<CenterAlignedPageViewState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
-    }
-  }
-
   private _getMaxWidth = () => {
     if (this.props.maxWidth) return this.props.maxWidth
 
-    return Styles.values.mainContentMaxWidth
+    return this.state.width
   }
 }
 

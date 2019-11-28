@@ -19,6 +19,7 @@ import { withNavigation } from '@Modules/navigator'
 import { navigate } from '@Utils'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
+import { StyleRuleSetRecursive, ViewStyleRuleSet } from 'reactxp/src/common/Types'
 
 
 const CLEAR_ICON_DIMENSION = 20
@@ -33,6 +34,7 @@ interface RecipeCellProps {
   onDelete?: () => void,
   imageOnly?: boolean,
   linkTo?: string
+  style?: StyleRuleSetRecursive<ViewStyleRuleSet>,
 }
 
 interface RecipeCellState {
@@ -87,6 +89,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
                 // height: this.props.size * 1.25,
                 // borderRadius: this.props.size / 12,
               },
+              this.props.style,
             ]}
           >
             <RX.View

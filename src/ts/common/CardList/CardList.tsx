@@ -4,6 +4,7 @@
  */
 
 import Styles from '@App/Styles'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -17,11 +18,12 @@ interface RecipesListProps extends RX.CommonProps {
   renderAddCell: (size: number) => any,
   renderCell: (item: any, size: number) => any,
   hideAvatar?: boolean,
+  loading?: boolean,
 }
 
 interface RecipesListState {
   columns: number,
-  windowWidth: number,
+  width: number,
   isSmallOrTiny?: boolean,
 }
 
@@ -29,7 +31,7 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
   public render() {
     const { style } = this.props
 
-    return (
+    return [
       <RX.View
         style={[styles.container, { minWidth: this._getCellSize() * this.state.columns }, style]}
         onLayout={this.props.onLayout}
@@ -37,23 +39,28 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
         {this.props.showAddButton && this.props.renderAddCell(this._getCellSize())}
 
         {this.props.items.map(item => this.props.renderCell(item, this._getCellSize()))}
+      </RX.View>,
+      this.props.loading && <RX.View
+        style={{
+          width: this.state.width,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <LoadingIndicator />
       </RX.View>
-    )
+    ]
   }
 
   protected _buildState(props: RecipesListProps, initialBuild: boolean): Partial<RecipesListState> | undefined {
     return {
       columns: ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 2 : 4,
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      windowWidth: ResponsiveWidthStore.getWidth(),
+      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
     }
   }
 
-  private _getMaximum1024 = (width: number) => (width > Styles.values.mainContentMaxWidth ? Styles.values.mainContentMaxWidth : width) // maximum 1024
-
-  private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
-
-  private _getCellSize = () => (this._getWindowWidthConsideringDrawer() - ((Styles.values.spacing * 2) * this.state.columns) - (Styles.values.spacing * 2)) / this.state.columns
+  private _getCellSize = () => (this.state.width - ((Styles.values.spacing * 2) * this.state.columns) - (Styles.values.spacing * 2)) / this.state.columns
 }
 
 const styles = {

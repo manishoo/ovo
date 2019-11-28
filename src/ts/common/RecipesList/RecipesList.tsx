@@ -20,6 +20,7 @@ interface RecipesListProps extends RX.CommonProps {
   showAddRecipe?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   hideAvatar?: boolean,
+  loading?: boolean,
 }
 
 export default class RecipesList extends RX.Component<RecipesListProps> {
@@ -32,6 +33,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
         showAddButton={this.props.showAddRecipe}
         onLayout={this.props.onLayout}
         hideAvatar={this.props.hideAvatar}
+        loading={this.props.loading}
       />
     )
   }

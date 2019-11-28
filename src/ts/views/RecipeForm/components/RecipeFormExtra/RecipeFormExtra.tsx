@@ -4,6 +4,7 @@
  */
 
 import FilledButton from '@Common/FilledButton/FilledButton'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import { User } from '@Models/FoodModels'
 import TagsInput from '@Views/RecipeForm/components/TagsInput/TagsInput'
 import { RecipeFormUpdateMutation_updateRecipe } from '@Views/RecipeForm/types/RecipeFormUpdateMutation'
@@ -32,7 +33,7 @@ export function RecipeFormExtra(props: RecipeFormExtraProps) {
       />
 
       <FilledButton
-        label={'Submit'}
+        label={translate(translate.keys.Submit)}
         onPress={() => props.onSubmit(props.selectedTags)}
       />
     </RX.View>

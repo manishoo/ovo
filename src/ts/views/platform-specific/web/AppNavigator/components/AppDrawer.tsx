@@ -134,8 +134,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
             label={translate('Logout')}
             style={{
               borderWidth: 0,
-              // width: 30,
-              // height: 30,
             }}
           />
         </RX.View>
@@ -156,37 +154,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
       exact: true,
     })
   }
-
-  // private _handleActiveChange = (index: number) => () => {
-  //   let toValue = 0
-  //
-  //   switch (index) {
-  //     case 0:
-  //       toValue = 90 + Styles.values.spacing
-  //       break
-  //     case 1:
-  //       toValue = 152 + (Styles.values.spacing * 2)
-  //       break
-  //     case 2:
-  //       toValue = 206 + (Styles.values.spacing * 2)
-  //       break
-  //     case 3:
-  //       toValue = 261 + (Styles.values.spacing * 2)
-  //       break
-  //     case 4:
-  //       toValue = 315 + (Styles.values.spacing * 2)
-  //       break
-  //   }
-  //
-  //   this.setState({
-  //     activeLink: index,
-  //   })
-  //   RX.Animated.timing(this._activeIndicatorTop, {
-  //     toValue,
-  //     duration: 500,
-  //   })
-  //     .start()
-  // }
 
   private _handleLocationChange = (location: Location, action?: Action) => {
     this._handleActiveChange(location.pathname, true)

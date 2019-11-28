@@ -250,18 +250,22 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
     const OFFSET = 100
 
-    const bottomOfViewPoint = newScrollValue + height
+    const bottomOfViewPoint = newScrollValue + height + OFFSET
 
     switch (activeTab) {
       case 2:
+        if (bottomOfViewPoint >= this._reviewRecipesHeight) {
+          onReachEnd()
+        }
+        break
       case 1:
-        if ((bottomOfViewPoint + OFFSET) >= this._mealsListHeight) {
+        if (bottomOfViewPoint >= this._mealsListHeight) {
           onReachEnd()
         }
         break
       case 0:
       default:
-        if ((bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
+        if (bottomOfViewPoint >= this._recipesListHeight) {
           onReachEnd()
         }
     }
@@ -272,11 +276,12 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
     switch (activeTab) {
       case 2:
+        this._reviewRecipes.fetchMore()
+        break
       case 1:
         this._meals.fetchMore()
         break
       case 0:
-      default:
         this._recipes.fetchMore()
     }
   }

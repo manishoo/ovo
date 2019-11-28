@@ -44,6 +44,7 @@ export default class ProfileRecipes extends ComponentBase<ProfileRecipesProps, P
         showAddRecipe={this.props.showAddRecipe}
         hideAvatar={this.state.me.role === Role.user}
         onLayout={e => this.props.onHeightChange(e.height)}
+        loading={this.state.fetching}
       />
     )
   }

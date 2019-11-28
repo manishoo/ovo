@@ -95,6 +95,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             thumbnail: mealItem.food.thumbnail,
             weight: mealItem.weight,
           }}
+          style={styles.mealItem}
         />
       )
     }
@@ -107,6 +108,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
           serving={mealItem.amount}
           recipe={mealItem.recipe}
           onDelete={() => this.props.onMealItemDelete(mealItem.id)}
+          style={styles.mealItem}
         />
       )
     }
@@ -177,4 +179,8 @@ const styles = {
     flexDirection: 'row',
     padding: Styles.values.spacing,
   }),
+  mealItem: RX.Styles.createViewStyle({
+    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginBottom: Styles.values.spacing,
+  })
 }

@@ -18,6 +18,7 @@ import {
   SelectFoodQuery_recipes_recipes,
   SelectFoodQueryVariables
 } from '@Common/FoodDialog/types/SelectFoodQuery'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
 import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
@@ -62,6 +63,7 @@ interface SelectFoodProps extends SelectFoodCommonProps {
   foods: SelectFoodQuery_foods_foods[],
   recipes: SelectFoodQuery_recipes_recipes[],
   onSearch: (nameSearchQuery: string) => void,
+  loading?: boolean,
 }
 
 interface SelectFoodState {
@@ -170,6 +172,23 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                 }}
                 style={styles.createNewFoodButton}
               />
+            }
+            {
+              this.props.loading &&
+              <RX.View
+                ignorePointerEvents
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <LoadingIndicator />
+              </RX.View>
             }
           </RX.View>
         )}
@@ -369,7 +388,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
 
 function SelectFoodContainer(props: SelectFoodCommonProps) {
   const [nameSearchQuery, setNameSearchQuery] = useState('')
-  const { data } = useQuery<SelectFoodQuery, SelectFoodQueryVariables>(gql`
+  const { data, loading } = useQuery<SelectFoodQuery, SelectFoodQueryVariables>(gql`
     query SelectFoodQuery($nameSearchQuery: String) {
       foods (nameSearchQuery: $nameSearchQuery) {
         foods {
@@ -394,6 +413,7 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
   return (
     <SelectFood
       {...props}
+      loading={loading}
       nameSearchQuery={nameSearchQuery}
       foods={(data && data.foods && data.foods.foods) || []}
       recipes={(data && data.recipes && data.recipes.recipes) || []}

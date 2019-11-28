@@ -204,6 +204,7 @@ enum FaLocale {
   'Log out' = 'خروج',
   ', and ' = '، و ',
   Calories = 'کالری',
+  Reviews = 'دستور تهیه های در انتظار تائید'
 }
 
 export default FaLocale
