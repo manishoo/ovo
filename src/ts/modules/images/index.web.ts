@@ -72,6 +72,8 @@ class ImageSource implements ImageSourceBase {
 
   Ellipsis = AppConfig.getImagePath('Ellipsis.svg')
   Regenerate = AppConfig.getImagePath('Regenerate.svg')
+
+  GooeyRingSpinner = AppConfig.getImagePath('GooeyRingSpinner.svg')
 }
 
 export default new ImageSource()

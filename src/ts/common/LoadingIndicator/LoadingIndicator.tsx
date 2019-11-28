@@ -7,7 +7,7 @@ import Image from '@Common/Image/Image'
 import RX from 'reactxp'
 
 
-const DEFAULT_SIZE = 30
+const DEFAULT_SIZE = 50
 
 interface LoadingIndicatorProps {
   style?: any,
@@ -44,7 +44,7 @@ export default class LoadingIndicator extends RX.Component<LoadingIndicatorProps
   }
 
   componentDidMount() {
-    this._loopAnimation.start()
+    // this._loopAnimation.start()
     this._opacityAnimation.start()
   }
 
@@ -52,8 +52,8 @@ export default class LoadingIndicator extends RX.Component<LoadingIndicatorProps
     const { style } = this.props
 
     return (
-      <RX.Animated.Image
-        source={Image.source.Logo}
+      <Image
+        source={Image.source.GooeyRingSpinner}
         style={[
           styles.container,
           {

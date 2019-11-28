@@ -47,7 +47,8 @@ export class Theme {
       case 'dark':
       default:
       case 'light': {
-        const primary = '#00BA72' //#00c54f
+        const primary = '#07AF47' //#00c54f #00BA72
+        const primaryDarker = '#05863e'
 
         return {
           primary,
@@ -74,7 +75,7 @@ export class Theme {
           userMealsInputBG: 'rgba(255, 255, 255, 0.38)',
           userMealsInputText: '#fff',
 
-          calendarDayName: '#fff∑',
+          calendarDayName: '#fff',
 
           grey1: 'grey',
           subtitle: '#757575',
@@ -126,7 +127,7 @@ export class Theme {
           filledButtonDefaultModeBorder: '#F2F2F2',
           filledButtonDefaultModeTextColor: '#B2B2B0',
           filledButtonText: '#fff',
-          filledButtonHoverBG: '#00915a',
+          filledButtonHoverBG: primaryDarker,
           filledButtonDisabledTextColor: '#B2B2B0',
           filledButtonDisabledBG: '#F5F5F8',
           createRecipeTextInputBG: '#f5f5f8',

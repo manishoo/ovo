@@ -65,6 +65,7 @@ class ImageSource implements ImageSourceBase {
   get Cog() {return require('../../../images/Cog.png')}
   get Ellipsis() {return require('../../../images/Ellipsis.png')}
   get Regenerate() {return require('../../../images/Regenerate.png')}
+  get GooeyRingSpinner() {return require('../../../images/GooeyRingSpinner.svg')}
 }
 
 export default new ImageSource()

@@ -129,8 +129,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         recipe: {
           ...props.recipe,
           ingredients: props.recipe.ingredients.map(ingredient => ({
-            key: String(Math.random()),
             ...ingredient,
+            key: String(Math.random()),
+            description: ingredient.description || [],
           })),
           instructions: props.recipe.instructions,
           title: props.recipe.title,
@@ -281,9 +282,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
                 onDelete={this._onIngredientDelete(index)}
                 onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
                 onIngredientChange={this._onIngredientChange}
-                style={{
-                  [Styles.values.marginEnd]: Styles.values.spacing,
-                }}
+                style={styles.ingredient}
               />
             ))
           }
@@ -870,5 +869,9 @@ const styles = {
     right: 0,
     top: 0,
     bottom: 0,
+  }),
+  ingredient: RX.Styles.createViewStyle({
+    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginBottom: Styles.values.spacing,
   })
 }

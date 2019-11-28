@@ -70,4 +70,6 @@ export interface ImageSourceBase {
 
   Ellipsis: string;
   Regenerate: string;
+
+  GooeyRingSpinner: string;
 }
