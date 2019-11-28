@@ -209,6 +209,8 @@ enum FaLocale {
   Reviews = 'دستور تهیه های در انتظار تائید',
   'Rejecting' = 'در حال رد درخواست',
   'Reject Request' = 'رد درخواست',
+  'Accepting' = 'در حال تائید',
+  'Accept Publication Request' = 'تائید درخواست',
   'Bringing down' = 'در حال عدم نشر',
   'Bring down' = 'عدم نشر',
   'Requesting for Publication' = 'در حال درخواست انتشار',
