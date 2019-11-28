@@ -198,7 +198,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           </RX.View>
         }
 
-        <FilledButton label={'Submit'} onPress={this._onSubmit} />
+        <FilledButton label={translate(translate.keys.Submit)} onPress={this._onSubmit} />
       </CenterAlignedPageView>
     )
   }

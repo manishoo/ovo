@@ -9,9 +9,11 @@ import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import ErrorComponent from '@Common/ErrorComponent/ErrorComponent'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
 import Link from '@Common/Link/Link'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
 import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
@@ -44,7 +46,8 @@ import Instructions from './components/Instructions'
 
 interface RecipeProps extends RX.CommonProps {
   style?: any,
-  recipe: PublicRecipe
+  recipe?: PublicRecipe,
+  loading?: boolean,
 }
 
 interface RecipeState {
@@ -57,6 +60,18 @@ interface RecipeState {
 
 class Recipe extends ComponentBase<RecipeProps, RecipeState> {
   public render() {
+    if (this.props.loading) {
+      return (
+        <RX.View
+          ignorePointerEvents
+          style={Styles.values.absolutelyExtended}
+        >
+          <LoadingIndicator />
+        </RX.View>
+      )
+    }
+    if (!this.props.recipe) return null
+
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -110,7 +125,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
       windowWidth: ResponsiveWidthStore.getWidth(),
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       user: UserStore.getUser(),
-      serving: props.recipe.serving,
+      serving: props.recipe ? props.recipe.serving : undefined,
     }
   }
 
@@ -400,12 +415,19 @@ export default function RecipeContainer(props: RecipeProps) {
     }
   })
 
+  if (error) {
+    return (
+      <ErrorComponent
+        error={error}
+      />
+    )
+  }
+
   return (
-    <RX.View>
-      {!!data && !!data.recipe && <Recipe recipe={data.recipe} />}
-      {!!loading && <Text translate>Loading</Text>}
-      {!!error && <RX.Text>Error</RX.Text>}
-    </RX.View>
+    <Recipe
+      recipe={data ? data.recipe : undefined}
+      loading={loading}
+    />
   )
 }
 

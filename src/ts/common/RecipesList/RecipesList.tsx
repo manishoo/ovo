@@ -63,7 +63,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
 
 const styles = {
   item: RX.Styles.createViewStyle({
-    marginHorizontal: Styles.values.spacing / 2,
-    marginBottom: Styles.values.spacing / 2,
+    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginBottom: Styles.values.spacing,
   })
 }

@@ -113,44 +113,47 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
               value={me.socialNetworks.instagram}
               onChange={this._onChange(['socialNetworks', 'instagram'])}
               label={translate('Instagram')}
-              placeholder={translate('Enter your username')}
+              placeholder={translate('socialMediaPlaceholderInstagram')}
             />
             <Input
               value={me.socialNetworks.twitter}
               onChange={this._onChange(['socialNetworks', 'twitter'])}
               label={translate('Twitter')}
-              placeholder={translate('Enter your username')}
+              placeholder={translate('socialMediaPlaceholderTwitter')}
             />
             <Input
               value={me.socialNetworks.pinterest}
               onChange={this._onChange(['socialNetworks', 'pinterest'])}
               label={translate('Pinterest')}
-              placeholder={translate('Enter your username')}
+              placeholder={translate('socialMediaPlaceholderPinterest')}
             />
 
-            <Text translate type={Text.types.title}>Change Password</Text>
-
-            <Input
-              value={this.state.newPassword}
-              onChange={this._onChange(['newPassword'])}
-              label={translate('NewPassword')}
-              validate={value => value.length >= 4}
-              secureTextEntry
-            />
-            <Input
-              value={this.state.password}
-              onChange={this._onChange(['password'])}
-              label={translate('Password')}
-              validate={value => value.length >= 4}
-              secureTextEntry
-            />
-            <Input
-              value={this.state.password2}
-              onChange={this._onChange(['password2'])}
-              label={translate('PasswordAgain')}
-              validate={value => value === this.state.password}
-              secureTextEntry
-            />
+            {
+              false && [
+                <Text translate type={Text.types.title}>Change Password</Text>,
+                <Input
+                  value={this.state.newPassword}
+                  onChange={this._onChange(['newPassword'])}
+                  label={translate('NewPassword')}
+                  validate={value => value.length >= 4}
+                  secureTextEntry
+                />,
+                <Input
+                  value={this.state.password}
+                  onChange={this._onChange(['password'])}
+                  label={translate('Password')}
+                  validate={value => value.length >= 4}
+                  secureTextEntry
+                />,
+                <Input
+                  value={this.state.password2}
+                  onChange={this._onChange(['password2'])}
+                  label={translate('PasswordAgain')}
+                  validate={value => value === this.state.password}
+                  secureTextEntry
+                />
+              ]
+            }
 
             <FilledButton label={translate('Submit')} onPress={this._onUpdate} />
 

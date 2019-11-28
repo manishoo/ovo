@@ -346,6 +346,6 @@ const styles = {
     marginBottom: Styles.values.spacing,
   }),
   tabButton: RX.Styles.createViewStyle({
-    marginRight: Styles.values.spacing,
+    [Styles.values.marginEnd]: Styles.values.spacing,
   })
 }

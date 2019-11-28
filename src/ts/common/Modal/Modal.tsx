@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import assert from 'assert'
 
@@ -32,13 +33,7 @@ const _initialScalingRatio = 0.5
 
 const _styles = {
   modalContainerBackground: RX.Styles.createViewStyle({
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...Styles.values.absolutelyExtended,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     flexDirection: 'row'
   }),

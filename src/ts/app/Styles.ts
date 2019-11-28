@@ -64,6 +64,16 @@ export default class Styles {
     get borderBottomStartRadius() {
       return `borderBottom${this.Start}Radius`
     },
+
+    absolutelyExtended: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+    } as any
   }
 
   public static fontSizes = {
