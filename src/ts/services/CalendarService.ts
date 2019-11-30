@@ -67,7 +67,7 @@ class CalendarService extends StoreBase implements IPersistableStore {
   }
 
   setDay(day: Day) {
-    const foundDayIndex = this.calendar.findIndex(p => DateTime.fromJSDate(p.date).toISODate() === DateTime.fromJSDate(day.date).toISODate())
+    const foundDayIndex = this.calendar.findIndex(p => DateTime.fromISO(p.date).hasSame(DateTime.fromISO(day.date), 'day'))
 
     if (foundDayIndex !== -1) {
       this.calendar[foundDayIndex] = day

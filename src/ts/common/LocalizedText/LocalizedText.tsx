@@ -4,6 +4,7 @@
  */
 
 import AppConfig from '@App/AppConfig'
+import { LanguageCode } from '@Models/global-types'
 import RX from 'reactxp'
 import { default as RXI18n } from 'reactxp-i18n'
 import ENLocale from '../../locales/en'
@@ -38,7 +39,7 @@ export function translate(key: string | ENLocale, variables?: { [k: string]: str
   return key
 }
 
-translate.keys = ENLocale
+translate.keys = locale === LanguageCode.fa ? FALocale : ENLocale
 
 export function __(key: string) {
   return translations[locale][key]

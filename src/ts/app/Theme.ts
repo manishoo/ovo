@@ -75,7 +75,7 @@ export class Theme {
           userMealsInputBG: 'rgba(255, 255, 255, 0.38)',
           userMealsInputText: '#fff',
 
-          calendarDayName: '#fff',
+          calendarDayName: '#4a4a4a',
 
           grey1: 'grey',
           subtitle: '#757575',
@@ -173,6 +173,8 @@ export class Theme {
           textInputBg: '#F5F5F8',
           inputValidColor: primary,
           inputInvalidColor: '#D44539',
+
+          calendarEmptyStateBG: '#fafafa',
         }
       }
     }

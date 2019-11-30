@@ -78,62 +78,67 @@ class MealComponent extends RX.Component<MealComponentProps> {
 
   public render() {
     const { style, mealRegenerating, dayId, meal } = this.props
-    // const { meal } = this.state
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <RX.View
-            style={[
-              styles.container,
-              {
-                backgroundColor: theme.colors.mealCardBackgroundColor
-              },
-              style,
-            ]}
-          >
-            <HoverView
-              onRenderChild={isHovering => (
-                <RX.View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <RX.View
-                    style={{ flex: 1 }}
-                  >
-                    <Text style={styles.mealName}>{meal.userMeal.name}</Text>
-                    <Text
-                      style={styles.mealCalorie}>{this._calculateMealNutrition()} {translate(translate.keys.Calories)}</Text>
-                  </RX.View>
-
+          <HoverView
+            onRenderChild={isHovering => (
+              <RX.View
+                style={[
+                  styles.container,
                   {
-                    (isHovering || mealRegenerating) &&
-                    <ItemControl
-                      onRegenerate={this._onMealRegenerate}
-                      regenerating={mealRegenerating}
+                    backgroundColor: theme.colors.mealCardBackgroundColor,
+                    borderColor: theme.colors.borderLight,
+                  },
+                  isHovering ? RX.Styles.createViewStyle(Styles.values.defaultShadow) : {},
+                  style,
+                ]}
+              >
+                <HoverView
+                  onRenderChild={isHovering => (
+                    <RX.View
                       style={{
-                        position: 'absolute',
-                        [Styles.values.end]: Styles.values.spacing,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
                       }}
-                    />
-                  }
-                </RX.View>
-              )}
-            />
+                    >
+                      <RX.View
+                        style={{ flex: 1 }}
+                      >
+                        <Text style={styles.mealName}>{meal.userMeal.name}</Text>
+                        <Text
+                          style={styles.mealCalorie}>{this._calculateMealNutrition()} {translate(translate.keys.Calories)}</Text>
+                      </RX.View>
 
-            {
-              meal.items.map(mealItem => (
-                <MealItemComponent
-                  meal={meal}
-                  dayId={dayId}
-                  mealItem={mealItem}
+                      {
+                        (isHovering || mealRegenerating) &&
+                        <ItemControl
+                          onRegenerate={this._onMealRegenerate}
+                          regenerating={mealRegenerating}
+                          style={{
+                            position: 'absolute',
+                            [Styles.values.end]: Styles.values.spacing,
+                          }}
+                        />
+                      }
+                    </RX.View>
+                  )}
                 />
-              ))
-            }
-          </RX.View>
+
+                {
+                  meal.items.map(mealItem => (
+                    <MealItemComponent
+                      meal={meal}
+                      dayId={dayId}
+                      mealItem={mealItem}
+                    />
+                  ))
+                }
+              </RX.View>
+            )}
+          />
         )}
       </ThemeContext.Consumer>
     )
@@ -143,11 +148,11 @@ class MealComponent extends RX.Component<MealComponentProps> {
     if (this.props.mealRegenerating) return
 
     this.props.onMealRegenerate()
-      // .then(({ data: { suggestMeal } }) => {
-      //   this.setState({
-      //     meal: suggestMeal
-      //   })
-      // })
+    // .then(({ data: { suggestMeal } }) => {
+    //   this.setState({
+    //     meal: suggestMeal
+    //   })
+    // })
   }
 
   private _calculateMealNutrition = () => {
@@ -197,9 +202,11 @@ export default MealComponentContainer
 
 const styles = {
   container: RX.Styles.createViewStyle({
+    // @ts-ignore
+    transition: 'all 0.5s',
+    borderWidth: 1,
     borderRadius: 20,
     marginBottom: Styles.values.spacing,
-    ...Styles.values.defaultShadow,
   }),
   mealName: RX.Styles.createTextStyle({
     fontSize: 20,

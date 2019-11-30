@@ -4,7 +4,10 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
+import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import CalendarService from '@Services/CalendarService'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import gql from 'graphql-tag'
@@ -23,8 +26,10 @@ interface CalendarProps extends RX.CommonProps {
 
 interface CalendarState {
   calendar: Day[],
+  renderingDates: DateTime[],
   dayCursor: DateTime,
   width: number,
+  height: number,
 }
 
 export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
@@ -44,150 +49,140 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
     super(props)
 
     RX.StatusBar.setTranslucent(true)
+    const dayCursor = DateTime.local()
+    const calendar = CalendarService.getCalendar()
+
     this.state = {
-      dayCursor: DateTime.local(),
+      dayCursor,
       calendar: CalendarService.getCalendar(),
+      renderingDates: this._generateRenderingDays(dayCursor),
       width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      height: ResponsiveWidthStore.getHeightNoSubscription(),
     }
   }
 
+  private _scrollView: RX.ScrollView
+
   protected _buildState(props: CalendarProps, initialBuild: boolean): Partial<CalendarState> | undefined {
+    const calendar = CalendarService.getCalendar()
+
     return {
-      calendar: CalendarService.getCalendar(),
+      calendar,
+      renderingDates: this._generateRenderingDays(this.state.dayCursor),
       width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      height: ResponsiveWidthStore.getHeight(),
     }
+  }
+
+  componentDidMount() {
+    // go to today
+    setTimeout(() => {
+      this._scrollView.setScrollLeft(this._getCurrentDayPosition(), false)
+    }, 0)
   }
 
   public render() {
-    return null
-
     return (
-      <RX.ScrollView
-        style={[
-          styles.scrollView,
+      <RX.View
+        style={{
+          flex: 1,
+          width: this.state.width,
+        }}
+      >
+        {this._renderControl()}
+        <RX.ScrollView
+          style={[
+            styles.scrollView,
+          ]}
+          horizontal
+          scrollEnabled={false}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          ref={ref => this._scrollView = ref}
+        >
           {
-            width: this.state.width,
+            this.state.renderingDates.map(date => (
+              <DayComponent
+                style={{
+                  width: this._getDayWidth(),
+                }}
+                date={date}
+                day={this._getDayByDate(date, this.state.calendar)}
+              />
+            ))
           }
-        ]}
-        horizontal
-        scrollEnabled={false}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        // pagingEnabled
-        // snapToInterval={1}
+        </RX.ScrollView>
+      </RX.View>
+    )
+  }
+
+  private _generateRenderingDays = (dayCursor: DateTime): DateTime[] => {
+    const renderingDays: DateTime[] = []
+    for (let i = 3; i > 0; i--) {
+      renderingDays.push(dayCursor.minus({ day: i }))
+    }
+    renderingDays.push(dayCursor)
+    for (let i = 1; i <= 3; i++) {
+      renderingDays.push(dayCursor.plus({ day: i }))
+    }
+    return renderingDays
+  }
+
+  private _renderControl = () => {
+    return (
+      <RX.View
+        style={styles.controlWrapper}
       >
-        {/*<DayComponent
-          style={{
-            width: this._getDayWidth(),
-          }}
-          date={this.state.dayCursor.plus({ day: 1 })}
-          day={this._getDayByDate(this.state.dayCursor.plus({ day: 1 }))}
-        />*/}
-        <DayComponent
-          style={{
-            width: this._getDayWidth(),
-          }}
-          date={this.state.dayCursor}
-          day={this._getDayByDate(this.state.dayCursor)}
+        <FilledButton
+          mode={FilledButton.mode.default}
+          label={translate('<-')}
+          onPress={() => this._changeDayCursor(this.state.dayCursor.minus({ day: 1 }), this._getPrevDayPosition())}
+          style={styles.controlButton}
         />
-        {/*<DayComponent
-          style={{
-            width: this._getDayWidth(),
-          }}
-          date={this.state.dayCursor.minus({ day: 1 })}
-          day={this._getDayByDate(this.state.dayCursor.minus({ day: 1 }))}
-        />*/}
-        {this._renderNextControl()}
-        {this._renderPrevControl()}
-      </RX.ScrollView>
-    )
-  }
-
-  private _renderNextControl = () => {
-    return (
-      <RX.View
-        onPress={this._onNextDay}
-        style={{
-          position: 'absolute',
-          [Styles.values.end]: 0,
-          width: 50,
-          top: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <RX.Text>{'->'}</RX.Text>
+        <FilledButton
+          mode={FilledButton.mode.default}
+          label={translate(translate.keys.Today)}
+          onPress={() => this._changeDayCursor(DateTime.local(), this._getCurrentDayPosition())}
+          style={styles.controlButton}
+        />
+        <FilledButton
+          mode={FilledButton.mode.default}
+          label={translate('->')}
+          onPress={() => this._changeDayCursor(this.state.dayCursor.plus({ day: 1 }), this._getNextDayPosition())}
+          style={styles.controlButton}
+        />
       </RX.View>
     )
   }
 
-  private _renderPrevControl = () => {
-    return (
-      <RX.View
-        onPress={this._onPrevDay}
-        style={{
-          position: 'absolute',
-          [Styles.values.start]: 0,
-          width: 50,
-          top: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <RX.Text>{'<-'}</RX.Text>
-      </RX.View>
-    )
-  }
+  private _getDayWidth = () => this.state.width
 
-  private _getDayWidth = () => {
-    return this.state.width
-  }
-
-  private _getDayByDate = (date: DateTime) => {
-    const { calendar } = this.state
-
+  private _getDayByDate = (date: DateTime, calendar: Day[]) => {
     return calendar.find(day => DateTime.fromISO(day.date).hasSame(date, 'day'))
   }
 
-  private _onNextDay = () => {
-    this.setState(prevState => ({
-      dayCursor: prevState.dayCursor.plus({ day: 1 })
-    }))
+  private _getPrevDayPosition = () => this._getDayWidth() * (AppConfig.isRTL() ? 4 : 2)
+  private _getCurrentDayPosition = () => this._getDayWidth() * 3
+  private _getNextDayPosition = () => this._getDayWidth() * (AppConfig.isRTL() ? 2 : 4)
+
+  private _changeDayCursor = (newDayCursor: DateTime, position: number) => {
+    const renderingDates = this._generateRenderingDays(newDayCursor)
+
+    this._scrollView.setScrollLeft(position, true)
+    setTimeout(() => {
+      this.setState({
+        renderingDates,
+        dayCursor: newDayCursor,
+      }, () => {
+        this._scrollView.setScrollLeft(this._getCurrentDayPosition(), false)
+      })
+    }, 300)
   }
-
-  private _onPrevDay = () => {
-    this.setState(prevState => ({
-      dayCursor: prevState.dayCursor.minus({ day: 1 })
-    }))
-  }
-
-  /*private _isPrevDayFilled = (day: Day) => {
-    const foundDay = this.state.calendar
-      .find(p => DateTime.fromJSDate(p.date).toISODate() === DateTime.fromJSDate(day.date).minus({ day: 1 }).toISODate())
-
-    /!**
-     * If it was the first day (ever!)
-     * *!/
-    if (!foundDay) return true
-
-    return foundDay && foundDay.meals.length > 0
-  }
-
-  private _isNextDayFilled = (day: Day) => {
-    const foundDay = this.state.calendar
-      .find(p => DateTime.fromJSDate(p.date).toISODate() === DateTime.fromJSDate(day.date).plus({ day: 1 }).toISODate())
-
-    /!**
-     * If it was the last day (ever!)
-     * *!/
-    if (!foundDay) return true
-
-    return foundDay && foundDay.meals.length > 0
-  }*/
 }
 
 export default () => {
   const { data } = useQuery<CalendarQuery, CalendarQueryVariables>(CalendarScreen.operations.calendar, {
+    fetchPolicy: 'network-only',
     variables: {
       startDate: '2019-10-29T16:23:18.758Z',
       endDate: '2020-01-01T16:23:18.758Z',
@@ -206,5 +201,13 @@ const styles = {
   scrollView: RX.Styles.createScrollViewStyle({
     // @ts-ignore
     display: 'flex',
+  }),
+  controlWrapper: RX.Styles.createViewStyle({
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: Styles.values.spacing,
+  }),
+  controlButton: RX.Styles.createViewStyle({
+    borderRadius: 8,
   })
 }

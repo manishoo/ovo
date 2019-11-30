@@ -59,7 +59,7 @@ enum FaLocale {
   'weightName' = 'نام واحد اندازه‌گیری',
   'gramWeight' = 'وزن (گرم)',
 
-  'Path' = 'راه من',
+  'Path' = 'برنامه',
   'MealPlan' = 'برنامه غذایی',
 
   'landing_1_t' = 'راحت\u200Cتر برنامه\u200Cغذایی اختصاصیتون رو دنبال کنین',
@@ -217,6 +217,14 @@ enum FaLocale {
   'Request Publication' = 'درخواست انتشار',
   'Cancelling' = 'در حال انصراف',
   'Cancel Publication Request' = 'انصراف',
+
+  Send = 'ارسال',
+  commaAnd = '، ',
+  Today = 'امروز',
+  availableTime = 'زمان موجود',
+  mealSize = 'اندازه وعده',
+  Save = 'ذخیره',
+  Snack = 'اسنک'
 }
 
 export default FaLocale

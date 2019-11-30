@@ -16,9 +16,9 @@ export default class Styles {
     drawerWidth: 200,
     mainContentMaxWidth: 975,
     defaultShadow: {
-      shadowColor: 'rgba(0, 0, 0, .4)',
-      shadowRadius: 5,
-      shadowOffset: { width: 0, height: 2 },
+      shadowColor: 'rgba(0, 0, 0, .3)',
+      shadowRadius: 4,
+      shadowOffset: { width: 0, height: 3 },
       shadowOpacity: -1
     },
 
