@@ -3,17 +3,17 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import AppConfig from '@App/AppConfig'
+import Text from '@Common/Text/Text'
+import LocationStore from '@Services/LocationStore'
+import {
+  PublicProfileScreenQuery,
+  PublicProfileScreenQueryVariables
+} from '@Views/ProfileScreen/types/PublicProfileScreenQuery'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import LocationStore from 'src/ts/stores/LocationStore'
-import {
-  PublicProfileScreenQuery,
-  PublicProfileScreenQueryVariables
-} from 'src/ts/views/ProfileScreen/types/PublicProfileScreenQuery'
 import ProfileScreen from './ProfileScreen'
 
 
@@ -30,7 +30,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
           username: this._username,
         }}
         query={gql`
-          query PublicProfileScreenQuery($username: String, $userId: String) {
+          query PublicProfileScreenQuery($username: String, $userId: ObjectId) {
             user(userId: $userId, username: $username) {
               ...ProfileUser
             }

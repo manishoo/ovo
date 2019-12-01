@@ -7,6 +7,29 @@
 //==============================================================
 
 /**
+ * AssistantExpectations
+ */
+export enum AssistantExpectations {
+  activity = "activity",
+  age = "age",
+  allergy = "allergy",
+  chooseDiet = "chooseDiet",
+  diet = "diet",
+  dislikedFoods = "dislikedFoods",
+  gender = "gender",
+  goal = "goal",
+  height = "height",
+  meal = "meal",
+  mealPlan = "mealPlan",
+  mealPlanSettings = "mealPlanSettings",
+  meals = "meals",
+  nickname = "nickname",
+  normalRoutine = "normalRoutine",
+  register = "register",
+  weight = "weight",
+}
+
+/**
  * Gender
  */
 export enum Gender {
@@ -20,6 +43,55 @@ export enum Gender {
 export enum LanguageCode {
   en = "en",
   fa = "fa",
+}
+
+/**
+ * Meal Available Time
+ */
+export enum MealAvailableTime {
+  littleTime = "littleTime",
+  lotsOfTime = "lotsOfTime",
+  moreTime = "moreTime",
+  noLimit = "noLimit",
+  noTime = "noTime",
+  someTime = "someTime",
+}
+
+/**
+ * Meal Size
+ */
+export enum MealSize {
+  big = "big",
+  huge = "huge",
+  normal = "normal",
+  small = "small",
+  tiny = "tiny",
+}
+
+/**
+ * Message Senders
+ */
+export enum MessageSender {
+  assistant = "assistant",
+  user = "user",
+}
+
+/**
+ * Message Type
+ */
+export enum MessageType {
+  email = "email",
+  food = "food",
+  form = "form",
+  height = "height",
+  mealPlan = "mealPlan",
+  mealPlanSettings = "mealPlanSettings",
+  meals = "meals",
+  number = "number",
+  password = "password",
+  select = "select",
+  text = "text",
+  weight = "weight",
 }
 
 /**
@@ -38,6 +110,7 @@ export enum RecipeDifficulty {
 export enum RecipeStatus {
   private = "private",
   public = "public",
+  review = "review",
 }
 
 /**
@@ -93,6 +166,9 @@ export interface MealItemInput {
   food?: string | null;
   recipe?: string | null;
   weight?: string | null;
+  customUnit?: string | null;
+  gramWeight?: number | null;
+  description?: TranslationInput[] | null;
   alternativeMealItems?: MealItemInputBase[] | null;
 }
 
@@ -102,6 +178,9 @@ export interface MealItemInputBase {
   food?: string | null;
   recipe?: string | null;
   weight?: string | null;
+  customUnit?: string | null;
+  gramWeight?: number | null;
+  description?: TranslationInput[] | null;
 }
 
 export interface RecipeInput {
@@ -152,6 +231,7 @@ export interface UserRegistrationInput {
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
+  dietId?: any | null;
 }
 
 export interface UserUpdateInput {
@@ -165,6 +245,7 @@ export interface UserUpdateInput {
   socialNetworks: SocialNetworksInput;
   bio?: string | null;
   phoneNumber?: string | null;
+  dietId?: any | null;
 }
 
 //==============================================================

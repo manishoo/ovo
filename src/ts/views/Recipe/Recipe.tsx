@@ -4,47 +4,50 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilledButton from 'common/FilledButton/FilledButton'
-import Image from 'common/Image/Image'
-import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Navbar from 'common/Navbar/Navbar'
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
-import Text from 'common/Text/Text'
-import gql from 'graphql-tag'
-// @ts-ignore
-import moment from 'moment-jalali'
-import { Mutation } from 'react-apollo'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Role } from 'src/ts/models/global-types'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import UserStore from 'src/ts/stores/UserStore'
-import { getParam, navigate } from 'src/ts/utilities'
-import trimTypeName from 'src/ts/utilities/trim-type-name'
-import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import ErrorComponent from '@Common/ErrorComponent/ErrorComponent'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
+import Text from '@Common/Text/Text'
+import { Role } from '@Models/global-types'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import UserStore from '@Services/UserStore'
+import { getParam, navigate } from '@Utils'
+import authorized from '@Utils/authorized'
+import trimTypeName from '@Utils/trim-type-name'
+import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
 import {
   ProfileRecipesQuery,
   ProfileRecipesQueryVariables
-} from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import IngredientServingControl from 'src/ts/views/Recipe/components/IngredientServingControl'
-import PublishRecipe from 'src/ts/views/Recipe/components/PublishRecipe'
-import { PublicRecipe } from 'src/ts/views/Recipe/types/PublicRecipe'
-import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from 'src/ts/views/Recipe/types/RecipeDeleteMutation'
-import { RecipeQuery, RecipeQueryVariables } from 'src/ts/views/Recipe/types/RecipeQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
+} from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import IngredientServingControl from '@Views/Recipe/components/IngredientServingControl'
+import PublishRecipe from '@Views/Recipe/components/PublishRecipe'
+import { PublicRecipe } from '@Views/Recipe/types/PublicRecipe'
+import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from '@Views/Recipe/types/RecipeDeleteMutation'
+import { RecipeQuery, RecipeQueryVariables } from '@Views/Recipe/types/RecipeQuery'
+import { Me } from '@Views/Register/types/Me'
+import gql from 'graphql-tag'
+import { DateTime } from 'luxon'
+import { Mutation } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import Instructions from './components/Instructions'
 
 
 interface RecipeProps extends RX.CommonProps {
   style?: any,
-  recipe: PublicRecipe
+  recipe?: PublicRecipe,
+  loading?: boolean,
 }
 
 interface RecipeState {
@@ -57,6 +60,18 @@ interface RecipeState {
 
 class Recipe extends ComponentBase<RecipeProps, RecipeState> {
   public render() {
+    if (this.props.loading) {
+      return (
+        <RX.View
+          ignorePointerEvents
+          style={Styles.values.absolutelyExtended}
+        >
+          <LoadingIndicator />
+        </RX.View>
+      )
+    }
+    if (!this.props.recipe) return null
+
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -110,7 +125,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
       windowWidth: ResponsiveWidthStore.getWidth(),
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       user: UserStore.getUser(),
-      serving: props.recipe.serving,
+      serving: props.recipe ? props.recipe.serving : undefined,
     }
   }
 
@@ -132,21 +147,21 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('prepTime')}: {recipe.timing.prepTime}</Text>
+          >{translate('prepTime')}: {recipe.timing.prepTime}</Text>
         }
         {
           recipe.timing.cookTime !== null &&
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('cookTime')}: {recipe.timing.cookTime}</Text>
+          >{translate('cookTime')}: {recipe.timing.cookTime}</Text>
         }
         {
           recipe.timing.totalTime !== null &&
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('totalTime')}: {recipe.timing.totalTime}</Text>
+          >{translate('totalTime')}: {recipe.timing.totalTime}</Text>
         }
       </RX.View>
     )
@@ -171,19 +186,19 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('calories')}: {recipe.nutrition.calories.amount.toFixed()} {recipe.nutrition.calories.unit}</Text>
+          >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {translate(recipe.nutrition.calories.unit)}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {recipe.nutrition.proteins.unit}</Text>
+          >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {translate(recipe.nutrition.proteins.unit)}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('totalCarbs')}: {carbs.amount.toFixed()} {carbs.unit}</Text>
+          >{translate('totalCarbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>
           <Text
             type={Text.types.body}
             style={{ marginBottom: 5 }}
-          >{getLocalizedText('fats')}: {recipe.nutrition.fats.amount.toFixed()} {recipe.nutrition.fats.unit}</Text>
+          >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {translate(recipe.nutrition.fats.unit)}</Text>
         </RX.View>
       </RX.View>
     )
@@ -194,7 +209,7 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
 
     return (
       <RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
-        <RX.View style={{ flexDirection: 'row' }}>
+        <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing / 2 }}>
           <Text translate type={Text.types.title}
                 style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}>Ingredients</Text>
           <IngredientServingControl
@@ -212,6 +227,10 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
                 ingredient={{
                   ...ingredient,
                   amount: Number(Number((ingredient.amount / recipe.serving) * this.state.serving).toFixed(1)),
+                }}
+                style={{
+                  [Styles.values.marginEnd]: Styles.values.spacing,
+                  marginBottom: Styles.values.spacing,
                 }}
                 size={200}
               />
@@ -278,7 +297,12 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
         <Text
           style={[styles.authorAndDescriptionSection.date, { color: theme.colors.authorAndDescriptionSectionDateColor }]}
         >
-          {moment(recipe.createdAt).format(AppConfig.locale === 'fa' ? 'jYYYY/jMM/jDD hh:mm' : 'YYYY/MM/DD hh:mm')}
+          {
+            DateTime.fromISO(recipe.createdAt)
+              .reconfigure({ outputCalendar: AppConfig.calendarSystem })
+              .setLocale(AppConfig.locale)
+              .toLocaleString(DateTime.DATE_FULL)
+          }
         </Text>
       </RX.View>
     )
@@ -333,24 +357,24 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
               })
             }}
             mutation={gql`
-							mutation RecipeDeleteMutation($recipeId: String!) {
+							mutation RecipeDeleteMutation($recipeId: ObjectId!) {
 								deleteRecipe(recipeId: $recipeId)
 							}
 						`}
           >
             {(mutate) => (
               <FilledButton
-                label={getLocalizedText('Delete Recipe')}
+                label={translate('Delete Recipe')}
                 mode={FilledButton.mode.danger}
-                onPress={() => RX.Alert.show(getLocalizedText('deleteRecipe?'), undefined, [{
-                  text: getLocalizedText('yes'),
+                onPress={() => RX.Alert.show(translate('deleteRecipe?'), undefined, [{
+                  text: translate('yes'),
                   onPress: () => mutate().then(() => navigate(this.props, 'back'))
-                }, { text: getLocalizedText('no') }])}
+                }, { text: translate('no') }])}
               />
             )}
           </Mutation>
           <FilledButton
-            label={getLocalizedText('Edit Recipe')}
+            label={translate('Edit Recipe')}
             mode={FilledButton.mode.default}
             onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })}
             style={{
@@ -358,13 +382,10 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
             }}
           />
           {
-            (
-              this.state.user.role === Role.operator ||
-              this.state.user.role === Role.admin
-            ) &&
+            authorized([Role.operator], this.state.user.role) &&
             <PublishRecipe
               recipe={this.props.recipe}
-              userId={this.state.user.id}
+              user={this.state.user}
             />
           }
         </RX.View>
@@ -394,12 +415,19 @@ export default function RecipeContainer(props: RecipeProps) {
     }
   })
 
+  if (error) {
+    return (
+      <ErrorComponent
+        error={error}
+      />
+    )
+  }
+
   return (
-    <RX.View>
-      {!!data && !!data.recipe && <Recipe recipe={data.recipe} />}
-      {!!loading && <Text translate>Loading</Text>}
-      {!!error && <RX.Text>Error</RX.Text>}
-    </RX.View>
+    <Recipe
+      recipe={data ? data.recipe : undefined}
+      loading={loading}
+    />
   )
 }
 

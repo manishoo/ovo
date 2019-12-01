@@ -3,19 +3,19 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FlatButton from 'common/FlatButton/FlatButton'
-import { showFoodModal } from 'common/FoodDialog/FoodDialog'
-import { SelectFoodMealItem } from 'common/FoodDialog/SelectFood'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
-import { IngredientCardIngredient } from 'common/recipe/IngredientCard/types/IngredientCardIngredient'
-import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import FlatButton from '@Common/FlatButton/FlatButton'
+import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
+import { SelectFoodMealItem } from '@Common/FoodDialog/SelectFood'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
+import { IngredientCardIngredient } from '@Common/recipe/IngredientCard/types/IngredientCardIngredient'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
+import { FoodTypes } from '@Models/FoodModels'
+import LocationStore from '@Services/LocationStore'
+import { MyMealItem } from '@Views/MealForm/MealForm'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { FoodTypes } from 'src/ts/models/FoodModels'
-import LocationStore from 'src/ts/stores/LocationStore'
-import { MyMealItem } from 'src/ts/views/MealForm/MealForm'
 
 
 interface MealItemRowProps {
@@ -54,7 +54,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
                     onDismiss: () => null,
                     onSubmit: this._onMealItemAlternativeCreation,
                   })}
-                  label={getLocalizedText('Add Alternative')}
+                  label={translate('Add Alternative')}
                 />
               </RX.View>
 
@@ -95,6 +95,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             thumbnail: mealItem.food.thumbnail,
             weight: mealItem.weight,
           }}
+          style={styles.mealItem}
         />
       )
     }
@@ -107,6 +108,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
           serving={mealItem.amount}
           recipe={mealItem.recipe}
           onDelete={() => this.props.onMealItemDelete(mealItem.id)}
+          style={styles.mealItem}
         />
       )
     }
@@ -177,4 +179,8 @@ const styles = {
     flexDirection: 'row',
     padding: Styles.values.spacing,
   }),
+  mealItem: RX.Styles.createViewStyle({
+    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginBottom: Styles.values.spacing,
+  })
 }

@@ -54,6 +54,6 @@ export interface SettingsMutation {
 }
 
 export interface SettingsMutationVariables {
-  id: string;
+  id: any;
   user: UserUpdateInput;
 }

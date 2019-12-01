@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import map from 'lodash/map'
+import Styles from '@App/Styles'
 import each from 'lodash/each'
+import map from 'lodash/map'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
 
-import KeyCodes from '../../utilities/KeyCodes'
+import KeyCodes from '@Utils/KeyCodes'
 import Modal from '../Modal/Modal'
 import SimpleButton from '../SimpleButton/SimpleButton'
 

@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
+import Styles from '@App/Styles'
+import FilledButton from '@Common/FilledButton/FilledButton'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
 
 
 interface SearchResultFilterProps {

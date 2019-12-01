@@ -6,11 +6,11 @@
 import {
   SelectFoodQuery_foods_foods,
   SelectFoodQuery_foods_foods_weights
-} from 'common/FoodDialog/types/SelectFoodQuery'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import { Translation } from 'src/ts/models/common'
-import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import { Me_avatar, Me_height, Me_weight } from 'src/ts/views/Register/types/Me'
+} from '@Common/FoodDialog/types/SelectFoodQuery'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import { Translation } from '@Models/common'
+import { ProfileRecipesQuery_recipes_recipes } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import { Me_avatar, Me_height, Me_weight } from '@Views/Register/types/Me'
 
 
 export enum TAG_TYPE {

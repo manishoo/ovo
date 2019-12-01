@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { withNavigation } from 'modules/navigator'
+import { ThemeContext } from '@App/ThemeContext'
+import { withNavigation } from '@Modules/navigator'
+import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import LocationStore from 'src/ts/stores/LocationStore'
 
 
 interface LinkProps {

@@ -4,33 +4,33 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
-import FlatButton from 'common/FlatButton/FlatButton'
-import RecipePreview from 'common/FoodDialog/components/RecipePreview'
-import { SelectFoodFood, SelectFoodFood_weights } from 'common/FoodDialog/types/SelectFoodFood'
+import client from '@App/client'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import FlatButton from '@Common/FlatButton/FlatButton'
+import RecipePreview from '@Common/FoodDialog/components/RecipePreview'
+import { SelectFoodFood, SelectFoodFood_weights } from '@Common/FoodDialog/types/SelectFoodFood'
 import {
   SelectFoodQuery,
   SelectFoodQuery_foods_foods,
   SelectFoodQuery_foods_foods_weights,
   SelectFoodQuery_recipes_recipes,
   SelectFoodQueryVariables
-} from 'common/FoodDialog/types/SelectFoodQuery'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import VirtualListViewWithoutScrollBar from 'common/VirtualListViewWithoutScrollBar/VirtualListViewWithoutScrollBar'
-import Text from 'common/Text/Text'
+} from '@Common/FoodDialog/types/SelectFoodQuery'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import Text from '@Common/Text/Text'
+import { Translation } from '@Models/common'
+import { FoodTypes, Weight } from '@Models/FoodModels'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
-import { VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
+import { VirtualListView, VirtualListViewCellRenderDetails } from 'reactxp-virtuallistview'
 import { ComponentBase } from 'resub'
-import client from 'src/ts/app/client'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Translation } from 'src/ts/models/common'
-import { FoodTypes, Weight } from 'src/ts/models/FoodModels'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
 import FoodPreview from './components/FoodPreview'
 
 
@@ -63,6 +63,7 @@ interface SelectFoodProps extends SelectFoodCommonProps {
   foods: SelectFoodQuery_foods_foods[],
   recipes: SelectFoodQuery_recipes_recipes[],
   onSearch: (nameSearchQuery: string) => void,
+  loading?: boolean,
 }
 
 interface SelectFoodState {
@@ -124,7 +125,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                       onChangeText={this.props.onSearch}
                       style={styles.textInput}
                       autoFocus
-                      placeholder={getLocalizedText('mealItemExample')}
+                      placeholder={translate('mealItemExample')}
                     />
                   </>
                 }
@@ -137,7 +138,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                 {
                   this.props.foodTypes.map(foodType => (
                     <FlatButton
-                      label={getLocalizedText(foodType)}
+                      label={translate(foodType)}
                       onPress={() => this.setState({ mode: foodType })}
                       {...this._getModeButtonStyle(theme, foodType)}
                     />
@@ -154,7 +155,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
             {
               !this.state.selectedItem &&
               <FlatButton
-                label={getLocalizedText('createX', { name: this.props.nameSearchQuery })}
+                label={translate('createX', { name: this.props.nameSearchQuery })}
                 onPress={() => {
                   // const key = String(Math.random())
                   // this.props.onSubmit({
@@ -163,7 +164,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                   //   type: 'food',
                   //   // height: 40,
                   //   // template: '_mealItem',
-                  //   customUnit: getLocalizedText('g'),
+                  //   customUnit: translate('g'),
                   //   weights: [],
                   //   slug: key,
                   // }, 1)
@@ -171,6 +172,15 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
                 }}
                 style={styles.createNewFoodButton}
               />
+            }
+            {
+              this.props.loading &&
+              <RX.View
+                ignorePointerEvents
+                style={Styles.values.absolutelyExtended}
+              >
+                <LoadingIndicator />
+              </RX.View>
             }
           </RX.View>
         )}
@@ -215,7 +225,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListViewWithoutScrollBar
+            <VirtualListView
               key={1}
               keyboardShouldPersistTaps
               itemList={this.props.foods.map(f => ({
@@ -235,7 +245,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               height: INNER_CONTAINER_HEIGHT - (77 + 64),
             }}
           >
-            <VirtualListViewWithoutScrollBar
+            <VirtualListView
               key={2}
               keyboardShouldPersistTaps
               itemList={this.props.recipes.map(r => ({
@@ -370,7 +380,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
 
 function SelectFoodContainer(props: SelectFoodCommonProps) {
   const [nameSearchQuery, setNameSearchQuery] = useState('')
-  const { data } = useQuery<SelectFoodQuery, SelectFoodQueryVariables>(gql`
+  const { data, loading } = useQuery<SelectFoodQuery, SelectFoodQueryVariables>(gql`
     query SelectFoodQuery($nameSearchQuery: String) {
       foods (nameSearchQuery: $nameSearchQuery) {
         foods {
@@ -395,6 +405,7 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
   return (
     <SelectFood
       {...props}
+      loading={loading}
       nameSearchQuery={nameSearchQuery}
       foods={(data && data.foods && data.foods.foods) || []}
       recipes={(data && data.recipes && data.recipes.recipes) || []}

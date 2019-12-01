@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-// import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
+import SearchResultRecipes from '@Views/SearchResult/SearchResultRecipes'
+import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
+// import Text from '@Common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import ExploreSearch from 'src/ts/views/ExploreSearch/ExploreSearch'
-import SearchResultRecipes from 'src/ts/views/SearchResult/SearchResultRecipes'
-import { SearchResultQueryVariables } from 'src/ts/views/SearchResult/types/SearchResultQuery'
 import { SearchResultParameters } from './SearchResultContainer'
 
 

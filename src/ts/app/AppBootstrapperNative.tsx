@@ -4,16 +4,16 @@
  */
 
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import client from '@App/client'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import RootView from '@Views/RootView/RootView'
 import { ApolloProvider } from 'react-apollo'
+import Splash from 'react-native-splash-screen'
 import RX from 'reactxp'
-import client from 'src/ts/app/client'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import RootView from 'src/ts/views/RootView/RootView'
 // Do shimming before anything else.
-import * as ShimHelpers from '../utilities/ShimHelpers'
+import * as ShimHelpers from '@Utils/ShimHelpers'
 import AppBootstrapper from './AppBootstrapper'
 import AppConfig from './AppConfig'
-import Splash from 'react-native-splash-screen'
 
 
 ShimHelpers.shimEnvironment(__DEV__, true)

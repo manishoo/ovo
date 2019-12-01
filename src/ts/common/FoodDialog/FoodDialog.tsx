@@ -3,12 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Modal from 'common/Modal/Modal'
+import Modal from '@Common/Modal/Modal'
+import { FoodTypes } from '@Models/FoodModels'
+import { fullHeight } from '@Utils'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { FoodTypes } from 'src/ts/models/FoodModels'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import { fullHeight } from 'src/ts/utilities'
 import SelectFood, { SelectFoodMealItem } from './SelectFood'
 
 
@@ -69,8 +68,6 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
     return (
       <Modal
         modalId={MODAL_ID}
-        // modalWidth={this.state.width}
-        // modalHeight={this.state.height}
       >
         <RX.View>
           <SelectFood
@@ -113,11 +110,4 @@ export default class FoodDialog extends ComponentBase<FoodDialogProps & RX.Commo
   //     />
   //   )
   // }
-
-  protected _buildState(props: FoodDialogProps, initialBuild: boolean): Partial<FoodDialogState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-    }
-  }
 }

@@ -3,19 +3,23 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import assert from 'assert'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
-import KeyCodes from '../../utilities/KeyCodes'
+import KeyCodes from '@Utils/KeyCodes'
 
 
 interface ModalProps extends RX.CommonProps {
   modalId: string;
   children?: JSX.Element | JSX.Element[];
   modalWidth?: number;
+  fullWidth?: boolean;
   modalHeight?: number;
+  fullHeight?: boolean;
 }
 
 interface ModalState {
@@ -29,13 +33,7 @@ const _initialScalingRatio = 0.5
 
 const _styles = {
   modalContainerBackground: RX.Styles.createViewStyle({
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
+    ...Styles.values.absolutelyExtended,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     flexDirection: 'row'
   }),
@@ -118,7 +116,7 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   }
 
   public render() {
-    const modalBoxStyles = [_styles.modalBox, this.state.widthStyle]
+    const modalBoxStyles = [_styles.modalBox, this.state.widthStyle, this.state.heightStyle]
     const modalContentStyles = [_styles.modalContainer, this._contentScaleAnimationStyle, this.state.heightStyle]
 
     let modalContent = (
@@ -151,13 +149,30 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   protected _buildState(props: ModalProps, initialBuild: boolean): Partial<ModalState> {
     let newState: Partial<ModalState> = {}
 
-    newState.widthStyle = props.modalWidth ? RX.Styles.createViewStyle({
-      width: props.modalWidth
-    }, false) : undefined
+    newState.widthStyle = undefined
+    newState.heightStyle = undefined
 
-    newState.heightStyle = props.modalHeight ? RX.Styles.createViewStyle({
-      height: props.modalHeight
-    }, false) : undefined
+    if (props.modalWidth) {
+      newState.widthStyle = RX.Styles.createViewStyle({
+        width: props.modalWidth,
+      }, false)
+    }
+    if (props.fullWidth) {
+      newState.widthStyle = RX.Styles.createViewStyle({
+        width: ResponsiveWidthStore.getWidth(),
+      }, false)
+    }
+
+    if (props.modalHeight) {
+      newState.heightStyle = RX.Styles.createViewStyle({
+        height: props.modalHeight,
+      }, false)
+    }
+    if (props.fullHeight) {
+      newState.heightStyle = RX.Styles.createViewStyle({
+        height: ResponsiveWidthStore.getHeight(),
+      }, false)
+    }
 
     return newState
   }

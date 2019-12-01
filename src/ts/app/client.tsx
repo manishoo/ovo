@@ -3,6 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { cache } from '@App/client-cache'
+import fetch from '@Modules/fetch'
+import ToastStore, { ToastTypes } from '@Services/ToastStore'
+import UserStore from '@Services/UserStore'
 /**
  * Apollo Client
  * */
@@ -11,17 +15,13 @@ import { ApolloLink, Observable } from 'apollo-link'
 import { onError } from 'apollo-link-error'
 import { withClientState } from 'apollo-link-state'
 import { createUploadLink } from 'apollo-upload-client'
-import fetch from 'modules/fetch'
-import { cache } from 'src/ts/app/client-cache'
-import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
-import UserStore from 'src/ts/stores/UserStore'
 import AppConfig from './AppConfig'
 
 
 const request = async (operation: any) => {
   operation.setContext({
     headers: {
-      'accept-language': 'fa',
+      'accept-language': AppConfig.locale,
     }
   })
 
@@ -30,7 +30,7 @@ const request = async (operation: any) => {
     operation.setContext({
       headers: {
         authorization: token,
-        'accept-language': 'fa',
+        'accept-language': AppConfig.locale,
       }
     })
   }

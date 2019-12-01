@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import ImageSource from 'modules/images'
+import { ThemeContext } from '@App/ThemeContext'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 interface TabBarProps {

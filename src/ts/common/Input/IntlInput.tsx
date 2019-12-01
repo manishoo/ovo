@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AppConfig from '@App/AppConfig'
+import { Translation } from '@Models/common'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import { Translation } from 'src/ts/models/common'
 import Input, { InputProps } from './Input'
 
 
@@ -17,6 +17,9 @@ interface IntlInputProps extends InputProps {
 export default function IntlInput(props: IntlInputProps) {
   const _getValue = () => {
     if (props.translations.length === 0) return ''
+
+    const foundTranslation = props.translations.find(p => p.locale === AppConfig.locale)
+    if (foundTranslation) return foundTranslation.text
 
     return props.translations[0].text
   }

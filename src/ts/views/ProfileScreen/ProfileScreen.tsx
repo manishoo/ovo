@@ -3,30 +3,33 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilledButton from 'common/FilledButton/FilledButton'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Navbar from 'common/Navbar/Navbar'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
+import { Routes } from '@Models/common'
+import { Role } from '@Models/global-types'
+import ImageSource from '@Modules/images'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { navigate } from '@Utils'
+import authorized from '@Utils/authorized'
 import gql from 'graphql-tag'
-import ImageSource from 'modules/images'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Routes } from 'src/ts/models/common'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import { navigate } from 'src/ts/utilities'
-import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
-import { ProfileInfoUser } from 'src/ts/views/ProfileScreen/components/types/ProfileInfoUser'
 import Avatar from './components/Avatar'
 import ProfileInfo from './components/ProfileInfo'
 import ProfileMeals from './components/ProfileMeals/ProfileMeals'
 import ProfileRecipes from './components/ProfileRecipes/ProfileRecipes'
+import { ProfileRecipesQuery_recipes_recipes } from './components/ProfileRecipes/types/ProfileRecipesQuery'
+import ReviewRecipes from './components/ReviewRecipes/ReviewRecipes'
+import { ProfileUser } from './types/ProfileUser'
 
 
 interface ProfileScreenProps extends RX.CommonProps {
-  user: ProfileInfoUser & { id: string },
+  user: ProfileUser,
   isMyProfile?: boolean,
 }
 
@@ -43,8 +46,9 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
   }
   static fragments = {
     user: gql`
-      fragment ProfileUser on BaseUser {
+      fragment ProfileUser on BasicUser {
         id
+        role
         ...ProfileInfoUser
       }
 
@@ -54,7 +58,9 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
   private _recipes: any
   private _recipesListHeight: number | undefined
   private _meals: any
+  private _reviewRecipes: any
   private _mealsListHeight: number | undefined
+  private _reviewRecipesHeight: number | undefined
 
   constructor(props: ProfileScreenProps) {
     super(props)
@@ -110,7 +116,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
             <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing * 2 }}>
               <FilledButton
-                label={getLocalizedText('Recipes')}
+                label={translate('Recipes')}
                 onPress={() => this.setState({ activeTab: 0 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
                 style={{
@@ -122,9 +128,22 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
               {
                 this.props.isMyProfile &&
                 <FilledButton
-                  label={getLocalizedText('Meals')}
+                  label={translate('Meals')}
                   onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
                   mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
+                  style={{
+                    padding: 16
+                  }}
+                  fontSize={16}
+                  containerStyle={styles.tabButton}
+                />
+              }
+              {
+                authorized([Role.admin, Role.operator], user.role) &&
+                <FilledButton
+                  label={translate('Reviews')}
+                  onPress={() => this.setState({ activeTab: 2 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
+                  mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{
                     padding: 16
                   }}
@@ -175,6 +194,14 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
             onHeightChange={this._onMealsHeightChange}
           />
         )
+      case 2:
+        return (
+          <ReviewRecipes
+            userId={user.id}
+            ref={ref => this._reviewRecipes = ref}
+            onHeightChange={this._onReviewRecipesHeightChange}
+          />
+        )
       default:
         return null
     }
@@ -193,6 +220,14 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
     if (height > this._mealsListHeight) {
       this._meals.fetchMore()
+    }
+  }
+
+  private _onReviewRecipesHeightChange = (height: number) => {
+    this._reviewRecipesHeight = height
+
+    if (height > this._reviewRecipesHeight) {
+      this._reviewRecipes.fetchMore()
     }
   }
 
@@ -215,18 +250,22 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
     const OFFSET = 100
 
-    const bottomOfViewPoint = newScrollValue + height
+    const bottomOfViewPoint = newScrollValue + height + OFFSET
 
     switch (activeTab) {
       case 2:
+        if (bottomOfViewPoint >= this._reviewRecipesHeight) {
+          onReachEnd()
+        }
+        break
       case 1:
-        if ((bottomOfViewPoint + OFFSET) >= this._mealsListHeight) {
+        if (bottomOfViewPoint >= this._mealsListHeight) {
           onReachEnd()
         }
         break
       case 0:
       default:
-        if ((bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
+        if (bottomOfViewPoint >= this._recipesListHeight) {
           onReachEnd()
         }
     }
@@ -237,11 +276,12 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
     switch (activeTab) {
       case 2:
+        this._reviewRecipes.fetchMore()
+        break
       case 1:
         this._meals.fetchMore()
         break
       case 0:
-      default:
         this._recipes.fetchMore()
     }
   }
@@ -306,6 +346,6 @@ const styles = {
     marginBottom: Styles.values.spacing,
   }),
   tabButton: RX.Styles.createViewStyle({
-    marginRight: Styles.values.spacing,
+    [Styles.values.marginEnd]: Styles.values.spacing,
   })
 }

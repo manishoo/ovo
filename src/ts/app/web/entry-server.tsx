@@ -6,18 +6,18 @@
  */
 
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import AppConfig from '@App/AppConfig'
+import { LanguageCode } from '@Models/global-types'
+import fetch from '@Modules/fetch'
+import LocationStore from '@Services/LocationStore'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { Request, Response } from 'express'
-import fetch from 'modules/fetch'
 import { ApolloProvider, renderToStringWithData } from 'react-apollo'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import { LanguageCode } from 'src/ts/models/global-types'
-import LocationStore from '../../stores/LocationStore'
 import RootView from '../../views/RootView/RootView'
 import Html from './html'
 

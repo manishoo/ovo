@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import UserStore from '@Services/UserStore'
+import { Me } from '@Views/Register/types/Me'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import UserStore from 'src/ts/stores/UserStore'
-import { Me } from 'src/ts/views/Register/types/Me'
 import ProfileScreen from './ProfileScreen'
 
 

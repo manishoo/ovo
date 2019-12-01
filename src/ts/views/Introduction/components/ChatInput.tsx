@@ -3,15 +3,23 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Input from '@Common/Input/Input'
+import InputNumber from '@Common/Input/InputNumber'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import UserMeals from '@Common/UserMeals/UserMeals'
+import { Food } from '@Models/FoodModels'
+import { AssistantExpectations, MessageType } from '@Models/global-types'
+import { generateHeightRange, generateWeightRange } from '@Utils'
+import {
+  IntroductionMutation_setup_messages_data,
+  IntroductionMutation_setup_messages_data_items,
+  IntroductionMutation_setup_messages_data_user
+} from '@Views/Introduction/types/IntroductionMutation'
 import isEqual from 'lodash/isEqual'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Food } from 'src/ts/models/FoodModels'
-import { generateHeightRange, generateWeightRange } from 'src/ts/utilities'
-import { EXPECTATIONS, Item, MessageType } from '../types'
 import FoodAutocomplete from './FoodAutocomplete'
 import InputForm from './InputForm'
 import MealSettings from './MealSettings/MealSettings'
@@ -19,26 +27,29 @@ import Picker from './Picker/Picker'
 import SubmitButton from './SubmitButton'
 
 
-interface MessageInput {
+type Item = IntroductionMutation_setup_messages_data_items
+
+export interface MessageInput {
   inputType: MessageType,
-  expect: EXPECTATIONS,
+  expect: AssistantExpectations,
   mealPlanSettings: any,
   skip: boolean,
   items?: Item[],
+  data: IntroductionMutation_setup_messages_data,
 }
 
-interface IntroductionProps {
+interface ChatInputProps {
   style?: any,
   onSubmit: any,
   loading: boolean,
   onHeightChange: (bottomMargin: number, bottomPadding?: number) => any,
   input: MessageInput,
   toggleMainKeyboardAvoidable: (enabled: boolean) => void,
-  onOpenMealPlan: () => any,
+  onOpenMealPlan: (user: IntroductionMutation_setup_messages_data_user) => any,
   introductionWidth: number
 }
 
-interface IntroductionState {
+interface ChatInputState {
   message: string,
 }
 
@@ -55,47 +66,48 @@ function getKeyboardType(inputType: string) {
   }
 }
 
-function getPlaceholder(expect: EXPECTATIONS) {
+function getPlaceholder(expect: AssistantExpectations) {
   switch (expect) {
-    case EXPECTATIONS.gender:
+    case AssistantExpectations.gender:
       return 'Enter your gender'
-    case EXPECTATIONS.nickname:
-      return getLocalizedText('getNamePlaceholder')
-    case EXPECTATIONS.age:
-      return getLocalizedText('getAgePlaceholder')
-    case EXPECTATIONS.weight:
+    case AssistantExpectations.nickname:
+      return translate('getNamePlaceholder')
+    case AssistantExpectations.age:
+      return translate('getAgePlaceholder')
+    case AssistantExpectations.weight:
       return 'Enter your weight'
-    case EXPECTATIONS.height:
+    case AssistantExpectations.height:
       return 'Enter your height'
-    case EXPECTATIONS.activity:
+    case AssistantExpectations.activity:
       return 'Enter your activity'
-    case EXPECTATIONS.goal:
+    case AssistantExpectations.goal:
       return 'Enter your goal'
-    case EXPECTATIONS.meals:
+    case AssistantExpectations.meals:
       return 'Enter your meals'
-    case EXPECTATIONS.allergy:
+    case AssistantExpectations.allergy:
       return 'Enter your allergies'
-    case EXPECTATIONS.dislikedFoods:
+    case AssistantExpectations.dislikedFoods:
       return 'Enter the foods you don\'t like'
-    case EXPECTATIONS.diet:
+    case AssistantExpectations.diet:
       return 'Enter your diet'
-    case EXPECTATIONS.chooseDiet:
+    case AssistantExpectations.chooseDiet:
       return 'Choose your diet'
-    case EXPECTATIONS.meal:
+    case AssistantExpectations.meal:
       return 'Enter your meal'
-    case EXPECTATIONS.normalRoutine:
+    case AssistantExpectations.normalRoutine:
       return 'Enter your normal routine'
     default:
       return 'Message'
   }
 }
 
-export default class Introduction extends RX.Component<IntroductionProps, IntroductionState> {
+export default class ChatInput extends RX.Component<ChatInputProps, ChatInputState> {
   state = {
     message: ''
   }
   animatedBottomValue = RX.Animated.createValue(-330)
   picker: any
+  userMeals: any
 
   public render() {
     const {
@@ -105,6 +117,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
         skip,
         expect,
         mealPlanSettings,
+        data
       },
       loading,
     } = this.props
@@ -119,12 +132,21 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
         return {
           ...containerStyle,
           width: this.props.introductionWidth,
+          height: 400,
         }
       }
-      if (MessageType.weight === inputType) {
+      if ((MessageType.weight === inputType) || (MessageType.height === inputType)) {
+        return {
+          ...containerStyle,
+          height: 120,
+          width: this.props.introductionWidth,
+        }
+      }
+      if (MessageType.meals === inputType) {
         return {
           ...containerStyle,
           width: this.props.introductionWidth,
+          height: 320,
         }
       }
       return {
@@ -158,15 +180,15 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
             {({ theme }) => (
               [
                 ((MessageType.select === inputType) && (items)) && <RX.ScrollView
-                  scrollEnabled={!(items && items.length <= 2)}
+                  // scrollEnabled={!(items && items.length <= 2)}
                   key='sc'
                   style={[
                     styles.selectItemContainer,
                     { width: this.props.introductionWidth },
-                    (items && items.length <= 2) ? {
-                      // justifyContent: 'center',
-                      // alignItems: 'center',
-                    } : {},
+                    // (items && items.length <= 2) ? {
+                    //   // justifyContent: 'center',
+                    //   // alignItems: 'center',
+                    // } : {},
                   ]}
                   // @ts-ignore
                   // contentContainerStyle={(items && items.length <= 2) ? {
@@ -202,11 +224,14 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
                     (() => {
                       if (MessageType.form === inputType) {
                         return (
-                          <InputForm
-                            onSubmit={this.onFormSubmit}
-                          />
+                          <RX.ScrollView>
+                            <InputForm
+                              onSubmit={this.onFormSubmit}
+                            />
+                          </RX.ScrollView>
                         )
                       }
+
                       if (MessageType.mealPlanSettings === inputType) {
                         return (
                           <MealSettings
@@ -214,6 +239,33 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
                             settings={mealPlanSettings}
                           />
                         )
+                      }
+
+                      if (MessageType.meals === inputType) {
+                        return [
+                          <RX.ScrollView
+                            style={{
+                              padding: Styles.values.spacing,
+                              paddingBottom: 65,
+                            }}
+                          >
+                            <UserMeals
+                              ref={ref => this.userMeals = ref}
+                              meals={data.meals}
+                            />
+                          </RX.ScrollView>,
+                          <SubmitButton
+                            key='button'
+                            style={[
+                              styles.submitButton,
+                              {
+                                bottom: Styles.values.spacing
+                              }
+                            ]}
+                            onPress={this.onMealsSubmit}
+                            disabled={loading}
+                          />
+                        ]
                       }
 
                       if (MessageType.weight === inputType) {
@@ -244,7 +296,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
                             disabled={loading}
                             style={[
                               styles.submitButton,
-                              { top: 206 }
+                              { bottom: Styles.values.spacing }
                             ]}
                             onPress={this.onPickerSubmit}
                           />
@@ -274,7 +326,7 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
                             key='button'
                             style={[
                               styles.submitButton,
-                              { top: 206 }
+                              { bottom: Styles.values.spacing }
                             ]}
                             onPress={this.onPickerSubmit}
                             disabled={loading}
@@ -282,22 +334,42 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
                         ]
                       }
 
+                      let inputComponent
+
+                      if (inputType === MessageType.number) {
+                        inputComponent = <InputNumber
+                          key='textinputnumber'
+                          value={Number(message)}
+                          keyboardType={getKeyboardType(inputType)}
+                          // multiline
+                          placeholder={loading ? translate('AssistantInputPlaceholder') : getPlaceholder(expect)}
+                          returnKeyType='send'
+                          textInputStyle={{ flex: 1, backgroundColor: 'transparent', borderWidth: 0 }}
+                          style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
+                          onChange={num => this.setState({ message: String(num) })}
+                          onSubmitEditing={this.onTextSubmit}
+                        />
+                      } else {
+                        inputComponent = <Input
+                          key='textinput'
+                          value={message}
+                          keyboardType={getKeyboardType(inputType)}
+                          // multiline
+                          placeholder={loading ? translate('AssistantInputPlaceholder') : getPlaceholder(expect)}
+                          returnKeyType='send'
+                          textInputStyle={{ flex: 1, backgroundColor: 'transparent', borderWidth: 0 }}
+                          secureTextEntry={MessageType.password == inputType}
+                          style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
+                          onChangeText={this.onChangeText}
+                          onSubmitEditing={this.onTextSubmit}
+                        />
+                      }
+
                       return (
                         <RX.View
                           style={styles.textInputContainer}
                         >
-                          <RX.TextInput
-                            key='textinput'
-                            value={message}
-                            keyboardType={getKeyboardType(inputType)}
-                            // multiline
-                            placeholder={loading ? getLocalizedText('AssistantInputPlaceholder') : getPlaceholder(expect)}
-                            returnKeyType='send'
-                            secureTextEntry={MessageType.password == inputType}
-                            style={[styles.textInput, { width: this.props.introductionWidth * 0.77 }]}
-                            onChangeText={this.onChangeText}
-                            onSubmitEditing={this.onTextSubmit}
-                          />
+                          {inputComponent}
                           <SubmitButton
                             skip={skip ? 'Nope' : undefined}
                             style={styles.submitButton}
@@ -395,8 +467,8 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
 
   onSelectSubmit = ({ text, value }: Item) => () => {
     switch (this.props.input.expect) {
-      case EXPECTATIONS.mealPlan: {
-        return this.props.onOpenMealPlan()
+      case AssistantExpectations.mealPlan: {
+        return this.props.onOpenMealPlan(this.props.input.data.user)
       }
       default: {
         this.props.onSubmit({
@@ -408,6 +480,19 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
         })
       }
     }
+  }
+
+  onMealsSubmit = () => {
+    const { onSubmit } = this.props
+
+    if (!this.userMeals) throw new Error('no user meals')
+
+    const meals = this.userMeals.getMeals()
+
+    onSubmit({
+      text: meals.map(m => m.name).join(translate(translate.keys.commaAnd)),
+      data: JSON.stringify({ meals: meals }),
+    })
   }
 
   onMealSettingsSubmit = (data: any) => {
@@ -423,19 +508,26 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
     const { onHeightChange } = this.props
 
     switch (inputType) {
+      case MessageType.meals: {
+        let bottomAnimation = RX.Animated.timing(this.animatedBottomValue,
+          { toValue: 0, duration: 350, easing: RX.Animated.Easing.InOut() })
+
+        onHeightChange(305)
+        return bottomAnimation.start()
+      }
       case MessageType.form: {
         let bottomAnimation = RX.Animated.timing(this.animatedBottomValue,
-          { toValue: -30, duration: 350, easing: RX.Animated.Easing.InOut() })
+          { toValue: -20, duration: 350, easing: RX.Animated.Easing.InOut() })
 
-        onHeightChange(366)
+        onHeightChange(365)
         return bottomAnimation.start()
       }
       case MessageType.height:
       case MessageType.weight: {
         let bottomAnimation = RX.Animated.timing(this.animatedBottomValue,
-          { toValue: -140, duration: 500, easing: RX.Animated.Easing.InOut() })
+          { toValue: 0, duration: 500, easing: RX.Animated.Easing.InOut() })
 
-        onHeightChange(250)
+        onHeightChange(106)
         return bottomAnimation.start()
       }
       case MessageType.select: {
@@ -475,11 +567,11 @@ export default class Introduction extends RX.Component<IntroductionProps, Introd
     }
   }
 
-  shouldComponentUpdate(nextProps: Readonly<IntroductionProps>, nextState: Readonly<IntroductionState>): boolean {
+  shouldComponentUpdate(nextProps: Readonly<ChatInputProps>, nextState: Readonly<ChatInputState>): boolean {
     return !isEqual(nextProps.input, this.props.input) || !isEqual(nextState, this.state) || !isEqual(nextProps.loading, this.props.loading)
   }
 
-  UNSAFE_componentWillUpdate(nextProps: Readonly<IntroductionProps>): void {
+  UNSAFE_componentWillUpdate(nextProps: Readonly<ChatInputProps>): void {
     this.controlInputPosition(nextProps.input.inputType)
   }
 }
@@ -499,14 +591,15 @@ const containerStyle: RX.Types.ViewStyle = {
 const styles = {
   textInputContainer: RX.Styles.createViewStyle({
     flexDirection: 'row',
-    [Styles.values.paddingStart]: Styles.values.spacing * 3,
+    [Styles.values.paddingEnd]: Styles.values.spacing * 3,
     minHeight: 50,
   }),
   textInput: RX.Styles.createTextInputStyle({
-    borderBottomWidth: 1,
-    borderColor: '#eee',
-    fontSize: 16,
-    [Styles.values.marginStart]: 10,
+    flex: 1,
+    // borderBottomWidth: 1,
+    // borderColor: '#eee',
+    [Styles.values.marginStart]: Styles.values.spacing,
+    marginBottom: 0,
   }),
   selectItemContainer: RX.Styles.createViewStyle({
     position: 'absolute',
@@ -520,7 +613,7 @@ const styles = {
   }),
   selectItem: RX.Styles.createViewStyle({
     padding: 15,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderRadius: 100,
     marginBottom: 5,
     justifyContent: 'center',
@@ -532,7 +625,7 @@ const styles = {
   }),
   submitButton: RX.Styles.createViewStyle({
     position: 'absolute',
-    right: 10,
+    [Styles.values.end]: 10,
     bottom: 0,
   })
 }

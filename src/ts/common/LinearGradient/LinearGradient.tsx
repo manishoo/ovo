@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { LinearGradientProps } from 'common/LinearGradient/types'
+import { LinearGradientProps } from '@Common/LinearGradient/types'
 import RX from 'reactxp'
 
 

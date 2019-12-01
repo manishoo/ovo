@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import AddCell from 'common/AddCell/AddCell'
-import CardList from 'common/CardList/CardList'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import Styles from '@App/Styles'
+import AddCell from '@Common/AddCell/AddCell'
+import CardList from '@Common/CardList/CardList'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import { Routes } from '@Models/common'
+import LocationStore from '@Services/LocationStore'
+import { ProfileRecipesQuery_recipes_recipes } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
-import { ProfileRecipesQuery_recipes_recipes } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 
@@ -20,6 +20,7 @@ interface RecipesListProps extends RX.CommonProps {
   showAddRecipe?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   hideAvatar?: boolean,
+  loading?: boolean,
 }
 
 export default class RecipesList extends RX.Component<RecipesListProps> {
@@ -32,6 +33,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
         showAddButton={this.props.showAddRecipe}
         onLayout={this.props.onLayout}
         hideAvatar={this.props.hideAvatar}
+        loading={this.props.loading}
       />
     )
   }
@@ -61,7 +63,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
 
 const styles = {
   item: RX.Styles.createViewStyle({
-    marginHorizontal: Styles.values.spacing / 2,
-    marginBottom: Styles.values.spacing / 2,
+    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginBottom: Styles.values.spacing,
   })
 }

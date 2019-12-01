@@ -170,7 +170,7 @@ export interface ProfileRecipesQuery {
 }
 
 export interface ProfileRecipesQueryVariables {
-  lastId?: string | null;
-  userId?: string | null;
+  lastId?: any | null;
+  userId?: any | null;
   size?: number | null;
 }

@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
-import ImageSource from 'modules/images'
+import Styles from '@App/Styles'
+import Text from '@Common/Text/Text'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
 
 
 interface GoDownIndicatorProps {

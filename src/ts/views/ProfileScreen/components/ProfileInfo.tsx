@@ -3,18 +3,18 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
-import Image from 'common/Image/Image'
-import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import ImageSource from '@Modules/images'
+import { navigate } from '@Utils'
+import { ProfileInfoUser } from '@Views/ProfileScreen/components/types/ProfileInfoUser'
 import gql from 'graphql-tag'
-import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Routes } from 'src/ts/models/common'
-import { navigate } from 'src/ts/utilities'
-import { ProfileInfoUser } from 'src/ts/views/ProfileScreen/components/types/ProfileInfoUser'
 
 
 const SOCIAL_MEDIA_ICON_SIZE = 20
@@ -28,7 +28,7 @@ interface ProfileInfoProps {
 export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
   static fragments = {
     user: gql`
-      fragment ProfileInfoUser on BaseUser {
+      fragment ProfileInfoUser on BasicUser {
         bio
         username
         firstName
@@ -75,7 +75,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
               this.props.isMyProfile &&
               <FilledButton
                 mode={FilledButton.mode.default}
-                label={getLocalizedText('ProfileSettings')}
+                label={translate('ProfileSettings')}
                 onPress={() => navigate(this.props, Routes.settings)}
                 style={{ [Styles.values.marginStart]: Styles.values.spacing }}
                 // labelStyle={{ fontSize: 14 }}

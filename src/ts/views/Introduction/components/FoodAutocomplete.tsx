@@ -3,13 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import { Food } from '@Models/FoodModels'
+import { fullWidth } from '@Utils'
+import { FoodAutocompleteQuery } from '@Views/Introduction/components/types/FoodAutocompleteQuery'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Food } from 'src/ts/models/FoodModels'
-import { fullWidth } from 'src/ts/utilities'
 import SubmitButton from './SubmitButton'
 
 
@@ -156,7 +157,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
             onPress={() => this.input.focus()}
             activeOpacity={1}
           >
-            <Query
+            <Query<FoodAutocompleteQuery>
               query={FOOD_AUTOCOMPLETE_QUERY}
               skip={!text}
               variables={{
@@ -256,9 +257,11 @@ const styles = {
 
 const FOOD_AUTOCOMPLETE_QUERY = gql`
   query FoodAutocompleteQuery($q: String!) {
-    searchFoods(q: $q) {
-      id
-      name
+    foods(nameSearchQuery: $q) {
+      foods {
+        id
+        name {text locale}
+      }
     }
   }
 `

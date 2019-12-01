@@ -3,22 +3,23 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { showRecipePreviewModal } from 'common/FoodDialog/components/RecipePreview'
-import Image from 'common/Image/Image'
-import LikeButton from 'common/LikeButton/LikeButton'
-import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import Text from 'common/Text/Text'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import { showRecipePreviewModal } from '@Common/FoodDialog/components/RecipePreview'
+import Image from '@Common/Image/Image'
+import LikeButton from '@Common/LikeButton/LikeButton'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import Text from '@Common/Text/Text'
+import ImageSource from '@Modules/images'
+import { withNavigation } from '@Modules/navigator'
+import { navigate } from '@Utils'
 import gql from 'graphql-tag'
-import { withNavigation } from 'modules/navigator'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ImageSource from 'src/ts/modules/images/index.web'
-import { navigate } from 'src/ts/utilities'
+import { StyleRuleSetRecursive, ViewStyleRuleSet } from 'reactxp/src/common/Types'
 
 
 const CLEAR_ICON_DIMENSION = 20
@@ -33,6 +34,7 @@ interface RecipeCellProps {
   onDelete?: () => void,
   imageOnly?: boolean,
   linkTo?: string
+  style?: StyleRuleSetRecursive<ViewStyleRuleSet>,
 }
 
 interface RecipeCellState {
@@ -69,12 +71,6 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ scale: this._previewScaleAnimatedValue }]
   })
-  private _containerAnimatedScale = RX.Animated.createValue(0)
-  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{
-      scale: this._containerAnimatedScale
-    }]
-  })
 
   public render() {
     const { recipe } = this.props
@@ -93,7 +89,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
                 // height: this.props.size * 1.25,
                 // borderRadius: this.props.size / 12,
               },
-              this._containerAnimationStyle
+              this.props.style,
             ]}
           >
             <RX.View
@@ -137,7 +133,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
                   <Text style={[{
                     color: theme.colors.recipeIngredientUnitTextColor,
                     fontSize: Styles.fontSizes.size12
-                  }]}>{this.props.serving} {getLocalizedText('serving')}</Text>
+                  }]}>{this.props.serving} {translate('serving')}</Text>
                 </RX.View>
               </RX.View>
             }
@@ -183,15 +179,6 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
     return this.props.linkTo ?
       <Link to={this.props.linkTo}>{content}</Link> :
       content
-  }
-
-  componentDidMount() {
-    RX.Animated.timing(this._containerAnimatedScale, {
-      toValue: 0.9,
-      easing: RX.Animated.Easing.OutBack(),
-      duration: 500,
-    })
-      .start()
   }
 
   private _onServingPress = () => {
@@ -306,7 +293,7 @@ const styles = {
     fontSize: Styles.fontSizes.size16,
   }),
   timingContainer: RX.Styles.createViewStyle({
-    flexDirection: AppConfig.isRTL() ? 'row-reverse' : 'row',
+    flexDirection: 'row',
     position: 'absolute',
     alignItems: 'flex-end',
     [Styles.values.start]: 16,

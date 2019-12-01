@@ -4,25 +4,25 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilledButton from 'common/FilledButton/FilledButton'
-import Image from 'common/Image/Image'
-import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Navbar from 'common/Navbar/Navbar'
-import Text from 'common/Text/Text'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
+import Text from '@Common/Text/Text'
+import { Role } from '@Models/global-types'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import UserStore from '@Services/UserStore'
+import { getParam } from '@Utils'
+import { FoodScreenFood } from '@Views/FoodScreen/types/FoodScreenFood'
+import { FoodScreenQuery, FoodScreenQueryVariables } from '@Views/FoodScreen/types/FoodScreenQuery'
+import { Me } from '@Views/Register/types/Me'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Role } from 'src/ts/models/global-types'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import UserStore from 'src/ts/stores/UserStore'
-import { getParam } from 'src/ts/utilities'
-import { FoodScreenFood } from 'src/ts/views/FoodScreen/types/FoodScreenFood'
-import { FoodScreenQuery, FoodScreenQueryVariables } from 'src/ts/views/FoodScreen/types/FoodScreenQuery'
-import { Me } from 'src/ts/views/Register/types/Me'
 
 
 interface FoodScreenProps {
@@ -44,7 +44,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
         name {text locale}
         description {text locale}
         image {url}
-        foodGroup {
+        origFoodGroups {
           id
           name {text locale}
         }
@@ -114,7 +114,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
         <RX.View style={{ flexDirection: 'row' }}>
           <Link to={`${AppConfig.panelAddress}/food-class/${this.props.food.foodClass.id}`} openInNewTab>
             <FilledButton
-              label={getLocalizedText('Edit Food')}
+              label={translate('Edit Food')}
               onPress={() => null}
               style={{
                 [Styles.values.marginStart]: Styles.values.spacing / 2
@@ -131,7 +131,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
 
 export default function (props: any) {
   const { data } = useQuery<FoodScreenQuery, FoodScreenQueryVariables>(gql`
-    query FoodScreenQuery ($id: String!) {
+    query FoodScreenQuery ($id: ObjectId!) {
       food(id: $id) {
         ...FoodScreenFood
       }

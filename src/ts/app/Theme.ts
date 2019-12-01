@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { default as FontRefs } from 'modules/fonts'
+import { default as FontRefs } from '@Modules/fonts'
 import RX from 'reactxp'
 
 
@@ -47,12 +47,16 @@ export class Theme {
       case 'dark':
       default:
       case 'light': {
-        const primary = '#00BA72' //#00c54f
+        const primary = '#07AF47' //#00c54f #00BA72
+        const primaryDarker = '#05863e'
 
         return {
           primary,
+          bg: '#fff',
 
           text: '#4a4a4a',
+          borderLight: '#eee',
+          mealItemBorder: 'rgba(0, 186, 114, 0.5)',
 
           assistantLinearGradient1: '#4856DC',
           assistantLinearGradient2: '#1F2CAA',
@@ -66,6 +70,12 @@ export class Theme {
           ingredientServingControlBorder: '#FAFAFA',
 
           selectBorderColor: primary,
+
+          userMealsMealItemBG: primary,
+          userMealsInputBG: 'rgba(255, 255, 255, 0.38)',
+          userMealsInputText: '#fff',
+
+          calendarDayName: '#4a4a4a',
 
           grey1: 'grey',
           subtitle: '#757575',
@@ -117,7 +127,7 @@ export class Theme {
           filledButtonDefaultModeBorder: '#F2F2F2',
           filledButtonDefaultModeTextColor: '#B2B2B0',
           filledButtonText: '#fff',
-          filledButtonHoverBG: '#00915a',
+          filledButtonHoverBG: primaryDarker,
           filledButtonDisabledTextColor: '#B2B2B0',
           filledButtonDisabledBG: '#F5F5F8',
           createRecipeTextInputBG: '#f5f5f8',
@@ -146,8 +156,8 @@ export class Theme {
           loginButtonTextColor: 'red',
           assistantBG: '#1F2CAA',
           assistantMessageBG: '#313EC0',
-          assistantUserMessageBG: '#fff',
-          assistantUserMessageTextColor: '#1B2492',
+          assistantUserMessageBG: primary,
+          assistantUserMessageTextColor: '#fff',
 
           assistantFaceColor: '#fefa03',
 
@@ -163,6 +173,8 @@ export class Theme {
           textInputBg: '#F5F5F8',
           inputValidColor: primary,
           inputInvalidColor: '#D44539',
+
+          calendarEmptyStateBG: '#fafafa',
         }
       }
     }

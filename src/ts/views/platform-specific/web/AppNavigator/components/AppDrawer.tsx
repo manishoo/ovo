@@ -3,26 +3,26 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
-import FlatButton from 'common/FlatButton/FlatButton'
-import Image from 'common/Image/Image'
-import Link from 'common/Link/Link'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Text from 'common/Text/Text'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import FlatButton from '@Common/FlatButton/FlatButton'
+import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import { User } from '@Models/FoodModels'
+import ImageSource from '@Modules/images'
+import LocationStore from '@Services/LocationStore'
+import UserStore from '@Services/UserStore'
+import { navigate } from '@Utils'
 import { Action, Location } from 'history'
 import { matchPath } from 'react-router'
-// import Text from 'common/Text/Text'
+// import Text from '@Common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Routes } from 'src/ts/models/common'
-import { User } from 'src/ts/models/FoodModels'
-import ImageSource from 'src/ts/modules/images/index.web'
-import LocationStore from 'src/ts/stores/LocationStore'
-import UserStore from 'src/ts/stores/UserStore'
-import { navigate } from 'src/ts/utilities'
 
 
 const BRAND_IMAGE_WIDTH = 120
@@ -75,7 +75,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 this._renderActiveIndicator(),
                 <Link
                   key={0}
-                  // onPress={this._handleActiveChange(0)}
                   to={`/${user.username}`}
                   style={{ alignSelf: 'center', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
                 >
@@ -83,36 +82,37 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 </Link>,
                 <Link
                   key={1}
-                  // onPress={this._handleActiveChange(1)}
+                  to={Routes.calendar}
+                  style={Object.assign({},
+                    styles.link,
+                    {
+                      color: this._isActive(Routes.calendar) ? '#fff' : '#4a4a4a'
+                    })
+                  }
+                >
+                  <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image
+                      source={this._isActive(Routes.calendar) ? ImageSource.CalendarActive : ImageSource.Calendar}
+                      style={styles.icon}
+                      resizeMode={'contain'}
+                    />
+                    <Text translate={translate.keys.Path} style={{ fontWeight: 'bold' }} />
+                  </RX.View>
+                </Link>,
+                <Link
+                  key={2}
                   to={Routes.searchRecipes}
                   style={Object.assign({}, styles.link, { color: this._isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
                 >
                   <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                       source={this._isActive(Routes.searchRecipes) ? ImageSource.SearchWhite : ImageSource.Search}
-                      style={styles.icon}
+                      style={[styles.icon, { transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }] }]}
+                      resizeMode={'contain'}
                     />
                     <Text translate style={{ fontWeight: 'bold' }}>Search</Text>
                   </RX.View>
-                </Link>,
-                /*<Link
-                  key={2}
-                  onPress={this._handleActiveChange(2)}
-                  to={`${Routes.mealPlan}`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 2 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>MealPlan</Text></Link>,
-                <Link
-                  key={3}
-                  onPress={this._handleActiveChange(3)}
-                  to={`/explore`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 3 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>Explore</Text></Link>,
-                <Link
-                  key={4}
-                  onPress={this._handleActiveChange(4)}
-                  to={`/${user.username}`}
-                  style={Object.assign({}, styles.link, { color: activeLink === 4 ? '#fff' : '#4a4a4a' })}><Text
-                  translate>Profile</Text></Link>,*/
+                </Link>
               ]
             } else {
               return <FilledButton onPress={() => navigate(this.props, Routes.login)} label={'LoginForm'} />
@@ -131,11 +131,9 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
         >
           <FlatButton
             onPress={this._onLogout}
-            label={getLocalizedText('Logout')}
+            label={translate('Logout')}
             style={{
               borderWidth: 0,
-              // width: 30,
-              // height: 30,
             }}
           />
         </RX.View>
@@ -157,37 +155,6 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     })
   }
 
-  // private _handleActiveChange = (index: number) => () => {
-  //   let toValue = 0
-  //
-  //   switch (index) {
-  //     case 0:
-  //       toValue = 90 + Styles.values.spacing
-  //       break
-  //     case 1:
-  //       toValue = 152 + (Styles.values.spacing * 2)
-  //       break
-  //     case 2:
-  //       toValue = 206 + (Styles.values.spacing * 2)
-  //       break
-  //     case 3:
-  //       toValue = 261 + (Styles.values.spacing * 2)
-  //       break
-  //     case 4:
-  //       toValue = 315 + (Styles.values.spacing * 2)
-  //       break
-  //   }
-  //
-  //   this.setState({
-  //     activeLink: index,
-  //   })
-  //   RX.Animated.timing(this._activeIndicatorTop, {
-  //     toValue,
-  //     duration: 500,
-  //   })
-  //     .start()
-  // }
-
   private _handleLocationChange = (location: Location, action?: Action) => {
     this._handleActiveChange(location.pathname, true)
   }
@@ -204,10 +171,17 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     }
 
     if (matchPath(pathname, {
-      path: Routes.searchRecipes,
+      path: Routes.calendar,
       // exact: true,
     })) {
       topValue = 152 + (Styles.values.spacing * 2)
+    }
+
+    if (matchPath(pathname, {
+      path: Routes.searchRecipes,
+      // exact: true,
+    })) {
+      topValue = 204 + (Styles.values.spacing * 2)
     }
 
     if (topValue == 0) {
@@ -287,6 +261,5 @@ const styles = {
     width: 20,
     height: 20,
     [Styles.values.marginEnd]: Styles.values.spacing / 2,
-    transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }]
   })
 }

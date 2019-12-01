@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
-import RecipeCard from 'common/RecipesList/components/RecipeCard/RecipeCard'
+import Styles from '@App/Styles'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
+import { ProfileMealsQuery_meals_meals_items } from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ProfileMealsQuery_meals_meals_items } from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 
 
 interface MealItemGridProps {

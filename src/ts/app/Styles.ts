@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { default as FontRefs } from 'modules/fonts'
+import AppConfig from '@App/AppConfig'
+import { default as FontRefs } from '@Modules/fonts'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
 
 
 export default class Styles {
@@ -16,8 +16,10 @@ export default class Styles {
     drawerWidth: 200,
     mainContentMaxWidth: 975,
     defaultShadow: {
-      shadowColor: 'rgba(0, 0, 0, .12)',
-      shadowRadius: 10,
+      shadowColor: 'rgba(0, 0, 0, .3)',
+      shadowRadius: 4,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: -1
     },
 
     normalBorderRadius: 5,
@@ -62,6 +64,16 @@ export default class Styles {
     get borderBottomStartRadius() {
       return `borderBottom${this.Start}Radius`
     },
+
+    absolutelyExtended: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      justifyContent: 'center',
+    } as any
   }
 
   public static fontSizes = {

@@ -160,6 +160,6 @@ export interface PublishRecipeUpdateMutation {
 }
 
 export interface PublishRecipeUpdateMutationVariables {
-  id: string;
+  id: any;
   recipe: RecipeInput;
 }

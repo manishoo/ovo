@@ -4,14 +4,14 @@
  */
 
 import { useQuery } from '@apollo/react-hooks'
-import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import gql from 'graphql-tag'
-import RX from 'reactxp'
+import Input from '@Common/Input/Input'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import {
   RegisterUsernameExistenceQuery,
   RegisterUsernameExistenceQueryVariables
-} from 'src/ts/views/Register/components/types/RegisterUsernameExistenceQuery'
+} from '@Views/Register/components/types/RegisterUsernameExistenceQuery'
+import gql from 'graphql-tag'
+import RX from 'reactxp'
 
 
 export default function UsernameInput(props: any) {
@@ -30,7 +30,7 @@ export default function UsernameInput(props: any) {
   return (
     <Input
       {...props}
-      label={getLocalizedText('Username')}
+      label={translate('Username')}
       usesNetwork
       validate={async (username) => {
         if (username.length === 0) return false

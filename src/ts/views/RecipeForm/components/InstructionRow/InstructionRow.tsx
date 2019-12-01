@@ -3,14 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import IntlInput from 'common/Input/IntlInput'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import IntlInput from '@Common/Input/IntlInput'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import Keys from '@Utils/KeyCodes'
+import { ProfileRecipesQuery_recipes_recipes_instructions } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import Keys from 'src/ts/utilities/KeyCodes'
-import { ProfileRecipesQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 
 
 const IMAGE_DIMENSIONS = 50
@@ -49,7 +49,7 @@ export default class InstructionRow extends RX.Component<IngredientRowProps> {
                   ...this.props.instruction,
                   text: translations,
                 })}
-                placeholder={this.props.step === 1 && getLocalizedText('e.g. Cook the Rice...')}
+                placeholder={this.props.step === 1 && translate('e.g. Cook the Rice...')}
                 returnKeyType={'done'}
                 style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
                 onKeyPress={e => {

@@ -3,8 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { LanguageCode } from '@Models/global-types'
+import { CalendarSystem, DateTime } from 'luxon'
 import RX from 'reactxp'
-import { LanguageCode } from 'src/ts/models/global-types'
+
 
 interface InitParams {
   appVersion?: string;
@@ -14,7 +16,9 @@ class AppConfig {
   public serverAddress = process.env.API_ADDRESS || 'http://localhost:4003'
   public version = process.env.TAG || ''
   public locale: LanguageCode = LanguageCode.en
+  public calendarSystem: CalendarSystem = 'gregory'
   public panelAddress: string = 'http://panel.prana.global'
+  public calorieMeasurementUnit: 'kcal' | 'kJ' = 'kcal'
   private _appVersion: string
   private readonly _frontendHost: string
   private readonly _platformType: RX.Types.PlatformType
@@ -93,7 +97,19 @@ class AppConfig {
   }
 
   setLocale(locale: LanguageCode) {
+    let calendarSystem: CalendarSystem = this.calendarSystem
+
+    switch (locale) {
+      case LanguageCode.fa:
+        calendarSystem = 'persian'
+        break
+      default:
+        calendarSystem = 'gregory'
+        break
+    }
+
     this.locale = locale
+    this.calendarSystem = calendarSystem
   }
 }
 

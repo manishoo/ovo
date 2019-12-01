@@ -11,6 +11,6 @@ export interface MealFormDeleteMutation {
 }
 
 export interface MealFormDeleteMutationVariables {
-  id: string;
+  id: any;
   bulkDelete?: boolean | null;
 }

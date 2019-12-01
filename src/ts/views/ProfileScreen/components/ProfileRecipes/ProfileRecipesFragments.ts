@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
 import gql from 'graphql-tag'
 
 

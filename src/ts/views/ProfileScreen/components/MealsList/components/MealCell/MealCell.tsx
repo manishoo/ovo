@@ -3,20 +3,21 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Image from 'common/Image/Image'
-import LikeButton from 'common/LikeButton/LikeButton'
-import Link from 'common/Link/Link'
-import Text from 'common/Text/Text'
-import { withNavigation } from 'modules/navigator'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Image from '@Common/Image/Image'
+import LikeButton from '@Common/LikeButton/LikeButton'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import { withNavigation } from '@Modules/navigator'
+import LocationStore from '@Services/LocationStore'
+import MealItemGrid from '@Views/ProfileScreen/components/MealsList/components/MealCell/MealItemGrid'
+import { ProfileMealsQuery_meals_meals } from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
-import MealItemGrid from 'src/ts/views/ProfileScreen/components/MealsList/components/MealCell/MealItemGrid'
-import { ProfileMealsQuery_meals_meals } from 'src/ts/views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
 
 
 interface AddMealCellProps {
@@ -57,9 +58,12 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
               mealItems={meal.items}
             />
 
-            <RX.Text>
+            <RX.Text
+              style={{marginTop: Styles.values.spacing / 2}}
+            >
               {
-                meal.items.map(mealItem => [
+                meal.items.map((mealItem, index) => [
+                  index > 0 ? (index === (meal.items.length - 1) ? translate(', and ') : ', ') : null,
                   <Text
                     onPress={() => LocationStore.navigate(this.props, `/meal/${meal.id}/`)}
                     style={[
@@ -74,7 +78,7 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
                         : mealItem.recipe.title
                     }
                   />,
-                  ', ',
+                  index === (meal.items.length - 1) ? ', ' : null,
                 ])
               }
 

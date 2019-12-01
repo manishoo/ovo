@@ -4,27 +4,23 @@
  */
 
 import { useMutation, useQuery } from '@apollo/react-hooks'
-import CenterAlignedPageView from 'common/CenterAlignedPageView'
-import FilledButton from 'common/FilledButton/FilledButton'
-import { showFoodModal } from 'common/FoodDialog/FoodDialog'
-import Image from 'common/Image/Image'
-import Input from 'common/Input/Input'
-import IntlInput from 'common/Input/IntlInput'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Navbar from 'common/Navbar/Navbar'
-import IngredientCard from 'common/recipe/IngredientCard/IngredientCard'
-import Select from 'common/Select/Select'
-import Text from 'common/Text/Text'
-import TextInputAutoGrow from 'common/TextInputAutoGrow/TextInputAutoGrow'
-import gql from 'graphql-tag'
-import FilePicker from 'modules/FilePicker'
-import { ExecutionResult } from 'react-apollo'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { FoodTypes, MealItem } from 'src/ts/models/FoodModels'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
+import Image from '@Common/Image/Image'
+import Input from '@Common/Input/Input'
+import InputNumber from '@Common/Input/InputNumber'
+import IntlInput from '@Common/Input/IntlInput'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
+import Select from '@Common/Select/Select'
+import Text from '@Common/Text/Text'
+import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
+import { FoodTypes, MealItem } from '@Models/FoodModels'
 import {
   IngredientInput,
   InstructionInput,
@@ -32,18 +28,23 @@ import {
   RecipeDifficulty,
   RecipeInput,
   RecipeStatus
-} from 'src/ts/models/global-types'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import ToastStore, { ToastTypes } from 'src/ts/stores/ToastStore'
-import UserStore from 'src/ts/stores/UserStore'
-import { getParam } from 'src/ts/utilities'
-import getGraphQLUserInputErrors from 'src/ts/utilities/get-graphql-user-input-errors'
-import { PROFILE_RECIPES_QUERY } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
-import { ProfileRecipesFragments } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
-import { MyRecipe_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/MyRecipe'
-import { RecipeFormExtra } from 'src/ts/views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
-import { Me } from 'src/ts/views/Register/types/Me'
+} from '@Models/global-types'
+import FilePicker from '@Modules/FilePicker'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import ToastStore, { ToastTypes } from '@Services/ToastStore'
+import UserStore from '@Services/UserStore'
+import { getParam } from '@Utils'
+import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
+import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
+import { ProfileRecipesFragments } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
+import { MyRecipe_instructions } from '@Views/ProfileScreen/components/ProfileRecipes/types/MyRecipe'
+import { RecipeFormExtra } from '@Views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
+import { Me } from '@Views/Register/types/Me'
+import gql from 'graphql-tag'
+import { ExecutionResult } from 'react-apollo'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import InstructionRow from './components/InstructionRow/InstructionRow'
 import { RecipeFormCreateMutation, RecipeFormCreateMutationVariables } from './types/RecipeFormCreateMutation'
 import {
@@ -61,6 +62,7 @@ interface RecipeFormProps {
   fieldErrors: { [k: string]: string }
   onCreate: (variables: RecipeFormCreateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormCreateMutation>>,
   onUpdate: (variables: RecipeFormUpdateMutationVariables, userId: string) => Promise<any>,
+  loading?: boolean
 }
 
 export type IngredientWithKey = (RecipeFormQuery_recipe_ingredients & { key: string })
@@ -107,7 +109,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               ref: ref => this._scrollView = ref,
             }}
           >
-            <Navbar title={getLocalizedText('Create Recipe')} />
+            <Navbar title={translate('Create Recipe')} />
             {this._renderFormContent(theme)}
             {this._renderFormExtraContent()}
           </CenterAlignedPageView>
@@ -127,8 +129,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         recipe: {
           ...props.recipe,
           ingredients: props.recipe.ingredients.map(ingredient => ({
-            key: String(Math.random()),
             ...ingredient,
+            key: String(Math.random()),
+            description: ingredient.description || [],
           })),
           instructions: props.recipe.instructions,
           title: props.recipe.title,
@@ -201,9 +204,8 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       >
         <RecipeFormExtra
           recipe={this.state.recipe}
-          userId={this.state.me.id}
           selectedTags={this.state.recipe.tags}
-          me={this.state.me}
+          user={this.state.me}
           onTagsChange={selectedTags => this.setState(prevState => ({
             recipe: {
               ...prevState.recipe,
@@ -230,9 +232,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       >
         <IntlInput
           autoFocus
-          label={getLocalizedText('Name')}
+          label={translate('Name')}
           required
-          placeholder={getLocalizedText('e.g. Easy Sesame Chicken')}
+          placeholder={translate('e.g. Easy Sesame Chicken')}
           translations={this.state.recipe.title || []}
           errorMessage={fieldErrors['title']}
           onTranslationsChange={(title) => this.setState(prevState => ({
@@ -249,8 +251,8 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
          * Ingredients Search Input
          * */}
         <Input
-          label={getLocalizedText('Ingredients')}
-          placeholder={getLocalizedText('e.g. Rice')}
+          label={translate('Ingredients')}
+          placeholder={translate('e.g. Rice')}
           required
           onFocus={() => showFoodModal({
             autoFocus: true,
@@ -280,9 +282,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
                 onDelete={this._onIngredientDelete(index)}
                 onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
                 onIngredientChange={this._onIngredientChange}
-                style={{
-                  [Styles.values.marginEnd]: Styles.values.spacing,
-                }}
+                style={styles.ingredient}
               />
             ))
           }
@@ -308,9 +308,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
 
         <RX.View style={{ height: Styles.values.spacing * 2 }} />
         <TextInputAutoGrow
-          label={getLocalizedText('Description')}
+          label={translate('Description')}
           translations={this.state.recipe.description || []}
-          placeholder={getLocalizedText('Describe the story behind your recipe')}
+          placeholder={translate('Describe the story behind your recipe')}
           onTranslationsChange={description => this.setState(prevState => ({
             recipe: {
               ...prevState.recipe,
@@ -322,57 +322,57 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <RX.View style={{ height: Styles.values.spacing * 2 }} />
 
         <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: Styles.values.spacing * 2 }}>
-          <Input
-            label={getLocalizedText('Serving')}
+          <InputNumber
+            label={translate('Serving')}
             required
-            value={this.state.recipe.serving ? String(this.state.recipe.serving) : ''}
-            onChange={(serving: string) => this.setState(prevState => ({
+            value={this.state.recipe.serving}
+            onChange={serving => this.setState(prevState => ({
               recipe: {
                 ...prevState.recipe,
-                serving: serving ? Number(serving) : 1,
+                serving,
               }
             }))}
             style={[styles.input, styles.smallInput]}
           />
-          <Input
-            label={getLocalizedText('PreparationTime')}
-            value={this.state.recipe.timing.prepTime ? String(this.state.recipe.timing.prepTime) : ''}
-            onChange={(prepTime: string) => this.setState(prevState => ({
+          <InputNumber
+            label={translate('PreparationTime')}
+            value={this.state.recipe.timing.prepTime}
+            onChange={prepTime => this.setState(prevState => ({
               recipe: {
                 ...prevState.recipe,
                 timing: {
                   ...prevState.recipe.timing,
-                  prepTime: prepTime ? Number(prepTime) : null
+                  prepTime
                 }
               }
             }), this._calculateTotalTime)}
             style={[styles.input, styles.smallInput]}
           />
-          <Input
-            label={getLocalizedText('CookingTime')}
-            value={this.state.recipe.timing.cookTime ? String(this.state.recipe.timing.cookTime) : ''}
-            onChange={(cookTime: string) => this.setState(prevState => ({
+          <InputNumber
+            label={translate('CookingTime')}
+            value={this.state.recipe.timing.cookTime}
+            onChange={cookTime => this.setState(prevState => ({
               recipe: {
                 ...prevState.recipe,
                 timing: {
                   ...prevState.recipe.timing,
-                  cookTime: cookTime ? Number(cookTime) : null,
+                  cookTime,
                 }
               }
             }), this._calculateTotalTime)}
             style={[styles.input, styles.smallInput]}
           />
-          <Input
-            label={getLocalizedText('TotalTime')}
+          <InputNumber
+            label={translate('TotalTime')}
             required
-            value={this.state.recipe.timing.totalTime ? String(this.state.recipe.timing.totalTime) : ''}
-            onChange={(totalTime: string) => this.setState(prevState => ({
+            value={this.state.recipe.timing.totalTime}
+            onChange={totalTime => this.setState(prevState => ({
               totalTimeSet: true,
               recipe: {
                 ...prevState.recipe,
                 timing: {
                   ...prevState.recipe.timing,
-                  totalTime: totalTime ? Number(totalTime) : 0,
+                  totalTime,
                 }
               }
             }))}
@@ -385,10 +385,10 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               value={this.state.recipe.difficulty}
               options={[
                 { value: null, text: <Text translate>Select</Text> },
-                ...Object.keys(RecipeDifficulty).map(difficulty => ({
-                  value: RecipeDifficulty[difficulty],
-                  text: <Text translate>{difficulty}</Text>,
-                })),
+                { value: RecipeDifficulty.easy, text: translate('easy') },
+                { value: RecipeDifficulty.medium, text: translate('medium') },
+                { value: RecipeDifficulty.hard, text: translate('hard') },
+                { value: RecipeDifficulty.expert, text: translate('expert') },
               ]}
               onChange={difficulty => this.setState(prevState => ({
                 recipe: {
@@ -401,63 +401,59 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           </RX.View>
         </RX.View>
 
-        <FilePicker
-          onImageChange={(image, thumbnail) => this.setState({ image, thumbnail })}
-          onImagePreviewChange={imagePreview => this.setState({ imagePreview })}
-          compress
-          withThumbnail
+        <RX.View
           style={{
             flex: 1,
-            height: 400,
-            borderRadius: 8,
             marginBottom: Styles.values.spacing,
+            alignItems: 'center',
+            position: 'relative',
           }}
         >
-          <RX.View
+          <FilePicker
+            onImageChange={(image, thumbnail) => this.setState({ image, thumbnail })}
+            onImagePreviewChange={imagePreview => this.setState({ imagePreview })}
+            compress
+            withThumbnail
             style={{
-              flex: 1,
-              backgroundColor: theme.colors.textInputBg,
-              alignItems: 'center',
-              position: 'relative',
+              width: 350,
+              height: 350,
             }}
           >
-            {
-              this.state.imagePreview &&
-              <Image
-                source={this.state.imagePreview}
-                style={styles.image}
-                resizeMode={'cover'}
-              />
-            }
             <RX.View
               style={{
                 flex: 1,
-                width: 300,
+                width: 350,
+                height: 350,
                 borderWidth: 1,
                 borderColor: theme.colors.selectBorderColor,
                 borderStyle: 'dashed',
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderRadius: 8,
+                borderRadius: 15,
                 position: 'absolute',
                 top: 0,
                 bottom: 0,
               }}
             >
               {
-                !this.state.imagePreview &&
-                <Text
-                  translate
-                  style={{
-                    color: theme.colors.selectBorderColor,
-                    fontSize: theme.fontSizes.size16,
-                    font: theme.fonts.displayBold
-                  }}
-                >UploadImage</Text>
+                this.state.imagePreview ?
+                  <Image
+                    source={this.state.imagePreview}
+                    style={styles.image}
+                    resizeMode={'cover'}
+                  /> :
+                  <Text
+                    translate
+                    style={{
+                      color: theme.colors.selectBorderColor,
+                      fontSize: theme.fontSizes.size16,
+                      font: theme.fonts.displayBold
+                    }}
+                  >UploadImage</Text>
               }
             </RX.View>
-          </RX.View>
-        </FilePicker>
+          </FilePicker>
+        </RX.View>
         <RX.View style={{ height: Styles.values.spacing * 2 }} />
 
         {
@@ -466,7 +462,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
            * */
           !this.props.recipe &&
           <FilledButton
-            label={getLocalizedText('Submit')}
+            label={translate(this.props.loading ? 'Submitting' : 'Submit')}
             onPress={this._handleCreate}
           />
         }
@@ -667,7 +663,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         if (data) {
           this._setUI()
           ToastStore.toast({
-            message: getLocalizedText('RecipeCreationSuccess'),
+            message: translate('RecipeCreationSuccess'),
             type: ToastTypes.Success,
           })
           this.setState({
@@ -690,7 +686,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }, this.state.me.id)
       .then(() => {
         ToastStore.toast({
-          message: getLocalizedText('RecipeUpdateSuccess'),
+          message: translate('RecipeUpdateSuccess'),
           type: ToastTypes.Success,
         })
         LocationStore.navigate(this.props, 'back')
@@ -744,7 +740,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
 }
 
 export default function (props: {}) {
-  const { data, error } = useQuery<RecipeFormQuery, RecipeFormQueryVariables>(gql`
+  const { data, error, loading: recipeLoading } = useQuery<RecipeFormQuery, RecipeFormQueryVariables>(gql`
     query RecipeFormQuery($slug: String!) {
       recipe(slug: $slug) {
         ...MyRecipe
@@ -759,15 +755,15 @@ export default function (props: {}) {
     skip: !getParam(props, 'slug'),
     fetchPolicy: 'cache-and-network'
   })
-  const [createRecipe, { error: createRecipeError }] = useMutation<RecipeFormCreateMutation, RecipeFormCreateMutationVariables>(gql`
+  const [createRecipe, { loading: createRecipeLoading, error: createRecipeError }] = useMutation<RecipeFormCreateMutation, RecipeFormCreateMutationVariables>(gql`
     mutation RecipeFormCreateMutation($recipe: RecipeInput!) {
       createRecipe(recipe: $recipe) { ...MyRecipe }
     }
 
     ${ProfileRecipesFragments.myRecipe}
   `)
-  const [updateRecipe, { error: updateRecipeError }] = useMutation<RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables>(gql`
-    mutation RecipeFormUpdateMutation($id: String!, $recipe: RecipeInput!) {
+  const [updateRecipe, { loading: updateRecipeLoading, error: updateRecipeError }] = useMutation<RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables>(gql`
+    mutation RecipeFormUpdateMutation($id: ObjectId!, $recipe: RecipeInput!) {
       updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
     }
 
@@ -777,6 +773,7 @@ export default function (props: {}) {
   return (
     <RecipeForm
       recipe={data && data.recipe}
+      loading={recipeLoading || createRecipeLoading || updateRecipeLoading}
       fieldErrors={getGraphQLUserInputErrors(error || createRecipeError || updateRecipeError)}
       onCreate={(variables, userId) => createRecipe({
         variables,
@@ -872,5 +869,9 @@ const styles = {
     right: 0,
     top: 0,
     bottom: 0,
+  }),
+  ingredient: RX.Styles.createViewStyle({
+    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginBottom: Styles.values.spacing,
   })
 }

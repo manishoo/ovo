@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import HoverButton from '@Common/HoverButton/HoverButton'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import HoverButton from 'src/ts/common/HoverButton/HoverButton'
 
 
 interface FilledButtonProps {
@@ -22,6 +22,7 @@ interface FilledButtonProps {
 
 enum ButtonMode {
   primary = 'primary',
+  success = 'success',
   default = 'default',
   danger = 'danger',
 }

@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import { withNavigation } from '@Modules/navigator'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { withNavigation } from 'modules/navigator'
 
 
 interface AddRecipeCellProps {
@@ -90,7 +90,6 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
 const styles = {
   container: RX.Styles.createViewStyle({
     cursor: 'pointer',
-    transform: [{ scale: 0.9 }],
     marginHorizontal: Styles.values.spacing / 2
     // alignItems: 'center',
   }),

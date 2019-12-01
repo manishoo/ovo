@@ -3,9 +3,9 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AppConfig from '@App/AppConfig'
 import qs from 'qs'
 import RX from 'reactxp'
-import AppConfig from 'src/ts/app/AppConfig'
 import SearchResult from './SearchResult'
 
 

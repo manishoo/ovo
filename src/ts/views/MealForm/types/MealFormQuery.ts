@@ -253,5 +253,5 @@ export interface MealFormQuery {
 }
 
 export interface MealFormQueryVariables {
-  id: string;
+  id: any;
 }

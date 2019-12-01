@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import LocalizedText from 'common/LocalizedText/LocalizedText'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import LocalizedText from '@Common/LocalizedText/LocalizedText'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { fullWidth } from 'src/ts/utilities'
 
 
 interface IntroductionButtonProps {
@@ -27,8 +27,8 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
     this.state = {
       large: true,
     }
-    this._widthAnimated = RX.Animated.createValue(props.introductionWidth ? (props.introductionWidth - 20) : (fullWidth() - 20))
-    this._marginTopAnimated = RX.Animated.createValue(100)
+    this._widthAnimated = RX.Animated.createValue(props.introductionWidth ? (props.introductionWidth - 20) : (ResponsiveWidthStore.getWidthNoSubscription() - 20))
+    this._marginTopAnimated = RX.Animated.createValue(222)
     this._borderRadiusAnimated = RX.Animated.createValue(20)
   }
 
@@ -37,17 +37,17 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
       RX.Animated.timing(this._widthAnimated, {
         toValue: 150,
         duration: 300,
-        easing: RX.Animated.Easing.Out()
+        // easing: RX.Animated.Easing.In()
       }),
       RX.Animated.timing(this._marginTopAnimated, {
         toValue: 0,
         duration: 300,
-        easing: RX.Animated.Easing.Out()
+        // easing: RX.Animated.Easing.In()
       }),
       RX.Animated.timing(this._borderRadiusAnimated, {
         toValue: 5,
         duration: 300,
-        easing: RX.Animated.Easing.Out()
+        // easing: RX.Animated.Easing.In()
       }),
     ]).start(() => {
       this.props.onIntroduction()
@@ -72,7 +72,7 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
           ]}
         />,
         <RX.View style={{
-          flexDirection: 'row-reverse',
+          flexDirection: 'row',
           cursor: large ? 'pointer' : 'default',
         }}>
           <ThemeContext.Consumer>
@@ -85,7 +85,7 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
                   { width: this._widthAnimated },
                   { backgroundColor: theme.colors.assistantUserMessageBG },
                   style,
-                  large ? {} : { [Styles.values.borderBottomEndRadius]: 5 }
+                  large ? {} : { [Styles.values.borderBottomStartRadius]: 5 }
                 ]}
               >
                 <RX.Text
@@ -113,6 +113,6 @@ const styles = {
     minHeight: 30,
     borderRadius: 25,
     margin: 5,
-    [Styles.values.marginEnd]: 10,
+    [Styles.values.marginStart]: 10,
   }),
 }

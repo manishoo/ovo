@@ -3,10 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
+import { ProfileRecipesQuery_recipes_recipes_instructions } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RX from 'reactxp'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import { ProfileRecipesQuery_recipes_recipes_instructions } from 'src/ts/views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 
 
 const Instructions = ({ instructions = [] }: { instructions: ProfileRecipesQuery_recipes_recipes_instructions[] }) => (

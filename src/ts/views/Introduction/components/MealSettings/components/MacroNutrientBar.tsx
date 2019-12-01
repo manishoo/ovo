@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { ThemeContext } from '@App/ThemeContext'
 import RX from 'reactxp'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 interface MacroNutrientBarProps {

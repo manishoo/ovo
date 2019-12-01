@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { LanguageCode } from 'src/ts/models/global-types'
+import { LanguageCode } from '@Models/global-types'
 
 
 export enum Routes {
@@ -11,6 +11,8 @@ export enum Routes {
   selectDialog = 'selectDialog',
   mealPlan = '/meal-plan',
   settings = '/settings',
+
+  calendar = '/timeline',
 
   introduction = '/introduction',
 
@@ -33,13 +35,14 @@ export enum Routes {
    * */
   meal = '/meal',
   mealForm = '/create-meal',
+  mealSettings = '/meal-settings',
 
   home = '/',
   // profile = '/',
   feed = 'feed',
   login = '/login',
-  register = '/join-caloria',
-  shoppingList = 'shopping-list',
+  register = '/join-prana',
+  shoppingList = '/shopping-list',
 }
 
 export interface Translation {

@@ -3,15 +3,15 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { showFoodPreviewModal } from 'common/FoodDialog/components/FoodPreview'
-import Image from 'common/Image/Image'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import { showFoodPreviewModal } from '@Common/FoodDialog/components/FoodPreview'
+import Image from '@Common/Image/Image'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import ImageSource from '@Modules/images'
 import gql from 'graphql-tag'
-import ImageSource from 'modules/images'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { IngredientCardIngredient } from './types/IngredientCardIngredient'
 
 
@@ -71,12 +71,6 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
   private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ scale: this._previewScaleAnimatedValue }]
   })
-  private _containerAnimatedScale = RX.Animated.createValue(0)
-  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    transform: [{
-      scale: this._containerAnimatedScale
-    }]
-  })
 
   public render() {
     const { style, ingredient } = this.props
@@ -90,7 +84,6 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
             style={[
               styles.container,
               { width: this.props.size },
-              this._containerAnimationStyle,
               style,
             ]}
           >
@@ -98,7 +91,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
              * Food Image
              * */}
             <RX.View
-              onPress={this.props.onPress}
+              // onPress={this.props.onPress}
               style={{
                 width: this.props.size,
                 height: this.props.size,
@@ -169,7 +162,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
                           color: theme.colors.recipeIngredientUnitTextColor,
                         }
                       ]}
-                    >{ingredient.customUnit || getLocalizedText('g')}</Text>
+                    >{ingredient.customUnit || translate('g')}</Text>
                 }
               </RX.View>
             }
@@ -195,15 +188,6 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
         )}
       </ThemeContext.Consumer>
     )
-  }
-
-  componentDidMount() {
-    RX.Animated.timing(this._containerAnimatedScale, {
-      toValue: 0.9,
-      easing: RX.Animated.Easing.OutBack(),
-      duration: 500,
-    })
-      .start()
   }
 
   private _handleOnDelete = () => {

@@ -3,11 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Image from 'common/Image/Image'
-import ImageSource from 'modules/images'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Image from '@Common/Image/Image'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 function getRandomFromArray(array: any[]): any {
@@ -46,6 +46,16 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
     const { style, size } = this.props
 
     return (
+      <RX.Image
+        source={ImageSource.Logo}
+        style={{
+          width: size,
+          height: size,
+        }}
+      />
+    )
+
+    return (
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.View
@@ -79,10 +89,10 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
     )
   }
 
-  componentDidMount(): void {
-    this._blink()
-    this._glow(this._getGlowTime())
-  }
+  // componentDidMount(): void {
+  //   this._blink()
+  //   this._glow(this._getGlowTime())
+  // }
 
   private _renderExtra = () => {
     return (

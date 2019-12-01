@@ -264,5 +264,5 @@ export interface ProfileMealsQuery {
 
 export interface ProfileMealsQueryVariables {
   lastId?: string | null;
-  userId?: string | null;
+  userId?: any | null;
 }

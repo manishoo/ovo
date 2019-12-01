@@ -3,19 +3,19 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Assistant from 'common/Assistant/Assistant'
-import FilledButton from 'common/FilledButton/FilledButton'
-import { __ } from 'common/LocalizedText/LocalizedText'
-import ImageSource from 'modules/images'
+import Assistant from '@Common/Assistant/Assistant'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { __ } from '@Common/LocalizedText/LocalizedText'
+import { Routes } from '@Models/common'
+import ImageSource from '@Modules/images'
+import LocationStore from '@Services/LocationStore'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { getParam, map } from '@Utils'
+import { AssistantMessage } from '@Views/Introduction/components/ChatBox'
+import ProfileScreenContainer from '@Views/ProfileScreen/ProfileScreenContainer'
+import SearchResult from '@Views/SearchResult/SearchResult'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { Routes } from 'src/ts/models/common'
-import LocationStore from 'src/ts/stores/LocationStore'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import { getParam, map } from 'src/ts/utilities'
-import { AssistantMessage } from 'src/ts/views/Introduction/components/ChatBox'
-import ProfileScreenContainer from 'src/ts/views/ProfileScreen/ProfileScreenContainer'
-import SearchResult from 'src/ts/views/SearchResult/SearchResult'
 import TabBar from './components/TabBar/TabBar'
 
 
@@ -41,12 +41,6 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
 
   // refs
   _scrollView: any
-
-  protected _buildState(props: {}, initialBuild: boolean): Partial<HomeScreenState> | undefined {
-    return {
-      width: ResponsiveWidthStore.getWidth(),
-    }
-  }
 
   componentDidMount(): void {
     this._scrollView.setScrollLeft(this.state.width, false)
@@ -121,6 +115,12 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
         />
       </RX.View>
     )
+  }
+
+  protected _buildState(props: {}, initialBuild: boolean): Partial<HomeScreenState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidth(),
+    }
   }
 
   private onScroll = (_scrollTop: number, scrollLeft: number) => {

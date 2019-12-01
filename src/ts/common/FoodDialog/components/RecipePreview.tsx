@@ -3,18 +3,18 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import FilledButton from 'common/FilledButton/FilledButton'
-import { SelectFoodQuery_recipes_recipes } from 'common/FoodDialog/types/SelectFoodQuery'
-import Image from 'common/Image/Image'
-import Input from 'common/Input/Input'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Modal from 'common/Modal/Modal'
-import { RecipeCardRecipe } from 'common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import { SelectFoodQuery_recipes_recipes } from '@Common/FoodDialog/types/SelectFoodQuery'
+import Image from '@Common/Image/Image'
+import InputNumber from '@Common/Input/InputNumber'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Modal from '@Common/Modal/Modal'
+import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import Text from '@Common/Text/Text'
 import RX from 'reactxp'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 const MODAL_ID = 'RecipePreview'
@@ -100,12 +100,12 @@ export default class RecipePreview extends RX.Component<RecipePreviewProps, Reci
         <RX.View
           style={styles.flex1}
         >
-          <Input
+          <InputNumber
             autoFocus
             inputRef={inputRef}
-            value={String(this.state.serving)}
-            onChange={(amount: string) => this.setState({ serving: Number(amount) })}
-            label={getLocalizedText('Amount')}
+            value={this.state.serving}
+            onChange={serving => this.setState({ serving })}
+            label={translate('Amount')}
             keyboardType={'number-pad'}
             style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
           />
@@ -120,7 +120,7 @@ export default class RecipePreview extends RX.Component<RecipePreviewProps, Reci
         </RX.View>*/}
       </RX.View>,
       <FilledButton
-        label={getLocalizedText('AddIngredient')}
+        label={translate('AddIngredient')}
         onPress={this._onSubmit(recipe)}
         containerStyle={styles.addToMeal}
       />

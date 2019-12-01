@@ -171,6 +171,6 @@ export interface SearchResultQuery {
 
 export interface SearchResultQueryVariables {
   nameSearchQuery: string;
-  lastId?: string | null;
+  lastId?: any | null;
   tags?: string[] | null;
 }

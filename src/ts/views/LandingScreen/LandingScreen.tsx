@@ -3,27 +3,28 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Assistant from 'common/Assistant/Assistant'
-import FilledButton from 'common/FilledButton/FilledButton'
-import Image from 'common/Image/Image'
-import { getLocalizedText } from 'common/LocalizedText/LocalizedText'
-import Text from 'common/Text/Text'
-import ImageSource from 'modules/images'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Assistant from '@Common/Assistant/Assistant'
+import FilledButton from '@Common/FilledButton/FilledButton'
+import HoverButton from '@Common/HoverButton/HoverButton'
+import Image from '@Common/Image/Image'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import ImageSource from '@Modules/images'
+import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { navigate } from '@Utils'
+import Introduction from '@Views/Introduction/Introduction'
+import GoDownIndicator from '@Views/LandingScreen/components/GoDownIndicator'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import HoverButton from 'src/ts/common/HoverButton/HoverButton'
-import { Routes } from 'src/ts/models/common'
-import ResponsiveWidthStore from 'src/ts/stores/ResponsiveWidthStore'
-import { navigate } from 'src/ts/utilities'
-import Introduction from 'src/ts/views/Introduction/Introduction'
-import GoDownIndicator from 'src/ts/views/LandingScreen/components/GoDownIndicator'
 
 
 const HEADER_MAX_WIDTH = 950
-const HEADER_HEIGHT = 80
+
+// const HEADER_HEIGHT = 80
 
 interface AssistantScreenProps extends RX.CommonProps {
   style?: any,
@@ -36,56 +37,39 @@ interface AssistantScreenState {
 
 export default class LandingScreen extends ComponentBase<AssistantScreenProps, AssistantScreenState> {
   public render() {
-    return null
-
     const { style } = this.props
-
-    if (this.state.width < 950) {
-      return (
-        <RX.View>
-          <Text
-            style={{
-              fontSize: Styles.fontSizes.size20,
-              alignSelf: 'center',
-              padding: Styles.values.spacing,
-              textAlign: 'center',
-            }}
-          >This website is currently under development, please use a desktop browser to view this page</Text>
-        </RX.View>
-      )
-    }
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <RX.View style={[styles.container, style]}>
+          <RX.ScrollView style={[styles.container, style]}>
             <RX.View
               style={[
                 {
                   height: this.state.height,
-                  minHeight: 1000
+                  minHeight: 650
                 },
                 styles.initialPageContainer,
               ]}>
-              <Text translate style={styles.title}>landingTitle</Text>
-              <Text translate style={[styles.subtitle, { color: theme.colors.landingSubtitle }]}>landingSubtitle</Text>
+              {/*<Text translate style={styles.title}>landingTitle</Text>*/}
+              {/*<Text translate style={[styles.subtitle, { color: theme.colors.landingSubtitle }]}>landingSubtitle</Text>*/}
 
               {this._renderPhone()}
 
-              <GoDownIndicator />
+              {false && <GoDownIndicator />}
             </RX.View>
 
-            {this._renderSection(theme, ImageSource.SC1, getLocalizedText('landing_1_t'), getLocalizedText('landing_1_s'))}
-            {this._renderSection(theme, ImageSource.SC2, getLocalizedText('landing_2_t'), getLocalizedText('landing_2_s'), {
+            {false && this._renderSection(theme, ImageSource.SC1, translate('landing_1_t'), translate('landing_1_s'))}
+            {false && this._renderSection(theme, ImageSource.SC2, translate('landing_2_t'), translate('landing_2_s'), {
               width: 400,
             })}
-            {this._renderSection(theme, ImageSource.SC3, getLocalizedText('landing_3_t'), getLocalizedText('landing_3_s'))}
-            {this._renderSection(theme, ImageSource.SC4, getLocalizedText('landing_4_t'), getLocalizedText('landing_4_s'))}
+            {false && this._renderSection(theme, ImageSource.SC3, translate('landing_3_t'), translate('landing_3_s'))}
+            {false && this._renderSection(theme, ImageSource.SC4, translate('landing_4_t'), translate('landing_4_s'))}
 
-            {this._renderBottomCall2Action()}
-            {this._renderFooter(theme)}
-            {this._renderHeader(theme)}
-          </RX.View>
+            {false && this._renderBottomCall2Action()}
+            {false && this._renderFooter(theme)}
+            {false && this._renderHeader(theme)}
+          </RX.ScrollView>
         )}
       </ThemeContext.Consumer>
     )
@@ -122,8 +106,10 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
                 }
               ]}
             >
-              <Text translate
-                    style={{ color: theme.colors.loginButtonTextColor }}>Login</Text>
+              <Text
+                translate
+                style={{ color: theme.colors.loginButtonTextColor }}
+              >Login</Text>
             </RX.View>
           )}
         />}
@@ -132,14 +118,25 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
   }
 
   private _renderPhone = () => {
-    let { height } = this.state
+    // let { height } = this.state
 
-    if (height < 900) {
-      height = 900
-    }
+    // if (height < 900) {
+    //   height = 900
+    // }
+    //
+    // let phoneHeight = height / 1.5
+    // let phoneWidth = phoneHeight / 1.8
+    //
+    // if (phoneHeight > 650) {
+    //   phoneHeight = 650
+    // }
+    //
+    // if (phoneWidth > 361) {
+    //   phoneWidth = 361
+    // }
 
-    const phoneHeight = height / 1.5
-    const phoneWidth = phoneHeight / 1.8
+    const phoneHeight = 650
+    const phoneWidth = 361
 
     return (
       <RX.View style={styles.phoneContainer}>
@@ -155,9 +152,9 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
         <RX.View
           style={[
             {
-              top: 49,
-              width: phoneWidth - 86,
-              height: phoneHeight - 76,
+              top: 52,
+              width: phoneWidth - 91,
+              height: phoneHeight - 80,
               borderBottomLeftRadius: phoneHeight / 23,
               borderBottomRightRadius: phoneHeight / 23,
             },
@@ -165,8 +162,8 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
           ]}
         >
           <Introduction
-            introductionWidth={phoneWidth - 86}
-            introductionHeight={phoneHeight - 76}
+            introductionWidth={phoneWidth - 91}
+            introductionHeight={phoneHeight - 80}
           />
         </RX.View>
       </RX.View>
@@ -209,7 +206,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
         glowMode={'dark'}
       />,
       <FilledButton
-        label={getLocalizedText('LandingStartFree')}
+        label={translate('LandingStartFree')}
         fontSize={24}
         style={{ paddingRight: Styles.values.spacingLarge * 2, paddingLeft: Styles.values.spacingLarge * 2 }}
         onPress={() => {
@@ -246,7 +243,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
           <RX.View style={{ [Styles.values.marginEnd]: Styles.values.spacing * 2 }}>
             <Text translate
                   style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}>LandingFooterCentralOffice</Text>
-            <Text translate style={footerLinkStyle}>LandingFooterAboutCaloria</Text>
+            <Text translate style={footerLinkStyle}>LandingFooterAboutPrana</Text>
             <Text translate style={footerLinkStyle}>LandingFooterContactUs</Text>
             <Text translate style={footerLinkStyle}>LandingFooterTerms</Text>
           </RX.View>
@@ -371,9 +368,9 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
+  container: RX.Styles.createScrollViewStyle({
     flex: 1,
-    alignItems: 'center'
+    // alignItems: 'center'
   }),
   headerContainer: RX.Styles.createViewStyle({
     flex: 1,
@@ -426,7 +423,8 @@ const styles = {
   }),
   initialPageContainer: RX.Styles.createViewStyle({
     alignItems: 'center',
-    marginTop: HEADER_HEIGHT
+    justifyContent: 'center',
+    // marginTop: HEADER_HEIGHT
   }),
   sectionImage: RX.Styles.createImageStyle({
     width: 333,

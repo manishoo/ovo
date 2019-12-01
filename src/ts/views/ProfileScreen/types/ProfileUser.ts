@@ -2,6 +2,8 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { Role } from "./../../../models/global-types";
+
 // ====================================================
 // GraphQL fragment: ProfileUser
 // ====================================================
@@ -19,6 +21,7 @@ export interface ProfileUser_socialNetworks {
 
 export interface ProfileUser {
   id: string;
+  role: Role;
   bio: string | null;
   username: string;
   firstName: string | null;

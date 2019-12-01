@@ -3,9 +3,11 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import ImageSource from 'modules/images'
+import AppConfig from '@App/AppConfig'
+import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import ImageSource from '@Modules/images'
 import RX from 'reactxp'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
 
 
 interface SubmitButtonProps {
@@ -51,11 +53,12 @@ export default class SubmitButton extends RX.Component<SubmitButtonProps> {
           >
             <RX.Image
               source={ImageSource.PaperPlane}
-              style={{
-                width: 24,
-                height: 24,
-                opacity: disabled ? 0.7 : 1
-              }}
+              style={[
+                styles.image,
+                {
+                  opacity: disabled ? 0.7 : 1,
+                }
+              ]}
             />
           </RX.View>
         )}
@@ -68,7 +71,7 @@ const styles = {
   sendButton: RX.Styles.createViewStyle({
     width: 45,
     height: 45,
-    marginLeft: 16,
+    [Styles.values.marginStart]: Styles.values.spacing,
     justifyContent: 'center',
     alignItems: 'center',
   }),
@@ -82,4 +85,9 @@ const styles = {
   skipButtonText: RX.Styles.createTextStyle({
     fontSize: 20,
   }),
+  image: RX.Styles.createImageStyle({
+    width: 24,
+    height: 24,
+    transform: [{ rotate: AppConfig.isRTL() ? '180deg' : '0deg' }],
+  })
 }

@@ -3,19 +3,19 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import RecipesList from 'common/RecipesList/RecipesList'
-import gql from 'graphql-tag'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import client from 'src/ts/app/client'
-import UserStore from 'src/ts/stores/UserStore'
-import { Me } from 'src/ts/views/Register/types/Me'
-import { SearchResultFragments } from 'src/ts/views/SearchResult/SearchResultFragments'
+import client from '@App/client'
+import RecipesList from '@Common/RecipesList/RecipesList'
+import UserStore from '@Services/UserStore'
+import { Me } from '@Views/Register/types/Me'
+import { SearchResultFragments } from '@Views/SearchResult/SearchResultFragments'
 import {
   SearchResultQuery,
   SearchResultQuery_recipes_recipes,
   SearchResultQueryVariables
-} from 'src/ts/views/SearchResult/types/SearchResultQuery'
+} from '@Views/SearchResult/types/SearchResultQuery'
+import gql from 'graphql-tag'
+import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 
 
 interface SearchResultRecipesProps {
@@ -96,7 +96,7 @@ export default class SearchResultRecipes extends ComponentBase<SearchResultRecip
 }
 
 export const SEARCH_RESULT_RECIPES_QUERY = gql`
-  query SearchResultQuery($nameSearchQuery: String!, $lastId: String, $tags: [String!]) {
+  query SearchResultQuery($nameSearchQuery: String!, $lastId: ObjectId, $tags: [String!]) {
     recipes(nameSearchQuery: $nameSearchQuery, lastId: $lastId, tags: $tags) {
       recipes {
         ...SearchResultRecipe

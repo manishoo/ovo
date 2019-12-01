@@ -4,6 +4,7 @@
  */
 
 import RX, { Types } from 'reactxp'
+import ImageSource from '@Modules/images'
 
 
 interface ImageProps extends Types.ImageProps {
@@ -11,6 +12,8 @@ interface ImageProps extends Types.ImageProps {
 }
 
 export default class Image extends RX.Component<ImageProps> {
+  static source = ImageSource
+
   public render() {
     const { style } = this.props
 

@@ -3,13 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import Text from 'common/Text/Text'
+import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
+import Text from '@Common/Text/Text'
+import ToastStore, { Toast } from '@Services/ToastStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Styles from 'src/ts/app/Styles'
-import { Theme } from 'src/ts/app/Theme'
-import { ThemeContext } from 'src/ts/app/ThemeContext'
-import ToastStore, { Toast } from 'src/ts/stores/ToastStore'
 
 
 interface ToastProps {
@@ -113,12 +113,12 @@ export default class ToastContainer extends ComponentBase<ToastProps, ToastState
 const styles = {
   container: RX.Styles.createViewStyle({
     position: 'absolute',
-    bottom: 0,
+    top: 0,
     alignSelf: 'center',
   }),
   toast: RX.Styles.createViewStyle({
     padding: Styles.values.spacing,
     borderRadius: 8,
-    marginBottom: Styles.values.spacing,
+    marginTop: Styles.values.spacing,
   }),
 }

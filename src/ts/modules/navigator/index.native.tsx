@@ -3,20 +3,22 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SelectDialog from 'common/Select/components/SelectDialog'
+import SelectDialog from '@Common/Select/components/SelectDialog'
+import { Routes } from '@Models/common'
+import AuthLoadingScreen from '@Views/AuthLoadingScreen/AuthLoadingScreen'
+import FoodScreen from '@Views/FoodScreen/FoodScreen'
+import Introduction from '@Views/Introduction/Introduction'
+import LandingScreen from '@Views/LandingScreen/LandingScreen'
+import LoginScreen from '@Views/Login/LoginScreen'
+import RecipeScreenContainer from '@Views/Recipe/Recipe'
+import SettingsScreen from '@Views/SettingsScreen/SettingsScreen'
+import ShoppingList from '@Views/ShoppingList/ShoppingList'
 import { createStackNavigator, createSwitchNavigator, withNavigation as withNav } from 'react-navigation'
-import { Routes } from 'src/ts/models/common'
-import AssistantScreen from 'src/ts/views/AssistantScreen/AssistantScreen'
-import AuthLoadingScreen from 'src/ts/views/AuthLoadingScreen/AuthLoadingScreen'
-import FoodScreen from 'src/ts/views/FoodScreen/FoodScreen'
-import Introduction from 'src/ts/views/Introduction/Introduction'
-import LoginScreen from 'src/ts/views/Login/LoginScreen'
-import HomeScreen from 'src/ts/views/platform-specific/native/HomeScreen/HomeScreen'
-import RecipeScreenContainer from 'src/ts/views/Recipe/Recipe'
-// import RecipeForm from 'src/ts/views/RecipeForm/RecipeForm'
-import SettingsScreen from 'src/ts/views/SettingsScreen/SettingsScreen'
-import ShoppingList from 'src/ts/views/ShoppingList/ShoppingList'
 
+
+export function withMobileNavigation(T: any): any {
+  return withNav(T)
+}
 
 export function withNavigation(T: any) {
   return withNav(T)
@@ -26,7 +28,7 @@ const CardStack = createStackNavigator(
   {
     [Routes.home]: {
       path: Routes.home,
-      screen: HomeScreen,
+      screen: LandingScreen,
     },
     [Routes.settings]: {
       path: Routes.settings,
@@ -41,7 +43,7 @@ const CardStack = createStackNavigator(
       screen: FoodScreen,
     },
     // mealPlan: {
-    //   path: 'mealPlan',
+    //   calendar: 'mealPlan',
     //   screen: MealPlanContainer,
     // },
     shoppingList: {
@@ -72,13 +74,13 @@ const AppStack = createStackNavigator(
   {
     main: CardStack,
     // mealPlan: {
-    //   path: 'mealPlan',
+    //   calendar: 'mealPlan',
     //   screen: MealPlanContainer,
     // },
-    [Routes.assistant]: {
-      path: Routes.assistant,
-      screen: AssistantScreen,
-    },
+    // [Routes.assistant]: {
+    //   path: Routes.assistant,
+    //   screen: AssistantScreen,
+    // },
     [Routes.selectDialog]: {
       path: 'selectDialog',
       screen: SelectDialog,
