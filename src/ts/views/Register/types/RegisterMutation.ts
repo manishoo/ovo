@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserRegistrationInput, Gender, Role } from "./../../../models/global-types";
+import { UserRegistrationInput, Gender, Role, MealAvailableTime, MealSize } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: RegisterMutation
@@ -29,6 +29,15 @@ export interface RegisterMutation_registerUser_user_socialNetworks {
   pinterest: string | null;
 }
 
+export interface RegisterMutation_registerUser_user_meals {
+  id: string;
+  availableTime: MealAvailableTime | null;
+  size: MealSize | null;
+  cook: boolean | null;
+  time: string;
+  name: string;
+}
+
 export interface RegisterMutation_registerUser_user {
   id: string;
   username: string;
@@ -47,6 +56,7 @@ export interface RegisterMutation_registerUser_user {
   caloriesPerDay: number | null;
   socialNetworks: RegisterMutation_registerUser_user_socialNetworks | null;
   role: Role;
+  meals: RegisterMutation_registerUser_user_meals[];
 }
 
 export interface RegisterMutation_registerUser {

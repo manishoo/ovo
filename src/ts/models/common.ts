@@ -36,6 +36,7 @@ export enum Routes {
   meal = '/meal',
   mealForm = '/create-meal',
   mealSettings = '/meal-settings',
+  mealPlanSettings = '/meal-plan-settings',
 
   home = '/',
   // profile = '/',

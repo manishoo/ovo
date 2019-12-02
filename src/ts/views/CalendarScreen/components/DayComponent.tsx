@@ -26,29 +26,7 @@ import {
 } from './types/DayComponentMealSuggestionMutation'
 
 
-const CIRCLE_INIT_SIZE = 100
-// const CIRCLE_TOP = -45
 const MEAL_MAX_WIDTH = 350
-
-// function getTemplate(isPrevDayFilled: boolean, isNextDayFilled: boolean) {
-//   if (isPrevDayFilled && isNextDayFilled) {
-//     return DayTemplate.fullTopBottomFull
-//   }
-//
-//   if (!isPrevDayFilled && !isNextDayFilled) {
-//     return DayTemplate.fullTopBottomEmpty
-//   }
-//
-//   if (isPrevDayFilled) {
-//     return DayTemplate.fullTopFull
-//   }
-//
-//   if (isNextDayFilled) {
-//     return DayTemplate.fullBottomFull
-//   }
-//
-//   return DayTemplate.empty
-// }
 
 interface DayComponentProps {
   style?: any,
@@ -196,6 +174,8 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
     )
   }
 
+  private _isToday = () => this.props.date.hasSame(DateTime.local(), 'day')
+
   private _renderDayTitle = () => {
     const { dayRegenerating, date } = this.props
 
@@ -217,7 +197,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
                   style={[
                     styles.dayName,
                     {
-                      color: theme.colors.calendarDayName,
+                      color: this._isToday() ? theme.colors.primary : theme.colors.calendarDayName,
                     }
                   ]}
                 >{date.toLocaleString({
@@ -227,13 +207,11 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
                   locale: AppConfig.locale
                 })}</Text>
 
-                {
-                  (isHovering || dayRegenerating) &&
-                  <ItemControl
-                    onRegenerate={this._onDayRegenerate}
-                    regenerating={dayRegenerating}
-                  />
-                }
+                <ItemControl
+                  visible={isHovering || dayRegenerating}
+                  onRegenerate={this._onDayRegenerate}
+                  regenerating={dayRegenerating}
+                />
               </RX.View>
             )}
           />

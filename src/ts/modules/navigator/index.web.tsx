@@ -18,6 +18,7 @@ import {
   LandingScreen,
   LoginScreen,
   MealForm,
+  MealPlanSettingsScreen,
   ProfileScreen,
   PublicProfileScreen,
   Recipe,
@@ -149,6 +150,13 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             navOptions: defaultNavOptions,
           },
           {
+            path: `${Routes.mealPlanSettings}/`,
+            exact: false,
+            redirectTo: this.state.user ? undefined : Routes.login,
+            component: MealPlanSettingsScreen,
+            navOptions: defaultNavOptions,
+          },
+          {
             path: Routes.login,
             immersive: true,
             exact: false,
@@ -156,7 +164,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           },
           {
             path: Routes.shoppingList,
-            immersive: true,
+            immersive: false,
             exact: true,
             component: ShoppingList,
           },

@@ -23,6 +23,7 @@ enum FaLocale {
   'Ingredients' = 'مواد لازم',
   'IngredientsYieldLabel' = 'برای {{number}} نفر',
   'ShoppingList' = 'لیست خرید',
+  'Pantry' = 'پنتری',
   'Explore' = 'گشت‌و‌گذار',
   'Profile' = 'پروفایل',
   'Dishes' = 'دیش ها',
@@ -224,7 +225,11 @@ enum FaLocale {
   availableTime = 'زمان موجود',
   mealSize = 'اندازه وعده',
   Save = 'ذخیره',
-  Snack = 'اسنک'
+  Snack = 'اسنک',
+  MealPlanSettings = 'تنظیمات برنامه‌غذایی',
+  editMealPlanSettings = 'تنظیمات برنامه‌غذایی',
+
+  Groceries = 'سبد خرید'
 }
 
 export default FaLocale

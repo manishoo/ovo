@@ -38,6 +38,25 @@ export interface IngredientFood_thumbnail {
   url: string;
 }
 
+export interface IngredientFood_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface IngredientFood_nutrition {
+  calories: IngredientFood_nutrition_calories | null;
+}
+
+export interface IngredientFood_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface IngredientFood_origFoodGroups {
+  id: string;
+  name: IngredientFood_origFoodGroups_name[];
+}
+
 export interface IngredientFood {
   id: string;
   name: IngredientFood_name[];
@@ -45,4 +64,6 @@ export interface IngredientFood {
   weights: IngredientFood_weights[];
   image: IngredientFood_image | null;
   thumbnail: IngredientFood_thumbnail | null;
+  nutrition: IngredientFood_nutrition;
+  origFoodGroups: IngredientFood_origFoodGroups[][];
 }

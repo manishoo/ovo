@@ -64,8 +64,15 @@ export default class Input extends RX.Component<InputProps, InputState> {
           <RX.View
             style={[styles.container, style]}
           >
-            {!!label && <RX.Text
-              style={[styles.label, { color: theme.colors.labelInput }, this._getLabelStyle(theme)]}>{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
+            {
+              !!label &&
+              <RX.Text
+                style={[
+                  styles.label,
+                  { color: theme.colors.labelInput },
+                  this._getLabelStyle(theme)
+                ]}
+              >{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
             <RX.TextInput
               ref={inputRef}
               value={value}
@@ -80,7 +87,14 @@ export default class Input extends RX.Component<InputProps, InputState> {
             />
             {!!errorMessage &&
             <RX.Text
-              style={[styles.label, styles.errorLabel, { color: theme.colors.inputErrorColor }]}>{errorMessage}</RX.Text>}
+              style={[
+                styles.label,
+                styles.errorLabel,
+                {
+                  color: theme.colors.inputErrorColor
+                }
+              ]}
+            >{errorMessage}</RX.Text>}
           </RX.View>
         )}
       </ThemeContext.Consumer>

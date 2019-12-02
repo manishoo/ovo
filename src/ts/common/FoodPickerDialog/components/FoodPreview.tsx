@@ -8,9 +8,9 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import {
-  SelectFoodQuery_foods_foods,
-  SelectFoodQuery_foods_foods_weights
-} from '@Common/FoodDialog/types/SelectFoodQuery'
+  FoodPickerQuery_foods_foods,
+  FoodPickerQuery_foods_foods_weights
+} from '@Common/FoodPickerDialog/types/FoodPickerQuery'
 import Image from '@Common/Image/Image'
 import Input from '@Common/Input/Input'
 import InputNumber from '@Common/Input/InputNumber'
@@ -21,6 +21,7 @@ import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import { Translation } from '@Models/common'
 import { MealItem } from '@Models/FoodModels'
+import { createId } from '@Utils/create-id'
 import RX from 'reactxp'
 
 
@@ -32,15 +33,15 @@ interface FoodPreviewProps {
   onDismiss: () => any,
   inputRef: (ref: any) => any,
   item: MealItem,
-  onSubmit: (food: SelectFoodQuery_foods_foods, amount: number, weight?: SelectFoodQuery_foods_foods_weights, customUnit?: string, gramWeight?: number, description?: Translation[]) => void,
+  onSubmit: (food: FoodPickerQuery_foods_foods, amount: number, description: Translation[], weight?: FoodPickerQuery_foods_foods_weights, customUnit?: string, gramWeight?: number) => void,
   height: number
 }
 
 interface FoodPreviewState {
   amount: number,
   description: Translation[],
-  selectedWeight?: SelectFoodQuery_foods_foods_weights,
-  weight?: SelectFoodQuery_foods_foods_weights,
+  selectedWeight?: FoodPickerQuery_foods_foods_weights,
+  weight?: FoodPickerQuery_foods_foods_weights,
   customUnit?: string,
   gramWeight: number,
   selectedWeightValue?: string,
@@ -66,7 +67,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
       weight: props.item.weight || {
         amount: 1,
         gramWeight: 1,
-        id: String(Math.random()),
+        id: createId(),
         name: [],
       },
       gramWeight: props.item.gramWeight || 1,
@@ -99,14 +100,14 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     )
   }
 
-  private _onSubmit = (food: SelectFoodQuery_foods_foods) => () => {
+  private _onSubmit = (food: FoodPickerQuery_foods_foods) => () => {
     this.props.onSubmit(
       food,
       this.state.amount,
+      this.state.description,
       this.state.selectedWeight,
       this.state.selectedWeightValue === 'custom' ? this.state.customUnit : undefined,
       this.state.selectedWeightValue === 'custom' ? this.state.gramWeight : undefined,
-      this.state.description,
     )
     this.props.onDismiss()
   }

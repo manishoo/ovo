@@ -9,7 +9,7 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import FilledButton from '@Common/FilledButton/FilledButton'
-import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
+import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import Image from '@Common/Image/Image'
 import Input from '@Common/Input/Input'
 import InputNumber from '@Common/Input/InputNumber'
@@ -35,6 +35,7 @@ import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import UserStore from '@Services/UserStore'
 import { getParam } from '@Utils'
+import { createId } from '@Utils/create-id'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
 import { ProfileRecipesFragments } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
@@ -130,7 +131,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           ...props.recipe,
           ingredients: props.recipe.ingredients.map(ingredient => ({
             ...ingredient,
-            key: String(Math.random()),
+            key: createId(),
             description: ingredient.description || [],
           })),
           instructions: props.recipe.instructions,
@@ -254,7 +255,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           label={translate('Ingredients')}
           placeholder={translate('e.g. Rice')}
           required
-          onFocus={() => showFoodModal({
+          onFocus={() => showFoodPicker({
             autoFocus: true,
             foodTypes: [FoodTypes.food],
             onDismiss: () => null,
@@ -496,7 +497,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
   private _onIngredientAdd = (mealItem: MealItem) => {
     const ingredients: IngredientWithKey[] = [...this.state.recipe.ingredients]
     ingredients.push({
-      key: String(Math.random()),
+      key: createId(),
       amount: mealItem.amount!,
       food: mealItem.food!,
       name: mealItem.food!.name,
@@ -670,7 +671,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             recipe: {
               ...data.createRecipe,
               ingredients: data.createRecipe.ingredients.map(ingredient => ({
-                key: String(Math.random()),
+                key: createId(),
                 ...ingredient,
               })),
             }

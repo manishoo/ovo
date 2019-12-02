@@ -3,7 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import SelectFood from '@Common/FoodDialog/SelectFood'
+import FoodPicker from '@Common/FoodPickerDialog/FoodPicker'
 import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
 import gql from 'graphql-tag'
 
@@ -19,7 +19,7 @@ const ProfileMealsFragments = {
         items {
           amount
           food {
-            ...SelectFoodFood
+            ...FoodPickerFood
             #            thumbnail {url}
             #            name {text locale}
             #            customUnit
@@ -38,7 +38,7 @@ const ProfileMealsFragments = {
           alternativeMealItems {
             amount
             food {
-              ...SelectFoodFood
+              ...FoodPickerFood
               #            customUnit
               #            gramWeight
             }
@@ -65,7 +65,7 @@ const ProfileMealsFragments = {
       }
 
       ${RecipeCard.fragments.recipe}
-      ${SelectFood.fragments.food}
+      ${FoodPicker.fragments.food}
     `
   },
 }

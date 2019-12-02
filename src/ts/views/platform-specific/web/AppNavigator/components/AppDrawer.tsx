@@ -101,6 +101,25 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
                 </Link>,
                 <Link
                   key={2}
+                  to={Routes.shoppingList}
+                  style={Object.assign({},
+                    styles.link,
+                    {
+                      color: this._isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
+                    })
+                  }
+                >
+                  <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image
+                      source={this._isActive(Routes.shoppingList) ? ImageSource.ShoppingListActive : ImageSource.ShoppingList}
+                      style={styles.icon}
+                      resizeMode={'contain'}
+                    />
+                    <Text translate={translate.keys.Groceries} style={{ fontWeight: 'bold' }} />
+                  </RX.View>
+                </Link>,
+                <Link
+                  key={3}
                   to={Routes.searchRecipes}
                   style={Object.assign({}, styles.link, { color: this._isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
                 >
@@ -172,16 +191,20 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
 
     if (matchPath(pathname, {
       path: Routes.calendar,
-      // exact: true,
     })) {
-      topValue = 152 + (Styles.values.spacing * 2)
+      topValue = 153 + (Styles.values.spacing * 2)
+    }
+
+    if (matchPath(pathname, {
+      path: Routes.shoppingList,
+    })) {
+      topValue = 207 + (Styles.values.spacing * 2)
     }
 
     if (matchPath(pathname, {
       path: Routes.searchRecipes,
-      // exact: true,
     })) {
-      topValue = 204 + (Styles.values.spacing * 2)
+      topValue = 261 + (Styles.values.spacing * 2)
     }
 
     if (topValue == 0) {

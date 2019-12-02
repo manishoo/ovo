@@ -52,6 +52,25 @@ export interface IngredientCardIngredient_food_thumbnail {
   url: string;
 }
 
+export interface IngredientCardIngredient_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface IngredientCardIngredient_food_nutrition {
+  calories: IngredientCardIngredient_food_nutrition_calories | null;
+}
+
+export interface IngredientCardIngredient_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface IngredientCardIngredient_food_origFoodGroups {
+  id: string;
+  name: IngredientCardIngredient_food_origFoodGroups_name[];
+}
+
 export interface IngredientCardIngredient_food {
   id: string;
   name: IngredientCardIngredient_food_name[];
@@ -59,6 +78,8 @@ export interface IngredientCardIngredient_food {
   weights: IngredientCardIngredient_food_weights[];
   image: IngredientCardIngredient_food_image | null;
   thumbnail: IngredientCardIngredient_food_thumbnail | null;
+  nutrition: IngredientCardIngredient_food_nutrition;
+  origFoodGroups: IngredientCardIngredient_food_origFoodGroups[][];
 }
 
 export interface IngredientCardIngredient_weight_name {

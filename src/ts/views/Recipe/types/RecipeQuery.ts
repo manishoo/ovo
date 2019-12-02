@@ -76,6 +76,25 @@ export interface RecipeQuery_recipe_ingredients_food_thumbnail {
   url: string;
 }
 
+export interface RecipeQuery_recipe_ingredients_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeQuery_recipe_ingredients_food_nutrition {
+  calories: RecipeQuery_recipe_ingredients_food_nutrition_calories | null;
+}
+
+export interface RecipeQuery_recipe_ingredients_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_food_origFoodGroups {
+  id: string;
+  name: RecipeQuery_recipe_ingredients_food_origFoodGroups_name[];
+}
+
 export interface RecipeQuery_recipe_ingredients_food {
   id: string;
   name: RecipeQuery_recipe_ingredients_food_name[];
@@ -83,6 +102,8 @@ export interface RecipeQuery_recipe_ingredients_food {
   weights: RecipeQuery_recipe_ingredients_food_weights[];
   image: RecipeQuery_recipe_ingredients_food_image | null;
   thumbnail: RecipeQuery_recipe_ingredients_food_thumbnail | null;
+  nutrition: RecipeQuery_recipe_ingredients_food_nutrition;
+  origFoodGroups: RecipeQuery_recipe_ingredients_food_origFoodGroups[][];
 }
 
 export interface RecipeQuery_recipe_ingredients_weight_name {

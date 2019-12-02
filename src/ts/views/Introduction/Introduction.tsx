@@ -17,6 +17,7 @@ import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import UserStore from '@Services/UserStore'
 import { navigate } from '@Utils'
+import { createId } from '@Utils/create-id'
 import {
   IntroductionMutation,
   IntroductionMutation_setup_messages,
@@ -39,7 +40,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
     type: MessageType.text,
     timestamp: String(Date.now()),
     sender: MessageSender.assistant,
-    id: String(Math.random()),
+    id: createId(),
     data: {
       expect: AssistantExpectations.nickname,
       skip: false,
@@ -54,7 +55,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
     type: MessageType.text,
     timestamp: String(Date.now()),
     sender: MessageSender.assistant,
-    id: String(Math.random()),
+    id: createId(),
     data: {
       expect: AssistantExpectations.nickname,
       skip: false,
@@ -69,7 +70,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
     type: MessageType.text,
     timestamp: String(Date.now()),
     sender: MessageSender.user,
-    id: String(Math.random()),
+    id: createId(),
     data: {
       expect: AssistantExpectations.nickname,
       skip: false,

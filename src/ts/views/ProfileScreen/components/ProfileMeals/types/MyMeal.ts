@@ -23,6 +23,16 @@ export interface MyMeal_items_food_description {
   locale: LanguageCode;
 }
 
+export interface MyMeal_items_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_food_origFoodGroups {
+  id: string;
+  name: MyMeal_items_food_origFoodGroups_name[];
+}
+
 export interface MyMeal_items_food_weights_name {
   text: string;
   locale: LanguageCode;
@@ -43,13 +53,24 @@ export interface MyMeal_items_food_thumbnail {
   url: string;
 }
 
+export interface MyMeal_items_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MyMeal_items_food_nutrition {
+  calories: MyMeal_items_food_nutrition_calories | null;
+}
+
 export interface MyMeal_items_food {
   id: string;
   name: MyMeal_items_food_name[];
   description: MyMeal_items_food_description[] | null;
+  origFoodGroups: MyMeal_items_food_origFoodGroups[][];
   weights: MyMeal_items_food_weights[];
   image: MyMeal_items_food_image | null;
   thumbnail: MyMeal_items_food_thumbnail | null;
+  nutrition: MyMeal_items_food_nutrition;
 }
 
 export interface MyMeal_items_recipe_title {
@@ -69,6 +90,103 @@ export interface MyMeal_items_recipe_thumbnail {
   url: string;
 }
 
+export interface MyMeal_items_recipe_ingredients_thumbnail {
+  url: string;
+}
+
+export interface MyMeal_items_recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_weights {
+  amount: number;
+  gramWeight: number;
+  id: string;
+  name: MyMeal_items_recipe_ingredients_food_weights_name[];
+}
+
+export interface MyMeal_items_recipe_ingredients_food_image {
+  url: string;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_thumbnail {
+  url: string;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_nutrition {
+  calories: MyMeal_items_recipe_ingredients_food_nutrition_calories | null;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_food_origFoodGroups {
+  id: string;
+  name: MyMeal_items_recipe_ingredients_food_origFoodGroups_name[];
+}
+
+export interface MyMeal_items_recipe_ingredients_food {
+  id: string;
+  name: MyMeal_items_recipe_ingredients_food_name[];
+  description: MyMeal_items_recipe_ingredients_food_description[] | null;
+  weights: MyMeal_items_recipe_ingredients_food_weights[];
+  image: MyMeal_items_recipe_ingredients_food_image | null;
+  thumbnail: MyMeal_items_recipe_ingredients_food_thumbnail | null;
+  nutrition: MyMeal_items_recipe_ingredients_food_nutrition;
+  origFoodGroups: MyMeal_items_recipe_ingredients_food_origFoodGroups[][];
+}
+
+export interface MyMeal_items_recipe_ingredients_weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_recipe_ingredients_weight {
+  amount: number;
+  gramWeight: number;
+  id: string;
+  name: MyMeal_items_recipe_ingredients_weight_name[];
+}
+
+export interface MyMeal_items_recipe_ingredients {
+  thumbnail: MyMeal_items_recipe_ingredients_thumbnail | null;
+  name: MyMeal_items_recipe_ingredients_name[] | null;
+  description: MyMeal_items_recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: string | null;
+  gramWeight: number | null;
+  food: MyMeal_items_recipe_ingredients_food | null;
+  weight: MyMeal_items_recipe_ingredients_weight | null;
+}
+
 export interface MyMeal_items_recipe_author_avatar {
   url: string;
 }
@@ -77,6 +195,15 @@ export interface MyMeal_items_recipe_author {
   id: string;
   username: string;
   avatar: MyMeal_items_recipe_author_avatar | null;
+}
+
+export interface MyMeal_items_recipe_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MyMeal_items_recipe_nutrition {
+  calories: MyMeal_items_recipe_nutrition_calories | null;
 }
 
 export interface MyMeal_items_recipe {
@@ -88,7 +215,9 @@ export interface MyMeal_items_recipe {
   likesCount: number;
   userLikedRecipe: boolean | null;
   thumbnail: MyMeal_items_recipe_thumbnail | null;
+  ingredients: MyMeal_items_recipe_ingredients[];
   author: MyMeal_items_recipe_author;
+  nutrition: MyMeal_items_recipe_nutrition | null;
 }
 
 export interface MyMeal_items_weight_name {
@@ -118,6 +247,16 @@ export interface MyMeal_items_alternativeMealItems_food_description {
   locale: LanguageCode;
 }
 
+export interface MyMeal_items_alternativeMealItems_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_food_origFoodGroups {
+  id: string;
+  name: MyMeal_items_alternativeMealItems_food_origFoodGroups_name[];
+}
+
 export interface MyMeal_items_alternativeMealItems_food_weights_name {
   text: string;
   locale: LanguageCode;
@@ -138,13 +277,24 @@ export interface MyMeal_items_alternativeMealItems_food_thumbnail {
   url: string;
 }
 
+export interface MyMeal_items_alternativeMealItems_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MyMeal_items_alternativeMealItems_food_nutrition {
+  calories: MyMeal_items_alternativeMealItems_food_nutrition_calories | null;
+}
+
 export interface MyMeal_items_alternativeMealItems_food {
   id: string;
   name: MyMeal_items_alternativeMealItems_food_name[];
   description: MyMeal_items_alternativeMealItems_food_description[] | null;
+  origFoodGroups: MyMeal_items_alternativeMealItems_food_origFoodGroups[][];
   weights: MyMeal_items_alternativeMealItems_food_weights[];
   image: MyMeal_items_alternativeMealItems_food_image | null;
   thumbnail: MyMeal_items_alternativeMealItems_food_thumbnail | null;
+  nutrition: MyMeal_items_alternativeMealItems_food_nutrition;
 }
 
 export interface MyMeal_items_alternativeMealItems_description {
@@ -169,6 +319,103 @@ export interface MyMeal_items_alternativeMealItems_recipe_thumbnail {
   url: string;
 }
 
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_thumbnail {
+  url: string;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_weights {
+  amount: number;
+  gramWeight: number;
+  id: string;
+  name: MyMeal_items_alternativeMealItems_recipe_ingredients_food_weights_name[];
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_image {
+  url: string;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_thumbnail {
+  url: string;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_nutrition {
+  calories: MyMeal_items_alternativeMealItems_recipe_ingredients_food_nutrition_calories | null;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food_origFoodGroups {
+  id: string;
+  name: MyMeal_items_alternativeMealItems_recipe_ingredients_food_origFoodGroups_name[];
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_food {
+  id: string;
+  name: MyMeal_items_alternativeMealItems_recipe_ingredients_food_name[];
+  description: MyMeal_items_alternativeMealItems_recipe_ingredients_food_description[] | null;
+  weights: MyMeal_items_alternativeMealItems_recipe_ingredients_food_weights[];
+  image: MyMeal_items_alternativeMealItems_recipe_ingredients_food_image | null;
+  thumbnail: MyMeal_items_alternativeMealItems_recipe_ingredients_food_thumbnail | null;
+  nutrition: MyMeal_items_alternativeMealItems_recipe_ingredients_food_nutrition;
+  origFoodGroups: MyMeal_items_alternativeMealItems_recipe_ingredients_food_origFoodGroups[][];
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients_weight {
+  amount: number;
+  gramWeight: number;
+  id: string;
+  name: MyMeal_items_alternativeMealItems_recipe_ingredients_weight_name[];
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_ingredients {
+  thumbnail: MyMeal_items_alternativeMealItems_recipe_ingredients_thumbnail | null;
+  name: MyMeal_items_alternativeMealItems_recipe_ingredients_name[] | null;
+  description: MyMeal_items_alternativeMealItems_recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: string | null;
+  gramWeight: number | null;
+  food: MyMeal_items_alternativeMealItems_recipe_ingredients_food | null;
+  weight: MyMeal_items_alternativeMealItems_recipe_ingredients_weight | null;
+}
+
 export interface MyMeal_items_alternativeMealItems_recipe_author_avatar {
   url: string;
 }
@@ -177,6 +424,15 @@ export interface MyMeal_items_alternativeMealItems_recipe_author {
   id: string;
   username: string;
   avatar: MyMeal_items_alternativeMealItems_recipe_author_avatar | null;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface MyMeal_items_alternativeMealItems_recipe_nutrition {
+  calories: MyMeal_items_alternativeMealItems_recipe_nutrition_calories | null;
 }
 
 export interface MyMeal_items_alternativeMealItems_recipe {
@@ -188,7 +444,9 @@ export interface MyMeal_items_alternativeMealItems_recipe {
   likesCount: number;
   userLikedRecipe: boolean | null;
   thumbnail: MyMeal_items_alternativeMealItems_recipe_thumbnail | null;
+  ingredients: MyMeal_items_alternativeMealItems_recipe_ingredients[];
   author: MyMeal_items_alternativeMealItems_recipe_author;
+  nutrition: MyMeal_items_alternativeMealItems_recipe_nutrition | null;
 }
 
 export interface MyMeal_items_alternativeMealItems_weight_name {
@@ -204,7 +462,7 @@ export interface MyMeal_items_alternativeMealItems_weight {
 }
 
 export interface MyMeal_items_alternativeMealItems {
-  amount: number;
+  amount: number | null;
   food: MyMeal_items_alternativeMealItems_food | null;
   customUnit: string | null;
   gramWeight: number | null;
@@ -214,7 +472,7 @@ export interface MyMeal_items_alternativeMealItems {
 }
 
 export interface MyMeal_items {
-  amount: number;
+  amount: number | null;
   food: MyMeal_items_food | null;
   recipe: MyMeal_items_recipe | null;
   weight: MyMeal_items_weight | null;

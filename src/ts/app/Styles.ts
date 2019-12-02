@@ -65,6 +65,13 @@ export default class Styles {
       return `borderBottom${this.Start}Radius`
     },
 
+    get borderEndWidth() {
+      return `border${this.End}Width`
+    },
+    get borderStartWidth() {
+      return `border${this.Start}Width`
+    },
+
     absolutelyExtended: {
       position: 'absolute',
       left: 0,

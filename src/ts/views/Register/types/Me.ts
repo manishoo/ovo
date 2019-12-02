@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, Role } from "./../../../models/global-types";
+import { Gender, Role, MealAvailableTime, MealSize } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: Me
@@ -29,6 +29,15 @@ export interface Me_socialNetworks {
   pinterest: string | null;
 }
 
+export interface Me_meals {
+  id: string;
+  availableTime: MealAvailableTime | null;
+  size: MealSize | null;
+  cook: boolean | null;
+  time: string;
+  name: string;
+}
+
 export interface Me {
   id: string;
   username: string;
@@ -47,4 +56,5 @@ export interface Me {
   caloriesPerDay: number | null;
   socialNetworks: Me_socialNetworks | null;
   role: Role;
+  meals: Me_meals[];
 }

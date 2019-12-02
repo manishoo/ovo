@@ -1,5 +1,5 @@
 /*
- * SelectFood.tsx
+ * FoodPicker.tsx
  * Copyright: Ouranos Studio 2019
  */
 
@@ -9,15 +9,15 @@ import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import FlatButton from '@Common/FlatButton/FlatButton'
-import RecipePreview from '@Common/FoodDialog/components/RecipePreview'
-import { SelectFoodFood, SelectFoodFood_weights } from '@Common/FoodDialog/types/SelectFoodFood'
+import RecipePreview from '@Common/FoodPickerDialog/components/RecipePreview'
+import { FoodPickerFood, FoodPickerFood_weights } from '@Common/FoodPickerDialog/types/FoodPickerFood'
 import {
-  SelectFoodQuery,
-  SelectFoodQuery_foods_foods,
-  SelectFoodQuery_foods_foods_weights,
-  SelectFoodQuery_recipes_recipes,
-  SelectFoodQueryVariables
-} from '@Common/FoodDialog/types/SelectFoodQuery'
+  FoodPickerQuery,
+  FoodPickerQuery_foods_foods,
+  FoodPickerQuery_foods_foods_weights,
+  FoodPickerQuery_recipes_recipes,
+  FoodPickerQueryVariables
+} from '@Common/FoodPickerDialog/types/FoodPickerQuery'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
@@ -26,6 +26,7 @@ import Text from '@Common/Text/Text'
 import { Translation } from '@Models/common'
 import { FoodTypes, Weight } from '@Models/FoodModels'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { createId } from '@Utils/create-id'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
@@ -39,48 +40,48 @@ const WINDOW_MAX_WIDTH = 500
 const LIST_ITEM_HEIGHT = 50
 const INNER_CONTAINER_HEIGHT = 500
 
-export interface SelectFoodMealItem {
-  amount?: number
-  food?: SelectFoodFood
+export interface FoodPickerMealItem {
+  amount: number
+  food?: FoodPickerFood
   recipe?: RecipeCardRecipe
-  weight?: SelectFoodFood_weights
+  weight?: FoodPickerFood_weights
   id: string,
+  description: Translation[]
   customUnit?: string
   gramWeight?: number
-  description?: Translation[]
 }
 
-interface SelectFoodCommonProps {
+interface FoodPickerCommonProps {
   style?: any,
   onDismiss: () => void,
-  onSubmit: (mealItem: SelectFoodMealItem) => any,
+  onSubmit: (mealItem: FoodPickerMealItem) => any,
   foodTypes: FoodTypes[],
 }
 
-interface SelectFoodProps extends SelectFoodCommonProps {
+interface FoodPickerProps extends FoodPickerCommonProps {
   nameSearchQuery: string
 
-  foods: SelectFoodQuery_foods_foods[],
-  recipes: SelectFoodQuery_recipes_recipes[],
+  foods: FoodPickerQuery_foods_foods[],
+  recipes: FoodPickerQuery_recipes_recipes[],
   onSearch: (nameSearchQuery: string) => void,
   loading?: boolean,
 }
 
-interface SelectFoodState {
+interface FoodPickerState {
   width?: number,
   height?: number,
-  selectedItem?: SelectFoodMealItem,
+  selectedItem?: FoodPickerMealItem,
 
   weights: Weight[],
   mode: FoodTypes,
 }
 
-class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectFoodState> {
+class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPickerState> {
   textInput: any
   previewInput: any
   inputContainerAnimatedHeight = RX.Animated.createValue(50)
 
-  constructor(props: SelectFoodProps & RX.CommonProps) {
+  constructor(props: FoodPickerProps & RX.CommonProps) {
     super(props)
 
     this.state = {
@@ -110,7 +111,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
               <RX.Animated.View
                 style={[
                   styles.inputContainer,
-                  // this.state.selectedItem ? {} : { backgroundColor: theme.colors.foodDialogSearchBG },
+                  // this.state.selectedItem ? {} : { backgroundColor: theme.colors.FoodPickerDialogSearchBG },
                   {
                     height: this.inputContainerAnimatedHeight,
                   }
@@ -188,7 +189,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     )
   }
 
-  protected _buildState(props: SelectFoodProps & RX.CommonProps, initialBuild: boolean): Partial<SelectFoodState> | undefined {
+  protected _buildState(props: FoodPickerProps & RX.CommonProps, initialBuild: boolean): Partial<FoodPickerState> | undefined {
     return {
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
@@ -263,7 +264,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     throw new Error('no food or recipe')
   }
 
-  private _renderRecipeItem = ({ item }: VirtualListViewCellRenderDetails<any> & SelectFoodMealItem) => (
+  private _renderRecipeItem = ({ item }: VirtualListViewCellRenderDetails<any> & FoodPickerMealItem) => (
     <RX.View
       style={styles.searchResultItemContainer}
       onPress={this._onResultPress(item)}
@@ -272,7 +273,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     </RX.View>
   )
 
-  private _renderFoodItem = ({ item }: VirtualListViewCellRenderDetails<any> & SelectFoodMealItem) => (
+  private _renderFoodItem = ({ item }: VirtualListViewCellRenderDetails<any> & FoodPickerMealItem) => (
     <ThemeContext.Consumer>
       {({ theme }) => (
         <RX.View
@@ -287,7 +288,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     </ThemeContext.Consumer>
   )
 
-  private _renderPreview = (item: SelectFoodMealItem) => {
+  private _renderPreview = (item: FoodPickerMealItem) => {
     if (!item) return null
 
     if (item.food) {
@@ -317,16 +318,7 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     return null
   }
 
-  private _onResultPress = (item: SelectFoodMealItem) => async () => {
-    // showFoodPreviewModal({
-    //   item,
-    //   inputRef: (ref: any) => this.previewInput = ref,
-    //   onDismiss: this._cancelSelection,
-    //   onSelectPress: () => null,
-    //   onSubmit: this._onSubmit,
-    //   height: INNER_CONTAINER_HEIGHT,
-    // })
-    // return
+  private _onResultPress = (item: FoodPickerMealItem) => async () => {
     this.setState({
       selectedItem: item,
     }, () => {
@@ -353,11 +345,13 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     })
   }
 
-  private _onFoodSubmit = (food: SelectFoodQuery_foods_foods, amount: number, weight?: SelectFoodQuery_foods_foods_weights, customUnit?: string, gramWeight?: number, description?: Translation[]) => {
+  private _onFoodSubmit = (food: FoodPickerQuery_foods_foods, amount: number, description: Translation[], weight?: FoodPickerQuery_foods_foods_weights, customUnit?: string, gramWeight?: number) => {
     if (!this.state.selectedItem) return
 
+    console.log('description', description)
+
     this.props.onSubmit({
-      id: String(Math.random()),
+      id: createId(),
       food,
       amount,
       weight,
@@ -367,24 +361,25 @@ class SelectFood extends ComponentBase<SelectFoodProps & RX.CommonProps, SelectF
     })
   }
 
-  private _onRecipeSubmit = (recipe: SelectFoodQuery_recipes_recipes, serving: number) => {
+  private _onRecipeSubmit = (recipe: FoodPickerQuery_recipes_recipes, serving: number) => {
     if (!this.state.selectedItem) return
 
     this.props.onSubmit({
-      id: String(Math.random()),
+      id: createId(),
       recipe,
       amount: serving,
-    })
+      description: [],
+    } as FoodPickerMealItem)
   }
 }
 
-function SelectFoodContainer(props: SelectFoodCommonProps) {
+function FoodPickerContainer(props: FoodPickerCommonProps) {
   const [nameSearchQuery, setNameSearchQuery] = useState('')
-  const { data, loading } = useQuery<SelectFoodQuery, SelectFoodQueryVariables>(gql`
-    query SelectFoodQuery($nameSearchQuery: String) {
+  const { data, loading } = useQuery<FoodPickerQuery, FoodPickerQueryVariables>(gql`
+    query FoodPickerQuery($nameSearchQuery: String) {
       foods (nameSearchQuery: $nameSearchQuery) {
         foods {
-          ...SelectFoodFood
+          ...FoodPickerFood
         }
       }
       recipes (nameSearchQuery: $nameSearchQuery) {
@@ -392,7 +387,7 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
       }
     }
 
-    ${SelectFoodContainer.fragments.food}
+    ${FoodPickerContainer.fragments.food}
     ${RecipeCard.fragments.recipe}
   `, {
     skip: nameSearchQuery.length === 0,
@@ -403,7 +398,7 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
   })
 
   return (
-    <SelectFood
+    <FoodPicker
       {...props}
       loading={loading}
       nameSearchQuery={nameSearchQuery}
@@ -414,12 +409,13 @@ function SelectFoodContainer(props: SelectFoodCommonProps) {
   )
 }
 
-SelectFoodContainer.fragments = {
+FoodPickerContainer.fragments = {
   food: gql`
-    fragment SelectFoodFood on Food {
+    fragment FoodPickerFood on Food {
       id
       name { text locale }
       description { text locale }
+      origFoodGroups { id name { text locale } }
       weights {
         amount
         gramWeight
@@ -428,11 +424,14 @@ SelectFoodContainer.fragments = {
       }
       image {url}
       thumbnail {url}
+      nutrition {
+        calories { amount unit }
+      }
     }
   `
 }
 
-export default SelectFoodContainer
+export default FoodPickerContainer
 
 const styles = {
   container: RX.Styles.createViewStyle({

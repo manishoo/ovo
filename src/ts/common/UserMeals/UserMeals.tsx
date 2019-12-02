@@ -61,6 +61,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
     return (
       <RX.View
         onPress={() => MealSettingsScreen.showModal({
+          theme,
           onSubmit: meal => {
             this.setState(({ meals }) => ({
               meals: [
@@ -147,6 +148,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
           <RX.View
             onPress={() => MealSettingsScreen.showModal({
               meal,
+              theme,
               onSubmit: meal => {
                 this.setState(({ meals }) => ({
                   meals: meals.map(m => {
@@ -212,7 +214,7 @@ const styles = {
     marginBottom: 3,
   }),
   container: RX.Styles.createViewStyle({
-    flex: 1,
+    // flex: 1,
   }),
   mealItemContainer: RX.Styles.createViewStyle({
     flexDirection: 'row',

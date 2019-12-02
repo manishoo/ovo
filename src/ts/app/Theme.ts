@@ -110,7 +110,7 @@ export class Theme {
           goToTodayBorder: '#F23E3E',
           activeMealItemBorderColor: '#D33131',
           ingredientUnit: '#F23E3E',
-          foodDialogSearchBG: 'rgba(142, 142, 147, 0.12)',
+          FoodPickerDialogSearchBG: 'rgba(142, 142, 147, 0.12)',
           drawerBg: '#fff',
           drawerBorderColor: '#eee',
           drawerActiveIndicator: primary,

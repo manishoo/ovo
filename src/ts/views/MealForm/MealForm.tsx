@@ -8,8 +8,8 @@ import Styles from '@App/Styles'
 import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import Checkbox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
-import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
-import { SelectFoodMealItem } from '@Common/FoodDialog/SelectFood'
+import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
+import { FoodPickerMealItem } from '@Common/FoodPickerDialog/FoodPicker'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
@@ -19,6 +19,7 @@ import { MealInput, Role } from '@Models/global-types'
 import LocationStore from '@Services/LocationStore'
 import UserStore from '@Services/UserStore'
 import { getParam } from '@Utils'
+import { createId } from '@Utils/create-id'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import trimTypeName from '@Utils/trim-type-name'
 import MealItemRow from '@Views/MealForm/components/MealItemRow/MealItemRow'
@@ -84,12 +85,12 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           weight: mealItem.weight,
           alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
             ...altMealItem,
-            id: String(Math.random()),
+            id: createId(),
           })),
           customUnit: mealItem.customUnit,
           gramWeight: mealItem.gramWeight,
           description: mealItem.description,
-          id: String(Math.random()),
+          id: createId(),
         })),
         meal: {
           name: props.meal.name,
@@ -155,7 +156,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         <Input
           label={translate('Meal Items')}
           placeholder={translate('e.g. Banana')}
-          onFocus={() => showFoodModal({
+          onFocus={() => showFoodPicker({
             autoFocus: true,
             foodTypes: [FoodTypes.food, FoodTypes.recipe],
             onDismiss: () => null,
@@ -213,12 +214,12 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     //       weight: mealItem.weight,
     //       alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
     //         ...altMealItem,
-    //         id: String(Math.random()),
+    //         id: createId(),
     //       })),
     //       customUnit: mealItem.customUnit,
     //       gramWeight: mealItem.gramWeight,
     //       description: mealItem.description,
-    //       id: String(Math.random()),
+    //       id: createId(),
     //     })),
     //   }
     // }
@@ -337,7 +338,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     }), this._saveStateToStorage)
   }
 
-  private _onMealItemCreation = (mealItem: SelectFoodMealItem) => {
+  private _onMealItemCreation = (mealItem: FoodPickerMealItem) => {
     this.setState(ps => ({
       mealItems: [
         {
@@ -349,7 +350,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           customUnit: mealItem.customUnit,
           gramWeight: mealItem.gramWeight,
           alternativeMealItems: [],
-          id: mealItem.id || String(Math.random()),
+          id: mealItem.id || createId(),
         },
         ...ps.mealItems,
       ]

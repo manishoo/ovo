@@ -1,12 +1,17 @@
 /*
- * SelectFoodMealItem.tsx
+ * FoodPickerMealItem.tsx
  * Copyright: Ouranos Studio 2019
  */
 
 import { useMutation } from '@apollo/react-hooks'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
+import FoodPickerContainer from '@Common/FoodPickerDialog/FoodPicker'
 import HoverView from '@Common/HoverView/HoverButton'
+import InputNumber from '@Common/Input/InputNumber'
+import MenuItem from '@Common/MenuItem/MenuItem'
+import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
+import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TotalTime from '@Common/TotalTime/TotalTime'
 import { withNavigation } from '@Modules/navigator'
@@ -14,6 +19,7 @@ import CalendarService from '@Services/CalendarService'
 import { renderImageOrPlaceholder } from '@Utils'
 import ItemControl from '@Views/CalendarScreen/components/ItemControl'
 import { DayMeal } from '@Views/CalendarScreen/components/types/DayMeal'
+import { MealComponentLogMealMutation } from '@Views/CalendarScreen/components/types/MealComponentLogMealMutation'
 import {
   MealItemComponentMutation,
   MealItemComponentMutationVariables
@@ -24,12 +30,13 @@ import RX from 'reactxp'
 import { MealItem } from './types/MealItem'
 
 
-
 interface MealItemComponentCommonProps {
   style?: any,
   mealItem: MealItem,
   meal: DayMeal,
   dayId: string,
+  onMealItemRemove: () => any,
+  onMealItemChange: (mealItem: MealItem) => Promise<ExecutionResult<MealComponentLogMealMutation>>
 }
 
 interface MealItemComponentProps extends MealItemComponentCommonProps {
@@ -49,28 +56,14 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
         id
         amount
         recipe {
-          id
-          thumbnail { url }
-          title { text locale }
-          timing {
-            cookTime
-            prepTime
-            totalTime
-          }
-          nutrition {
-            calories { amount unit }
-          }
+          ...RecipeCardRecipe
         }
         food {
-          id
-          thumbnail { url }
-          name { text locale }
-          nutrition {
-            calories { amount unit }
-          }
+          ...FoodPickerFood
         }
         amount
         customUnit
+        gramWeight
         description { text locale }
         weight {
           amount
@@ -79,6 +72,9 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
           name { text locale }
         }
       }
+
+      ${FoodPickerContainer.fragments.food}
+      ${RecipeCard.fragments.recipe}
     `
   }
   static operations = {
@@ -138,23 +134,69 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
                 >
                   {renderImageOrPlaceholder(mealItem.thumbnail, styles.image)}
                   <RX.View style={styles.textsContainer}>
-                    <Text translations={mealItem.title} style={styles.title} />
-                    {/*<RX.Text style={[styles.subtitle, { color: theme.colors.mealItemSubtitle }]}>{this.props.mealItem.subtitle}</RX.Text>*/}
-                    {!!mealItem.totalTime &&
-                    <TotalTime totalTime={mealItem.totalTime} />}
+                    <RX.View
+                      style={{
+                        flexDirection: 'row',
+                        marginBottom: Styles.values.spacing / 4
+                      }}
+                    >
+                      <Text
+                        translations={mealItem.title}
+                        style={styles.title}
+                      />
+                      {!!mealItem.totalTime && <TotalTime totalTime={mealItem.totalTime} />}
+                    </RX.View>
+                    <RX.View
+                      style={{
+                        flexDirection: 'row',
+                        [Styles.values.marginStart]: -Styles.values.spacing / 2,
+                      }}
+                    >
+                      <InputNumber
+                        value={mealItem.amount}
+                        onChange={(value) => this._onMealItemAmountChange(value, mealItem.selectedUnit)}
+                        textInputStyle={{
+                          backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
+                          padding: Styles.values.spacing / 2,
+                          [Styles.values.paddingEnd]: Styles.values.spacing / 4,
+                          [Styles.values.borderTopEndRadius]: 0,
+                          [Styles.values.borderBottomEndRadius]: 0,
+                          width: (String(mealItem.amount).length * 10) + (Styles.values.spacing / 2) + (Styles.values.spacing / 4)
+                        }}
+                        style={{
+                          marginBottom: 0,
+                        }}
+                      />
+                      <Select
+                        value={mealItem.selectedUnit}
+                        options={mealItem.units}
+                        onChange={value => this._onMealItemAmountChange(mealItem.amount, value)}
+                        style={{
+                          backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
+                          padding: Styles.values.spacing / 2,
+                          [Styles.values.paddingStart]: 0,
+                          [Styles.values.borderTopStartRadius]: 0,
+                          [Styles.values.borderBottomStartRadius]: 0,
+                          marginBottom: 0,
+                        }}
+                      />
+                    </RX.View>
                   </RX.View>
 
-                  {
-                    (isHovering || mealItemRegenerating) &&
-                    <ItemControl
-                      onRegenerate={this._onMealItemRegenerate}
-                      regenerating={mealItemRegenerating}
-                      style={{
-                        position: 'absolute',
-                        [Styles.values.end]: Styles.values.spacing,
-                      }}
+                  <ItemControl
+                    visible={isHovering || mealItemRegenerating}
+                    onRegenerate={this._onMealItemRegenerate}
+                    regenerating={mealItemRegenerating}
+                    style={{
+                      position: 'absolute',
+                      [Styles.values.end]: Styles.values.spacing,
+                    }}
+                  >
+                    <MenuItem
+                      label={'Remove from meal'}
+                      onPress={this.props.onMealItemRemove}
                     />
-                  }
+                  </ItemControl>
                 </RX.View>
               )}
             />
@@ -164,35 +206,85 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
     )
   }
 
+  private _onMealItemAmountChange = (amount: number, selectedUnit: string) => {
+    const mealItem = this.props.mealItem
+    const { food, recipe } = mealItem
+
+    mealItem.amount = amount
+
+    if (recipe) {
+      switch (selectedUnit) {
+        case 'serving':
+        case 'g':
+        default:
+          break
+      }
+    }
+
+    if (food) {
+      switch(selectedUnit) {
+        case 'g':
+          mealItem.customUnit = null
+          mealItem.gramWeight = null
+          mealItem.weight = null
+          break
+        case mealItem.customUnit:
+          mealItem.customUnit = selectedUnit
+          mealItem.weight = null
+          break
+        default:
+          const weight = food.weights.find(p => p.id === selectedUnit)
+          if (!weight) throw new Error('selectedUnit is unknown')
+
+          mealItem.customUnit = null
+          mealItem.gramWeight = null
+          mealItem.weight = weight
+      }
+    }
+
+    this.props.onMealItemChange(mealItem)
+  }
+
   private _onMealItemRegenerate = () => {
     if (this.props.mealItemRegenerating) return
 
     this.props.onMealItemRegenerate()
-      // .then(({data: {suggestMealItem}}) => {
-      //   this.setState({
-      //     mealItem: suggestMealItem
-      //   })
-      // })
   }
 
   private _getCommonMealItem = () => {
-    const { recipe, food } = this.props.mealItem
+    const mealItem = this.props.mealItem
+    const { food, recipe } = mealItem
 
     if (recipe) {
       return {
-        id: recipe.id,
+        ...mealItem,
         title: recipe.title,
         thumbnail: recipe.thumbnail,
+        selectedUnit: 'serving',
+        units: [
+          {value: 'serving', text: 'serving'}, //FIXME
+          {value: 'g', text: 'grams'},
+          mealItem.customUnit ? { value: mealItem.customUnit, text: mealItem.customUnit } : undefined,
+        ].filter(Boolean),
         totalTime: recipe.timing.totalTime,
       }
     }
 
     if (food) {
       return {
-        id: food.id,
+        ...mealItem,
         title: food.name,
         thumbnail: food.thumbnail,
         totalTime: 5,
+        selectedUnit: (mealItem.weight && mealItem.weight.id) || mealItem.customUnit || 'g', // Either weight, customUnit, or grams (no weight)
+        units: [
+          ...food.weights.map(weight => ({
+            text: weight.name[0].text, //FIXME
+            value: weight.id,
+          })),
+          mealItem.customUnit ? { value: mealItem.customUnit, text: mealItem.customUnit } : undefined,
+          {value: 'g', text: 'grams'}
+        ].filter(Boolean),
       }
     }
 
@@ -201,9 +293,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
 }
 
 const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
-  const [suggestMealItem, { loading, data }] = useMutation<MealItemComponentMutation, MealItemComponentMutationVariables>(MealItemComponent.operations.suggestMealItem, {
-    update: (proxy, { data: { suggestMealItem } }) => CalendarService.setMealItem(props.dayId, props.meal.id, suggestMealItem),
-  })
+  const [suggestMealItem, { loading }] = useMutation<MealItemComponentMutation, MealItemComponentMutationVariables>(MealItemComponent.operations.suggestMealItem)
 
   return (
     <MealItemComponent
@@ -211,10 +301,11 @@ const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
       mealItemRegenerating={loading}
       onMealItemRegenerate={() => suggestMealItem({
         variables: {
-          date: new Date(),
+          date: props.meal.time,
           userMealId: props.meal.userMeal.id,
-          mealItemId: data ? data.suggestMealItem.id : props.mealItem.id,
-        }
+          mealItemId: props.mealItem.id,
+        },
+        update: (proxy, { data: { suggestMealItem } }) => CalendarService.setMealItem(props.dayId, props.meal.id, props.mealItem.id, suggestMealItem),
       })}
     />
   )
@@ -235,7 +326,8 @@ const styles = {
     borderRadius: 8,
   }),
   textsContainer: RX.Styles.createViewStyle({
-    [Styles.values.marginStart]: 16,
+    [Styles.values.paddingStart]: 16,
+    justifyContent: 'center',
   }),
   image: RX.Styles.createImageStyle({
     width: 60,
@@ -245,6 +337,7 @@ const styles = {
   }),
   title: RX.Styles.createTextStyle({
     fontWeight: '500',
+    [Styles.values.marginEnd]: Styles.values.spacing / 2
   }),
   subtitle: RX.Styles.createTextStyle({
     fontWeight: '100',

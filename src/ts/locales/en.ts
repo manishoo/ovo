@@ -153,7 +153,11 @@ enum Content {
   Submitting = 'Submitting',
   ', and ' = ', and ',
   Calories = 'Calories',
-  Today = 'Today'
+  Today = 'Today',
+  MealPlanSettings = 'MealPlan Settings',
+  editMealPlanSettings = 'Edit MealPlan Settings',
+  Pantry = 'Pantry',
+  Groceries = 'Groceries',
 }
 
 export default Content

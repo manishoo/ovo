@@ -19,6 +19,7 @@ import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import validator from 'validator'
 import UsernameInput from './components/UsernameInput'
+import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
 
 
 const FORM_WIDTH = 270
@@ -62,7 +63,12 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           pinterest
         }
         role
+        meals {
+          ...MealSettingsMeal
+        }
       }
+      
+      ${MealSettingsScreen.fragments.mealSettingsMeal}
     `
   }
   state = {

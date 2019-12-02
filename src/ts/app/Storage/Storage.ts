@@ -3,4 +3,6 @@
  * Copyright: Ouranos Studio 2019
  */
 
-export default window.localStorage
+import localforage from 'localforage'
+
+export default localforage

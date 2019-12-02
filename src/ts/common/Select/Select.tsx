@@ -5,9 +5,9 @@
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import { SelectPopup, showSelectDialog } from '@Common/Select/components/SelectDialog'
 import Text from '@Common/Text/Text'
 import RX from 'reactxp'
+import { SelectPopup, showSelectDialog } from './components/SelectDialog'
 
 
 const POPUP_ID = 'Select'
@@ -19,10 +19,11 @@ export interface Option {
 
 interface SelectProps {
   style?: any,
-  value?: string,
+  value: string,
   options: Option[],
   onChange: (value: any) => void,
   label?: string
+  children?: any,
 }
 
 export default class Select extends RX.Component<SelectProps> {
@@ -40,7 +41,7 @@ export default class Select extends RX.Component<SelectProps> {
           <RX.View
             style={[styles.selectContainer, { backgroundColor: theme.colors.textInputBg }, style]}
             onPress={this._handleOnPress}
-            activeOpacity={0.4}
+            activeOpacity={0.7}
             ref={ref => this._mountedButton = ref}
           >
             <Text>{this.props.options.find(p => p.value === this.props.value)!.text}</Text>
@@ -66,7 +67,7 @@ export default class Select extends RX.Component<SelectProps> {
             onOptionSelect={(option => {
               this.props.onChange(option.value)
               this._popupDisplayed = false
-              RX.Popup.dismissAll()
+              // RX.Popup.dismissAll()
             })}
             options={this.props.options}
           />
@@ -103,7 +104,6 @@ const styles = {
     cursor: 'pointer',
     marginBottom: Styles.values.spacing
   }),
-
   label: RX.Styles.createTextStyle({
     fontWeight: '500',
     marginBottom: Styles.values.spacing / 2,

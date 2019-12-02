@@ -6,14 +6,15 @@
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FlatButton from '@Common/FlatButton/FlatButton'
-import { showFoodModal } from '@Common/FoodDialog/FoodDialog'
-import { SelectFoodMealItem } from '@Common/FoodDialog/SelectFood'
+import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
+import { FoodPickerMealItem } from '@Common/FoodPickerDialog/FoodPicker'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
 import { IngredientCardIngredient } from '@Common/recipe/IngredientCard/types/IngredientCardIngredient'
 import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
 import { FoodTypes } from '@Models/FoodModels'
 import LocationStore from '@Services/LocationStore'
+import { createId } from '@Utils/create-id'
 import { MyMealItem } from '@Views/MealForm/MealForm'
 import RX from 'reactxp'
 
@@ -48,7 +49,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             >
               <RX.View style={{ width: 150, justifyContent: 'center', alignItems: 'center' }}>
                 <FlatButton
-                  onPress={() => showFoodModal({
+                  onPress={() => showFoodPicker({
                     autoFocus: true,
                     foodTypes: [FoodTypes.food, FoodTypes.recipe],
                     onDismiss: () => null,
@@ -154,7 +155,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
 
   }
 
-  private _onMealItemAlternativeCreation = (mealItem: SelectFoodMealItem) => {
+  private _onMealItemAlternativeCreation = (mealItem: FoodPickerMealItem) => {
     this.props.onMealItemChange({
       ...this.props.mealItem,
       alternativeMealItems: [
@@ -167,7 +168,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
           customUnit: mealItem.customUnit,
           description: mealItem.description,
           gramWeight: mealItem.gramWeight,
-          id: mealItem.id || String(Math.random()),
+          id: mealItem.id || createId(),
         },
       ]
     })

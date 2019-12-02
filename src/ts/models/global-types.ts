@@ -162,7 +162,7 @@ export interface MealInput {
 
 export interface MealItemInput {
   id?: any | null;
-  amount: number;
+  amount?: number | null;
   food?: string | null;
   recipe?: string | null;
   weight?: string | null;
@@ -174,7 +174,7 @@ export interface MealItemInput {
 
 export interface MealItemInputBase {
   id?: any | null;
-  amount: number;
+  amount?: number | null;
   food?: string | null;
   recipe?: string | null;
   weight?: string | null;
@@ -222,6 +222,15 @@ export interface TranslationInput {
   locale: LanguageCode;
   text: string;
   verified?: boolean | null;
+}
+
+export interface UserMealInput {
+  id: string;
+  name: string;
+  time: string;
+  size?: MealSize | null;
+  availableTime?: MealAvailableTime | null;
+  cook?: boolean | null;
 }
 
 export interface UserRegistrationInput {

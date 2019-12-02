@@ -6,10 +6,15 @@
 import { useQuery } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import { Routes } from '@Models/common'
 import CalendarService from '@Services/CalendarService'
+import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import MealPlanSettingsScreen from '@Views/MealPlanSettingsScreen/MealPlanSettingsScreen'
+import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
 import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
 import RX from 'reactxp'
@@ -133,34 +138,68 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
       <RX.View
         style={styles.controlWrapper}
       >
-        <FilledButton
-          mode={FilledButton.mode.default}
-          label={translate('<-')}
-          onPress={() => this._changeDayCursor(this.state.dayCursor.minus({ day: 1 }), this._getPrevDayPosition())}
-          style={styles.controlButton}
-        />
-        <FilledButton
-          mode={FilledButton.mode.default}
-          label={translate(translate.keys.Today)}
-          onPress={() => this._changeDayCursor(DateTime.local(), this._getCurrentDayPosition())}
-          style={styles.controlButton}
-        />
-        <FilledButton
-          mode={FilledButton.mode.default}
-          label={translate('->')}
-          onPress={() => this._changeDayCursor(this.state.dayCursor.plus({ day: 1 }), this._getNextDayPosition())}
-          style={styles.controlButton}
-        />
+        <RX.View
+          style={{
+            flexDirection: 'row'
+          }}
+        >
+          <FilledButton
+            mode={FilledButton.mode.default}
+            label={translate(translate.keys.MealPlanSettings)}
+            onPress={() => LocationStore.navigate(this.props, Routes.mealPlanSettings)}
+            style={styles.controlButton}
+          />
+        </RX.View>
+        <RX.View
+          style={{
+            flexDirection: 'row'
+          }}
+        >
+          <FilledButton
+            mode={FilledButton.mode.default}
+            label={translate('<-')}
+            onPress={() => this._changeDayCursor(this.state.dayCursor.minus({ day: 1 }), this._getPrevDayPosition())}
+            style={[
+              styles.controlButton,
+              {
+
+                [Styles.values.borderTopEndRadius]: 0,
+                [Styles.values.borderBottomEndRadius]: 0,
+                [Styles.values.borderEndWidth]: 0,
+              }
+            ]}
+          />
+          <FilledButton
+            mode={FilledButton.mode.default}
+            label={translate(translate.keys.Today)}
+            onPress={() => this._changeDayCursor(DateTime.local(), this._getCurrentDayPosition())}
+            style={[
+              styles.controlButton,
+              {
+                borderRadius: 0,
+              }
+            ]}
+          />
+          <FilledButton
+            mode={FilledButton.mode.default}
+            label={translate('->')}
+            onPress={() => this._changeDayCursor(this.state.dayCursor.plus({ day: 1 }), this._getNextDayPosition())}
+            style={[
+              styles.controlButton,
+              {
+                [Styles.values.borderTopStartRadius]: 0,
+                [Styles.values.borderBottomStartRadius]: 0,
+                [Styles.values.borderStartWidth]: 0,
+              }
+            ]}
+          />
+        </RX.View>
       </RX.View>
     )
   }
 
   private _getDayWidth = () => this.state.width
-
-  private _getDayByDate = (date: DateTime, calendar: Day[]) => {
-    return calendar.find(day => DateTime.fromISO(day.date).hasSame(date, 'day'))
-  }
-
+  private _getDayByDate = (date: DateTime, calendar: Day[]) => calendar.find(day => DateTime.fromISO(day.date).hasSame(date, 'day'))
   private _getPrevDayPosition = () => this._getDayWidth() * (AppConfig.isRTL() ? 4 : 2)
   private _getCurrentDayPosition = () => this._getDayWidth() * 3
   private _getNextDayPosition = () => this._getDayWidth() * (AppConfig.isRTL() ? 2 : 4)
@@ -204,7 +243,7 @@ const styles = {
   }),
   controlWrapper: RX.Styles.createViewStyle({
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     padding: Styles.values.spacing,
   }),
   controlButton: RX.Styles.createViewStyle({

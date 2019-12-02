@@ -6,13 +6,16 @@
 import Styles from '@App/Styles'
 import HoverView from '@Common/HoverView/HoverButton'
 import Image from '@Common/Image/Image'
+import MenuItem from '@Common/MenuItem/MenuItem'
+import Popup from '@Common/Popup/Popup'
 import RX from 'reactxp'
 
 
 interface ItemControlProps {
   style?: any,
-  onRegenerate: () => void,
+  onRegenerate?: () => void,
   regenerating?: boolean,
+  visible?: boolean
 }
 
 export default class ItemControl extends RX.Component<ItemControlProps> {
@@ -50,13 +53,17 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
 
     return (
       <RX.View
-        style={[styles.container, style]}
+        style={[
+          styles.container,
+          {
+            opacity: this.props.visible ? 1 : 0,
+          },
+          style,
+        ]}
       >
         <HoverView
-          style={{
-            cursor: 'pointer',
-          }}
-          onPress={() => this.props.onRegenerate()}
+          style={{ cursor: 'pointer' }}
+          onPress={this.props.onRegenerate}
           onRenderChild={isHovering => (
             <RX.Animated.Image
               source={Image.source.Regenerate}
@@ -72,18 +79,27 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
             />
           )}
         />
-        <HoverView
-          onRenderChild={isHovering => (
-            <Image
-              source={Image.source.Ellipsis}
-              style={{
-                width: 20,
-                height: 20,
-                opacity: isHovering ? 1 : 0.3,
-              }}
-            />
-          )}
-        />
+        {
+          this.props.children &&
+          <HoverView
+            onRenderChild={isHovering => (
+              <Popup
+                anchor={
+                  <Image
+                    source={Image.source.Ellipsis}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      opacity: isHovering ? 1 : 0.3,
+                    }}
+                  />
+                }
+              >
+                {this.props.children}
+              </Popup>
+            )}
+          />
+        }
       </RX.View>
     )
   }

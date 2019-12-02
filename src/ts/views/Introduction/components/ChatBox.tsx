@@ -7,6 +7,7 @@ import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import Markdown from '@Common/Markdown/Markdown'
 import { MessageSender } from '@Models/global-types'
+import { createId } from '@Utils/create-id'
 import IntroductionButton from '@Views/Introduction/components/IntroductionButton'
 import { IntroductionMutation_setup_messages } from '@Views/Introduction/types/IntroductionMutation'
 import RX from 'reactxp'
@@ -78,14 +79,14 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 
   renderSpacing(n: number = 80) {
     return (
-      <RX.View key={Math.random()} style={{ height: n }} />
+      <RX.View key={createId()} style={{ height: n }} />
     )
   }
 
   renderAssistantMessage(msg: Message) {
     return (
       <AssistantMessage
-        key={Math.random()}
+        key={createId()}
         text={msg.text}
       />
     )

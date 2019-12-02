@@ -40,7 +40,7 @@ export default class TotalTime extends RX.Component<TotalTimeProps> {
             height: 13,
           }}
         />
-        <RX.Text style={{ fontSize: 10, fontWeight: '100' }}>{this.props.totalTime}m</RX.Text>
+        {/*<RX.Text style={{ fontSize: 10, fontWeight: '100' }}>{this.props.totalTime}m</RX.Text>*/}
       </RX.View>
     )
   }

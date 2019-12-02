@@ -28,7 +28,7 @@ export interface FoodScreenFood_origFoodGroups_name {
 }
 
 export interface FoodScreenFood_origFoodGroups {
-  id: any;
+  id: string;
   name: FoodScreenFood_origFoodGroups_name[];
 }
 
@@ -62,7 +62,7 @@ export interface FoodScreenFood {
   name: FoodScreenFood_name[];
   description: FoodScreenFood_description[] | null;
   image: FoodScreenFood_image | null;
-  origFoodGroups: FoodScreenFood_origFoodGroups[];
+  origFoodGroups: FoodScreenFood_origFoodGroups[][];
   nutrition: FoodScreenFood_nutrition;
   foodClass: FoodScreenFood_foodClass;
 }

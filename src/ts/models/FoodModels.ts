@@ -4,9 +4,9 @@
  */
 
 import {
-  SelectFoodQuery_foods_foods,
-  SelectFoodQuery_foods_foods_weights
-} from '@Common/FoodDialog/types/SelectFoodQuery'
+  FoodPickerQuery_foods_foods,
+  FoodPickerQuery_foods_foods_weights
+} from '@Common/FoodPickerDialog/types/FoodPickerQuery'
 import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import { Translation } from '@Models/common'
 import { ProfileRecipesQuery_recipes_recipes } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
@@ -135,9 +135,9 @@ export interface RecipeUnit {
 
 export interface MealItem {
   amount?: number
-  food?: SelectFoodQuery_foods_foods
+  food?: FoodPickerQuery_foods_foods
   recipe?: RecipeCardRecipe
-  weight?: SelectFoodQuery_foods_foods_weights
+  weight?: FoodPickerQuery_foods_foods_weights
   id?: string,
   customUnit?: string
   gramWeight?: number

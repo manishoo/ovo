@@ -73,6 +73,25 @@ export interface ReviewRecipesQuery_recipes_recipes_ingredients_food_thumbnail {
   url: string;
 }
 
+export interface ReviewRecipesQuery_recipes_recipes_ingredients_food_nutrition_calories {
+  amount: number;
+  unit: string;
+}
+
+export interface ReviewRecipesQuery_recipes_recipes_ingredients_food_nutrition {
+  calories: ReviewRecipesQuery_recipes_recipes_ingredients_food_nutrition_calories | null;
+}
+
+export interface ReviewRecipesQuery_recipes_recipes_ingredients_food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface ReviewRecipesQuery_recipes_recipes_ingredients_food_origFoodGroups {
+  id: string;
+  name: ReviewRecipesQuery_recipes_recipes_ingredients_food_origFoodGroups_name[];
+}
+
 export interface ReviewRecipesQuery_recipes_recipes_ingredients_food {
   id: string;
   name: ReviewRecipesQuery_recipes_recipes_ingredients_food_name[];
@@ -80,6 +99,8 @@ export interface ReviewRecipesQuery_recipes_recipes_ingredients_food {
   weights: ReviewRecipesQuery_recipes_recipes_ingredients_food_weights[];
   image: ReviewRecipesQuery_recipes_recipes_ingredients_food_image | null;
   thumbnail: ReviewRecipesQuery_recipes_recipes_ingredients_food_thumbnail | null;
+  nutrition: ReviewRecipesQuery_recipes_recipes_ingredients_food_nutrition;
+  origFoodGroups: ReviewRecipesQuery_recipes_recipes_ingredients_food_origFoodGroups[][];
 }
 
 export interface ReviewRecipesQuery_recipes_recipes_ingredients_weight_name {

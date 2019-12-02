@@ -15,7 +15,11 @@ import ServiceManager, { Service } from '../services/ServiceManager'
 import ServiceRegistrar from '../services/ServiceRegistrar'
 import AppConfig from './AppConfig'
 import Storage from './Storage/Storage'
+import { IPersistableStore, rehydrate, autoSave } from 'resub-persist'
 
+const persistableStores: IPersistableStore[] = [
+  CalendarService,
+]
 
 function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: LanguageCode } {
   const splitUrl = url.split('/')
@@ -25,6 +29,16 @@ function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: Lang
     locale: locale[0] as LanguageCode,
     urlWithoutLocale: splitUrl.join('/') || '/'
   }
+}
+
+async function persistAndRehydrate() {
+  persistableStores.forEach(store => {
+    Object.keys(CalendarService.triggerKeys)
+      .map(key => {
+        autoSave(Storage, store, key)
+      })
+  })
+  return rehydrate(Storage, persistableStores)
 }
 
 export default abstract class AppBootstrapper {
@@ -53,11 +67,14 @@ export default abstract class AppBootstrapper {
               storage: Storage
             })
               .then(() => {
-                // init the app
-                RX.UserInterface.setMainView(this._renderRootView())
-                // RX.UserInterface.useCustomScrollbars(true)
-                RX.International.forceRTL(AppConfig.isRTL())
-                this._hideSplash()
+                persistAndRehydrate()
+                  .then(() => {
+                    // init the app
+                    RX.UserInterface.setMainView(this._renderRootView())
+                    // RX.UserInterface.useCustomScrollbars(true)
+                    RX.International.forceRTL(AppConfig.isRTL())
+                    this._hideSplash()
+                  })
               })
           })
       })
@@ -73,7 +90,6 @@ export default abstract class AppBootstrapper {
     let servicesToStart: Service[] = [
       UserStore,
       CalendarService,
-      // LocationStore,
     ]
 
     if (AppConfig.getPlatformType() === 'web') {

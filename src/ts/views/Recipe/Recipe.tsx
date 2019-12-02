@@ -381,13 +381,10 @@ class Recipe extends ComponentBase<RecipeProps, RecipeState> {
               [Styles.values.marginStart]: Styles.values.spacing / 2
             }}
           />
-          {
-            authorized([Role.operator], this.state.user.role) &&
-            <PublishRecipe
-              recipe={this.props.recipe}
-              user={this.state.user}
-            />
-          }
+          <PublishRecipe
+            recipe={this.props.recipe}
+            user={this.state.user}
+          />
         </RX.View>
       )
     }

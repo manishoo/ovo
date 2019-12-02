@@ -5,11 +5,12 @@
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import { showFoodPreviewModal } from '@Common/FoodDialog/components/FoodPreview'
+import { showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPreview'
 import Image from '@Common/Image/Image'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import ImageSource from '@Modules/images'
+import { createId } from '@Utils/create-id'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { IngredientCardIngredient } from './types/IngredientCardIngredient'
@@ -64,6 +65,10 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
         }
         image {url}
         thumbnail {url}
+        nutrition {
+          calories { amount unit }
+        }
+        origFoodGroups { id name { text locale } }
       }
     `
   }
@@ -206,7 +211,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
   private _handleUnitPress = () => {
     showFoodPreviewModal({
       item: {
-        id: String(Math.random()),
+        id: createId(),
         amount: this.props.ingredient.amount,
         food: this.props.ingredient.food!,
         weight: this.props.ingredient.weight || undefined,
@@ -216,15 +221,15 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
       },
       inputRef: () => null,
       onDismiss: () => null,
-      onSubmit: ((food, amount, weight, customUnit, gramWeight, description) => {
+      onSubmit: ((food, amount, description, weight, customUnit, gramWeight) => {
         this.props.onIngredientChange!({
           ...this.props.ingredient,
           food,
           amount,
+          description,
           weight: weight || null,
           customUnit: customUnit || null,
           gramWeight: gramWeight || null,
-          description: description || null,
         })
       }),
       height: 400,

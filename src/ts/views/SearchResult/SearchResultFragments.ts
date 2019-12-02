@@ -65,6 +65,9 @@ const SearchResultFragments = {
         createdAt
         updatedAt
         status
+        nutrition {
+          calories { amount unit }
+        }
       }
 
       ${this.SearchResultFood}
@@ -83,6 +86,9 @@ const SearchResultFragments = {
       }
       image {url}
       thumbnail {url}
+      nutrition {
+        calories { amount unit }
+      }
     }
   `
 }

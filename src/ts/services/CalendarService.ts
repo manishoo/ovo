@@ -3,66 +3,72 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { Day } from '@Views/CalendarScreen/components/types/Day'
+import { Day, Day_meals_items, Day_meals_items_food } from '@Views/CalendarScreen/components/types/Day'
 import { DayMeal } from '@Views/CalendarScreen/components/types/DayMeal'
 import { MealItem } from '@Views/CalendarScreen/components/types/MealItem'
 import { DateTime } from 'luxon'
-import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
 import * as SyncTasks from 'synctasks'
 
 
-export enum DayTemplate {
-  empty = 'empty',
-  fullTopBottomEmpty = 'fullTopBottomEmpty',
-  fullTopFull = 'fullTopFull',
-  fullBottomFull = 'fullBottomFull',
-  fullTopBottomFull = 'fullTopBottomFull',
+export function calculateMealItemAmount(mealItem: Day_meals_items): number {
+  let grams = 0
+  if (mealItem.weight) {
+    grams = mealItem.amount * mealItem.weight.gramWeight
+  } else if (mealItem.gramWeight) {
+    grams = mealItem.amount * mealItem.gramWeight
+  } else {
+    grams = mealItem.amount
+  }
+  return grams
 }
 
-const STORAGE_KEYS = {
-  calendar: 'calendar',
-  token: 'token',
+export interface GroceryItem {
+  food: Day_meals_items_food,
+  grams: number,
+  dateAdded?: Date,
 }
 
-export enum TriggerKeys {
-  //
+interface GroceriesByFood {
+  [k: string]: GroceryItem
+}
+
+export interface GroceriesByFoodGroup {
+  [k: string]: { food: Day_meals_items_food, grams: number, dateAdded?: Date }[]
+}
+
+enum TriggerKeys {
+  calendar,
+  shoppingListGroceriesByFoodGroup,
+  pantryGroceriesByFoodGroup,
 }
 
 @AutoSubscribeStore
-class CalendarService extends StoreBase implements IPersistableStore {
+export class CalendarService extends StoreBase implements IPersistableStore {
   public name = 'CalendarService'
   private calendar: Day[] = []
+  private shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup = {}
+  private pantryGroceriesByFoodGroup: GroceriesByFoodGroup = {}
+  public triggerKeys = TriggerKeys
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
 
-    RX.Storage.getItem(STORAGE_KEYS.calendar)
-      .then(CalendarJSONString => {
-        try {
-          this.calendar = JSON.parse(CalendarJSONString) as Day[]
-        } catch (e) {
-          RX.Storage.removeItem(STORAGE_KEYS.calendar)
-        }
-        deferred.resolve(void 0)
-      })
-      .catch(error => {
-        deferred.reject(error)
-      })
+    this._handleShoppingList()
+    deferred.resolve(void 0)
 
     return deferred.promise()
   }
 
   setCalendar(calendar?: Day[]) {
     if (calendar) {
-      RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(calendar))
       this.calendar = calendar
     } else {
-      RX.Storage.removeItem(STORAGE_KEYS.calendar)
       this.calendar = null
     }
 
+    this._handleShoppingList()
     this.trigger()
   }
 
@@ -76,7 +82,7 @@ class CalendarService extends StoreBase implements IPersistableStore {
       this.calendar.sort((a, b) => a.date - b.date)
     }
 
-    RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
+    this._handleShoppingList()
     this.trigger()
   }
 
@@ -91,11 +97,11 @@ class CalendarService extends StoreBase implements IPersistableStore {
       return m
     })
 
-    RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
+    this._handleShoppingList()
     this.trigger()
   }
 
-  setMealItem(dayId: string, mealId: string, mealItem: MealItem) {
+  setMealItem(dayId: string, mealId: string, prevMealItemId: string, mealItem: MealItem) {
     const foundDay = this.calendar.find(p => p.id === dayId)
     if (!foundDay) throw new Error('day not found')
 
@@ -104,7 +110,7 @@ class CalendarService extends StoreBase implements IPersistableStore {
         return {
           ...meal,
           items: meal.items.map(mi => {
-            if (mi.id === mealItem.id) {
+            if (mi.id === prevMealItemId) {
               return mealItem
             }
 
@@ -114,17 +120,221 @@ class CalendarService extends StoreBase implements IPersistableStore {
       }
       return meal
     })
-    RX.Storage.setItem(STORAGE_KEYS.calendar, JSON.stringify(this.calendar))
+    this._handleShoppingList()
     this.trigger()
   }
 
-  updateDay(day: Day) {
+  private _handleShoppingList() {
+    const calendar = this.calendar
 
+    const foods: GroceriesByFood = {}
+    const groceriesByFoodGroup: GroceriesByFoodGroup = {}
+
+    /**
+     * Unique by food id
+     * */
+    function handleFood(food: Day_meals_items_food, grams: number) {
+      if (foods[food.id]) {
+        foods[food.id] = {
+          ...foods[food.id],
+          grams: foods[food.id].grams + grams
+        }
+      } else {
+        foods[food.id] = {
+          food,
+          grams,
+        }
+      }
+    }
+
+    calendar.map(day => {
+      day.meals.map(meal => {
+        meal.items.map(mealItem => {
+          if (mealItem.food) {
+            handleFood(mealItem.food, calculateMealItemAmount(mealItem))
+          } else if (mealItem.recipe) {
+            mealItem.recipe.ingredients.map(ingredient => {
+              handleFood(ingredient.food, calculateMealItemAmount(mealItem))
+            })
+          }
+        })
+      })
+    })
+
+    /**
+     * Unique by food group
+     * */
+    Object.keys(foods).map(foodId => {
+      const food = foods[foodId]
+
+      const foodGroupId = food.food.origFoodGroups[0][0].id
+      if (!foodGroupId) throw new Error('food group not found')
+
+      if (groceriesByFoodGroup[foodGroupId]) {
+        groceriesByFoodGroup[foodGroupId] = [
+          ...groceriesByFoodGroup[foodGroupId],
+          food
+        ]
+      } else {
+        groceriesByFoodGroup[foodGroupId] = [
+          food
+        ]
+      }
+    })
+
+    this.shoppingListGroceriesByFoodGroup = this._excludePantryItemsFromShoppingList(groceriesByFoodGroup, this.pantryGroceriesByFoodGroup)
   }
 
-  getPropKeys() {
+  private _excludePantryItemsFromShoppingList(shoppingList: GroceriesByFoodGroup, pantry: GroceriesByFoodGroup): GroceriesByFoodGroup {
+    const finalShoppingList: GroceriesByFoodGroup = {}
+
+    Object.keys(shoppingList).map(shoppingListFoodGroupId => {
+      function addGroceryItemToShoppingList(groceryItem: GroceryItem) {
+        if (finalShoppingList[shoppingListFoodGroupId]) {
+          finalShoppingList[shoppingListFoodGroupId] = [
+            ...finalShoppingList[shoppingListFoodGroupId],
+            groceryItem
+          ]
+        } else {
+          finalShoppingList[shoppingListFoodGroupId] = [
+            groceryItem
+          ]
+        }
+      }
+
+      const foodGroupGroceries = shoppingList[shoppingListFoodGroupId]
+
+      foodGroupGroceries.map(shoppingListGroceryItem => {
+        let requiredAmount = shoppingListGroceryItem.grams
+        /**
+         * Check whether it exists in pantry
+         * */
+        if (pantry[shoppingListFoodGroupId]) {
+          const foundGroceryItem = pantry[shoppingListFoodGroupId].find(p => p.food.id === shoppingListGroceryItem.food.id)
+
+          /**
+           * Check whether the amount exists
+           * */
+          if (foundGroceryItem) {
+            /**
+             * The amount that we need minus the amount that we have
+             * */
+            requiredAmount = requiredAmount - foundGroceryItem.grams
+          }
+        }
+
+        /**
+         * Insufficient amount. Needs to be added to shopping list
+         * */
+        if (requiredAmount > 0) {
+          addGroceryItemToShoppingList({
+            food: shoppingListGroceryItem.food,
+            grams: requiredAmount,
+          })
+        }
+      })
+    })
+
+    return finalShoppingList
+  }
+
+  @autoSubscribe
+  getShoppingList() {
+    return this.shoppingListGroceriesByFoodGroup
+  }
+
+  @autoSubscribe
+  getPantry() {
+    return this.pantryGroceriesByFoodGroup
+  }
+
+  public addPantryItem(food: Day_meals_items_food, grams: number) {
+    const foodGroupId = food.origFoodGroups[0][0].id
+
+    const item = {
+      food,
+      grams,
+      dateAdded: new Date()
+    }
+
+    /**
+     * 1) Add to pantry
+     * */
+    if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
+      const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
+
+      if (foodAlreadyExists) {
+        this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
+          grocery.grams += grams
+          grocery.dateAdded = new Date()
+
+          return grocery
+        })
+      } else {
+        this.pantryGroceriesByFoodGroup[foodGroupId] = [
+          ...this.pantryGroceriesByFoodGroup[foodGroupId],
+          item,
+        ]
+      }
+    } else {
+      this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
+    }
+
+    /**
+     * 2) Remove from shoppingList
+     * */
+    this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
+
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  public removePantryItem(foodId: string) {
+    /**
+     * Remove from pantry and add to shopping list if needed
+     * */
+    Object.keys(this.pantryGroceriesByFoodGroup).map(pantryFoodGroupId => {
+      const pantryGroceryItems = this.pantryGroceriesByFoodGroup[pantryFoodGroupId]
+      this.pantryGroceriesByFoodGroup[pantryFoodGroupId] = pantryGroceryItems.filter(p => p.food.id !== foodId)
+    })
+    this._handleShoppingList()
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  public editPantryItem(foodId: string, grams: number) {
+    /**
+     * Remove from pantry and add to shopping list if needed
+     * */
+    Object.keys(this.pantryGroceriesByFoodGroup).map(pantryFoodGroupId => {
+      const pantryGroceryItems = this.pantryGroceriesByFoodGroup[pantryFoodGroupId]
+      this.pantryGroceriesByFoodGroup[pantryFoodGroupId] = pantryGroceryItems.map(pantryGroceryItem => {
+        if (pantryGroceryItem.food.id === foodId) {
+          return {
+            ...pantryGroceryItem,
+            grams,
+          }
+        }
+
+        return pantryGroceryItem
+      })
+    })
+    this._handleShoppingList()
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  public getPropKeys() {
     return [
       'calendar',
+      'pantryGroceriesByFoodGroup',
+      'shoppingListGroceriesByFoodGroup',
     ]
   }
 

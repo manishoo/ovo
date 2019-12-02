@@ -7,7 +7,7 @@ import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
-import { SelectFoodQuery_recipes_recipes } from '@Common/FoodDialog/types/SelectFoodQuery'
+import { FoodPickerQuery_recipes_recipes } from '@Common/FoodPickerDialog/types/FoodPickerQuery'
 import Image from '@Common/Image/Image'
 import InputNumber from '@Common/Input/InputNumber'
 import { translate } from '@Common/LocalizedText/LocalizedText'
@@ -26,7 +26,7 @@ interface RecipePreviewProps {
   inputRef: (ref: any) => any,
   serving?: number,
   recipe: RecipeCardRecipe,
-  onSubmit: (recipe: SelectFoodQuery_recipes_recipes, serving: number) => void,
+  onSubmit: (recipe: FoodPickerQuery_recipes_recipes, serving: number) => void,
   height: number
 }
 
@@ -66,7 +66,7 @@ export default class RecipePreview extends RX.Component<RecipePreviewProps, Reci
     )
   }
 
-  private _onSubmit = (recipe: SelectFoodQuery_recipes_recipes) => () => {
+  private _onSubmit = (recipe: FoodPickerQuery_recipes_recipes) => () => {
     this.props.onSubmit(recipe, this.state.serving)
     this.props.onDismiss()
   }

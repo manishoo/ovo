@@ -11,6 +11,7 @@ import Input, { InputProps } from './Input'
 interface InputNumberProps extends Omit<InputProps, 'value' | 'onChange'> {
   value: number,
   onChange: (value: number) => void,
+  autoSize?: boolean,
 }
 
 export default function InputNumber(props: InputNumberProps) {

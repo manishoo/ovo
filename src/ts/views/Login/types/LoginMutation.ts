@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, Role } from "./../../../models/global-types";
+import { Gender, Role, MealAvailableTime, MealSize } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: LoginMutation
@@ -29,6 +29,15 @@ export interface LoginMutation_loginUser_user_socialNetworks {
   pinterest: string | null;
 }
 
+export interface LoginMutation_loginUser_user_meals {
+  id: string;
+  availableTime: MealAvailableTime | null;
+  size: MealSize | null;
+  cook: boolean | null;
+  time: string;
+  name: string;
+}
+
 export interface LoginMutation_loginUser_user {
   id: string;
   username: string;
@@ -47,6 +56,7 @@ export interface LoginMutation_loginUser_user {
   caloriesPerDay: number | null;
   socialNetworks: LoginMutation_loginUser_user_socialNetworks | null;
   role: Role;
+  meals: LoginMutation_loginUser_user_meals[];
 }
 
 export interface LoginMutation_loginUser {

@@ -7,11 +7,12 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import { showRecipePreviewModal } from '@Common/FoodDialog/components/RecipePreview'
+import { showRecipePreviewModal } from '@Common/FoodPickerDialog/components/RecipePreview'
 import Image from '@Common/Image/Image'
 import LikeButton from '@Common/LikeButton/LikeButton'
 import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
 import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from '@Common/Text/Text'
 import ImageSource from '@Modules/images'
@@ -56,12 +57,20 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
         likesCount
         userLikedRecipe
         thumbnail {url}
+        ingredients {
+          ...IngredientCardIngredient
+        }
         author {
           id
           username
           avatar {url}
         }
+        nutrition {
+          calories { amount unit }
+        }
       }
+      
+      ${IngredientCard.fragments.ingredient}
     `
   }
   state = {

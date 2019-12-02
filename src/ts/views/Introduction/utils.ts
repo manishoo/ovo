@@ -4,6 +4,7 @@
  */
 
 import { AssistantExpectations, MessageSender, MessageType } from '@Models/global-types'
+import { createId } from '@Utils/create-id'
 import { MessageInput } from '@Views/Introduction/components/ChatInput'
 import {
   IntroductionMutation_setup_messages,
@@ -37,8 +38,6 @@ export function getLastInputType(messages: IntroductionMutation_setup_messages[]
       mealPlanSettings = message.data.mealPlanSettings
     }
   })
-  console.log('messages', messages)
-  console.log('data', data)
   return {
     expect,
     inputType,
@@ -51,7 +50,7 @@ export function getLastInputType(messages: IntroductionMutation_setup_messages[]
 
 export function createMessage(text: string, data?: any): IntroductionMutation_setup_messages {
   return {
-    id: String(Math.random()),
+    id: createId(),
     sender: MessageSender.user,
     text,
     timestamp: String(Date.now()),
