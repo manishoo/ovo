@@ -5,7 +5,7 @@
 
 import CalendarService from '@Services/CalendarService'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
+import UserStore from '@Services/UserService'
 import AppConfig from '../app/AppConfig'
 import ServiceManager from './ServiceManager'
 

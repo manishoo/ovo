@@ -15,11 +15,11 @@ import Navbar from '@Common/Navbar/Navbar'
 import Text from '@Common/Text/Text'
 import { Role } from '@Models/global-types'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import UserStore from '@Services/UserStore'
+import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
 import { FoodScreenFood } from '@Views/FoodScreen/types/FoodScreenFood'
 import { FoodScreenQuery, FoodScreenQueryVariables } from '@Views/FoodScreen/types/FoodScreenQuery'
-import { Me } from '@Views/Register/types/Me'
+import { Me } from '@Services/types/Me'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -30,7 +30,7 @@ interface FoodScreenProps {
 }
 
 interface FoodScreenState {
-  user: Me,
+  me: Me | null,
   width: number,
   drawerVisible?: boolean,
   isSmallOrTiny?: boolean,
@@ -60,7 +60,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
     `
   }
   state = {
-    user: UserStore.getUser(),
+    me: UserStore.getUser(),
     drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
     isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     width: ResponsiveWidthStore.getWidth(),
@@ -89,7 +89,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
 
         <RX.View style={{ paddingTop: Styles.values.spacing, paddingBottom: Styles.values.spacing }}>
           <Text type={Text.types.title} translations={this.props.food.foodClass.name} />
-          <Text type={Text.types.body} translations={this.props.food.foodClass.description} />
+          <Text type={Text.types.body} translations={this.props.food.foodClass.description || []} />
         </RX.View>
       </CenterAlignedPageView>
     )
@@ -97,7 +97,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
 
   protected _buildState(props: FoodScreenProps, initialBuild: boolean): Partial<FoodScreenState> | undefined {
     return {
-      user: UserStore.getUser(),
+      me: UserStore.getUser(),
       drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       width: ResponsiveWidthStore.getWidth(),
@@ -109,7 +109,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.drawerVisible ? this.state.width : this.state.width - Styles.values.drawerWidth)
 
   private _renderControlBar = () => {
-    if (this.props.food && (AppConfig.getPlatformType() === 'web') && this.state.user && (this.state.user.role === Role.operator)) {
+    if (this.props.food && (AppConfig.getPlatformType() === 'web') && this.state.me && (this.state.me.role === Role.operator)) {
       return (
         <RX.View style={{ flexDirection: 'row' }}>
           <Link to={`${AppConfig.panelAddress}/food-class/${this.props.food.foodClass.id}`} openInNewTab>
@@ -129,7 +129,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
   }
 }
 
-export default function (props: any) {
+export default function (props: FoodScreenProps) {
   const { data } = useQuery<FoodScreenQuery, FoodScreenQueryVariables>(gql`
     query FoodScreenQuery ($id: ObjectId!) {
       food(id: $id) {
@@ -153,14 +153,3 @@ export default function (props: any) {
     />
   )
 }
-
-// const styles = {
-//   container: RX.Styles.createViewStyle({
-//     //
-//   }),
-//   title: RX.Styles.createTextStyle({
-//     fontSize: Styles.fontSizes.size32,
-//     fontWeight: '500',
-//     marginBottom: 10,
-//   }),
-// }

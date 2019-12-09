@@ -9,13 +9,13 @@ import CardList from '@Common/CardList/CardList'
 import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
 import MealCell from '@Views/ProfileScreen/components/MealsList/components/MealCell/MealCell'
-import { ProfileMealsQuery_meals_meals } from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import { MealCellMeal } from '@Views/ProfileScreen/components/MealsList/components/MealCell/types/MealCellMeal'
 import RX from 'reactxp'
 
 
 interface RecipesListProps extends RX.CommonProps {
   style?: any,
-  meals: ProfileMealsQuery_meals_meals[],
+  meals: MealCellMeal[],
   showAddMeal?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   hideAvatar?: boolean,
@@ -37,7 +37,7 @@ export default class MealsList extends RX.Component<RecipesListProps> {
     )
   }
 
-  private _renderRecipeCell = (meal: ProfileMealsQuery_meals_meals, size: number) => {
+  private _renderRecipeCell = (meal: MealCellMeal, size: number) => {
     return (
       <MealCell
         meal={meal}
@@ -61,7 +61,7 @@ export default class MealsList extends RX.Component<RecipesListProps> {
 
 const styles = {
   item: RX.Styles.createViewStyle({
-    marginHorizontal: Styles.values.spacing / 2,
+    [Styles.values.marginEnd]: Styles.values.spacing,
     marginBottom: Styles.values.spacing / 2,
   })
 }

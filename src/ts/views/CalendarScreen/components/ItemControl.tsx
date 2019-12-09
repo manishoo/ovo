@@ -6,7 +6,6 @@
 import Styles from '@App/Styles'
 import HoverView from '@Common/HoverView/HoverButton'
 import Image from '@Common/Image/Image'
-import MenuItem from '@Common/MenuItem/MenuItem'
 import Popup from '@Common/Popup/Popup'
 import RX from 'reactxp'
 
@@ -27,7 +26,7 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
   })
   private _loopAnimation: RX.Types.Animated.CompositeAnimation
 
-  constructor(props) {
+  constructor(props: ItemControlProps) {
     super(props)
 
     this._loopAnimation = RX.Animated.timing(this._ellipsisAnimationValue, {

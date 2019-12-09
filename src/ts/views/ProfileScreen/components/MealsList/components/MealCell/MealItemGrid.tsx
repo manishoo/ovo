@@ -4,25 +4,35 @@
  */
 
 import Styles from '@App/Styles'
-import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
-import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
-import { ProfileMealsQuery_meals_meals_items } from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
+import gql from 'graphql-tag'
 import RX from 'reactxp'
+import { MealItemGridIngredient } from './types/MealItemGridIngredient'
 
+
+export const fragments = {
+  mealItem: gql`
+    fragment MealItemGridIngredient on Ingredient {
+      ...IngredientCardIngredient
+    }
+
+    ${IngredientCard.fragments.ingredient}
+  `
+}
 
 interface MealItemGridProps {
   style?: any,
-  mealItems: ProfileMealsQuery_meals_meals_items[],
+  mealItems: MealItemGridIngredient[],
   size: number
 }
 
 interface MealItemGridState {
-  row1: ProfileMealsQuery_meals_meals_items[],
-  row2: ProfileMealsQuery_meals_meals_items[],
+  row1: MealItemGridIngredient[],
+  row2: MealItemGridIngredient[],
 }
 
 export default class MealItemGrid extends RX.Component<MealItemGridProps, MealItemGridState> {
-  constructor(props) {
+  constructor(props: MealItemGridProps) {
     super(props)
 
     const { row1, row2 } = this._fillRows()
@@ -41,9 +51,6 @@ export default class MealItemGrid extends RX.Component<MealItemGridProps, MealIt
       <RX.View
         style={[
           styles.container,
-          {
-            transform: [{ scale: 0.7 }]
-          },
           style,
         ]}
       >
@@ -65,43 +72,20 @@ export default class MealItemGrid extends RX.Component<MealItemGridProps, MealIt
     )
   }
 
-  private _renderMealItem = (mealItem: ProfileMealsQuery_meals_meals_items, size: number) => {
-    if (mealItem.food) {
-      return (
-        <IngredientCard
-          size={size}
-          hideTitle
-          hideUnits
-          ingredient={{
-            amount: mealItem.amount,
-            customUnit: mealItem.customUnit,
-            description: mealItem.description,
-            food: mealItem.food,
-            gramWeight: mealItem.gramWeight,
-            name: mealItem.food.name,
-            thumbnail: mealItem.food.thumbnail,
-            weight: mealItem.weight,
-          }}
-        />
-      )
-    }
-
-    if (mealItem.recipe) {
-      return (
-        <RecipeCard
-          size={size}
-          imageOnly
-          recipe={mealItem.recipe}
-        />
-      )
-    }
-
-    throw new Error('no recipe or food')
+  private _renderMealItem = (mealItem: MealItemGridIngredient, size: number) => {
+    return (
+      <IngredientCard
+        size={size}
+        hideTitle
+        hideUnits
+        ingredient={mealItem}
+      />
+    )
   }
 
   private _fillRows = () => {
-    const row1 = []
-    const row2 = []
+    const row1: MealItemGridIngredient[] = []
+    const row2: MealItemGridIngredient[] = []
 
     this.props.mealItems.map((mealItem, index) => {
       if ((row1.length + row2.length) > 4) return

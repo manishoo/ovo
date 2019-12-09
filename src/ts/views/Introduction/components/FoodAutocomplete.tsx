@@ -5,7 +5,6 @@
 
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import { Food } from '@Models/FoodModels'
 import { fullWidth } from '@Utils'
 import { FoodAutocompleteQuery } from '@Views/Introduction/components/types/FoodAutocompleteQuery'
 import gql from 'graphql-tag'
@@ -17,12 +16,12 @@ import SubmitButton from './SubmitButton'
 interface FoodAutocompleteProps {
   style?: any,
   skip?: string,
-  onSubmit: (data: Food[]) => void,
+  onSubmit: (data: any[]) => void,
   onSkip: (text: string) => void,
 }
 
 interface FoodAutocompleteState {
-  selectedFoods: Food[],
+  selectedFoods: any[],
   text: string,
 }
 
@@ -80,14 +79,14 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
     )
   }
 
-  renderFoods(items: Food[]) {
-    const onAddedItemPress = (f: Food) => () => {
+  renderFoods(items: any[]) {
+    const onAddedItemPress = (f: any) => () => {
       this.setState(prevState => ({
-        selectedFoods: prevState.selectedFoods.filter((food: Food) => food.id !== f.id)
+        selectedFoods: prevState.selectedFoods.filter((food: any) => food.id !== f.id)
       }))
     }
 
-    return items.map((f: Food) => {
+    return items.map((f: any) => {
       return (
         <RX.View
           key={f.id}
@@ -104,7 +103,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
     const { selectedFoods } = this.state
     if (error || loading || !data) return null
 
-    const onSuggestionPress = (f: Food) => () => {
+    const onSuggestionPress = (f: any) => () => {
       this.setState(prevState => ({
         selectedFoods: [...prevState.selectedFoods, f],
         text: '',
@@ -112,7 +111,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
       this.input.focus()
     }
 
-    function renderSuggestionItem(f: Food) {
+    function renderSuggestionItem(f: any) {
       return (
         <RX.View
           key={f.id}
@@ -131,7 +130,7 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
         keyboardShouldPersistTaps
       >
         {
-          data.searchFoods.filter((i: Food) => !selectedFoods.find(j => j.id === i.id)).map((f: Food) => renderSuggestionItem(f))
+          data.searchFoods.filter((i: any) => !selectedFoods.find(j => j.id === i.id)).map((f: any) => renderSuggestionItem(f))
         }
       </RX.ScrollView>
     )

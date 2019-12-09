@@ -25,7 +25,7 @@ interface UserMealsState {
 }
 
 export default class UserMeals extends RX.Component<UserMealsProps, UserMealsState> {
-  constructor(props) {
+  constructor(props: UserMealsProps) {
     super(props)
 
     this.state = {

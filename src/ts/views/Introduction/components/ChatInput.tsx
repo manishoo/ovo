@@ -10,7 +10,6 @@ import Input from '@Common/Input/Input'
 import InputNumber from '@Common/Input/InputNumber'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import UserMeals from '@Common/UserMeals/UserMeals'
-import { Food } from '@Models/FoodModels'
 import { AssistantExpectations, MessageType } from '@Models/global-types'
 import { generateHeightRange, generateWeightRange } from '@Utils'
 import {
@@ -105,9 +104,9 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
   state = {
     message: ''
   }
-  animatedBottomValue = RX.Animated.createValue(-330)
-  picker: any
-  userMeals: any
+  private animatedBottomValue = RX.Animated.createValue(-330)
+  private picker: any
+  private _userMeals: UserMeals | null = null
 
   public render() {
     const {
@@ -241,7 +240,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
                         )
                       }
 
-                      if (MessageType.meals === inputType) {
+                      if (MessageType.meals === inputType && data.meals) {
                         return [
                           <RX.ScrollView
                             style={{
@@ -250,7 +249,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
                             }}
                           >
                             <UserMeals
-                              ref={ref => this.userMeals = ref}
+                              ref={ref => this._userMeals = ref}
                               meals={data.meals}
                             />
                           </RX.ScrollView>,
@@ -394,10 +393,10 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
     })
   }
 
-  onFoodSubmit = (data: Food[]) => {
+  onFoodSubmit = (data: any[]) => {
     const { onSubmit } = this.props
     let text = ''
-    data.map((f: Food) => {
+    data.map((f: any) => {
       text += `${f.name}, `
     })
 
@@ -468,7 +467,10 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
   onSelectSubmit = ({ text, value }: Item) => () => {
     switch (this.props.input.expect) {
       case AssistantExpectations.mealPlan: {
-        return this.props.onOpenMealPlan(this.props.input.data.user)
+        if (this.props.input.data.user) {
+          return this.props.onOpenMealPlan(this.props.input.data.user)
+        }
+        break
       }
       default: {
         this.props.onSubmit({
@@ -485,9 +487,9 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
   onMealsSubmit = () => {
     const { onSubmit } = this.props
 
-    if (!this.userMeals) throw new Error('no user meals')
+    if (!this._userMeals) throw new Error('no user meals')
 
-    const meals = this.userMeals.getMeals()
+    const meals = this._userMeals.getMeals()
 
     onSubmit({
       text: meals.map(m => m.name).join(translate(translate.keys.commaAnd)),

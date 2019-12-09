@@ -35,7 +35,7 @@ export interface FoodPickerFood_weights_name {
 
 export interface FoodPickerFood_weights {
   amount: number;
-  gramWeight: number;
+  gramWeight: number | null;
   id: string;
   name: FoodPickerFood_weights_name[];
 }

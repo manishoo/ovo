@@ -6,7 +6,6 @@
 import { useMutation } from '@apollo/react-hooks'
 import client from '@App/client'
 import Styles from '@App/Styles'
-import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
@@ -14,7 +13,8 @@ import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
-import UserStore from '@Services/UserStore'
+import { Me } from '@Services/types/Me'
+import UserStore from '@Services/UserService'
 import trimTypeName from '@Utils/trim-type-name'
 import { MealPlanSettingsMeal } from '@Views/MealPlanSettingsScreen/types/MealPlanSettingsMeal'
 import {
@@ -22,7 +22,6 @@ import {
   MealPlanSettingsScreenMutationVariables
 } from '@Views/MealPlanSettingsScreen/types/MealPlanSettingsScreenMutation'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import { Me } from '@Views/Register/types/Me'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
@@ -41,7 +40,7 @@ interface MealPlanSettingsScreenProps extends MealPlanSettingsScreenCommonProps 
 }
 
 interface MealPlanSettingsScreenState {
-  user: Me,
+  me: Me | null,
 }
 
 const MODAL_ID = 'mealPlanSettingsModal'
@@ -61,11 +60,11 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
 
   protected _buildState(props: MealPlanSettingsScreenProps, initialBuild: boolean): Partial<MealPlanSettingsScreenState> | undefined {
     return {
-      user: UserStore.getUser(),
+      me: UserStore.getUser(),
     }
   }
 
-  private _userMeals: UserMeals
+  private _userMeals: null | UserMeals = null
 
   static showModal = (props: MealPlanSettingsScreenCommonProps) => (
     RX.Modal.show(
@@ -84,9 +83,8 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
   )
 
   render() {
-    const { user } = this.state
-
-    if (!user) return
+    const { me } = this.state
+    if (!me) return
 
     return (
       <ThemeContext.Consumer>
@@ -123,7 +121,7 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
             <RX.View style={styles.innerContainer}>
               <UserMeals
                 ref={ref => this._userMeals = ref}
-                meals={user.meals}
+                meals={me.meals}
               />
             </RX.View>
           </RX.View>
@@ -133,7 +131,9 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
   }
 
   private _onSubmit = () => {
-    const meals = this._userMeals.getMeals()
+    const userMeals = this._userMeals
+    if (!userMeals) throw new Error()
+    const meals = userMeals.getMeals()
 
     return this.props.onUpdateMealPlanSettings({
       userMeals: meals.map(trimTypeName),
@@ -141,7 +141,6 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
       .then(() => {
         Modal.dismissAnimated(MODAL_ID).then(() => this.props.onSubmit(meals))
       })
-
   }
 }
 

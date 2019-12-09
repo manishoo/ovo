@@ -7,18 +7,16 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import { showRecipePreviewModal } from '@Common/FoodPickerDialog/components/RecipePreview'
+import { showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPreview'
 import Image from '@Common/Image/Image'
+import { IngredientRecipe } from '@Common/IngredientCard/types/IngredientRecipe'
 import LikeButton from '@Common/LikeButton/LikeButton'
 import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
-import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import Text from '@Common/Text/Text'
 import ImageSource from '@Modules/images'
 import { withNavigation } from '@Modules/navigator'
 import { navigate } from '@Utils'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { StyleRuleSetRecursive, ViewStyleRuleSet } from 'reactxp/src/common/Types'
 
@@ -28,7 +26,7 @@ const CLEAR_ICON_DIMENSION = 20
 interface RecipeCellProps {
   wrapperStyle?: any,
   size: number,
-  recipe: RecipeCardRecipe,
+  recipe: IngredientRecipe,
   serving?: number,
   onServingChange?: (serving: number) => void,
   hideAvatar?: boolean,
@@ -44,35 +42,6 @@ interface RecipeCellState {
 
 @withNavigation
 export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCellState> {
-  static fragments = {
-    recipe: gql`
-      fragment RecipeCardRecipe on Recipe {
-        id
-        slug
-        title {text locale}
-        image {url}
-        timing {
-          totalTime
-        }
-        likesCount
-        userLikedRecipe
-        thumbnail {url}
-        ingredients {
-          ...IngredientCardIngredient
-        }
-        author {
-          id
-          username
-          avatar {url}
-        }
-        nutrition {
-          calories { amount unit }
-        }
-      }
-      
-      ${IngredientCard.fragments.ingredient}
-    `
-  }
   state = {
     isHovering: false,
   }
@@ -172,7 +141,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               this.props.onDelete &&
               <RX.View
                 style={styles.clearWrapper}
-                onPress={() => this.props.onDelete()}
+                onPress={this.props.onDelete}
               >
                 <Image
                   source={ImageSource.Clear}
@@ -191,12 +160,20 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   }
 
   private _onServingPress = () => {
-    showRecipePreviewModal({
-      serving: this.props.serving,
-      recipe: this.props.recipe,
+    showFoodPreviewModal({
       inputRef: () => null,
       onDismiss: () => null,
-      onSubmit: ((recipe, serving) => this.props.onServingChange(serving)),
+      mealItem: {
+        name: [],
+        description: null,
+        customUnit: null,
+        unit: null,
+        item: this.props.recipe,
+        amount: this.props.serving || 1,
+        id: this.props.recipe.id,
+        isOptional: null,
+      },
+      onSubmit: mealItem => this.props.onServingChange && this.props.onServingChange(mealItem.amount || 0),
       height: 400, // FIXME not a constant!
     })
   }

@@ -5,20 +5,24 @@
 
 import { cache } from '@App/client-cache'
 import { LanguageCode } from '@Models/global-types'
+import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import CalendarService from '@Services/CalendarService'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
+import UserService from '@Services/UserService'
+import UserStore from '@Services/UserService'
 import { persistCache } from 'apollo-cache-persist'
 import RX from 'reactxp'
+import { autoSave, rehydrate } from 'resub-persist'
 import * as SyncTasks from 'synctasks'
 import ServiceManager, { Service } from '../services/ServiceManager'
 import ServiceRegistrar from '../services/ServiceRegistrar'
 import AppConfig from './AppConfig'
 import Storage from './Storage/Storage'
-import { IPersistableStore, rehydrate, autoSave } from 'resub-persist'
 
-const persistableStores: IPersistableStore[] = [
+
+const persistableStores: IAutoSavablePersistableStore[] = [
   CalendarService,
+  UserService,
 ]
 
 function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: LanguageCode } {
@@ -33,7 +37,7 @@ function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: Lang
 
 async function persistAndRehydrate() {
   persistableStores.forEach(store => {
-    Object.keys(CalendarService.triggerKeys)
+    Object.keys(store.autoSaveTriggerKeys)
       .map(key => {
         autoSave(Storage, store, key)
       })

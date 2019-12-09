@@ -131,7 +131,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
     }
   }
 
-  private _getLabelStyle = (theme: Theme) => {
+  private _getLabelStyle = (theme: Theme): any => {
     if (!this.props.validate) return null
 
     if (this.state.isPristine || this.props.errorMessage) {

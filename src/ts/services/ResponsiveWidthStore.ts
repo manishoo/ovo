@@ -110,7 +110,7 @@ class ResponsiveWidthStore extends StoreBase {
   }
 
   @autoSubscribeWithKey(TriggerKeys.ResponsiveWidth)
-  getResponsiveWidth(rootViewId: string = MainWindowId): number {
+  getResponsiveWidth(rootViewId: string = MainWindowId): ResponsiveWidth {
     return this._responsiveWidth[rootViewId]
   }
 

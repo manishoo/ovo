@@ -31,8 +31,8 @@ export interface SettingsMutation_updateUser_socialNetworks {
 
 export interface SettingsMutation_updateUser_meals {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;

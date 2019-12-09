@@ -9,39 +9,34 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import Image from '@Common/Image/Image'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import Input from '@Common/Input/Input'
 import InputNumber from '@Common/Input/InputNumber'
 import IntlInput from '@Common/Input/IntlInput'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
-import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
 import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
-import { FoodTypes, MealItem } from '@Models/FoodModels'
-import {
-  IngredientInput,
-  InstructionInput,
-  LanguageCode,
-  RecipeDifficulty,
-  RecipeInput,
-  RecipeStatus
-} from '@Models/global-types'
+import { LanguageCode, RecipeDifficulty, RecipeStatus } from '@Models/global-types'
 import FilePicker from '@Modules/FilePicker'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
-import UserStore from '@Services/UserStore'
+import { Me } from '@Services/types/Me'
+import UserService from '@Services/UserService'
+import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
 import { createId } from '@Utils/create-id'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
-import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipes'
-import { ProfileRecipesFragments } from '@Views/ProfileScreen/components/ProfileRecipes/ProfileRecipesFragments'
-import { MyRecipe_instructions } from '@Views/ProfileScreen/components/ProfileRecipes/types/MyRecipe'
+import { transformRecipeToRecipeInput } from '@Utils/transformers/recipe.transformer'
+import { ProfileRecipesQuery, ProfileRecipesQueryVariables } from '@Views/ProfileScreen/types/ProfileRecipesQuery'
+import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
 import { RecipeFormExtra } from '@Views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
-import { Me } from '@Views/Register/types/Me'
+import { fragments as RecipeScreenFragments } from '@Views/RecipeScreen/RecipeScreen'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
@@ -52,6 +47,7 @@ import {
   RecipeFormQuery,
   RecipeFormQuery_recipe,
   RecipeFormQuery_recipe_ingredients,
+  RecipeFormQuery_recipe_instructions,
   RecipeFormQueryVariables
 } from './types/RecipeFormQuery'
 import { RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables } from './types/RecipeFormUpdateMutation'
@@ -66,17 +62,15 @@ interface RecipeFormProps {
   loading?: boolean
 }
 
-export type IngredientWithKey = (RecipeFormQuery_recipe_ingredients & { key: string })
-
 interface RecipeFormState {
   ingredientModalOpen: boolean,
-  recipe: Omit<RecipeFormQuery_recipe, 'ingredients'> & { ingredients: IngredientWithKey[] },
+  recipe: RecipeFormQuery_recipe,
   slugEdited: boolean,
   imagePreview?: any,
   difficulty?: string,
   totalTimeSet?: boolean,
   height?: number,
-  me?: Me,
+  me: Me,
   hideForm?: boolean
   image?: any,
   thumbnail?: any,
@@ -120,7 +114,15 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
   }
 
   protected _buildState(props: RecipeFormProps, initialBuild: boolean): Partial<RecipeFormState> | undefined {
-    if (!initialBuild) return null
+    if (!initialBuild) return
+
+    const author = UserService.getUser()!
+    const defaultInstructions = [{
+      text: [],
+      step: 1,
+      // notes: null,
+      // image: null,
+    }]
 
     if (props.recipe) {
       this._showExtraForm()
@@ -134,7 +136,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             key: createId(),
             description: ingredient.description || [],
           })),
-          instructions: props.recipe.instructions,
+          instructions: props.recipe.instructions.length === 0 ? defaultInstructions : props.recipe.instructions,
           title: props.recipe.title,
           description: props.recipe.description || [],
           slug: props.recipe.slug,
@@ -148,7 +150,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         slugEdited: true,
         imagePreview: props.recipe.image ? props.recipe.image.url : undefined,
         height: ResponsiveWidthStore.getHeight(),
-        me: UserStore.getUser(),
+        me: UserStore.getUser()!,
       }
     } else {
       return {
@@ -157,12 +159,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           id: 'new',
           description: [],
           ingredients: [],
-          instructions: [{
-            text: [],
-            step: 1,
-            notes: null,
-            image: null,
-          }],
+          instructions: defaultInstructions,
           title: [],
           slug: '',
           timing: {
@@ -175,22 +172,24 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           createdAt: new Date(),
           updatedAt: new Date(),
           difficulty: null,
-          author: {
-            id: '',
-            username: '',
-            avatar: {
-              url: ''
-            }
-          },
+          author,
           serving: 1,
           image: null,
+          nutrition: {
+            calories: null,
+            proteins: null,
+            totalAvailableCarbs: null,
+            totalCarbs: null,
+            carbsByDifference: null,
+            fats: null,
+          },
           tags: [],
           status: RecipeStatus.private,
         },
         slugEdited: false,
         imagePreview: undefined,
         height: ResponsiveWidthStore.getHeight(),
-        me: UserStore.getUser(),
+        me: UserStore.getUser()!,
       }
     }
   }
@@ -227,7 +226,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     return (
       <RX.Animated.View
         style={[
-          styles.innerContainer,
           this._mainFormAnimationStyle
         ]}
       >
@@ -281,7 +279,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
                 size={200}
                 ingredient={ingredient}
                 onDelete={this._onIngredientDelete(index)}
-                onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
+                // onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
                 onIngredientChange={this._onIngredientChange}
                 style={styles.ingredient}
               />
@@ -327,7 +325,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             label={translate('Serving')}
             required
             value={this.state.recipe.serving}
-            onChange={serving => this.setState(prevState => ({
+            onChange={serving => serving && this.setState(prevState => ({
               recipe: {
                 ...prevState.recipe,
                 serving,
@@ -367,7 +365,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             label={translate('TotalTime')}
             required
             value={this.state.recipe.timing.totalTime}
-            onChange={totalTime => this.setState(prevState => ({
+            onChange={totalTime => totalTime && this.setState(prevState => ({
               totalTimeSet: true,
               recipe: {
                 ...prevState.recipe,
@@ -494,18 +492,11 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _onIngredientAdd = (mealItem: MealItem) => {
-    const ingredients: IngredientWithKey[] = [...this.state.recipe.ingredients]
+  private _onIngredientAdd = (mealItem: FoodPickerMealItem) => {
+    const ingredients: RecipeFormQuery_recipe_ingredients[] = [...this.state.recipe.ingredients]
     ingredients.push({
-      key: createId(),
-      amount: mealItem.amount!,
-      food: mealItem.food!,
-      name: mealItem.food!.name,
-      customUnit: mealItem.customUnit || null,
-      description: mealItem.description || [],
-      gramWeight: mealItem.gramWeight || null,
-      thumbnail: mealItem.food!.thumbnail || null,
-      weight: mealItem.weight || null,
+      id: createId(),
+      ...mealItem,
     })
     this.setState(prevState => ({
       recipe: {
@@ -515,7 +506,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _handleInstructionDelete = (instruction: MyRecipe_instructions) => {
+  private _handleInstructionDelete = (instruction: RecipeFormQuery_recipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     /**
@@ -540,7 +531,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }
   }
 
-  private _onInstructionChange = (instruction: MyRecipe_instructions) => {
+  private _onInstructionChange = (instruction: RecipeFormQuery_recipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     const foundInstruction = instructions.find(p => p.step === instruction.step)
@@ -550,7 +541,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }
 
     foundInstruction.text = instruction.text
-    foundInstruction.image = instruction.image
+    // foundInstruction.image = instruction.image
 
     /**
      * If the instruction text was deleted
@@ -585,7 +576,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     }))
   }
 
-  private _onInstructionAdd = (instruction: MyRecipe_instructions) => {
+  private _onInstructionAdd = (instruction: RecipeFormQuery_recipe_instructions) => {
     const instructions = [...this.state.recipe.instructions]
 
     instructions.splice(
@@ -597,8 +588,8 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
           text: ''
         }],
         step: instruction.step + 1,
-        image: null,
-        notes: null,
+        // image: null,
+        // notes: null,
       }
     )
 
@@ -626,39 +617,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     return title.toLowerCase().replace(/ /g, '-')
   }
 
-  private _getRecipe = (): RecipeInput => {
-    return {
-      title: this.state.recipe.title.map(i => ({ locale: i.locale, text: i.text })),
-      description: this.state.recipe.description.map(i => ({ locale: i.locale, text: i.text })),
-      ingredients: this.state.recipe.ingredients.map(ingredient => ({
-        food: ingredient.food && ingredient.food.id,
-        name: ingredient.name && ingredient.name.map(tr => ({ text: tr.text, locale: tr.locale })),
-        amount: ingredient.amount,
-        weight: ingredient.weight ? ingredient.weight.id : undefined,
-        customUnit: ingredient.customUnit,
-        description: ingredient.description.map(i => ({ locale: i.locale, text: i.text })),
-      }) as IngredientInput),
-      instructions: this.state.recipe.instructions.map(instruction => ({
-        text: instruction.text.map(i => ({ locale: i.locale, text: i.text })),
-        step: instruction.step,
-      }) as InstructionInput),
-      serving: this.state.recipe.serving,
-      timing: {
-        totalTime: this.state.recipe.timing.totalTime,
-        prepTime: this.state.recipe.timing.prepTime,
-        cookTime: this.state.recipe.timing.cookTime,
-      },
-      tags: this.state.recipe.tags,
-      difficulty: this.state.recipe.difficulty,
-      slug: this.state.recipe.slug,
-      image: this.state.image,
-      thumbnail: this.state.thumbnail,
-    }
-  }
-
   private _handleCreate = () => {
     this.props.onCreate({
-      recipe: this._getRecipe(),
+      recipe: transformRecipeToRecipeInput(this.state.recipe, this.state.image, this.state.thumbnail),
     }, this.state.me.id)
       .then(({ data }) => {
         if (data) {
@@ -671,7 +632,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
             recipe: {
               ...data.createRecipe,
               ingredients: data.createRecipe.ingredients.map(ingredient => ({
-                key: createId(),
+                id: createId(),
                 ...ingredient,
               })),
             }
@@ -683,7 +644,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
   private _handleUpdate = () => {
     this.props.onUpdate({
       id: this.state.recipe.id,
-      recipe: this._getRecipe(),
+      recipe: transformRecipeToRecipeInput(this.state.recipe, this.state.image, this.state.thumbnail),
     }, this.state.me.id)
       .then(() => {
         ToastStore.toast({
@@ -694,12 +655,12 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       })
   }
 
-  private _onIngredientChange = (ingredient: IngredientWithKey) => {
+  private _onIngredientChange = (ingredient: RecipeFormQuery_recipe_ingredients) => {
     this.setState(prevState => ({
       recipe: {
         ...prevState.recipe,
         ingredients: this.state.recipe.ingredients.map(i => {
-          if (ingredient.key && (i.key === ingredient.key)) {
+          if (ingredient.id && (i.id === ingredient.id)) {
             return ingredient
           }
 
@@ -744,31 +705,32 @@ export default function (props: {}) {
   const { data, error, loading: recipeLoading } = useQuery<RecipeFormQuery, RecipeFormQueryVariables>(gql`
     query RecipeFormQuery($slug: String!) {
       recipe(slug: $slug) {
-        ...MyRecipe
+        ...Recipe
       }
     }
 
-    ${ProfileRecipesFragments.myRecipe}
+    ${RecipeScreenFragments.recipe}
   `, {
     variables: {
       slug: getParam(props, 'slug'),
     },
     skip: !getParam(props, 'slug'),
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    returnPartialData: true,
   })
   const [createRecipe, { loading: createRecipeLoading, error: createRecipeError }] = useMutation<RecipeFormCreateMutation, RecipeFormCreateMutationVariables>(gql`
     mutation RecipeFormCreateMutation($recipe: RecipeInput!) {
-      createRecipe(recipe: $recipe) { ...MyRecipe }
+      createRecipe(recipe: $recipe) { ...Recipe }
     }
 
-    ${ProfileRecipesFragments.myRecipe}
+    ${RecipeScreenFragments.recipe}
   `)
   const [updateRecipe, { loading: updateRecipeLoading, error: updateRecipeError }] = useMutation<RecipeFormUpdateMutation, RecipeFormUpdateMutationVariables>(gql`
     mutation RecipeFormUpdateMutation($id: ObjectId!, $recipe: RecipeInput!) {
-      updateRecipe(recipeId: $id, recipe: $recipe) { ...MyRecipe }
+      updateRecipe(recipeId: $id, recipe: $recipe) { ...Recipe }
     }
 
-    ${ProfileRecipesFragments.myRecipe}
+    ${RecipeScreenFragments.recipe}
   `)
 
   return (
@@ -779,13 +741,15 @@ export default function (props: {}) {
       onCreate={(variables, userId) => createRecipe({
         variables,
         update: (proxy, { data }) => {
-          const { recipes } = proxy.readQuery({
+          if (!data) return
+          const profileRecipes = proxy.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
               size: 20,
             },
           })
+          if (!profileRecipes) return
 
           proxy.writeQuery({
             query: PROFILE_RECIPES_QUERY,
@@ -795,10 +759,10 @@ export default function (props: {}) {
             },
             data: {
               recipes: {
-                ...recipes,
+                ...profileRecipes.recipes,
                 recipes: [
                   data.createRecipe,
-                  ...recipes.recipes,
+                  ...profileRecipes.recipes.recipes,
                 ]
               },
             }
@@ -808,13 +772,15 @@ export default function (props: {}) {
       onUpdate={(variables, userId) => updateRecipe({
         variables,
         update: (proxy, { data }) => {
-          const { recipes } = proxy.readQuery({
+          if (!data) return
+          const profileRecipes = proxy.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
             query: PROFILE_RECIPES_QUERY,
             variables: {
               userId,
               size: 20,
             },
           })
+          if (!profileRecipes) return
 
           proxy.writeQuery({
             query: PROFILE_RECIPES_QUERY,
@@ -824,8 +790,8 @@ export default function (props: {}) {
             },
             data: {
               recipes: {
-                ...recipes,
-                recipes: recipes.recipes.map((r: any) => {
+                ...profileRecipes.recipes,
+                recipes: profileRecipes.recipes.recipes.map((r: any) => {
                   if (r.id === data.updateRecipe.id) {
                     return Object.assign({}, r, data.updateRecipe)
                   }
@@ -845,14 +811,6 @@ const styles = {
   container: RX.Styles.createViewStyle({
     flex: 1,
     padding: Styles.values.spacing * 2,
-    // paddingTop: Styles.values.navBarHeight,
-    // flex: 1,
-    // overflow: 'visible',
-    // maxWidth: Styles.values.mainContentMaxWidth,
-    // alignSelf: 'center',
-  }),
-  innerContainer: RX.Styles.createViewStyle({
-    //
   }),
   title: RX.Styles.createTextStyle({
     fontWeight: '500',

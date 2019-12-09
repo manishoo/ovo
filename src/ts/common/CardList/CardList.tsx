@@ -5,6 +5,7 @@
 
 import Styles from '@App/Styles'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
+import { ResponsiveWidth } from '@Models/ResponsiveWidthModels'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -53,8 +54,23 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
   }
 
   protected _buildState(props: RecipesListProps, initialBuild: boolean): Partial<RecipesListState> | undefined {
+    let columns = 3
+
+    switch (ResponsiveWidthStore.getResponsiveWidth()) {
+      case ResponsiveWidth.Large:
+        columns = 4
+        break
+      case ResponsiveWidth.Medium:
+        columns = 3
+        break
+      case ResponsiveWidth.Small:
+      default:
+        columns = 2
+        break
+    }
+
     return {
-      columns: ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 2 : 4,
+      columns,
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       width: ResponsiveWidthStore.getWidthConsideringDrawer(),
     }

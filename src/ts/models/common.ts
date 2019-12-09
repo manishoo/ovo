@@ -4,6 +4,7 @@
  */
 
 import { LanguageCode } from '@Models/global-types'
+import gql from 'graphql-tag'
 
 
 export enum Routes {

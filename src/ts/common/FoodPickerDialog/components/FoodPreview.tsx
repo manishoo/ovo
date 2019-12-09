@@ -8,22 +8,26 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import {
-  FoodPickerQuery_foods_foods,
-  FoodPickerQuery_foods_foods_weights
-} from '@Common/FoodPickerDialog/types/FoodPickerQuery'
+  FoodPreviewMealItem,
+  FoodPreviewMealItem_unit,
+  FoodPreviewMealItem_unit_Weight
+} from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import Image from '@Common/Image/Image'
-import Input from '@Common/Input/Input'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import InputNumber from '@Common/Input/InputNumber'
 import IntlInput from '@Common/Input/IntlInput'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
-import Select from '@Common/Select/Select'
+import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
-import { Translation } from '@Models/common'
-import { MealItem } from '@Models/FoodModels'
-import { createId } from '@Utils/create-id'
+import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
+import gql from 'graphql-tag'
 import RX from 'reactxp'
 
+
+export function determineIfIsWeight(toBeDetermined: FoodPreviewMealItem_unit): toBeDetermined is FoodPreviewMealItem_unit_Weight {
+  return toBeDetermined.hasOwnProperty('id')
+}
 
 const MODAL_ID = 'FoodPreview'
 const TEXT_HEADING_WIDTH = 200
@@ -32,48 +36,72 @@ interface FoodPreviewProps {
   style?: any,
   onDismiss: () => any,
   inputRef: (ref: any) => any,
-  item: MealItem,
-  onSubmit: (food: FoodPickerQuery_foods_foods, amount: number, description: Translation[], weight?: FoodPickerQuery_foods_foods_weights, customUnit?: string, gramWeight?: number) => void,
+  mealItem: FoodPreviewMealItem,
+  onSubmit: (mealItem: FoodPreviewMealItem) => void,
   height: number
 }
 
 interface FoodPreviewState {
-  amount: number,
-  description: Translation[],
-  selectedWeight?: FoodPickerQuery_foods_foods_weights,
-  weight?: FoodPickerQuery_foods_foods_weights,
-  customUnit?: string,
-  gramWeight: number,
+  mealItem: FoodPreviewMealItem,
   selectedWeightValue?: string,
 }
 
 export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPreviewState> {
+  static fragments = {
+    mealItem: gql`
+      fragment FoodPreviewMealItem on MealItem {
+        id
+        name {text locale}
+        description {text locale}
+        amount
+        customUnit {
+          gramWeight
+          name { text locale }
+        }
+        isOptional
+        unit {
+          ... on Weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+          ... on CustomUnit {
+            gramWeight
+            name { text locale }
+          }
+        }
+        item {
+          ... on Food {
+            ...IngredientFood
+          }
+          ... on Recipe {
+            ...IngredientRecipe
+          }
+        }
+      }
+      
+      ${IngredientCard.fragments.food}
+      ${IngredientCard.fragments.recipe}
+    `
+  }
+
   constructor(props: FoodPreviewProps) {
     super(props)
 
     let selectedWeightValue
 
-    if (props.item.customUnit && !props.item.weight) {
-      selectedWeightValue = 'custom'
-    }
-
-    if (props.item.weight) {
-      selectedWeightValue = props.item.weight.id
+    if (this.props.mealItem.unit) {
+      if (determineIfIsWeight(this.props.mealItem.unit)) {
+        selectedWeightValue = this.props.mealItem.unit.id
+      } else {
+        selectedWeightValue = 'custom'
+      }
     }
 
     this.state = {
-      amount: props.item.amount || 1,
-      description: props.item.description || props.item.food.description,
-      weight: props.item.weight || {
-        amount: 1,
-        gramWeight: 1,
-        id: createId(),
-        name: [],
-      },
-      gramWeight: props.item.gramWeight || 1,
-      customUnit: props.item.customUnit,
-      selectedWeightValue,
-      selectedWeight: props.item.weight,
+      mealItem: this.props.mealItem,
+      selectedWeightValue
     }
   }
 
@@ -100,29 +128,44 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     )
   }
 
-  private _onSubmit = (food: FoodPickerQuery_foods_foods) => () => {
-    this.props.onSubmit(
-      food,
-      this.state.amount,
-      this.state.description,
-      this.state.selectedWeight,
-      this.state.selectedWeightValue === 'custom' ? this.state.customUnit : undefined,
-      this.state.selectedWeightValue === 'custom' ? this.state.gramWeight : undefined,
-    )
+  private _onSubmit = () => {
+    this.props.onSubmit(this.state.mealItem)
     this.props.onDismiss()
   }
 
-  private _renderContent = (theme: Theme) => {
-    const { inputRef, item } = this.props
+  private _onMealItemChange = (mealItem: Partial<FoodPreviewMealItem>) => {
+    this.setState(prevState => ({
+      mealItem: {
+        ...prevState.mealItem,
+        ...mealItem,
+      }
+    }))
+  }
 
-    const food = item.food!
+  private _renderContent = (theme: Theme) => {
+    const { mealItem } = this.state
+    const { inputRef } = this.props
+
+    if (!mealItem.item) return null
+
+    const units: Option[] = [
+      { value: undefined, text: <Text translate>g</Text> },
+      { value: 'custom', text: <Text translate>Custom Weight</Text> },
+    ]
+
+    if (determineIfIsFood(mealItem.item)) {
+      units.splice(1, 0, ...mealItem.item.weights.map(w => ({
+        value: w.id,
+        text: <Text translations={w.name} />,
+      })))
+    }
 
     return [
       <RX.View
         style={styles.firstRow}
       >
         <Image
-          source={food.thumbnail ? food.thumbnail.url : ''}
+          source={mealItem.item.thumbnail ? mealItem.item.thumbnail.url : ''}
           style={styles.imageStyle}
           resizeMode={'cover'}
         />
@@ -132,7 +175,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
           >
             <Text
               style={styles.bigTitle}
-              translations={food.name}
+              translations={determineIfIsFood(mealItem.item) ? mealItem.item.name : mealItem.item.title}
             />
           </RX.View>
         </RX.View>
@@ -146,8 +189,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
           <InputNumber
             autoFocus
             inputRef={inputRef}
-            value={this.state.amount}
-            onChange={amount => this.setState({ amount })}
+            value={mealItem.amount}
+            onChange={amount => this._onMealItemChange({ amount })}
             label={translate('Amount')}
             keyboardType={'number-pad'}
             style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
@@ -156,39 +199,70 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
             <Text translate style={[styles.label, { color: theme.colors.labelInput }]}>Unit</Text>
             <Select
               value={this.state.selectedWeightValue}
-              options={[
-                { value: undefined, text: <Text translate>g</Text> },
-                ...food.weights.map(w => ({
-                  value: w.id,
-                  text: <Text translations={w.name} />,
-                })),
-                { value: 'custom', text: <Text translate>Custom Weight</Text> },
-              ]}
+              options={units}
               onChange={(value) => this.setState({
                 selectedWeightValue: value,
-                selectedWeight: food.weights.find(p => p.id === value),
+              }, () => {
+                let unit: FoodPreviewMealItem_unit | null = null
+                let customUnit = mealItem.customUnit
+
+                if (value) {
+                  if (value === 'custom') {
+                    customUnit = mealItem.customUnit || {
+                      name: [],
+                      gramWeight: null
+                    }
+                    unit = customUnit
+                  } else if (mealItem.item && determineIfIsFood(mealItem.item)) {
+                    unit = mealItem.item.weights.find(p => p.id === value) || null
+                  }
+                }
+
+                this._onMealItemChange({
+                  unit,
+                  customUnit
+                })
               })}
             />
           </RX.View>
         </RX.View>
         {
-          this.state.selectedWeightValue === 'custom' &&
+          mealItem.unit && !determineIfIsWeight(mealItem.unit) &&
           <RX.View
             style={styles.flex1}
           >
-            <Input
+            <IntlInput
               autoFocus
               inputRef={inputRef}
-              value={this.state.customUnit}
-              onChangeText={customWeight => this.setState({ customUnit: customWeight })}
+              translations={mealItem.unit.name}
+              onTranslationsChange={customUnitName => this._onMealItemChange({
+                unit: {
+                  ...mealItem.unit,
+                  gramWeight: mealItem.unit!.gramWeight,
+                  name: customUnitName
+                },
+                customUnit: {
+                  gramWeight: mealItem.unit!.gramWeight,
+                  name: customUnitName
+                }
+              })}
               label={translate('weightName')}
-              keyboardType={'number-pad'}
               style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
             />
             <InputNumber
               inputRef={inputRef}
-              value={this.state.gramWeight}
-              onChange={gramWeight => this.setState({ gramWeight })}
+              value={mealItem.unit.gramWeight}
+              onChange={gramWeight => this._onMealItemChange({
+                unit: {
+                  ...mealItem.unit,
+                  name: mealItem.unit!.name,
+                  gramWeight,
+                },
+                customUnit: {
+                  name: mealItem.unit!.name,
+                  gramWeight,
+                }
+              })}
               label={translate('gramWeight')}
               keyboardType={'number-pad'}
               style={[styles.row, { [Styles.values.marginStart]: Styles.values.spacing / 2 }]}
@@ -200,23 +274,16 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
         >
           <IntlInput
             inputRef={inputRef}
-            translations={this.state.description}
-            onTranslationsChange={translations => this.setState({ description: translations })}
+            translations={mealItem.description || []}
+            onTranslationsChange={description => this._onMealItemChange({ description })}
             label={translate('Description')}
             style={{ flex: 1 }}
           />
         </RX.View>
-        {/*<RX.View
-          style={styles.chartContainer}
-        >
-          <RX.Text
-            style={[styles.chartTextContainer, { color: theme.colors.subtitle }]}
-          >MacroNutrients Chart</RX.Text>
-        </RX.View>*/}
       </RX.View>,
       <FilledButton
         label={translate('AddIngredient')}
-        onPress={this._onSubmit(food)}
+        onPress={this._onSubmit}
         containerStyle={styles.addToMeal}
       />
     ]
@@ -240,6 +307,8 @@ export function showFoodPreviewModal(props: FoodPreviewProps) {
             flex: 1,
             backgroundColor: '#fff',
             borderRadius: 8,
+            width: 500,
+            height: 500,
           }
         ]}
       >
@@ -265,8 +334,6 @@ const styles = {
     top: 0,
     left: 0,
     right: 0,
-    // padding: Styles.values.spacing,
-    // paddingTop: 70,
   }),
   cancelSelectedMealContainer: RX.Styles.createViewStyle({
     position: 'absolute',

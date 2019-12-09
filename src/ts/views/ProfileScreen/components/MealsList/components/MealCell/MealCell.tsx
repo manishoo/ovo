@@ -15,15 +15,25 @@ import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import { withNavigation } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
+import MealItemRow from '@Views/MealForm/components/MealItemRow/MealItemRow'
 import MealItemGrid from '@Views/ProfileScreen/components/MealsList/components/MealCell/MealItemGrid'
-import { ProfileMealsQuery_meals_meals } from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
+import {
+  MealCellMeal,
+  MealCellMeal_items,
+  MealCellMeal_items_item_Food
+} from '@Views/ProfileScreen/components/MealsList/components/MealCell/types/MealCellMeal'
+import gql from 'graphql-tag'
 import RX from 'reactxp'
 
+
+function determineIfIsFood(toBeDetermined: Partial<MealCellMeal_items>): toBeDetermined is MealCellMeal_items_item_Food {
+  return toBeDetermined.hasOwnProperty('weights')
+}
 
 interface AddMealCellProps {
   wrapperStyle?: any,
   size: number,
-  meal: ProfileMealsQuery_meals_meals,
+  meal: MealCellMeal,
   hideAvatar?: boolean,
 }
 
@@ -32,6 +42,7 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
   public render() {
     const { meal } = this.props
 
+    console.log('MEAL CELL', meal.items)
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
@@ -59,11 +70,11 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
             />
 
             <RX.Text
-              style={{marginTop: Styles.values.spacing / 2}}
+              style={{ marginTop: Styles.values.spacing / 2 }}
             >
               {
                 meal.items.map((mealItem, index) => [
-                  index > 0 ? (index === (meal.items.length - 1) ? translate(', and ') : ', ') : null,
+                  (index > 0) ? (index === (meal.items.length - 1) ? translate(', and ') : ', ') : null,
                   <Text
                     onPress={() => LocationStore.navigate(this.props, `/meal/${meal.id}/`)}
                     style={[
@@ -73,12 +84,11 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
                       }
                     ]}
                     translations={
-                      mealItem.food ?
-                        mealItem.food.name
-                        : mealItem.recipe.title
+                      mealItem.item ?
+                        (determineIfIsFood(mealItem.item) ? mealItem.item.name : mealItem.item.title)
+                        : (mealItem.name || [])
                     }
                   />,
-                  index === (meal.items.length - 1) ? ', ' : null,
                 ])
               }
 
@@ -138,6 +148,31 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
       </RX.View>
     )
   }
+
+  static fragments = {
+    mealCellMeal: gql`
+      fragment MealCellMeal on Meal {
+        id
+        name {text locale}
+        likedByUser
+        likesCount
+        items {
+          ...MealItemRowMealItem
+        }
+        author {
+          id
+          username
+          avatar {url}
+        }
+        timing {
+          totalTime
+        }
+      }
+
+      ${MealItemRow.fragments.mealItem}
+    `
+  }
+
 }
 
 const styles = {

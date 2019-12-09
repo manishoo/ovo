@@ -4,6 +4,7 @@
  */
 
 import AppConfig from '@App/AppConfig'
+// @ts-ignore
 import imageCompression from 'browser-image-compression'
 import React from 'react'
 import RX from 'reactxp'
@@ -12,13 +13,13 @@ import { FilePickerProps } from './types'
 
 export default class FilePicker extends RX.Component<FilePickerProps> {
   _input: any
-  reader: FileReader
+  private readonly _reader: FileReader | null = null
 
   constructor(props: FilePickerProps) {
     super(props)
 
     if (!AppConfig.isNode()) {
-      this.reader = new FileReader()
+      this._reader = new FileReader()
     }
   }
 
@@ -44,16 +45,16 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
   }
 
   private _onChange = ({ target: { validity, files } }: React.ChangeEvent<HTMLInputElement>) => {
-    const file = files[0]
+    const file = files![0]
 
-    if (this.reader) {
+    if (this._reader) {
       if (!file) return null
 
-      this.reader.onload = (event) => {
-        this.props.onImagePreviewChange(event.target.result)
+      this._reader.onload = (event) => {
+        this.props.onImagePreviewChange(event.target!.result)
       }
 
-      this.reader.readAsDataURL(file)
+      this._reader.readAsDataURL(file)
 
       if (!validity.valid) return null
 

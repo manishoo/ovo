@@ -10,12 +10,12 @@ import { ThemeContext } from '@App/ThemeContext'
 import Image from '@Common/Image/Image'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
-import { User } from '@Models/FoodModels'
 import ImageSource from '@Modules/images'
 import { NavOptions } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import UserStore from '@Services/UserStore'
+import { Me } from '@Services/types/Me'
+import UserStore from '@Services/UserService'
 import { trimSlashes } from '@Utils/trim-slashes'
 import { Action, Location } from 'history'
 import { matchPath, Redirect } from 'react-router'
@@ -45,7 +45,7 @@ interface AppNavigatorProps extends RX.CommonProps {
 
 interface WebAppRouterState {
   mode: string,
-  user?: User,
+  me: Me | null,
   hideDrawer: boolean,
   currentPath: string,
   height: number,
@@ -58,14 +58,14 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   static contextType = ThemeContext
   state: WebAppRouterState = {
     mode: ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer',
-    user: UserStore.getUser(),
+    me: UserStore.getUser(),
     currentPath: LocationStore.getPath(),
     height: ResponsiveWidthStore.getHeight(),
     width: ResponsiveWidthStore.getWidth(),
     routes: [],
     hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
   }
-  private _searchInput: any
+  private _searchInput: any = null
   private _drawerClosedValue = AppConfig.isRTL() ? Styles.values.drawerWidth : -Styles.values.drawerWidth
   private _drawerAnimationLeftValue = RX.Animated.createValue(this._drawerClosedValue)
   private _navbarAnimationTopValue = RX.Animated.createValue(-NAVBAR_HEIGHT)
@@ -90,7 +90,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
   protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
     const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
-    const user = UserStore.getUser()
+    const me = UserStore.getUser()
     const currentPath = LocationStore.getPath()
     const hideDrawer = !ResponsiveWidthStore.isDrawerVisible()
 
@@ -104,7 +104,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
     return {
       mode,
-      user,
+      me,
       currentPath,
       height: ResponsiveWidthStore.getHeight(),
       width: ResponsiveWidthStore.getWidth(),
@@ -196,14 +196,14 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
   }
 
   private _renderDrawer = (theme: Theme) => {
-    if (this.state.hideDrawer && !this.state.user) return null
+    if (this.state.hideDrawer && !this.state.me) return null
 
     return (
       <RX.Animated.View style={[styles.drawer.container, {
         height: this.state.height,
         // backgroundColor: theme.colors.drawerBg
       }, this._drawerAnimationStyle]}>
-        <AppDrawer user={this.state.user} />
+        <AppDrawer me={this.state.me} />
       </RX.Animated.View>
     )
   }
@@ -245,7 +245,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
   private _renderTabBar = () => {
     if (this.state.mode === 'drawer') return null
-    if (!this.state.user) return null
+    if (!this.state.me) return null
 
     let { currentPath, width } = this.state
 
@@ -266,7 +266,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       exact: false,
     })) activePath = TabBarItems.shoppingList
 
-    if (this.state.user && (this.state.user.username === trimSlashes(currentPath))) {
+    if (this.state.me && (this.state.me.username === trimSlashes(currentPath))) {
       activePath = TabBarItems.profile
     }
 
@@ -352,7 +352,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
         <RX.Text style={{ padding: Styles.values.spacing, fontSize: 20 }} onPress={toggleModal(false)}>x</RX.Text>}
 
         <AppSearchComponent
-          inputRef={ref => this._searchInput = ref}
+          inputRef={(ref: any) => this._searchInput = ref}
           onSubmit={toggleModal(false)}
         />
       </RX.Animated.View>
@@ -401,7 +401,7 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       setTimeout(() => this._setUI(false, this.state.mode === 'navbar', animate), 0)
 
       // // hide the drawer if landing
-      // if (this.state.user) {
+      // if (this.state.me) {
       //   this._setUI(this.state.mode === 'drawer', this.state.mode === 'navbar', animate)
       // } else {
       //   this._setUI(false, false, animate)

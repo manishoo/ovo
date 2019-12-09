@@ -5,10 +5,10 @@
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
+import UserStore from '@Services/UserService'
 import { trimSlashes } from '@Utils/trim-slashes'
 import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator'
-import { Me } from '@Views/Register/types/Me'
+import { Me } from '@Services/types/Me'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -21,7 +21,7 @@ import {
   MealPlanSettingsScreen,
   ProfileScreen,
   PublicProfileScreen,
-  Recipe,
+  RecipeScreen,
   RecipeForm,
   RegisterScreen,
   SearchResult,
@@ -52,7 +52,7 @@ interface NavigatorProps {
 }
 
 interface NavigatorState {
-  user: Me,
+  user: Me | null,
   currentPath: string,
 }
 
@@ -83,7 +83,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `/${Routes.recipe}/:slug/`,
             exact: false,
-            component: Recipe,
+            component: RecipeScreen,
             navOptions: defaultNavOptions,
           },
 
@@ -122,7 +122,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `${Routes.mealForm}/:id`,
             exact: false,
-            immersive: true,
+            immersive: false,
             redirectTo: this.state.user ? undefined : Routes.login,
             component: MealForm,
             navOptions: {
@@ -133,7 +133,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `${Routes.mealForm}/`,
             exact: false,
-            immersive: true,
+            immersive: false,
             redirectTo: this.state.user ? undefined : Routes.login,
             component: MealForm,
             navOptions: {

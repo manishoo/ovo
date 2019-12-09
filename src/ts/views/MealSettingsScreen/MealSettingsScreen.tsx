@@ -72,7 +72,7 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
     `
   }
 
-  constructor(props) {
+  constructor(props: MealSettingsScreenProps) {
     super(props)
 
     this.state = {
@@ -158,10 +158,11 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
             label={translate(translate.keys.mealSize)}
             value={meal.size}
             options={[
-              ...Object.keys(MealSize).map(key => ({
-                value: MealSize[key],
-                text: <Text translate={key} />,
-              }))
+              { value: MealSize.tiny, text: <Text translate={'tiny'} /> },
+              { value: MealSize.small, text: <Text translate={'small'} /> },
+              { value: MealSize.normal, text: <Text translate={'normal'} /> },
+              { value: MealSize.huge, text: <Text translate={'huge'} /> },
+              { value: MealSize.big, text: <Text translate={'big'} /> },
             ]}
             onChange={size => this.setState(({ meal }) => ({
               meal: {
@@ -178,10 +179,12 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
             label={translate(translate.keys.availableTime)}
             value={meal.availableTime}
             options={[
-              ...Object.keys(MealAvailableTime).map(key => ({
-                value: MealAvailableTime[key],
-                text: <Text translate={key} />,
-              }))
+              { value: MealAvailableTime.littleTime, text: 'littleTime' },
+              { value: MealAvailableTime.lotsOfTime, text: 'lotsOfTime' },
+              { value: MealAvailableTime.moreTime, text: 'moreTime' },
+              { value: MealAvailableTime.noLimit, text: 'noLimit' },
+              { value: MealAvailableTime.noTime, text: 'noTime' },
+              { value: MealAvailableTime.someTime, text: 'someTime' },
             ]}
             onChange={availableTime => this.setState(({ meal }) => ({
               meal: {

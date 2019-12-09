@@ -11,7 +11,8 @@ import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
-import UserStore from '@Services/UserStore'
+import UserService from '@Services/UserService'
+import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import { RegisterMutation, RegisterMutationVariables } from '@Views/Register/types/RegisterMutation'
 import gql from 'graphql-tag'
@@ -30,47 +31,6 @@ interface RegisterFormProps {
 }
 
 export class RegisterForm extends RX.Component<RegisterFormProps> {
-  static fragments = {
-    me: gql`
-      fragment Me on User {
-        id
-        username
-        session
-        email
-        firstName
-        middleName
-        lastName
-        avatar {
-          url
-        }
-        gender
-        bodyFat
-        age
-        bio
-        weight {
-          value
-          unit
-        }
-        height {
-          value
-          unit
-        }
-        caloriesPerDay
-        socialNetworks {
-          instagram
-          twitter
-          website
-          pinterest
-        }
-        role
-        meals {
-          ...MealSettingsMeal
-        }
-      }
-      
-      ${MealSettingsScreen.fragments.mealSettingsMeal}
-    `
-  }
   state = {
     username: '',
     password: '',
@@ -208,7 +168,7 @@ export default function (props: {}) {
       }
     }
 
-    ${RegisterForm.fragments.me}
+    ${UserService.fragments.me}
   `)
 
   return (

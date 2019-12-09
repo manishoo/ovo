@@ -6,7 +6,7 @@
 import { cache } from '@App/client-cache'
 import fetch from '@Modules/fetch'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
-import UserStore from '@Services/UserStore'
+import UserStore from '@Services/UserService'
 /**
  * Apollo Client
  * */

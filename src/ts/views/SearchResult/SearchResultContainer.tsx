@@ -4,6 +4,7 @@
  */
 
 import AppConfig from '@App/AppConfig'
+// @ts-ignore
 import qs from 'qs'
 import RX from 'reactxp'
 import SearchResult from './SearchResult'

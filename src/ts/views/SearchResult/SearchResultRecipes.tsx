@@ -4,10 +4,10 @@
  */
 
 import client from '@App/client'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import RecipesList from '@Common/RecipesList/RecipesList'
-import UserStore from '@Services/UserStore'
-import { Me } from '@Views/Register/types/Me'
-import { SearchResultFragments } from '@Views/SearchResult/SearchResultFragments'
+import UserStore from '@Services/UserService'
+import { Me } from '@Services/types/Me'
 import {
   SearchResultQuery,
   SearchResultQuery_recipes_recipes,
@@ -26,7 +26,7 @@ interface SearchResultRecipesProps {
 interface SearchResultRecipesState {
   recipes: SearchResultQuery_recipes_recipes[],
   hasNext?: boolean,
-  me: Me,
+  me: Me | null,
   fetching: boolean
 }
 
@@ -51,7 +51,7 @@ export default class SearchResultRecipes extends ComponentBase<SearchResultRecip
       if (!this.state.hasNext && this.state.recipes.length > 0) return
     }
 
-    let lastId
+    let lastId: any
 
     const lastItem = this.state.recipes[this.state.recipes.length - 1]
     if (lastItem) {
@@ -64,9 +64,10 @@ export default class SearchResultRecipes extends ComponentBase<SearchResultRecip
           query: SEARCH_RESULT_RECIPES_QUERY,
           fetchPolicy: 'network-only',
           variables: {
+            nameSearchQuery: '',
             ...this.props.variables,
             ...variables,
-            lastId: refetch ? undefined : lastId,
+            lastId: refetch ? null : lastId,
           },
         })
           .then(({ data }) => {
@@ -99,7 +100,7 @@ export const SEARCH_RESULT_RECIPES_QUERY = gql`
   query SearchResultQuery($nameSearchQuery: String!, $lastId: ObjectId, $tags: [String!]) {
     recipes(nameSearchQuery: $nameSearchQuery, lastId: $lastId, tags: $tags) {
       recipes {
-        ...SearchResultRecipe
+        ...IngredientRecipe
       }
       pagination {
         hasNext
@@ -108,5 +109,5 @@ export const SEARCH_RESULT_RECIPES_QUERY = gql`
     }
   }
 
-  ${SearchResultFragments.SearchResultRecipe}
+  ${IngredientCard.fragments.recipe}
 `

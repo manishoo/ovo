@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { Image } from '@Common/Image/types/Image'
 import { Routes } from '@Models/common'
-import { Image } from '@Models/FoodModels'
 import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
 import AppConfig from '../app/AppConfig'
@@ -90,7 +90,7 @@ export function isEmailValid(email: string) {
   return email.match(EMAIL_REGEX)
 }
 
-export function renderImageOrPlaceholder(image?: Image, style?: any) {
+export function renderImageOrPlaceholder(image: Image | null, style?: any) {
   if (image) {
     return (
       <RX.Image

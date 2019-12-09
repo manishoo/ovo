@@ -150,7 +150,7 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
                   web: 2
                 }),
               },
-              ...options.textStyle,
+              options.textStyle,
             ]}
           >{msg.text}</Markdown>
         </RX.View>

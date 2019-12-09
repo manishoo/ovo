@@ -7,16 +7,18 @@ import { useMutation } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import { FoodPickerMealItem } from '@Common/FoodPickerDialog/FoodPicker'
+import {
+  FoodPreviewMealItem_item,
+  FoodPreviewMealItem_item_Food
+} from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
+import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import HoverView from '@Common/HoverView/HoverButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import MenuItem from '@Common/MenuItem/MenuItem'
 import Text from '@Common/Text/Text'
-import { FoodTypes } from '@Models/FoodModels'
 import CalendarService from '@Services/CalendarService'
-import { getOrigId } from '@Utils/create-id'
-import trimTypeName from '@Utils/trim-type-name'
+import { transformMealItemToMealItemInput } from '@Utils/transformers/meal.transformer'
 import ItemControl from '@Views/CalendarScreen/components/ItemControl'
 import {
   MealComponentLogMealMutation,
@@ -47,9 +49,9 @@ interface MealComponentProps extends MealComponentCommonProps {
   onLogMeal: (variables: MealComponentLogMealMutationVariables, previousMeal: DayMeal) => Promise<ExecutionResult<MealComponentLogMealMutation>>,
 }
 
-// interface MealComponentState {
-//   meal: DayMeal,
-// }
+function determineIfIsFood(toBeDetermined: FoodPreviewMealItem_item): toBeDetermined is FoodPreviewMealItem_item_Food {
+  return toBeDetermined.hasOwnProperty('weights')
+}
 
 class MealComponent extends RX.Component<MealComponentProps> {
   static fragments = {
@@ -170,6 +172,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                       meal={meal}
                       dayId={dayId}
                       mealItem={mealItem}
+                      onMealItemChange={this._onMealItemChange}
                       onMealItemRemove={() => this._onRemoveMealItem(mealItem.id)}
                     />
                   ))
@@ -182,39 +185,35 @@ class MealComponent extends RX.Component<MealComponentProps> {
     )
   }
 
-  private _getMealItemInputFromMealItem = (mealItem) => {
-    return {
-      food: mealItem.food ? mealItem.food.id : undefined,
-      recipe: mealItem.recipe ? mealItem.recipe.id : undefined,
-      amount: mealItem.amount,
-      id: getOrigId(mealItem.id),
-      // alternativeMealItems:
-      weight: mealItem.weight ? mealItem.weight.id : undefined,
-      customUnit: mealItem.customUnit,
-      description: mealItem.description ? mealItem.description.map(t => trimTypeName(t)) : null,
-      gramWeight: mealItem.gramWeight,
-    }
-  }
-
   private _onAddMealItem = (mealItem: FoodPickerMealItem) => {
     const mealItems: DayMeal_items[] = [
       ...this.props.meal.items,
-      {
-        id: mealItem.id,
-        amount: mealItem.amount,
-        recipe: mealItem.recipe,
-        food: mealItem.food,
-        customUnit: mealItem.customUnit,
-        gramWeight: mealItem.gramWeight,
-        description: mealItem.description,
-        weight: mealItem.weight,
-      },
+      mealItem,
     ]
 
-    this.props.onLogMeal({
+    return this.props.onLogMeal({
       date: this.props.meal.time,
       userMealId: this.props.meal.userMeal.id,
-      mealItems: mealItems.map(this._getMealItemInputFromMealItem)
+      mealItems: mealItems.map(mealItem => transformMealItemToMealItemInput(mealItem))
+    }, {
+      ...this.props.meal,
+      items: mealItems,
+    })
+  }
+
+  private _onMealItemChange = (mealItem: FoodPickerMealItem) => {
+    const mealItems: DayMeal_items[] = this.props.meal.items.map(item => {
+      if (item.id === mealItem.id) {
+        return mealItem
+      }
+
+      return item
+    })
+
+    return this.props.onLogMeal({
+      date: this.props.meal.time,
+      userMealId: this.props.meal.userMeal.id,
+      mealItems: mealItems.map(mealItem => transformMealItemToMealItemInput(mealItem))
     }, {
       ...this.props.meal,
       items: mealItems,
@@ -227,7 +226,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
     this.props.onLogMeal({
       date: this.props.meal.time,
       userMealId: this.props.meal.userMeal.id,
-      mealItems: mealItems.map(this._getMealItemInputFromMealItem)
+      mealItems: mealItems.map(mealItem => transformMealItemToMealItemInput(mealItem))
     }, {
       ...this.props.meal,
       items: mealItems,
@@ -256,15 +255,11 @@ class MealComponent extends RX.Component<MealComponentProps> {
     let unit = AppConfig.calorieMeasurementUnit
 
     this.props.meal.items.forEach(item => {
-      if (!item.food.nutrition.calories) return
+      if (!item.item) return null
 
-      if (item.food) {
-        if (item.food.nutrition.calories.unit == unit) {
-          totalCalorie += item.food.nutrition.calories.amount
-        }
-      } else if (item.recipe) {
-        if (item.recipe.nutrition.calories.unit == unit) {
-          totalCalorie += item.recipe.nutrition.calories.amount
+      if (item.item.nutrition.calories) {
+        if (item.item.nutrition.calories.unit == unit) {
+          totalCalorie += item.item.nutrition.calories.amount
         }
       }
     })
@@ -273,8 +268,8 @@ class MealComponent extends RX.Component<MealComponentProps> {
 }
 
 const MealComponentContainer = (props: MealComponentCommonProps) => {
-  const [logMeal, { loading: logMealLoading, data: logMealData }] = useMutation<MealComponentLogMealMutation, MealComponentLogMealMutationVariables>(MealComponent.operations.logMeal, {})
-  const [suggestMeal, { loading: suggestMealLoading, data: suggestMealData }] = useMutation<MealComponentSuggestMealMutation, MealComponentSuggestMealMutationVariables>(MealComponent.operations.suggestMeal, {})
+  const [logMeal, { loading: logMealLoading }] = useMutation<MealComponentLogMealMutation, MealComponentLogMealMutationVariables>(MealComponent.operations.logMeal, {})
+  const [suggestMeal, { loading: suggestMealLoading }] = useMutation<MealComponentSuggestMealMutation, MealComponentSuggestMealMutationVariables>(MealComponent.operations.suggestMeal, {})
 
   return (
     <MealComponent
@@ -286,14 +281,14 @@ const MealComponentContainer = (props: MealComponentCommonProps) => {
         optimisticResponse: () => ({
           logMeal: mealOptimisticResponse
         }),
-        update: (proxy, { data: { logMeal: logMealData } }) => CalendarService.setMeal(props.dayId, logMealData),
+        update: (proxy, { data }) => data && CalendarService.setMeal(props.dayId, data.logMeal),
       })}
       onMealRegenerate={() => suggestMeal({
         variables: {
           date: props.meal.time,
           userMealId: props.meal.userMeal.id,
         },
-        update: (proxy, { data: { suggestMeal: suggestMealData } }) => CalendarService.setMeal(props.dayId, suggestMealData),
+        update: (proxy, { data }) => data && CalendarService.setMeal(props.dayId, data.suggestMeal),
       })}
     />
   )

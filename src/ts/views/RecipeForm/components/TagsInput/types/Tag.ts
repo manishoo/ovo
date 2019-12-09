@@ -19,7 +19,7 @@ export interface Tag_info {
 }
 
 export interface Tag {
-  slug: string | null;
+  slug: string;
   title: Tag_title[] | null;
   info: Tag_info[] | null;
   type: TagType;

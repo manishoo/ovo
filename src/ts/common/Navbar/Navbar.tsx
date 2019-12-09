@@ -48,7 +48,7 @@ export default class Navbar extends RX.Component<NavbarProps> {
   private _handleBack = () => {
     const { inModal } = this.props
 
-    if (inModal) {
+    if (inModal && this.props.onBackPress) {
       return this.props.onBackPress()
     }
 

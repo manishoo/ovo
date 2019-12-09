@@ -8,11 +8,11 @@ import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import UserStore from '@Services/UserStore'
+import UserService from '@Services/UserService'
+import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { LoginMutation, LoginMutationVariables } from '@Views/Login/types/LoginMutation'
-import { RegisterForm } from '@Views/Register/RegisterForm'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
@@ -110,7 +110,7 @@ export default function (props: any) {
       }
     }
 
-    ${RegisterForm.fragments.me}
+    ${UserService.fragments.me}
   `)
 
   return (

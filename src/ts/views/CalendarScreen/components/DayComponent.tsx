@@ -72,7 +72,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
     `
   }
 
-  constructor(props) {
+  constructor(props: DayComponentProps) {
     super(props)
     this.state = {
       // day: props.day,
@@ -229,7 +229,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
 
 function DayComponentContainer(props: Omit<DayComponentProps, 'onDayRegenerate' | 'dayRegenerating'>) {
   const [suggestDay, { loading }] = useMutation<DayComponentMealSuggestionMutation, DayComponentMealSuggestionMutationVariables>(DayComponent.operations.suggestDay, {
-    update: (proxy, { data: { suggestDay } }) => CalendarService.setDay(suggestDay),
+    update: (proxy, { data }) => data && CalendarService.setDay(data.suggestDay),
   })
 
   return (

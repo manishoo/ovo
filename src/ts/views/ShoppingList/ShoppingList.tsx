@@ -10,7 +10,7 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import CalendarService, { GroceriesByFoodGroup } from '@Services/CalendarService'
 import { renderImageOrPlaceholder } from '@Utils'
-import { Day_meals_items_food } from '@Views/CalendarScreen/components/types/Day'
+import { Day_meals_items_item_Food } from '@Views/CalendarScreen/components/types/Day'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -108,7 +108,7 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
     }
   }
 
-  private _renderShoppingListItem = (food: Day_meals_items_food, grams: number, type: 'shoppingList' | 'pantry') => {
+  private _renderShoppingListItem = (food: Day_meals_items_item_Food, grams: number, type: 'shoppingList' | 'pantry') => {
     return (
       <RX.View
         style={styles.container}

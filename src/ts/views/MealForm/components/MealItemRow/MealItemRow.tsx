@@ -6,179 +6,200 @@
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FlatButton from '@Common/FlatButton/FlatButton'
+import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
-import { FoodPickerMealItem } from '@Common/FoodPickerDialog/FoodPicker'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
+import { IngredientCardIngredient } from '@Common/IngredientCard/types/IngredientCardIngredient'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import IngredientCard from '@Common/recipe/IngredientCard/IngredientCard'
-import { IngredientCardIngredient } from '@Common/recipe/IngredientCard/types/IngredientCardIngredient'
-import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
-import { FoodTypes } from '@Models/FoodModels'
-import LocationStore from '@Services/LocationStore'
 import { createId } from '@Utils/create-id'
-import { MyMealItem } from '@Views/MealForm/MealForm'
+import {
+  MealItemRowMealItem,
+  MealItemRowMealItem_alternativeMealItems
+} from '@Views/MealForm/components/MealItemRow/types/MealItemRowMealItem'
+import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
 interface MealItemRowProps {
   style?: any,
-  mealItem: MyMealItem,
-  onMealItemChange: (mealItem: MyMealItem) => void,
+  mealItem: MealItemRowMealItem,
+  onMealItemChange: (mealItem: MealItemRowMealItem) => void,
   onMealItemDelete: (mealItemId: string) => void,
 }
 
 export default class MealItemRow extends RX.Component<MealItemRowProps> {
-  public render() {
-    const { style } = this.props
+  static fragments = {
+    mealItem: gql`
+      fragment MealItemRowMealItem on MealItem {
+        id
+        name {text locale}
+        description {text locale}
+        amount
+        customUnit {
+          gramWeight
+          name { text locale }
+        }
+        unit {
+          ... on Weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+          ... on CustomUnit {
+            gramWeight
+            name { text locale }
+          }
+        }
+        isOptional
+        item {
+          ... on Food {
+            ...IngredientFood
+          }
+          ... on Recipe {
+            ...IngredientRecipe
+          }
+        }
+        alternativeMealItems {
+          id
+          name {text locale}
+          description {text locale}
+          amount
+          customUnit {
+            gramWeight
+            name { text locale }
+          }
+          unit {
+            ... on Weight {
+              amount
+              gramWeight
+              id
+              name { text locale }
+            }
+            ... on CustomUnit {
+              gramWeight
+              name { text locale }
+            }
+          }
+          item {
+            ... on Food {
+              ...IngredientFood
+            }
+            ... on Recipe {
+              ...IngredientRecipe
+            }
+          }
+        }
+      }
 
+      ${IngredientCard.fragments.recipe}
+      ${IngredientCard.fragments.food}
+    `
+  }
+
+  public render() {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <RX.View
-            style={[styles.container, style]}
-          >
-            {this._renderMealItem(this.props.mealItem, true)}
-
-            <RX.View
-              style={{
+          <RX.ScrollView
+            horizontal
+            style={[
+              styles.scrollView,
+              {
                 backgroundColor: theme.colors.textInputBg,
                 borderRadius: 10,
                 flexDirection: 'row',
-                [Styles.values.marginStart]: Styles.values.spacing,
                 padding: Styles.values.spacing,
-              }}
-            >
-              <RX.View style={{ width: 150, justifyContent: 'center', alignItems: 'center' }}>
-                <FlatButton
-                  onPress={() => showFoodPicker({
-                    autoFocus: true,
-                    foodTypes: [FoodTypes.food, FoodTypes.recipe],
-                    onDismiss: () => null,
-                    onSubmit: this._onMealItemAlternativeCreation,
-                  })}
-                  label={translate('Add Alternative')}
-                />
-              </RX.View>
+                marginBottom: Styles.values.spacing,
+              }
+            ]}
+          >
+            {this._renderMealItem(this.props.mealItem, true)}
 
-              <RX.ScrollView
-                style={{ flex: 1 }}
-                horizontal
-              >
-                <RX.View style={{ flexDirection: 'row', flex: 1, alignItems: 'flex-start' }}>
-                  {
-                    this.props.mealItem.alternativeMealItems.map(alternativeMealItem => (
-                      this._renderMealItem(alternativeMealItem)
-                    ))
-                  }
-                </RX.View>
-              </RX.ScrollView>
+            <RX.View style={{ width: 150, justifyContent: 'center', alignItems: 'center' }}>
+              <FlatButton
+                onPress={() => showFoodPicker({
+                  autoFocus: true,
+                  foodTypes: [FoodTypes.food, FoodTypes.recipe],
+                  onDismiss: () => null,
+                  onSubmit: this._onMealItemAlternativeCreation,
+                })}
+                label={translate('Add Alternative')}
+              />
             </RX.View>
-          </RX.View>
+
+            {
+              this.props.mealItem.alternativeMealItems.map(alternativeMealItem => (
+                this._renderMealItem(alternativeMealItem)
+              ))
+            }
+          </RX.ScrollView>
         )}
       </ThemeContext.Consumer>
     )
   }
 
-  private _renderMealItem = (mealItem: MyMealItem, isMainMealItem?: boolean) => {
-    if (mealItem.food) {
-      return (
-        <IngredientCard
-          size={150}
-          onPress={mealItem.food ? () => LocationStore.navigate(this.props, `/food/${mealItem.food.id}/`) : undefined}
-          onIngredientChange={this._onMealItemIngredientChange(mealItem)}
-          onDelete={() => this.props.onMealItemDelete(mealItem.id)}
-          ingredient={{
-            amount: mealItem.amount,
-            customUnit: mealItem.customUnit,
-            description: mealItem.description,
-            food: mealItem.food,
-            gramWeight: mealItem.gramWeight,
-            name: mealItem.food.name,
-            thumbnail: mealItem.food.thumbnail,
-            weight: mealItem.weight,
-          }}
-          style={styles.mealItem}
-        />
-      )
-    }
+  private _renderMealItem = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => {
+    if (!mealItem.item) throw new Error('no meal item')
 
-    if (mealItem.recipe) {
-      return (
-        <RecipeCard
-          size={150}
-          onServingChange={this._onMealItemServingChange(mealItem.id, isMainMealItem)}
-          serving={mealItem.amount}
-          recipe={mealItem.recipe}
-          onDelete={() => this.props.onMealItemDelete(mealItem.id)}
-          style={styles.mealItem}
-        />
-      )
-    }
-
-    throw new Error('no recipe or food')
+    return (
+      <IngredientCard
+        size={150}
+        // onPress={mealItem.food ? () => LocationStore.navigate(this.props, `/food/${mealItem.food.id}/`) : undefined}
+        onIngredientChange={this._onMealItemIngredientChange(mealItem, isMainMealItem)}
+        onDelete={() => this.props.onMealItemDelete(mealItem.id)}
+        ingredient={{
+          ...mealItem,
+          isOptional: null,
+        }}
+        style={styles.mealItem}
+      />
+    )
   }
 
-  private _onMealItemIngredientChange = (mealItem: MyMealItem) => (ingredient: IngredientCardIngredient) => {
-    this.props.onMealItemChange({
-      ...mealItem,
-      amount: ingredient.amount,
-      food: ingredient.food,
-      gramWeight: ingredient.gramWeight,
-      customUnit: ingredient.customUnit,
-      description: ingredient.description,
-      // thumbnail: ingredient.thumbnail,
-      weight: ingredient.weight,
-      alternativeMealItems: mealItem.alternativeMealItems,
-    })
-  }
-
-  private _onMealItemServingChange = (id: string, isMainMealItem: boolean) => (serving: number) => {
+  private _onMealItemIngredientChange = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => (ingredient: IngredientCardIngredient) => {
     if (isMainMealItem) {
       this.props.onMealItemChange({
         ...this.props.mealItem,
-        amount: serving,
+        ...ingredient,
       })
     } else {
       this.props.onMealItemChange({
         ...this.props.mealItem,
         alternativeMealItems: this.props.mealItem.alternativeMealItems.map(alternativeMealItem => {
-          if (alternativeMealItem.id === id) {
-            return {
-              ...alternativeMealItem,
-              amount: serving,
-            }
+          if (alternativeMealItem.id === mealItem.id) {
+            return ingredient
           }
 
           return alternativeMealItem
         })
+
       })
     }
-
   }
 
   private _onMealItemAlternativeCreation = (mealItem: FoodPickerMealItem) => {
     this.props.onMealItemChange({
       ...this.props.mealItem,
       alternativeMealItems: [
-        ...this.props.mealItem.alternativeMealItems,
         {
-          amount: mealItem.amount,
-          food: mealItem.food,
-          recipe: mealItem.recipe,
-          weight: mealItem.weight,
-          customUnit: mealItem.customUnit,
-          description: mealItem.description,
-          gramWeight: mealItem.gramWeight,
           id: mealItem.id || createId(),
+          ...mealItem,
         },
+        ...this.props.mealItem.alternativeMealItems,
       ]
     })
   }
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({
-    flexDirection: 'row',
-    padding: Styles.values.spacing,
+  // container: RX.Styles.createViewStyle({
+  //   flexDirection: 'row',
+  //   padding: Styles.values.spacing,
+  // }),
+  scrollView: RX.Styles.createScrollViewStyle({
+    // @ts-ignore
+    display: 'flex',
   }),
   mealItem: RX.Styles.createViewStyle({
     [Styles.values.marginEnd]: Styles.values.spacing,

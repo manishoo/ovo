@@ -15,7 +15,7 @@ interface CheckboxProps {
   borderWidth?: number,
   borderColor?: string,
   onChange: (checked: boolean) => void,
-  value: boolean,
+  value?: boolean,
 }
 
 export default class Checkbox extends RX.Component<CheckboxProps, RX.Stateless> {

@@ -9,7 +9,8 @@ import IntlInput from '@Common/Input/IntlInput'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import Keys from '@Utils/KeyCodes'
-import { ProfileRecipesQuery_recipes_recipes_instructions } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import { InstructionRowInstruction } from '@Views/RecipeForm/components/InstructionRow/types/InstructionRowInstruction'
+import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
@@ -18,12 +19,21 @@ const CLEAR_DIMENSIONS = 20
 
 interface IngredientRowProps {
   style?: any,
-  instruction: ProfileRecipesQuery_recipes_recipes_instructions,
-  onChange: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
-  onEnterPressed: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
-  onDeletePressed: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
+  instruction: InstructionRowInstruction,
+  onChange: (instruction: InstructionRowInstruction) => void,
+  onEnterPressed: (instruction: InstructionRowInstruction) => void,
+  onDeletePressed: (instruction: InstructionRowInstruction) => void,
   onDelete: (step: number) => void,
   step: number,
+}
+
+export const fragments = {
+  instruction: gql`
+    fragment InstructionRowInstruction on Instruction {
+      step
+      text { text locale }
+    }
+  `
 }
 
 export default class InstructionRow extends RX.Component<IngredientRowProps> {

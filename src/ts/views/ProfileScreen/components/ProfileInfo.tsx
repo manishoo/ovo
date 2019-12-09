@@ -78,7 +78,6 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
                 label={translate('ProfileSettings')}
                 onPress={() => navigate(this.props, Routes.settings)}
                 style={{ [Styles.values.marginStart]: Styles.values.spacing }}
-                // labelStyle={{ fontSize: 14 }}
               />
             }
 
@@ -97,7 +96,9 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
           /**
            * If any social media accounts were added
            * */
-          Object.keys(user.socialNetworks).filter(k => user.socialNetworks[k] && (k !== '__typename')).length > 0 &&
+          user.socialNetworks &&
+          // @ts-ignore
+          Object.keys(user.socialNetworks).filter(k => user.socialNetworks![k] && (k !== '__typename')).length > 0 &&
           <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing }}>
             {
               user.socialNetworks.instagram && <Link

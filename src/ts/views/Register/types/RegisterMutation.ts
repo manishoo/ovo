@@ -31,8 +31,8 @@ export interface RegisterMutation_registerUser_user_socialNetworks {
 
 export interface RegisterMutation_registerUser_user_meals {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;

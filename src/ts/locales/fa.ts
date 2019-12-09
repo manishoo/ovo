@@ -147,6 +147,7 @@ enum FaLocale {
   'Meal Items' = 'آیتم های سفره',
   'Edit Meal' = 'بروزرسانی سفره',
   'Create Meal' = 'ساخت سفره',
+  'Update Meal' = 'تغییر سفره',
 
   '______Settings_Page______' = '//',
   'Edit Profile' = 'بروزرسانی پروفایل',
@@ -229,7 +230,18 @@ enum FaLocale {
   MealPlanSettings = 'تنظیمات برنامه‌غذایی',
   editMealPlanSettings = 'تنظیمات برنامه‌غذایی',
 
-  Groceries = 'سبد خرید'
+  Groceries = 'سبد خرید',
+
+  cuisine = 'cuisine',
+  diet = 'diet',
+  imported = 'imported',
+  ingredient = 'ingredient',
+  meal = 'meal',
+  occasion = 'occasion',
+  other = 'other',
+  recipe = 'recipe',
+
+  'site.title' = 'پرانا | دستیار هوشمند تغذیه'
 }
 
 export default FaLocale

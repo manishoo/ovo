@@ -17,7 +17,8 @@ interface FilledButtonProps {
   onPress: (e: RX.Types.SyntheticEvent) => void,
   disabled?: boolean,
   fontSize?: number,
-  mode?: ButtonMode
+  mode?: ButtonMode,
+  suffix?: any,
 }
 
 enum ButtonMode {
@@ -34,7 +35,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
   static mode = ButtonMode
 
   public render() {
-    const { style, containerStyle, label, onPress, fontSize, disabled } = this.props
+    const { style, containerStyle, label, onPress, fontSize, disabled, suffix } = this.props
 
     return (
       <ThemeContext.Consumer>
@@ -53,11 +54,14 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
                 onPress={onPress}
                 activeOpacity={0.7}
               >
-                <RX.Text style={[{
-                  color: disabled ? theme.colors.filledButtonDisabledTextColor : theme.colors.filledButtonText,
-                  font: Styles.fonts.displayBold,
-                  fontSize: Styles.fontSizes.size14,
-                }, this._getStyle(theme).labelStyle, { fontSize }]}>{label}</RX.Text>
+                <RX.Text
+                  style={[{
+                    color: disabled ? theme.colors.filledButtonDisabledTextColor : theme.colors.filledButtonText,
+                    font: Styles.fonts.displayBold,
+                    fontSize: Styles.fontSizes.size14,
+                  }, this._getStyle(theme).labelStyle, { fontSize }]}
+                >{label}</RX.Text>
+                {suffix}
               </RX.View>
             )}
           />
@@ -116,6 +120,7 @@ const styles = {
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
     // shadowColor: 'rgba(0, 0, 0, .2)',
     // shadowOffset: {
     //   height: 3,

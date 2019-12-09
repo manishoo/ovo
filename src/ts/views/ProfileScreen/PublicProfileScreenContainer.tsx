@@ -14,7 +14,7 @@ import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import ProfileScreen from './ProfileScreen'
+import ProfileScreen, { fragments as ProfileScreenFragments } from './ProfileScreen'
 
 
 export default class PublicProfileScreenContainer extends ComponentBase<RX.CommonProps, { path: string }> {
@@ -36,7 +36,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
             }
           }
 
-          ${ProfileScreen.fragments.user}
+          ${ProfileScreenFragments.user}
         `}
       >
         {({ data, loading }) => {

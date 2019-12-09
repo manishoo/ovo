@@ -19,7 +19,7 @@ export interface TagsInputQuery_tags_info {
 }
 
 export interface TagsInputQuery_tags {
-  slug: string | null;
+  slug: string;
   title: TagsInputQuery_tags_title[] | null;
   info: TagsInputQuery_tags_info[] | null;
   type: TagType;

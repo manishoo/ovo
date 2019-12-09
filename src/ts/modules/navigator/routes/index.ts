@@ -34,7 +34,7 @@ export const RegisterScreen = loadComponent('Register', 'RegisterScreen')
 export const CalendarScreen = loadComponent('CalendarScreen')
 export const ProfileScreen = loadComponent('ProfileScreen', 'ProfileScreenContainer')
 export const RecipeForm = loadComponent('RecipeForm')
-export const Recipe = loadComponent('Recipe')
+export const RecipeScreen = loadComponent('RecipeScreen')
 
 export const MealForm = loadComponent('MealForm')
 export const FoodScreen = loadComponent('FoodScreen')

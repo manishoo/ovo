@@ -5,16 +5,15 @@
 
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import { User } from '@Models/FoodModels'
 import TagsInput from '@Views/RecipeForm/components/TagsInput/TagsInput'
-import { RecipeFormUpdateMutation_updateRecipe } from '@Views/RecipeForm/types/RecipeFormUpdateMutation'
-import { Me } from '@Views/Register/types/Me'
+import { RecipeFormQuery_recipe } from '@Views/RecipeForm/types/RecipeFormQuery'
+import { Me } from '@Services/types/Me'
 import RX from 'reactxp'
 
 
 interface RecipeFormExtraProps {
   style?: any,
-  recipe: RecipeFormUpdateMutation_updateRecipe,
+  recipe: RecipeFormQuery_recipe,
   selectedTags: string[],
   onTagsChange: (tags: string[]) => void,
   onSubmit: (selectedTags: string[]) => void,

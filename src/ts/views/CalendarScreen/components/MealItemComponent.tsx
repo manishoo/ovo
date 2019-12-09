@@ -6,12 +6,11 @@
 import { useMutation } from '@apollo/react-hooks'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import FoodPickerContainer from '@Common/FoodPickerDialog/FoodPicker'
 import HoverView from '@Common/HoverView/HoverButton'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import InputNumber from '@Common/Input/InputNumber'
 import MenuItem from '@Common/MenuItem/MenuItem'
-import RecipeCard from '@Common/RecipesList/components/RecipeCard/RecipeCard'
-import Select from '@Common/Select/Select'
+import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TotalTime from '@Common/TotalTime/TotalTime'
 import { withNavigation } from '@Modules/navigator'
@@ -27,7 +26,7 @@ import {
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
-import { MealItem } from './types/MealItem'
+import { MealItem, MealItem_item, MealItem_item_Food, MealItem_unit, MealItem_unit_Weight } from './types/MealItem'
 
 
 interface MealItemComponentCommonProps {
@@ -44,9 +43,13 @@ interface MealItemComponentProps extends MealItemComponentCommonProps {
   mealItemRegenerating?: boolean,
 }
 
-// interface MealItemComponentState {
-//   mealItem: MealItem,
-// }
+function determineIfIsFood(toBeDetermined: MealItem_item): toBeDetermined is MealItem_item_Food {
+  return toBeDetermined.hasOwnProperty('weights')
+}
+
+export function determineIfIsWeight(toBeDetermined: MealItem_unit): toBeDetermined is MealItem_unit_Weight {
+  return toBeDetermined.hasOwnProperty('id')
+}
 
 @withNavigation
 class MealItemComponent extends RX.Component<MealItemComponentProps> {
@@ -54,27 +57,38 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
     mealItem: gql`
       fragment MealItem on MealItem {
         id
+        name {text locale}
+        description {text locale}
         amount
-        recipe {
-          ...RecipeCardRecipe
-        }
-        food {
-          ...FoodPickerFood
-        }
-        amount
-        customUnit
-        gramWeight
-        description { text locale }
-        weight {
-          amount
+        customUnit {
           gramWeight
-          id
           name { text locale }
+        }
+        unit {
+          ... on Weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+          ... on CustomUnit {
+            gramWeight
+            name { text locale }
+          }
+        }
+        isOptional
+        item {
+          ... on Food {
+            ...IngredientFood
+          }
+          ... on Recipe {
+            ...IngredientRecipe
+          }
         }
       }
 
-      ${FoodPickerContainer.fragments.food}
-      ${RecipeCard.fragments.recipe}
+      ${IngredientCard.fragments.food}
+      ${IngredientCard.fragments.recipe}
     `
   }
   static operations = {
@@ -89,22 +103,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
     `
   }
 
-  // constructor(props) {
-  //   super(props)
-  //
-  //   this.state = {
-  //     mealItem: props.mealItem,
-  //   }
-  // }
-
   _onPress = () => {
-    // const type = this.props.mealItem.type
-    // // either food or recipe. Send to their corresponding routes
-    // LocationStore.navigate(this.props, `${type}/${this.props.mealItem.slug}`, {
-    //   params: {
-    //     [`${type}Id`]: this.props.mealItem.id,
-    //   },
-    // })
   }
 
   public render() {
@@ -141,7 +140,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
                       }}
                     >
                       <Text
-                        translations={mealItem.title}
+                        translations={mealItem.title || []}
                         style={styles.title}
                       />
                       {!!mealItem.totalTime && <TotalTime totalTime={mealItem.totalTime} />}
@@ -206,39 +205,33 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
     )
   }
 
-  private _onMealItemAmountChange = (amount: number, selectedUnit: string) => {
+  private _onMealItemAmountChange = (amount: number | null, selectedUnit: string) => {
     const mealItem = this.props.mealItem
-    const { food, recipe } = mealItem
 
     mealItem.amount = amount
 
-    if (recipe) {
-      switch (selectedUnit) {
-        case 'serving':
-        case 'g':
-        default:
-          break
-      }
-    }
+    if (mealItem.item) {
+      if (determineIfIsFood(mealItem.item)) {
+        switch (selectedUnit) {
+          case 'g':
+            mealItem.unit = null
+            break
+          case 'customUnit':
+            mealItem.unit = mealItem.customUnit
+            break
+          default:
+            const weight = mealItem.item.weights.find(p => p.id === selectedUnit)
+            if (!weight) throw new Error('selectedUnit is unknown')
 
-    if (food) {
-      switch(selectedUnit) {
-        case 'g':
-          mealItem.customUnit = null
-          mealItem.gramWeight = null
-          mealItem.weight = null
-          break
-        case mealItem.customUnit:
-          mealItem.customUnit = selectedUnit
-          mealItem.weight = null
-          break
-        default:
-          const weight = food.weights.find(p => p.id === selectedUnit)
-          if (!weight) throw new Error('selectedUnit is unknown')
-
-          mealItem.customUnit = null
-          mealItem.gramWeight = null
-          mealItem.weight = weight
+            mealItem.unit = weight
+        }
+      } else {
+        switch (selectedUnit) {
+          case 'serving':
+          case 'g':
+          default:
+            break
+        }
       }
     }
 
@@ -253,42 +246,57 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
 
   private _getCommonMealItem = () => {
     const mealItem = this.props.mealItem
-    const { food, recipe } = mealItem
 
-    if (recipe) {
+    if (mealItem.item) {
+      if (determineIfIsFood(mealItem.item)) {
+        return {
+          ...mealItem,
+          title: mealItem.item.name,
+          thumbnail: mealItem.item.thumbnail,
+          totalTime: 5,
+          selectedUnit: mealItem.unit ? (determineIfIsWeight(mealItem.unit) ? mealItem.unit.id : 'customUnit') : 'g',
+          units: ([
+            ...mealItem.item.weights.map(weight => ({
+              text: weight.name[0].text, //FIXME
+              value: weight.id,
+            })),
+            mealItem.customUnit ? {
+              value: 'customUnit',
+              text: <Text translations={mealItem.customUnit.name} />
+            } : undefined,
+            { value: 'g', text: 'grams' }
+          ] as Option[]).filter(Boolean),
+        }
+      } else {
+        return {
+          ...mealItem,
+          title: mealItem.item.title,
+          thumbnail: mealItem.item.thumbnail,
+          selectedUnit: 'serving',
+          units: ([
+            { value: 'serving', text: 'serving' }, //FIXME
+            { value: 'g', text: 'grams' },
+            mealItem.customUnit ? {
+              value: 'customUnit',
+              text: <Text translations={mealItem.customUnit.name} />
+            } : undefined,
+          ] as Option[]).filter(Boolean),
+          totalTime: mealItem.item.timing.totalTime,
+        }
+      }
+    } else {
       return {
         ...mealItem,
-        title: recipe.title,
-        thumbnail: recipe.thumbnail,
-        selectedUnit: 'serving',
-        units: [
-          {value: 'serving', text: 'serving'}, //FIXME
-          {value: 'g', text: 'grams'},
-          mealItem.customUnit ? { value: mealItem.customUnit, text: mealItem.customUnit } : undefined,
-        ].filter(Boolean),
-        totalTime: recipe.timing.totalTime,
+        title: mealItem.name,
+        thumbnail: null,
+        selectedUnit: 'g',
+        units: ([
+          { value: 'g', text: 'grams' },
+          mealItem.customUnit ? { value: 'customUnit', text: mealItem.customUnit } : undefined,
+        ] as Option[]),
+        totalTime: null,
       }
     }
-
-    if (food) {
-      return {
-        ...mealItem,
-        title: food.name,
-        thumbnail: food.thumbnail,
-        totalTime: 5,
-        selectedUnit: (mealItem.weight && mealItem.weight.id) || mealItem.customUnit || 'g', // Either weight, customUnit, or grams (no weight)
-        units: [
-          ...food.weights.map(weight => ({
-            text: weight.name[0].text, //FIXME
-            value: weight.id,
-          })),
-          mealItem.customUnit ? { value: mealItem.customUnit, text: mealItem.customUnit } : undefined,
-          {value: 'g', text: 'grams'}
-        ].filter(Boolean),
-      }
-    }
-
-    throw new Error('no food or recipe')
   }
 }
 
@@ -305,7 +313,7 @@ const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
           userMealId: props.meal.userMeal.id,
           mealItemId: props.mealItem.id,
         },
-        update: (proxy, { data: { suggestMealItem } }) => CalendarService.setMealItem(props.dayId, props.meal.id, props.mealItem.id, suggestMealItem),
+        update: (proxy, { data }) => data && CalendarService.setMealItem(props.dayId, props.meal.id, props.mealItem.id, data.suggestMealItem),
       })}
     />
   )

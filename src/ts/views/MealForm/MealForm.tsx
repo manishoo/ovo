@@ -8,51 +8,35 @@ import Styles from '@App/Styles'
 import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import Checkbox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
-import { FoodPickerMealItem } from '@Common/FoodPickerDialog/FoodPicker'
 import Input from '@Common/Input/Input'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
 import Text from '@Common/Text/Text'
-import { FoodTypes } from '@Models/FoodModels'
-import { MealInput, Role } from '@Models/global-types'
+import { Role } from '@Models/global-types'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
+import { Me } from '@Services/types/Me'
+import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
 import { createId } from '@Utils/create-id'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
-import trimTypeName from '@Utils/trim-type-name'
+import { transformMealToMealInput } from '@Utils/transformers/meal.transformer'
 import MealItemRow from '@Views/MealForm/components/MealItemRow/MealItemRow'
+import { MealItemRowMealItem } from '@Views/MealForm/components/MealItemRow/types/MealItemRowMealItem'
 import { MealFormCreateMutation, MealFormCreateMutationVariables } from '@Views/MealForm/types/MealFormCreateMutation'
 import { MealFormDeleteMutation, MealFormDeleteMutationVariables } from '@Views/MealForm/types/MealFormDeleteMutation'
+import { MealFormMeal, MealFormMeal_items } from '@Views/MealForm/types/MealFormMeal'
 import { MealFormQuery, MealFormQueryVariables } from '@Views/MealForm/types/MealFormQuery'
 import { MealFormUpdateMutation, MealFormUpdateMutationVariables } from '@Views/MealForm/types/MealFormUpdateMutation'
-import { PROFILE_MEALS_QUERY } from '@Views/ProfileScreen/components/ProfileMeals/ProfileMeals'
-import { ProfileMealsFragments } from '@Views/ProfileScreen/components/ProfileMeals/ProfileMealsFragments'
-import {
-  MyMeal as RealMyMeal,
-  MyMeal_items,
-  MyMeal_items_alternativeMealItems
-} from '@Views/ProfileScreen/components/ProfileMeals/types/MyMeal'
-import {
-  ProfileMealsQuery,
-  ProfileMealsQueryVariables
-} from '@Views/ProfileScreen/components/ProfileMeals/types/ProfileMealsQuery'
-import { Me } from '@Views/Register/types/Me'
+import { ProfileMealsQuery, ProfileMealsQueryVariables } from '@Views/ProfileScreen/types/ProfileMealsQuery'
+import { PROFILE_MEALS_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
-
-export interface MyMealItem extends Omit<MyMeal_items, 'alternativeMealItems'> {
-  id: string
-  alternativeMealItems?: (MyMeal_items_alternativeMealItems & { id: string })[]
-}
-
-export interface MyMeal extends Omit<RealMyMeal, 'items'> {
-  items: MyMealItem[];
-}
 
 interface MealFormProps {
   style?: any,
@@ -60,54 +44,54 @@ interface MealFormProps {
   onUpdate: (variables: MealFormUpdateMutationVariables, userId: string) => Promise<ExecutionResult<MealFormUpdateMutation>>,
   onDelete: (variables: MealFormDeleteMutationVariables, userId: string) => Promise<ExecutionResult<MealFormDeleteMutation>>,
   fieldErrors: { [k: string]: string }
-  meal?: RealMyMeal
+  meal?: MealFormMeal,
+
+  createRecipeLoading?: boolean,
+  updateRecipeLoading?: boolean,
+  deleteMealLoading?: boolean,
 }
 
 interface MealFormState {
-  meal: MealInput,
-  mealItems: MyMealItem[],
-
-  me?: Me,
+  meal: MealFormMeal,
+  me: Me,
   bulkCreate?: boolean,
 }
 
 class MealForm extends ComponentBase<MealFormProps, MealFormState> {
-  constructor(props) {
+  constructor(props: MealFormProps) {
     super(props)
+
+    const me = UserStore.getUser()!
 
     if (props.meal) {
       this.state = {
-        me: UserStore.getUser(),
-        mealItems: props.meal.items.map(mealItem => ({
-          amount: mealItem.amount,
-          food: mealItem.food,
-          recipe: mealItem.recipe,
-          weight: mealItem.weight,
-          alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
-            ...altMealItem,
-            id: createId(),
-          })),
-          customUnit: mealItem.customUnit,
-          gramWeight: mealItem.gramWeight,
-          description: mealItem.description,
-          id: createId(),
-        })),
-        meal: {
-          name: props.meal.name,
-          description: props.meal.description,
-          items: [],
-        }
+        me,
+        meal: props.meal,
       }
     } else {
       this.state = {
-        me: UserStore.getUser(),
-        mealItems: [],
+        me,
         meal: {
+          id: createId(),
           name: [],
-          description: [],
           items: [],
+          likedByUser: false,
+          instanceOf: false,
+          likesCount: 0,
+          author: me,
+          timing: {
+            totalTime: 0
+          }
         }
       }
+    }
+  }
+
+  public componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
+    if (this.state.meal.items.length === 0 && nextProps.meal) {
+      this.setState({
+        meal: nextProps.meal,
+      })
     }
   }
 
@@ -118,37 +102,31 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   }
 
   public render() {
-    const { fieldErrors } = this.props
+    const { fieldErrors, createRecipeLoading, updateRecipeLoading } = this.props
+    const { meal } = this.state
 
     return (
       <CenterAlignedPageView>
-        <Navbar title={translate('Create Meal')} />
-
-        {
-          this.props.meal &&
-          (
-            this.state.me.id === this.props.meal.author.id ||
-            this.state.me.role === Role.operator
-          ) &&
-          <RX.View style={{ flexDirection: 'row', paddingBottom: Styles.values.spacing }}>
+        <Navbar
+          title={
+            this.props.meal ?
+              translate('Update Meal') :
+              translate('Create Meal')
+          }
+        >
+          {
+            this.props.meal &&
+            (
+              this.state.me.id === this.props.meal.author.id ||
+              this.state.me.role === Role.operator
+            ) &&
             <FilledButton
               label={translate('Delete')}
               onPress={this._onDelete}
               mode={FilledButton.mode.danger}
             />
-          </RX.View>
-        }
-
-        {/*<IntlInput
-            label={translate('Name')}
-            translations={meal.name}
-            onTranslationsChange={translations => this.setState(ps => ({
-              meal: {
-                ...ps.meal,
-                name: translations
-              }
-            }))}
-          />*/}
+          }
+        </Navbar>
 
         {/**
          * Ingredient input
@@ -167,7 +145,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         />
 
         {
-          this.state.mealItems.map(mealItem => (
+          meal.items.map(mealItem => (
             <MealItemRow
               key={mealItem.id}
               mealItem={mealItem}
@@ -199,67 +177,28 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           </RX.View>
         }
 
-        <FilledButton label={translate(translate.keys.Submit)} onPress={this._onSubmit} />
+        <FilledButton
+          label={translate(translate.keys.Submit)}
+          onPress={this._onSubmit}
+          suffix={(
+            (createRecipeLoading || updateRecipeLoading) &&
+            <LoadingIndicator size={17} />
+          )}
+        />
       </CenterAlignedPageView>
     )
   }
 
-  protected _buildState(props: MealFormProps, initialBuild: boolean): Partial<MealFormState> | undefined {
-    // if (props.meal && this.state.mealItems.length === 0) {
-    //   return {
-    //     mealItems: props.meal.items.map(mealItem => ({
-    //       amount: mealItem.amount,
-    //       food: mealItem.food,
-    //       recipe: mealItem.recipe,
-    //       weight: mealItem.weight,
-    //       alternativeMealItems: mealItem.alternativeMealItems.map(altMealItem => ({
-    //         ...altMealItem,
-    //         id: createId(),
-    //       })),
-    //       customUnit: mealItem.customUnit,
-    //       gramWeight: mealItem.gramWeight,
-    //       description: mealItem.description,
-    //       id: createId(),
-    //     })),
-    //   }
-    // }
-
-    return {
-      me: UserStore.getUser(),
-    }
-  }
-
-  private _getMeal = (): MealInput => {
-    const { meal, mealItems } = this.state
-
-    return {
-      ...meal,
-      items: mealItems.map(mealItem => ({
-        food: mealItem.food ? mealItem.food.id : undefined,
-        recipe: mealItem.recipe ? mealItem.recipe.id : undefined,
-        amount: mealItem.amount,
-        description: mealItem.description.map(t => trimTypeName(t)),
-        weight: mealItem.weight ? mealItem.weight.id : undefined,
-        customUnit: mealItem.customUnit,
-        gramWeight: mealItem.gramWeight,
-        alternativeMealItems: mealItem.alternativeMealItems.map(alternativeMealItem => ({
-          food: alternativeMealItem.food ? alternativeMealItem.food.id : undefined,
-          recipe: alternativeMealItem.recipe ? alternativeMealItem.recipe.id : undefined,
-          amount: alternativeMealItem.amount,
-          weight: alternativeMealItem.weight ? alternativeMealItem.weight.id : undefined,
-        }))
-      }))
-    } as MealInput
-  }
-
   private _onSubmit = () => {
+    const mealInput = transformMealToMealInput(this.state.meal)
+
     if (this.props.meal) {
       /**
        * On Update
        * */
       this.props.onUpdate({
         id: this.props.meal.id,
-        meal: this._getMeal(),
+        meal: mealInput,
       }, this.state.me.id)
         .then(() => {
           this._clearStateStorage()
@@ -270,7 +209,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
        * On Create
        * */
       this.props.onCreate({
-        meal: this._getMeal(),
+        meal: mealInput,
         bulkCreate: this.state.bulkCreate,
       }, this.state.me.id)
         .then(() => {
@@ -281,87 +220,102 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   }
 
   private _onDelete = () => {
-    RX.Alert.show(translate('areyousure?'), undefined, [
+    const meal = this.props.meal
+    if (!meal) return null
+
+    const buttons: RX.Types.AlertButtonSpec[] = [
       {
         text: translate('Delete'),
         style: 'cancel',
         onPress: () => this.props.onDelete({
           bulkDelete: false,
-          id: this.props.meal.id,
+          id: meal.id,
         }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
       },
       {
+        text: translate('cancel'),
+        style: 'default',
+      }
+    ]
+
+    if (meal.instanceOf) {
+      buttons.splice(1, 0, {
         text: translate('Delete All Instances'),
         style: 'cancel',
         onPress: () => this.props.onDelete({
           bulkDelete: true,
-          id: this.props.meal.id,
+          id: meal.id,
         }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
-      }, {
-        text: translate('cancel'),
-        style: 'default',
-      }
-    ])
+      })
+    }
+
+    RX.Alert.show(translate('areyousure?'), undefined, buttons)
   }
 
   private _onMealItemDelete = (mealItemId: string) => {
     this.setState(ps => ({
-      mealItems: ps.mealItems.map(item => {
-        item.alternativeMealItems = item.alternativeMealItems.filter(alternativeMealItem => mealItemId !== alternativeMealItem.id)
+      meal: {
+        ...ps.meal,
+        items: (ps.meal.items.map(item => {
+          if (item.alternativeMealItems) {
+            item.alternativeMealItems = item.alternativeMealItems.filter(alternativeMealItem => mealItemId !== alternativeMealItem.id)
+          }
 
-        if (mealItemId === item.id) {
-          return null
-        }
+          if (mealItemId === item.id) {
+            return null
+          }
 
-        return item
-      }).filter(Boolean)
+          return item
+        }) as MealFormMeal_items[]).filter(Boolean)
+      }
     }), this._saveStateToStorage)
   }
 
-  private _onMealItemChange = (mealItem: MyMealItem) => {
+  private _onMealItemChange = (mealItem: MealItemRowMealItem) => {
     this.setState(ps => ({
-      mealItems: ps.mealItems.map(item => {
-        if (mealItem.id === item.id) {
-          mealItem.alternativeMealItems.map(alternativeMealItem => {
-            if (mealItem.id === alternativeMealItem.id) {
-              return mealItem
+      meal: {
+        ...ps.meal,
+        items: ps.meal.items.map(item => {
+          if (mealItem.id === item.id) {
+            if (mealItem.alternativeMealItems) {
+              mealItem.alternativeMealItems.map(alternativeMealItem => {
+                if (mealItem.id === alternativeMealItem.id) {
+                  return mealItem
+                }
+
+                return alternativeMealItem
+              })
             }
 
-            return alternativeMealItem
-          })
+            return mealItem
+          }
 
-          return mealItem
-        }
-
-        return item
-      })
+          return item
+        })
+      }
     }), this._saveStateToStorage)
   }
 
   private _onMealItemCreation = (mealItem: FoodPickerMealItem) => {
     this.setState(ps => ({
-      mealItems: [
-        {
-          amount: mealItem.amount,
-          description: mealItem.description,
-          food: mealItem.food,
-          recipe: mealItem.recipe,
-          weight: mealItem.weight,
-          customUnit: mealItem.customUnit,
-          gramWeight: mealItem.gramWeight,
-          alternativeMealItems: [],
-          id: mealItem.id || createId(),
-        },
-        ...ps.mealItems,
-      ]
+      meal: {
+        ...ps.meal,
+        items: [
+          {
+            ...mealItem,
+            alternativeMealItems: [],
+            id: mealItem.id || createId(),
+          },
+          ...ps.meal.items,
+        ]
+      },
     }), this._saveStateToStorage)
   }
 
   private _saveStateToStorage = () => {
-    const { meal, mealItems } = this.state
+    const { meal } = this.state
 
     RX.Storage.setItem('_MealForm_meal', JSON.stringify(meal))
-    RX.Storage.setItem('_MealForm_mealItems', JSON.stringify(mealItems))
   }
 
   private _clearStateStorage = () => {
@@ -371,75 +325,109 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
 
   private _loadStateFromStorage = async () => {
     const mealStringified = await RX.Storage.getItem('_MealForm_meal')
-    const mealItemsStringified = await RX.Storage.getItem('_MealForm_mealItems')
 
     let meal
-    let mealItems
 
     if (mealStringified) {
       meal = JSON.parse(mealStringified)
     }
-    if (mealItemsStringified) {
-      mealItems = JSON.parse(mealItemsStringified)
-    }
 
-    if (meal && mealItems) {
+    if (meal) {
       this.setState({
         meal,
-        mealItems,
       })
     }
+  }
+
+  static fragments = {
+    meal: gql`
+      fragment MealFormMeal on Meal {
+        id
+        name {text locale}
+        likedByUser
+        likesCount
+        items {
+          ...MealItemRowMealItem
+        }
+        instanceOf
+        author {
+          id
+          username
+          avatar {url}
+        }
+        timing {
+          totalTime
+        }
+      }
+
+      ${MealItemRow.fragments.mealItem}
+    `
+
   }
 }
 
 const MealFormContainer = (props: MealFormProps) => {
-  const { data } = useQuery<MealFormQuery, MealFormQueryVariables>(gql`
+  const mealId = getParam(props, 'id')
+
+  const { data: mealFormQueryData, loading: mealFormQueryLoading } = useQuery<MealFormQuery, MealFormQueryVariables>(gql`
     query MealFormQuery($id: ObjectId!) {
       meal(id: $id) {
-        ...MyMeal
+        ...MealFormMeal
       }
     }
 
-    ${ProfileMealsFragments.myMeal}
+    ${MealForm.fragments.meal}
   `, {
     variables: {
-      id: getParam(props, 'id'),
+      id: mealId,
     },
-    skip: !getParam(props, 'id'),
+    skip: !mealId,
+    returnPartialData: true,
     fetchPolicy: 'cache-and-network',
   })
 
-  const [createMeal, { error: createRecipeError }] = useMutation<MealFormCreateMutation, MealFormCreateMutationVariables>(gql`
+  const [createMeal, { error: createRecipeError, loading: createRecipeLoading }] = useMutation<MealFormCreateMutation, MealFormCreateMutationVariables>(gql`
     mutation MealFormCreateMutation ($meal: MealInput!, $bulkCreate: Boolean) {
       createMeal(meal: $meal, bulkCreate: $bulkCreate) {
-        ...MyMeal
+        ...MealFormMeal
       }
     }
 
-    ${ProfileMealsFragments.myMeal}
+    ${MealForm.fragments.meal}
   `)
-  const [updateMeal, { error: updateRecipeError }] = useMutation<MealFormUpdateMutation, MealFormUpdateMutationVariables>(gql`
+  const [updateMeal, { error: updateRecipeError, loading: updateRecipeLoading }] = useMutation<MealFormUpdateMutation, MealFormUpdateMutationVariables>(gql`
     mutation MealFormUpdateMutation ($id: ObjectId!, $meal: MealInput!) {
       updateMeal(id: $id, data: $meal) {
-        ...MyMeal
+        ...MealFormMeal
       }
     }
 
-    ${ProfileMealsFragments.myMeal}
+    ${MealForm.fragments.meal}
   `)
-  const [deleteMeal, { error: deleteMealError }] = useMutation<MealFormDeleteMutation, MealFormDeleteMutationVariables>(gql`
+  const [deleteMeal, { error: deleteMealError, loading: deleteMealLoading }] = useMutation<MealFormDeleteMutation, MealFormDeleteMutationVariables>(gql`
     mutation MealFormDeleteMutation ($id: ObjectId!, $bulkDelete: Boolean) {
       deleteMeal(id: $id, bulkDelete: $bulkDelete)
     }
   `)
 
+  /**
+   * If this was the update page, show loading until u actually load
+   * */
+  if (!mealFormQueryData && mealId) return null
+  if (mealFormQueryLoading) return <LoadingIndicator />
+console.log('mealFormQueryData && mealFormQueryData.meal', mealFormQueryData && mealFormQueryData.meal)
   return (
     <MealForm
       fieldErrors={getGraphQLUserInputErrors(deleteMealError || createRecipeError || updateRecipeError)}
-      meal={data && data.meal}
+      meal={mealFormQueryData && mealFormQueryData.meal}
+      createRecipeLoading={createRecipeLoading}
+      updateRecipeLoading={updateRecipeLoading}
+      deleteMealLoading={deleteMealLoading}
       onCreate={(variables, userId) => createMeal({
         variables,
-        update: ((proxy, { data: { createMeal } }) => {
+        update: ((proxy, { data }) => {
+          if (!data) return
+
           const queryOptions = {
             query: PROFILE_MEALS_QUERY,
             variables: {
@@ -447,16 +435,17 @@ const MealFormContainer = (props: MealFormProps) => {
             }
           }
 
-          const { meals } = proxy.readQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(queryOptions)
+          const profileMealsQuery = proxy.readQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(queryOptions)
+          if (!profileMealsQuery) return
 
           proxy.writeQuery<ProfileMealsQuery, ProfileMealsQueryVariables>({
             ...queryOptions,
             data: {
               meals: {
-                ...meals,
+                ...profileMealsQuery.meals,
                 meals: [
-                  ...createMeal,
-                  ...meals.meals,
+                  ...data.createMeal,
+                  ...profileMealsQuery.meals.meals,
                 ]
               }
             }
@@ -465,22 +454,24 @@ const MealFormContainer = (props: MealFormProps) => {
       })}
       onDelete={(variables, userId) => deleteMeal({
         variables,
-        update: ((proxy, { data: { deleteMeal } }) => {
+        update: ((proxy, { data }) => {
           const queryOptions = {
             query: PROFILE_MEALS_QUERY,
             variables: {
               userId,
             }
           }
+          if (!data) return
 
-          const { meals } = proxy.readQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(queryOptions)
+          const profileMealsQuery = proxy.readQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(queryOptions)
+          if (!profileMealsQuery) return
 
           proxy.writeQuery<ProfileMealsQuery, ProfileMealsQueryVariables>({
             ...queryOptions,
             data: {
               meals: {
-                ...meals,
-                meals: meals.meals.filter(meal => !deleteMeal.find(id => id === meal.id))
+                ...profileMealsQuery.meals,
+                meals: profileMealsQuery.meals.meals.filter(meal => !data.deleteMeal.find(id => id === meal.id))
               }
             }
           })
@@ -488,24 +479,26 @@ const MealFormContainer = (props: MealFormProps) => {
       })}
       onUpdate={(variables, userId) => updateMeal({
         variables,
-        update: ((proxy, { data: { updateMeal } }) => {
+        update: ((proxy, { data }) => {
           const queryOptions = {
             query: PROFILE_MEALS_QUERY,
             variables: {
               userId,
             }
           }
+          if (!data) return
 
-          const { meals } = proxy.readQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(queryOptions)
+          const profileMealsQuery = proxy.readQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(queryOptions)
+          if (!profileMealsQuery) return
 
           proxy.writeQuery<ProfileMealsQuery, ProfileMealsQueryVariables>({
             ...queryOptions,
             data: {
               meals: {
-                ...meals,
-                meals: meals.meals.map(meal => {
-                  if (meal.id === updateMeal.id) {
-                    return updateMeal
+                ...profileMealsQuery.meals,
+                meals: profileMealsQuery.meals.meals.map(meal => {
+                  if (meal.id === data.updateMeal.id) {
+                    return data.updateMeal
                   }
 
                   return meal

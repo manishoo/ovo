@@ -4,11 +4,10 @@
  */
 
 import Modal from '@Common/Modal/Modal'
-import { FoodTypes } from '@Models/FoodModels'
 import { fullHeight } from '@Utils'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import FoodPicker, { FoodPickerMealItem } from './FoodPicker'
+import FoodPicker, { FoodPickerMealItem, FoodTypes } from './FoodPicker'
 
 
 interface FoodPickerDialogProps {
@@ -17,16 +16,6 @@ interface FoodPickerDialogProps {
   autoFocus: boolean,
   foodTypes: FoodTypes[],
   onSubmit: (mealItem: FoodPickerMealItem) => void,
-}
-
-interface FoodPickerDialogState {
-  width?: number,
-  height?: number,
-  // searchText: string,
-
-  // weights: Weight[],
-  // selectedWeight?: Weight,
-  // selectDialogVisible: boolean,
 }
 
 export const MODAL_ID = 'FoodPickerDialog'
@@ -40,21 +29,8 @@ export function showFoodPicker(props: FoodPickerDialogProps) {
   )
 }
 
-export default class FoodPickerDialog extends ComponentBase<FoodPickerDialogProps & RX.CommonProps, FoodPickerDialogState> {
-  // textInput: any
+export default class FoodPickerDialog extends RX.Component<FoodPickerDialogProps> {
   _opacityAnimatedValue = RX.Animated.createValue(fullHeight())
-  // _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-  //   transform: [{ translateY: this._opacityAnimatedValue }],
-  // })
-
-  constructor(props: FoodPickerDialogProps) {
-    super(props)
-
-    this.state = {
-      // selectDialogVisible: false,
-      // weights: [],
-    }
-  }
 
   componentDidMount(): void {
     RX.Animated.timing(this._opacityAnimatedValue, {

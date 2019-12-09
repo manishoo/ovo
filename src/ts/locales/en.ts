@@ -102,6 +102,7 @@ enum Content {
   '______Create_Meal_Page______' = '//',
   'Meal Items' = 'Meal Items',
   'Create Meal' = 'Create Meal',
+  'Update Meal' = 'Update Meal',
   'viewMealPlan' = 'View Meal Plan',
   'cancel' = 'Cancel',
   'editMealSettings' = 'Edit Meal Settings',
@@ -158,6 +159,16 @@ enum Content {
   editMealPlanSettings = 'Edit MealPlan Settings',
   Pantry = 'Pantry',
   Groceries = 'Groceries',
+  cuisine = 'cuisine',
+  diet = 'diet',
+  imported = 'imported',
+  ingredient = 'ingredient',
+  meal = 'meal',
+  occasion = 'occasion',
+  other = 'other',
+  recipe = 'recipe',
+
+  'site.title' = 'Prana | Personal Fitness Assistant'
 }
 
 export default Content

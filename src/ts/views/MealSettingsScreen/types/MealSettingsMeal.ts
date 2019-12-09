@@ -10,8 +10,8 @@ import { MealAvailableTime, MealSize } from "./../../../models/global-types";
 
 export interface MealSettingsMeal {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;

@@ -7,18 +7,22 @@
 
 import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import { LanguageCode } from '@Models/global-types'
 import fetch from '@Modules/fetch'
 import LocationStore from '@Services/LocationStore'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
+// @ts-ignore
 import { Request, Response } from 'express'
 import { ApolloProvider, renderToStringWithData } from 'react-apollo'
+// @ts-ignore
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 import RX from 'reactxp'
 import RootView from '../../views/RootView/RootView'
+// @ts-ignore
 import Html from './html'
 
 
@@ -68,7 +72,14 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
       const chunkNames = splitPoints.map(name => `${name.replace(/\//g, '-')}.js`)
 
       const html = renderToString(
-        <Html content={content} assets={assets} chunkNames={chunkNames} state={initialState} lang={lang} />,
+        <Html
+          content={content}
+          assets={assets}
+          chunkNames={chunkNames}
+          state={initialState}
+          lang={lang}
+          title={translate('site.title')}
+        />,
       )
 
       res.status(200)

@@ -3,29 +3,39 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { Day, Day_meals_items, Day_meals_items_food } from '@Views/CalendarScreen/components/types/Day'
+import { IAutoSavablePersistableStore } from '@Models/resub-persist'
+import {
+  Day,
+  Day_meals_items,
+  Day_meals_items_item,
+  Day_meals_items_item_Food
+} from '@Views/CalendarScreen/components/types/Day'
 import { DayMeal } from '@Views/CalendarScreen/components/types/DayMeal'
 import { MealItem } from '@Views/CalendarScreen/components/types/MealItem'
 import { DateTime } from 'luxon'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
-import { IPersistableStore } from 'resub-persist'
 import * as SyncTasks from 'synctasks'
 
 
+function determineIfIsFood(toBeDetermined: Partial<Day_meals_items_item>): toBeDetermined is Day_meals_items_item_Food {
+  return toBeDetermined.hasOwnProperty('weights')
+}
+
 export function calculateMealItemAmount(mealItem: Day_meals_items): number {
   let grams = 0
-  if (mealItem.weight) {
-    grams = mealItem.amount * mealItem.weight.gramWeight
-  } else if (mealItem.gramWeight) {
-    grams = mealItem.amount * mealItem.gramWeight
+
+  if (mealItem.unit) {
+    // TODO: take weight amount into account
+    grams = (mealItem.amount || 0) * (mealItem.unit.gramWeight || 0)
   } else {
-    grams = mealItem.amount
+    grams = (mealItem.amount || 0)
   }
+
   return grams
 }
 
 export interface GroceryItem {
-  food: Day_meals_items_food,
+  food: Day_meals_items_item_Food,
   grams: number,
   dateAdded?: Date,
 }
@@ -35,7 +45,7 @@ interface GroceriesByFood {
 }
 
 export interface GroceriesByFoodGroup {
-  [k: string]: { food: Day_meals_items_food, grams: number, dateAdded?: Date }[]
+  [k: string]: { food: Day_meals_items_item_Food, grams: number, dateAdded?: Date }[]
 }
 
 enum TriggerKeys {
@@ -45,12 +55,12 @@ enum TriggerKeys {
 }
 
 @AutoSubscribeStore
-export class CalendarService extends StoreBase implements IPersistableStore {
+export class CalendarService extends StoreBase implements IAutoSavablePersistableStore {
   public name = 'CalendarService'
   private calendar: Day[] = []
   private shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup = {}
   private pantryGroceriesByFoodGroup: GroceriesByFoodGroup = {}
-  public triggerKeys = TriggerKeys
+  public autoSaveTriggerKeys = TriggerKeys
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
@@ -65,7 +75,7 @@ export class CalendarService extends StoreBase implements IPersistableStore {
     if (calendar) {
       this.calendar = calendar
     } else {
-      this.calendar = null
+      this.calendar = []
     }
 
     this._handleShoppingList()
@@ -94,6 +104,7 @@ export class CalendarService extends StoreBase implements IPersistableStore {
       if (m.id === meal.id) {
         return meal
       }
+
       return m
     })
 
@@ -133,7 +144,7 @@ export class CalendarService extends StoreBase implements IPersistableStore {
     /**
      * Unique by food id
      * */
-    function handleFood(food: Day_meals_items_food, grams: number) {
+    function handleFood(food: Day_meals_items_item_Food, grams: number) {
       if (foods[food.id]) {
         foods[food.id] = {
           ...foods[food.id],
@@ -150,12 +161,18 @@ export class CalendarService extends StoreBase implements IPersistableStore {
     calendar.map(day => {
       day.meals.map(meal => {
         meal.items.map(mealItem => {
-          if (mealItem.food) {
-            handleFood(mealItem.food, calculateMealItemAmount(mealItem))
-          } else if (mealItem.recipe) {
-            mealItem.recipe.ingredients.map(ingredient => {
-              handleFood(ingredient.food, calculateMealItemAmount(mealItem))
-            })
+          if (mealItem.item) {
+            if (determineIfIsFood(mealItem.item)) {
+              handleFood(mealItem.item, calculateMealItemAmount(mealItem))
+            } else {
+              mealItem.item.ingredients.map(ingredient => {
+                if (ingredient.item) {
+                  if (determineIfIsFood(ingredient.item)) {
+                    handleFood(ingredient.item, calculateMealItemAmount(mealItem))
+                  }
+                }
+              })
+            }
           }
         })
       })
@@ -248,7 +265,7 @@ export class CalendarService extends StoreBase implements IPersistableStore {
     return this.pantryGroceriesByFoodGroup
   }
 
-  public addPantryItem(food: Day_meals_items_food, grams: number) {
+  public addPantryItem(food: Day_meals_items_item_Food, grams: number) {
     const foodGroupId = food.origFoodGroups[0][0].id
 
     const item = {

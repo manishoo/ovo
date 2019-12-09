@@ -17,8 +17,8 @@ export interface IntroductionMutation_setup_messages_data_mealPlanSettings {
 
 export interface IntroductionMutation_setup_messages_data_meals {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;
@@ -47,8 +47,8 @@ export interface IntroductionMutation_setup_messages_data_user_socialNetworks {
 
 export interface IntroductionMutation_setup_messages_data_user_meals {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;

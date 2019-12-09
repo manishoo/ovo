@@ -4,7 +4,7 @@
  */
 
 import { TouchableOpacity } from 'react-native'
-// import arrayMove from 'array-move'
+// @ts-ignore
 import DraggableFlatList from 'react-native-draggable-flatlist'
 import RX from 'reactxp'
 import SortableListProps from './types'
@@ -34,13 +34,15 @@ export default class SortableList extends RX.Component<SortableListProps> {
       <DraggableFlatList
         data={this.props.items}
         renderItem={this._renderItem}
-        keyExtractor={(item) => `draggable-item-${item.id}`}
+        keyExtractor={(item: any) => `draggable-item-${item.id}`}
         scrollPercent={5}
+        // @ts-ignore
         onMoveEnd={({ data }) => this.props.onItemsChange(data)}
       />
     )
   }
 
+  // @ts-ignore
   private _renderItem = ({ item, index, move, moveEnd }) => {
     return (
       <SortableItem

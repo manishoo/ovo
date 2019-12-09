@@ -13,31 +13,39 @@ import {
 
 
 export function getLastInputType(messages: IntroductionMutation_setup_messages[]): MessageInput {
-  let inputType: MessageType = undefined
-  let expect: AssistantExpectations = undefined
-  let items: IntroductionMutation_setup_messages_data_items[] = []
-  let skip: boolean = false
+  let inputType: MessageType | null = null
+  let expect: AssistantExpectations | null = null
+  let items: IntroductionMutation_setup_messages_data_items[] | null = []
+  let skip: boolean | null = false
   let mealPlanSettings: any = null
   let data: any = null
 
   messages.forEach((message) => {
     if (message.sender == 'assistant') {
       inputType = message.type
-      if (message.data.expect) {
-        const type = message.data.expect
-        Object.keys(AssistantExpectations).map((key: string) => {
-          if (key === type) {
-            // @ts-ignore
-            expect = AssistantExpectations[key]
-          }
-        })
+      if (message.data) {
+        if (message.data.expect) {
+          const type = message.data.expect
+          Object.keys(AssistantExpectations).map((key: string) => {
+            if (key === type) {
+              // @ts-ignore
+              expect = AssistantExpectations[key]
+            }
+          })
+        }
+
+        items = message.data.items
+        skip = message.data.skip
+        mealPlanSettings = message.data.mealPlanSettings
       }
+
       data = message.data
-      items = message.data.items
-      skip = message.data.skip
-      mealPlanSettings = message.data.mealPlanSettings
     }
   })
+
+  if (!expect) throw new Error('no expect')
+  if (!inputType) throw new Error('no inputType')
+
   return {
     expect,
     inputType,

@@ -136,15 +136,21 @@ export enum TagType {
   recipe = "recipe",
 }
 
-export interface IngredientInput {
-  food?: string | null;
-  amount: number;
-  customUnit?: string | null;
+export interface CustomUnitInput {
+  name: TranslationInput[];
   gramWeight?: number | null;
+}
+
+export interface IngredientInput {
+  id?: any | null;
   name?: TranslationInput[] | null;
-  weight?: string | null;
+  amount?: number | null;
+  unit: string;
+  food?: any | null;
+  recipe?: any | null;
+  isOptional?: boolean | null;
+  customUnit?: CustomUnitInput | null;
   description?: TranslationInput[] | null;
-  thumbnail?: any | null;
 }
 
 export interface InstructionInput {
@@ -162,25 +168,15 @@ export interface MealInput {
 
 export interface MealItemInput {
   id?: any | null;
+  name?: TranslationInput[] | null;
   amount?: number | null;
-  food?: string | null;
-  recipe?: string | null;
-  weight?: string | null;
-  customUnit?: string | null;
-  gramWeight?: number | null;
+  unit: string;
+  food?: any | null;
+  recipe?: any | null;
+  isOptional?: boolean | null;
+  customUnit?: CustomUnitInput | null;
   description?: TranslationInput[] | null;
-  alternativeMealItems?: MealItemInputBase[] | null;
-}
-
-export interface MealItemInputBase {
-  id?: any | null;
-  amount?: number | null;
-  food?: string | null;
-  recipe?: string | null;
-  weight?: string | null;
-  customUnit?: string | null;
-  gramWeight?: number | null;
-  description?: TranslationInput[] | null;
+  alternativeMealItems: IngredientInput[];
 }
 
 export interface RecipeInput {
@@ -228,8 +224,8 @@ export interface UserMealInput {
   id: string;
   name: string;
   time: string;
-  size?: MealSize | null;
-  availableTime?: MealAvailableTime | null;
+  size: MealSize;
+  availableTime: MealAvailableTime;
   cook?: boolean | null;
 }
 

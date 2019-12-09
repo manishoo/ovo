@@ -5,71 +5,77 @@
 
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
+import RecipesList from '@Common/RecipesList/RecipesList'
+import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import { Role } from '@Models/global-types'
 import ImageSource from '@Modules/images'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { navigate } from '@Utils'
 import authorized from '@Utils/authorized'
+import MealsList from '@Views/ProfileScreen/components/MealsList/MealsList'
+import useProfileTabsHOC, {
+  PROFILE_MEALS_QUERY,
+  PROFILE_RECIPES_QUERY, PROFILE_REVIEW_RECIPES_QUERY,
+  ProfileTabsResult
+} from '@Views/ProfileScreen/useProfileTabs.hook'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Avatar from './components/Avatar'
 import ProfileInfo from './components/ProfileInfo'
-import ProfileMeals from './components/ProfileMeals/ProfileMeals'
-import ProfileRecipes from './components/ProfileRecipes/ProfileRecipes'
-import { ProfileRecipesQuery_recipes_recipes } from './components/ProfileRecipes/types/ProfileRecipesQuery'
-import ReviewRecipes from './components/ReviewRecipes/ReviewRecipes'
 import { ProfileUser } from './types/ProfileUser'
 
 
-interface ProfileScreenProps extends RX.CommonProps {
+export interface ProfileScreenProps extends RX.CommonProps {
   user: ProfileUser,
   isMyProfile?: boolean,
 }
 
+export type ProfileScreenInnerProps = ProfileScreenProps & ProfileTabsResult
+
 interface ProfileState {
   height: number,
   width: number,
-  recipes: ProfileRecipesQuery_recipes_recipes[],
   activeTab: number,
 }
 
-export default class ProfileScreen extends ComponentBase<ProfileScreenProps, ProfileState> {
+export const fragments = {
+  user: gql`
+    fragment ProfileUser on BasicUser {
+      id
+      role
+      ...ProfileInfoUser
+    }
+
+    ${ProfileInfo.fragments.user}
+  `
+}
+
+export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & ProfileTabsResult, ProfileState> {
   static storageKeys = {
     activeTab: '_ProfileScreen_activeTab'
   }
-  static fragments = {
-    user: gql`
-      fragment ProfileUser on BasicUser {
-        id
-        role
-        ...ProfileInfoUser
-      }
-
-      ${ProfileInfo.fragments.user}
-    `
-  }
   private _recipes: any
-  private _recipesListHeight: number | undefined
+  private _recipesListHeight: number | null = null
   private _meals: any
   private _reviewRecipes: any
-  private _mealsListHeight: number | undefined
-  private _reviewRecipesHeight: number | undefined
+  private _mealsListHeight: number | null = null
+  private _reviewRecipesHeight: number | null = null
 
-  constructor(props: ProfileScreenProps) {
+  constructor(props: ProfileScreenInnerProps) {
     super(props)
 
     this.state = {
       activeTab: 0,
       width: ResponsiveWidthStore.getHeight(),
       height: ResponsiveWidthStore.getHeight(),
-      recipes: [],
     }
   }
 
@@ -87,7 +93,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
         {({ theme }) => (
           <CenterAlignedPageView
             scrollViewProps={{
-              onScroll: this._onScroll(this._handleOnReachEnd),
+              onScroll: this._onScroll,
             }}
           >
             {
@@ -117,7 +123,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
             <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing * 2 }}>
               <FilledButton
                 label={translate('Recipes')}
-                onPress={() => this.setState({ activeTab: 0 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
+                onPress={() => this.setState({ activeTab: 0 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
                 style={{
                   padding: 16
@@ -129,7 +135,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
                 this.props.isMyProfile &&
                 <FilledButton
                   label={translate('Meals')}
-                  onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
+                  onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
                   mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{
                     padding: 16
@@ -142,13 +148,14 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
                 authorized([Role.admin, Role.operator], user.role) &&
                 <FilledButton
                   label={translate('Reviews')}
-                  onPress={() => this.setState({ activeTab: 2 }, this.props.isMyProfile ? this._saveStateToStorage : null)}
+                  onPress={() => this.setState({ activeTab: 2 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
                   mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{
                     padding: 16
                   }}
                   fontSize={16}
                   containerStyle={styles.tabButton}
+                  suffix={this._renderReviewRecipesIndicator(theme)}
                 />
               }
             </RX.View>
@@ -168,38 +175,72 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     return {
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
-      recipes: initialBuild ? [] : this.state.recipes,
     }
+  }
+  
+  private _renderReviewRecipesIndicator = (theme: Theme) => {
+    const { reviewRecipes } = this.props
+    
+    if (reviewRecipes.data) {
+      const recipesCount = reviewRecipes.data.recipes.recipes.length
+      if (recipesCount === 0) return null
+
+      return (
+        <RX.View
+          style={{
+            borderRadius: 100,
+            backgroundColor: theme.colors.reviewRecipesUnreadIndicatorBg,
+            paddingRight: 5,
+            paddingLeft: 5,
+            [Styles.values.marginStart]: Styles.values.spacing / 2
+          }}
+        >
+          <Text
+            style={{
+              color: theme.colors.reviewRecipesUnreadIndicatorText
+            }}
+          >{recipesCount}</Text>
+        </RX.View>
+      )
+    }
+    
+    return null
   }
 
   private _renderTabContent = () => {
-    const { user } = this.props
+    const {
+      meals,
+      recipes,
+      reviewRecipes,
+    } = this.props
 
     switch (this.state.activeTab) {
       case 0:
         return (
-          <ProfileRecipes
+          <RecipesList
             showAddRecipe={this.props.isMyProfile}
-            userId={user.id}
-            ref={ref => this._recipes = ref}
-            onHeightChange={this._onRecipesHeightChange}
+            hideAvatar={this.props.isMyProfile}
+            recipes={recipes.data ? recipes.data.recipes.recipes : []}
+            onLayout={e => this._onRecipesHeightChange(e.height)}
+            loading={recipes.loading}
           />
         )
       case 1:
         return (
-          <ProfileMeals
+          <MealsList
+            meals={meals.data ? meals.data.meals.meals : []}
             showAddMeal={this.props.isMyProfile}
-            userId={user.id}
-            ref={ref => this._meals = ref}
-            onHeightChange={this._onMealsHeightChange}
+            hideAvatar={this.props.isMyProfile}
+            onLayout={e => this._onMealsHeightChange(e.height)}
+            loading={meals.loading}
           />
         )
       case 2:
         return (
-          <ReviewRecipes
-            userId={user.id}
-            ref={ref => this._reviewRecipes = ref}
-            onHeightChange={this._onReviewRecipesHeightChange}
+          <RecipesList
+            recipes={reviewRecipes.data ? reviewRecipes.data.recipes.recipes : []}
+            onLayout={e => this._onReviewRecipesHeightChange(e.height)}
+            loading={reviewRecipes.loading}
           />
         )
       default:
@@ -207,11 +248,92 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     }
   }
 
+  private _fetchMoreRecipes = () => {
+    const { recipes: recipesQuery } = this.props
+    if (!recipesQuery.data) return
+    if (!recipesQuery.data.recipes.pagination.hasNext) return
+
+    return this.props.recipes.fetchMore({
+      variables: {
+        lastId: recipesQuery.data.recipes.pagination.lastId,
+      },
+      query: PROFILE_RECIPES_QUERY,
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return previousResult
+
+        return {
+          ...previousResult,
+          recipes: {
+            recipes: [
+              ...previousResult.recipes.recipes,
+              ...fetchMoreResult.recipes.recipes,
+            ],
+            pagination: fetchMoreResult.recipes.pagination,
+          }
+        }
+      }
+    })
+  }
+
+  private _fetchMoreMeals = () => {
+    const { meals: mealsQuery } = this.props
+    if (!mealsQuery.data) return
+    if (!mealsQuery.data.meals.pagination.hasNext) return
+
+    return this.props.meals.fetchMore({
+      variables: {
+        lastId: mealsQuery.data.meals.pagination.lastId,
+      },
+      query: PROFILE_MEALS_QUERY,
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return previousResult
+
+        return {
+          ...previousResult,
+          meals: {
+            meals: [
+              ...previousResult.meals.meals,
+              ...fetchMoreResult.meals.meals,
+            ],
+            pagination: fetchMoreResult.meals.pagination,
+          }
+        }
+      }
+    })
+  }
+
+  private _fetchMoreReviewRecipes = () => {
+    const { reviewRecipes: reviewRecipesQuery } = this.props
+    if (!reviewRecipesQuery.data) return
+    if (!reviewRecipesQuery.data.recipes.pagination.hasNext) return
+
+    return this.props.reviewRecipes.fetchMore({
+      variables: {
+        lastId: reviewRecipesQuery.data.recipes.pagination.lastId,
+      },
+      query: PROFILE_REVIEW_RECIPES_QUERY,
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return previousResult
+
+        return {
+          ...previousResult,
+          recipes: {
+            recipes: [
+              ...previousResult.recipes.recipes,
+              ...fetchMoreResult.recipes.recipes,
+            ],
+            pagination: fetchMoreResult.recipes.pagination,
+          }
+        }
+      }
+    })
+  }
+
   private _onRecipesHeightChange = (height: number) => {
     this._recipesListHeight = height
 
     if (height > this._recipesListHeight) {
-      this._recipes.fetchMore()
+      //
     }
   }
 
@@ -219,7 +341,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     this._mealsListHeight = height
 
     if (height > this._mealsListHeight) {
-      this._meals.fetchMore()
+      //
     }
   }
 
@@ -227,7 +349,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     this._reviewRecipesHeight = height
 
     if (height > this._reviewRecipesHeight) {
-      this._reviewRecipes.fetchMore()
+      //
     }
   }
 
@@ -245,7 +367,7 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     )
   }
 
-  private _onScroll = (onReachEnd: () => void) => (newScrollValue: number) => {
+  private _onScroll = (newScrollValue: number) => {
     const { height, activeTab } = this.state
 
     const OFFSET = 100
@@ -254,35 +376,20 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
 
     switch (activeTab) {
       case 2:
-        if (bottomOfViewPoint >= this._reviewRecipesHeight) {
-          onReachEnd()
+        if (this._reviewRecipesHeight && bottomOfViewPoint >= this._reviewRecipesHeight) {
+          return this._fetchMoreRecipes()
         }
         break
       case 1:
-        if (bottomOfViewPoint >= this._mealsListHeight) {
-          onReachEnd()
+        if (this._mealsListHeight && bottomOfViewPoint >= this._mealsListHeight) {
+          return this._fetchMoreMeals()
         }
         break
       case 0:
       default:
-        if (bottomOfViewPoint >= this._recipesListHeight) {
-          onReachEnd()
+        if (this._recipesListHeight && bottomOfViewPoint >= this._recipesListHeight) {
+          return this._fetchMoreReviewRecipes()
         }
-    }
-  }
-
-  private _handleOnReachEnd = () => {
-    const { activeTab } = this.state
-
-    switch (activeTab) {
-      case 2:
-        this._reviewRecipes.fetchMore()
-        break
-      case 1:
-        this._meals.fetchMore()
-        break
-      case 0:
-        this._recipes.fetchMore()
     }
   }
 
@@ -308,6 +415,8 @@ export default class ProfileScreen extends ComponentBase<ProfileScreenProps, Pro
     }
   }
 }
+
+export default useProfileTabsHOC(ProfileScreen)
 
 const styles = {
   container: RX.Styles.createViewStyle({

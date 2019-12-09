@@ -14,8 +14,8 @@ import * as SyncTasks from 'synctasks'
 @AutoSubscribeStore
 class LocationStore extends StoreBase implements IPersistableStore {
   public name = 'LocationStore'
-  private path: string | undefined = undefined
-  private history: History
+  private path: string | null = null
+  private history: History | null = null
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
@@ -26,10 +26,10 @@ class LocationStore extends StoreBase implements IPersistableStore {
     return deferred.promise()
   }
 
-  setHistory(history: any) {
+  setHistory(history: History) {
     this.history = history
 
-    this.history.listen(this._handleLocationChange)
+    history.listen(this._handleLocationChange)
 
     this.trigger()
   }
@@ -47,6 +47,8 @@ class LocationStore extends StoreBase implements IPersistableStore {
   }
 
   navigate(props: any, route: Routes | string, config: any = { params: {} }): void {
+    if (!this.history) return
+
     const type = RX.Platform.getType()
     const params = config.params || {}
     const replace = config.params && config.params.replace
@@ -85,11 +87,13 @@ class LocationStore extends StoreBase implements IPersistableStore {
   }
 
   @autoSubscribe
-  getPath(): string | undefined {
+  getPath(): string {
+    if (!this.path) throw new Error('no path available')
     return this.path
   }
 
-  getHistory(): History | undefined {
+  getHistory(): History {
+    if (!this.history) throw new Error('no history available')
     return this.history
   }
 

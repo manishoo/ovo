@@ -15,7 +15,8 @@ import { AssistantExpectations, MessageSender, MessageType } from '@Models/globa
 import KeyboardAvoidable from '@Modules/KeyboardAvoidable'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import UserStore from '@Services/UserStore'
+import UserService from '@Services/UserService'
+import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import { createId } from '@Utils/create-id'
 import {
@@ -24,9 +25,8 @@ import {
   IntroductionMutationVariables
 } from '@Views/Introduction/types/IntroductionMutation'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import { RegisterForm } from '@Views/Register/RegisterForm'
 import gql from 'graphql-tag'
-import { Mutation, MutationFn } from 'react-apollo'
+import { Mutation, MutationFunction } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import ChatBox from './components/ChatBox'
@@ -45,7 +45,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
       expect: AssistantExpectations.nickname,
       skip: false,
       items: [],
-      mealPlanSettings: undefined,
+      mealPlanSettings: null,
       meals: [],
       user: null,
     },
@@ -60,7 +60,7 @@ const INITIAL_MESSAGES: IntroductionMutation_setup_messages[] = [
       expect: AssistantExpectations.nickname,
       skip: false,
       items: [],
-      mealPlanSettings: undefined,
+      mealPlanSettings: null,
       meals: [],
       user: null,
     },
@@ -169,7 +169,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 					}
 
 					${MealSettingsScreen.fragments.mealSettingsMeal}
-					${RegisterForm.fragments.me}
+					${UserService.fragments.me}
 				`}
       >
         {(setupConversation, { loading }) => (
@@ -315,7 +315,7 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
     }
   }
 
-  private getStartedPress = (setupConversation: MutationFn<IntroductionMutation, IntroductionMutationVariables>) => async () => {
+  private getStartedPress = (setupConversation: MutationFunction<IntroductionMutation, IntroductionMutationVariables>) => async () => {
     this.setState({
       showButtons: false,
     })
@@ -330,11 +330,13 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
     if (!result) return
     if (!result.data) return
 
-    await RX.Storage.setItem('token', result.data.setup.token)
+    if (result.data.setup.token) {
+      await RX.Storage.setItem('token', result.data.setup.token)
+    }
     this.addToMessagesSlowly(result.data.setup.messages)
   }
 
-  private sendMessage = (sendMessage: MutationFn<IntroductionMutation, IntroductionMutationVariables>) => async ({ text, data }: { text: string, data: any }) => {
+  private sendMessage = (sendMessage: MutationFunction<IntroductionMutation, IntroductionMutationVariables>) => async ({ text, data }: { text: string, data: any }) => {
     const token = await RX.Storage.getItem('token')
 
     this.setState(prevState => ({

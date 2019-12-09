@@ -6,15 +6,12 @@
 import { useQuery } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
-import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import CalendarService from '@Services/CalendarService'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import MealPlanSettingsScreen from '@Views/MealPlanSettingsScreen/MealPlanSettingsScreen'
-import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
 import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
 import RX from 'reactxp'
@@ -55,7 +52,6 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
 
     RX.StatusBar.setTranslucent(true)
     const dayCursor = DateTime.local()
-    const calendar = CalendarService.getCalendar()
 
     this.state = {
       dayCursor,
@@ -66,7 +62,7 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
     }
   }
 
-  private _scrollView: RX.ScrollView
+  private _scrollView: RX.ScrollView | null = null
 
   protected _buildState(props: CalendarProps, initialBuild: boolean): Partial<CalendarState> | undefined {
     const calendar = CalendarService.getCalendar()
@@ -80,10 +76,14 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
   }
 
   componentDidMount() {
+    const scrollView = this._scrollView
+
     // go to today
-    setTimeout(() => {
-      this._scrollView.setScrollLeft(this._getCurrentDayPosition(), false)
-    }, 0)
+    if (scrollView) {
+      setTimeout(() => {
+        scrollView.setScrollLeft(this._getCurrentDayPosition(), false)
+      }, 0)
+    }
   }
 
   public render() {
@@ -206,20 +206,23 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
 
   private _changeDayCursor = (newDayCursor: DateTime, position: number) => {
     const renderingDates = this._generateRenderingDays(newDayCursor)
+    const scrollView = this._scrollView
 
-    this._scrollView.setScrollLeft(position, true)
-    setTimeout(() => {
-      this.setState({
-        renderingDates,
-        dayCursor: newDayCursor,
-      }, () => {
-        this._scrollView.setScrollLeft(this._getCurrentDayPosition(), false)
-      })
-    }, 300)
+    if (scrollView) {
+      scrollView.setScrollLeft(position, true)
+      setTimeout(() => {
+        this.setState({
+          renderingDates,
+          dayCursor: newDayCursor,
+        }, () => {
+          scrollView.setScrollLeft(this._getCurrentDayPosition(), false)
+        })
+      }, 300)
+    }
   }
 }
 
-export default () => {
+export default (props: CalendarProps) => {
   const { data } = useQuery<CalendarQuery, CalendarQueryVariables>(CalendarScreen.operations.calendar, {
     fetchPolicy: 'network-only',
     variables: {
@@ -230,8 +233,8 @@ export default () => {
 
   return (
     <CalendarScreen
+      style={props.style}
       calendar={(data && data.calendar) || []}
-      {...this.props}
     />
   )
 }

@@ -49,6 +49,7 @@ export class Theme {
       case 'light': {
         const primary = '#07AF47' //#00c54f #00BA72
         const primaryDarker = '#05863e'
+        const red = '#d32f2f'
 
         return {
           primary,
@@ -153,7 +154,7 @@ export class Theme {
           recipeIngredientUnitTextColor: '#fff',
 
           tabBarBG: '#fff',
-          loginButtonTextColor: 'red',
+          loginButtonTextColor: red,
           assistantBG: '#1F2CAA',
           assistantMessageBG: '#313EC0',
           assistantUserMessageBG: primary,
@@ -175,6 +176,8 @@ export class Theme {
           inputInvalidColor: '#D44539',
 
           calendarEmptyStateBG: '#fafafa',
+          reviewRecipesUnreadIndicatorBg: red,
+          reviewRecipesUnreadIndicatorText: '#fff',
         }
       }
     }

@@ -11,7 +11,7 @@ const PropTypes = require('prop-types')
 const isProd = process.env.NODE_ENV === 'production'
 
 const Html = props => {
-  const { assets, chunkNames, lang, state = {} } = props
+  const { assets, chunkNames, lang, state = {}, title } = props
 
   let { content } = props
   let scripts
@@ -45,7 +45,7 @@ const Html = props => {
       <meta charSet='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <meta name='theme-color' content='#606c76' />
-      <title>پرانا | ‌Prana</title>
+      <title>{title}</title>
       {isProd && preloadLinks}
       <link rel='manifest' href='/manifest.json' />
       <link rel='shortcut icon' href='/favicon.ico' />

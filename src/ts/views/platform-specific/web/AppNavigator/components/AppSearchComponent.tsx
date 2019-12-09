@@ -9,7 +9,7 @@ import { useState } from 'react'
 import RX from 'reactxp'
 
 
-const AppSearchComponent = ({ onSubmit, inputRef }) => {
+const AppSearchComponent = ({ onSubmit, inputRef }: any) => {
   const defaultState = { nameSearchQuery: '' }
   const [variables, setVariables] = useState<SearchResultQueryVariables>(defaultState)
 

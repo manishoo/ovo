@@ -90,7 +90,7 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
 const styles = {
   container: RX.Styles.createViewStyle({
     cursor: 'pointer',
-    marginHorizontal: Styles.values.spacing / 2
+    [Styles.values.marginEnd]: Styles.values.spacing
     // alignItems: 'center',
   }),
   innerContainer: RX.Styles.createViewStyle({

@@ -10,8 +10,8 @@ import { UserMealInput, MealAvailableTime, MealSize } from "./../../../models/gl
 
 export interface MealPlanSettingsScreenMutation_updateUserMeals {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;

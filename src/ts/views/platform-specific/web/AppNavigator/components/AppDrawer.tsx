@@ -13,14 +13,13 @@ import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
-import { User } from '@Models/FoodModels'
 import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
+import { Me } from '@Services/types/Me'
+import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import { Action, Location } from 'history'
 import { matchPath } from 'react-router'
-// import Text from '@Common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -30,12 +29,12 @@ const BRAND_IMAGE_HEIGHT = 35
 const ACTIVE_INDICATOR_WIDTH = Styles.values.drawerWidth + Styles.values.spacing * 2
 
 interface AppDrawerProps {
-  user?: User,
+  me: Me | null,
 }
 
 interface AppDrawerState {
   path: string,
-  me: { username: string },
+  me: Me | null,
 }
 
 export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerState> {
@@ -59,7 +58,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
   }
 
   public render() {
-    const { user } = this.props
+    const { me } = this.props
 
     return (
       <RX.View style={{ flex: 1, padding: Styles.values.spacingLarge }}>
@@ -70,15 +69,15 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
 
         {
           (() => {
-            if (user) {
+            if (me) {
               return [
                 this._renderActiveIndicator(),
                 <Link
                   key={0}
-                  to={`/${user.username}`}
+                  to={`/${me.username}`}
                   style={{ alignSelf: 'center', marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
                 >
-                  <Image source={user.avatar!.url} style={styles.avatar} />
+                  <Image source={me.avatar!.url} style={styles.avatar} />
                 </Link>,
                 <Link
                   key={1}
@@ -212,23 +211,27 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
     }
 
     setTimeout(() => {
-      RX.Animated.parallel([
-        topValue !== 0 && RX.Animated.timing(this._activeIndicatorTop, {
-          toValue: topValue,
-          duration: animated ? 500 : 0,
-        }),
+      const animations = [
         RX.Animated.timing(this._activeIndicatorStart, {
           toValue: startValue,
           duration: 500,
         })
-      ].filter(Boolean)).start()
+      ]
 
+      if (topValue !== 0) {
+        animations.splice(0, 0, RX.Animated.timing(this._activeIndicatorTop, {
+          toValue: topValue,
+          duration: animated ? 500 : 0,
+        }))
+      }
+
+      RX.Animated.parallel(animations).start()
     }, 0)
   }
 
   private _onLogout = () => {
     UserStore.setUser()
-    UserStore.setSession()
+    UserStore.setSession(null)
     RX.Storage.clear()
 
     LocationStore.navigate(this.props, Routes.login)

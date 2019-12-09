@@ -19,7 +19,7 @@ export interface Option {
 
 interface SelectProps {
   style?: any,
-  value: string,
+  value: any,
   options: Option[],
   onChange: (value: any) => void,
   label?: string

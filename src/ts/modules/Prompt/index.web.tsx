@@ -27,7 +27,7 @@ export default class PromptWeb extends RX.Component<PromptWebProps> {
     if (this.props.when) {
       window.onbeforeunload = () => true
     } else {
-      window.onbeforeunload = undefined
+      window.onbeforeunload = null
     }
   }
 }

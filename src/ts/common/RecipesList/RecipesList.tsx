@@ -6,17 +6,18 @@
 import Styles from '@App/Styles'
 import AddCell from '@Common/AddCell/AddCell'
 import CardList from '@Common/CardList/CardList'
-import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
+import { IngredientRecipe } from '@Common/IngredientCard/types/IngredientRecipe'
 import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
-import { ProfileRecipesQuery_recipes_recipes } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RX from 'reactxp'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 
+export interface RecipesListRecipe extends IngredientRecipe {}
+
 interface RecipesListProps extends RX.CommonProps {
   style?: any,
-  recipes: ProfileRecipesQuery_recipes_recipes[],
+  recipes: IngredientRecipe[],
   showAddRecipe?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   hideAvatar?: boolean,
@@ -38,7 +39,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
     )
   }
 
-  private _renderRecipeCell = (recipe: RecipeCardRecipe, size: number) => {
+  private _renderRecipeCell = (recipe: IngredientRecipe, size: number) => {
     return (
       <RecipeCell
         recipe={recipe}

@@ -20,7 +20,7 @@ import {
   TagsInputDeleteMutation,
   TagsInputDeleteMutationVariables
 } from '@Views/RecipeForm/components/TagsInput/types/TagsInputDeleteMutation'
-import { Me } from '@Views/Register/types/Me'
+import { Me } from '@Services/types/Me'
 import gql from 'graphql-tag'
 import { useContext, useState } from 'react'
 import { ExecutionResult } from 'react-apollo'
@@ -45,15 +45,17 @@ export default function TagsInputContainer(props: TagsInputCommonProps) {
       tags={data && data.tags && data.tags.length > 0 ? data.tags : []}
       onTagDelete={variables => deleteTag({
         variables,
-        update: (proxy, mutationResult) => {
-          const { tags } = proxy.readQuery<TagsInputQuery>({
+        update: (proxy, { data }) => {
+          if (!data) return
+          const tagsInputQuery = proxy.readQuery<TagsInputQuery>({
             query: TAGS_INPUT_QUERY,
           })
+          if (!tagsInputQuery) return
 
           proxy.writeQuery<TagsInputQuery>({
             query: TAGS_INPUT_QUERY,
             data: {
-              tags: tags.filter(tag => tag.slug !== mutationResult.data.deleteTag)
+              tags: tagsInputQuery.tags.filter(tag => tag.slug !== data.deleteTag)
             }
           })
         }
@@ -92,7 +94,7 @@ interface TagsInputCommonProps {
 }
 
 interface TagsInputProps extends TagsInputCommonProps {
-  tags: TagsInputQuery_tags[],
+  tags: (Omit<TagsInputQuery_tags, 'slug'> & {slug: string})[],
   onTagDelete: (variables: TagsInputDeleteMutationVariables) => Promise<ExecutionResult<TagsInputDeleteMutation>>
 }
 
@@ -129,6 +131,7 @@ export function TagsInput(props: TagsInputProps) {
       <Text translate style={{ fontSize: 16, marginBottom: Styles.values.spacing }}>RecipeExtraGuide</Text>
 
       {Object.keys(TagType).map(key => {
+        // @ts-ignore
         const tags = props.tags.filter(i => i.type === TagType[key])
         if (tags.length === 0) return null
 
@@ -142,10 +145,11 @@ export function TagsInput(props: TagsInputProps) {
               {
                 tags.map(tag => (
                   <FlatButton
-                    labelTranslations={tag.title}
-                    onPress={() => props.onTagsChange(props.selectedTags.find(p => p === tag.slug)
-                      ? props.selectedTags.filter(p => p !== tag.slug)
-                      : [...props.selectedTags, tag.slug]
+                    labelTranslations={tag.title || []}
+                    onPress={() => props.onTagsChange(
+                      props.selectedTags.find(p => p === tag.slug)
+                        ? props.selectedTags.filter(p => p !== tag.slug)
+                        : [...props.selectedTags, tag.slug!]
                     )}
                     style={[setLabelStyle(tag).style, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
                     labelStyle={setLabelStyle(tag).labelStyle}
@@ -199,7 +203,7 @@ export function TagsInput(props: TagsInputProps) {
           <TagInput
             onSubmit={tag => props.onTagsChange([
               ...props.selectedTags,
-              tag.slug,
+              tag.slug!,
             ])}
           />
         </RX.View>
@@ -213,7 +217,7 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
     type: TagType.other,
     title: [],
     info: [],
-    slug: null,
+    slug: '',
   }
   const [tag, setTag] = useState<Omit<TagsInputQuery_tags, 'user'>>(defaultState)
   const [addTag] = useMutation<TagInputMutation, TagInputMutationVariables>(gql`
@@ -226,16 +230,21 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
     ${TagsInputContainer.fragments.tag}
   `, {
     variables: {
-      tag
+      tag: {
+        ...tag,
+        title: tag.title || [],
+      }
     },
     update: (proxy, { data }) => {
-      const { tags } = proxy.readQuery({ query: TAGS_INPUT_QUERY })
+      if (!data) return
+      const tagsInputQuery = proxy.readQuery<TagsInputQuery>({ query: TAGS_INPUT_QUERY })
+      if (!tagsInputQuery) return
 
       proxy.writeQuery({
         query: TAGS_INPUT_QUERY,
         data: {
           tags: [
-            ...tags,
+            ...tagsInputQuery.tags,
             data.addTag,
           ],
         }
@@ -248,10 +257,11 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
   return (
     <RX.View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
       <IntlInput
-        translations={tag.title}
+        translations={tag.title || []}
         onTranslationsChange={translations => setTag({
           ...tag,
           title: translations,
+          slug: translations[0].text
         })}
         style={{
           minWidth: 200,
@@ -262,14 +272,15 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
       <Select
         value={tag.type}
         options={[
-          {
-            value: undefined,
-            text: <Text translate>Select Tag Type</Text>,
-          },
-          ...Object.keys(TagType).map(key => ({
-            value: TagType[key],
-            text: <Text>{key}</Text>,
-          }))
+          { value: undefined, text: <Text translate>Select Tag Type</Text>, },
+          { value: TagType.recipe, text: <Text translate>{'recipe'}</Text>, },
+          { value: TagType.cuisine, text: <Text translate>{'cuisine'}</Text>, },
+          { value: TagType.diet, text: <Text translate>{'diet'}</Text>, },
+          { value: TagType.imported, text: <Text translate>{'imported'}</Text>, },
+          { value: TagType.ingredient, text: <Text translate>{'ingredient'}</Text>, },
+          { value: TagType.meal, text: <Text translate>{'meal'}</Text>, },
+          { value: TagType.occasion, text: <Text translate>{'occasion'}</Text>, },
+          { value: TagType.other, text: <Text translate>{'other'}</Text>, },
         ]}
         onChange={value => setTag({
           ...tag,
@@ -290,8 +301,5 @@ const styles = {
   panel: RX.Styles.createViewStyle({
     marginBottom: Styles.values.spacing,
     paddingVertical: Styles.values.spacing,
-    // borderWidth: 1,
-    // borderColor: '#eee',
-    // borderRadius: 8,
   }),
 }

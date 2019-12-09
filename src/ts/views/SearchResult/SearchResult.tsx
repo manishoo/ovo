@@ -9,7 +9,6 @@ import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
 import SearchResultRecipes from '@Views/SearchResult/SearchResultRecipes'
 import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
-// import Text from '@Common/Text/Text'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { SearchResultParameters } from './SearchResultContainer'
@@ -26,7 +25,7 @@ interface SearchResultState {
 }
 
 export default class SearchResult extends ComponentBase<SearchResultProps, SearchResultState> {
-  private _recipesListHeight: number
+  private _recipesListHeight: number | null = null
   private _recipes: any
 
   public render() {
@@ -90,7 +89,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     return {
       height: ResponsiveWidthStore.getHeight(),
       variables: {
-        nameSearchQuery: this.props.parameters ? this.props.parameters.q : '',
+        nameSearchQuery: this.props.parameters && this.props.parameters.q ? this.props.parameters.q : '',
       },
       filterVisible: false,
     }
@@ -105,7 +104,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
   private _checkIfRecipesHeightWasShorter = () => {
     const { height } = this.state
 
-    if (height > this._recipesListHeight) {
+    if (this._recipesListHeight && height > this._recipesListHeight) {
       this._recipes.fetchMore()
     }
   }
@@ -116,7 +115,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     const OFFSET = 100
 
     const bottomOfViewPoint = newScrollValue + height
-    if ((bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
+    if (this._recipesListHeight && (bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
       onReachEnd()
     }
   }
