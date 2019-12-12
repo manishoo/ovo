@@ -4,6 +4,8 @@
  */
 
 import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
+import Footer from '@Common/Footer/Footer'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -41,36 +43,42 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
     const { width } = this.state
 
     return (
-      <RX.ScrollView
-        {...this.props.scrollViewProps}
-        style={[
-          styles.container, {
-            height: this.state.height,
-            width
-          },
-          this.props.scrollViewProps ? this.props.scrollViewProps.style : {}
-        ]}
-      >
-        <RX.Animated.View
-          style={[
-            {
-              width,
-              alignItems: 'center',
-            },
-            this._animatedStyle,
-            this.props.outermostViewStyle,
-          ]}
-        >
-          <RX.View
-            style={[{
-              width: this.state.width < this._getMaxWidth() ? this.state.width : this._getMaxWidth(),
-              padding: Styles.values.spacing * 2,
-            }, this.props.innermostViewStyle]}
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <RX.ScrollView
+            {...this.props.scrollViewProps}
+            style={[
+              styles.container, {
+                backgroundColor: theme.colors.bg,
+                height: this.state.height,
+                width
+              },
+              this.props.scrollViewProps ? this.props.scrollViewProps.style : {}
+            ]}
           >
-            {this.props.children}
-          </RX.View>
-        </RX.Animated.View>
-      </RX.ScrollView>
+            <RX.Animated.View
+              style={[
+                {
+                  width,
+                  alignItems: 'center',
+                },
+                this._animatedStyle,
+                this.props.outermostViewStyle,
+              ]}
+            >
+              <RX.View
+                style={[{
+                  width: this.state.width < this._getMaxWidth() ? this.state.width : this._getMaxWidth(),
+                  padding: Styles.values.spacing * 2,
+                }, this.props.innermostViewStyle]}
+              >
+                {this.props.children}
+              </RX.View>
+            </RX.Animated.View>
+            <Footer />
+          </RX.ScrollView>
+        )}
+      </ThemeContext.Consumer>
     )
   }
 
@@ -95,6 +103,5 @@ const styles = {
     // alignItems: 'center',
     alignSelf: 'center',
     // padding: Styles.values.spacingLarge,
-    backgroundColor: '#fff',
   }),
 }

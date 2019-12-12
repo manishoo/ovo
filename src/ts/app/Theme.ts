@@ -50,12 +50,13 @@ export class Theme {
         const primary = '#07AF47' //#00c54f #00BA72
         const primaryDarker = '#05863e'
         const red = '#d32f2f'
+        const text = '#515B66'
 
         return {
           primary,
           bg: '#fff',
 
-          text: '#4a4a4a',
+          text,
           borderLight: '#eee',
           mealItemBorder: 'rgba(0, 186, 114, 0.5)',
 
@@ -76,7 +77,7 @@ export class Theme {
           userMealsInputBG: 'rgba(255, 255, 255, 0.38)',
           userMealsInputText: '#fff',
 
-          calendarDayName: '#4a4a4a',
+          calendarDayName: text,
 
           grey1: 'grey',
           subtitle: '#757575',
@@ -93,14 +94,14 @@ export class Theme {
           toast: {
             success: '#00BA72',
             error: '#d32f2f',
-            default: '#4a4a4a',
+            default: text,
           },
 
           red: '#d32f2f',
           darkerRed: '#a92626',
 
           mealCardBackgroundColor: '#fff',
-          mealItemSubtitle: '#4A4A4A',
+          mealItemSubtitle: text,
           mealPlanDayName: '#fff',
           submitButtonBorderColor: '#eee',
           submitButtonBackgroundColor: '#fff',
@@ -162,15 +163,15 @@ export class Theme {
 
           assistantFaceColor: '#fefa03',
 
-          landingSubtitle: '#4A4A4A',
+          landingSubtitle: text,
           landingFooterBG: '#1F2CAA',
 
           sectionCircle: '#FFDE34',
 
-          landingSectionTitle: '#4a4a4a',
-          landingSectionSubtitle: '#4a4a4a',
-          footerTitleColor: '#99A3FF',
-          footerLinkColor: '#fff',
+          landingSectionTitle: text,
+          landingSectionSubtitle: text,
+          footerTitleColor: text,
+          footerLinkColor: primary,
           textInputBg: '#F5F5F8',
           inputValidColor: primary,
           inputInvalidColor: '#D44539',
@@ -178,6 +179,8 @@ export class Theme {
           calendarEmptyStateBG: '#fafafa',
           reviewRecipesUnreadIndicatorBg: red,
           reviewRecipesUnreadIndicatorText: '#fff',
+
+          footerBorderColor: '#eee'
         }
       }
     }

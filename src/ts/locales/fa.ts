@@ -75,7 +75,7 @@ enum FaLocale {
   'landing_4_t' = 'لیست خریدتون طبق برنامتون آماده میشه',
   'landing_4_s' = 'خرید کردن با لیست خریدی که طبق نیاز و برنامه اختصاصی\nخودتون آماده شده راحت\u200Cتره.',
 
-  'landingfooterAck' = 'استفاده از مطالب پرانا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است. کلیه حقوق این سایت متعلق به  mycaloria.com می\u200Cباشد.',
+  'landingfooterAck' = 'استفاده از مطالب پرانا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است. کلیه حقوق این سایت متعلق به prana.green می\u200Cباشد.',
 
   'landingTitle' = 'دستیار هوشمند تغذیه',
   'landingSubtitle' = 'دکتر و آشپز و فروشگاهو بزار تو جیبت!',
@@ -241,7 +241,26 @@ enum FaLocale {
   other = 'other',
   recipe = 'recipe',
 
-  'site.title' = 'پرانا | دستیار هوشمند تغذیه'
+  'site.title' = 'پرانا | دستیار هوشمند تغذیه',
+  'Add Meal Item' = 'افزودن غذا',
+  'Edit Meal Settings' = 'تنظیمات وعده',
+  'Clear Meals Items' = 'پاک کردن سفره',
+  'Remove from meal' = 'حذف',
+
+  'tiny' = 'خیلی کوچک',
+  'small' = 'کوچک',
+  'normal' = 'متوسط',
+  'huge' = 'بزرگ',
+  'big' = 'خیلی بزرگ',
+
+  noTime = '۵ دقیقه',
+  littleTime = '۱۵ دقیقه',
+  someTime = 'نیم ساعت',
+  moreTime = '۴۵ دقیقه',
+  lotsOfTime = 'یک ساعت',
+  noLimit = 'بدون محدودیت',
+
+  'Delete All Instances' = 'حذف تمام جایگشت ها'
 }
 
 export default FaLocale

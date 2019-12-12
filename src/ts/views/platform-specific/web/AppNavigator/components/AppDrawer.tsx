@@ -24,7 +24,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
 
-const BRAND_IMAGE_WIDTH = 120
+const BRAND_IMAGE_WIDTH = 127
 const BRAND_IMAGE_HEIGHT = 35
 const ACTIVE_INDICATOR_WIDTH = Styles.values.drawerWidth + Styles.values.spacing * 2
 
@@ -185,25 +185,25 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
       path: `/${this.state.me.username}`,
       exact: true,
     })) {
-      topValue = 90 + Styles.values.spacing
+      topValue = 92
     }
 
     if (matchPath(pathname, {
       path: Routes.calendar,
     })) {
-      topValue = 153 + (Styles.values.spacing * 2)
+      topValue = 137 + (Styles.values.spacing * 2)
     }
 
     if (matchPath(pathname, {
       path: Routes.shoppingList,
     })) {
-      topValue = 207 + (Styles.values.spacing * 2)
+      topValue = 191 + (Styles.values.spacing * 2)
     }
 
     if (matchPath(pathname, {
       path: Routes.searchRecipes,
     })) {
-      topValue = 261 + (Styles.values.spacing * 2)
+      topValue = 245 + (Styles.values.spacing * 2)
     }
 
     if (topValue == 0) {
@@ -267,7 +267,6 @@ const styles = {
   logo: RX.Styles.createImageStyle({
     width: BRAND_IMAGE_WIDTH,
     height: BRAND_IMAGE_HEIGHT,
-    marginBottom: Styles.values.spacing,
     alignSelf: 'center',
   }),
   link: RX.Styles.createTextStyle({

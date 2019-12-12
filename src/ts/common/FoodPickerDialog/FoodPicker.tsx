@@ -27,6 +27,7 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { createId } from '@Utils/create-id'
+import {fragments as NutritionInfoFragments} from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
@@ -380,9 +381,11 @@ FoodPickerContainer.fragments = {
       image {url}
       thumbnail {url}
       nutrition {
-        calories { amount unit }
+        ...NutritionInfoNutrition
       }
     }
+    
+    ${NutritionInfoFragments.nutrition}
   `
 }
 

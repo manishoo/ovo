@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import Footer from '@Common/Footer/Footer'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import CalendarService from '@Services/CalendarService'
@@ -88,7 +89,7 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
 
   public render() {
     return (
-      <RX.View
+      <RX.ScrollView
         style={{
           flex: 1,
           width: this.state.width,
@@ -117,7 +118,8 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
             ))
           }
         </RX.ScrollView>
-      </RX.View>
+        <Footer />
+      </RX.ScrollView>
     )
   }
 

@@ -11,8 +11,10 @@ import HoverView from '@Common/HoverView/HoverButton'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { calculateDayNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import DayEmpty from '@Views/CalendarScreen/components/DayEmpty'
 import ItemControl from '@Views/CalendarScreen/components/ItemControl'
+import NutritionInfo from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import { Day } from '@Views/CalendarScreen/components/types/Day'
 import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
@@ -95,81 +97,91 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
 
     return (
       <RX.View
-        style={style}
+        style={[
+          style,
+          {
+            alignItems: 'center',
+          }
+        ]}
       >
-        <RX.ScrollView>
+        {this._renderDayTitle()}
+
+        {
+          !day &&
           <RX.View
             style={{
+              flex: 1,
               alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: Styles.values.spacing,
+              minHeight: this.state.height,
+              minWidth: this.state.width,
             }}
           >
-            {this._renderDayTitle()}
-
-            {
-              !day &&
-              <RX.View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginTop: Styles.values.spacing,
-                }}
-              >
-                <DayEmpty
-                  {...this.props}
-                  onDayRegenerate={this._onDayRegenerate}
-                />
-              </RX.View>
-            }
-
-            {
-              day &&
-              <RX.View
-                style={[
-                  styles.container,
-                  {
-                    minHeight: this.state.height,
-                    minWidth: this.state.width,
-                  }
-                ]}
-                // animateChildEnter
-                // animateChildLeave
-                // onLayout={e => {
-                //   if (day.height !== e.height) {
-                //     CalendarService.setDay({
-                //       ...day,
-                //       template: null,
-                //       height: e.height + 80,
-                //     })
-                //   }
-                // }}
-              >
-                {
-                  day.meals.map(meal => (
-                    <MealComponent
-                      key={meal.id}
-                      meal={meal}
-                      dayId={day.id}
-                      style={[
-                        {
-                          margin: Styles.values.spacing,
-                        },
-                        this.state.isTinyOrSmall ?
-                          {
-                            alignSelf: 'stretch',
-                          } :
-                          {
-                            alignSelf: 'center',
-                            width: MEAL_MAX_WIDTH,
-                          }
-                      ]}
-                    />
-                  ))
-                }
-              </RX.View>
-            }
+            <DayEmpty
+              {...this.props}
+              onDayRegenerate={this._onDayRegenerate}
+            />
           </RX.View>
-        </RX.ScrollView>
+        }
+
+        {
+          day &&
+          <RX.View
+            style={{
+              flex: 1,
+              flexDirection: this.state.isTinyOrSmall ? 'column' : 'row',
+              minHeight: this.state.height,
+              minWidth: this.state.width,
+              alignItems: this.state.isTinyOrSmall ? 'center' : 'flex-start',
+              justifyContent: this.state.isTinyOrSmall ? 'flex-start' : 'center',
+            }}
+          >
+            {
+              day.meals.filter(m => m.items.length > 0).length > 0 &&
+              <NutritionInfo
+                nutrition={calculateDayNutrition(day)}
+              />
+            }
+            <RX.View
+              style={styles.container}
+              // animateChildEnter
+              // animateChildLeave
+              // onLayout={e => {
+              //   if (day.height !== e.height) {
+              //     CalendarService.setDay({
+              //       ...day,
+              //       template: null,
+              //       height: e.height + 80,
+              //     })
+              //   }
+              // }}
+            >
+              {
+                day.meals.map(meal => (
+                  <MealComponent
+                    key={meal.id}
+                    meal={meal}
+                    dayId={day.id}
+                    style={[
+                      {
+                        margin: Styles.values.spacing,
+                      },
+                      this.state.isTinyOrSmall ?
+                        {
+                          alignSelf: 'stretch',
+                        } :
+                        {
+                          alignSelf: 'center',
+                          width: MEAL_MAX_WIDTH,
+                        }
+                    ]}
+                  />
+                ))
+              }
+            </RX.View>
+          </RX.View>
+        }
       </RX.View>
     )
   }
@@ -254,7 +266,6 @@ export default DayComponentContainer
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   }),

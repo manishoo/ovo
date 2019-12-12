@@ -44,7 +44,6 @@ class ImageSource implements ImageSourceBase {
   get LandingCurve() {return require('../../../images/LandingCurve.png')}
   get AssistantExtra() {return require('../../../images/AssistantExtra.png')}
   get AssistantExtraWhite() {return require('../../../images/AssistantExtraWhite.png')}
-  get ComingSoonButtonGroup() {return require('../../../images/ComingSoonButtonGroup.png')}
   get FaceBookIcon() {return require('../../../images/FB.png')}
   get YoutubeIcon() {return require('../../../images/YT.png')}
   get TwitterIcon() {return require('../../../images/TW.png')}
@@ -66,6 +65,10 @@ class ImageSource implements ImageSourceBase {
   get Ellipsis() {return require('../../../images/Ellipsis.png')}
   get Regenerate() {return require('../../../images/Regenerate.png')}
   get GooeyRingSpinner() {return require('../../../images/GooeyRingSpinner.svg')}
+
+  get AppStoreButton() {return require('../../../images/AppStoreButton.png')}
+  get GooglePlayButton() {return require('../../../images/GooglePlayButton.png')}
+  get CafeBazaarButton() {return require('../../../images/CafeBazaarButton.png')}
 }
 
 export default new ImageSource()

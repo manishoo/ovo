@@ -3,12 +3,13 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AppConfig from '@App/AppConfig'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import {
   Day,
   Day_meals_items,
-  Day_meals_items_item,
-  Day_meals_items_item_Food
+  Day_meals_items_item_Food,
+  Day_meals_items_item_Recipe_ingredients_item
 } from '@Views/CalendarScreen/components/types/Day'
 import { DayMeal } from '@Views/CalendarScreen/components/types/DayMeal'
 import { MealItem } from '@Views/CalendarScreen/components/types/MealItem'
@@ -17,7 +18,7 @@ import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import * as SyncTasks from 'synctasks'
 
 
-function determineIfIsFood(toBeDetermined: Partial<Day_meals_items_item>): toBeDetermined is Day_meals_items_item_Food {
+function determineIfIsFood(toBeDetermined: Partial<Day_meals_items_item_Recipe_ingredients_item>): toBeDetermined is Day_meals_items_item_Food {
   return toBeDetermined.hasOwnProperty('weights')
 }
 
@@ -158,25 +159,50 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
       }
     }
 
-    calendar.map(day => {
-      day.meals.map(meal => {
-        meal.items.map(mealItem => {
-          if (mealItem.item) {
-            if (determineIfIsFood(mealItem.item)) {
-              handleFood(mealItem.item, calculateMealItemAmount(mealItem))
-            } else {
-              mealItem.item.ingredients.map(ingredient => {
-                if (ingredient.item) {
-                  if (determineIfIsFood(ingredient.item)) {
-                    handleFood(ingredient.item, calculateMealItemAmount(mealItem))
-                  }
+    function getDateFromTimeString(timeString: string): DateTime {
+      console.log('timeString', timeString)
+      const splitTime = timeString.split(':')
+      if (splitTime[0].length !== 2) throw Error('time format should be HH:mm')
+      if (splitTime[1].length !== 2) throw Error('time format should be HH:mm')
+
+      const mealDate = new Date()
+
+      mealDate.setHours(+splitTime[0])
+      mealDate.setMinutes(+splitTime[1])
+
+      return DateTime.fromJSDate(mealDate)
+    }
+
+    const now = DateTime.local()
+    calendar
+    /**
+     * Only days in the future
+     * */
+      .filter(day => Math.round(DateTime.fromISO(day.date).diff(now).as('days')) >= 0)
+      .map(day => {
+        day.meals
+        /**
+         * Only meals in the future
+         * */
+          .filter(meal => Math.round(DateTime.fromISO(meal.time).diff(now).as('minutes')) >= 0)
+          .map(meal => {
+            meal.items.map(mealItem => {
+              if (mealItem.item) {
+                if (determineIfIsFood(mealItem.item)) {
+                  handleFood(mealItem.item, calculateMealItemAmount(mealItem))
+                } else {
+                  mealItem.item.ingredients.map(ingredient => {
+                    if (ingredient.item) {
+                      if (determineIfIsFood(ingredient.item)) {
+                        handleFood(ingredient.item, calculateMealItemAmount(mealItem))
+                      }
+                    }
+                  })
                 }
-              })
-            }
-          }
-        })
+              }
+            })
+          })
       })
-    })
 
     /**
      * Unique by food group
@@ -359,6 +385,23 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
   getCalendar(): Day[] {
     return this.calendar
   }
+
+  public calculateMealNutrition = (meal: DayMeal) => {
+    let totalCalorie = 0
+    let unit = AppConfig.calorieMeasurementUnit
+
+    meal.items.forEach(mealItem => {
+      if (!mealItem.item) return null
+
+      if (mealItem.item.nutrition && mealItem.item.nutrition.calories) {
+        if (mealItem.item.nutrition.calories.unit == unit) {
+          totalCalorie += (mealItem.item.nutrition.calories.amount * ((mealItem.amount || 0) * (mealItem.unit && mealItem.unit.gramWeight ? mealItem.unit.gramWeight : 1))) / 100
+        }
+      }
+    })
+    return Math.round(totalCalorie)
+  }
+
 }
 
 export default new CalendarService()

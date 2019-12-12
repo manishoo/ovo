@@ -167,6 +167,8 @@ class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
   private _renderNutritionInfo = (theme: Theme) => {
     const recipe = this.props.recipe
 
+    if (!recipe.nutrition) return null
+
     if (Object.values(trimTypeName(recipe.nutrition)).filter(Boolean).length === 0) return null
 
     const carbs = (recipe.nutrition.totalCarbs || recipe.nutrition.totalAvailableCarbs || recipe.nutrition.carbsByDifference)

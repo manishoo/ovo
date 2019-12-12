@@ -40,11 +40,47 @@ export interface IngredientFood_thumbnail {
 
 export interface IngredientFood_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientFood_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientFood_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientFood_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientFood_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientFood_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface IngredientFood_nutrition {
   calories: IngredientFood_nutrition_calories | null;
+  proteins: IngredientFood_nutrition_proteins | null;
+  carbsByDifference: IngredientFood_nutrition_carbsByDifference | null;
+  totalCarbs: IngredientFood_nutrition_totalCarbs | null;
+  totalAvailableCarbs: IngredientFood_nutrition_totalAvailableCarbs | null;
+  fats: IngredientFood_nutrition_fats | null;
 }
 
 export interface IngredientFood_origFoodGroups_name {
@@ -64,6 +100,6 @@ export interface IngredientFood {
   weights: IngredientFood_weights[];
   image: IngredientFood_image | null;
   thumbnail: IngredientFood_thumbnail | null;
-  nutrition: IngredientFood_nutrition;
+  nutrition: IngredientFood_nutrition | null;
   origFoodGroups: IngredientFood_origFoodGroups[][];
 }

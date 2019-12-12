@@ -93,11 +93,47 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_th
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition {
   calories: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_calories | null;
+  proteins: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition_fats | null;
 }
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food_origFoodGroups_name {
@@ -117,7 +153,7 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Food {
   weights: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_weights[];
   image: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_image | null;
   thumbnail: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_thumbnail | null;
-  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition;
+  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_nutrition | null;
   origFoodGroups: MealComponentSuggestMealMutation_suggestMeal_items_item_Food_origFoodGroups[][];
 }
 
@@ -214,11 +250,47 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -238,7 +310,7 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_
   weights: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_weights[];
   image: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -260,7 +332,7 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_
   id: string;
   slug: string;
   title: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item = MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Food | MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients_item_Recipe;
@@ -296,11 +368,47 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition {
   calories: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_calories | null;
+  proteins: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition_fats | null;
 }
 
 export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe {
@@ -314,7 +422,7 @@ export interface MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe 
   thumbnail: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_thumbnail | null;
   ingredients: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_ingredients[];
   author: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_author;
-  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition;
+  nutrition: MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealComponentSuggestMealMutation_suggestMeal_items_item = MealComponentSuggestMealMutation_suggestMeal_items_item_Food | MealComponentSuggestMealMutation_suggestMeal_items_item_Recipe;

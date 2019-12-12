@@ -7,6 +7,7 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import Footer from '@Common/Footer/Footer'
 import Image from '@Common/Image/Image'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
@@ -130,9 +131,8 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                 },
               ]}
             >
-              <RX.View importantForLayout style={{ flexDirection: 'row' }}>
+              <RX.View style={{ flexDirection: 'row' }}>
                 <RX.Animated.View
-                  importantForLayout
                   style={[
                     {
                       height: 1,
@@ -141,7 +141,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                   ]}
                 />
                 <RX.View
-                  importantForLayout
                   style={[styles.innerContainer, { height: this.state.height }]}
                 >
                   <Switch>

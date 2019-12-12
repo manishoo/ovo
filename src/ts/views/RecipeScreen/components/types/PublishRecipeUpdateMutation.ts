@@ -108,11 +108,47 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition {
   calories: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups_name {
@@ -132,7 +168,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food 
   weights: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_weights[];
   image: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_image | null;
   thumbnail: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_thumbnail | null;
-  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition;
+  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -229,11 +265,47 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition {
   calories: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -253,7 +325,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
   weights: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights[];
   image: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -275,7 +347,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
   id: string;
   slug: string;
   title: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item = PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food | PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe;
@@ -311,11 +383,47 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition {
   calories: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_calories | null;
+  proteins: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition_fats | null;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe {
@@ -329,7 +437,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
   thumbnail: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_thumbnail | null;
   ingredients: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients[];
   author: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_author;
-  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition;
+  nutrition: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type PublishRecipeUpdateMutation_updateRecipe_ingredients_item = PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food | PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe;
@@ -429,7 +537,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe {
   timing: PublishRecipeUpdateMutation_updateRecipe_timing;
   ingredients: PublishRecipeUpdateMutation_updateRecipe_ingredients[];
   instructions: PublishRecipeUpdateMutation_updateRecipe_instructions[];
-  nutrition: PublishRecipeUpdateMutation_updateRecipe_nutrition;
+  nutrition: PublishRecipeUpdateMutation_updateRecipe_nutrition | null;
   difficulty: RecipeDifficulty | null;
   description: PublishRecipeUpdateMutation_updateRecipe_description[] | null;
   image: PublishRecipeUpdateMutation_updateRecipe_image | null;

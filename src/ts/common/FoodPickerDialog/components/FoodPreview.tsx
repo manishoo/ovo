@@ -80,7 +80,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
           }
         }
       }
-      
+
       ${IngredientCard.fragments.food}
       ${IngredientCard.fragments.recipe}
     `
@@ -149,8 +149,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     if (!mealItem.item) return null
 
     const units: Option[] = [
-      { value: undefined, text: <Text translate>g</Text> },
-      { value: 'custom', text: <Text translate>Custom Weight</Text> },
+      { value: undefined, text: determineIfIsFood(mealItem.item) ? translate('g') : translate('serving') },
+      { value: 'custom', text: translate('Custom Weight') },
     ]
 
     if (determineIfIsFood(mealItem.item)) {

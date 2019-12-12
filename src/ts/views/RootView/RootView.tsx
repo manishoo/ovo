@@ -31,14 +31,21 @@ export default class RootView extends RX.Component<RootViewProps, RootViewState>
   }
 
   public render() {
+    const {theme} = this.state
+
     return (
       <ThemeContext.Provider
         value={{
-          theme: this.state.theme,
+          theme,
           toggleTheme: (mode: 'dark' | 'light') => this.setState({ theme: new Theme(mode) })
         }}
       >
-        <RX.View style={styles.root} onLayout={this.props.onLayout}>
+        <RX.View style={[
+          styles.root,
+          {
+            backgroundColor: theme.colors.bg,
+          }
+        ]} onLayout={this.props.onLayout}>
           {AppConfig.getPlatformType() === 'ios' && <SafeArea />}
           <Navigator history={this.props.history} />
 

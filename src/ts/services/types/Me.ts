@@ -44,7 +44,6 @@ export interface Me {
   session: string;
   email: string;
   firstName: string | null;
-  middleName: string | null;
   lastName: string | null;
   avatar: Me_avatar | null;
   gender: Gender | null;

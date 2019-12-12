@@ -252,6 +252,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     const { recipes: recipesQuery } = this.props
     if (!recipesQuery.data) return
     if (!recipesQuery.data.recipes.pagination.hasNext) return
+    if (recipesQuery.loading) return
 
     return this.props.recipes.fetchMore({
       variables: {
@@ -279,6 +280,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     const { meals: mealsQuery } = this.props
     if (!mealsQuery.data) return
     if (!mealsQuery.data.meals.pagination.hasNext) return
+    if (mealsQuery.loading) return
 
     return this.props.meals.fetchMore({
       variables: {
@@ -306,6 +308,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     const { reviewRecipes: reviewRecipesQuery } = this.props
     if (!reviewRecipesQuery.data) return
     if (!reviewRecipesQuery.data.recipes.pagination.hasNext) return
+    if (reviewRecipesQuery.loading) return
 
     return this.props.reviewRecipes.fetchMore({
       variables: {

@@ -277,18 +277,18 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         ...ps.meal,
         items: ps.meal.items.map(item => {
           if (mealItem.id === item.id) {
-            if (mealItem.alternativeMealItems) {
-              mealItem.alternativeMealItems.map(alternativeMealItem => {
-                if (mealItem.id === alternativeMealItem.id) {
-                  return mealItem
-                }
-
-                return alternativeMealItem
-              })
-            }
-
             return mealItem
           }
+
+          // if (item.alternativeMealItems) {
+          //   item.alternativeMealItems = item.alternativeMealItems.map(alternativeMealItem => {
+          //     if (mealItem.id === alternativeMealItem.id) {
+          //       return mealItem
+          //     }
+          //
+          //     return alternativeMealItem
+          //   })
+          // }
 
           return item
         })
@@ -382,8 +382,7 @@ const MealFormContainer = (props: MealFormProps) => {
       id: mealId,
     },
     skip: !mealId,
-    returnPartialData: true,
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'no-cache',
   })
 
   const [createMeal, { error: createRecipeError, loading: createRecipeLoading }] = useMutation<MealFormCreateMutation, MealFormCreateMutationVariables>(gql`
@@ -415,7 +414,7 @@ const MealFormContainer = (props: MealFormProps) => {
    * */
   if (!mealFormQueryData && mealId) return null
   if (mealFormQueryLoading) return <LoadingIndicator />
-console.log('mealFormQueryData && mealFormQueryData.meal', mealFormQueryData && mealFormQueryData.meal)
+
   return (
     <MealForm
       fieldErrors={getGraphQLUserInputErrors(deleteMealError || createRecipeError || updateRecipeError)}

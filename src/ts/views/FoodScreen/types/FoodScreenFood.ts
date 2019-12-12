@@ -63,6 +63,6 @@ export interface FoodScreenFood {
   description: FoodScreenFood_description[] | null;
   image: FoodScreenFood_image | null;
   origFoodGroups: FoodScreenFood_origFoodGroups[][];
-  nutrition: FoodScreenFood_nutrition;
+  nutrition: FoodScreenFood_nutrition | null;
   foodClass: FoodScreenFood_foodClass;
 }

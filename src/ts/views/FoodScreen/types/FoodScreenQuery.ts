@@ -63,7 +63,7 @@ export interface FoodScreenQuery_food {
   description: FoodScreenQuery_food_description[] | null;
   image: FoodScreenQuery_food_image | null;
   origFoodGroups: FoodScreenQuery_food_origFoodGroups[][];
-  nutrition: FoodScreenQuery_food_nutrition;
+  nutrition: FoodScreenQuery_food_nutrition | null;
   foodClass: FoodScreenQuery_food_foodClass;
 }
 

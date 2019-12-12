@@ -40,7 +40,6 @@ export interface ImageSourceBase {
   LandingCurve: string;
   AssistantExtra: string;
   AssistantExtraWhite: string;
-  ComingSoonButtonGroup: string;
 
   FaceBookIcon: string;
   YoutubeIcon: string;
@@ -72,4 +71,8 @@ export interface ImageSourceBase {
   Regenerate: string;
 
   GooeyRingSpinner: string;
+
+  AppStoreButton: string;
+  GooglePlayButton: string;
+  CafeBazaarButton: string;
 }

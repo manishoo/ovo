@@ -35,7 +35,10 @@ export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | 
     recipe: mealItem.item && (determineIfIsFood(mealItem.item) ? null : mealItem.item.id),
     unit: mealItem.unit ? (determineIfIsWeight(mealItem.unit) ? mealItem.unit.id : 'customUnit') : 'g',
     description: mealItem.description && mealItem.description.map(t => trimTypeName(t)),
-    customUnit: mealItem.customUnit,
+    customUnit: mealItem.customUnit ? {
+      name: mealItem.customUnit.name.map(t => trimTypeName(t)),
+      gramWeight: mealItem.customUnit.gramWeight,
+    } : undefined,
     id: getOrigId(mealItem.id),
     amount: mealItem.amount,
     alternativeMealItems: determineIfMealItemIsMealFormMeal_items(mealItem) ? mealItem.alternativeMealItems.map(alternativeMealItem => ({
@@ -44,9 +47,12 @@ export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | 
       recipe: alternativeMealItem.item && (determineIfIsFood(alternativeMealItem.item) ? null : alternativeMealItem.item.id),
       unit: alternativeMealItem.unit ? (determineIfIsWeight(alternativeMealItem.unit) ? alternativeMealItem.unit.id : 'customUnit') : 'g',
       description: alternativeMealItem.description && alternativeMealItem.description.map(t => trimTypeName(t)),
-      customUnit: mealItem.customUnit,
-      id: getOrigId(mealItem.id),
-      amount: mealItem.amount,
+      customUnit: alternativeMealItem.customUnit ? {
+        name: alternativeMealItem.customUnit.name.map(t => trimTypeName(t)),
+        gramWeight: alternativeMealItem.customUnit.gramWeight,
+      } : undefined,
+      id: getOrigId(alternativeMealItem.id),
+      amount: alternativeMealItem.amount,
     })) : []
   }
 }

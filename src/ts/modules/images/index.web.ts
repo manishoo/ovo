@@ -26,7 +26,7 @@ class ImageSource implements ImageSourceBase {
   ShoppingList = AppConfig.getImagePath('ShoppingList.svg')
   ShoppingListActive = AppConfig.getImagePath('ShoppingListActive.svg')
 
-  Brand = AppConfig.getImagePath('Brand.svg')
+  Brand = AppConfig.getImagePath('Brand.png')
   BrandWhite = AppConfig.getImagePath('BrandWhite.svg')
   Phone = AppConfig.getImagePath('Phone.png')
   Assistant = AppConfig.getImagePath('Assistant.svg')
@@ -42,7 +42,6 @@ class ImageSource implements ImageSourceBase {
   LandingCurve = AppConfig.getImagePath('LandingCurve.svg')
   AssistantExtra = AppConfig.getImagePath('AssistantExtra.png')
   AssistantExtraWhite = AppConfig.getImagePath('AssistantExtraWhite.png')
-  ComingSoonButtonGroup = AppConfig.getImagePath('ComingSoonButtonGroup.png')
 
   FaceBookIcon = AppConfig.getImagePath('FB.svg')
   YoutubeIcon = AppConfig.getImagePath('YT.svg')
@@ -74,6 +73,10 @@ class ImageSource implements ImageSourceBase {
   Regenerate = AppConfig.getImagePath('Regenerate.svg')
 
   GooeyRingSpinner = AppConfig.getImagePath('GooeyRingSpinner.svg')
+
+  AppStoreButton = AppConfig.getImagePath('AppStoreButton.png')
+  GooglePlayButton = AppConfig.getImagePath('GooglePlayButton.png')
+  CafeBazaarButton = AppConfig.getImagePath('CafeBazaarButton.png')
 }
 
 export default new ImageSource()

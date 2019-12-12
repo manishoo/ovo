@@ -24,6 +24,7 @@ interface SelectProps {
   onChange: (value: any) => void,
   label?: string
   children?: any,
+  editable?: boolean,
 }
 
 export default class Select extends RX.Component<SelectProps> {
@@ -32,19 +33,24 @@ export default class Select extends RX.Component<SelectProps> {
   private _popupDisplayed: boolean = false
 
   public render() {
-    const { style, label } = this.props
+    const { style, label, editable = true } = this.props
+
+    const selectedOption = this.props.options.find(p => p.value === this.props.value)
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => [
           !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>,
           <RX.View
-            style={[styles.selectContainer, { backgroundColor: theme.colors.textInputBg }, style]}
-            onPress={this._handleOnPress}
+            style={[styles.selectContainer, {
+              backgroundColor: theme.colors.textInputBg,
+              cursor: editable ? 'pointer' : undefined,
+            }, style]}
+            onPress={editable ? this._handleOnPress : undefined}
             activeOpacity={0.7}
             ref={ref => this._mountedButton = ref}
           >
-            <Text>{this.props.options.find(p => p.value === this.props.value)!.text}</Text>
+            <Text>{selectedOption && selectedOption.text}</Text>
           </RX.View>
         ]}
       </ThemeContext.Consumer>
@@ -101,7 +107,6 @@ const styles = {
   selectContainer: RX.Styles.createViewStyle({
     padding: 8,
     borderRadius: 5,
-    cursor: 'pointer',
     marginBottom: Styles.values.spacing
   }),
   label: RX.Styles.createTextStyle({

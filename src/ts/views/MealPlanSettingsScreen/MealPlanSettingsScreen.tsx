@@ -6,7 +6,7 @@
 import { useMutation } from '@apollo/react-hooks'
 import client from '@App/client'
 import Styles from '@App/Styles'
-import { ThemeContext } from '@App/ThemeContext'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
@@ -87,46 +87,36 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
     if (!me) return
 
     return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
+      <CenterAlignedPageView>
+        <Navbar
+          title={translate(translate.keys.editMealPlanSettings)}
+        >
           <RX.View
-            style={[
-              styles.container,
-              {
-                backgroundColor: theme.colors.bg,
-              }
-            ]}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              [Styles.values.marginStart]: Styles.values.spacing,
+            }}
           >
-            <Navbar
-              title={translate(translate.keys.editMealPlanSettings)}
-            >
-              <RX.View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  [Styles.values.marginStart]: Styles.values.spacing,
-                }}
-              >
-                <Text
-                  translate={translate.keys.Save}
-                  onPress={this._onSubmit}
-                />
-                {
-                  this.props.loading &&
-                  <LoadingIndicator size={30} />
-                }
-              </RX.View>
-            </Navbar>
-
-            <RX.View style={styles.innerContainer}>
-              <UserMeals
-                ref={ref => this._userMeals = ref}
-                meals={me.meals}
-              />
-            </RX.View>
+            <Text
+              translate={translate.keys.Save}
+              onPress={this._onSubmit}
+            />
+            {
+              this.props.loading &&
+              <LoadingIndicator size={30} />
+            }
           </RX.View>
-        )}
-      </ThemeContext.Consumer>
+        </Navbar>
+
+        <RX.View style={styles.innerContainer}>
+          <UserMeals
+            ref={ref => this._userMeals = ref}
+            meals={me.meals}
+          />
+        </RX.View>
+
+      </CenterAlignedPageView>
     )
   }
 
@@ -162,9 +152,5 @@ MealPlanSettingsScreenContainer.operations = MealPlanSettingsScreen.operations
 MealPlanSettingsScreenContainer.showModal = MealPlanSettingsScreen.showModal
 
 const styles = {
-  container: RX.Styles.createViewStyle({
-    padding: Styles.values.spacing,
-    borderRadius: 15,
-  }),
   innerContainer: RX.Styles.createViewStyle({})
 }

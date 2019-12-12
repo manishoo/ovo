@@ -93,11 +93,47 @@ export interface DayMeal_items_item_Food_thumbnail {
 
 export interface DayMeal_items_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface DayMeal_items_item_Food_nutrition {
   calories: DayMeal_items_item_Food_nutrition_calories | null;
+  proteins: DayMeal_items_item_Food_nutrition_proteins | null;
+  carbsByDifference: DayMeal_items_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: DayMeal_items_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: DayMeal_items_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: DayMeal_items_item_Food_nutrition_fats | null;
 }
 
 export interface DayMeal_items_item_Food_origFoodGroups_name {
@@ -117,7 +153,7 @@ export interface DayMeal_items_item_Food {
   weights: DayMeal_items_item_Food_weights[];
   image: DayMeal_items_item_Food_image | null;
   thumbnail: DayMeal_items_item_Food_thumbnail | null;
-  nutrition: DayMeal_items_item_Food_nutrition;
+  nutrition: DayMeal_items_item_Food_nutrition | null;
   origFoodGroups: DayMeal_items_item_Food_origFoodGroups[][];
 }
 
@@ -214,11 +250,47 @@ export interface DayMeal_items_item_Recipe_ingredients_item_Food_thumbnail {
 
 export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface DayMeal_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface DayMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -238,7 +310,7 @@ export interface DayMeal_items_item_Recipe_ingredients_item_Food {
   weights: DayMeal_items_item_Recipe_ingredients_item_Food_weights[];
   image: DayMeal_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: DayMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: DayMeal_items_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: DayMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -260,7 +332,7 @@ export interface DayMeal_items_item_Recipe_ingredients_item_Recipe {
   id: string;
   slug: string;
   title: DayMeal_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: DayMeal_items_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: DayMeal_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type DayMeal_items_item_Recipe_ingredients_item = DayMeal_items_item_Recipe_ingredients_item_Food | DayMeal_items_item_Recipe_ingredients_item_Recipe;
@@ -296,11 +368,47 @@ export interface DayMeal_items_item_Recipe_author {
 
 export interface DayMeal_items_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface DayMeal_items_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface DayMeal_items_item_Recipe_nutrition {
   calories: DayMeal_items_item_Recipe_nutrition_calories | null;
+  proteins: DayMeal_items_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: DayMeal_items_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: DayMeal_items_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: DayMeal_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: DayMeal_items_item_Recipe_nutrition_fats | null;
 }
 
 export interface DayMeal_items_item_Recipe {
@@ -314,7 +422,7 @@ export interface DayMeal_items_item_Recipe {
   thumbnail: DayMeal_items_item_Recipe_thumbnail | null;
   ingredients: DayMeal_items_item_Recipe_ingredients[];
   author: DayMeal_items_item_Recipe_author;
-  nutrition: DayMeal_items_item_Recipe_nutrition;
+  nutrition: DayMeal_items_item_Recipe_nutrition | null;
 }
 
 export type DayMeal_items_item = DayMeal_items_item_Food | DayMeal_items_item_Recipe;

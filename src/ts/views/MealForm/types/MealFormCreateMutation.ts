@@ -89,11 +89,47 @@ export interface MealFormCreateMutation_createMeal_items_item_Food_thumbnail {
 
 export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Food_nutrition {
   calories: MealFormCreateMutation_createMeal_items_item_Food_nutrition_calories | null;
+  proteins: MealFormCreateMutation_createMeal_items_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealFormCreateMutation_createMeal_items_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealFormCreateMutation_createMeal_items_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealFormCreateMutation_createMeal_items_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealFormCreateMutation_createMeal_items_item_Food_nutrition_fats | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Food_origFoodGroups_name {
@@ -113,7 +149,7 @@ export interface MealFormCreateMutation_createMeal_items_item_Food {
   weights: MealFormCreateMutation_createMeal_items_item_Food_weights[];
   image: MealFormCreateMutation_createMeal_items_item_Food_image | null;
   thumbnail: MealFormCreateMutation_createMeal_items_item_Food_thumbnail | null;
-  nutrition: MealFormCreateMutation_createMeal_items_item_Food_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_item_Food_nutrition | null;
   origFoodGroups: MealFormCreateMutation_createMeal_items_item_Food_origFoodGroups[][];
 }
 
@@ -210,11 +246,47 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -234,7 +306,7 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients
   weights: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_weights[];
   image: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -256,7 +328,7 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe_ingredients
   id: string;
   slug: string;
   title: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item = MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Food | MealFormCreateMutation_createMeal_items_item_Recipe_ingredients_item_Recipe;
@@ -292,11 +364,47 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe_author {
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_nutrition {
   calories: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_calories | null;
+  proteins: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition_fats | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe {
@@ -310,7 +418,7 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe {
   thumbnail: MealFormCreateMutation_createMeal_items_item_Recipe_thumbnail | null;
   ingredients: MealFormCreateMutation_createMeal_items_item_Recipe_ingredients[];
   author: MealFormCreateMutation_createMeal_items_item_Recipe_author;
-  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealFormCreateMutation_createMeal_items_item = MealFormCreateMutation_createMeal_items_item_Food | MealFormCreateMutation_createMeal_items_item_Recipe;
@@ -391,11 +499,47 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition {
   calories: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_calories | null;
+  proteins: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition_fats | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_origFoodGroups_name {
@@ -415,7 +559,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
   weights: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_weights[];
   image: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_image | null;
   thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_thumbnail | null;
-  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition | null;
   origFoodGroups: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_origFoodGroups[][];
 }
 
@@ -512,11 +656,47 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition {
   calories: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -536,7 +716,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
   weights: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights[];
   image: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -558,7 +738,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
   id: string;
   slug: string;
   title: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item = MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food | MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe;
@@ -594,11 +774,47 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition {
   calories: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_calories | null;
+  proteins: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition_fats | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe {
@@ -612,7 +828,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
   thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_thumbnail | null;
   ingredients: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_ingredients[];
   author: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_author;
-  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition | null;
 }
 
 export type MealFormCreateMutation_createMeal_items_alternativeMealItems_item = MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food | MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe;
@@ -677,7 +893,7 @@ export interface MealFormCreateMutation_createMeal {
   likedByUser: boolean | null;
   likesCount: number;
   items: MealFormCreateMutation_createMeal_items[];
-  instanceOf: any | null;
+  instanceOf: any;
   author: MealFormCreateMutation_createMeal_author;
   timing: MealFormCreateMutation_createMeal_timing;
 }

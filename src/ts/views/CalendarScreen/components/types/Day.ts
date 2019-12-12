@@ -93,11 +93,47 @@ export interface Day_meals_items_item_Food_thumbnail {
 
 export interface Day_meals_items_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface Day_meals_items_item_Food_nutrition {
   calories: Day_meals_items_item_Food_nutrition_calories | null;
+  proteins: Day_meals_items_item_Food_nutrition_proteins | null;
+  carbsByDifference: Day_meals_items_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: Day_meals_items_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: Day_meals_items_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: Day_meals_items_item_Food_nutrition_fats | null;
 }
 
 export interface Day_meals_items_item_Food_origFoodGroups_name {
@@ -117,7 +153,7 @@ export interface Day_meals_items_item_Food {
   weights: Day_meals_items_item_Food_weights[];
   image: Day_meals_items_item_Food_image | null;
   thumbnail: Day_meals_items_item_Food_thumbnail | null;
-  nutrition: Day_meals_items_item_Food_nutrition;
+  nutrition: Day_meals_items_item_Food_nutrition | null;
   origFoodGroups: Day_meals_items_item_Food_origFoodGroups[][];
 }
 
@@ -214,11 +250,47 @@ export interface Day_meals_items_item_Recipe_ingredients_item_Food_thumbnail {
 
 export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface Day_meals_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface Day_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -238,7 +310,7 @@ export interface Day_meals_items_item_Recipe_ingredients_item_Food {
   weights: Day_meals_items_item_Recipe_ingredients_item_Food_weights[];
   image: Day_meals_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: Day_meals_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: Day_meals_items_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: Day_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -260,7 +332,7 @@ export interface Day_meals_items_item_Recipe_ingredients_item_Recipe {
   id: string;
   slug: string;
   title: Day_meals_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: Day_meals_items_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: Day_meals_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type Day_meals_items_item_Recipe_ingredients_item = Day_meals_items_item_Recipe_ingredients_item_Food | Day_meals_items_item_Recipe_ingredients_item_Recipe;
@@ -296,11 +368,47 @@ export interface Day_meals_items_item_Recipe_author {
 
 export interface Day_meals_items_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface Day_meals_items_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface Day_meals_items_item_Recipe_nutrition {
   calories: Day_meals_items_item_Recipe_nutrition_calories | null;
+  proteins: Day_meals_items_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: Day_meals_items_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: Day_meals_items_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: Day_meals_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: Day_meals_items_item_Recipe_nutrition_fats | null;
 }
 
 export interface Day_meals_items_item_Recipe {
@@ -314,7 +422,7 @@ export interface Day_meals_items_item_Recipe {
   thumbnail: Day_meals_items_item_Recipe_thumbnail | null;
   ingredients: Day_meals_items_item_Recipe_ingredients[];
   author: Day_meals_items_item_Recipe_author;
-  nutrition: Day_meals_items_item_Recipe_nutrition;
+  nutrition: Day_meals_items_item_Recipe_nutrition | null;
 }
 
 export type Day_meals_items_item = Day_meals_items_item_Food | Day_meals_items_item_Recipe;

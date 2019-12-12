@@ -50,11 +50,47 @@ export interface FoodPickerQuery_foods_foods_thumbnail {
 
 export interface FoodPickerQuery_foods_foods_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_foods_foods_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_foods_foods_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_foods_foods_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_foods_foods_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_foods_foods_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface FoodPickerQuery_foods_foods_nutrition {
   calories: FoodPickerQuery_foods_foods_nutrition_calories | null;
+  proteins: FoodPickerQuery_foods_foods_nutrition_proteins | null;
+  carbsByDifference: FoodPickerQuery_foods_foods_nutrition_carbsByDifference | null;
+  totalCarbs: FoodPickerQuery_foods_foods_nutrition_totalCarbs | null;
+  totalAvailableCarbs: FoodPickerQuery_foods_foods_nutrition_totalAvailableCarbs | null;
+  fats: FoodPickerQuery_foods_foods_nutrition_fats | null;
 }
 
 export interface FoodPickerQuery_foods_foods {
@@ -65,7 +101,7 @@ export interface FoodPickerQuery_foods_foods {
   weights: FoodPickerQuery_foods_foods_weights[];
   image: FoodPickerQuery_foods_foods_image | null;
   thumbnail: FoodPickerQuery_foods_foods_thumbnail | null;
-  nutrition: FoodPickerQuery_foods_foods_nutrition;
+  nutrition: FoodPickerQuery_foods_foods_nutrition | null;
 }
 
 export interface FoodPickerQuery_foods {
@@ -165,11 +201,47 @@ export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_thumbnail
 
 export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition {
   calories: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_calories | null;
+  proteins: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_origFoodGroups_name {
@@ -189,7 +261,7 @@ export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food {
   weights: FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights[];
   image: FoodPickerQuery_recipes_recipes_ingredients_item_Food_image | null;
   thumbnail: FoodPickerQuery_recipes_recipes_ingredients_item_Food_thumbnail | null;
-  nutrition: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition;
+  nutrition: FoodPickerQuery_recipes_recipes_ingredients_item_Food_nutrition | null;
   origFoodGroups: FoodPickerQuery_recipes_recipes_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -211,7 +283,7 @@ export interface FoodPickerQuery_recipes_recipes_ingredients_item_Recipe {
   id: string;
   slug: string;
   title: FoodPickerQuery_recipes_recipes_ingredients_item_Recipe_title[];
-  nutrition: FoodPickerQuery_recipes_recipes_ingredients_item_Recipe_nutrition;
+  nutrition: FoodPickerQuery_recipes_recipes_ingredients_item_Recipe_nutrition | null;
 }
 
 export type FoodPickerQuery_recipes_recipes_ingredients_item = FoodPickerQuery_recipes_recipes_ingredients_item_Food | FoodPickerQuery_recipes_recipes_ingredients_item_Recipe;
@@ -247,11 +319,47 @@ export interface FoodPickerQuery_recipes_recipes_author {
 
 export interface FoodPickerQuery_recipes_recipes_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface FoodPickerQuery_recipes_recipes_nutrition {
   calories: FoodPickerQuery_recipes_recipes_nutrition_calories | null;
+  proteins: FoodPickerQuery_recipes_recipes_nutrition_proteins | null;
+  carbsByDifference: FoodPickerQuery_recipes_recipes_nutrition_carbsByDifference | null;
+  totalCarbs: FoodPickerQuery_recipes_recipes_nutrition_totalCarbs | null;
+  totalAvailableCarbs: FoodPickerQuery_recipes_recipes_nutrition_totalAvailableCarbs | null;
+  fats: FoodPickerQuery_recipes_recipes_nutrition_fats | null;
 }
 
 export interface FoodPickerQuery_recipes_recipes {
@@ -265,7 +373,7 @@ export interface FoodPickerQuery_recipes_recipes {
   thumbnail: FoodPickerQuery_recipes_recipes_thumbnail | null;
   ingredients: FoodPickerQuery_recipes_recipes_ingredients[];
   author: FoodPickerQuery_recipes_recipes_author;
-  nutrition: FoodPickerQuery_recipes_recipes_nutrition;
+  nutrition: FoodPickerQuery_recipes_recipes_nutrition | null;
 }
 
 export interface FoodPickerQuery_recipes {

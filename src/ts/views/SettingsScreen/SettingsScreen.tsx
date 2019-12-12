@@ -252,7 +252,6 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       firstName: me.firstName,
       gender: me.gender,
       lastName: me.lastName,
-      middleName: me.middleName,
       socialNetworks: {
         instagram: me.socialNetworks && me.socialNetworks.instagram,
         twitter: me.socialNetworks && me.socialNetworks.twitter,

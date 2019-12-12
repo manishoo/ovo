@@ -93,11 +93,47 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Food_thumbnail 
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition {
   calories: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_calories | null;
+  proteins: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_fats | null;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Food_origFoodGroups_name {
@@ -117,7 +153,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Food {
   weights: MealComponentLogMealMutation_logMeal_items_item_Food_weights[];
   image: MealComponentLogMealMutation_logMeal_items_item_Food_image | null;
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Food_thumbnail | null;
-  nutrition: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition;
+  nutrition: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition | null;
   origFoodGroups: MealComponentLogMealMutation_logMeal_items_item_Food_origFoodGroups[][];
 }
 
@@ -214,11 +250,47 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredie
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -238,7 +310,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredie
   weights: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_weights[];
   image: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -260,7 +332,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredie
   id: string;
   slug: string;
   title: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item = MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food | MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe;
@@ -296,11 +368,47 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_author {
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition {
   calories: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_calories | null;
+  proteins: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition_fats | null;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe {
@@ -314,7 +422,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe {
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Recipe_thumbnail | null;
   ingredients: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients[];
   author: MealComponentLogMealMutation_logMeal_items_item_Recipe_author;
-  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition;
+  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealComponentLogMealMutation_logMeal_items_item = MealComponentLogMealMutation_logMeal_items_item_Food | MealComponentLogMealMutation_logMeal_items_item_Recipe;

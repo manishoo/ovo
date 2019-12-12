@@ -101,11 +101,47 @@ export interface IngredientRecipe_ingredients_item_Food_thumbnail {
 
 export interface IngredientRecipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface IngredientRecipe_ingredients_item_Food_nutrition {
   calories: IngredientRecipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: IngredientRecipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: IngredientRecipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: IngredientRecipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: IngredientRecipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: IngredientRecipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface IngredientRecipe_ingredients_item_Food_origFoodGroups_name {
@@ -125,7 +161,7 @@ export interface IngredientRecipe_ingredients_item_Food {
   weights: IngredientRecipe_ingredients_item_Food_weights[];
   image: IngredientRecipe_ingredients_item_Food_image | null;
   thumbnail: IngredientRecipe_ingredients_item_Food_thumbnail | null;
-  nutrition: IngredientRecipe_ingredients_item_Food_nutrition;
+  nutrition: IngredientRecipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: IngredientRecipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -147,7 +183,7 @@ export interface IngredientRecipe_ingredients_item_Recipe {
   id: string;
   slug: string;
   title: IngredientRecipe_ingredients_item_Recipe_title[];
-  nutrition: IngredientRecipe_ingredients_item_Recipe_nutrition;
+  nutrition: IngredientRecipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type IngredientRecipe_ingredients_item = IngredientRecipe_ingredients_item_Food | IngredientRecipe_ingredients_item_Recipe;
@@ -183,11 +219,47 @@ export interface IngredientRecipe_author {
 
 export interface IngredientRecipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface IngredientRecipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface IngredientRecipe_nutrition {
   calories: IngredientRecipe_nutrition_calories | null;
+  proteins: IngredientRecipe_nutrition_proteins | null;
+  carbsByDifference: IngredientRecipe_nutrition_carbsByDifference | null;
+  totalCarbs: IngredientRecipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: IngredientRecipe_nutrition_totalAvailableCarbs | null;
+  fats: IngredientRecipe_nutrition_fats | null;
 }
 
 export interface IngredientRecipe {
@@ -201,5 +273,5 @@ export interface IngredientRecipe {
   thumbnail: IngredientRecipe_thumbnail | null;
   ingredients: IngredientRecipe_ingredients[];
   author: IngredientRecipe_author;
-  nutrition: IngredientRecipe_nutrition;
+  nutrition: IngredientRecipe_nutrition | null;
 }

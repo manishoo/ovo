@@ -9,10 +9,10 @@ import { ThemeContext } from '@App/ThemeContext'
 import HoverView from '@Common/HoverView/HoverButton'
 import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import InputNumber from '@Common/Input/InputNumber'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import MenuItem from '@Common/MenuItem/MenuItem'
 import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
-import TotalTime from '@Common/TotalTime/TotalTime'
 import { withNavigation } from '@Modules/navigator'
 import CalendarService from '@Services/CalendarService'
 import { renderImageOrPlaceholder } from '@Utils'
@@ -143,7 +143,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
                         translations={mealItem.title || []}
                         style={styles.title}
                       />
-                      {!!mealItem.totalTime && <TotalTime totalTime={mealItem.totalTime} />}
+                      {/*{!!mealItem.totalTime && <TotalTime totalTime={mealItem.totalTime} />}*/}
                     </RX.View>
                     <RX.View
                       style={{
@@ -152,16 +152,15 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
                       }}
                     >
                       <InputNumber
-                        value={mealItem.amount}
+                        value={mealItem.amount && Number(mealItem.amount.toFixed(1))}
                         onChange={(value) => this._onMealItemAmountChange(value, mealItem.selectedUnit)}
-                        textInputStyle={{
-                          backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
-                          padding: Styles.values.spacing / 2,
-                          [Styles.values.paddingEnd]: Styles.values.spacing / 4,
-                          [Styles.values.borderTopEndRadius]: 0,
-                          [Styles.values.borderBottomEndRadius]: 0,
-                          width: (String(mealItem.amount).length * 10) + (Styles.values.spacing / 2) + (Styles.values.spacing / 4)
-                        }}
+                        textInputStyle={[
+                          styles.amountInput,
+                          {
+                            backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
+                            width: ((mealItem.amount ? mealItem.amount.toFixed(1) : '').length * 10) + (Styles.values.spacing / 4)
+                          }
+                        ]}
                         style={{
                           marginBottom: 0,
                         }}
@@ -169,15 +168,13 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
                       <Select
                         value={mealItem.selectedUnit}
                         options={mealItem.units}
-                        onChange={value => this._onMealItemAmountChange(mealItem.amount, value)}
-                        style={{
-                          backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
-                          padding: Styles.values.spacing / 2,
-                          [Styles.values.paddingStart]: 0,
-                          [Styles.values.borderTopStartRadius]: 0,
-                          [Styles.values.borderBottomStartRadius]: 0,
-                          marginBottom: 0,
-                        }}
+                        onChange={this._handleMealItemUnitChange}
+                        style={[
+                          styles.unitInput,
+                          {
+                            backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
+                          },
+                        ]}
                       />
                     </RX.View>
                   </RX.View>
@@ -192,7 +189,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
                     }}
                   >
                     <MenuItem
-                      label={'Remove from meal'}
+                      label={translate('Remove from meal')}
                       onPress={this.props.onMealItemRemove}
                     />
                   </ItemControl>
@@ -203,6 +200,45 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _handleMealItemUnitChange = (selectedUnit: string) => {
+    const mealItem = this.props.mealItem
+    if (!mealItem.amount) return null
+
+    let newAmount = mealItem.amount
+
+    if (mealItem.item) {
+      if (determineIfIsFood(mealItem.item)) {
+        switch (selectedUnit) {
+          case 'g':
+            if (mealItem.unit && mealItem.unit.gramWeight) {
+              newAmount = mealItem.amount * mealItem.unit.gramWeight
+            }
+            break
+          case 'customUnit':
+            if (mealItem.customUnit && mealItem.customUnit.gramWeight) {
+              newAmount = (mealItem.amount * mealItem.customUnit.gramWeight) / (mealItem.unit && mealItem.unit.gramWeight ? mealItem.unit.gramWeight : 1)
+            }
+            break
+          default:
+            const weight = mealItem.item.weights.find(p => p.id === selectedUnit)
+            if (!weight) throw new Error('selectedUnit is unknown')
+            if (!weight.gramWeight) throw new Error('weight does not have gramWeight')
+
+            newAmount = (mealItem.amount * ((mealItem.unit && mealItem.unit.gramWeight ? mealItem.unit.gramWeight : 1))) / weight.gramWeight
+        }
+      } else {
+        switch (selectedUnit) {
+          case 'serving':
+          case 'g':
+          default:
+            break
+        }
+      }
+    }
+
+    this._onMealItemAmountChange(newAmount, selectedUnit)
   }
 
   private _onMealItemAmountChange = (amount: number | null, selectedUnit: string) => {
@@ -230,6 +266,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
           case 'serving':
           case 'g':
           default:
+            mealItem.unit = null
             break
         }
       }
@@ -264,7 +301,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
               value: 'customUnit',
               text: <Text translations={mealItem.customUnit.name} />
             } : undefined,
-            { value: 'g', text: 'grams' }
+            { value: 'g', text: translate('g') }
           ] as Option[]).filter(Boolean),
         }
       } else {
@@ -274,8 +311,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
           thumbnail: mealItem.item.thumbnail,
           selectedUnit: 'serving',
           units: ([
-            { value: 'serving', text: 'serving' }, //FIXME
-            { value: 'g', text: 'grams' },
+            { value: 'serving', text: translate('serving') },
             mealItem.customUnit ? {
               value: 'customUnit',
               text: <Text translations={mealItem.customUnit.name} />
@@ -330,7 +366,7 @@ const styles = {
     paddingHorizontal: Styles.values.spacingLarge,
     flexDirection: 'row',
     alignItems: 'center',
-    cursor: 'pointer',
+    // cursor: 'pointer',
     borderRadius: 8,
   }),
   textsContainer: RX.Styles.createViewStyle({
@@ -355,5 +391,18 @@ const styles = {
   moreButton: RX.Styles.createViewStyle({
     position: 'absolute',
     right: 20,
+  }),
+  amountInput: RX.Styles.createViewStyle({
+    padding: Styles.values.spacing / 2,
+    [Styles.values.paddingEnd]: Styles.values.spacing / 4,
+    [Styles.values.borderTopEndRadius]: 0,
+    [Styles.values.borderBottomEndRadius]: 0,
+  }),
+  unitInput: RX.Styles.createViewStyle({
+    padding: Styles.values.spacing / 2,
+    [Styles.values.paddingStart]: 0,
+    [Styles.values.borderTopStartRadius]: 0,
+    [Styles.values.borderBottomStartRadius]: 0,
+    marginBottom: 0,
   })
 }

@@ -60,7 +60,6 @@ export interface IntroductionMutation_setup_messages_data_user {
   session: string;
   email: string;
   firstName: string | null;
-  middleName: string | null;
   lastName: string | null;
   avatar: IntroductionMutation_setup_messages_data_user_avatar | null;
   gender: Gender | null;

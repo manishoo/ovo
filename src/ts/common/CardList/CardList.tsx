@@ -83,6 +83,6 @@ const styles = {
   container: RX.Styles.createViewStyle({
     flexDirection: 'row',
     flexWrap: 'wrap',
-    maxWidth: Styles.values.mainContentMaxWidth
+    maxWidth: 1200
   }),
 }

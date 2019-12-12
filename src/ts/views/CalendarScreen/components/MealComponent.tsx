@@ -125,7 +125,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                       >
                         <Text style={styles.mealName}>{meal.userMeal.name}</Text>
                         <Text
-                          style={styles.mealCalorie}>{this._calculateMealNutrition()} {translate(translate.keys.Calories)}</Text>
+                          style={styles.mealCalorie}>{CalendarService.calculateMealNutrition(meal)} {translate(translate.keys.Calories)}</Text>
                       </RX.View>
 
                       <ItemControl
@@ -138,7 +138,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                         }}
                       >
                         <MenuItem
-                          label={'Add Meal Item'}
+                          label={translate('Add Meal Item')}
                           onPress={() => showFoodPicker({
                             autoFocus: true,
                             foodTypes: [FoodTypes.food, FoodTypes.recipe],
@@ -147,7 +147,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                           })}
                         />
                         <MenuItem
-                          label={'Edit Meal Settings'}
+                          label={translate('Edit Meal Settings')}
                           onPress={() => MealSettingsScreen.showModal({
                             theme,
                             meal: meal.userMeal,
@@ -158,7 +158,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                           })}
                         />
                         <MenuItem
-                          label={'Clear Meals Items'}
+                          label={translate('Clear Meals Items')}
                           onPress={this._onClearMealItems}
                         />
                       </ItemControl>
@@ -248,22 +248,6 @@ class MealComponent extends RX.Component<MealComponentProps> {
     if (this.props.mealRegenerating) return
 
     this.props.onMealRegenerate()
-  }
-
-  private _calculateMealNutrition = () => {
-    let totalCalorie = 0
-    let unit = AppConfig.calorieMeasurementUnit
-
-    this.props.meal.items.forEach(item => {
-      if (!item.item) return null
-
-      if (item.item.nutrition.calories) {
-        if (item.item.nutrition.calories.unit == unit) {
-          totalCalorie += item.item.nutrition.calories.amount
-        }
-      }
-    })
-    return totalCalorie
   }
 }
 

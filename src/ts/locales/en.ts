@@ -168,7 +168,25 @@ enum Content {
   other = 'other',
   recipe = 'recipe',
 
-  'site.title' = 'Prana | Personal Fitness Assistant'
+  'site.title' = 'Prana | Personal Fitness Assistant',
+
+  'Add Meal Item' = 'Add Meal Item',
+  'Edit Meal Settings' = 'Edit Meal Settings',
+  'Clear Meals Items' = 'Clear Meals Items',
+  'Remove from meal' = 'Remove from meal',
+
+  'tiny' = 'tiny',
+  'small' = 'small',
+  'normal' = 'normal',
+  'huge' = 'huge',
+  'big' = 'big',
+
+  littleTime = '15 min',
+  lotsOfTime = '1 hour',
+  moreTime = '45 minutes',
+  noLimit = 'No limit',
+  noTime = '5 minutes',
+  someTime = '30 minutes',
 }
 
 export default Content

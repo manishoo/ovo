@@ -4,13 +4,13 @@
  */
 
 import Styles from '@App/Styles'
-import CheckBox from '@Common/Checkbox/Checkbox'
+import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import CalendarService, { GroceriesByFoodGroup } from '@Services/CalendarService'
-import { renderImageOrPlaceholder } from '@Utils'
-import { Day_meals_items_item_Food } from '@Views/CalendarScreen/components/types/Day'
+import GroceryList from '@Views/ShoppingList/components/GroceryList/GroceryList'
+import GroceryListItem from '@Views/ShoppingList/components/GroceryListItem/GroceryListItem'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -36,8 +36,12 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
 
   public render() {
     return (
-      <RX.View>
-        <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing * 2 }}>
+      <CenterAlignedPageView
+        style={{
+          padding: Styles.values.spacing,
+        }}
+      >
+        <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
           <FilledButton
             label={translate(translate.keys.ShoppingList)}
             onPress={() => this.setState({ activeTab: 'shoppingList' })}
@@ -61,7 +65,7 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
         </RX.View>
 
         {this._renderTabContent()}
-      </RX.View>
+      </CenterAlignedPageView>
     )
   }
 
@@ -76,15 +80,29 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
           if (!foodItem) return null
 
           return (
-            <RX.View>
-              <Text
-                type={Text.types.title}
+            <GroceryList
+              title={<Text
+                type={Text.types.body}
                 translations={foodItem.food.origFoodGroups[0][0].name}
-              />
+              />}
+            >
               {
-                pantryGroceriesByFoodGroup[foodGroupId].map(food => this._renderShoppingListItem(food.food, food.grams, 'pantry'))
+                pantryGroceriesByFoodGroup[foodGroupId].map(food =>
+                  <GroceryListItem
+                    food={food.food}
+                    type={'pantry'}
+                    grams={food.grams}
+                    editable={false}
+                    onAmountChange={() => {
+                      //
+                    }}
+                    onUnitChange={() => {
+                      //
+                    }}
+                  />
+                )
               }
-            </RX.View>
+            </GroceryList>
           )
         })
       case 'shoppingList':
@@ -94,38 +112,32 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
           if (!foodItem) return null
 
           return (
-            <RX.View>
-              <Text
-                type={Text.types.title}
+            <GroceryList
+              title={<Text
+                type={Text.types.body}
                 translations={foodItem.food.origFoodGroups[0][0].name}
-              />
+              />}
+            >
               {
-                shoppingListGroceriesByFoodGroup[foodGroupId].map(food => this._renderShoppingListItem(food.food, food.grams, 'shoppingList'))
+                shoppingListGroceriesByFoodGroup[foodGroupId].map(food =>
+                  <GroceryListItem
+                    food={food.food}
+                    type={'shoppingList'}
+                    grams={food.grams}
+                    editable={false}
+                    onAmountChange={() => {
+                      //
+                    }}
+                    onUnitChange={() => {
+                      //
+                    }}
+                  />
+                )
               }
-            </RX.View>
+            </GroceryList>
           )
         })
     }
-  }
-
-  private _renderShoppingListItem = (food: Day_meals_items_item_Food, grams: number, type: 'shoppingList' | 'pantry') => {
-    return (
-      <RX.View
-        style={styles.container}
-      >
-        {renderImageOrPlaceholder(food.thumbnail, styles.image)}
-        <RX.View style={styles.textsContainer}>
-          <Text translations={food.name} style={styles.title} />
-        </RX.View>
-        <CheckBox
-          value={type === 'pantry'}
-          onChange={() => {
-            if (type === 'shoppingList') CalendarService.addPantryItem(food, grams)
-            if (type === 'pantry') CalendarService.removePantryItem(food.id)
-          }}
-        />
-      </RX.View>
-    )
   }
 }
 
@@ -152,5 +164,8 @@ const styles = {
   }),
   tabButton: RX.Styles.createViewStyle({
     [Styles.values.marginEnd]: Styles.values.spacing,
+  }),
+  listWrapper: RX.Styles.createViewStyle({
+    paddingTop: Styles.values.spacing,
   })
 }

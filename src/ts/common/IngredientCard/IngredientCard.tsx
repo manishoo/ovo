@@ -12,6 +12,7 @@ import Text from '@Common/Text/Text'
 import ImageSource from '@Modules/images'
 import { createId } from '@Utils/create-id'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
+import { fragments as NutritionInfoFragments } from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { IngredientCardIngredient } from './types/IngredientCardIngredient'
@@ -84,10 +85,12 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
         image {url}
         thumbnail {url}
         nutrition {
-          calories { amount unit }
+          ...NutritionInfoNutrition
         }
         origFoodGroups { id name { text locale } }
       }
+      
+      ${NutritionInfoFragments.nutrition}
     `,
     get recipe() {
       return gql`
@@ -143,11 +146,12 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
             avatar {url}
           }
           nutrition {
-            calories { amount unit }
+            ...NutritionInfoNutrition
           }
         }
 
         ${this.food}
+        ${NutritionInfoFragments.nutrition}
       `
     }
   }
@@ -229,7 +233,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
                       color: theme.colors.recipeIngredientUnitTextColor,
                     }
                   ]}
-                >{!ingredient.unit && translate('g')}</Text>
+                >{!ingredient.unit && ingredient.item && !determineIfIsFood(ingredient.item) ? translate('serving') : translate('g')}</Text>
               </RX.View>
             }
 

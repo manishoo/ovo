@@ -44,7 +44,6 @@ export interface LoginMutation_loginUser_user {
   session: string;
   email: string;
   firstName: string | null;
-  middleName: string | null;
   lastName: string | null;
   avatar: LoginMutation_loginUser_user_avatar | null;
   gender: Gender | null;

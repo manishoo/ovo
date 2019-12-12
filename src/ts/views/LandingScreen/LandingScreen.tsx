@@ -257,13 +257,13 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
                 marginBottom: Styles.values.spacing * 2,
               }}
             />
-            <Image
+            {/*<Image
               source={ImageSource.ComingSoonButtonGroup}
               style={{
                 width: 400,
                 height: 143,
               }}
-            />
+            />*/}
           </RX.View>
         </RX.View>
         <RX.View

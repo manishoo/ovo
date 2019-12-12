@@ -89,11 +89,47 @@ export interface ProfileMealsQuery_meals_meals_items_item_Food_thumbnail {
 
 export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_item_Food_nutrition {
   calories: ProfileMealsQuery_meals_meals_items_item_Food_nutrition_calories | null;
+  proteins: ProfileMealsQuery_meals_meals_items_item_Food_nutrition_proteins | null;
+  carbsByDifference: ProfileMealsQuery_meals_meals_items_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: ProfileMealsQuery_meals_meals_items_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: ProfileMealsQuery_meals_meals_items_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: ProfileMealsQuery_meals_meals_items_item_Food_nutrition_fats | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_item_Food_origFoodGroups_name {
@@ -113,7 +149,7 @@ export interface ProfileMealsQuery_meals_meals_items_item_Food {
   weights: ProfileMealsQuery_meals_meals_items_item_Food_weights[];
   image: ProfileMealsQuery_meals_meals_items_item_Food_image | null;
   thumbnail: ProfileMealsQuery_meals_meals_items_item_Food_thumbnail | null;
-  nutrition: ProfileMealsQuery_meals_meals_items_item_Food_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_item_Food_nutrition | null;
   origFoodGroups: ProfileMealsQuery_meals_meals_items_item_Food_origFoodGroups[][];
 }
 
@@ -210,11 +246,47 @@ export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_ite
 
 export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -234,7 +306,7 @@ export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_ite
   weights: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_weights[];
   image: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -256,7 +328,7 @@ export interface ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_ite
   id: string;
   slug: string;
   title: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item = ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Food | ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients_item_Recipe;
@@ -292,11 +364,47 @@ export interface ProfileMealsQuery_meals_meals_items_item_Recipe_author {
 
 export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition {
   calories: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_calories | null;
+  proteins: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition_fats | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_item_Recipe {
@@ -310,7 +418,7 @@ export interface ProfileMealsQuery_meals_meals_items_item_Recipe {
   thumbnail: ProfileMealsQuery_meals_meals_items_item_Recipe_thumbnail | null;
   ingredients: ProfileMealsQuery_meals_meals_items_item_Recipe_ingredients[];
   author: ProfileMealsQuery_meals_meals_items_item_Recipe_author;
-  nutrition: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_item_Recipe_nutrition | null;
 }
 
 export type ProfileMealsQuery_meals_meals_items_item = ProfileMealsQuery_meals_meals_items_item_Food | ProfileMealsQuery_meals_meals_items_item_Recipe;
@@ -391,11 +499,47 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_F
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition {
   calories: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_calories | null;
+  proteins: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_proteins | null;
+  carbsByDifference: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition_fats | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_origFoodGroups_name {
@@ -415,7 +559,7 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_F
   weights: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_weights[];
   image: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_image | null;
   thumbnail: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_thumbnail | null;
-  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_nutrition | null;
   origFoodGroups: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food_origFoodGroups[][];
 }
 
@@ -512,11 +656,47 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_R
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition {
   calories: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_calories | null;
+  proteins: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  carbsByDifference: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
+  totalCarbs: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
+  totalAvailableCarbs: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  fats: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition_fats | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -536,7 +716,7 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_R
   weights: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights[];
   image: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_nutrition | null;
   origFoodGroups: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -558,7 +738,7 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_R
   id: string;
   slug: string;
   title: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_nutrition | null;
 }
 
 export type ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item = ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Food | ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe;
@@ -594,11 +774,47 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_R
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition {
   calories: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_calories | null;
+  proteins: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_proteins | null;
+  carbsByDifference: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_carbsByDifference | null;
+  totalCarbs: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_totalCarbs | null;
+  totalAvailableCarbs: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_totalAvailableCarbs | null;
+  fats: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition_fats | null;
 }
 
 export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe {
@@ -612,7 +828,7 @@ export interface ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_R
   thumbnail: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_thumbnail | null;
   ingredients: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_ingredients[];
   author: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_author;
-  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition;
+  nutrition: ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe_nutrition | null;
 }
 
 export type ProfileMealsQuery_meals_meals_items_alternativeMealItems_item = ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Food | ProfileMealsQuery_meals_meals_items_alternativeMealItems_item_Recipe;

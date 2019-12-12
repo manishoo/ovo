@@ -42,7 +42,6 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
   public render() {
     const { meal } = this.props
 
-    console.log('MEAL CELL', meal.items)
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (

@@ -147,7 +147,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
         size={150}
         // onPress={mealItem.food ? () => LocationStore.navigate(this.props, `/food/${mealItem.food.id}/`) : undefined}
         onIngredientChange={this._onMealItemIngredientChange(mealItem, isMainMealItem)}
-        onDelete={() => this.props.onMealItemDelete(mealItem.id)}
+        onDelete={this._onMealItemDelete(mealItem, isMainMealItem)}
         ingredient={{
           ...mealItem,
           isOptional: null,
@@ -155,6 +155,17 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
         style={styles.mealItem}
       />
     )
+  }
+
+  private _onMealItemDelete = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => () => {
+    if (isMainMealItem) {
+      this.props.onMealItemDelete(this.props.mealItem.id)
+    } else {
+      this.props.onMealItemChange({
+        ...this.props.mealItem,
+        alternativeMealItems: this.props.mealItem.alternativeMealItems.filter(alternativeMealItem => alternativeMealItem.id !== mealItem.id)
+      })
+    }
   }
 
   private _onMealItemIngredientChange = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => (ingredient: IngredientCardIngredient) => {

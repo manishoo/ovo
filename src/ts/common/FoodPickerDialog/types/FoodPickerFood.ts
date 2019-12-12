@@ -50,11 +50,47 @@ export interface FoodPickerFood_thumbnail {
 
 export interface FoodPickerFood_nutrition_calories {
   amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerFood_nutrition_proteins {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerFood_nutrition_carbsByDifference {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerFood_nutrition_totalCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerFood_nutrition_totalAvailableCarbs {
+  amount: number;
+  id: string | null;
+  unit: string;
+}
+
+export interface FoodPickerFood_nutrition_fats {
+  amount: number;
+  id: string | null;
   unit: string;
 }
 
 export interface FoodPickerFood_nutrition {
   calories: FoodPickerFood_nutrition_calories | null;
+  proteins: FoodPickerFood_nutrition_proteins | null;
+  carbsByDifference: FoodPickerFood_nutrition_carbsByDifference | null;
+  totalCarbs: FoodPickerFood_nutrition_totalCarbs | null;
+  totalAvailableCarbs: FoodPickerFood_nutrition_totalAvailableCarbs | null;
+  fats: FoodPickerFood_nutrition_fats | null;
 }
 
 export interface FoodPickerFood {
@@ -65,5 +101,5 @@ export interface FoodPickerFood {
   weights: FoodPickerFood_weights[];
   image: FoodPickerFood_image | null;
   thumbnail: FoodPickerFood_thumbnail | null;
-  nutrition: FoodPickerFood_nutrition;
+  nutrition: FoodPickerFood_nutrition | null;
 }
