@@ -45,6 +45,10 @@ export interface IntroductionMutation_setup_messages_data_user_socialNetworks {
   pinterest: string | null;
 }
 
+export interface IntroductionMutation_setup_messages_data_user_membership {
+  type: string;
+}
+
 export interface IntroductionMutation_setup_messages_data_user_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -70,6 +74,7 @@ export interface IntroductionMutation_setup_messages_data_user {
   height: IntroductionMutation_setup_messages_data_user_height | null;
   caloriesPerDay: number | null;
   socialNetworks: IntroductionMutation_setup_messages_data_user_socialNetworks | null;
+  membership: IntroductionMutation_setup_messages_data_user_membership | null;
   role: Role;
   meals: IntroductionMutation_setup_messages_data_user_meals[];
 }

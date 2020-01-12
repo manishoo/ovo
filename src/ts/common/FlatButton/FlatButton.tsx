@@ -18,11 +18,12 @@ interface FlatButtonProps {
   onPress: any,
   labelStyle?: any,
   containerStyle?: any,
+  borderless?: boolean,
 }
 
 export default class FlatButton extends RX.Component<FlatButtonProps> {
   public render() {
-    const { style, containerStyle, label, labelTranslations, onPress, labelStyle } = this.props
+    const { style, containerStyle, label, labelTranslations, onPress, labelStyle, borderless } = this.props
 
     return (
       <ThemeContext.Consumer>
@@ -32,13 +33,17 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
             onRenderChild={isHovering => (
               <RX.View
                 style={[styles.container, {
+                  borderWidth: borderless ? 0 : 1,
                   borderColor: theme.colors.flatButtonBorderColor,
                   backgroundColor: theme.colors.flatButtonBGColor
                 }, style]}
                 onPress={onPress}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.text, { color: theme.colors.flatButtonTextColor }, labelStyle]}
+                <Text style={[styles.text, {
+                  color: theme.colors.flatButtonTextColor,
+                  opacity: isHovering ? 0.7 : 1
+                }, labelStyle]}
                       translations={labelTranslations}>{label}</Text>
                 {this.props.children}
               </RX.View>
@@ -53,7 +58,6 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
 const styles = {
   container: RX.Styles.createViewStyle({
     borderRadius: 50,
-    borderWidth: 1,
     padding: Styles.values.spacing / 2,
     justifyContent: 'center',
     alignItems: 'center',

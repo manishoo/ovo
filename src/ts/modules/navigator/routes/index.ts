@@ -46,3 +46,4 @@ export const PublicProfileScreen = loadComponent('ProfileScreen', 'PublicProfile
 export const MealPlanSettingsScreen = loadComponent('MealPlanSettingsScreen')
 
 export const SearchResult = loadComponent('SearchResult', 'SearchResultContainer')
+export const PayScreen = loadComponent('PayScreen')

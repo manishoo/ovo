@@ -5,6 +5,7 @@
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
+import Assistant from '@Common/Assistant/Assistant'
 import Markdown from '@Common/Markdown/Markdown'
 import { MessageSender } from '@Models/global-types'
 import { createId } from '@Utils/create-id'
@@ -69,7 +70,12 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
   renderMessage(msg: Message) {
     switch (msg.sender) {
       case MessageSender.assistant:
-        return this.renderAssistantMessage(msg)
+        return (
+          <AssistantMessage
+            key={createId()}
+            text={msg.text}
+          />
+        )
       case MessageSender.user:
         return this.renderUserMessage(msg)
       default:
@@ -80,15 +86,6 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
   renderSpacing(n: number = 80) {
     return (
       <RX.View key={createId()} style={{ height: n }} />
-    )
-  }
-
-  renderAssistantMessage(msg: Message) {
-    return (
-      <AssistantMessage
-        key={createId()}
-        text={msg.text}
-      />
     )
   }
 
@@ -187,7 +184,7 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
   }
 
   public render() {
-    const { style, messages, scrollEnabled, loading, bottomMargin, bottomPadding } = this.props
+    const { style, messages, scrollEnabled, loading, bottomMargin, children } = this.props
 
     return (
       <RX.ScrollView
@@ -199,15 +196,23 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
         showsHorizontalScrollIndicator={false}
         bounces
       >
+        <RX.View
+          style={{
+            alignItems: 'center',
+            padding: Styles.values.spacing / 2,
+          }}
+        >
+          <Assistant
+            size={100}
+          />
+        </RX.View>
         {
           messages.map((msg: Message) => this.renderMessage(msg))
         }
         {
           loading ? this.renderTyping() : null
         }
-        {
-          this.renderSpacing(16 + bottomPadding) //FIXME mobiile
-        }
+        {children}
       </RX.ScrollView>
     )
   }
@@ -216,7 +221,6 @@ export default class ChatBox extends RX.Component<ChatBoxProps> {
 const styles = {
   container: RX.Styles.createViewStyle({
     flex: 1,
-    paddingTop: 65,
   }),
   userText: RX.Styles.createTextStyle({
     fontWeight: 'bold',

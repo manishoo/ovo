@@ -53,7 +53,7 @@ export interface ProfileReviewRecipesQuery_recipes_recipes_ingredients_unit_Weig
 export interface ProfileReviewRecipesQuery_recipes_recipes_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: ProfileReviewRecipesQuery_recipes_recipes_ingredients_unit_Weight_name[];
 }
 
@@ -87,7 +87,7 @@ export interface ProfileReviewRecipesQuery_recipes_recipes_ingredients_item_Food
 export interface ProfileReviewRecipesQuery_recipes_recipes_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: ProfileReviewRecipesQuery_recipes_recipes_ingredients_item_Food_weights_name[];
 }
 

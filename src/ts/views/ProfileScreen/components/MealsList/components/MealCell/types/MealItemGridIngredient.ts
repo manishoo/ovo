@@ -36,7 +36,7 @@ export interface MealItemGridIngredient_unit_Weight_name {
 export interface MealItemGridIngredient_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemGridIngredient_unit_Weight_name[];
 }
 
@@ -70,7 +70,7 @@ export interface MealItemGridIngredient_item_Food_weights_name {
 export interface MealItemGridIngredient_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemGridIngredient_item_Food_weights_name[];
 }
 
@@ -193,7 +193,7 @@ export interface MealItemGridIngredient_item_Recipe_ingredients_unit_Weight_name
 export interface MealItemGridIngredient_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemGridIngredient_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -227,7 +227,7 @@ export interface MealItemGridIngredient_item_Recipe_ingredients_item_Food_weight
 export interface MealItemGridIngredient_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemGridIngredient_item_Recipe_ingredients_item_Food_weights_name[];
 }
 

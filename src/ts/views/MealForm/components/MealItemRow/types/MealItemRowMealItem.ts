@@ -36,7 +36,7 @@ export interface MealItemRowMealItem_unit_Weight_name {
 export interface MealItemRowMealItem_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_unit_Weight_name[];
 }
 
@@ -70,7 +70,7 @@ export interface MealItemRowMealItem_item_Food_weights_name {
 export interface MealItemRowMealItem_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_item_Food_weights_name[];
 }
 
@@ -193,7 +193,7 @@ export interface MealItemRowMealItem_item_Recipe_ingredients_unit_Weight_name {
 export interface MealItemRowMealItem_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -227,7 +227,7 @@ export interface MealItemRowMealItem_item_Recipe_ingredients_item_Food_weights_n
 export interface MealItemRowMealItem_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_item_Recipe_ingredients_item_Food_weights_name[];
 }
 
@@ -446,7 +446,7 @@ export interface MealItemRowMealItem_alternativeMealItems_unit_Weight_name {
 export interface MealItemRowMealItem_alternativeMealItems_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_alternativeMealItems_unit_Weight_name[];
 }
 
@@ -480,7 +480,7 @@ export interface MealItemRowMealItem_alternativeMealItems_item_Food_weights_name
 export interface MealItemRowMealItem_alternativeMealItems_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_alternativeMealItems_item_Food_weights_name[];
 }
 
@@ -603,7 +603,7 @@ export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_ingredient
 export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_alternativeMealItems_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -637,7 +637,7 @@ export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_ingredient
 export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealItemRowMealItem_alternativeMealItems_item_Recipe_ingredients_item_Food_weights_name[];
 }
 

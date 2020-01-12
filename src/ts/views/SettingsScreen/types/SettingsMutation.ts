@@ -29,6 +29,10 @@ export interface SettingsMutation_updateUser_socialNetworks {
   pinterest: string | null;
 }
 
+export interface SettingsMutation_updateUser_membership {
+  type: string;
+}
+
 export interface SettingsMutation_updateUser_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -54,6 +58,7 @@ export interface SettingsMutation_updateUser {
   height: SettingsMutation_updateUser_height | null;
   caloriesPerDay: number | null;
   socialNetworks: SettingsMutation_updateUser_socialNetworks | null;
+  membership: SettingsMutation_updateUser_membership | null;
   role: Role;
   meals: SettingsMutation_updateUser_meals[];
 }

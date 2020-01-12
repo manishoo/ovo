@@ -41,7 +41,7 @@ export interface MealFormQuery_meal_items_unit_Weight_name {
 export interface MealFormQuery_meal_items_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_unit_Weight_name[];
 }
 
@@ -75,7 +75,7 @@ export interface MealFormQuery_meal_items_item_Food_weights_name {
 export interface MealFormQuery_meal_items_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_item_Food_weights_name[];
 }
 
@@ -198,7 +198,7 @@ export interface MealFormQuery_meal_items_item_Recipe_ingredients_unit_Weight_na
 export interface MealFormQuery_meal_items_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -232,7 +232,7 @@ export interface MealFormQuery_meal_items_item_Recipe_ingredients_item_Food_weig
 export interface MealFormQuery_meal_items_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_item_Recipe_ingredients_item_Food_weights_name[];
 }
 
@@ -451,7 +451,7 @@ export interface MealFormQuery_meal_items_alternativeMealItems_unit_Weight_name 
 export interface MealFormQuery_meal_items_alternativeMealItems_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_alternativeMealItems_unit_Weight_name[];
 }
 
@@ -485,7 +485,7 @@ export interface MealFormQuery_meal_items_alternativeMealItems_item_Food_weights
 export interface MealFormQuery_meal_items_alternativeMealItems_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_alternativeMealItems_item_Food_weights_name[];
 }
 
@@ -608,7 +608,7 @@ export interface MealFormQuery_meal_items_alternativeMealItems_item_Recipe_ingre
 export interface MealFormQuery_meal_items_alternativeMealItems_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_alternativeMealItems_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -642,7 +642,7 @@ export interface MealFormQuery_meal_items_alternativeMealItems_item_Recipe_ingre
 export interface MealFormQuery_meal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: MealFormQuery_meal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights_name[];
 }
 
@@ -893,7 +893,7 @@ export interface MealFormQuery_meal {
   likedByUser: boolean | null;
   likesCount: number;
   items: MealFormQuery_meal_items[];
-  instanceOf: any;
+  instanceOf: any | null;
   author: MealFormQuery_meal_author;
   timing: MealFormQuery_meal_timing;
 }

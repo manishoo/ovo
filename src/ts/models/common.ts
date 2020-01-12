@@ -44,6 +44,7 @@ export enum Routes {
   feed = 'feed',
   login = '/login',
   register = '/join-prana',
+  membership = '/membership',
   shoppingList = '/shopping-list',
 }
 

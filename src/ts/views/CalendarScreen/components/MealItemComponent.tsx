@@ -33,7 +33,7 @@ interface MealItemComponentCommonProps {
   style?: any,
   mealItem: MealItem,
   meal: DayMeal,
-  dayId: string,
+  dayId?: string,
   onMealItemRemove: () => any,
   onMealItemChange: (mealItem: MealItem) => Promise<ExecutionResult<MealComponentLogMealMutation>>
 }
@@ -349,7 +349,7 @@ const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
           userMealId: props.meal.userMeal.id,
           mealItemId: props.mealItem.id,
         },
-        update: (proxy, { data }) => data && CalendarService.setMealItem(props.dayId, props.meal.id, props.mealItem.id, data.suggestMealItem),
+        update: (proxy, { data }) => data && props.dayId && CalendarService.setMealItem(props.dayId, props.meal.id, props.mealItem.id, data.suggestMealItem),
       })}
     />
   )

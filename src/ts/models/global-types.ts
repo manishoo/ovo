@@ -179,6 +179,14 @@ export interface MealItemInput {
   alternativeMealItems: IngredientInput[];
 }
 
+export interface NutritionProfileInput {
+  calories: number;
+  protein: TargetNutritionInput;
+  carb: TargetNutritionInput;
+  fat: TargetNutritionInput;
+  isStrict: boolean;
+}
+
 export interface RecipeInput {
   title: TranslationInput[];
   ingredients: IngredientInput[];
@@ -206,6 +214,11 @@ export interface TagInput {
   title: TranslationInput[];
   info?: TranslationInput[] | null;
   type: TagType;
+}
+
+export interface TargetNutritionInput {
+  min: number;
+  max: number;
 }
 
 export interface TimingInput {

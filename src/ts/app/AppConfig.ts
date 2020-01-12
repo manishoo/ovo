@@ -3,7 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { LanguageCode } from '@Models/global-types'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import { LanguageCode, MealAvailableTime, MealSize } from '@Models/global-types'
 import { CalendarSystem, DateTime } from 'luxon'
 import RX from 'reactxp'
 
@@ -111,6 +112,41 @@ class AppConfig {
     this.locale = locale
     this.calendarSystem = calendarSystem
   }
+
+  defaultUserMeals = [
+    {
+      id: 'breakfast',
+      name: 'Breakfast',
+      availableTime: MealAvailableTime.littleTime,
+      cook: false,
+      time: '09:00',
+      size: MealSize.tiny,
+    },
+    {
+      id: 'lunch',
+      name: 'Lunch',
+      availableTime: MealAvailableTime.someTime,
+      cook: true,
+      time: '13:00',
+      size: MealSize.normal,
+    },
+    {
+      id: 'snack',
+      name: 'Snack',
+      availableTime: MealAvailableTime.noLimit,
+      cook: false,
+      time: '17:30',
+      size: MealSize.normal,
+    },
+    {
+      id: 'dinner',
+      name: 'Dinner',
+      availableTime: MealAvailableTime.moreTime,
+      cook: true,
+      time: '21:00',
+      size: MealSize.big,
+    }
+  ]
 }
 
 export default new AppConfig()

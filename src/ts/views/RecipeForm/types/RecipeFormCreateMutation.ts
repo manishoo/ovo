@@ -60,7 +60,7 @@ export interface RecipeFormCreateMutation_createRecipe_ingredients_unit_Weight_n
 export interface RecipeFormCreateMutation_createRecipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: RecipeFormCreateMutation_createRecipe_ingredients_unit_Weight_name[];
 }
 
@@ -94,7 +94,7 @@ export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Food_wei
 export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: RecipeFormCreateMutation_createRecipe_ingredients_item_Food_weights_name[];
 }
 
@@ -217,7 +217,7 @@ export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_i
 export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -251,7 +251,7 @@ export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_i
 export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_ingredients_item_Food_weights_name[];
 }
 

@@ -20,7 +20,7 @@ const styles = {
     paddingBottom: Styles.values.spacing * 3,
     marginTop: Styles.values.spacingLarge,
     borderTopWidth: 1,
-    maxWidth: Styles.values.mainContentMaxWidth,
+    // maxWidth: Styles.values.mainContentMaxWidth,
     alignSelf: 'center',
   }),
   footerTitle: RX.Styles.createTextStyle({
@@ -82,26 +82,11 @@ const Footer = () => {
                   marginBottom: Styles.values.spacing * 2,
                 }}
               />
-              <RX.View
-                style={{
-                  flexDirection: 'row-reverse',
-                  maxWidth: 340,
-                  flexWrap: 'wrap',
-                }}
-              >
+              <RX.View>
                 <Image
                   source={ImageSource.GooglePlayButton}
                   style={{
                     width: 151,
-                    height: 45,
-                    [Styles.values.marginStart]: Styles.values.spacing,
-                    marginBottom: Styles.values.spacing,
-                  }}
-                />
-                <Image
-                  source={ImageSource.CafeBazaarButton}
-                  style={{
-                    width: 143,
                     height: 45,
                     [Styles.values.marginStart]: Styles.values.spacing,
                     marginBottom: Styles.values.spacing,

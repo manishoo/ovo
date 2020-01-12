@@ -26,7 +26,7 @@ export interface IngredientFood_weights_name {
 export interface IngredientFood_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: IngredientFood_weights_name[];
 }
 

@@ -105,6 +105,9 @@ class UserService extends StoreBase implements IAutoSavablePersistableStore {
           website
           pinterest
         }
+        membership {
+          type
+        }
         role
         meals {
           ...MealSettingsMeal

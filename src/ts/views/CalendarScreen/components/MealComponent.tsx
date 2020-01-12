@@ -39,7 +39,7 @@ import { DayMeal, DayMeal_items } from './types/DayMeal'
 interface MealComponentCommonProps {
   style?: any,
   meal: DayMeal,
-  dayId: string,
+  dayId?: string,
 }
 
 interface MealComponentProps extends MealComponentCommonProps {
@@ -265,14 +265,14 @@ const MealComponentContainer = (props: MealComponentCommonProps) => {
         optimisticResponse: () => ({
           logMeal: mealOptimisticResponse
         }),
-        update: (proxy, { data }) => data && CalendarService.setMeal(props.dayId, data.logMeal),
+        update: (proxy, { data }) => data && props.dayId && CalendarService.setMeal(props.dayId, data.logMeal),
       })}
       onMealRegenerate={() => suggestMeal({
         variables: {
           date: props.meal.time,
           userMealId: props.meal.userMeal.id,
         },
-        update: (proxy, { data }) => data && CalendarService.setMeal(props.dayId, data.suggestMeal),
+        update: (proxy, { data }) => data && props.dayId && CalendarService.setMeal(props.dayId, data.suggestMeal),
       })}
     />
   )

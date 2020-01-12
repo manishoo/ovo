@@ -28,7 +28,7 @@ export default class IntroductionButton extends RX.Component<IntroductionButtonP
       large: true,
     }
     this._widthAnimated = RX.Animated.createValue(props.introductionWidth ? (props.introductionWidth - 20) : (ResponsiveWidthStore.getWidthNoSubscription() - 20))
-    this._marginTopAnimated = RX.Animated.createValue(222)
+    this._marginTopAnimated = RX.Animated.createValue(168)
     this._borderRadiusAnimated = RX.Animated.createValue(20)
   }
 

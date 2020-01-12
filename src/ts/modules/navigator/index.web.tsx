@@ -27,6 +27,7 @@ import {
   SearchResult,
   SettingsScreen,
   ShoppingList,
+  PayScreen,
 } from './routes'
 
 
@@ -179,6 +180,12 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             immersive: true,
             exact: false,
             component: RegisterScreen,
+          },
+          {
+            path: Routes.membership,
+            immersive: true,
+            exact: false,
+            component: PayScreen,
           },
           {
             path: '/:username',

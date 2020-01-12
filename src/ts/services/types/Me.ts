@@ -29,6 +29,10 @@ export interface Me_socialNetworks {
   pinterest: string | null;
 }
 
+export interface Me_membership {
+  type: string;
+}
+
 export interface Me_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -54,6 +58,7 @@ export interface Me {
   height: Me_height | null;
   caloriesPerDay: number | null;
   socialNetworks: Me_socialNetworks | null;
+  membership: Me_membership | null;
   role: Role;
   meals: Me_meals[];
 }

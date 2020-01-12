@@ -13,7 +13,7 @@ import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { getParam, map } from '@Utils'
 import { AssistantMessage } from '@Views/Introduction/components/ChatBox'
 import ProfileScreenContainer from '@Views/ProfileScreen/ProfileScreenContainer'
-import SearchResult from '@Views/SearchResult/SearchResult'
+import SearchResultContainer from '@Views/SearchResult/SearchResultContainer'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import TabBar from './components/TabBar/TabBar'
@@ -78,7 +78,7 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
 					<Path {...this.props} />
 					<Profile {...this.props} />*/}
           <RX.View style={{ width: this.state.width }}>
-            <SearchResult />
+            <SearchResultContainer />
           </RX.View>
           <RX.View style={{ width: this.state.width }}>
 

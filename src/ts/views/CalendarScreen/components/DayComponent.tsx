@@ -11,8 +11,11 @@ import HoverView from '@Common/HoverView/HoverButton'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { Me } from '@Services/types/Me'
+import UserService from '@Services/UserService'
 import { calculateDayNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import DayEmpty from '@Views/CalendarScreen/components/DayEmpty'
+import DayPayWall from '@Views/CalendarScreen/components/DayPayWall'
 import ItemControl from '@Views/CalendarScreen/components/ItemControl'
 import NutritionInfo from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import { Day } from '@Views/CalendarScreen/components/types/Day'
@@ -45,7 +48,7 @@ interface DayComponentState {
   width: number
   height: number
   isTinyOrSmall: boolean,
-  // day: Day,
+  me: Me | null,
 }
 
 class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
@@ -78,6 +81,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
     super(props)
     this.state = {
       // day: props.day,
+      me: UserService.getUser(),
       width: ResponsiveWidthStore.getWidthConsideringDrawer(),
       height: ResponsiveWidthStore.getHeight(),
       isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
@@ -86,6 +90,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
 
   protected _buildState(props: DayComponentProps, initialBuild: boolean): Partial<DayComponentState> | undefined {
     return {
+      me: UserService.getUser(),
       width: ResponsiveWidthStore.getWidthConsideringDrawer(),
       height: ResponsiveWidthStore.getHeight(),
       isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
@@ -112,16 +117,22 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
             style={{
               flex: 1,
               alignItems: 'center',
-              justifyContent: 'center',
+              // justifyContent: 'center',
               marginTop: Styles.values.spacing,
               minHeight: this.state.height,
               minWidth: this.state.width,
             }}
           >
-            <DayEmpty
-              {...this.props}
-              onDayRegenerate={this._onDayRegenerate}
-            />
+            {
+              // is it in the future?
+              this._isFreeUser() ?
+                <DayPayWall /> :
+                <DayEmpty
+                  {...this.props}
+                  onDayRegenerate={this._onDayRegenerate}
+                />
+            }
+
           </RX.View>
         }
 
@@ -137,12 +148,6 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
               justifyContent: this.state.isTinyOrSmall ? 'flex-start' : 'center',
             }}
           >
-            {
-              day.meals.filter(m => m.items.length > 0).length > 0 &&
-              <NutritionInfo
-                nutrition={calculateDayNutrition(day)}
-              />
-            }
             <RX.View
               style={styles.container}
               // animateChildEnter
@@ -180,10 +185,25 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
                 ))
               }
             </RX.View>
+            {
+              day.meals.filter(m => m.items.length > 0).length > 0 &&
+              <NutritionInfo
+                nutrition={calculateDayNutrition(day)}
+              />
+            }
           </RX.View>
         }
       </RX.View>
     )
+  }
+
+  private _isFreeUser = () => {
+    const { date } = this.props
+
+    // if it was in future
+    return (Math.round(date.diff(DateTime.local()).as('day')) > 0) &&
+      // and it was a free member
+      (this.state.me && !this.state.me.membership)
   }
 
   private _isToday = () => this.props.date.hasSame(DateTime.local(), 'day')
@@ -220,7 +240,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
                 })}</Text>
 
                 <ItemControl
-                  visible={isHovering || dayRegenerating}
+                  visible={!this._isFreeUser() && (isHovering || dayRegenerating)}
                   onRegenerate={this._onDayRegenerate}
                   regenerating={dayRegenerating}
                 />

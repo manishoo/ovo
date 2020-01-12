@@ -18,10 +18,11 @@ import RX from 'reactxp'
 interface UserMealsProps {
   style?: any,
   meals: MealSettingsMeal[],
+  onMealsChange?: (meals: MealSettingsMeal[]) => void,
 }
 
 interface UserMealsState {
-  meals: MealSettingsMeal[]
+  meals: MealSettingsMeal[],
 }
 
 export default class UserMeals extends RX.Component<UserMealsProps, UserMealsState> {
@@ -34,7 +35,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
   }
 
   render() {
-    const { style } = this.props
+    const { style, onMealsChange } = this.props
     const { meals } = this.state
 
     return (
@@ -46,7 +47,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
             <SortableList
               items={meals}
               renderItem={this._renderMealItem(theme)}
-              onItemsChange={(meals) => this.setState({ meals })}
+              onItemsChange={(meals) => this.setState({ meals }, () => onMealsChange && onMealsChange(meals))}
             />
             {this._renderAddMealItem(theme)}
           </RX.View>

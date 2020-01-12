@@ -160,7 +160,6 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     }
 
     function getDateFromTimeString(timeString: string): DateTime {
-      console.log('timeString', timeString)
       const splitTime = timeString.split(':')
       if (splitTime[0].length !== 2) throw Error('time format should be HH:mm')
       if (splitTime[1].length !== 2) throw Error('time format should be HH:mm')

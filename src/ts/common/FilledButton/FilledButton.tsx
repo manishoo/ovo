@@ -97,7 +97,8 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
       style = {
         ...style,
         borderWidth: 1,
-        borderColor: 'transparent',
+        borderBottomWidth: 3,
+        borderColor: theme.colors.text,
         backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
       }
       labelStyle = {

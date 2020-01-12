@@ -36,7 +36,7 @@ export interface FoodPickerQuery_foods_foods_weights_name {
 export interface FoodPickerQuery_foods_foods_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: FoodPickerQuery_foods_foods_weights_name[];
 }
 
@@ -153,7 +153,7 @@ export interface FoodPickerQuery_recipes_recipes_ingredients_unit_Weight_name {
 export interface FoodPickerQuery_recipes_recipes_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: FoodPickerQuery_recipes_recipes_ingredients_unit_Weight_name[];
 }
 
@@ -187,7 +187,7 @@ export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights_n
 export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights_name[];
 }
 

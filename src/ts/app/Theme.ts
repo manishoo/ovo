@@ -47,8 +47,8 @@ export class Theme {
       case 'dark':
       default:
       case 'light': {
-        const primary = '#07AF47' //#00c54f #00BA72
-        const primaryDarker = '#05863e'
+        const primary = '#00BA72' //#00c54f #00BA72
+        const primaryDarker = '#009B60'
         const red = '#d32f2f'
         const text = '#515B66'
 
@@ -155,7 +155,7 @@ export class Theme {
           recipeIngredientUnitTextColor: '#fff',
 
           tabBarBG: '#fff',
-          loginButtonTextColor: red,
+          loginButtonTextColor: primary,
           assistantBG: '#1F2CAA',
           assistantMessageBG: '#313EC0',
           assistantUserMessageBG: primary,

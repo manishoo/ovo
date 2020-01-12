@@ -4,10 +4,8 @@
  */
 
 import AppConfig from '@App/AppConfig'
-import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import Assistant from '@Common/Assistant/Assistant'
 import LinearGradient from '@Common/LinearGradient/LinearGradient'
 import LocalizedText, { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
@@ -175,36 +173,26 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
         {(setupConversation, { loading }) => (
           <ThemeContext.Consumer>
             {({ theme }) => (
-              [
-                <KeyboardAvoidable
-                  keyboardVerticalOffset={20}
-                  key={1}
-                  enabled={keyboardAvoidableEnabled}
-                  style={[styles.container, style]}
+              <KeyboardAvoidable
+                keyboardVerticalOffset={20}
+                key={1}
+                enabled={keyboardAvoidableEnabled}
+                style={[styles.container, style]}
+              >
+                <ChatBox
+                  ref={ref => this.chatBox = ref}
+                  loading={loading || assistantTalking}
+                  bottomMargin={chatBoxMarginBottom}
+                  bottomPadding={chatBoxPaddingBottom}
+                  style={[
+                    isForm ? styles.chatBoxWithForm : {},
+                  ]}
+                  scrollEnabled={!showIntro}
+                  messages={messages}
+                  introductionWidth={this.props.introductionWidth || this.state.width}
+                  introductionHeight={this.props.introductionHeight || this.state.height}
+                  onIntroduction={this.getStartedPress(setupConversation)}
                 >
-                  {false && <LinearGradient
-                    colors={[theme.colors.assistantLinearGradient1, theme.colors.assistantLinearGradient2]}
-                  />}
-                  <ChatBox
-                    ref={ref => this.chatBox = ref}
-                    loading={loading || assistantTalking}
-                    bottomMargin={chatBoxMarginBottom}
-                    bottomPadding={chatBoxPaddingBottom}
-                    style={[
-                      isForm ? styles.chatBoxWithForm : {},
-                    ]}
-                    scrollEnabled={!showIntro}
-                    messages={messages}
-                    introductionWidth={this.props.introductionWidth || this.state.width}
-                    introductionHeight={this.props.introductionHeight || this.state.height}
-                    onIntroduction={this.getStartedPress(setupConversation)}
-                  />
-
-                  {
-                    false &&
-                    this.renderIntro(theme)
-                  }
-
                   {
                     !showIntro &&
                     <ChatInput
@@ -221,43 +209,13 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
                       introductionWidth={this.props.introductionWidth || this.state.width}
                     />
                   }
-                </KeyboardAvoidable>,
-                <RX.View
-                  key={2}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    marginTop: Styles.values.spacing / 2,
-                    // borderTopWidth: 0,
-                    // borderLeftWidth: 0,
-                    // borderRightWidth: 0,
-                    // paddingTop: Styles.values.spacing / 2,
-                    // paddingBottom: Styles.values.spacing / 2,
-                    // borderBottomWidth: 1,
-                    // borderColor: theme.colors.borderLight,
-                    alignItems: 'center',
-                    // backgroundColor: theme.colors.bg,
-                    paddingRight: Styles.values.spacing / 2,
-                    paddingLeft: Styles.values.spacing / 2,
-                    flexDirection: 'row-reverse',
-                  }}
-                >
-                  {/*<RX.Image
-                    source={theme.mode === 'light' ? ImageSource.BackDark : ImageSource.BackLight}
-                    style={[
-                      styles.backImage,
-                      {
-                        [Styles.values.marginEnd]: Styles.values.spacing / 2,
-                      }
-                    ]}
-                  />*/}
-                  <Assistant
-                    size={50}
-                  />
-                </RX.View>
-              ]
+                </ChatBox>
+
+                {
+                  false &&
+                  this.renderIntro(theme)
+                }
+              </KeyboardAvoidable>
             )}
           </ThemeContext.Consumer>
         )}
@@ -419,10 +377,10 @@ const styles = {
     bottom: 230,
   }),
   chatInput: RX.Styles.createViewStyle({
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    // position: 'absolute',
+    // bottom: 0,
+    // left: 0,
+    // right: 0,
   }),
   backImage: RX.Styles.createImageStyle({
     width: 12,

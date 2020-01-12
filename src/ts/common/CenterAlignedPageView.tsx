@@ -49,7 +49,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
             {...this.props.scrollViewProps}
             style={[
               styles.container, {
-                backgroundColor: theme.colors.bg,
+                // backgroundColor: theme.colors.bg,
                 height: this.state.height,
                 width
               },

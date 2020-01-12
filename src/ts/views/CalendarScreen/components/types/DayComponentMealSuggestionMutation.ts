@@ -45,7 +45,7 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_unit_
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: DayComponentMealSuggestionMutation_suggestDay_meals_items_unit_Weight_name[];
 }
 
@@ -79,7 +79,7 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_weights_name[];
 }
 
@@ -202,7 +202,7 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_unit_Weight {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_unit_Weight_name[];
 }
 
@@ -236,7 +236,7 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_weights {
   amount: number;
   gramWeight: number | null;
-  id: string;
+  id: any;
   name: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_weights_name[];
 }
 

@@ -92,7 +92,6 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   componentDidMount() {
     super.componentDidMount()
 
-    console.log('Modal._visibleModalMap[this.props.modalId] = this', this.props.modalId)
     Modal._visibleModalMap[this.props.modalId] = this
 
     RX.Animated.timing(this._contentScaleValue, {

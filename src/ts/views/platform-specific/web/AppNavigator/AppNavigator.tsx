@@ -360,7 +360,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
 
   private _handleLocationChange = (location: Location<any>, action: Action) => {
     // LocationStore.setPath(location.pathname) // FIXME do something better maybe
-    console.log('location.pathname in AppNavigator', location.pathname)
     this._handleDrawerVisibility(location.pathname)
   }
 
