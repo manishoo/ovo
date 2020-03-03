@@ -5,9 +5,10 @@
 
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import Styles from '@App/Styles'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Page from '@Common/Page'
 import Checkbox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import { FoodPreviewOnSubmit } from '@Common/FoodPickerDialog/components/FoodPreview'
 import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import Input from '@Common/Input/Input'
@@ -36,15 +37,20 @@ import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
+import SortableList from 'src/ts/modules/SortableList/index.web'
+import Storage from '@App/Storage/Storage'
 
 
-interface MealFormProps {
+interface MealFormCommonProps extends RX.CommonProps {
   style?: any,
+  meal?: MealFormMeal,
+}
+
+interface MealFormProps extends MealFormCommonProps {
   onCreate: (variables: MealFormCreateMutationVariables, userId: string) => Promise<ExecutionResult<MealFormCreateMutation>>,
   onUpdate: (variables: MealFormUpdateMutationVariables, userId: string) => Promise<ExecutionResult<MealFormUpdateMutation>>,
   onDelete: (variables: MealFormDeleteMutationVariables, userId: string) => Promise<ExecutionResult<MealFormDeleteMutation>>,
   fieldErrors: { [k: string]: string }
-  meal?: MealFormMeal,
 
   createRecipeLoading?: boolean,
   updateRecipeLoading?: boolean,
@@ -87,30 +93,16 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     }
   }
 
-  public componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
-    if (this.state.meal.items.length === 0 && nextProps.meal) {
-      this.setState({
-        meal: nextProps.meal,
-      })
-    }
-  }
-
-  public componentWillMount(): void {
-    if (!this.props.meal) {
-      this._loadStateFromStorage()
-    }
-  }
-
   public render() {
     const { fieldErrors, createRecipeLoading, updateRecipeLoading } = this.props
     const { meal } = this.state
 
     return (
-      <CenterAlignedPageView>
+      <Page>
         <Navbar
           title={
             this.props.meal ?
-              translate('Update Meal') :
+              translate('Meal') :
               translate('Create Meal')
           }
         >
@@ -131,29 +123,41 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         {/**
          * Ingredient input
          * */}
-        <Input
-          label={translate('Meal Items')}
-          placeholder={translate('e.g. Banana')}
-          onFocus={() => showFoodPicker({
-            autoFocus: true,
-            foodTypes: [FoodTypes.food, FoodTypes.recipe],
-            onDismiss: () => null,
-            onSubmit: this._onMealItemCreation,
-          })}
-          errorMessage={fieldErrors['items']}
-          style={{ marginBottom: Styles.values.spacing * 2 }}
-        />
-
         {
-          meal.items.map(mealItem => (
+          !this.props.meal &&
+          <Input
+            label={translate('Main Meal Items')}
+            placeholder={translate('e.g. Banana')}
+            onFocus={() => showFoodPicker({
+              foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
+              onDismiss: () => null,
+              onSubmit: this._onMealItemCreation,
+              showOptional: true,
+              submitButtonLabel: translate('Add Meal Item')
+            })}
+            errorMessage={fieldErrors['items']}
+          />
+        }
+
+        <SortableList
+          items={meal.items}
+          disabled={!this.props.meal}
+          renderItem={(mealItem) => (
             <MealItemRow
               key={mealItem.id}
               mealItem={mealItem}
+              editable={!this.props.meal}
               onMealItemChange={this._onMealItemChange}
               onMealItemDelete={this._onMealItemDelete}
             />
-          ))
-        }
+          )}
+          onItemsChange={items => this.setState(prevState => ({
+            meal: {
+              ...prevState.meal,
+              items,
+            },
+          }))}
+        />
 
         {
           !this.props.meal &&
@@ -177,15 +181,18 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           </RX.View>
         }
 
-        <FilledButton
-          label={translate(translate.keys.Submit)}
-          onPress={this._onSubmit}
-          suffix={(
-            (createRecipeLoading || updateRecipeLoading) &&
-            <LoadingIndicator size={17} />
-          )}
-        />
-      </CenterAlignedPageView>
+        {
+          !this.props.meal &&
+          <FilledButton
+            label={translate(translate.keys.Submit)}
+            onPress={this._onSubmit}
+            suffix={(
+              (createRecipeLoading || updateRecipeLoading) &&
+              <LoadingIndicator size={17} />
+            )}
+          />
+        }
+      </Page>
     )
   }
 
@@ -228,7 +235,6 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         text: translate('Delete'),
         style: 'cancel',
         onPress: () => this.props.onDelete({
-          bulkDelete: false,
           id: meal.id,
         }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
       },
@@ -237,17 +243,6 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         style: 'default',
       }
     ]
-
-    if (meal.instanceOf) {
-      buttons.splice(1, 0, {
-        text: translate('Delete All Instances'),
-        style: 'cancel',
-        onPress: () => this.props.onDelete({
-          bulkDelete: true,
-          id: meal.id,
-        }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
-      })
-    }
 
     RX.Alert.show(translate('areyousure?'), undefined, buttons)
   }
@@ -261,7 +256,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
             item.alternativeMealItems = item.alternativeMealItems.filter(alternativeMealItem => mealItemId !== alternativeMealItem.id)
           }
 
-          if (mealItemId === item.id) {
+          if (item.item && mealItemId === item.item.id) {
             return null
           }
 
@@ -296,17 +291,17 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     }), this._saveStateToStorage)
   }
 
-  private _onMealItemCreation = (mealItem: FoodPickerMealItem) => {
+  private _onMealItemCreation: FoodPreviewOnSubmit = (mealItem: FoodPickerMealItem) => {
     this.setState(ps => ({
       meal: {
         ...ps.meal,
         items: [
+          ...ps.meal.items,
           {
             ...mealItem,
             alternativeMealItems: [],
             id: mealItem.id || createId(),
           },
-          ...ps.meal.items,
         ]
       },
     }), this._saveStateToStorage)
@@ -315,16 +310,16 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   private _saveStateToStorage = () => {
     const { meal } = this.state
 
-    RX.Storage.setItem('_MealForm_meal', JSON.stringify(meal))
+    Storage.setItem('_MealForm_meal', JSON.stringify(meal))
   }
 
   private _clearStateStorage = () => {
-    RX.Storage.removeItem('_MealForm_meal')
-    RX.Storage.removeItem('_MealForm_mealItems')
+    Storage.removeItem('_MealForm_meal')
+    Storage.removeItem('_MealForm_mealItems')
   }
 
   private _loadStateFromStorage = async () => {
-    const mealStringified = await RX.Storage.getItem('_MealForm_meal')
+    const mealStringified: string | undefined = await Storage.getItem('_MealForm_meal')
 
     let meal
 
@@ -364,9 +359,23 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     `
 
   }
+
+  public componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
+    if (this.state.meal.items.length === 0 && nextProps.meal) {
+      this.setState({
+        meal: nextProps.meal,
+      })
+    }
+  }
+
+  public componentWillMount(): void {
+    if (!this.props.meal) {
+      this._loadStateFromStorage()
+    }
+  }
 }
 
-const MealFormContainer = (props: MealFormProps) => {
+const MealFormContainer = (props: MealFormCommonProps) => {
   const mealId = getParam(props, 'id')
 
   const { data: mealFormQueryData, loading: mealFormQueryLoading } = useQuery<MealFormQuery, MealFormQueryVariables>(gql`
@@ -404,8 +413,8 @@ const MealFormContainer = (props: MealFormProps) => {
     ${MealForm.fragments.meal}
   `)
   const [deleteMeal, { error: deleteMealError, loading: deleteMealLoading }] = useMutation<MealFormDeleteMutation, MealFormDeleteMutationVariables>(gql`
-    mutation MealFormDeleteMutation ($id: ObjectId!, $bulkDelete: Boolean) {
-      deleteMeal(id: $id, bulkDelete: $bulkDelete)
+    mutation MealFormDeleteMutation ($id: ObjectId!) {
+      deleteMeal(id: $id)
     }
   `)
 

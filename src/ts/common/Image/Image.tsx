@@ -8,7 +8,7 @@ import RX, { Types } from 'reactxp'
 import ImageSource from '@Modules/images'
 
 
-interface ImageProps extends Types.ImageProps {
+export interface ImageProps extends Types.ImageProps {
   style?: any,
 }
 

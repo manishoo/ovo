@@ -3,7 +3,6 @@
  * Copyright: Ouranos Studio 2019
  */
 
-
 import trimTypeName from '@Utils/trim-type-name'
 
 
@@ -40,25 +39,33 @@ export function scaleFoodNutrition(food: any, foodAmount: number, weightId?: str
   return totalNutrition
 }
 
-function getFoodNutrientAmount(food: any, foodAmount: number, nutrient: any, baseAmount: number, weightId?: string, customGramWeight?: number) {
-  let totalAmount = baseAmount
+function getFoodNutrientAmount(food: any, amount: number, nutrient: any, existingNutrientAmount: number, weightId?: string, customGramWeight?: number) {
+  let totalGrams = 0
+
   /**
    * If the food had a weight,
    * use the weight's {gramWeight}
    * */
   if (weightId) {
-    const foundWeight = food.weights.find((w: any) => w.id == weightId)
+    const foundWeight = food.weights.find((w: any) => w.id.toString() == weightId.toString())
     if (!foundWeight) throw new Error('Weight id not valid')
-    totalAmount = (foundWeight.gramWeight || 0) * foodAmount
+    if (!foundWeight.gramWeight) throw new Error('Found weight doesnt have gramWeight')
+
+    totalGrams = foundWeight.gramWeight * amount
   } else if (customGramWeight) {
-    totalAmount = customGramWeight * foodAmount
+    totalGrams = customGramWeight * amount
   } else {
-    totalAmount = foodAmount
+    totalGrams = amount
   }
 
-  totalAmount += (nutrient.amount / 100) * totalAmount
+  // 60g of protein
+  const totalNutrientAmount =
+    // 60g of sugar
+    totalGrams *
+    // 1g of protein in 100g
+    (nutrient.amount / 100)
 
-  return Number(totalAmount.toFixed(2))
+  return Number((totalNutrientAmount + existingNutrientAmount).toFixed(2))
 }
 
 export function scaleRecipeNutrition(recipe: any, serving: number): any {

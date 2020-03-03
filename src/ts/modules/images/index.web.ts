@@ -77,6 +77,9 @@ class ImageSource implements ImageSourceBase {
   AppStoreButton = AppConfig.getImagePath('AppStoreButton.png')
   GooglePlayButton = AppConfig.getImagePath('GooglePlayButton.png')
   CafeBazaarButton = AppConfig.getImagePath('CafeBazaarButton.png')
+
+  VerifiedBadge = AppConfig.getImagePath('VerifiedBadge.svg')
+  VerifyingBadge = AppConfig.getImagePath('VerifyingBadge.svg')
 }
 
 export default new ImageSource()

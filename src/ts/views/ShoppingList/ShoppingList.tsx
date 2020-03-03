@@ -4,7 +4,7 @@
  */
 
 import Styles from '@App/Styles'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
@@ -36,7 +36,7 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
 
   public render() {
     return (
-      <CenterAlignedPageView
+      <Page
         style={{
           padding: Styles.values.spacing,
         }}
@@ -65,7 +65,7 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
         </RX.View>
 
         {this._renderTabContent()}
-      </CenterAlignedPageView>
+      </Page>
     )
   }
 

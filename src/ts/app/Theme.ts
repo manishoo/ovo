@@ -54,7 +54,8 @@ export class Theme {
 
         return {
           primary,
-          bg: '#fff',
+          bg: '#fafafa',
+          cardBg: '#fff',
 
           text,
           borderLight: '#eee',
@@ -153,6 +154,8 @@ export class Theme {
 
           recipeIngredientUnitBG: primary,
           recipeIngredientUnitTextColor: '#fff',
+          recipeIngredientRequiredBG: 'orange',
+          recipeIngredientRequiredTextColor: '#fff',
 
           tabBarBG: '#fff',
           loginButtonTextColor: primary,
@@ -173,6 +176,7 @@ export class Theme {
           footerTitleColor: text,
           footerLinkColor: primary,
           textInputBg: '#F5F5F8',
+          textInputBgHovering: '#dfdfe2',
           inputValidColor: primary,
           inputInvalidColor: '#D44539',
 

@@ -81,7 +81,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           <Input
             value={this.state.password2}
             onChange={this._onChange('password2')}
-            label={translate('PasswordAgain')}
+            label={translate('passwordConfirmation')}
             validate={value => value === this.state.password}
             secureTextEntry
           />

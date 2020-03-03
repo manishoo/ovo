@@ -4,7 +4,6 @@
  */
 
 import { LanguageCode } from '@Models/global-types'
-import gql from 'graphql-tag'
 
 
 export enum Routes {
@@ -46,6 +45,9 @@ export enum Routes {
   register = '/join-prana',
   membership = '/membership',
   shoppingList = '/shopping-list',
+
+  forgotPassword = '/forgot-password',
+  newPassword = '/new-password',
 }
 
 export interface Translation {

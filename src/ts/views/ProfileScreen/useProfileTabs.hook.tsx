@@ -73,8 +73,8 @@ export interface ProfileTabsResult {
 
 function useProfileTabs({userId}: ProfileTabsProps): ProfileTabsResult {
   const meals = useQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(PROFILE_MEALS_QUERY, {
-    fetchPolicy: 'no-cache',
-    // returnPartialData: true,
+    fetchPolicy: 'cache-and-network',
+    returnPartialData: true,
     variables: {
       userId,
     }
@@ -85,7 +85,7 @@ function useProfileTabs({userId}: ProfileTabsProps): ProfileTabsResult {
     variables: {
       size: 20,
       userId,
-    }
+    },
   })
   const reviewRecipes = useQuery<ProfileReviewRecipesQuery, ProfileReviewRecipesQueryVariables>(PROFILE_REVIEW_RECIPES_QUERY, {
     fetchPolicy: 'cache-and-network',

@@ -3,8 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import AppConfig from '@App/AppConfig'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
+import { calculateMealItemsNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import {
   Day,
   Day_meals_items,
@@ -19,7 +19,8 @@ import * as SyncTasks from 'synctasks'
 
 
 function determineIfIsFood(toBeDetermined: Partial<Day_meals_items_item_Recipe_ingredients_item>): toBeDetermined is Day_meals_items_item_Food {
-  return toBeDetermined.hasOwnProperty('weights')
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Food'
 }
 
 export function calculateMealItemAmount(mealItem: Day_meals_items): number {
@@ -153,7 +154,7 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
         }
       } else {
         foods[food.id] = {
-          food,
+          food: foodClass,
           grams,
         }
       }
@@ -270,7 +271,7 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
          * */
         if (requiredAmount > 0) {
           addGroceryItemToShoppingList({
-            food: shoppingListGroceryItem.food,
+            foodClass: shoppingListGroceryItem.food,
             grams: requiredAmount,
           })
         }
@@ -294,7 +295,7 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     const foodGroupId = food.origFoodGroups[0][0].id
 
     const item = {
-      food,
+      food: foodClass,
       grams,
       dateAdded: new Date()
     }
@@ -385,20 +386,10 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     return this.calendar
   }
 
-  public calculateMealNutrition = (meal: DayMeal) => {
-    let totalCalorie = 0
-    let unit = AppConfig.calorieMeasurementUnit
-
-    meal.items.forEach(mealItem => {
-      if (!mealItem.item) return null
-
-      if (mealItem.item.nutrition && mealItem.item.nutrition.calories) {
-        if (mealItem.item.nutrition.calories.unit == unit) {
-          totalCalorie += (mealItem.item.nutrition.calories.amount * ((mealItem.amount || 0) * (mealItem.unit && mealItem.unit.gramWeight ? mealItem.unit.gramWeight : 1))) / 100
-        }
-      }
-    })
-    return Math.round(totalCalorie)
+  public calculateMealTotalCalorie = (meal: DayMeal) => {
+    // let unit = AppConfig.calorieMeasurementUnit
+    const nutrition = calculateMealItemsNutrition(meal.items)
+    return Math.round(nutrition.calories ? nutrition.calories.amount : 0)
   }
 
 }

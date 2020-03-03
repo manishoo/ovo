@@ -75,7 +75,7 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
         useWebWorker: true
       }),
       thumb: this.props.withThumbnail && await imageCompression(image, this.props.thumbImageOptions || {
-        maxSizeMB: 0.05,
+        maxSizeMB: 0.08,
         maxWidthOrHeight: 500,
         useWebWorker: true
       }),

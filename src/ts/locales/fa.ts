@@ -11,7 +11,7 @@ enum FaLocale {
 
   'Email' = 'ایمیل',
   'Gender' = 'جنسیت',
-  'PasswordAgain' = 'تکرار گذرواژه',
+  'passwordConfirmation' = 'تکرار گذرواژه',
 
   'Username' = 'نام کاربری',
   'Password' = 'گذرواژه',
@@ -237,6 +237,7 @@ enum FaLocale {
   imported = 'imported',
   ingredient = 'ingredient',
   meal = 'meal',
+  Meal = 'Meal',
   occasion = 'occasion',
   other = 'other',
   recipe = 'recipe',
@@ -260,7 +261,27 @@ enum FaLocale {
   lotsOfTime = 'یک ساعت',
   noLimit = 'بدون محدودیت',
 
-  'Delete All Instances' = 'حذف تمام جایگشت ها'
+  'Delete All Instances' = 'حذف تمام جایگشت ها',
+  AlreadyAMember = 'AlreadyAMember',
+  Or = 'یا',
+  GetStartedNow = 'همین الان شروع کن',
+
+  'estimatedGramWeight' = 'وزن حدودی (گرم)',
+
+  'nutrition' = 'ارزش غذایی',
+  'note' = 'نوت',
+  'loadMore' = 'بیشتر',
+  'resetAll' = 'تنظیم مجدد',
+
+  forgotPassword = 'فراموشی رمز عبور',
+
+  'Main Meal Items' = 'موارد اصلی',
+
+  'optional' = 'اختیاری',
+
+  'Add Alternative Meal Item' = 'افزودن غذای آلترناتیو',
+  'Log Meal' = 'لاگ کردن',
+
 }
 
 export default FaLocale

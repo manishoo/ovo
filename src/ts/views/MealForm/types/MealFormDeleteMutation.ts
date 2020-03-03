@@ -7,10 +7,9 @@
 // ====================================================
 
 export interface MealFormDeleteMutation {
-  deleteMeal: string[];
+  deleteMeal: string;
 }
 
 export interface MealFormDeleteMutationVariables {
   id: any;
-  bulkDelete?: boolean | null;
 }

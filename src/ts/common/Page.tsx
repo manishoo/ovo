@@ -1,5 +1,5 @@
 /*
- * CenterAlignedPageView.tsx
+ * Page.tsx
  * Copyright: Ouranos Studio 2019
  */
 
@@ -11,7 +11,7 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
 
-interface CenterAlignedPageViewProps {
+interface PageProps {
   style?: any,
   scrollViewProps?: RX.Types.ScrollViewProps,
   outermostViewStyle?: RX.Types.ViewStyle,
@@ -19,28 +19,25 @@ interface CenterAlignedPageViewProps {
   maxWidth?: number
 }
 
-interface CenterAlignedPageViewState {
+interface PageState {
   height: number,
   width: number,
+  screenWidth: number,
   hideDrawer: boolean,
 }
 
-export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPageViewProps, CenterAlignedPageViewState> {
-  private _animatedValue = RX.Animated.createValue(0)
-  private _animatedStyle = RX.Styles.createAnimatedViewStyle({
-    opacity: this._animatedValue
-  })
-
-  protected _buildState(props: CenterAlignedPageViewProps, initialBuild: boolean): Partial<CenterAlignedPageViewState> | undefined {
+export default class Page extends ComponentBase<PageProps, PageState> {
+  protected _buildState(props: PageProps, initialBuild: boolean): Partial<PageState> | undefined {
     return {
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      screenWidth: ResponsiveWidthStore.getWidth(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeight(),
       hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
     }
   }
 
   public render() {
-    const { width } = this.state
+    const { width, screenWidth } = this.state
 
     return (
       <ThemeContext.Consumer>
@@ -51,7 +48,7 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
               styles.container, {
                 // backgroundColor: theme.colors.bg,
                 height: this.state.height,
-                width
+                width: screenWidth,
               },
               this.props.scrollViewProps ? this.props.scrollViewProps.style : {}
             ]}
@@ -59,40 +56,31 @@ export default class CenterAlignedPageView extends ComponentBase<CenterAlignedPa
             <RX.Animated.View
               style={[
                 {
-                  width,
+                  width: screenWidth,
                   alignItems: 'center',
                 },
-                this._animatedStyle,
                 this.props.outermostViewStyle,
               ]}
             >
               <RX.View
                 style={[{
-                  width: this.state.width < this._getMaxWidth() ? this.state.width : this._getMaxWidth(),
-                  padding: Styles.values.spacing * 2,
+                  width,
+                  paddingTop: Styles.values.spacing * 2,
+                  padding: Styles.values.spacing,
                 }, this.props.innermostViewStyle]}
               >
                 {this.props.children}
               </RX.View>
             </RX.Animated.View>
-            <Footer />
+            <Footer
+              style={{
+                width
+              }}
+            />
           </RX.ScrollView>
         )}
       </ThemeContext.Consumer>
     )
-  }
-
-  componentDidMount() {
-    RX.Animated.timing(this._animatedValue, {
-      toValue: 1,
-      duration: 300,
-    }).start()
-  }
-
-  private _getMaxWidth = () => {
-    if (this.props.maxWidth) return this.props.maxWidth
-
-    return this.state.width
   }
 }
 

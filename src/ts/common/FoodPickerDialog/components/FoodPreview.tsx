@@ -6,7 +6,9 @@
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import Checkbox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import SubmitSelect, { SubmitSelectProps } from '@Common/FoodPickerDialog/components/components/SubmitSelect'
 import {
   FoodPreviewMealItem,
   FoodPreviewMealItem_unit,
@@ -20,87 +22,77 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
+import getFloatFromString from '@Utils/get-float-from-string'
+import { calculateMealItemNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
+import NutritionInfo from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
 export function determineIfIsWeight(toBeDetermined: FoodPreviewMealItem_unit): toBeDetermined is FoodPreviewMealItem_unit_Weight {
-  return toBeDetermined.hasOwnProperty('id')
+  // @ts-ignore __typename
+  return toBeDetermined.__typename == 'Weight'
 }
 
 const MODAL_ID = 'FoodPreview'
 const TEXT_HEADING_WIDTH = 200
+
+export type FoodPreviewOnSubmit = (mealItem: FoodPreviewMealItem, userMealId?: string) => void
 
 interface FoodPreviewProps {
   style?: any,
   onDismiss: () => any,
   inputRef: (ref: any) => any,
   mealItem: FoodPreviewMealItem,
-  onSubmit: (mealItem: FoodPreviewMealItem) => void,
-  height: number
+  onSubmit: FoodPreviewOnSubmit,
+  height: number,
+  selectProps?: SubmitSelectProps,
+  showOptional?: boolean,
+  submitButtonLabel?: string,
 }
 
+type LocalFoodPreviewMealItem = Omit<FoodPreviewMealItem, 'amount'> & { amount: string | null }
+
 interface FoodPreviewState {
-  mealItem: FoodPreviewMealItem,
+  mealItem: LocalFoodPreviewMealItem,
   selectedWeightValue?: string,
 }
 
 export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPreviewState> {
-  static fragments = {
-    mealItem: gql`
-      fragment FoodPreviewMealItem on MealItem {
-        id
-        name {text locale}
-        description {text locale}
-        amount
-        customUnit {
-          gramWeight
-          name { text locale }
-        }
-        isOptional
-        unit {
-          ... on Weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-          ... on CustomUnit {
-            gramWeight
-            name { text locale }
-          }
-        }
-        item {
-          ... on Food {
-            ...IngredientFood
-          }
-          ... on Recipe {
-            ...IngredientRecipe
-          }
-        }
-      }
-
-      ${IngredientCard.fragments.food}
-      ${IngredientCard.fragments.recipe}
-    `
-  }
-
   constructor(props: FoodPreviewProps) {
     super(props)
 
     let selectedWeightValue
+    let description
+    let defaultAmount = ''
 
-    if (this.props.mealItem.unit) {
-      if (determineIfIsWeight(this.props.mealItem.unit)) {
-        selectedWeightValue = this.props.mealItem.unit.id
+    if (props.mealItem.description && props.mealItem.description.length > 0) {
+      description = props.mealItem.description
+    } else {
+      description = props.mealItem.item && determineIfIsFood(props.mealItem.item) ? props.mealItem.item.description : []
+    }
+
+    if (props.mealItem.item && determineIfIsFood(props.mealItem.item)) {
+      defaultAmount = '100'
+    } else {
+      defaultAmount = '1'
+    }
+
+    if (props.mealItem.unit) {
+      if (determineIfIsWeight(props.mealItem.unit)) {
+        selectedWeightValue = props.mealItem.unit.id
       } else {
         selectedWeightValue = 'custom'
       }
     }
 
     this.state = {
-      mealItem: this.props.mealItem,
+      mealItem: {
+        ...props.mealItem,
+        amount: props.mealItem.amount ? String(props.mealItem.amount) : defaultAmount,
+        description,
+      },
       selectedWeightValue
     }
   }
@@ -128,12 +120,15 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     )
   }
 
-  private _onSubmit = () => {
-    this.props.onSubmit(this.state.mealItem)
+  private _onSubmit = (userMealId?: string) => {
+    this.props.onSubmit({
+      ...this.state.mealItem,
+      amount: getFloatFromString(this.state.mealItem.amount)
+    }, userMealId)
     this.props.onDismiss()
   }
 
-  private _onMealItemChange = (mealItem: Partial<FoodPreviewMealItem>) => {
+  private _onMealItemChange = (mealItem: Partial<LocalFoodPreviewMealItem>) => {
     this.setState(prevState => ({
       mealItem: {
         ...prevState.mealItem,
@@ -177,153 +172,266 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               style={styles.bigTitle}
               translations={determineIfIsFood(mealItem.item) ? mealItem.item.name : mealItem.item.title}
             />
+            {
+              determineIfIsFood(mealItem.item) ?
+                <Text
+                  style={styles.subtitle}
+                  translations={mealItem.item.description || []}
+                /> :
+                <Text
+                  style={styles.subtitle}
+                >
+                  @{mealItem.item.author.username}
+                </Text>
+            }
+
           </RX.View>
         </RX.View>
       </RX.View>,
       <RX.View
-        style={styles.secondRow}
+        style={{
+          flexDirection: 'row',
+        }}
       >
         <RX.View
-          style={styles.flex1}
+          style={{
+            flex: 3,
+            [Styles.values.paddingEnd]: Styles.values.spacing / 2
+          }}
         >
-          <InputNumber
-            autoFocus
-            inputRef={inputRef}
-            value={mealItem.amount}
-            onChange={amount => this._onMealItemChange({ amount })}
-            label={translate('Amount')}
-            keyboardType={'number-pad'}
-            style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
-          />
-          <RX.View style={[styles.row, { [Styles.values.marginStart]: Styles.values.spacing / 2 }]}>
-            <Text translate style={[styles.label, { color: theme.colors.labelInput }]}>Unit</Text>
-            <Select
-              value={this.state.selectedWeightValue}
-              options={units}
-              onChange={(value) => this.setState({
-                selectedWeightValue: value,
-              }, () => {
-                let unit: FoodPreviewMealItem_unit | null = null
-                let customUnit = mealItem.customUnit
-
-                if (value) {
-                  if (value === 'custom') {
-                    customUnit = mealItem.customUnit || {
-                      name: [],
-                      gramWeight: null
-                    }
-                    unit = customUnit
-                  } else if (mealItem.item && determineIfIsFood(mealItem.item)) {
-                    unit = mealItem.item.weights.find(p => p.id === value) || null
-                  }
-                }
-
-                this._onMealItemChange({
-                  unit,
-                  customUnit
-                })
-              })}
-            />
-          </RX.View>
-        </RX.View>
-        {
-          mealItem.unit && !determineIfIsWeight(mealItem.unit) &&
           <RX.View
             style={styles.flex1}
           >
-            <IntlInput
+            <InputNumber
               autoFocus
               inputRef={inputRef}
-              translations={mealItem.unit.name}
-              onTranslationsChange={customUnitName => this._onMealItemChange({
-                unit: {
-                  ...mealItem.unit,
-                  gramWeight: mealItem.unit!.gramWeight,
-                  name: customUnitName
-                },
-                customUnit: {
-                  gramWeight: mealItem.unit!.gramWeight,
-                  name: customUnitName
-                }
-              })}
-              label={translate('weightName')}
+              value={mealItem.amount}
+              onChange={amount => this._onMealItemChange({ amount })}
+              label={translate('Amount')}
+              keyboardType={'number-pad'}
               style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
             />
-            <InputNumber
-              inputRef={inputRef}
-              value={mealItem.unit.gramWeight}
-              onChange={gramWeight => this._onMealItemChange({
-                unit: {
-                  ...mealItem.unit,
-                  name: mealItem.unit!.name,
-                  gramWeight,
-                },
-                customUnit: {
-                  name: mealItem.unit!.name,
-                  gramWeight,
-                }
+            <RX.View style={[styles.row, { [Styles.values.marginStart]: Styles.values.spacing / 2 }]}>
+              <Text translate style={[styles.label, { color: theme.colors.labelInput }]}>Unit</Text>
+              <Select
+                value={this.state.selectedWeightValue}
+                options={units}
+                onChange={(value) => this.setState({
+                  selectedWeightValue: value,
+                }, () => {
+                  let unit: FoodPreviewMealItem_unit | null = null
+                  let customUnit = mealItem.customUnit
+
+                  if (value) {
+                    if (value === 'custom') {
+                      customUnit = mealItem.customUnit || {
+                        name: [],
+                        gramWeight: null
+                      }
+                      unit = customUnit
+                    } else if (mealItem.item && determineIfIsFood(mealItem.item)) {
+                      unit = mealItem.item.weights.find(p => p.id === value) || null
+                    }
+                  }
+
+                  this._onMealItemChange({
+                    unit,
+                    customUnit
+                  })
+                })}
+              />
+            </RX.View>
+          </RX.View>
+          {
+            mealItem.unit && !determineIfIsWeight(mealItem.unit) &&
+            <RX.View
+              style={styles.flex1}
+            >
+              <IntlInput
+                autoFocus
+                translations={mealItem.unit.name}
+                onTranslationsChange={customUnitName => this._onMealItemChange({
+                  unit: {
+                    ...mealItem.unit,
+                    gramWeight: mealItem.unit!.gramWeight,
+                    name: customUnitName
+                  },
+                  customUnit: {
+                    gramWeight: mealItem.unit!.gramWeight,
+                    name: customUnitName
+                  }
+                })}
+                label={translate('weightName')}
+                style={[styles.row, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
+              />
+              <InputNumber
+                value={mealItem.unit.gramWeight}
+                onChange={gramWeight => this._onMealItemChange({
+                  unit: {
+                    ...mealItem.unit,
+                    name: mealItem.unit!.name,
+                    gramWeight: getFloatFromString(gramWeight),
+                  },
+                  customUnit: {
+                    name: mealItem.unit!.name,
+                    gramWeight: getFloatFromString(gramWeight),
+                  }
+                })}
+                label={translate('estimatedGramWeight')}
+                keyboardType={'number-pad'}
+                style={[styles.row, { [Styles.values.marginStart]: Styles.values.spacing / 2 }]}
+              />
+            </RX.View>
+          }
+          <RX.View>
+            <IntlInput
+              translations={mealItem.description || []}
+              onTranslationsChange={description => this._onMealItemChange({ description })}
+              label={translate('Description')}
+              style={{ flex: 1 }}
+            />
+
+            {
+              this.props.showOptional &&
+              <RX.View
+                style={[
+                  styles.flex1,
+                  {
+                    marginTop: Styles.values.spacing,
+                  }
+                ]}
+              >
+                <Text
+                  style={{
+                    fontWeight: '500',
+                    color: theme.colors.labelInput,
+                    [Styles.values.marginEnd]: Styles.values.spacing,
+                  }}
+                  translate={'optional'}
+                />
+                <Checkbox
+                  size={20}
+                  value={mealItem.isOptional || false}
+                  onChange={isOptional => this.setState(prevState => ({
+                    mealItem: {
+                      ...prevState.mealItem,
+                      isOptional,
+                    }
+                  }))}
+                />
+              </RX.View>
+            }
+          </RX.View>
+
+        </RX.View>
+        {
+          mealItem.item.nutrition && mealItem.amount &&
+          <RX.View
+            style={{
+              flex: 2
+            }}
+          >
+            <NutritionInfo
+              nutrition={calculateMealItemNutrition({
+                ...mealItem,
+                amount: Number(mealItem.amount)
               })}
-              label={translate('gramWeight')}
-              keyboardType={'number-pad'}
-              style={[styles.row, { [Styles.values.marginStart]: Styles.values.spacing / 2 }]}
             />
           </RX.View>
         }
-        <RX.View
-          style={styles.flex1}
-        >
-          <IntlInput
-            inputRef={inputRef}
-            translations={mealItem.description || []}
-            onTranslationsChange={description => this._onMealItemChange({ description })}
-            label={translate('Description')}
-            style={{ flex: 1 }}
-          />
-        </RX.View>
       </RX.View>,
-      <FilledButton
-        label={translate('AddIngredient')}
-        onPress={this._onSubmit}
-        containerStyle={styles.addToMeal}
-      />
+      this.props.selectProps ?
+        <SubmitSelect
+          {...this.props.selectProps}
+          onSubmit={this._onSubmit}
+        /> :
+        <FilledButton
+          label={this.props.submitButtonLabel || translate('AddIngredient')}
+          onPress={() => this._onSubmit()}
+          containerStyle={styles.addToMeal}
+        />
     ]
   }
 
   private _dismiss = () => {
     this.props.onDismiss()
   }
+
+  static fragments = {
+    mealItem: gql`
+      fragment FoodPreviewMealItem on MealItem {
+        id
+        name {text locale}
+        description {text locale}
+        amount
+        customUnit {
+          gramWeight
+          name { text locale }
+        }
+        isOptional
+        unit {
+          ... on Weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+          ... on CustomUnit {
+            gramWeight
+            name { text locale }
+          }
+        }
+        item {
+          ... on Food {
+            ...IngredientFood
+          }
+          ... on Recipe {
+            ...IngredientRecipe
+          }
+        }
+      }
+
+      ${IngredientCard.fragments.food}
+      ${IngredientCard.fragments.recipe}
+    `
+  }
 }
 
 export function showFoodPreviewModal(props: FoodPreviewProps) {
   RX.Modal.show(
-    <Modal
-      modalId={MODAL_ID}
-      modalWidth={500}
-      modalHeight={500}
-    >
-      <RX.View
-        style={[
-          {
-            flex: 1,
-            backgroundColor: '#fff',
-            borderRadius: 8,
-            width: 500,
-            height: 500,
-          }
-        ]}
-      >
-        <FoodPreview
-          {...props}
-          style={{
-            position: 'absolute',
-            top: Styles.values.spacing * 2,
-            left: Styles.values.spacing * 2,
-            right: Styles.values.spacing * 2,
-          }}
-          onDismiss={() => Modal.dismissAnimated(MODAL_ID)}
-        />
-      </RX.View>
-    </Modal>,
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <Modal
+          modalId={MODAL_ID}
+          modalWidth={500}
+          modalHeight={500}
+          theme={theme}
+        >
+          <RX.View
+            style={[
+              {
+                flex: 1,
+                backgroundColor: '#fff',
+                borderRadius: 8,
+                width: 500,
+                height: 500,
+              }
+            ]}
+          >
+            <FoodPreview
+              {...props}
+              style={{
+                position: 'absolute',
+                top: Styles.values.spacing * 2,
+                left: Styles.values.spacing * 2,
+                right: Styles.values.spacing * 2,
+              }}
+              onDismiss={() => Modal.dismissAnimated(MODAL_ID)}
+            />
+          </RX.View>
+        </Modal>
+      )}
+    </ThemeContext.Consumer>,
     MODAL_ID
   )
 }
@@ -354,29 +462,21 @@ const styles = {
     paddingTop: 0,
   }),
   textHeadingContainer: RX.Styles.createViewStyle({
-    // flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    [Styles.values.marginEnd]: 50
+    [Styles.values.marginEnd]: 50,
+    maxWidth: 200,
   }),
   bigTitle: RX.Styles.createTextStyle({
     fontSize: 25,
     width: TEXT_HEADING_WIDTH,
+    marginBottom: Styles.values.spacing / 2,
     // wordBreak: 'break-word',
     top: 2
-  }),
-  smallTitle: RX.Styles.createTextStyle({
-    color: 'red',
   }),
   subtitle: RX.Styles.createTextStyle({
     fontSize: 12,
   }),
-  secondRow: RX.Styles.createViewStyle({
-    // flexDirection: 'row',
-    // alignItems: 'flex-end',
-  }),
   flex1: RX.Styles.createViewStyle({
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
   }),
   chartContainer: RX.Styles.createViewStyle({

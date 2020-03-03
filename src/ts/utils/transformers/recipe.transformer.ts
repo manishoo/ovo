@@ -16,11 +16,13 @@ import { Recipe } from '@Views/RecipeScreen/types/Recipe'
 
 
 export function determineIfIsWeight(toBeDetermined: Partial<FoodPreviewMealItem_unit>): toBeDetermined is FoodPreviewMealItem_unit_Weight {
-  return toBeDetermined.hasOwnProperty('id')
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Weight'
 }
 
 function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_item>): toBeDetermined is FoodPreviewMealItem_item_Food {
-  return toBeDetermined.hasOwnProperty('weights')
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Food'
 }
 
 export function transformRecipeToRecipeInput(recipe: RecipeFormQuery_recipe | Recipe, image?: any, thumbnail?: any): RecipeInput {

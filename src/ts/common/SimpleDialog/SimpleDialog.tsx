@@ -4,6 +4,7 @@
  */
 
 import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
 import each from 'lodash/each'
 import map from 'lodash/map'
 
@@ -159,19 +160,24 @@ export default class SimpleDialog extends ComponentBase<SimpleDialogProps, RX.St
     }
 
     return (
-      <Modal
-        modalId={this.props.dialogId}
-        modalWidth={this.props.maxWidth || 450}
-        modalHeight={this.props.maxHeight}
-      >
-        <RX.View style={[_styles.container, this.props.containerStyle]}>
-          {optionalTitleText}
-          <RX.View style={_styles.contentContainer}>
-            {optionalContent}
-          </RX.View>
-          {optionalButtonsContainer}
-        </RX.View>
-      </Modal>
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            modalId={this.props.dialogId}
+            modalWidth={this.props.maxWidth || 450}
+            modalHeight={this.props.maxHeight}
+            theme={theme}
+          >
+            <RX.View style={[_styles.container, this.props.containerStyle]}>
+              {optionalTitleText}
+              <RX.View style={_styles.contentContainer}>
+                {optionalContent}
+              </RX.View>
+              {optionalButtonsContainer}
+            </RX.View>
+          </Modal>
+        )}
+      </ThemeContext.Consumer>
     )
   }
 

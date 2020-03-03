@@ -41,7 +41,7 @@ export const AssistantMessage = ({ text, style }: { text: string, style?: any })
           style={[
             styles.baseMessage, {
               // width: text.length * 10,
-              backgroundColor: theme.colors.bg,
+              backgroundColor: theme.colors.cardBg,
               borderWidth: 1,
               borderColor: theme.colors.borderLight,
               [Styles.values.borderTopEndRadius]: 5,

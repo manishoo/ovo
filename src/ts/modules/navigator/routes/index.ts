@@ -47,3 +47,6 @@ export const MealPlanSettingsScreen = loadComponent('MealPlanSettingsScreen')
 
 export const SearchResult = loadComponent('SearchResult', 'SearchResultContainer')
 export const PayScreen = loadComponent('PayScreen')
+
+export const ForgotPasswordScreen = loadComponent('ForgotPasswordScreen')
+export const NewPasswordScreen = loadComponent('NewPasswordScreen')

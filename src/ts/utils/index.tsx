@@ -3,12 +3,16 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import ImageComponent from '@Common/Image/Image'
+import ImageClickable from '@Common/Image/ImageClickable'
 import { Image } from '@Common/Image/types/Image'
 import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
 import AppConfig from '../app/AppConfig'
 
+
+const qs = require('querystring')
 
 export function fullWidth() {
   return RX.UserInterface.measureWindow().width
@@ -59,6 +63,25 @@ export function getParam(props: any, paramName: string) {
   }
 }
 
+export function getQueryParam(props: any, paramName: string) {
+  const type = RX.Platform.getType()
+
+  if (type === 'web') {
+    let q
+
+    if (location.search) {
+      if (location.search[0] === '?') {
+        q = location.search.replace('?', '')
+      }
+
+      const parsedQS = qs.parse(q)
+
+      return parsedQS[paramName]
+    }
+  } else {
+  }
+}
+
 export function getimage(imageObject?: Image) {
   if (imageObject) {
     return `${AppConfig.serverAddress}/${imageObject.url}`
@@ -90,10 +113,23 @@ export function isEmailValid(email: string) {
   return email.match(EMAIL_REGEX)
 }
 
-export function renderImageOrPlaceholder(image: Image | null, style?: any) {
+export function renderImageOrPlaceholder(image: Image | null, style?: any, onPress?: () => void) {
   if (image) {
+    if (onPress) {
+      return (
+        <ImageClickable
+          source={image.url}
+          width={style.width}
+          height={style.height}
+          onPress={onPress}
+          style={style}
+          resizeMode={'cover'}
+        />
+      )
+    }
+
     return (
-      <RX.Image
+      <ImageComponent
         source={image.url}
         style={style}
         resizeMode={'cover'}
@@ -102,7 +138,12 @@ export function renderImageOrPlaceholder(image: Image | null, style?: any) {
   } else {
     return (
       <RX.View
-        style={style}
+        style={[
+          {
+            //
+          },
+          style
+        ]}
       />
     )
   }

@@ -6,11 +6,13 @@
 import { useMutation } from '@apollo/react-hooks'
 import client from '@App/client'
 import Styles from '@App/Styles'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import { ThemeContext } from '@App/ThemeContext'
+import Page from '@Common/Page'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
+import { NutritionProfileFormContainer } from '@Common/NutritionProfileForm/NutritionProfileForm'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
 import { Me } from '@Services/types/Me'
@@ -68,16 +70,21 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
 
   static showModal = (props: MealPlanSettingsScreenCommonProps) => (
     RX.Modal.show(
-      <Modal
-        key={MODAL_ID}
-        modalId={MODAL_ID}
-        fullWidth
-        fullHeight
-      >
-        <MealPlanSettingsScreenContainer
-          {...props}
-        />
-      </Modal>,
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            key={MODAL_ID}
+            modalId={MODAL_ID}
+            fullWidth
+            fullHeight
+            theme={theme}
+          >
+            <MealPlanSettingsScreenContainer
+              {...props}
+            />
+          </Modal>
+        )}
+      </ThemeContext.Consumer>,
       MODAL_ID,
     )
   )
@@ -87,7 +94,7 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
     if (!me) return
 
     return (
-      <CenterAlignedPageView>
+      <Page>
         <Navbar
           title={translate(translate.keys.editMealPlanSettings)}
         >
@@ -115,8 +122,7 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
             meals={me.meals}
           />
         </RX.View>
-
-      </CenterAlignedPageView>
+      </Page>
     )
   }
 

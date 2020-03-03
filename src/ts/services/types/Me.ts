@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, Role, MealAvailableTime, MealSize } from "./../../models/global-types";
+import { Gender, NutritionProfileMode, Role, MealAvailableTime, MealSize } from "./../../models/global-types";
 
 // ====================================================
 // GraphQL fragment: Me
@@ -27,6 +27,33 @@ export interface Me_socialNetworks {
   twitter: string | null;
   website: string | null;
   pinterest: string | null;
+}
+
+export interface Me_nutritionProfile_carbs {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface Me_nutritionProfile_fat {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface Me_nutritionProfile_protein {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface Me_nutritionProfile {
+  calories: number;
+  carbs: Me_nutritionProfile_carbs;
+  fat: Me_nutritionProfile_fat;
+  protein: Me_nutritionProfile_protein;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
 }
 
 export interface Me_membership {
@@ -56,8 +83,8 @@ export interface Me {
   bio: string | null;
   weight: Me_weight | null;
   height: Me_height | null;
-  caloriesPerDay: number | null;
   socialNetworks: Me_socialNetworks | null;
+  nutritionProfile: Me_nutritionProfile;
   membership: Me_membership | null;
   role: Role;
   meals: Me_meals[];

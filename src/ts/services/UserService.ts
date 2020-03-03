@@ -4,12 +4,14 @@
  */
 
 import client from '@App/client'
+import NutritionProfileForm from '@Common/NutritionProfileForm/NutritionProfileForm'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
+import MacroTargets from '@Views/CalendarScreen/components/NutritionInfo/MacroTargets'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
 import gql from 'graphql-tag'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import * as SyncTasks from 'synctasks'
-import { Me } from './types/Me'
+import { Me, Me_nutritionProfile } from './types/Me'
 import RX from 'reactxp'
 import Storage from '@App/Storage/Storage'
 
@@ -61,6 +63,14 @@ class UserService extends StoreBase implements IAutoSavablePersistableStore {
     this.trigger()
   }
 
+  setNutritionProfile(nutritionProfile: Me_nutritionProfile) {
+    if (!this.me) return
+
+    this.me.nutritionProfile = nutritionProfile
+
+    this.trigger()
+  }
+
   @autoSubscribe
   async getSession(): Promise<string | null> {
     return this.token
@@ -69,9 +79,9 @@ class UserService extends StoreBase implements IAutoSavablePersistableStore {
   logOut() {
     this.setSession(null)
     this.setUser()
+    client.clearStore()
     RX.Storage.clear()
     Storage.clear()
-    client.resetStore()
   }
 
   public fragments = {
@@ -98,13 +108,13 @@ class UserService extends StoreBase implements IAutoSavablePersistableStore {
           value
           unit
         }
-        caloriesPerDay
         socialNetworks {
           instagram
           twitter
           website
           pinterest
         }
+        nutritionProfile { ...NutritionProfileFormNutritionProfile }
         membership {
           type
         }
@@ -115,6 +125,7 @@ class UserService extends StoreBase implements IAutoSavablePersistableStore {
       }
 
       ${MealSettingsScreen.fragments.mealSettingsMeal}
+      ${NutritionProfileForm.fragments.nutritionProfile}
     `
   }
 }

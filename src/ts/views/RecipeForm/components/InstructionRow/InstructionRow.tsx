@@ -17,7 +17,7 @@ import RX from 'reactxp'
 const IMAGE_DIMENSIONS = 50
 const CLEAR_DIMENSIONS = 20
 
-interface IngredientRowProps {
+interface InstructionRowProps {
   style?: any,
   instruction: InstructionRowInstruction,
   onChange: (instruction: InstructionRowInstruction) => void,
@@ -36,7 +36,7 @@ export const fragments = {
   `
 }
 
-export default class InstructionRow extends RX.Component<IngredientRowProps> {
+export default class InstructionRow extends RX.Component<InstructionRowProps> {
   onDeletePress = () => this.props.onDelete(this.props.instruction.step)
 
   public render() {
@@ -53,7 +53,7 @@ export default class InstructionRow extends RX.Component<IngredientRowProps> {
                 <Text>{instruction.step}</Text>
               </RX.View>
               <IntlInput
-                autoFocus={instruction.step > 1}
+                autoFocus={instruction.step > 1 && (instruction.text[0].text.length === 0)}
                 translations={instruction.text}
                 onTranslationsChange={translations => this.props.onChange({
                   ...this.props.instruction,

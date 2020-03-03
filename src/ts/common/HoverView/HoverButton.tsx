@@ -10,7 +10,7 @@ export interface HoverViewProps extends RX.Types.ViewProps {
   onRenderChild: (isHovering: boolean) => JSX.Element | null;
   title?: string;
   disabled?: boolean;
-  style?: RX.Types.ViewStyle
+  style?: any
 }
 
 export interface HoverViewState {

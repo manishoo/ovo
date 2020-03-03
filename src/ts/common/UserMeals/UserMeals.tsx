@@ -114,10 +114,10 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
               appRegion: 'drag'
             }}
           >
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
           </RX.View>
 
           {/**

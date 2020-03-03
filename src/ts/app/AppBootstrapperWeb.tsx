@@ -43,7 +43,7 @@ class AppBootstrapperWeb extends AppBootstrapper {
   }
 
   protected _renderRootView(): any {
-    const history = createBrowserHistory({ basename: `/${AppConfig.locale}` })
+    const history = createBrowserHistory()
     LocationStore.setHistory(history)
 
     return (

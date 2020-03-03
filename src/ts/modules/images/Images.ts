@@ -75,4 +75,7 @@ export interface ImageSourceBase {
   AppStoreButton: string;
   GooglePlayButton: string;
   CafeBazaarButton: string;
+
+  VerifiedBadge: string;
+  VerifyingBadge: string;
 }

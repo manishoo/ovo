@@ -95,6 +95,14 @@ export enum MessageType {
 }
 
 /**
+ * Nutrition Profile Mode
+ */
+export enum NutritionProfileMode {
+  percentage = "percentage",
+  range = "range",
+}
+
+/**
  * Recipe difficulty
  */
 export enum RecipeDifficulty {
@@ -182,9 +190,10 @@ export interface MealItemInput {
 export interface NutritionProfileInput {
   calories: number;
   protein: TargetNutritionInput;
-  carb: TargetNutritionInput;
+  carbs: TargetNutritionInput;
   fat: TargetNutritionInput;
   isStrict: boolean;
+  mode: NutritionProfileMode;
 }
 
 export interface RecipeInput {
@@ -217,6 +226,7 @@ export interface TagInput {
 }
 
 export interface TargetNutritionInput {
+  percentage?: number | null;
   min: number;
   max: number;
 }
@@ -224,7 +234,7 @@ export interface TargetNutritionInput {
 export interface TimingInput {
   prepTime?: number | null;
   cookTime?: number | null;
-  totalTime: number;
+  totalTime?: number | null;
 }
 
 export interface TranslationInput {

@@ -7,7 +7,7 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
@@ -22,7 +22,8 @@ import authorized from '@Utils/authorized'
 import MealsList from '@Views/ProfileScreen/components/MealsList/MealsList'
 import useProfileTabsHOC, {
   PROFILE_MEALS_QUERY,
-  PROFILE_RECIPES_QUERY, PROFILE_REVIEW_RECIPES_QUERY,
+  PROFILE_RECIPES_QUERY,
+  PROFILE_REVIEW_RECIPES_QUERY,
   ProfileTabsResult
 } from '@Views/ProfileScreen/useProfileTabs.hook'
 import gql from 'graphql-tag'
@@ -91,7 +92,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <CenterAlignedPageView
+          <Page
             scrollViewProps={{
               onScroll: this._onScroll,
             }}
@@ -124,6 +125,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
               <FilledButton
                 label={translate('Recipes')}
                 onPress={() => this.setState({ activeTab: 0 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
+                pressed={this.state.activeTab === 0}
                 mode={this.state.activeTab === 0 ? FilledButton.mode.primary : FilledButton.mode.default}
                 style={{
                   padding: 16
@@ -136,6 +138,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
                 <FilledButton
                   label={translate('Meals')}
                   onPress={() => this.setState({ activeTab: 1 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
+                  pressed={this.state.activeTab === 1}
                   mode={this.state.activeTab === 1 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{
                     padding: 16
@@ -149,6 +152,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
                 <FilledButton
                   label={translate('Reviews')}
                   onPress={() => this.setState({ activeTab: 2 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
+                  pressed={this.state.activeTab === 2}
                   mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{
                     padding: 16
@@ -165,7 +169,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
                 this._renderTabContent()
               }
             </RX.View>
-          </CenterAlignedPageView>
+          </Page>
         )}
       </ThemeContext.Consumer>
     )
@@ -177,11 +181,11 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
       height: ResponsiveWidthStore.getHeight(),
     }
   }
-  
+
   private _renderReviewRecipesIndicator = (theme: Theme) => {
     const { reviewRecipes } = this.props
-    
-    if (reviewRecipes.data) {
+
+    if (reviewRecipes.data && reviewRecipes.data.recipes) {
       const recipesCount = reviewRecipes.data.recipes.recipes.length
       if (recipesCount === 0) return null
 
@@ -203,7 +207,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
         </RX.View>
       )
     }
-    
+
     return null
   }
 
@@ -220,7 +224,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
           <RecipesList
             showAddRecipe={this.props.isMyProfile}
             hideAvatar={this.props.isMyProfile}
-            recipes={recipes.data ? recipes.data.recipes.recipes : []}
+            recipes={recipes.data && recipes.data.recipes ? recipes.data.recipes.recipes : []}
             onLayout={e => this._onRecipesHeightChange(e.height)}
             loading={recipes.loading}
           />
@@ -228,7 +232,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
       case 1:
         return (
           <MealsList
-            meals={meals.data ? meals.data.meals.meals : []}
+            meals={meals.data && meals.data.meals ? meals.data.meals.meals : []}
             showAddMeal={this.props.isMyProfile}
             hideAvatar={this.props.isMyProfile}
             onLayout={e => this._onMealsHeightChange(e.height)}
@@ -238,7 +242,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
       case 2:
         return (
           <RecipesList
-            recipes={reviewRecipes.data ? reviewRecipes.data.recipes.recipes : []}
+            recipes={reviewRecipes.data && reviewRecipes.data.recipes ? reviewRecipes.data.recipes.recipes : []}
             onLayout={e => this._onReviewRecipesHeightChange(e.height)}
             loading={reviewRecipes.loading}
           />
@@ -334,26 +338,14 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
 
   private _onRecipesHeightChange = (height: number) => {
     this._recipesListHeight = height
-
-    if (height > this._recipesListHeight) {
-      //
-    }
   }
 
   private _onMealsHeightChange = (height: number) => {
     this._mealsListHeight = height
-
-    if (height > this._mealsListHeight) {
-      //
-    }
   }
 
   private _onReviewRecipesHeightChange = (height: number) => {
     this._reviewRecipesHeight = height
-
-    if (height > this._reviewRecipesHeight) {
-      //
-    }
   }
 
   private renderSettingsIcon = () => {
@@ -379,19 +371,19 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
 
     switch (activeTab) {
       case 2:
-        if (this._reviewRecipesHeight && bottomOfViewPoint >= this._reviewRecipesHeight) {
-          return this._fetchMoreRecipes()
+        if (this._reviewRecipesHeight && (bottomOfViewPoint >= this._reviewRecipesHeight)) {
+          return this._fetchMoreReviewRecipes()
         }
         break
       case 1:
-        if (this._mealsListHeight && bottomOfViewPoint >= this._mealsListHeight) {
+        if (this._mealsListHeight && (bottomOfViewPoint >= this._mealsListHeight)) {
           return this._fetchMoreMeals()
         }
         break
       case 0:
       default:
-        if (this._recipesListHeight && bottomOfViewPoint >= this._recipesListHeight) {
-          return this._fetchMoreReviewRecipes()
+        if (this._recipesListHeight && (bottomOfViewPoint >= this._recipesListHeight)) {
+          return this._fetchMoreRecipes()
         }
     }
   }

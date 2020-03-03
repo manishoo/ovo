@@ -50,14 +50,31 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
               <RX.Animated.View
                 style={[
                   styles.circle,
-                  { backgroundColor: theme.colors.addRecipeCardCircleBG },
+                  {
+                    width: this.props.size / 5,
+                    height: this.props.size / 5,
+                    borderRadius: this.props.size,
+                    backgroundColor: theme.colors.addRecipeCardCircleBG,
+                  },
                   this._previewAnimatedStyle,
                 ]}
               >
                 <RX.View
-                  style={[styles.plusIconVerticalLine, { backgroundColor: theme.colors.addRecipeCardCirclePlus }]} />
+                  style={[
+                    styles.plusIconVerticalLine, {
+                      backgroundColor: theme.colors.addRecipeCardCirclePlus,
+                      height: this.props.size / 10,
+                    }
+                  ]}
+                />
                 <RX.View
-                  style={[styles.plusIconHorizontalLine, { backgroundColor: theme.colors.addRecipeCardCirclePlus }]} />
+                  style={[
+                    styles.plusIconHorizontalLine, {
+                      backgroundColor: theme.colors.addRecipeCardCirclePlus,
+                      width: this.props.size / 10,
+                    }
+                  ]}
+                />
               </RX.Animated.View>
             </RX.View>
             {/*<Text
@@ -101,22 +118,17 @@ const styles = {
     marginBottom: Styles.values.spacingLarge / 2,
   }),
   circle: RX.Styles.createViewStyle({
-    width: 40,
-    height: 40,
-    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   }),
   plusIconVerticalLine: RX.Styles.createViewStyle({
-    width: 20,
-    height: 2,
+    width: 2,
     borderRadius: 2,
     position: 'absolute'
   }),
   plusIconHorizontalLine: RX.Styles.createViewStyle({
-    width: 2,
-    height: 20,
     borderRadius: 2,
+    height: 2,
     position: 'absolute'
     // transform: [{
     //   rotate: '90deg'

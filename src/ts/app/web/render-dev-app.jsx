@@ -9,8 +9,8 @@ const React = require('react')
 const { renderToString } = require('react-dom/server')
 const Html = require('./html')
 
-const renderDevApp = (res, lang) => {
-  const html = renderToString(<Html lang={lang} />)
+const renderDevApp = (res) => {
+  const html = renderToString(<Html lang={'en'} />)
 
   res.send(`<!doctype html>${html}`)
 }

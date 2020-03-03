@@ -5,34 +5,30 @@
 
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
-import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import Image from '@Common/Image/Image'
-import LikeButton from '@Common/LikeButton/LikeButton'
-import Link from '@Common/Link/Link'
+import HoverView from '@Common/HoverView/HoverButton'
+import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import { withNavigation } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
-import MealItemRow from '@Views/MealForm/components/MealItemRow/MealItemRow'
-import MealItemGrid from '@Views/ProfileScreen/components/MealsList/components/MealCell/MealItemGrid'
 import {
   MealCellMeal,
-  MealCellMeal_items,
+  MealCellMeal_items_item,
   MealCellMeal_items_item_Food
 } from '@Views/ProfileScreen/components/MealsList/components/MealCell/types/MealCellMeal'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
-function determineIfIsFood(toBeDetermined: Partial<MealCellMeal_items>): toBeDetermined is MealCellMeal_items_item_Food {
-  return toBeDetermined.hasOwnProperty('weights')
+function determineIfIsFood(toBeDetermined: Partial<MealCellMeal_items_item>): toBeDetermined is MealCellMeal_items_item_Food {
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Food'
 }
 
 interface AddMealCellProps {
-  wrapperStyle?: any,
-  size: number,
+  style?: any,
   meal: MealCellMeal,
   hideAvatar?: boolean,
 }
@@ -45,106 +41,76 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <RX.View
-            onPress={(e) => {
-              e.stopPropagation()
-              e.preventDefault()
-              LocationStore.navigate(this.props, `${Routes.mealForm}/${meal.id}`)
-            }}
+          <HoverView
             style={[
               styles.container,
-              this.props.wrapperStyle,
-              {
-                width: this.props.size,
-                // backgroundColor: theme.colors.textInputBg,
-
-                // height: this.props.size * 1.25,
-                borderRadius: this.props.size / 20,
-              },
+              this.props.style,
             ]}
-          >
-            <MealItemGrid
-              size={this.props.size}
-              mealItems={meal.items}
-            />
-
-            <RX.Text
-              style={{ marginTop: Styles.values.spacing / 2 }}
-            >
-              {
-                meal.items.map((mealItem, index) => [
-                  (index > 0) ? (index === (meal.items.length - 1) ? translate(', and ') : ', ') : null,
-                  <Text
-                    onPress={() => LocationStore.navigate(this.props, `/meal/${meal.id}/`)}
-                    style={[
-                      styles.title,
-                      {
-                        color: theme.colors.text,
-                      }
-                    ]}
-                    translations={
-                      mealItem.item ?
-                        (determineIfIsFood(mealItem.item) ? mealItem.item.name : mealItem.item.title)
-                        : (mealItem.name || [])
-                    }
-                  />,
-                ])
-              }
-
-            </RX.Text>
-
-            {
-              !this.props.hideAvatar &&
-              <Link to={`/${meal.author.username}`} style={styles.avatarContainer}>
-                <Image
-                  source={meal.author.avatar!.url}
+            onRenderChild={isHovering => (
+              <RX.View
+                onPress={(e) => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  LocationStore.navigate(this.props, `${Routes.mealForm}/${meal.id}`)
+                }}
+                style={[
+                  {
+                    borderRadius: 15,
+                    padding: Styles.values.spacing / 2,
+                    backgroundColor: isHovering ? theme.colors.textInputBgHovering : theme.colors.textInputBg,
+                  },
+                ]}
+              >
+                <RX.View
                   style={{
-                    width: this.props.size / 5,
-                    height: this.props.size / 5,
-                    borderRadius: 100,
+                    flexDirection: 'row',
+                    alignSelf: 'flex-start',
                   }}
-                />
-              </Link>
-            }
+                >
+                  {
+                    meal.items.map(mealItem => (
+                      <IngredientCard
+                        size={100}
+                        hideTitle
+                        hideUnits
+                        ingredient={mealItem}
+                        style={{
+                          [Styles.values.marginEnd]: Styles.values.spacing / 2,
+                        }}
+                      />
+                    ))
+                  }
+                </RX.View>
+                <Text
+                  style={{ marginTop: Styles.values.spacing / 2 }}
+                >
+                  {
+                    meal.items.map((mealItem, index) => [
+                      (index > 0) ? translate(', ') : null,
+                      <Text
+                        onPress={() => LocationStore.navigate(this.props, `/meal/${meal.id}/`)}
+                        style={[
+                          styles.title,
+                          {
+                            color: theme.colors.text,
+                          }
+                        ]}
+                        translations={
+                          mealItem.item ?
+                            (determineIfIsFood(mealItem.item) ? mealItem.item.name : mealItem.item.title)
+                            : []
+                        }
+                      />,
+                    ])
+                  }
 
-            {this._renderLikes(theme)}
-            {this._renderTime(theme)}
-          </RX.View>
+                  {meal.hasPermutations && '*'}
+                </Text>
+              </RX.View>
+            )}
+          />
         )}
       </ThemeContext.Consumer>
-    )
-  }
-
-  private _renderLikes = (theme: Theme) => {
-    return null // TODO
-
-    let size = this.props.size / 4
-    if (size < 60) {
-      size = 60
-    }
-
-    return (
-      <RX.View style={[styles.likesContainer, { top: (this.props.size * 1.3) - (size - 10) }]}>
-        <LikeButton
-          size={size}
-          liked={this.props.meal.likedByUser || false}
-          onChange={liked => {
-
-          }}
-        />
-        <Text
-          style={[styles.likeText, { color: theme.colors.recipeCardLikeText }]}>{this.props.meal.likesCount}</Text>
-      </RX.View>
-    )
-  }
-
-  private _renderTime = (theme: Theme) => {
-    return (
-      <RX.View style={[styles.timingContainer, { top: ((this.props.size * 1.3) - 30) }]}>
-        <Text
-          style={[styles.timingNumber, { color: theme.colors.recipeCardTimingNumberColor, }]}>{this.props.meal.timing.totalTime}</Text>
-        <Text translate style={[styles.timingUnit, { color: theme.colors.recipeCardTimingUnitColor }]}>min</Text>
-      </RX.View>
     )
   }
 
@@ -156,8 +122,36 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
         likedByUser
         likesCount
         items {
-          ...MealItemRowMealItem
+          amount
+          customUnit {
+            gramWeight
+            name { text locale }
+          }
+          unit {
+            ... on Weight {
+              amount
+              gramWeight
+              id
+              name { text locale }
+            }
+            ... on CustomUnit {
+              gramWeight
+              name { text locale }
+            }
+          }
+          item {
+            ... on Food {
+              name { text locale }
+              description { text locale }
+              thumbnail {url}
+            }
+            ... on Recipe {
+              title {text locale}
+              thumbnail {url}
+            }
+          }
         }
+        hasPermutations
         author {
           id
           username
@@ -167,8 +161,6 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
           totalTime
         }
       }
-
-      ${MealItemRow.fragments.mealItem}
     `
   }
 
@@ -176,16 +168,10 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    // backgroundColor: '#fff',
-    // borderWidth: 1,
-    // borderColor: '#eee',
     cursor: 'pointer',
-    paddingBottom: Styles.values.spacing,
+    alignSelf: 'flex-start',
   }),
-  innerContainer: RX.Styles.createViewStyle({
-    // height: 200,
-    // width: 100,
-  }),
+  innerContainer: RX.Styles.createViewStyle({}),
   image: RX.Styles.createImageStyle({
     position: 'absolute',
     left: 0,

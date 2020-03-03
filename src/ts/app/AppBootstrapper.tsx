@@ -25,14 +25,14 @@ const persistableStores: IAutoSavablePersistableStore[] = [
   UserService,
 ]
 
-function getLocaleFromUrl(url: string): { urlWithoutLocale: string, locale: LanguageCode } {
-  const splitUrl = url.split('/')
-  const locale = splitUrl.splice(1, 1)
+async function getSetLocale(): Promise<LanguageCode> {
+  let locale: LanguageCode = await Storage.getItem('locale')
 
-  return {
-    locale: locale[0] as LanguageCode,
-    urlWithoutLocale: splitUrl.join('/') || '/'
+  if (!locale) {
+    locale = await Storage.setItem('locale', LanguageCode.en)
   }
+
+  return locale!
 }
 
 async function persistAndRehydrate() {
@@ -54,32 +54,35 @@ export default abstract class AppBootstrapper {
 
     this._startCriticalServices()
       .thenAsync(value => {
-        this._getInitialUrl()
-          .then(url => {
-            if (url) {
-              const { urlWithoutLocale, locale } = getLocaleFromUrl(url)
-              // do something with the url
-              LocationStore.setPath(urlWithoutLocale)
-              // set locale
-              AppConfig.setLocale(locale)
-            }
+        getSetLocale()
+          .then(locale => {
+            this._getInitialUrl()
+              .then(url => {
+                if (url) {
+                  // do something with the url
+                  LocationStore.setPath(url)
+                  // set locale
+                  AppConfig.setLocale(locale)
+                }
 
-            // persist apollo cache
-            persistCache({
-              cache,
-              // @ts-ignore
-              storage: Storage
-            })
-              .then(() => {
-                persistAndRehydrate()
+                // persist apollo cache
+                persistCache({
+                  cache,
+                  // @ts-ignore
+                  storage: Storage
+                })
                   .then(() => {
-                    // init the app
-                    RX.UserInterface.setMainView(this._renderRootView())
-                    // RX.UserInterface.useCustomScrollbars(true)
-                    RX.International.forceRTL(AppConfig.isRTL())
-                    this._hideSplash()
+                    persistAndRehydrate()
+                      .then(() => {
+                        // init the app
+                        RX.UserInterface.setMainView(this._renderRootView())
+                        // RX.UserInterface.useCustomScrollbars(true)
+                        RX.International.forceRTL(AppConfig.isRTL())
+                        this._hideSplash()
+                      })
                   })
               })
+
           })
       })
   }

@@ -74,7 +74,7 @@ const GroceryListItem = ({ food, grams, type, onUnitChange, onAmountChange, edit
         <RX.View
           activeOpacity={0.7}
           style={[styles.container, {
-            backgroundColor: theme.colors.bg,
+            backgroundColor: theme.colors.cardBg,
           }, style]}
         >
           {renderImageOrPlaceholder(food.thumbnail, styles.image)}

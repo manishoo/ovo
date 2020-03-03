@@ -19,6 +19,7 @@ interface FilledButtonProps {
   fontSize?: number,
   mode?: ButtonMode,
   suffix?: any,
+  pressed?: boolean
 }
 
 enum ButtonMode {
@@ -29,6 +30,9 @@ enum ButtonMode {
 }
 
 export default class FilledButton extends RX.Component<FilledButtonProps> {
+  state = {
+    pressed: false
+  }
   static defaultProps = {
     mode: ButtonMode.primary,
   }
@@ -36,23 +40,36 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
 
   public render() {
     const { style, containerStyle, label, onPress, fontSize, disabled, suffix } = this.props
+    let { pressed } = this.state
+
+    if (this.props.pressed) {
+      pressed = this.props.pressed
+    }
+    if (disabled) {
+      pressed = false
+    }
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
           <HoverButton
             style={containerStyle}
+            onPressIn={() => this.setState({ pressed: true })}
+            onPressOut={() => this.setState({ pressed: false })}
             onRenderChild={isHovering => (
               <RX.View
                 style={[
                   styles.container,
                   this._getStyle(theme).style,
                   isHovering && !disabled ? this._getStyle(theme).hoverStyle : undefined,
+                  {
+                    borderBottomWidth: pressed ? 1 : 3,
+                    marginTop: pressed ? 2 : 0,
+                  },
                   disabled ? { backgroundColor: theme.colors.filledButtonDisabledBG } : undefined,
                   style,
                 ]}
                 onPress={onPress}
-                activeOpacity={0.7}
               >
                 <RX.Text
                   style={[{
@@ -97,8 +114,8 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
       style = {
         ...style,
         borderWidth: 1,
-        borderBottomWidth: 3,
-        borderColor: theme.colors.text,
+        // borderBottomWidth: 3,
+        borderColor: theme.colors.filledButtonDefaultModeBorder,
         backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
       }
       labelStyle = {

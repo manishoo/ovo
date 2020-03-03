@@ -16,6 +16,7 @@ import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
 import { Me } from '@Services/types/Me'
+import UserService from '@Services/UserService'
 import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import { Action, Location } from 'history'
@@ -230,9 +231,7 @@ export default class AppDrawer extends ComponentBase<AppDrawerProps, AppDrawerSt
   }
 
   private _onLogout = () => {
-    UserStore.setUser()
-    UserStore.setSession(null)
-    RX.Storage.clear()
+    UserService.logOut()
 
     LocationStore.navigate(this.props, Routes.login)
   }

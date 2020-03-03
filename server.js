@@ -39,26 +39,19 @@ app.use(favicon(paths.favicon))
 if (isProd) {
   const assets = require('./web/build/assets.json')
 
-  config.supportedLanguages.map(lang => {
-    app.get('/' + lang + '*', (req, res) => {
-      shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
-      return require('./web/build/server-bundle').default(assets)(req, res, lang)
-    })
+  app.get('/*', (req, res) => {
+    const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
+    shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
+    return require('./web/build/server-bundle').default(assets)(req, res, lang)
   })
-
-  // fallback on en
-  app.get('/', (req, res) => res.redirect(`/${req.language || config.defaultLocale}`))
 } else {
   require('@babel/register')
 
-  config.supportedLanguages.map(lang => {
-    app.get('/' + lang + '*', (req, res) => {
-      return require('./src/ts/app/web/render-dev-app')(res, lang)
-    })
-  })
+  app.get('/*', (req, res) => {
+    const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
 
-  // fallback on en
-  app.get('/', (req, res) => res.redirect(`/${req.language || config.defaultLocale}`))
+    return require('./src/ts/app/web/render-dev-app')(res, lang)
+  })
 }
 
 app.use((err, req, res, next) => {

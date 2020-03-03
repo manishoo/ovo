@@ -3,19 +3,14 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import { ThemeContext } from '@App/ThemeContext'
 import Modal from '@Common/Modal/Modal'
 import { fullHeight } from '@Utils'
 import RX from 'reactxp'
-import { ComponentBase } from 'resub'
-import FoodPicker, { FoodPickerMealItem, FoodTypes } from './FoodPicker'
+import FoodPicker, { FoodPickerCommonProps } from './FoodPicker'
 
 
-interface FoodPickerDialogProps {
-  style?: any,
-  onDismiss: () => void,
-  autoFocus: boolean,
-  foodTypes: FoodTypes[],
-  onSubmit: (mealItem: FoodPickerMealItem) => void,
+interface FoodPickerDialogProps extends FoodPickerCommonProps {
 }
 
 export const MODAL_ID = 'FoodPickerDialog'
@@ -42,20 +37,24 @@ export default class FoodPickerDialog extends RX.Component<FoodPickerDialogProps
 
   public render() {
     return (
-      <Modal
-        modalId={MODAL_ID}
-      >
-        <RX.View>
-          <FoodPicker
-            onDismiss={this.dismiss}
-            foodTypes={this.props.foodTypes}
-            onSubmit={(mealItem) => {
-              this.props.onSubmit(mealItem)
-              this.dismiss()
-            }}
-          />
-        </RX.View>
-      </Modal>
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            modalId={MODAL_ID}
+            theme={theme}
+          >
+            <RX.View>
+              <FoodPicker
+                {...this.props}
+                onSubmit={(mealItem, userMealId) => {
+                  this.props.onSubmit(mealItem, userMealId)
+                  this.dismiss()
+                }}
+              />
+            </RX.View>
+          </Modal>
+        )}
+      </ThemeContext.Consumer>
     )
   }
 

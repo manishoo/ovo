@@ -59,6 +59,7 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
           textInputStyle={{
             fontSize: Styles.fontSizes.size16,
           }}
+          style={styles.container}
         />
       </RX.View>
     )
@@ -68,5 +69,9 @@ export default class ExploreSearch extends RX.Component<ExploreSearchProps, Expl
 }
 
 const styles = {
-  container: RX.Styles.createViewStyle({}),
+  container: RX.Styles.createViewStyle({
+    minWidth: 125,
+    width: 215,
+    marginBottom: 0,
+  }),
 }

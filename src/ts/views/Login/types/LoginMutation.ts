@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, Role, MealAvailableTime, MealSize } from "./../../../models/global-types";
+import { Gender, NutritionProfileMode, Role, MealAvailableTime, MealSize } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: LoginMutation
@@ -27,6 +27,33 @@ export interface LoginMutation_loginUser_user_socialNetworks {
   twitter: string | null;
   website: string | null;
   pinterest: string | null;
+}
+
+export interface LoginMutation_loginUser_user_nutritionProfile_carbs {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface LoginMutation_loginUser_user_nutritionProfile_fat {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface LoginMutation_loginUser_user_nutritionProfile_protein {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface LoginMutation_loginUser_user_nutritionProfile {
+  calories: number;
+  carbs: LoginMutation_loginUser_user_nutritionProfile_carbs;
+  fat: LoginMutation_loginUser_user_nutritionProfile_fat;
+  protein: LoginMutation_loginUser_user_nutritionProfile_protein;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
 }
 
 export interface LoginMutation_loginUser_user_membership {
@@ -56,8 +83,8 @@ export interface LoginMutation_loginUser_user {
   bio: string | null;
   weight: LoginMutation_loginUser_user_weight | null;
   height: LoginMutation_loginUser_user_height | null;
-  caloriesPerDay: number | null;
   socialNetworks: LoginMutation_loginUser_user_socialNetworks | null;
+  nutritionProfile: LoginMutation_loginUser_user_nutritionProfile;
   membership: LoginMutation_loginUser_user_membership | null;
   role: Role;
   meals: LoginMutation_loginUser_user_meals[];

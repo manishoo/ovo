@@ -120,7 +120,7 @@ export default class InputForm extends RX.Component<InputFormProps, InputFormSta
           onChange={this.onChange('password')}
         />
         <Input
-          label={translate(translate.keys.PasswordAgain)}
+          label={translate(translate.keys.passwordConfirmation)}
           secureTextEntry
           value={passwordVerification}
           onChange={this.onChange('passwordVerification')}

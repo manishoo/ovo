@@ -15,7 +15,7 @@ interface FlatButtonProps {
   style?: any,
   label?: string,
   labelTranslations?: Translation[],
-  onPress: any,
+  onPress: (e: any) => any,
   labelStyle?: any,
   containerStyle?: any,
   borderless?: boolean,

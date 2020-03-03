@@ -32,7 +32,7 @@ export default function TabBar({ activeItem, innerContainerStyle }: TabBarProps)
   return (
     <ThemeContext.Consumer>
       {({ theme }) => (
-        <RX.View style={[styles.container, { backgroundColor: theme.colors.bg }]}>
+        <RX.View style={[styles.container, { backgroundColor: theme.colors.cardBg }]}>
           <RX.View
             style={[styles.innerContainer, { backgroundColor: theme.colors.tabBarBG }, innerContainerStyle]}>
             <RX.View

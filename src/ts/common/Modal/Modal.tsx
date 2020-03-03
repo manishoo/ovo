@@ -3,7 +3,10 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import client from '@App/client'
 import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import assert from 'assert'
 
@@ -11,6 +14,8 @@ import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
 import KeyCodes from '@Utils/KeyCodes'
+import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 
 
 interface ModalProps extends RX.CommonProps {
@@ -20,6 +25,7 @@ interface ModalProps extends RX.CommonProps {
   fullWidth?: boolean;
   modalHeight?: number;
   fullHeight?: boolean;
+  theme: Theme
 }
 
 interface ModalState {
@@ -137,14 +143,26 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     )
 
     return (
-      <RX.Animated.View
-        style={[_styles.modalContainerBackground, this._opacityAnimationStyle]}
-        onPress={this._clickOutside}
-        onLongPress={this._onLongPressOutside}
-        disableTouchOpacityAnimation={true}
-      >
-        {modalContent}
-      </RX.Animated.View>
+      <ApolloProvider client={client}>
+        <ApolloHooksProvider client={client}>
+          <ThemeContext.Provider
+            value={{
+              theme: this.props.theme,
+              toggleTheme: () => null,
+            }}
+          >
+            <RX.Animated.View
+              style={[_styles.modalContainerBackground, this._opacityAnimationStyle]}
+              onPress={this._clickOutside}
+              onLongPress={this._onLongPressOutside}
+              disableTouchOpacityAnimation={true}
+            >
+              {modalContent}
+            </RX.Animated.View>
+          </ThemeContext.Provider>
+        </ApolloHooksProvider>
+      </ApolloProvider>
+
     )
   }
 

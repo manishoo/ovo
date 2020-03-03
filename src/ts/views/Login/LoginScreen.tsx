@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import Styles from '@App/Styles'
 import Link from '@Common/Link/Link'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
@@ -31,7 +32,8 @@ export default class LoginScreen extends ComponentBase<LoginScreenProps, LoginSc
           style={styles.brand}
         />
         <LoginForm {...this.props} />
-        <Link to={Routes.register}><Text translate>dontHaveAnAccount</Text></Link>
+        <Link to={Routes.register}><Text translate='dontHaveAnAccount' /></Link>
+        <Link to={Routes.forgotPassword} style={{ marginTop: Styles.values.spacing / 2 }}><Text translate='forgotPassword' /></Link>
       </RX.View>
     )
   }

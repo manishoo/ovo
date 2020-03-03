@@ -49,11 +49,7 @@ interface MealComponentProps extends MealComponentCommonProps {
   onLogMeal: (variables: MealComponentLogMealMutationVariables, previousMeal: DayMeal) => Promise<ExecutionResult<MealComponentLogMealMutation>>,
 }
 
-function determineIfIsFood(toBeDetermined: FoodPreviewMealItem_item): toBeDetermined is FoodPreviewMealItem_item_Food {
-  return toBeDetermined.hasOwnProperty('weights')
-}
-
-class MealComponent extends RX.Component<MealComponentProps> {
+export class MealComponent extends RX.Component<MealComponentProps> {
   static fragments = {
     dayMeal: gql`
       fragment DayMeal on DayMeal {
@@ -99,6 +95,10 @@ class MealComponent extends RX.Component<MealComponentProps> {
       <ThemeContext.Consumer>
         {({ theme }) => (
           <HoverView
+            style={{
+              padding: 10,
+              paddingTop: 5,
+            }}
             onRenderChild={isHovering => (
               <RX.View
                 style={[
@@ -107,7 +107,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                     backgroundColor: theme.colors.mealCardBackgroundColor,
                     borderColor: theme.colors.borderLight,
                   },
-                  isHovering ? RX.Styles.createViewStyle(Styles.values.defaultShadow) : {},
+                  isHovering ? shadowStyle : {},
                   style,
                 ]}
               >
@@ -125,7 +125,7 @@ class MealComponent extends RX.Component<MealComponentProps> {
                       >
                         <Text style={styles.mealName}>{meal.userMeal.name}</Text>
                         <Text
-                          style={styles.mealCalorie}>{CalendarService.calculateMealNutrition(meal)} {translate(translate.keys.Calories)}</Text>
+                          style={styles.mealCalorie}>{CalendarService.calculateMealTotalCalorie(meal)} {translate(translate.keys.Calories)}</Text>
                       </RX.View>
 
                       <ItemControl
@@ -140,10 +140,10 @@ class MealComponent extends RX.Component<MealComponentProps> {
                         <MenuItem
                           label={translate('Add Meal Item')}
                           onPress={() => showFoodPicker({
-                            autoFocus: true,
-                            foodTypes: [FoodTypes.food, FoodTypes.recipe],
+                            foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
                             onDismiss: () => null,
                             onSubmit: this._onAddMealItem,
+                            submitButtonLabel: translate('Add Meal Item')
                           })}
                         />
                         <MenuItem
@@ -283,13 +283,20 @@ MealComponentContainer.fragments = MealComponent.fragments
 
 export default MealComponentContainer
 
+const shadowStyle = RX.Styles.createViewStyle({
+  shadowColor: 'rgba(0, 0, 0, .2)',
+  shadowRadius: 10,
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: -2
+})
+
 const styles = {
   container: RX.Styles.createViewStyle({
     // @ts-ignore
-    transition: 'all 0.5s',
+    transition: 'all 0.3s',
     borderWidth: 1,
     borderRadius: 20,
-    marginBottom: Styles.values.spacing,
+    paddingBottom: Styles.values.spacing,
   }),
   mealName: RX.Styles.createTextStyle({
     fontSize: 20,

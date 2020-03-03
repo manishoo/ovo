@@ -32,25 +32,30 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
   public render() {
     const { style } = this.props
 
-    return [
+    const size = this._getCellSize()
+    return (
       <RX.View
-        style={[styles.container, { minWidth: this._getCellSize() * this.state.columns }, style]}
+        style={[styles.container, { minWidth: size * this.state.columns }, style]}
         onLayout={this.props.onLayout}
       >
-        {this.props.showAddButton && this.props.renderAddCell(this._getCellSize())}
+        {this.props.showAddButton && this.props.renderAddCell(size)}
 
-        {this.props.items.map(item => this.props.renderCell(item, this._getCellSize()))}
-      </RX.View>,
-      this.props.loading && <RX.View
-        style={{
-          width: this.state.width,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <LoadingIndicator />
+        {this.props.items.map(item => this.props.renderCell(item, size))}
+
+        {
+          this.props.loading && <RX.View
+            style={{
+              width: size,
+              height: size,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <LoadingIndicator />
+          </RX.View>
+        }
       </RX.View>
-    ]
+    )
   }
 
   protected _buildState(props: RecipesListProps, initialBuild: boolean): Partial<RecipesListState> | undefined {
@@ -72,7 +77,7 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
     return {
       columns,
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
     }
   }
 

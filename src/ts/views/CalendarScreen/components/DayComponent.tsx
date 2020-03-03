@@ -8,6 +8,7 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import HoverView from '@Common/HoverView/HoverButton'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
@@ -82,7 +83,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
     this.state = {
       // day: props.day,
       me: UserService.getUser(),
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeight(),
       isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     }
@@ -91,7 +92,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
   protected _buildState(props: DayComponentProps, initialBuild: boolean): Partial<DayComponentState> | undefined {
     return {
       me: UserService.getUser(),
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeight(),
       isTinyOrSmall: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     }
@@ -163,15 +164,12 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
               // }}
             >
               {
-                day.meals.map(meal => (
+                day.meals.map((meal, index) => (
                   <MealComponent
                     key={meal.id}
                     meal={meal}
                     dayId={day.id}
                     style={[
-                      {
-                        margin: Styles.values.spacing,
-                      },
                       this.state.isTinyOrSmall ?
                         {
                           alignSelf: 'stretch',
@@ -188,7 +186,9 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
             {
               day.meals.filter(m => m.items.length > 0).length > 0 &&
               <NutritionInfo
+                title={translate('Total Nutrition')}
                 nutrition={calculateDayNutrition(day)}
+                showTargets
               />
             }
           </RX.View>
@@ -200,10 +200,12 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
   private _isFreeUser = () => {
     const { date } = this.props
 
+    return false
+
     // if it was in future
-    return (Math.round(date.diff(DateTime.local()).as('day')) > 0) &&
-      // and it was a free member
-      (this.state.me && !this.state.me.membership)
+    // return (Math.round(date.diff(DateTime.local()).as('day')) > 0) &&
+    //   // and it was a free member
+    //   (this.state.me && !this.state.me.membership)
   }
 
   private _isToday = () => this.props.date.hasSame(DateTime.local(), 'day')
@@ -222,7 +224,7 @@ class DayComponent extends ComponentBase<DayComponentProps, DayComponentState> {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   paddingBottom: Styles.values.spacing,
-                  width: MEAL_MAX_WIDTH,
+                  // width: MEAL_MAX_WIDTH,
                 }}
               >
                 <Text

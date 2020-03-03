@@ -128,8 +128,6 @@ export function TagsInput(props: TagsInputProps) {
 
   return (
     <RX.View>
-      <Text translate style={{ fontSize: 16, marginBottom: Styles.values.spacing }}>RecipeExtraGuide</Text>
-
       {Object.keys(TagType).map(key => {
         // @ts-ignore
         const tags = props.tags.filter(i => i.type === TagType[key])
@@ -151,7 +149,7 @@ export function TagsInput(props: TagsInputProps) {
                         ? props.selectedTags.filter(p => p !== tag.slug)
                         : [...props.selectedTags, tag.slug!]
                     )}
-                    style={[setLabelStyle(tag).style, { [Styles.values.marginEnd]: Styles.values.spacing / 2 }]}
+                    style={[setLabelStyle(tag).style, { [Styles.values.marginEnd]: Styles.values.spacing / 2, marginBottom: Styles.values.spacing / 4 }]}
                     labelStyle={setLabelStyle(tag).labelStyle}
                   >
                     {
@@ -159,8 +157,9 @@ export function TagsInput(props: TagsInputProps) {
                         tag.user === props.user.id ||
                         props.user.role === Role.operator
                       ) &&
-                      <FilledButton
-                        label={'x'}
+                      <FlatButton
+                        label={'×'}
+                        borderless
                         onPress={(e) => {
                           e.stopPropagation()
                           e.preventDefault()
@@ -250,7 +249,11 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
         }
       })
       props.onSubmit(data.addTag)
-      setTag(defaultState)
+      setTag({
+        ...tag,
+        title: [],
+        slug: '',
+      })
     }
   })
 
@@ -261,7 +264,7 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
         onTranslationsChange={translations => setTag({
           ...tag,
           title: translations,
-          slug: translations[0].text
+          // slug: translations[0].text
         })}
         style={{
           minWidth: 200,
@@ -300,6 +303,5 @@ export function TagInput(props: { onSubmit: (tag: TagInputMutation_addTag) => an
 const styles = {
   panel: RX.Styles.createViewStyle({
     marginBottom: Styles.values.spacing,
-    paddingVertical: Styles.values.spacing,
   }),
 }

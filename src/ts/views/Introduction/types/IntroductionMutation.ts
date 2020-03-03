@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MessageSender, MessageType, AssistantExpectations, MealAvailableTime, MealSize, Gender, Role } from "./../../../models/global-types";
+import { MessageSender, MessageType, AssistantExpectations, MealAvailableTime, MealSize, Gender, NutritionProfileMode, Role } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: IntroductionMutation
@@ -45,6 +45,33 @@ export interface IntroductionMutation_setup_messages_data_user_socialNetworks {
   pinterest: string | null;
 }
 
+export interface IntroductionMutation_setup_messages_data_user_nutritionProfile_carbs {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface IntroductionMutation_setup_messages_data_user_nutritionProfile_fat {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface IntroductionMutation_setup_messages_data_user_nutritionProfile_protein {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface IntroductionMutation_setup_messages_data_user_nutritionProfile {
+  calories: number;
+  carbs: IntroductionMutation_setup_messages_data_user_nutritionProfile_carbs;
+  fat: IntroductionMutation_setup_messages_data_user_nutritionProfile_fat;
+  protein: IntroductionMutation_setup_messages_data_user_nutritionProfile_protein;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
+}
+
 export interface IntroductionMutation_setup_messages_data_user_membership {
   type: string;
 }
@@ -72,8 +99,8 @@ export interface IntroductionMutation_setup_messages_data_user {
   bio: string | null;
   weight: IntroductionMutation_setup_messages_data_user_weight | null;
   height: IntroductionMutation_setup_messages_data_user_height | null;
-  caloriesPerDay: number | null;
   socialNetworks: IntroductionMutation_setup_messages_data_user_socialNetworks | null;
+  nutritionProfile: IntroductionMutation_setup_messages_data_user_nutritionProfile;
   membership: IntroductionMutation_setup_messages_data_user_membership | null;
   role: Role;
   meals: IntroductionMutation_setup_messages_data_user_meals[];

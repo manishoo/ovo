@@ -7,7 +7,7 @@ import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
 import UserStore from '@Services/UserService'
 import { trimSlashes } from '@Utils/trim-slashes'
-import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator'
+import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator2'
 import { Me } from '@Services/types/Me'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
@@ -28,6 +28,8 @@ import {
   SettingsScreen,
   ShoppingList,
   PayScreen,
+  ForgotPasswordScreen,
+  NewPasswordScreen,
 } from './routes'
 
 
@@ -111,7 +113,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
            * */
 
           {
-            path: `${Routes.food}/:id`,
+            path: `${Routes.food}/:slug`,
             exact: false,
             component: FoodScreen,
             navOptions: defaultNavOptions,
@@ -164,14 +166,28 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             component: LoginScreen,
           },
           {
+            path: Routes.forgotPassword,
+            immersive: true,
+            exact: true,
+            component: ForgotPasswordScreen,
+          },
+          {
+            path: Routes.newPassword,
+            immersive: true,
+            exact: true,
+            component: NewPasswordScreen,
+          },
+          {
             path: Routes.shoppingList,
             immersive: false,
+            redirectTo: this.state.user ? undefined : Routes.login,
             exact: true,
             component: ShoppingList,
           },
           {
             path: Routes.calendar,
             immersive: false,
+            redirectTo: this.state.user ? undefined : Routes.login,
             exact: true,
             component: CalendarScreen,
           },

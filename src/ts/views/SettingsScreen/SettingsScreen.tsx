@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/react-hooks'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import FlatButton from '@Common/FlatButton/FlatButton'
 import Image from '@Common/Image/Image'
@@ -58,7 +58,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <CenterAlignedPageView maxWidth={500}>
+          <Page>
             <Navbar title={translate('Edit Profile')} />
             {this._renderAvatar()}
             <Text translate type={Text.types.title}>Account Info</Text>
@@ -147,7 +147,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
                 <Input
                   value={this.state.password2}
                   onChange={this._onChange(['password2'])}
-                  label={translate('PasswordAgain')}
+                  label={translate('passwordConfirmation')}
                   validate={value => value === this.state.password}
                   secureTextEntry
                 />
@@ -169,7 +169,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
               }}
               label={translate('Log out')}
             />
-          </CenterAlignedPageView>
+          </Page>
         )}
       </ThemeContext.Consumer>
     )

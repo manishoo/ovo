@@ -17,11 +17,13 @@ import { MealFormMeal, MealFormMeal_items } from '@Views/MealForm/types/MealForm
 
 
 export function determineIfIsWeight(toBeDetermined: Partial<FoodPreviewMealItem_unit>): toBeDetermined is FoodPreviewMealItem_unit_Weight {
-  return toBeDetermined.hasOwnProperty('id')
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Weight'
 }
 
 export function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_item>): toBeDetermined is FoodPreviewMealItem_item_Food {
-  return toBeDetermined.hasOwnProperty('weights')
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Food'
 }
 
 export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | DayMeal_items): MealItemInput {

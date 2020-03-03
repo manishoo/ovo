@@ -25,6 +25,7 @@ interface SelectProps {
   label?: string
   children?: any,
   editable?: boolean,
+  textStyle?: any
 }
 
 export default class Select extends RX.Component<SelectProps> {
@@ -33,7 +34,7 @@ export default class Select extends RX.Component<SelectProps> {
   private _popupDisplayed: boolean = false
 
   public render() {
-    const { style, label, editable = true } = this.props
+    const { style, label, editable = true, textStyle } = this.props
 
     const selectedOption = this.props.options.find(p => p.value === this.props.value)
 
@@ -50,7 +51,7 @@ export default class Select extends RX.Component<SelectProps> {
             activeOpacity={0.7}
             ref={ref => this._mountedButton = ref}
           >
-            <Text>{selectedOption && selectedOption.text}</Text>
+            <Text style={textStyle}>{selectedOption && selectedOption.text}</Text>
           </RX.View>
         ]}
       </ThemeContext.Consumer>
@@ -73,7 +74,7 @@ export default class Select extends RX.Component<SelectProps> {
             onOptionSelect={(option => {
               this.props.onChange(option.value)
               this._popupDisplayed = false
-              // RX.Popup.dismissAll()
+              RX.Popup.dismissAll()
             })}
             options={this.props.options}
           />
@@ -90,8 +91,10 @@ export default class Select extends RX.Component<SelectProps> {
     this._popupDisplayed = true
   }
 
-  private _handleOnPress = () => {
+  private _handleOnPress = (e: RX.Types.SyntheticEvent) => {
     if (RX.Platform.getType() === 'web') {
+      e.preventDefault()
+      e.stopPropagation()
       this._showPopup()
     } else {
       showSelectDialog({

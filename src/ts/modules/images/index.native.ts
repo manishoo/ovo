@@ -69,6 +69,9 @@ class ImageSource implements ImageSourceBase {
   get AppStoreButton() {return require('../../../images/AppStoreButton.png')}
   get GooglePlayButton() {return require('../../../images/GooglePlayButton.png')}
   get CafeBazaarButton() {return require('../../../images/CafeBazaarButton.png')}
+
+  get VerifiedBadge() {return require('../../../images/VerifiedBadge.png')}
+  get VerifyingBadge() {return require('../../../images/VerifyingBadge.png')}
 }
 
 export default new ImageSource()

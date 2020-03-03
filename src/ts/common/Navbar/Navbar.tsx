@@ -30,7 +30,7 @@ export default class Navbar extends RX.Component<NavbarProps> {
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.View
-            style={[styles.container, { height: Styles.values.navBarHeight }, style]}
+            style={[styles.container, { minHeight: Styles.values.navBarHeight }, style]}
           >
             <RX.View style={{ flexDirection: 'row' }}>
               {this.renderBackButton(theme)}

@@ -6,27 +6,35 @@
 import { useQuery } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import { ThemeContext } from '@App/ThemeContext'
+import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
 import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
 import Text from '@Common/Text/Text'
 import { Role } from '@Models/global-types'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { Me } from '@Services/types/Me'
 import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
-import { FoodScreenFood } from '@Views/FoodScreen/types/FoodScreenFood'
-import { FoodScreenQuery, FoodScreenQueryVariables } from '@Views/FoodScreen/types/FoodScreenQuery'
-import { Me } from '@Services/types/Me'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
+import { FoodScreenFoodClass } from './types/FoodScreenFoodClass'
+import { FoodScreenQuery, FoodScreenQueryVariables } from './types/FoodScreenQuery'
 
+
+const MODAL_ID = 'FoodScreen'
+
+interface FoodScreenCommonProps extends RX.CommonProps {
+  slug?: string
+}
 
 interface FoodScreenProps {
-  food: FoodScreenFood,
+  foodClass: FoodScreenFoodClass,
 }
 
 interface FoodScreenState {
@@ -36,25 +44,17 @@ interface FoodScreenState {
   isSmallOrTiny?: boolean,
 }
 
-class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
+export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
   static fragments = {
-    food: gql`
-      fragment FoodScreenFood on Food {
+    foodClass: gql`
+      fragment FoodScreenFoodClass on FoodClass {
         id
         name {text locale}
         description {text locale}
         image {url}
-        origFoodGroups {
+        foodGroups {
           id
           name {text locale}
-        }
-        nutrition {
-          calories {amount unit}
-        }
-        foodClass {
-          id
-          name {text locale}
-          description {text locale}
         }
       }
     `
@@ -68,7 +68,7 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
 
   public render() {
     return (
-      <CenterAlignedPageView>
+      <Page>
         <Navbar>
           {this._renderControlBar()}
         </Navbar>
@@ -81,17 +81,17 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
           ]}
         >
           <Image
-            source={this.props.food.image ? this.props.food.image.url : ''}
+            source={this.props.foodClass.image ? this.props.foodClass.image.url : ''}
             resizeMode={'cover'}
             style={{ flex: 1, borderRadius: this.state.isSmallOrTiny ? 0 : 20 }}
           />
         </RX.View>
 
         <RX.View style={{ paddingTop: Styles.values.spacing, paddingBottom: Styles.values.spacing }}>
-          <Text type={Text.types.title} translations={this.props.food.foodClass.name} />
-          <Text type={Text.types.body} translations={this.props.food.foodClass.description || []} />
+          <Text type={Text.types.title} translations={this.props.foodClass.name} />
+          <Text type={Text.types.body} translations={this.props.foodClass.description || []} />
         </RX.View>
-      </CenterAlignedPageView>
+      </Page>
     )
   }
 
@@ -109,10 +109,10 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.drawerVisible ? this.state.width : this.state.width - Styles.values.drawerWidth)
 
   private _renderControlBar = () => {
-    if (this.props.food && (AppConfig.getPlatformType() === 'web') && this.state.me && (this.state.me.role === Role.operator)) {
+    if (this.props.foodClass && (AppConfig.getPlatformType() === 'web') && this.state.me && (this.state.me.role === Role.operator)) {
       return (
         <RX.View style={{ flexDirection: 'row' }}>
-          <Link to={`${AppConfig.panelAddress}/food-class/${this.props.food.foodClass.id}`} openInNewTab>
+          <Link to={`${AppConfig.panelAddress}/food-class/${this.props.foodClass.id}`} openInNewTab>
             <FilledButton
               label={translate('Edit Food')}
               onPress={() => null}
@@ -127,29 +127,50 @@ class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> {
 
     return null
   }
+
+  public static showModal = (props: FoodScreenCommonProps) => (
+    RX.Modal.show(
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            key={MODAL_ID}
+            modalId={MODAL_ID}
+            fullWidth
+            fullHeight
+            theme={theme}
+          >
+            <FoodScreenContainer
+              {...props}
+            />
+          </Modal>
+        )}
+      </ThemeContext.Consumer>,
+      MODAL_ID,
+    )
+  )
 }
 
-export default function (props: FoodScreenProps) {
+export default function FoodScreenContainer(props: FoodScreenCommonProps) {
   const { data } = useQuery<FoodScreenQuery, FoodScreenQueryVariables>(gql`
-    query FoodScreenQuery ($id: ObjectId!) {
-      food(id: $id) {
-        ...FoodScreenFood
+    query FoodScreenQuery ($slug: String!) {
+      foodClass(slug: $slug) {
+        ...FoodScreenFoodClass
       }
     }
 
-    ${FoodScreen.fragments.food}
+    ${FoodScreen.fragments.foodClass}
   `, {
     variables: {
-      id: getParam(props, 'id'),
+      slug: props.slug || getParam(props, 'slug'),
     }
   })
 
   if (!data) return null
-  if (!data.food) return null
+  if (!data.foodClass) return null
 
   return (
     <FoodScreen
-      food={data.food}
+      foodClass={data.foodClass}
     />
   )
 }

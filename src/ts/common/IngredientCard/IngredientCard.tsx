@@ -9,21 +9,20 @@ import { showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPr
 import Image from '@Common/Image/Image'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
+import { IngredientFoodFragment, IngredientFragment, IngredientRecipeFragment } from '@Models/ingredients'
+import { Ingredient } from '@Models/types/Ingredient'
 import ImageSource from '@Modules/images'
 import { createId } from '@Utils/create-id'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
-import { fragments as NutritionInfoFragments } from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
-import { IngredientCardIngredient } from './types/IngredientCardIngredient'
 
 
 const CLEAR_ICON_DIMENSION = 20
 
 interface IngredientCardProps {
   style?: any,
-  ingredient: IngredientCardIngredient,
-  onIngredientChange?: (ingredient: IngredientCardIngredient) => void,
+  ingredient: Ingredient,
+  onIngredientChange?: (ingredient: Ingredient) => void,
   onDelete?: () => void,
   onPress?: (e: RX.Types.SyntheticEvent) => void,
   size: number,
@@ -33,127 +32,9 @@ interface IngredientCardProps {
 
 export default class IngredientCard extends RX.Component<IngredientCardProps> {
   static fragments = {
-    get ingredient() {
-      return gql`
-        fragment IngredientCardIngredient on Ingredient {
-          id
-          name {text locale}
-          description {text locale}
-          amount
-          customUnit {
-            gramWeight
-            name { text locale }
-          }
-          unit {
-            ... on Weight {
-              amount
-              gramWeight
-              id
-              name { text locale }
-            }
-            ... on CustomUnit {
-              gramWeight
-              name { text locale }
-            }
-          }
-          isOptional
-          item {
-            ... on Food {
-              ...IngredientFood
-            }
-            ... on Recipe {
-              ...IngredientRecipe
-            }
-          }
-        }
-
-        ${this.food}
-        ${this.recipe}
-      `
-    },
-    food: gql`
-      fragment IngredientFood on Food {
-        id
-        name { text locale }
-        description { text locale }
-        weights {
-          amount
-          gramWeight
-          id
-          name { text locale }
-        }
-        image {url}
-        thumbnail {url}
-        nutrition {
-          ...NutritionInfoNutrition
-        }
-        origFoodGroups { id name { text locale } }
-      }
-      
-      ${NutritionInfoFragments.nutrition}
-    `,
-    get recipe() {
-      return gql`
-        fragment IngredientRecipe on Recipe {
-          id
-          slug
-          title {text locale}
-          image {url}
-          timing {
-            totalTime
-          }
-          likesCount
-          userLikedRecipe
-          thumbnail {url}
-          ingredients {
-            id
-            name {text locale}
-            description {text locale}
-            amount
-            customUnit {
-              gramWeight
-              name { text locale }
-            }
-            unit {
-              ... on Weight {
-                amount
-                gramWeight
-                id
-                name { text locale }
-              }
-              ... on CustomUnit {
-                gramWeight
-                name { text locale }
-              }
-            }
-            item {
-              ... on Food {
-                ...IngredientFood
-              }
-              ... on Recipe {
-                id
-                slug
-                title {text locale}
-                nutrition {
-                  calories { amount unit }
-                }
-              }
-            }
-          }
-          author {
-            id
-            username
-            avatar {url}
-          }
-          nutrition {
-            ...NutritionInfoNutrition
-          }
-        }
-
-        ${this.food}
-        ${NutritionInfoFragments.nutrition}
-      `
-    }
+    ingredient: IngredientFragment,
+    food: IngredientFoodFragment,
+    recipe: IngredientRecipeFragment,
   }
   private _previewScaleAnimatedValue = RX.Animated.createValue(1)
   private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
@@ -171,7 +52,10 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
             onMouseLeave={this._onHoverEnd}
             style={[
               styles.container,
-              { width: this.props.size },
+              {
+                width: this.props.size,
+                cursor: this.props.onPress ? 'pointer' : undefined,
+              },
               style,
             ]}
           >
@@ -209,34 +93,59 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
               </>
             }
 
-            {/**
-             * Food unit
-             * */}
-            {
-              !this.props.hideUnits &&
-              <RX.View
-                onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
-                style={[styles.unitWrapper, {
-                  cursor: this.props.onIngredientChange ? 'pointer' : 'default',
-                  backgroundColor: theme.colors.recipeIngredientUnitBG
-                }]}
-              >
-                <Text style={[{
-                  color: theme.colors.recipeIngredientUnitTextColor,
-                  fontSize: Styles.fontSizes.size12
-                }]}>{ingredient.amount}</Text>
-                <Text
-                  translations={ingredient.unit ? ingredient.unit.name : undefined}
-                  style={[
-                    styles.unitText,
-                    {
-                      color: theme.colors.recipeIngredientUnitTextColor,
-                    }
-                  ]}
-                >{!ingredient.unit && ingredient.item && !determineIfIsFood(ingredient.item) ? translate('serving') : translate('g')}</Text>
-              </RX.View>
-            }
+            <RX.View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+              {/**
+               * Food unit
+               * */}
+              {
+                !this.props.hideUnits &&
+                <RX.View
+                  onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
+                  style={[styles.unitWrapper, {
+                    cursor: this.props.onIngredientChange ? 'pointer' : undefined,
+                    backgroundColor: theme.colors.recipeIngredientUnitBG
+                  }]}
+                >
+                  <Text style={[{
+                    color: theme.colors.recipeIngredientUnitTextColor,
+                    fontSize: Styles.fontSizes.size12
+                  }]}>{ingredient.amount}</Text>
+                  <Text
+                    translations={ingredient.unit ? ingredient.unit.name : undefined}
+                    style={[
+                      styles.unitText,
+                      {
+                        color: theme.colors.recipeIngredientUnitTextColor,
+                      }
+                    ]}
+                  >{!ingredient.unit && ingredient.item && !determineIfIsFood(ingredient.item) ? translate('serving') : translate('g')}</Text>
+                </RX.View>
+              }
 
+              {/**
+               * isOptional label
+               * */}
+              {
+                ingredient.isOptional &&
+                <RX.View
+                  onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
+                  style={[styles.unitWrapper, {
+                    cursor: this.props.onIngredientChange ? 'pointer' : undefined,
+                    backgroundColor: theme.colors.recipeIngredientRequiredBG
+                  }]}
+                >
+                  <Text style={[{
+                    color: theme.colors.recipeIngredientRequiredTextColor,
+                    fontSize: Styles.fontSizes.size12
+                  }]} translate={'optional'} />
+                </RX.View>
+              }
+            </RX.View>
 
             {/**
              * Delete button
@@ -304,9 +213,11 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
   }
 
   private _setUI = (isHovering: boolean) => {
+    if (!this.props.onPress) return
+
     RX.Animated.timing(this._previewScaleAnimatedValue, {
       toValue: isHovering ? 1.1 : 1,
-      duration: 500,
+      duration: 300,
     }).start()
   }
 
@@ -323,7 +234,6 @@ const styles = {
   container: RX.Styles.createViewStyle({
     position: 'relative',
     alignItems: 'flex-start',
-    cursor: 'pointer',
   }),
   name: RX.Styles.createTextStyle({
     marginVertical: Styles.values.spacing / 4,

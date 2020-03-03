@@ -6,13 +6,19 @@
 import { useQuery } from '@apollo/react-hooks'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
+import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import { FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
+import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import Footer from '@Common/Footer/Footer'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import Select from '@Common/Select/Select'
+import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import CalendarService from '@Services/CalendarService'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import CalendarFAB from '@Views/CalendarScreen/components/CalendarFAB'
 import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
 import RX from 'reactxp'
@@ -58,7 +64,7 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
       dayCursor,
       calendar: CalendarService.getCalendar(),
       renderingDates: this._generateRenderingDays(dayCursor),
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeightNoSubscription(),
     }
   }
@@ -71,7 +77,7 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
     return {
       calendar,
       renderingDates: this._generateRenderingDays(this.state.dayCursor),
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeight(),
     }
   }
@@ -88,38 +94,52 @@ export class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> 
   }
 
   public render() {
+    const currentDay = this._getDayByDate(this.state.dayCursor, this.state.calendar)
+
     return (
-      <RX.ScrollView
-        style={{
-          flex: 1,
-          width: this.state.width,
-        }}
-      >
-        {this._renderControl()}
-        <RX.ScrollView
-          style={[
-            styles.scrollView,
-          ]}
-          horizontal
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          ref={ref => this._scrollView = ref}
+      <RX.View>
+        <Page
+          style={{
+            flex: 1,
+          }}
         >
-          {
-            this.state.renderingDates.map(date => (
-              <DayComponent
-                style={{
-                  width: this._getDayWidth(),
-                }}
-                date={date}
-                day={this._getDayByDate(date, this.state.calendar)}
-              />
-            ))
-          }
-        </RX.ScrollView>
-        <Footer />
-      </RX.ScrollView>
+          {this._renderControl()}
+          <RX.ScrollView
+            style={[
+              styles.scrollView,
+            ]}
+            horizontal
+            scrollEnabled={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ref={ref => this._scrollView = ref}
+          >
+            {
+              this.state.renderingDates.map(date => (
+                <DayComponent
+                  style={{
+                    width: this._getDayWidth(),
+                  }}
+                  date={date}
+                  day={this._getDayByDate(date, this.state.calendar)}
+                />
+              ))
+            }
+          </RX.ScrollView>
+        </Page>
+
+        {
+          currentDay &&
+          <CalendarFAB
+            day={currentDay}
+            style={{
+              position: 'absolute',
+              [Styles.values.end]: Styles.values.spacing,
+              top: this.state.height - Styles.values.spacing - 70 // fab height,
+            }}
+          />
+        }
+      </RX.View>
     )
   }
 
@@ -249,9 +269,8 @@ const styles = {
   controlWrapper: RX.Styles.createViewStyle({
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: Styles.values.spacing,
   }),
   controlButton: RX.Styles.createViewStyle({
     borderRadius: 8,
-  })
+  }),
 }

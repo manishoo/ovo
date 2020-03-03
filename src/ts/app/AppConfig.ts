@@ -3,9 +3,8 @@
  * Copyright: Ouranos Studio 2019
  */
 
-import { translate } from '@Common/LocalizedText/LocalizedText'
 import { LanguageCode, MealAvailableTime, MealSize } from '@Models/global-types'
-import { CalendarSystem, DateTime } from 'luxon'
+import { CalendarSystem } from 'luxon'
 import RX from 'reactxp'
 
 
@@ -37,6 +36,8 @@ class AppConfig {
   public get graphQLAddress() {
     return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
   }
+
+  public contentMaxWidth = 975
 
   initialize(params: InitParams) {
     if (params.appVersion) {
@@ -109,6 +110,7 @@ class AppConfig {
         break
     }
 
+    Storage
     this.locale = locale
     this.calendarSystem = calendarSystem
   }

@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealAvailableTime, MealSize, LanguageCode } from "./../../../../models/global-types";
+import { MealAvailableTime, MealSize, LanguageCode, RecipeStatus } from "./../../../../models/global-types";
 
 // ====================================================
 // GraphQL mutation operation: DayComponentMealSuggestionMutation
@@ -93,47 +93,467 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_proteins {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition {
   calories: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_calories | null;
-  proteins: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_proteins | null;
-  carbsByDifference: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_carbsByDifference | null;
   totalCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_totalCarbs | null;
-  totalAvailableCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_totalAvailableCarbs | null;
   fats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fats | null;
+  proteins: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_proteins | null;
+  fiber: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fiber | null;
+  totalAvailableCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_totalAvailableCarbs | null;
+  sodium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_sodium | null;
+  cholesterol: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_cholesterol | null;
+  potassium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_potassium | null;
+  sugar: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_sugar | null;
+  sucrose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_sucrose | null;
+  glucose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_glucose | null;
+  fructose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fructose | null;
+  lactose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_lactose | null;
+  maltose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_maltose | null;
+  galactose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_galactose | null;
+  starch: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_starch | null;
+  saturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_saturatedFats | null;
+  monounsaturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_polyunsaturatedFats | null;
+  transFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_transFats | null;
+  omega3: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_omega3 | null;
+  omega6: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_omega6 | null;
+  ALA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_ALA | null;
+  DHA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_DHA | null;
+  EPA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_EPA | null;
+  DPA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_DPA | null;
+  caffeine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_caffeine | null;
+  theobromine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_theobromine | null;
+  calcium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_calcium | null;
+  choline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_choline | null;
+  copper: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_copper | null;
+  fluoride: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_fluoride | null;
+  folate: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_folate | null;
+  iron: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_iron | null;
+  lycopene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_lycopene | null;
+  magnesium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_magnesium | null;
+  manganese: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_manganese | null;
+  niacin: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_niacin | null;
+  phosphorus: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_phosphorus | null;
+  retinol: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_retinol | null;
+  riboflavin: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_riboflavin | null;
+  selenium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_selenium | null;
+  thiamine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_thiamine | null;
+  alphaCarotene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_alphaCarotene | null;
+  betaCarotene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_betaCarotene | null;
+  pantothenicAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_pantothenicAcid | null;
+  vitA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitA | null;
+  vitAIU: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitAIU | null;
+  vitB6: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitB6 | null;
+  vitB12: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitB12 | null;
+  vitC: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitC | null;
+  vitD: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitD | null;
+  vitD2: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitD2 | null;
+  vitD3: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitD3 | null;
+  vitE: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitE | null;
+  vitK: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_vitK | null;
+  zinc: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_zinc | null;
+  tryptophan: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_tryptophan | null;
+  threonine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_threonine | null;
+  isoleucine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_isoleucine | null;
+  leucine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_leucine | null;
+  lysine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_lysine | null;
+  methionine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_methionine | null;
+  cystine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_cystine | null;
+  phenylalanine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_phenylalanine | null;
+  tyrosine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_tyrosine | null;
+  valine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_valine | null;
+  arginine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_arginine | null;
+  histidine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_histidine | null;
+  alanine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_alanine | null;
+  asparticAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_asparticAcid | null;
+  glutamicAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_glutamicAcid | null;
+  glycine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_glycine | null;
+  proline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_proline | null;
+  serine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_serine | null;
+  hydroxyproline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition_hydroxyproline | null;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_origFoodGroups_name {
@@ -153,7 +573,8 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
   weights: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_weights[];
   image: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_image | null;
   thumbnail: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_thumbnail | null;
-  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition | null;
+  origFoodClassSlug: string;
+  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_nutrition;
   origFoodGroups: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food_origFoodGroups[][];
 }
 
@@ -167,7 +588,9 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_timing {
-  totalTime: number;
+  cookTime: number | null;
+  prepTime: number | null;
+  totalTime: number | null;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_thumbnail {
@@ -250,47 +673,467 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition {
   calories: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_calories | null;
-  proteins: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
-  carbsByDifference: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
   totalCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
-  totalAvailableCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
   fats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fats | null;
+  proteins: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  fiber: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fiber | null;
+  totalAvailableCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  sodium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_sodium | null;
+  cholesterol: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_cholesterol | null;
+  potassium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_potassium | null;
+  sugar: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_sugar | null;
+  sucrose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_sucrose | null;
+  glucose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_glucose | null;
+  fructose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fructose | null;
+  lactose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_lactose | null;
+  maltose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_maltose | null;
+  galactose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_galactose | null;
+  starch: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_starch | null;
+  saturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_saturatedFats | null;
+  monounsaturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_polyunsaturatedFats | null;
+  transFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_transFats | null;
+  omega3: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_omega3 | null;
+  omega6: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_omega6 | null;
+  ALA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_ALA | null;
+  DHA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_DHA | null;
+  EPA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_EPA | null;
+  DPA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_DPA | null;
+  caffeine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_caffeine | null;
+  theobromine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_theobromine | null;
+  calcium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_calcium | null;
+  choline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_choline | null;
+  copper: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_copper | null;
+  fluoride: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_fluoride | null;
+  folate: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_folate | null;
+  iron: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_iron | null;
+  lycopene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_lycopene | null;
+  magnesium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_magnesium | null;
+  manganese: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_manganese | null;
+  niacin: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_niacin | null;
+  phosphorus: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_phosphorus | null;
+  retinol: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_retinol | null;
+  riboflavin: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_riboflavin | null;
+  selenium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_selenium | null;
+  thiamine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_thiamine | null;
+  alphaCarotene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_alphaCarotene | null;
+  betaCarotene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_betaCarotene | null;
+  pantothenicAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_pantothenicAcid | null;
+  vitA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitA | null;
+  vitAIU: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitAIU | null;
+  vitB6: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitB6 | null;
+  vitB12: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitB12 | null;
+  vitC: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitC | null;
+  vitD: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitD | null;
+  vitD2: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitD2 | null;
+  vitD3: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitD3 | null;
+  vitE: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitE | null;
+  vitK: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_vitK | null;
+  zinc: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_zinc | null;
+  tryptophan: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_tryptophan | null;
+  threonine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_threonine | null;
+  isoleucine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_isoleucine | null;
+  leucine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_leucine | null;
+  lysine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_lysine | null;
+  methionine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_methionine | null;
+  cystine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_cystine | null;
+  phenylalanine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_phenylalanine | null;
+  tyrosine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_tyrosine | null;
+  valine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_valine | null;
+  arginine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_arginine | null;
+  histidine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_histidine | null;
+  alanine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_alanine | null;
+  asparticAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_asparticAcid | null;
+  glutamicAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_glutamicAcid | null;
+  glycine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_glycine | null;
+  proline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_proline | null;
+  serine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_serine | null;
+  hydroxyproline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition_hydroxyproline | null;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -310,7 +1153,8 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
   weights: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_weights[];
   image: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition | null;
+  origFoodClassSlug: string;
+  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_nutrition;
   origFoodGroups: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -332,7 +1176,7 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
   id: string;
   slug: string;
   title: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Recipe_nutrition | null;
+  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Recipe_nutrition;
 }
 
 export type DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item = DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Food | DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients_item_Recipe;
@@ -368,47 +1212,467 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_proteins {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition {
   calories: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_calories | null;
-  proteins: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_proteins | null;
-  carbsByDifference: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_carbsByDifference | null;
   totalCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_totalCarbs | null;
-  totalAvailableCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_totalAvailableCarbs | null;
   fats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fats | null;
+  proteins: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_proteins | null;
+  fiber: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fiber | null;
+  totalAvailableCarbs: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_totalAvailableCarbs | null;
+  sodium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_sodium | null;
+  cholesterol: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_cholesterol | null;
+  potassium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_potassium | null;
+  sugar: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_sugar | null;
+  sucrose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_sucrose | null;
+  glucose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_glucose | null;
+  fructose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fructose | null;
+  lactose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_lactose | null;
+  maltose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_maltose | null;
+  galactose: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_galactose | null;
+  starch: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_starch | null;
+  saturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_saturatedFats | null;
+  monounsaturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_polyunsaturatedFats | null;
+  transFats: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_transFats | null;
+  omega3: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_omega3 | null;
+  omega6: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_omega6 | null;
+  ALA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_ALA | null;
+  DHA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_DHA | null;
+  EPA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_EPA | null;
+  DPA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_DPA | null;
+  caffeine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_caffeine | null;
+  theobromine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_theobromine | null;
+  calcium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_calcium | null;
+  choline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_choline | null;
+  copper: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_copper | null;
+  fluoride: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_fluoride | null;
+  folate: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_folate | null;
+  iron: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_iron | null;
+  lycopene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_lycopene | null;
+  magnesium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_magnesium | null;
+  manganese: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_manganese | null;
+  niacin: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_niacin | null;
+  phosphorus: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_phosphorus | null;
+  retinol: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_retinol | null;
+  riboflavin: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_riboflavin | null;
+  selenium: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_selenium | null;
+  thiamine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_thiamine | null;
+  alphaCarotene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_alphaCarotene | null;
+  betaCarotene: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_betaCarotene | null;
+  pantothenicAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_pantothenicAcid | null;
+  vitA: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitA | null;
+  vitAIU: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitAIU | null;
+  vitB6: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitB6 | null;
+  vitB12: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitB12 | null;
+  vitC: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitC | null;
+  vitD: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitD | null;
+  vitD2: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitD2 | null;
+  vitD3: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitD3 | null;
+  vitE: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitE | null;
+  vitK: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_vitK | null;
+  zinc: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_zinc | null;
+  tryptophan: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_tryptophan | null;
+  threonine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_threonine | null;
+  isoleucine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_isoleucine | null;
+  leucine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_leucine | null;
+  lysine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_lysine | null;
+  methionine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_methionine | null;
+  cystine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_cystine | null;
+  phenylalanine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_phenylalanine | null;
+  tyrosine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_tyrosine | null;
+  valine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_valine | null;
+  arginine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_arginine | null;
+  histidine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_histidine | null;
+  alanine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_alanine | null;
+  asparticAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_asparticAcid | null;
+  glutamicAcid: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_glutamicAcid | null;
+  glycine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_glycine | null;
+  proline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_proline | null;
+  serine: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_serine | null;
+  hydroxyproline: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition_hydroxyproline | null;
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe {
@@ -417,12 +1681,13 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals_items_item_
   title: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_title[];
   image: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_image | null;
   timing: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_timing;
+  status: RecipeStatus;
   likesCount: number;
   userLikedRecipe: boolean | null;
   thumbnail: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_thumbnail | null;
   ingredients: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_ingredients[];
   author: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_author;
-  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition | null;
+  nutrition: DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe_nutrition;
 }
 
 export type DayComponentMealSuggestionMutation_suggestDay_meals_items_item = DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Food | DayComponentMealSuggestionMutation_suggestDay_meals_items_item_Recipe;

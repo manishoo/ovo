@@ -6,7 +6,7 @@
   "scripts": {
     "packager": "react-native start",
     "serve:web": "NODE_ENV=development node server.js",
-    "build:web": "NODE_ENV=development API_ADDRESS=http://localhost:4003 GRAPHQL_ENDPOINT=gql node node_modules/gulp/bin/gulp run --platform=web",
+    "build:web": "NODE_ENV=development API_ADDRESS=http://localhost:4003 GRAPHQL_ENDPOINT=gql node --max_old_space_size=4096 node_modules/gulp/bin/gulp run --platform=web",
     "serve:web:prod": "NODE_ENV=production node server.js",
     "build:web:prod": "NODE_ENV=production node --max_old_space_size=4096 node_modules/gulp/bin/gulp run-once --platform=web",
     "types:generate": "apollo client:codegen types --target typescript --watch --globalTypesFile=src/ts/models/global-types.ts --no-addTypename",

@@ -66,13 +66,13 @@ export default class Input extends RX.Component<InputProps, InputState> {
           >
             {
               !!label &&
-              <RX.Text
+              <Text
                 style={[
                   styles.label,
                   { color: theme.colors.labelInput },
                   this._getLabelStyle(theme)
                 ]}
-              >{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
+              >{required && this._renderRequiredStart(theme)}{label}</Text>}
             <RX.TextInput
               ref={inputRef}
               value={value}

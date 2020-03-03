@@ -9,11 +9,12 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import { showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPreview'
 import Image from '@Common/Image/Image'
-import { IngredientRecipe } from '@Common/IngredientCard/types/IngredientRecipe'
 import LikeButton from '@Common/LikeButton/LikeButton'
 import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
+import { RecipeStatus } from '@Models/global-types'
+import { IngredientRecipe } from '@Models/types/IngredientRecipe'
 import ImageSource from '@Modules/images'
 import { withNavigation } from '@Modules/navigator'
 import { navigate } from '@Utils'
@@ -45,6 +46,10 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   state = {
     isHovering: false,
   }
+  private _overlayBackgroundOpacity = RX.Animated.createValue(0)
+  private _overlayAnimatedStyle = RX.Styles.createAnimatedViewStyle({
+    opacity: this._overlayBackgroundOpacity
+  })
   private _previewScaleAnimatedValue = RX.Animated.createValue(1)
   private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ scale: this._previewScaleAnimatedValue }]
@@ -80,13 +85,19 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               }}
             >
               {
-                recipe.image &&
+                recipe.thumbnail &&
                 <RX.Animated.Image
-                  source={recipe.image.url}
+                  source={recipe.thumbnail.url}
                   style={[styles.image, this._previewAnimatedStyle]}
                   resizeMode={'cover'}
                 />
               }
+              <RX.Animated.View
+                style={[
+                  styles.overlay,
+                  this._overlayAnimatedStyle,
+                ]}
+              />
             </RX.View>
 
             {
@@ -116,6 +127,17 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               </RX.View>
             }
 
+            {
+              (
+                (recipe.status === RecipeStatus.public) ||
+                (recipe.status === RecipeStatus.review)
+              ) &&
+              <Image
+                source={recipe.status === RecipeStatus.public ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
+                style={styles.verifiedBadge}
+                resizeMode={'cover'}
+              />
+            }
 
             {
               !this.props.hideAvatar &&
@@ -212,16 +234,28 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
     )
   }
 
+  private _animation: RX.Types.Animated.CompositeAnimation | null = null
+
   private _setUI = (isHovering: boolean) => {
     if (!this.props.recipe.image) {
       this.setState({
         isHovering,
       })
     }
-    RX.Animated.timing(this._previewScaleAnimatedValue, {
-      toValue: isHovering ? 1.1 : 1,
-      duration: 500,
-    }).start()
+    if (this._animation) {
+      this._animation.stop()
+    }
+    this._animation = RX.Animated.parallel([
+      RX.Animated.timing(this._previewScaleAnimatedValue, {
+        toValue: isHovering ? 1.1 : 1,
+        duration: 300,
+      }),
+      RX.Animated.timing(this._overlayBackgroundOpacity, {
+        toValue: isHovering ? 0.5 : 0,
+        duration: 300,
+      })
+    ])
+    this._animation.start()
   }
 
   private _onHoverStart = () => {
@@ -316,4 +350,19 @@ const styles = {
     fontSize: Styles.fontSizes.size12,
     [Styles.values.marginStart]: Styles.values.spacing / 4,
   }),
+  verifiedBadge: RX.Styles.createImageStyle({
+    width: 15,
+    height: 15,
+    position: 'absolute',
+    top: Styles.values.spacing / 2,
+    [Styles.values.start]: Styles.values.spacing / 2,
+  }),
+  overlay: RX.Styles.createViewStyle({
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: '#000',
+  })
 }

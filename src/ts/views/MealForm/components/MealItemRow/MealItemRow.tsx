@@ -6,11 +6,12 @@
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FlatButton from '@Common/FlatButton/FlatButton'
+import { FoodPreviewOnSubmit } from '@Common/FoodPickerDialog/components/FoodPreview'
 import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import IngredientCard from '@Common/IngredientCard/IngredientCard'
-import { IngredientCardIngredient } from '@Common/IngredientCard/types/IngredientCardIngredient'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import { Ingredient } from '@Models/types/Ingredient'
 import { createId } from '@Utils/create-id'
 import {
   MealItemRowMealItem,
@@ -25,15 +26,13 @@ interface MealItemRowProps {
   mealItem: MealItemRowMealItem,
   onMealItemChange: (mealItem: MealItemRowMealItem) => void,
   onMealItemDelete: (mealItemId: string) => void,
+  editable?: boolean,
 }
 
 export default class MealItemRow extends RX.Component<MealItemRowProps> {
   static fragments = {
     mealItem: gql`
       fragment MealItemRowMealItem on MealItem {
-        id
-        name {text locale}
-        description {text locale}
         amount
         customUnit {
           gramWeight
@@ -51,7 +50,6 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             name { text locale }
           }
         }
-        isOptional
         item {
           ... on Food {
             ...IngredientFood
@@ -62,8 +60,6 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
         }
         alternativeMealItems {
           id
-          name {text locale}
-          description {text locale}
           amount
           customUnit {
             gramWeight
@@ -106,33 +102,56 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             style={[
               styles.scrollView,
               {
-                backgroundColor: theme.colors.textInputBg,
-                borderRadius: 10,
                 flexDirection: 'row',
-                padding: Styles.values.spacing,
                 marginBottom: Styles.values.spacing,
               }
             ]}
           >
-            {this._renderMealItem(this.props.mealItem, true)}
-
-            <RX.View style={{ width: 150, justifyContent: 'center', alignItems: 'center' }}>
-              <FlatButton
-                onPress={() => showFoodPicker({
-                  autoFocus: true,
-                  foodTypes: [FoodTypes.food, FoodTypes.recipe],
-                  onDismiss: () => null,
-                  onSubmit: this._onMealItemAlternativeCreation,
-                })}
-                label={translate('Add Alternative')}
-              />
+            <RX.View
+              style={[
+                styles.row,
+                {
+                  [Styles.values.marginEnd]: Styles.values.spacing,
+                  borderRadius: 10,
+                  backgroundColor: theme.colors.textInputBg,
+                }
+              ]}
+            >
+              {this._renderMealItem(this.props.mealItem, true)}
             </RX.View>
 
-            {
-              this.props.mealItem.alternativeMealItems.map(alternativeMealItem => (
-                this._renderMealItem(alternativeMealItem)
-              ))
-            }
+            <RX.View
+              style={[
+                styles.row,
+                {
+                  borderWidth: 1,
+                  borderColor: this.props.mealItem.alternativeMealItems.length > 0 ? theme.colors.primary : 'transparent',
+                  borderStyle: 'dashed',
+                }
+              ]}
+            >
+              {
+                this.props.mealItem.alternativeMealItems.map(alternativeMealItem => (
+                  this._renderMealItem(alternativeMealItem)
+                ))
+              }
+
+              {
+                this.props.editable &&
+                <RX.View style={{ width: 150, justifyContent: 'center', alignItems: 'center' }}>
+                  <FlatButton
+                    onPress={() => showFoodPicker({
+                      foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
+                      onDismiss: () => null,
+                      onSubmit: this._onMealItemAlternativeCreation,
+                      showOptional: true,
+                      submitButtonLabel: translate('Add Alternative Meal Item')
+                    })}
+                    label={translate('Add Alternative')}
+                  />
+                </RX.View>
+              }
+            </RX.View>
           </RX.ScrollView>
         )}
       </ThemeContext.Consumer>
@@ -140,42 +159,45 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
   }
 
   private _renderMealItem = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => {
+    const { editable = true } = this.props
+
     if (!mealItem.item) throw new Error('no meal item')
 
     return (
       <IngredientCard
         size={150}
         // onPress={mealItem.food ? () => LocationStore.navigate(this.props, `/food/${mealItem.food.id}/`) : undefined}
-        onIngredientChange={this._onMealItemIngredientChange(mealItem, isMainMealItem)}
-        onDelete={this._onMealItemDelete(mealItem, isMainMealItem)}
-        ingredient={{
-          ...mealItem,
-          isOptional: null,
-        }}
-        style={styles.mealItem}
+        onIngredientChange={editable ? this._onMealItemIngredientChange(mealItem, isMainMealItem) : undefined}
+        onDelete={editable ? this._onMealItemDelete(mealItem, isMainMealItem) : undefined}
+        ingredient={mealItem}
+        style={isMainMealItem ? undefined : styles.mealItem}
       />
     )
   }
 
   private _onMealItemDelete = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => () => {
+    const { onMealItemDelete, onMealItemChange } = this.props
+
     if (isMainMealItem) {
-      this.props.onMealItemDelete(this.props.mealItem.id)
+      onMealItemDelete(this.props.mealItem.item!.id)
     } else {
-      this.props.onMealItemChange({
+      onMealItemChange({
         ...this.props.mealItem,
         alternativeMealItems: this.props.mealItem.alternativeMealItems.filter(alternativeMealItem => alternativeMealItem.id !== mealItem.id)
       })
     }
   }
 
-  private _onMealItemIngredientChange = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => (ingredient: IngredientCardIngredient) => {
+  private _onMealItemIngredientChange = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => (ingredient: Ingredient) => {
+    const { onMealItemChange } = this.props
+
     if (isMainMealItem) {
-      this.props.onMealItemChange({
+      onMealItemChange({
         ...this.props.mealItem,
         ...ingredient,
       })
     } else {
-      this.props.onMealItemChange({
+      onMealItemChange({
         ...this.props.mealItem,
         alternativeMealItems: this.props.mealItem.alternativeMealItems.map(alternativeMealItem => {
           if (alternativeMealItem.id === mealItem.id) {
@@ -189,31 +211,33 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
     }
   }
 
-  private _onMealItemAlternativeCreation = (mealItem: FoodPickerMealItem) => {
-    this.props.onMealItemChange({
+  private _onMealItemAlternativeCreation: FoodPreviewOnSubmit = (mealItem: FoodPickerMealItem) => {
+    const { onMealItemChange } = this.props
+
+    onMealItemChange({
       ...this.props.mealItem,
       alternativeMealItems: [
+        ...this.props.mealItem.alternativeMealItems,
         {
           id: mealItem.id || createId(),
           ...mealItem,
         },
-        ...this.props.mealItem.alternativeMealItems,
       ]
     })
   }
 }
 
 const styles = {
-  // container: RX.Styles.createViewStyle({
-  //   flexDirection: 'row',
-  //   padding: Styles.values.spacing,
-  // }),
+  row: RX.Styles.createViewStyle({
+    padding: Styles.values.spacing,
+    flexDirection: 'row',
+    borderRadius: 10,
+  }),
   scrollView: RX.Styles.createScrollViewStyle({
     // @ts-ignore
     display: 'flex',
   }),
   mealItem: RX.Styles.createViewStyle({
     [Styles.values.marginEnd]: Styles.values.spacing,
-    marginBottom: Styles.values.spacing,
   })
 }

@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeDifficulty, RecipeStatus } from "./../../../models/global-types";
+import { LanguageCode, RecipeStatus, RecipeDifficulty } from "./../../../models/global-types";
 
 // ====================================================
 // GraphQL query operation: RecipeFormQuery
@@ -29,7 +29,7 @@ export interface RecipeFormQuery_recipe_author {
 export interface RecipeFormQuery_recipe_timing {
   prepTime: number | null;
   cookTime: number | null;
-  totalTime: number;
+  totalTime: number | null;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_name {
@@ -108,47 +108,467 @@ export interface RecipeFormQuery_recipe_ingredients_item_Food_thumbnail {
 
 export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_proteins {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Food_nutrition {
   calories: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_calories | null;
-  proteins: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_proteins | null;
-  carbsByDifference: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
   totalCarbs: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_totalCarbs | null;
-  totalAvailableCarbs: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
   fats: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fats | null;
+  proteins: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_proteins | null;
+  fiber: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fiber | null;
+  totalAvailableCarbs: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  sodium: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_sodium | null;
+  cholesterol: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_cholesterol | null;
+  potassium: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_potassium | null;
+  sugar: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_sugar | null;
+  sucrose: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_sucrose | null;
+  glucose: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_glucose | null;
+  fructose: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fructose | null;
+  lactose: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_lactose | null;
+  maltose: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_maltose | null;
+  galactose: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_galactose | null;
+  starch: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_starch | null;
+  saturatedFats: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_saturatedFats | null;
+  monounsaturatedFats: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_polyunsaturatedFats | null;
+  transFats: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_transFats | null;
+  omega3: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_omega3 | null;
+  omega6: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_omega6 | null;
+  ALA: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_ALA | null;
+  DHA: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_DHA | null;
+  EPA: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_EPA | null;
+  DPA: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_DPA | null;
+  caffeine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_caffeine | null;
+  theobromine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_theobromine | null;
+  calcium: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_calcium | null;
+  choline: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_choline | null;
+  copper: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_copper | null;
+  fluoride: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_fluoride | null;
+  folate: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_folate | null;
+  iron: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_iron | null;
+  lycopene: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_lycopene | null;
+  magnesium: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_magnesium | null;
+  manganese: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_manganese | null;
+  niacin: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_niacin | null;
+  phosphorus: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_phosphorus | null;
+  retinol: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_retinol | null;
+  riboflavin: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_riboflavin | null;
+  selenium: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_selenium | null;
+  thiamine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_thiamine | null;
+  alphaCarotene: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_alphaCarotene | null;
+  betaCarotene: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_betaCarotene | null;
+  pantothenicAcid: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_pantothenicAcid | null;
+  vitA: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitA | null;
+  vitAIU: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitAIU | null;
+  vitB6: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitB6 | null;
+  vitB12: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitB12 | null;
+  vitC: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitC | null;
+  vitD: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitD | null;
+  vitD2: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitD2 | null;
+  vitD3: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitD3 | null;
+  vitE: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitE | null;
+  vitK: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_vitK | null;
+  zinc: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_zinc | null;
+  tryptophan: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_tryptophan | null;
+  threonine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_threonine | null;
+  isoleucine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_isoleucine | null;
+  leucine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_leucine | null;
+  lysine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_lysine | null;
+  methionine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_methionine | null;
+  cystine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_cystine | null;
+  phenylalanine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_phenylalanine | null;
+  tyrosine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_tyrosine | null;
+  valine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_valine | null;
+  arginine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_arginine | null;
+  histidine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_histidine | null;
+  alanine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_alanine | null;
+  asparticAcid: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_asparticAcid | null;
+  glutamicAcid: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_glutamicAcid | null;
+  glycine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_glycine | null;
+  proline: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_proline | null;
+  serine: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_serine | null;
+  hydroxyproline: RecipeFormQuery_recipe_ingredients_item_Food_nutrition_hydroxyproline | null;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Food_origFoodGroups_name {
@@ -168,7 +588,8 @@ export interface RecipeFormQuery_recipe_ingredients_item_Food {
   weights: RecipeFormQuery_recipe_ingredients_item_Food_weights[];
   image: RecipeFormQuery_recipe_ingredients_item_Food_image | null;
   thumbnail: RecipeFormQuery_recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: RecipeFormQuery_recipe_ingredients_item_Food_nutrition | null;
+  origFoodClassSlug: string;
+  nutrition: RecipeFormQuery_recipe_ingredients_item_Food_nutrition;
   origFoodGroups: RecipeFormQuery_recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -182,7 +603,9 @@ export interface RecipeFormQuery_recipe_ingredients_item_Recipe_image {
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_timing {
-  totalTime: number;
+  cookTime: number | null;
+  prepTime: number | null;
+  totalTime: number | null;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_thumbnail {
@@ -265,47 +688,467 @@ export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proteins {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition {
   calories: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_calories | null;
-  proteins: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
-  carbsByDifference: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_carbsByDifference | null;
   totalCarbs: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalCarbs | null;
-  totalAvailableCarbs: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
   fats: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fats | null;
+  proteins: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proteins | null;
+  fiber: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fiber | null;
+  totalAvailableCarbs: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_totalAvailableCarbs | null;
+  sodium: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_sodium | null;
+  cholesterol: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_cholesterol | null;
+  potassium: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_potassium | null;
+  sugar: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_sugar | null;
+  sucrose: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_sucrose | null;
+  glucose: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_glucose | null;
+  fructose: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fructose | null;
+  lactose: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_lactose | null;
+  maltose: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_maltose | null;
+  galactose: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_galactose | null;
+  starch: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_starch | null;
+  saturatedFats: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_saturatedFats | null;
+  monounsaturatedFats: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_polyunsaturatedFats | null;
+  transFats: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_transFats | null;
+  omega3: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_omega3 | null;
+  omega6: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_omega6 | null;
+  ALA: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_ALA | null;
+  DHA: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_DHA | null;
+  EPA: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_EPA | null;
+  DPA: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_DPA | null;
+  caffeine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_caffeine | null;
+  theobromine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_theobromine | null;
+  calcium: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_calcium | null;
+  choline: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_choline | null;
+  copper: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_copper | null;
+  fluoride: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_fluoride | null;
+  folate: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_folate | null;
+  iron: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_iron | null;
+  lycopene: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_lycopene | null;
+  magnesium: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_magnesium | null;
+  manganese: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_manganese | null;
+  niacin: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_niacin | null;
+  phosphorus: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_phosphorus | null;
+  retinol: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_retinol | null;
+  riboflavin: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_riboflavin | null;
+  selenium: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_selenium | null;
+  thiamine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_thiamine | null;
+  alphaCarotene: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_alphaCarotene | null;
+  betaCarotene: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_betaCarotene | null;
+  pantothenicAcid: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_pantothenicAcid | null;
+  vitA: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitA | null;
+  vitAIU: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitAIU | null;
+  vitB6: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitB6 | null;
+  vitB12: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitB12 | null;
+  vitC: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitC | null;
+  vitD: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitD | null;
+  vitD2: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitD2 | null;
+  vitD3: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitD3 | null;
+  vitE: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitE | null;
+  vitK: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_vitK | null;
+  zinc: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_zinc | null;
+  tryptophan: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_tryptophan | null;
+  threonine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_threonine | null;
+  isoleucine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_isoleucine | null;
+  leucine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_leucine | null;
+  lysine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_lysine | null;
+  methionine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_methionine | null;
+  cystine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_cystine | null;
+  phenylalanine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_phenylalanine | null;
+  tyrosine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_tyrosine | null;
+  valine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_valine | null;
+  arginine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_arginine | null;
+  histidine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_histidine | null;
+  alanine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_alanine | null;
+  asparticAcid: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_asparticAcid | null;
+  glutamicAcid: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_glutamicAcid | null;
+  glycine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_glycine | null;
+  proline: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_proline | null;
+  serine: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_serine | null;
+  hydroxyproline: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition_hydroxyproline | null;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name {
@@ -325,7 +1168,8 @@ export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item
   weights: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_weights[];
   image: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_image | null;
   thumbnail: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail | null;
-  nutrition: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition | null;
+  origFoodClassSlug: string;
+  nutrition: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_nutrition;
   origFoodGroups: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
@@ -347,7 +1191,7 @@ export interface RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item
   id: string;
   slug: string;
   title: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe_title[];
-  nutrition: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe_nutrition | null;
+  nutrition: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe_nutrition;
 }
 
 export type RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item = RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Food | RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe;
@@ -383,47 +1227,467 @@ export interface RecipeFormQuery_recipe_ingredients_item_Recipe_author {
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_proteins {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition {
   calories: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_calories | null;
-  proteins: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_proteins | null;
-  carbsByDifference: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_carbsByDifference | null;
   totalCarbs: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_totalCarbs | null;
-  totalAvailableCarbs: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_totalAvailableCarbs | null;
   fats: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fats | null;
+  proteins: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_proteins | null;
+  fiber: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fiber | null;
+  totalAvailableCarbs: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_totalAvailableCarbs | null;
+  sodium: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_sodium | null;
+  cholesterol: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_cholesterol | null;
+  potassium: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_potassium | null;
+  sugar: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_sugar | null;
+  sucrose: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_sucrose | null;
+  glucose: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_glucose | null;
+  fructose: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fructose | null;
+  lactose: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_lactose | null;
+  maltose: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_maltose | null;
+  galactose: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_galactose | null;
+  starch: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_starch | null;
+  saturatedFats: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_saturatedFats | null;
+  monounsaturatedFats: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_polyunsaturatedFats | null;
+  transFats: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_transFats | null;
+  omega3: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_omega3 | null;
+  omega6: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_omega6 | null;
+  ALA: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_ALA | null;
+  DHA: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_DHA | null;
+  EPA: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_EPA | null;
+  DPA: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_DPA | null;
+  caffeine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_caffeine | null;
+  theobromine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_theobromine | null;
+  calcium: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_calcium | null;
+  choline: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_choline | null;
+  copper: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_copper | null;
+  fluoride: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_fluoride | null;
+  folate: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_folate | null;
+  iron: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_iron | null;
+  lycopene: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_lycopene | null;
+  magnesium: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_magnesium | null;
+  manganese: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_manganese | null;
+  niacin: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_niacin | null;
+  phosphorus: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_phosphorus | null;
+  retinol: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_retinol | null;
+  riboflavin: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_riboflavin | null;
+  selenium: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_selenium | null;
+  thiamine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_thiamine | null;
+  alphaCarotene: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_alphaCarotene | null;
+  betaCarotene: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_betaCarotene | null;
+  pantothenicAcid: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_pantothenicAcid | null;
+  vitA: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitA | null;
+  vitAIU: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitAIU | null;
+  vitB6: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitB6 | null;
+  vitB12: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitB12 | null;
+  vitC: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitC | null;
+  vitD: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitD | null;
+  vitD2: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitD2 | null;
+  vitD3: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitD3 | null;
+  vitE: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitE | null;
+  vitK: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_vitK | null;
+  zinc: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_zinc | null;
+  tryptophan: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_tryptophan | null;
+  threonine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_threonine | null;
+  isoleucine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_isoleucine | null;
+  leucine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_leucine | null;
+  lysine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_lysine | null;
+  methionine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_methionine | null;
+  cystine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_cystine | null;
+  phenylalanine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_phenylalanine | null;
+  tyrosine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_tyrosine | null;
+  valine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_valine | null;
+  arginine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_arginine | null;
+  histidine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_histidine | null;
+  alanine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_alanine | null;
+  asparticAcid: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_asparticAcid | null;
+  glutamicAcid: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_glutamicAcid | null;
+  glycine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_glycine | null;
+  proline: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_proline | null;
+  serine: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_serine | null;
+  hydroxyproline: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition_hydroxyproline | null;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_item_Recipe {
@@ -432,12 +1696,13 @@ export interface RecipeFormQuery_recipe_ingredients_item_Recipe {
   title: RecipeFormQuery_recipe_ingredients_item_Recipe_title[];
   image: RecipeFormQuery_recipe_ingredients_item_Recipe_image | null;
   timing: RecipeFormQuery_recipe_ingredients_item_Recipe_timing;
+  status: RecipeStatus;
   likesCount: number;
   userLikedRecipe: boolean | null;
   thumbnail: RecipeFormQuery_recipe_ingredients_item_Recipe_thumbnail | null;
   ingredients: RecipeFormQuery_recipe_ingredients_item_Recipe_ingredients[];
   author: RecipeFormQuery_recipe_ingredients_item_Recipe_author;
-  nutrition: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition | null;
+  nutrition: RecipeFormQuery_recipe_ingredients_item_Recipe_nutrition;
 }
 
 export type RecipeFormQuery_recipe_ingredients_item = RecipeFormQuery_recipe_ingredients_item_Food | RecipeFormQuery_recipe_ingredients_item_Recipe;
@@ -496,12 +1761,6 @@ export interface RecipeFormQuery_recipe_nutrition_totalAvailableCarbs {
   unit: string;
 }
 
-export interface RecipeFormQuery_recipe_nutrition_carbsByDifference {
-  amount: number;
-  id: string | null;
-  unit: string;
-}
-
 export interface RecipeFormQuery_recipe_nutrition_fats {
   amount: number;
   id: string | null;
@@ -513,7 +1772,6 @@ export interface RecipeFormQuery_recipe_nutrition {
   proteins: RecipeFormQuery_recipe_nutrition_proteins | null;
   totalCarbs: RecipeFormQuery_recipe_nutrition_totalCarbs | null;
   totalAvailableCarbs: RecipeFormQuery_recipe_nutrition_totalAvailableCarbs | null;
-  carbsByDifference: RecipeFormQuery_recipe_nutrition_carbsByDifference | null;
   fats: RecipeFormQuery_recipe_nutrition_fats | null;
 }
 
@@ -531,19 +1789,19 @@ export interface RecipeFormQuery_recipe {
   title: RecipeFormQuery_recipe_title[];
   serving: number;
   slug: string;
+  status: RecipeStatus;
   author: RecipeFormQuery_recipe_author;
   likesCount: number;
   userLikedRecipe: boolean | null;
   timing: RecipeFormQuery_recipe_timing;
   ingredients: RecipeFormQuery_recipe_ingredients[];
   instructions: RecipeFormQuery_recipe_instructions[];
-  nutrition: RecipeFormQuery_recipe_nutrition | null;
+  nutrition: RecipeFormQuery_recipe_nutrition;
   difficulty: RecipeDifficulty | null;
   description: RecipeFormQuery_recipe_description[] | null;
   image: RecipeFormQuery_recipe_image | null;
   createdAt: any;
   updatedAt: any;
-  status: RecipeStatus;
   tags: string[];
 }
 

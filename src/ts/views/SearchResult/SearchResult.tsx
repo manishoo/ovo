@@ -4,7 +4,7 @@
  */
 
 import Styles from '@App/Styles'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Page from '@Common/Page'
 import RecipesList from '@Common/RecipesList/RecipesList'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
@@ -34,7 +34,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     const { recipesData } = this.props
 
     return (
-      <CenterAlignedPageView
+      <Page
         scrollViewProps={{
           onScroll: this._onScroll(this._handleOnReachEnd),
         }}
@@ -85,7 +85,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
             loading={recipesData.loading}
           />
         </RX.View>
-      </CenterAlignedPageView>
+      </Page>
     )
   }
 

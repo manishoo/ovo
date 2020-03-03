@@ -3,6 +3,7 @@
  * Copyright: Ouranos Studio 2019
  */
 
+import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import RX from 'reactxp'
 import { AutoSubscribeStore, autoSubscribeWithKey, disableWarnings, StoreBase } from 'resub'
@@ -81,12 +82,14 @@ class ResponsiveWidthStore extends StoreBase {
   }
 
   @autoSubscribeWithKey(TriggerKeys.Width)
-  getWidthConsideringDrawer(rootViewId: string = MainWindowId): number {
-    if (this.isDrawerVisible()) {
-      return this._rawWidth[rootViewId] - Styles.values.drawerWidth
+  getWidthConsideringMaxWidth(rootViewId: string = MainWindowId): number {
+    const width = this._rawWidth[rootViewId]
+
+    if (width > AppConfig.contentMaxWidth) {
+      return AppConfig.contentMaxWidth
     }
 
-    return this._rawWidth[rootViewId]
+    return width
   }
 
   @autoSubscribeWithKey(TriggerKeys.Drawer)

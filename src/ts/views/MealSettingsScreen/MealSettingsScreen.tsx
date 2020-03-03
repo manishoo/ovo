@@ -7,6 +7,7 @@ import { useMutation } from '@apollo/react-hooks'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
+import { ThemeContext } from '@App/ThemeContext'
 import Input from '@Common/Input/Input'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
@@ -91,16 +92,21 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
     // const M = React.cloneElement(RX.View, {type: '', pro})
     return (
       RX.Modal.show(
-        <Modal
-          key={MODAL_ID}
-          modalId={MODAL_ID}
-          fullWidth
-          fullHeight
-        >
-          <MealSettingsScreenContainer
-            {...props}
-          />
-        </Modal>,
+        <ThemeContext.Consumer>
+          {({ theme }) => (
+            <Modal
+              key={MODAL_ID}
+              modalId={MODAL_ID}
+              fullWidth
+              fullHeight
+              theme={theme}
+            >
+              <MealSettingsScreenContainer
+                {...props}
+              />
+            </Modal>
+          )}
+        </ThemeContext.Consumer>,
         MODAL_ID,
       )
     )
@@ -115,7 +121,7 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
         style={[
           styles.container,
           {
-            backgroundColor: theme.colors.bg,
+            backgroundColor: theme.colors.cardBg,
           }
         ]}
       >

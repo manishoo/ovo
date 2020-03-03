@@ -13,7 +13,7 @@ enum Content {
   'Gender' = 'Gender',
   'Username' = 'Username',
   'Password' = 'Password',
-  'PasswordAgain' = 'Password (again)',
+  'passwordConfirmation' = 'Password (again)',
   'Login' = 'Login',
   'showMeMealPlan' = 'Show me my meal plan',
   'Ingredients' = 'Ingredients',
@@ -65,8 +65,8 @@ enum Content {
   'no' = 'No',
   'weightName' = 'Unit name',
   'gramWeight' = 'Weight (grams)',
-  'landingTitle' = 'Smart assistant',
-  'landingSubtitle' = 'is good',
+  'landingTitle' = 'Take Control of Your Food',
+  'landingSubtitle' = 'The only App you\'ll ever need to manage your eating',
   'LandingStartFree' = 'Start Free! \uD83D\uDCB8',
   'assistantIntro1' = 'Hi! I\'m Prana, your new Personal assistant.',
   'assistantIntro2' = 'I can help you manage eating, activities, habits, and so much more.',
@@ -95,12 +95,12 @@ enum Content {
   'totalCarbs' = 'Total Carbs',
   'fats' = 'Fats',
   '______Login_Page______' = '//',
-  'dontHaveAnAccount' = 'Don\'t Have an account? Register',
+  'dontHaveAnAccount' = 'Don\'t Have an account?',
   '______Create_Recipe_Page______' = '//',
   'Create Recipe' = 'Create Recipe',
   'e.g. Cook the Rice...' = 'e.g. Cook the Rice...',
   '______Create_Meal_Page______' = '//',
-  'Meal Items' = 'Meal Items',
+  'Main Meal Items' = 'Main Meal Items',
   'Create Meal' = 'Create Meal',
   'Update Meal' = 'Update Meal',
   'viewMealPlan' = 'View Meal Plan',
@@ -164,6 +164,7 @@ enum Content {
   imported = 'imported',
   ingredient = 'ingredient',
   meal = 'meal',
+  Meal = 'Meal',
   occasion = 'occasion',
   other = 'other',
   recipe = 'recipe',
@@ -187,6 +188,36 @@ enum Content {
   noLimit = 'No limit',
   noTime = '5 minutes',
   someTime = '30 minutes',
+  AlreadyAMember = 'Already a Member? Login',
+  Or = 'Or',
+  GetStartedNow = 'Get Started Now',
+
+  'landing_1_t' = 'A MealPlanner for mere Mortals',
+  'landing_1_s' = 'Plan your meals ahead of time so you don\'t have to worry about what to cook when the time comes',
+
+  'landing_2_t' = 'Your Shopping list, Always up-to-date',
+  'landing_2_s' = 'some text about the importance of this feature',
+
+  'landing_3_t' = 'Explore hundreds of community-made recipes, meals, and collections',
+  'landing_3_s' = 'Some text about the community and the fact that the user can contribute and blah blah',
+
+  'landing_4_t' = 'Get notified when its time to plan, shop or cook!',
+  'landing_4_s' = 'sex forever',
+
+  'landingfooterAck' = 'Copyright © Wellington Production 2020 All Rights Reserved',
+
+  'estimatedGramWeight' = 'Estimated weight (g)',
+
+  'nutrition' = 'Nutrition',
+  'note' = 'Note',
+  'loadMore' = 'More',
+  'resetAll' = 'Reset All',
+  forgotPassword = 'Forgot Password?',
+  'optional' = 'Optional',
+
+  'Add Alternative Meal Item' = 'Add Alternative Meal Item',
+  'Log Meal' = 'Log Meal',
+
 }
 
 export default Content

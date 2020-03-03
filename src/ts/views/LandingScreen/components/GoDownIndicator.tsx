@@ -69,7 +69,7 @@ const styles = {
   }),
   text: RX.Styles.createTextStyle({
     font: Styles.fonts.displayLight,
-    color: '#BBBBBB',
+    color: '#dde5ec',
     marginHorizontal: Styles.values.spacing / 2,
   })
 }
