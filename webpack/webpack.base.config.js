@@ -104,7 +104,7 @@ const productionConfig = merge(
 
 const developmentConfig = merge(
   {
-    devtool: 'source-map',
+    devtool: 'cheap-module-source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
     ]

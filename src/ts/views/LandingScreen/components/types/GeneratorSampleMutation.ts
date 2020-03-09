@@ -2,7 +2,14 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserMealInput, NutritionProfileInput, MealAvailableTime, MealSize, LanguageCode, RecipeStatus } from "./../../../../models/global-types";
+import {
+  LanguageCode,
+  MealAvailableTime,
+  MealSize,
+  NutritionProfileInput,
+  RecipeStatus,
+  UserMealInput
+} from './../../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: GeneratorSampleMutation
@@ -1716,6 +1723,7 @@ export interface GeneratorSampleMutation_suggestDayGuest {
   id: any;
   userMeal: GeneratorSampleMutation_suggestDayGuest_userMeal;
   time: any | null;
+  ate: boolean | null;
   items: GeneratorSampleMutation_suggestDayGuest_items[];
 }
 

@@ -4,12 +4,10 @@
  */
 
 import { useMutation } from '@apollo/react-hooks'
-import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import { transformMealItemToMealItemInput } from '@Utils/transformers/meal.transformer'
@@ -20,9 +18,8 @@ import {
 import differenceInMinutes from 'date-fns/differenceInMinutes'
 import setHours from 'date-fns/setHours'
 import setMinutes from 'date-fns/setMinutes'
-import { useState } from 'react'
 import RX from 'reactxp'
-import { MealComponent } from './MealComponent'
+import MealComponent from './MealComponent'
 import { Day } from './types/Day'
 
 

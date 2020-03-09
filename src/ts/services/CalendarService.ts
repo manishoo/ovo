@@ -137,6 +137,59 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     this.trigger()
   }
 
+  public addPantryItem(food: Day_meals_items_item_Food, grams: number) {
+    const foodGroupId = food.origFoodGroups[0][0].id
+
+    const item = {
+      food,
+      grams,
+      dateAdded: new Date()
+    }
+
+    /**
+     * 1) Add to pantry
+     * */
+    if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
+      const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
+
+      if (foodAlreadyExists) {
+        this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
+          grocery.grams += grams
+          grocery.dateAdded = new Date()
+
+          return grocery
+        })
+      } else {
+        this.pantryGroceriesByFoodGroup[foodGroupId] = [
+          ...this.pantryGroceriesByFoodGroup[foodGroupId],
+          item,
+        ]
+      }
+    } else {
+      this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
+    }
+
+    /**
+     * 2) Remove from shoppingList
+     * */
+    this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
+
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  @autoSubscribe
+  getShoppingList() {
+    return this.shoppingListGroceriesByFoodGroup
+  }
+
+  @autoSubscribe
+  getPantry() {
+    return this.pantryGroceriesByFoodGroup
+  }
+
   private _handleShoppingList() {
     const calendar = this.calendar
 
@@ -154,7 +207,7 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
         }
       } else {
         foods[food.id] = {
-          food: foodClass,
+          food,
           grams,
         }
       }
@@ -271,7 +324,7 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
          * */
         if (requiredAmount > 0) {
           addGroceryItemToShoppingList({
-            foodClass: shoppingListGroceryItem.food,
+            food: shoppingListGroceryItem.food,
             grams: requiredAmount,
           })
         }
@@ -279,59 +332,6 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     })
 
     return finalShoppingList
-  }
-
-  @autoSubscribe
-  getShoppingList() {
-    return this.shoppingListGroceriesByFoodGroup
-  }
-
-  @autoSubscribe
-  getPantry() {
-    return this.pantryGroceriesByFoodGroup
-  }
-
-  public addPantryItem(food: Day_meals_items_item_Food, grams: number) {
-    const foodGroupId = food.origFoodGroups[0][0].id
-
-    const item = {
-      food: foodClass,
-      grams,
-      dateAdded: new Date()
-    }
-
-    /**
-     * 1) Add to pantry
-     * */
-    if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
-      const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
-
-      if (foodAlreadyExists) {
-        this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
-          grocery.grams += grams
-          grocery.dateAdded = new Date()
-
-          return grocery
-        })
-      } else {
-        this.pantryGroceriesByFoodGroup[foodGroupId] = [
-          ...this.pantryGroceriesByFoodGroup[foodGroupId],
-          item,
-        ]
-      }
-    } else {
-      this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
-    }
-
-    /**
-     * 2) Remove from shoppingList
-     * */
-    this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
-
-    this.trigger([
-      TriggerKeys.pantryGroceriesByFoodGroup,
-      TriggerKeys.shoppingListGroceriesByFoodGroup,
-    ])
   }
 
   public removePantryItem(foodId: string) {

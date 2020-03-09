@@ -24,8 +24,8 @@ import {
   MealItemComponentMutation,
   MealItemComponentMutationVariables
 } from '@Views/CalendarScreen/components/types/MealItemComponentMutation'
-import { RecipeScreen } from '@Views/RecipeScreen/RecipeScreen'
 import { FoodScreen } from '@Views/FoodScreen/FoodScreen'
+import { RecipeScreen } from '@Views/RecipeScreen/RecipeScreen'
 import gql from 'graphql-tag'
 import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
@@ -56,183 +56,11 @@ export function determineIfIsWeight(toBeDetermined: MealItem_unit): toBeDetermin
   return toBeDetermined.__typename === 'Weight'
 }
 
-@withNavigation
-class MealItemComponent extends RX.Component<MealItemComponentProps> {
-  static fragments = {
-    mealItem: gql`
-      fragment MealItem on MealItem {
-        id
-        name {text locale}
-        description {text locale}
-        amount
-        customUnit {
-          gramWeight
-          name { text locale }
-        }
-        unit {
-          ... on Weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-          ... on CustomUnit {
-            gramWeight
-            name { text locale }
-          }
-        }
-        isOptional
-        item {
-          ... on Food {
-            ...IngredientFood
-          }
-          ... on Recipe {
-            ...IngredientRecipe
-          }
-        }
-      }
-
-      ${IngredientCard.fragments.food}
-      ${IngredientCard.fragments.recipe}
-    `
-  }
-  static operations = {
-    suggestMealItem: gql`
-      mutation MealItemComponentMutation($userMealId: String!, $mealItemId: String!, $date: DateTime!) {
-        suggestMealItem(userMealId: $userMealId, mealItemId: $mealItemId, date: $date) {
-          ...MealItem
-        }
-      }
-
-      ${MealItemComponent.fragments.mealItem}
-    `
+let MealItemComponent = ({ style, mealItemRegenerating, mealItem, onMealItemRemove, onMealItemChange, onMealItemRegenerate }: MealItemComponentProps) => {
+  const _onPress = () => {
   }
 
-  _onPress = () => {
-  }
-
-  public render() {
-    const { style, mealItemRegenerating } = this.props
-
-    const mealItem = this._getCommonMealItem()
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <HoverView
-            onRenderChild={isHovering => (
-              <RX.View
-                key={mealItem.id}
-                onPress={this._onPress}
-                activeOpacity={0.7}
-                style={[styles.container, style, {
-                  borderWidth: 1,
-                  borderColor: isHovering ? theme.colors.mealItemBorder : 'transparent',
-                  transition: 'all 0.3s'
-                }]}
-              >
-                <HoverView
-                  onPress={this._onMealItemClick}
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onRenderChild={hovering => renderImageOrPlaceholder(
-                    mealItem.thumbnail,
-                    {
-                      width: 60,
-                      height: 60,
-                      borderRadius: 30,
-                      borderWidth: 1,
-                      borderColor: hovering ? theme.colors.primary : 'transparent',
-                      backgroundColor: '#fafafa',
-                    }
-                  )}
-                />
-                <RX.View style={styles.textsContainer}>
-                  <RX.View
-                    style={{
-                      flexDirection: 'row',
-                      marginBottom: Styles.values.spacing / 4
-                    }}
-                  >
-                    <HoverView
-                      onRenderChild={hovering => (
-                        <Text
-                          translations={mealItem.title || []}
-                          style={[
-                            styles.title,
-                            {
-                              color: hovering ? theme.colors.primary : theme.colors.text,
-                            }
-                          ]}
-                          onPress={this._onMealItemClick}
-                        />
-                      )}
-                    />
-                    <Text
-                      translations={mealItem.description || []}
-                      style={styles.description}
-                    />
-                    {/*{!!mealItem.totalTime && <TotalTime totalTime={mealItem.totalTime} />}*/}
-                  </RX.View>
-                  <RX.View
-                    style={{
-                      flexDirection: 'row',
-                      [Styles.values.marginStart]: -Styles.values.spacing / 2,
-                    }}
-                  >
-                    <InputNumber
-                      value={mealItem.amount && Number(mealItem.amount.toFixed(1))}
-                      onChange={(value) => this._onMealItemAmountChange(getFloatFromString(value), mealItem.selectedUnit)}
-                      textInputStyle={[
-                        styles.amountInput,
-                        {
-                          backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
-                          width: ((mealItem.amount ? mealItem.amount.toFixed(1) : '').length * 10)
-                        }
-                      ]}
-                      style={{
-                        marginBottom: 0,
-                      }}
-                    />
-                    <Select
-                      value={mealItem.selectedUnit}
-                      options={mealItem.units}
-                      onChange={this._handleMealItemUnitChange}
-                      style={[
-                        styles.unitInput,
-                        {
-                          backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
-                        },
-                      ]}
-                    />
-                  </RX.View>
-                </RX.View>
-
-                <ItemControl
-                  visible={isHovering || mealItemRegenerating}
-                  onRegenerate={this._onMealItemRegenerate}
-                  regenerating={mealItemRegenerating}
-                  style={{
-                    position: 'absolute',
-                    [Styles.values.end]: Styles.values.spacing,
-                  }}
-                >
-                  <MenuItem
-                    label={translate('Remove from meal')}
-                    onPress={this.props.onMealItemRemove}
-                  />
-                </ItemControl>
-              </RX.View>
-            )}
-          />
-        )}
-      </ThemeContext.Consumer>
-    )
-  }
-
-  private _handleMealItemUnitChange = (selectedUnit: string) => {
-    const mealItem = this.props.mealItem
+  const _handleMealItemUnitChange = (selectedUnit: string) => {
     if (!mealItem.amount) return null
 
     let newAmount = mealItem.amount
@@ -267,12 +95,10 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
       }
     }
 
-    this._onMealItemAmountChange(newAmount, selectedUnit)
+    _onMealItemAmountChange(newAmount, selectedUnit)
   }
 
-  private _onMealItemAmountChange = (amount: number | null, selectedUnit: string) => {
-    const mealItem = this.props.mealItem
-
+  const _onMealItemAmountChange = (amount: number | null, selectedUnit: string) => {
     mealItem.amount = amount
 
     if (mealItem.item) {
@@ -301,18 +127,16 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
       }
     }
 
-    this.props.onMealItemChange(mealItem)
+    return onMealItemChange(mealItem)
   }
 
-  private _onMealItemRegenerate = () => {
-    if (this.props.mealItemRegenerating) return
+  const _onMealItemRegenerate = () => {
+    if (mealItemRegenerating) return
 
-    this.props.onMealItemRegenerate()
+    return onMealItemRegenerate()
   }
 
-  private _getCommonMealItem = () => {
-    const mealItem = this.props.mealItem
-
+  const _getCommonMealItem = () => {
     if (mealItem.item) {
       if (determineIfIsFood(mealItem.item)) {
         return {
@@ -364,8 +188,7 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
     }
   }
 
-  private _onMealItemClick = () => {
-    const { mealItem } = this.props
+  const _onMealItemClick = () => {
     if (!mealItem.item) return
 
     if (determineIfIsFood(mealItem.item)) {
@@ -378,10 +201,131 @@ class MealItemComponent extends RX.Component<MealItemComponentProps> {
       })
     }
   }
+
+  const commonMealItem = _getCommonMealItem()
+
+  return (
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <HoverView
+          onRenderChild={isHovering => (
+            <RX.View
+              key={commonMealItem.id}
+              onPress={_onPress}
+              activeOpacity={0.7}
+              style={[styles.container, style, {
+                borderWidth: 1,
+                borderColor: isHovering ? theme.colors.mealItemBorder : 'transparent',
+                transition: 'all 0.3s'
+              }]}
+            >
+              <HoverView
+                onPress={_onMealItemClick}
+                style={{
+                  cursor: 'pointer',
+                }}
+                onRenderChild={hovering => renderImageOrPlaceholder(
+                  commonMealItem.thumbnail,
+                  {
+                    width: 60,
+                    height: 60,
+                    borderRadius: 10,
+                    borderWidth: 2,
+                    borderColor: hovering ? theme.colors.primary : 'transparent',
+                    // @ts-ignore web
+                    transition: 'all 0.3s',
+
+                    backgroundColor: '#fafafa',
+                  }
+                )}
+              />
+              <RX.View style={styles.textsContainer}>
+                <RX.View
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: Styles.values.spacing / 4
+                  }}
+                >
+                  <HoverView
+                    onRenderChild={hovering => (
+                      <Text
+                        translations={commonMealItem.title || []}
+                        style={[
+                          styles.title,
+                          {
+                            color: hovering ? theme.colors.primary : theme.colors.text,
+                          }
+                        ]}
+                        onPress={_onMealItemClick}
+                      />
+                    )}
+                  />
+                  {/*<Text
+                    translations={commonMealItem.description || []}
+                    style={styles.description}
+                  />*/}
+                  {/*{!!commonMealItem.totalTime && <TotalTime totalTime={commonMealItem.totalTime} />}*/}
+                </RX.View>
+                <RX.View
+                  style={{
+                    flexDirection: 'row',
+                    [Styles.values.marginStart]: -Styles.values.spacing / 4,
+                  }}
+                >
+                  <InputNumber
+                    value={commonMealItem.amount && Number(commonMealItem.amount.toFixed(1))}
+                    onChange={(value) => _onMealItemAmountChange(getFloatFromString(value), commonMealItem.selectedUnit)}
+                    textInputStyle={[
+                      styles.amountInput,
+                      {
+                        backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
+                        width: ((commonMealItem.amount ? commonMealItem.amount.toFixed(1) : '').length * 10)
+                      }
+                    ]}
+                    style={{
+                      marginBottom: 0,
+                    }}
+                  />
+                  <Select
+                    value={commonMealItem.selectedUnit}
+                    options={commonMealItem.units}
+                    onChange={_handleMealItemUnitChange}
+                    style={[
+                      styles.unitInput,
+                      {
+                        backgroundColor: isHovering ? theme.colors.textInputBg : 'transparent',
+                      },
+                    ]}
+                  />
+                </RX.View>
+              </RX.View>
+
+              <ItemControl
+                visible={isHovering || mealItemRegenerating}
+                onRegenerate={_onMealItemRegenerate}
+                regenerating={mealItemRegenerating}
+                style={{
+                  position: 'absolute',
+                  [Styles.values.end]: Styles.values.spacing,
+                }}
+              >
+                <MenuItem
+                  label={translate('Remove from meal')}
+                  onPress={onMealItemRemove}
+                />
+              </ItemControl>
+            </RX.View>
+          )}
+        />
+      )}
+    </ThemeContext.Consumer>
+  )
 }
 
+MealItemComponent = withNavigation(MealItemComponent)
+
 const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
-  const [suggestMealItem, { loading }] = useMutation<MealItemComponentMutation, MealItemComponentMutationVariables>(MealItemComponent.operations.suggestMealItem)
+  const [suggestMealItem, { loading }] = useMutation<MealItemComponentMutation, MealItemComponentMutationVariables>(MealItemComponentContainer.operations.suggestMealItem)
 
   return (
     <MealItemComponent
@@ -399,8 +343,56 @@ const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
   )
 }
 
-MealItemComponentContainer.operations = MealItemComponent.operations
-MealItemComponentContainer.fragments = MealItemComponent.fragments
+MealItemComponentContainer.fragments = {
+  mealItem: gql`
+    fragment MealItem on MealItem {
+      id
+      name {text locale}
+      description {text locale}
+      amount
+      customUnit {
+        gramWeight
+        name { text locale }
+      }
+      unit {
+        ... on Weight {
+          amount
+          gramWeight
+          id
+          name { text locale }
+        }
+        ... on CustomUnit {
+          gramWeight
+          name { text locale }
+        }
+      }
+      isOptional
+      item {
+        ... on Food {
+          ...IngredientFood
+        }
+        ... on Recipe {
+          ...IngredientRecipe
+        }
+      }
+    }
+
+    ${IngredientCard.fragments.food}
+    ${IngredientCard.fragments.recipe}
+  `
+}
+
+MealItemComponentContainer.operations = {
+  suggestMealItem: gql`
+    mutation MealItemComponentMutation($userMealId: String!, $mealItemId: String!, $date: DateTime!) {
+      suggestMealItem(userMealId: $userMealId, mealItemId: $mealItemId, date: $date) {
+        ...MealItem
+      }
+    }
+
+    ${MealItemComponentContainer.fragments.mealItem}
+  `
+}
 
 export default MealItemComponentContainer
 
@@ -417,14 +409,10 @@ const styles = {
     [Styles.values.paddingStart]: 16,
     justifyContent: 'center',
   }),
-  image: RX.Styles.createImageStyle({
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#fafafa',
-  }),
   title: RX.Styles.createTextStyle({
-    // fontWeight: '500',
+    fontWeight: '500',
+    // @ts-ignore web
+    transition: 'all 0.3s',
     [Styles.values.marginEnd]: Styles.values.spacing / 2
   }),
   description: RX.Styles.createTextStyle({
@@ -441,13 +429,13 @@ const styles = {
     right: 20,
   }),
   amountInput: RX.Styles.createViewStyle({
-    padding: Styles.values.spacing / 2,
+    padding: Styles.values.spacing / 4,
     [Styles.values.paddingEnd]: Styles.values.spacing / 4,
     [Styles.values.borderTopEndRadius]: 0,
     [Styles.values.borderBottomEndRadius]: 0,
   }),
   unitInput: RX.Styles.createViewStyle({
-    padding: Styles.values.spacing / 2,
+    padding: Styles.values.spacing / 4,
     [Styles.values.paddingStart]: 0,
     [Styles.values.borderTopStartRadius]: 0,
     [Styles.values.borderBottomStartRadius]: 0,

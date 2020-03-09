@@ -7,35 +7,19 @@ import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import NutritionProfileForm from '@Common/NutritionProfileForm/NutritionProfileForm'
 import Text from '@Common/Text/Text'
-import UserService from '@Services/UserService'
 import gql from 'graphql-tag'
 import RX from 'reactxp'
-import { ComponentBase } from 'resub'
 import { NutritionProfile } from './types/NutritionProfile'
 
 
 interface MacroTargetsProps {
   style?: any,
-}
-
-interface MacroTargetsState {
   nutritionProfile: NutritionProfile
 }
 
-export default class MacroTargets extends ComponentBase<MacroTargetsProps, MacroTargetsState> {
-  protected _buildState(props: MacroTargetsProps, initialBuild: boolean): Partial<MacroTargetsState> | undefined {
-    const user = UserService.getUser()!
-
-    return {
-      nutritionProfile: user.nutritionProfile,
-    }
-  }
-
+export default class MacroTargets extends RX.Component<MacroTargetsProps> {
   render() {
-    const { style } = this.props
-    const { nutritionProfile } = this.state
-
-    if (!nutritionProfile) return null
+    const { style, nutritionProfile } = this.props
 
     return (
       <RX.View
@@ -55,7 +39,7 @@ export default class MacroTargets extends ComponentBase<MacroTargetsProps, Macro
         </ThemeContext.Consumer>
 
         <RX.View>
-          <Text>{nutritionProfile.calories}</Text>
+          <Text style={styles.text}>{nutritionProfile.calories}</Text>
         </RX.View>
         {
           nutritionProfile.mode === 'range'
@@ -93,9 +77,9 @@ export default class MacroTargets extends ComponentBase<MacroTargetsProps, Macro
   private _renderPercentTarget = (percent: number, gram: number) => {
     return (
       <RX.View style={styles.row}>
-        <Text>~ </Text>
-        <Text>{gram}</Text>
-        <Text>g ({percent}%)</Text>
+        <Text style={styles.text}>~ </Text>
+        <Text style={styles.text}>{gram}</Text>
+        <Text style={styles.text}>g ({percent}%)</Text>
       </RX.View>
     )
   }
@@ -103,9 +87,9 @@ export default class MacroTargets extends ComponentBase<MacroTargetsProps, Macro
   private _renderRangeTarget = (min: number, max: number) => {
     return (
       <RX.View style={styles.row}>
-        <Text>{min}</Text>
-        <Text>-</Text>
-        <Text>{max}</Text>
+        <Text style={styles.text}>{min}</Text>
+        <Text style={styles.text}>-</Text>
+        <Text style={styles.text}>{max}</Text>
       </RX.View>
     )
   }
@@ -131,6 +115,8 @@ const styles = {
   title: RX.Styles.createTextStyle({
     textAlign: 'center',
     fontWeight: '300',
-    marginBottom: Styles.values.spacing
+    marginBottom: Styles.values.spacing / 2,
+  }),
+  text: RX.Styles.createTextStyle({
   })
 }

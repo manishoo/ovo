@@ -6,7 +6,6 @@
 import AppConfig from '@App/AppConfig'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import LinearGradient from '@Common/LinearGradient/LinearGradient'
 import LocalizedText, { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import { AssistantExpectations, MessageSender, MessageType } from '@Models/global-types'

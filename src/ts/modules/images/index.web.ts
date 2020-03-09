@@ -80,6 +80,9 @@ class ImageSource implements ImageSourceBase {
 
   VerifiedBadge = AppConfig.getImagePath('VerifiedBadge.svg')
   VerifyingBadge = AppConfig.getImagePath('VerifyingBadge.svg')
+
+  Crown = AppConfig.getImagePath('Crown.svg')
+  CrownEmpty = AppConfig.getImagePath('CrownEmpty.svg')
 }
 
 export default new ImageSource()

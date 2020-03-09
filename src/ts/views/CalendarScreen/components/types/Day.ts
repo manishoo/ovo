@@ -2,11 +2,44 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealAvailableTime, MealSize, LanguageCode, RecipeStatus } from "./../../../../models/global-types";
+import {
+  LanguageCode,
+  MealAvailableTime,
+  MealSize,
+  NutritionProfileMode,
+  RecipeStatus
+} from './../../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: Day
 // ====================================================
+
+export interface Day_nutritionProfile_carbs {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface Day_nutritionProfile_fat {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface Day_nutritionProfile_protein {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface Day_nutritionProfile {
+  calories: number;
+  carbs: Day_nutritionProfile_carbs;
+  fat: Day_nutritionProfile_fat;
+  protein: Day_nutritionProfile_protein;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
+}
 
 export interface Day_meals_userMeal {
   id: string;
@@ -1716,11 +1749,13 @@ export interface Day_meals {
   id: any;
   userMeal: Day_meals_userMeal;
   time: any | null;
+  ate: boolean | null;
   items: Day_meals_items[];
 }
 
 export interface Day {
   id: string;
   date: any;
+  nutritionProfile: Day_nutritionProfile;
   meals: Day_meals[];
 }

@@ -2,11 +2,44 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealAvailableTime, MealSize, LanguageCode, RecipeStatus } from "./../../../../models/global-types";
+import {
+  LanguageCode,
+  MealAvailableTime,
+  MealSize,
+  NutritionProfileMode,
+  RecipeStatus
+} from './../../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: DayComponentMealSuggestionMutation
 // ====================================================
+
+export interface DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_carbs {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_fat {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_protein {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface DayComponentMealSuggestionMutation_suggestDay_nutritionProfile {
+  calories: number;
+  carbs: DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_carbs;
+  fat: DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_fat;
+  protein: DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_protein;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
+}
 
 export interface DayComponentMealSuggestionMutation_suggestDay_meals_userMeal {
   id: string;
@@ -1716,12 +1749,14 @@ export interface DayComponentMealSuggestionMutation_suggestDay_meals {
   id: any;
   userMeal: DayComponentMealSuggestionMutation_suggestDay_meals_userMeal;
   time: any | null;
+  ate: boolean | null;
   items: DayComponentMealSuggestionMutation_suggestDay_meals_items[];
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay {
   id: string;
   date: any;
+  nutritionProfile: DayComponentMealSuggestionMutation_suggestDay_nutritionProfile;
   meals: DayComponentMealSuggestionMutation_suggestDay_meals[];
 }
 

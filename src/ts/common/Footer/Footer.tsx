@@ -42,7 +42,6 @@ const Footer = ({style}: {style?: any}) => {
       {({ theme }) => (
         <RX.View
           style={{
-            marginTop: Styles.values.spacingLarge,
             borderWidth: 0,
             borderTopWidth: 1,
             borderColor: theme.colors.footerBorderColor,
@@ -94,6 +93,7 @@ const Footer = ({style}: {style?: any}) => {
                 <RX.View>
                   <Image
                     source={ImageSource.GooglePlayButton}
+                    resizeMode={'contain'}
                     style={{
                       width: 151,
                       height: 45,
@@ -103,6 +103,7 @@ const Footer = ({style}: {style?: any}) => {
                   />
                   <Image
                     source={ImageSource.AppStoreButton}
+                    resizeMode={'contain'}
                     style={{
                       width: 151,
                       height: 49,

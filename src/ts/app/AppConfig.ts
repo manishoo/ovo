@@ -4,7 +4,7 @@
  */
 
 import { LanguageCode, MealAvailableTime, MealSize } from '@Models/global-types'
-import { CalendarSystem } from 'luxon'
+import { CalendarSystem, Settings } from 'luxon'
 import RX from 'reactxp'
 
 
@@ -110,7 +110,9 @@ class AppConfig {
         break
     }
 
-    Storage
+    Settings.defaultLocale = locale
+    Settings.defaultOutputCalendar = calendarSystem
+
     this.locale = locale
     this.calendarSystem = calendarSystem
   }

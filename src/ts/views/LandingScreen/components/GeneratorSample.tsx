@@ -13,7 +13,7 @@ import InputNumber from '@Common/Input/InputNumber'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
-import { UserMealInput } from '@Models/global-types'
+import { NutritionProfileMode, UserMealInput } from '@Models/global-types'
 import MealComponentContainer from '@Views/CalendarScreen/components/MealComponent'
 import MealComponent from '@Views/CalendarScreen/components/MealComponent'
 import {
@@ -45,6 +45,7 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
   `, {
     variables: {
       nutritionProfile: {
+        mode: NutritionProfileMode.range,
         calories: 2300,
         protein: {
           max: 1000,

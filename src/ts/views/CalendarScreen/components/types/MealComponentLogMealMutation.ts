@@ -2,7 +2,13 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealItemInput, MealAvailableTime, MealSize, LanguageCode, RecipeStatus } from "./../../../../models/global-types";
+import {
+  LanguageCode,
+  MealAvailableTime,
+  MealItemInput,
+  MealSize,
+  RecipeStatus
+} from './../../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: MealComponentLogMealMutation
@@ -1716,6 +1722,7 @@ export interface MealComponentLogMealMutation_logMeal {
   id: any;
   userMeal: MealComponentLogMealMutation_logMeal_userMeal;
   time: any | null;
+  ate: boolean | null;
   items: MealComponentLogMealMutation_logMeal_items[];
 }
 

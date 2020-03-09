@@ -11,6 +11,7 @@ import { Nutrition } from '@Models/types/Nutrition'
 import MacroTargets from '@Views/CalendarScreen/components/NutritionInfo/MacroTargets'
 import React, { Suspense } from 'react'
 import RX from 'reactxp'
+import { NutritionProfile } from './types/NutritionProfile'
 
 
 const styles = {
@@ -21,21 +22,22 @@ const styles = {
   title: RX.Styles.createTextStyle({
     textAlign: 'center',
     fontWeight: '300',
-    marginBottom: Styles.values.spacing
+    marginBottom: Styles.values.spacing / 2,
   })
 }
 
 interface NutritionInfoProps {
   nutrition: Nutrition,
   title?: string,
-  showTargets?: boolean,
+  nutritionProfile?: NutritionProfile,
+  style?: any,
 }
 
 export const fragments = {
   nutrition: NutritionFragment
 }
 
-const NutritionInfo = ({ nutrition, showTargets, title }: NutritionInfoProps) => {
+const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionInfoProps) => {
   if (nutrition.calories && nutrition.calories.amount === 0) return null
 
   // @ts-ignore
@@ -59,7 +61,7 @@ const NutritionInfo = ({ nutrition, showTargets, title }: NutritionInfoProps) =>
   }
 
   return (
-    <RX.View>
+    <RX.View style={style}>
       <RX.View style={{ margin: -54 }}>
         <Suspense fallback={<RX.View />}>
           {
@@ -77,7 +79,7 @@ const NutritionInfo = ({ nutrition, showTargets, title }: NutritionInfoProps) =>
                 fontFamily: Styles.fonts.displayRegular.fontFamily,
                 fontSize: 8
               }} />}
-              colorScale={['#e95855', '#ffd633', '#8ed091']}
+              colorScale={['#e95855', '#ffd633', '#60c365']}
               data={[
                 {
                   x: `${translate('proteins')}\n${_getMacroPercent('protein')}%`,
@@ -85,7 +87,7 @@ const NutritionInfo = ({ nutrition, showTargets, title }: NutritionInfoProps) =>
                 },
                 { x: `${translate('fats')}\n${_getMacroPercent('fat')}%`, y: Math.round(nutrition.fats.amount * 9) },
                 {
-                  x: `${translate('totalCarbs')}\n${_getMacroPercent('carbs')}%`,
+                  x: `${translate('carbs')}\n${_getMacroPercent('carbs')}%`,
                   y: Math.round(nutrition.totalCarbs.amount * 4)
                 },
               ]}
@@ -101,6 +103,7 @@ const NutritionInfo = ({ nutrition, showTargets, title }: NutritionInfoProps) =>
           padding: Styles.values.spacing,
           paddingTop: 0,
           marginTop: -Styles.values.spacing / 2,
+          minWidth: 230, //FIXME
         }}
       >
         <RX.View
@@ -157,9 +160,11 @@ const NutritionInfo = ({ nutrition, showTargets, title }: NutritionInfoProps) =>
           }
         </RX.View>
         {
-          showTargets &&
+          nutritionProfile &&
           <RX.View style={{ flex: 2 }}>
-            <MacroTargets />
+            <MacroTargets
+              nutritionProfile={nutritionProfile}
+            />
           </RX.View>
         }
       </RX.View>

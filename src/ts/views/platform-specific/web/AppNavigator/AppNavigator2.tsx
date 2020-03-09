@@ -3,10 +3,7 @@
  * Copyright: Ouranos Studio 2020
  */
 
-import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
-import { ThemeContext } from '@App/ThemeContext'
-import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import { NavOptions } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
@@ -44,7 +41,8 @@ interface WebAppRouterState {
   height: number,
   width: number,
   searchModalShowing?: boolean,
-  routes: AppRoute[]
+  routes: AppRoute[],
+  isSmallOrTinyScreenSize: boolean,
 }
 
 export default class AppNavigator extends ComponentBase<AppNavigatorProps & { history: any }, WebAppRouterState> {
@@ -53,70 +51,59 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     path: LocationStore.getPath(),
     height: ResponsiveWidthStore.getHeight(),
     width: ResponsiveWidthStore.getWidth(),
+    isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     routes: [],
-  }
-
-  protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
-    const me = UserStore.getUser()
-    const path = LocationStore.getPath()
-
-    return {
-      me,
-      path,
-      height: ResponsiveWidthStore.getHeight(),
-      width: ResponsiveWidthStore.getWidth(),
-      routes: props.routes,
-    }
   }
 
   public render() {
     const TabBarElement = this._renderTabBar()
 
     return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <Router history={this.props.history}>
-            <AppNavbar
-              me={this.state.me}
-              path={this.state.path}
-              width={this.state.width}
-            />
-            <RX.View
-              style={[
-                {
-                  flex: 1,
-                  overflow: 'visible',
-                },
-                {
-                  height: this.state.height,
-                }
-              ]}
-            >
-              <Switch>
-                {
-                  this.state.routes.filter(r => !r.modal).map(route => (
-                    <Route
-                      {...route}
-                    >
-                      {route.redirectTo && <Redirect to={route.redirectTo} />}
-                    </Route>
-                  ))
-                }
-              </Switch>
-            </RX.View>
-
+      <Router history={this.props.history}>
+        <AppNavbar
+          me={this.state.me}
+          path={this.state.path}
+          width={this.state.width}
+          showIcons={!this.state.isSmallOrTinyScreenSize}
+        />
+        <RX.View
+          style={[
             {
-              /**
-               * Modals
-               * */
-              this.state.routes.filter(r => r.modal).map(route => (
+              flex: 1,
+              overflow: 'visible',
+            },
+            {
+              height: this.state.height,
+            }
+          ]}
+        >
+          <Switch>
+            {
+              this.state.routes.filter(r => !r.modal).map(route => (
                 <Route
                   {...route}
-                />
+                >
+                  {route.redirectTo && <Redirect to={route.redirectTo} />}
+                </Route>
               ))
             }
+          </Switch>
+        </RX.View>
 
-            <RX.View
+        {
+          /**
+           * Modals
+           * */
+          this.state.routes.filter(r => r.modal).map(route => (
+            <Route
+              {...route}
+            />
+          ))
+        }
+
+
+        {this.state.isSmallOrTinyScreenSize && TabBarElement}
+        {/*<RX.View
               style={[
                 styles.container,
                 {
@@ -137,11 +124,23 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
                   color: theme.colors.subtitle,
                 }}
               >{AppConfig.version}</Text>
-            </RX.View>
-          </Router>
-        )}
-      </ThemeContext.Consumer>
+            </RX.View>*/}
+      </Router>
     )
+  }
+
+  protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
+    const me = UserStore.getUser()
+    const path = LocationStore.getPath()
+
+    return {
+      me,
+      path,
+      height: ResponsiveWidthStore.getHeight(),
+      width: ResponsiveWidthStore.getWidth(),
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      routes: props.routes,
+    }
   }
 
   componentDidMount(): void {

@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealAvailableTime, MealSize, LanguageCode, RecipeStatus } from "./../../../../models/global-types";
+import { LanguageCode, MealAvailableTime, MealSize, RecipeStatus } from './../../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: DayMeal
@@ -1716,5 +1716,6 @@ export interface DayMeal {
   id: any;
   userMeal: DayMeal_userMeal;
   time: any | null;
+  ate: boolean | null;
   items: DayMeal_items[];
 }

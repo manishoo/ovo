@@ -24,6 +24,7 @@ interface AppNavbarProps {
   me: Me | null,
   path: string,
   width: number,
+  showIcons: boolean,
 }
 
 export default class AppNavbar extends RX.Component<AppNavbarProps> {
@@ -65,73 +66,74 @@ export default class AppNavbar extends RX.Component<AppNavbarProps> {
                 />
               </RX.View>
 
-              <RX.View
-                style={{
-                  flexDirection: 'row',
-                }}
-              >
-                <Link
-                  key={1}
-                  to={Routes.calendar}
-                  style={Object.assign({},
-                    {
-                      color: this._isActive(Routes.calendar) ? '#fff' : '#4a4a4a'
-                    })
-                  }
+              {
+                this.props.showIcons &&
+                <RX.View
+                  style={styles.iconsWrapper}
                 >
-                  <Image
-                    source={this._isActive(Routes.calendar) ? ImageSource.CalendarActive : ImageSource.Calendar}
-                    style={styles.icon}
-                    resizeMode={'contain'}
-                  />
-                </Link>
-
-                <Link
-                  key={2}
-                  to={Routes.shoppingList}
-                  style={Object.assign({},
-                    {
-                      color: this._isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
-                    })
-                  }
-                >
-                  <Image
-                    source={this._isActive(Routes.shoppingList) ? ImageSource.ShoppingListActive : ImageSource.ShoppingList}
-                    style={styles.icon}
-                    resizeMode={'contain'}
-                  />
-                </Link>
-
-                <Link
-                  key={3}
-                  to={Routes.searchRecipes}
-                  style={Object.assign({}, { color: this._isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
-                >
-                  <Image
-                    source={this._isActive(Routes.searchRecipes) ? ImageSource.SearchWhite : ImageSource.Search}
-                    style={[styles.icon, { transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }] }]}
-                    resizeMode={'contain'}
-                  />
-                </Link>
-
-                {
-                  me &&
                   <Link
-                    key={0}
-                    to={`/${me.username}`}
+                    key={1}
+                    to={Routes.calendar}
+                    style={Object.assign({},
+                      {
+                        color: this._isActive(Routes.calendar) ? '#fff' : '#4a4a4a'
+                      })
+                    }
                   >
                     <Image
-                      source={me.avatar!.url}
-                      style={[
-                        styles.icon,
-                        {
-                          borderRadius: 100,
-                        }
-                      ]}
+                      source={this._isActive(Routes.calendar) ? ImageSource.CalendarActive : ImageSource.Calendar}
+                      style={styles.icon}
+                      resizeMode={'contain'}
                     />
                   </Link>
-                }
-              </RX.View>
+
+                  <Link
+                    key={2}
+                    to={Routes.shoppingList}
+                    style={Object.assign({},
+                      {
+                        color: this._isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
+                      })
+                    }
+                  >
+                    <Image
+                      source={this._isActive(Routes.shoppingList) ? ImageSource.ShoppingListActive : ImageSource.ShoppingList}
+                      style={styles.icon}
+                      resizeMode={'contain'}
+                    />
+                  </Link>
+
+                  <Link
+                    key={3}
+                    to={Routes.searchRecipes}
+                    style={Object.assign({}, { color: this._isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
+                  >
+                    <Image
+                      source={this._isActive(Routes.searchRecipes) ? ImageSource.SearchWhite : ImageSource.Search}
+                      style={[styles.icon, { transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }] }]}
+                      resizeMode={'contain'}
+                    />
+                  </Link>
+
+                  {
+                    me &&
+                    <Link
+                      key={0}
+                      to={`/${me.username}`}
+                    >
+                      <Image
+                        source={me.avatar!.url}
+                        style={[
+                          styles.icon,
+                          {
+                            borderRadius: 100,
+                          }
+                        ]}
+                      />
+                    </Link>
+                  }
+                </RX.View>
+              }
             </RX.View>
           </RX.View>
         )}
@@ -169,10 +171,17 @@ const styles = {
   brand: RX.Styles.createImageStyle({
     width: 60,
     height: 16,
+    position: 'absolute',
+    [Styles.values.start]: Styles.values.spacing,
   }),
   icon: RX.Styles.createImageStyle({
     width: 25,
     height: 25,
     [Styles.values.marginStart]: Styles.values.spacing,
+  }),
+  iconsWrapper: RX.Styles.createViewStyle({
+    flexDirection: 'row',
+    position: 'absolute',
+    [Styles.values.end]: Styles.values.spacing,
   })
 }

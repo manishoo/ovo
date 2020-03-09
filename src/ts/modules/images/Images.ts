@@ -78,4 +78,7 @@ export interface ImageSourceBase {
 
   VerifiedBadge: string;
   VerifyingBadge: string;
+
+  Crown: string;
+  CrownEmpty: string;
 }

@@ -14,7 +14,7 @@ interface FilledButtonProps {
   style?: any,
   containerStyle?: any,
   label: any,
-  onPress: (e: RX.Types.SyntheticEvent) => void,
+  onPress?: (e: RX.Types.SyntheticEvent) => void,
   disabled?: boolean,
   fontSize?: number,
   mode?: ButtonMode,
@@ -134,7 +134,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    borderRadius: 100,
+    borderRadius: 8,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',

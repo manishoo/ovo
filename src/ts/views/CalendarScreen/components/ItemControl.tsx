@@ -40,10 +40,12 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
   }
 
   public componentWillReceiveProps(nextProps: Readonly<ItemControlProps>, nextContext: any): void {
-    if (nextProps.regenerating) {
-      this._loopAnimation.start()
-    } else {
-      this._loopAnimation.stop()
+    if (nextProps.regenerating !== this.props.regenerating) {
+      if (nextProps.regenerating) {
+        this._loopAnimation.start()
+      } else {
+        this._loopAnimation.stop()
+      }
     }
   }
 
@@ -62,7 +64,7 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
       >
         <HoverView
           style={{ cursor: 'pointer' }}
-          onPress={this.props.onRegenerate}
+          onPress={this.props.regenerating ? undefined : this.props.onRegenerate}
           onRenderChild={isHovering => (
             <RX.Animated.Image
               source={Image.source.Regenerate}

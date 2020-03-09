@@ -5,5 +5,6 @@
 
 export interface LinearGradientProps {
   style?: any,
-  colors: string[]
+  colors: string[],
+  direction: 'toLeft' | 'toRight'
 }

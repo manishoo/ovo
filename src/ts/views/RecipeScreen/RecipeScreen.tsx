@@ -8,7 +8,6 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import Page from '@Common/Page'
 import ErrorComponent from '@Common/ErrorComponent/ErrorComponent'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
@@ -19,6 +18,7 @@ import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { RecipeStatus, Role } from '@Models/global-types'
 import NutritionFragment from '@Models/nutrition'
@@ -229,7 +229,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
             <Text
               type={Text.types.body}
               style={{ marginBottom: 5 }}
-            >{translate('totalCarbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>}
+            >{translate('carbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>}
           {
             recipe.nutrition.fats &&
             <Text

@@ -72,6 +72,14 @@ class ImageSource implements ImageSourceBase {
 
   get VerifiedBadge() {return require('../../../images/VerifiedBadge.png')}
   get VerifyingBadge() {return require('../../../images/VerifyingBadge.png')}
+
+  get Crown() {
+    return require('../../../images/Crown.png')
+  }
+
+  get CrownEmpty() {
+    return require('../../../images/CrownEmpty.png')
+  }
 }
 
 export default new ImageSource()

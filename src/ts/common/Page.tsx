@@ -17,6 +17,7 @@ interface PageProps {
   outermostViewStyle?: RX.Types.ViewStyle,
   innermostViewStyle?: RX.Types.ViewStyle,
   maxWidth?: number
+  outerContainerChildren?: any,
 }
 
 interface PageState {
@@ -65,12 +66,14 @@ export default class Page extends ComponentBase<PageProps, PageState> {
               <RX.View
                 style={[{
                   width,
-                  paddingTop: Styles.values.spacing * 2,
+                  paddingTop: Styles.values.spacingLarge,
                   padding: Styles.values.spacing,
                 }, this.props.innermostViewStyle]}
               >
                 {this.props.children}
               </RX.View>
+
+              {this.props.outerContainerChildren}
             </RX.Animated.View>
             <Footer
               style={{
@@ -87,9 +90,6 @@ export default class Page extends ComponentBase<PageProps, PageState> {
 const styles = {
   container: RX.Styles.createScrollViewStyle({
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     alignSelf: 'center',
-    // padding: Styles.values.spacingLarge,
   }),
 }
