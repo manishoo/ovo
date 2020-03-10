@@ -1,6 +1,6 @@
 /*
  * ImageClickable.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import RX, { Types } from 'reactxp'

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
-    <title>Rectangle</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="First-Time" transform="translate(-303.000000, -616.000000)" fill-rule="nonzero" stroke="#DADADA" stroke-width="5">
-            <g id="Group-2" transform="translate(0.000000, 597.000000)">
-                <rect id="Rectangle" x="305.5" y="21.5" width="27" height="27" rx="8"></rect>
-            </g>
-        </g>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+  <title>Rectangle</title>
+  <desc>Created with Sketch.</desc>
+  <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="First-Time" transform="translate(-303.000000, -616.000000)" fill-rule="nonzero" stroke="#DADADA"
+       stroke-width="5">
+      <g id="Group-2" transform="translate(0.000000, 597.000000)">
+        <rect id="Rectangle" x="305.5" y="21.5" width="27" height="27" rx="8"></rect>
+      </g>
     </g>
+  </g>
 </svg>

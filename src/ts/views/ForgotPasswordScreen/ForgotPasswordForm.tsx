@@ -1,9 +1,9 @@
 /*
  * ForgotPasswordForm.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
@@ -14,8 +14,6 @@ import {
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables
 } from '@Views/ForgotPasswordScreen/types/ForgotPasswordMutation'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import validator from 'validator'
 

@@ -1,11 +1,8 @@
 /*
- * LoginScreen.tsx
- * Copyright: Ouranos Studio 2020
+ * ForgotPasswordScreen.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import Link from '@Common/Link/Link'
-import Text from '@Common/Text/Text'
-import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'

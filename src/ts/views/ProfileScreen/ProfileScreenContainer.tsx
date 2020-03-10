@@ -1,10 +1,10 @@
 /*
  * ProfileScreenContainer.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import UserStore from '@Services/UserService'
 import { Me } from '@Services/types/Me'
+import UserStore from '@Services/UserService'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import ProfileScreen from './ProfileScreen'

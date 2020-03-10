@@ -1,6 +1,6 @@
 /*
  * RootView.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
@@ -31,7 +31,7 @@ export default class RootView extends RX.Component<RootViewProps, RootViewState>
   }
 
   public render() {
-    const {theme} = this.state
+    const { theme } = this.state
 
     return (
       <ThemeContext.Provider

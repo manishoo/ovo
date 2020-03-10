@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeStatus } from "./../../../models/global-types";
+import { LanguageCode, RecipeStatus } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL query operation: MealFormQuery
@@ -3355,6 +3355,7 @@ export interface MealFormQuery_meal_items_alternativeMealItems {
 }
 
 export interface MealFormQuery_meal_items {
+  id: any;
   amount: number | null;
   customUnit: MealFormQuery_meal_items_customUnit | null;
   /**

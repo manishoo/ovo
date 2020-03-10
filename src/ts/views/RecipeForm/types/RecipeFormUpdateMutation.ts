@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { RecipeInput, LanguageCode, RecipeStatus, RecipeDifficulty } from "./../../../models/global-types";
+import { LanguageCode, RecipeDifficulty, RecipeInput, RecipeStatus } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: RecipeFormUpdateMutation
@@ -30,16 +30,6 @@ export interface RecipeFormUpdateMutation_updateRecipe_timing {
   prepTime: number | null;
   cookTime: number | null;
   totalTime: number | null;
-}
-
-export interface RecipeFormUpdateMutation_updateRecipe_ingredients_name {
-  text: string;
-  locale: LanguageCode;
-}
-
-export interface RecipeFormUpdateMutation_updateRecipe_ingredients_description {
-  text: string;
-  locale: LanguageCode;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_customUnit_name {
@@ -1709,14 +1699,6 @@ export type RecipeFormUpdateMutation_updateRecipe_ingredients_item = RecipeFormU
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients {
   id: any;
-  /**
-   * The plain name of the ingredient in the case it was not associated with a food or recipe
-   */
-  name: RecipeFormUpdateMutation_updateRecipe_ingredients_name[] | null;
-  /**
-   * Additional descriptions or hints for this ingredient
-   */
-  description: RecipeFormUpdateMutation_updateRecipe_ingredients_description[] | null;
   amount: number | null;
   customUnit: RecipeFormUpdateMutation_updateRecipe_ingredients_customUnit | null;
   /**

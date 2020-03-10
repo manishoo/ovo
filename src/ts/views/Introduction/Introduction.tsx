@@ -1,8 +1,10 @@
 /*
  * Introduction.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql, MutationFunction } from '@apollo/client'
+import { Mutation } from '@apollo/react-components'
 import AppConfig from '@App/AppConfig'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
@@ -22,8 +24,6 @@ import {
   IntroductionMutationVariables
 } from '@Views/Introduction/types/IntroductionMutation'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import gql from 'graphql-tag'
-import { Mutation, MutationFunction } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import ChatBox from './components/ChatBox'

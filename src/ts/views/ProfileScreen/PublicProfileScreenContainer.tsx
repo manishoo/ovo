@@ -1,8 +1,10 @@
 /*
  * PublicProfileScreenContainer.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
+import { Query } from '@apollo/react-components'
 import AppConfig from '@App/AppConfig'
 import Text from '@Common/Text/Text'
 import LocationStore from '@Services/LocationStore'
@@ -10,8 +12,6 @@ import {
   PublicProfileScreenQuery,
   PublicProfileScreenQueryVariables
 } from '@Views/ProfileScreen/types/PublicProfileScreenQuery'
-import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import ProfileScreen, { fragments as ProfileScreenFragments } from './ProfileScreen'

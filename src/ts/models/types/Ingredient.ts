@@ -2,21 +2,11 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeStatus } from "./../global-types";
+import { LanguageCode, RecipeStatus } from './../global-types'
 
 // ====================================================
 // GraphQL fragment: Ingredient
 // ====================================================
-
-export interface Ingredient_name {
-  text: string;
-  locale: LanguageCode;
-}
-
-export interface Ingredient_description {
-  text: string;
-  locale: LanguageCode;
-}
 
 export interface Ingredient_customUnit_name {
   text: string;
@@ -1685,14 +1675,6 @@ export type Ingredient_item = Ingredient_item_Food | Ingredient_item_Recipe;
 
 export interface Ingredient {
   id: any;
-  /**
-   * The plain name of the ingredient in the case it was not associated with a food or recipe
-   */
-  name: Ingredient_name[] | null;
-  /**
-   * Additional descriptions or hints for this ingredient
-   */
-  description: Ingredient_description[] | null;
   amount: number | null;
   customUnit: Ingredient_customUnit | null;
   /**

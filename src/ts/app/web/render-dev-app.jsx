@@ -1,8 +1,6 @@
 /*
  * render-dev-app.jsx
- * Copyright: Ouranos Studio 2019
- *
- * this file will be used in nodeserver.js to serve the dev app locally
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const React = require('react')

@@ -1,8 +1,9 @@
 /*
  * ProfileInfo.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
@@ -13,7 +14,6 @@ import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
 import { navigate } from '@Utils'
 import { ProfileInfoUser } from '@Views/ProfileScreen/components/types/ProfileInfoUser'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 

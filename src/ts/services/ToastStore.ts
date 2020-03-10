@@ -1,6 +1,6 @@
 /*
  * ToastStore.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { createId } from '@Utils/create-id'

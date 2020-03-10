@@ -1,21 +1,20 @@
 /*
  * Modal.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { ApolloProvider, ApolloProvider as ApolloHooksProvider } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+
+import KeyCodes from '@Utils/KeyCodes'
 import assert from 'assert'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-
-import KeyCodes from '@Utils/KeyCodes'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
 
 
 interface ModalProps extends RX.CommonProps {

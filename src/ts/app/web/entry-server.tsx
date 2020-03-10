@@ -1,22 +1,17 @@
 /*
- * entry-server.jsx
- * Copyright: Ouranos Studio 2019
- *
- * The entry for rendering the app on the server
+ * entry-server.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
+import { renderToStringWithData } from '@apollo/react-ssr'
 import AppConfig from '@App/AppConfig'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { LanguageCode } from '@Models/global-types'
 import fetch from '@Modules/fetch'
 import LocationStore from '@Services/LocationStore'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
 // @ts-ignore
 import { Request, Response } from 'express'
-import { ApolloProvider, renderToStringWithData } from 'react-apollo'
 // @ts-ignore
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
@@ -53,17 +48,15 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
   LocationStore.setPath(initialUrl)
   renderToStringWithData(
     <ApolloProvider client={client}>
-      <ApolloHooksProvider client={client}>
-        <StaticRouter
-          location={initialUrl}
-          context={{
-            // @ts-ignore
-            splitPoints
-          }}
-        >
-          <RootView history={createMemoryHistory({ initialEntries: [initialUrl] })} />
-        </StaticRouter>
-      </ApolloHooksProvider>
+      <StaticRouter
+        location={initialUrl}
+        context={{
+          // @ts-ignore
+          splitPoints
+        }}
+      >
+        <RootView history={createMemoryHistory({ initialEntries: [initialUrl] })} />
+      </StaticRouter>
     </ApolloProvider>
   )
     .then((content) => {

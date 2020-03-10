@@ -1,13 +1,12 @@
 /*
- * Navigator.tsx
- * Copyright: Ouranos Studio 2019
+ * AppNavigator.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import Footer from '@Common/Footer/Footer'
 import Image from '@Common/Image/Image'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
@@ -89,31 +88,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     width: this._drawerSpacingAnimationWidthValue,
   })
 
-  protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
-    const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
-    const me = UserStore.getUser()
-    const currentPath = LocationStore.getPath()
-    const hideDrawer = !ResponsiveWidthStore.isDrawerVisible()
-
-    if (initialBuild || (this.state.mode !== mode)) {
-      if (mode === 'drawer') {
-        this._setUI(true, false, !initialBuild)
-      } else {
-        this._setUI(false, true, !initialBuild)
-      }
-    }
-
-    return {
-      mode,
-      me,
-      currentPath,
-      height: ResponsiveWidthStore.getHeight(),
-      width: ResponsiveWidthStore.getWidth(),
-      routes: props.routes,
-      hideDrawer,
-    }
-  }
-
   public render() {
     const TabBarElement = this._renderTabBar()
 
@@ -192,6 +166,31 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     history.listen(this._handleLocationChange) // FIXME better place to call this maybe
 
     this._handleDrawerVisibility()
+  }
+
+  protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
+    const mode = ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 'navbar' : 'drawer'
+    const me = UserStore.getUser()
+    const currentPath = LocationStore.getPath()
+    const hideDrawer = !ResponsiveWidthStore.isDrawerVisible()
+
+    if (initialBuild || (this.state.mode !== mode)) {
+      if (mode === 'drawer') {
+        this._setUI(true, false, !initialBuild)
+      } else {
+        this._setUI(false, true, !initialBuild)
+      }
+    }
+
+    return {
+      mode,
+      me,
+      currentPath,
+      height: ResponsiveWidthStore.getHeight(),
+      width: ResponsiveWidthStore.getWidth(),
+      routes: props.routes,
+      hideDrawer,
+    }
   }
 
   private _renderDrawer = (theme: Theme) => {

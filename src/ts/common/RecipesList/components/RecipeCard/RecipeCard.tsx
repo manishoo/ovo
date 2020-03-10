@@ -1,6 +1,6 @@
 /*
  * RecipeCard.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
@@ -54,6 +54,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ scale: this._previewScaleAnimatedValue }]
   })
+  private _animation: RX.Types.Animated.CompositeAnimation | null = null
 
   public render() {
     const { recipe } = this.props
@@ -233,8 +234,6 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
       </RX.View>
     )
   }
-
-  private _animation: RX.Types.Animated.CompositeAnimation | null = null
 
   private _setUI = (isHovering: boolean) => {
     if (!this.props.recipe.image) {

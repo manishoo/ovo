@@ -1,17 +1,17 @@
 /*
  * SearchResultContainer.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
+import { Query } from '@apollo/react-components'
 import AppConfig from '@App/AppConfig'
 import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import { SearchResultQuery, SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
-import gql from 'graphql-tag'
 // @ts-ignore
 import qs from 'qs'
 import RX from 'reactxp'
 import SearchResult from './SearchResult'
-import { Query } from 'react-apollo'
 
 
 export const SEARCH_RESULT_RECIPES_QUERY = gql`
@@ -29,7 +29,6 @@ export const SEARCH_RESULT_RECIPES_QUERY = gql`
 
   ${IngredientCard.fragments.recipe}
 `
-
 
 export interface SearchResultParameters {
   q?: string

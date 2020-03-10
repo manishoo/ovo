@@ -1,11 +1,11 @@
 /*
  * ErrorComponent.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { ApolloError } from '@apollo/client'
 import { ThemeContext } from '@App/ThemeContext'
 import Text from '@Common/Text/Text'
-import { ApolloError } from 'apollo-client'
 import RX from 'reactxp'
 
 

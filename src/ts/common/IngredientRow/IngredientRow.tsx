@@ -1,6 +1,6 @@
 /*
  * IngredientRow.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'

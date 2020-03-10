@@ -1,6 +1,6 @@
 /*
  * webpack.base.config.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const webpack = require('webpack')
@@ -18,6 +18,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const commonConfig = merge(
   {
+    mode: process.env.NODE_ENV,
     entry: paths.entryClient,
     output: {
       path: paths.build,
@@ -99,7 +100,7 @@ const productionConfig = merge(
   }),
   // should go after loading images
   parts.optimizeImages(),
-  // parts.optimizeChunks(),
+  parts.optimizeChunks(),
 )
 
 const developmentConfig = merge(

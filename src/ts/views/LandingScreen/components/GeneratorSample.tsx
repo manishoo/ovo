@@ -1,9 +1,9 @@
 /*
  * GeneratorSample.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { gql, useMutation } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
@@ -21,7 +21,6 @@ import {
   GeneratorSampleMutationVariables
 } from '@Views/LandingScreen/components/types/GeneratorSampleMutation'
 import RegisterForm from '@Views/Register/RegisterForm'
-import gql from 'graphql-tag'
 import { useState } from 'react'
 import RX from 'reactxp'
 
@@ -120,7 +119,13 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
               </RX.View>
               <RegisterForm />
             </RX.View>
-            <RX.View style={{ flex: 1, padding: Styles.values.spacing, borderWidth: 0, [Styles.values.borderStartWidth]: 1, borderColor: theme.colors.borderLight }}>
+            <RX.View style={{
+              flex: 1,
+              padding: Styles.values.spacing,
+              borderWidth: 0,
+              [Styles.values.borderStartWidth]: 1,
+              borderColor: theme.colors.borderLight
+            }}>
               {
                 data && data.suggestDayGuest.map(dayMeal => (
                   <MealComponentContainer meal={dayMeal} />

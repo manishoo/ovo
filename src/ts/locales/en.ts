@@ -1,3 +1,8 @@
+/*
+ * en.ts
+ * Copyright: Mehdi J. Shooshtari 2020
+ */
+
 enum Content {
   'hello' = 'Hello!',
   'hiPrana' = 'Hi Prana \uD83D\uDC4B',

@@ -1,3 +1,8 @@
+/*
+ * fa.ts
+ * Copyright: Mehdi J. Shooshtari 2020
+ */
+
 enum FaLocale {
   'hello' = 'سلام',
   'getStarted' = 'شروع!',

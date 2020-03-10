@@ -464,7 +464,7 @@ gulp.task('lint', gulp.series('ts-lint', 'gulpfile-lint'))
 
 gulp.task('build', gulp.series('copy', 'compile-rn'))
 
-gulp.task('webpack-js', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.client.config.js --progress --colors', { env: webpackEnv, verbose: true }))
+gulp.task('webpack-js', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.client.config.js --progress --colors', { env: webpackEnv }))
 gulp.task('webpack-js-watch', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --watch --hide-modules --config ./webpack/webpack.client.config.js --progress --colors', { env: webpackEnv }))
 gulp.task('webpack-js-server', shell.task('node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --bail --hide-modules --config ./webpack/webpack.server.config.js --progress --colors', { env: webpackEnv }))
 

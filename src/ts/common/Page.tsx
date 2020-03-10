@@ -1,6 +1,6 @@
 /*
  * Page.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -28,15 +28,6 @@ interface PageState {
 }
 
 export default class Page extends ComponentBase<PageProps, PageState> {
-  protected _buildState(props: PageProps, initialBuild: boolean): Partial<PageState> | undefined {
-    return {
-      screenWidth: ResponsiveWidthStore.getWidth(),
-      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
-      height: ResponsiveWidthStore.getHeight(),
-      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
-    }
-  }
-
   public render() {
     const { width, screenWidth } = this.state
 
@@ -84,6 +75,15 @@ export default class Page extends ComponentBase<PageProps, PageState> {
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  protected _buildState(props: PageProps, initialBuild: boolean): Partial<PageState> | undefined {
+    return {
+      screenWidth: ResponsiveWidthStore.getWidth(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
+      height: ResponsiveWidthStore.getHeight(),
+      hideDrawer: !ResponsiveWidthStore.isDrawerVisible(),
+    }
   }
 }
 

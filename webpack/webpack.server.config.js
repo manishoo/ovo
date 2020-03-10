@@ -1,6 +1,6 @@
 /*
  * webpack.server.config.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const webpack = require('webpack')

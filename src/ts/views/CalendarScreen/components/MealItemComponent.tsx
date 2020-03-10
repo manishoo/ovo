@@ -1,9 +1,9 @@
 /*
- * FoodPickerMealItem.tsx
- * Copyright: Ouranos Studio 2019
+ * MealItemComponent.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import HoverView from '@Common/HoverView/HoverButton'
@@ -26,8 +26,6 @@ import {
 } from '@Views/CalendarScreen/components/types/MealItemComponentMutation'
 import { FoodScreen } from '@Views/FoodScreen/FoodScreen'
 import { RecipeScreen } from '@Views/RecipeScreen/RecipeScreen'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { MealItem, MealItem_item, MealItem_item_Food, MealItem_unit, MealItem_unit_Weight } from './types/MealItem'
 

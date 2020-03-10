@@ -1,8 +1,9 @@
 /*
  * MealItemRow.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FlatButton from '@Common/FlatButton/FlatButton'
@@ -17,7 +18,6 @@ import {
   MealItemRowMealItem,
   MealItemRowMealItem_alternativeMealItems
 } from '@Views/MealForm/components/MealItemRow/types/MealItemRowMealItem'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
@@ -33,6 +33,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
   static fragments = {
     mealItem: gql`
       fragment MealItemRowMealItem on MealItem {
+        id
         amount
         customUnit {
           gramWeight

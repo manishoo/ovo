@@ -1,9 +1,9 @@
 /*
  * TagsInput.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation, useQuery } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
@@ -14,16 +14,14 @@ import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import { Role, TagType } from '@Models/global-types'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
+import { Me } from '@Services/types/Me'
 import authorized from '@Utils/authorized'
 import { capitalize } from '@Utils/capitalize'
 import {
   TagsInputDeleteMutation,
   TagsInputDeleteMutationVariables
 } from '@Views/RecipeForm/components/TagsInput/types/TagsInputDeleteMutation'
-import { Me } from '@Services/types/Me'
-import gql from 'graphql-tag'
 import { useContext, useState } from 'react'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { TagInputMutation, TagInputMutation_addTag, TagInputMutationVariables } from './types/TagInputMutation'
 import { TagsInputQuery, TagsInputQuery_tags } from './types/TagsInputQuery'
@@ -94,7 +92,7 @@ interface TagsInputCommonProps {
 }
 
 interface TagsInputProps extends TagsInputCommonProps {
-  tags: (Omit<TagsInputQuery_tags, 'slug'> & {slug: string})[],
+  tags: (Omit<TagsInputQuery_tags, 'slug'> & { slug: string })[],
   onTagDelete: (variables: TagsInputDeleteMutationVariables) => Promise<ExecutionResult<TagsInputDeleteMutation>>
 }
 
@@ -149,7 +147,10 @@ export function TagsInput(props: TagsInputProps) {
                         ? props.selectedTags.filter(p => p !== tag.slug)
                         : [...props.selectedTags, tag.slug!]
                     )}
-                    style={[setLabelStyle(tag).style, { [Styles.values.marginEnd]: Styles.values.spacing / 2, marginBottom: Styles.values.spacing / 4 }]}
+                    style={[setLabelStyle(tag).style, {
+                      [Styles.values.marginEnd]: Styles.values.spacing / 2,
+                      marginBottom: Styles.values.spacing / 4
+                    }]}
                     labelStyle={setLabelStyle(tag).labelStyle}
                   >
                     {

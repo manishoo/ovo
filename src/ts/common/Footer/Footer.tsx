@@ -1,6 +1,6 @@
 /*
  * Footer.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -36,7 +36,7 @@ const styles = {
   })
 }
 
-const Footer = ({style}: {style?: any}) => {
+const Footer = ({ style }: { style?: any }) => {
   return (
     <ThemeContext.Consumer>
       {({ theme }) => (
@@ -66,17 +66,20 @@ const Footer = ({style}: {style?: any}) => {
                 >LandingFooterCentralOffice</Text>
                 <Text
                   translate
-                  onPress={() => {}}
+                  onPress={() => {
+                  }}
                   style={{ marginTop: Styles.values.spacing }}
                 >LandingFooterAboutPrana</Text>
                 <Text
                   translate
-                  onPress={() => {}}
+                  onPress={() => {
+                  }}
                   style={{ marginTop: Styles.values.spacing }}
                 >LandingFooterContactUs</Text>
                 <Text
                   translate
-                  onPress={() => {}}
+                  onPress={() => {
+                  }}
                   style={{ marginTop: Styles.values.spacing }}
                 >LandingFooterTerms</Text>
               </RX.View>

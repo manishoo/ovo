@@ -1,9 +1,9 @@
 /*
  * CalendarFAB.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'

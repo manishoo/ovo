@@ -5,31 +5,31 @@
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'
+import { Me } from '@Services/types/Me'
 import UserStore from '@Services/UserService'
 import { trimSlashes } from '@Utils/trim-slashes'
 import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator2'
-import { Me } from '@Services/types/Me'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import {
   CalendarScreen,
   FoodScreen,
+  ForgotPasswordScreen,
   LandingScreen,
   LoginScreen,
   MealForm,
   MealPlanSettingsScreen,
+  NewPasswordScreen,
+  PayScreen,
   ProfileScreen,
   PublicProfileScreen,
-  RecipeScreen,
   RecipeForm,
+  RecipeScreen,
   RegisterScreen,
   SearchResult,
   SettingsScreen,
   ShoppingList,
-  PayScreen,
-  ForgotPasswordScreen,
-  NewPasswordScreen,
 } from './routes'
 
 

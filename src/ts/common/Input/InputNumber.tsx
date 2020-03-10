@@ -1,6 +1,6 @@
 /*
- * IntlInput.tsx
- * Copyright: Ouranos Studio 2019
+ * InputNumber.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 // @ts-ignore

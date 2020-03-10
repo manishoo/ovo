@@ -1,6 +1,6 @@
 /*
  * meal.transformer.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import {
@@ -36,7 +36,7 @@ export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | 
     food: mealItem.item && (determineIfIsFood(mealItem.item) ? mealItem.item.id : null),
     recipe: mealItem.item && (determineIfIsFood(mealItem.item) ? null : mealItem.item.id),
     unit: mealItem.unit ? (determineIfIsWeight(mealItem.unit) ? mealItem.unit.id : 'customUnit') : 'g',
-    description: mealItem.description && mealItem.description.map(t => trimTypeName(t)),
+    // description: mealItem.description && mealItem.description.map(t => trimTypeName(t)),
     customUnit: mealItem.customUnit ? {
       name: mealItem.customUnit.name.map(t => trimTypeName(t)),
       gramWeight: mealItem.customUnit.gramWeight,
@@ -48,7 +48,7 @@ export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | 
       food: alternativeMealItem.item && (determineIfIsFood(alternativeMealItem.item) ? alternativeMealItem.item.id : null),
       recipe: alternativeMealItem.item && (determineIfIsFood(alternativeMealItem.item) ? null : alternativeMealItem.item.id),
       unit: alternativeMealItem.unit ? (determineIfIsWeight(alternativeMealItem.unit) ? alternativeMealItem.unit.id : 'customUnit') : 'g',
-      description: alternativeMealItem.description && alternativeMealItem.description.map(t => trimTypeName(t)),
+      // description: alternativeMealItem.description && alternativeMealItem.description.map(t => trimTypeName(t)),
       customUnit: alternativeMealItem.customUnit ? {
         name: alternativeMealItem.customUnit.name.map(t => trimTypeName(t)),
         gramWeight: alternativeMealItem.customUnit.gramWeight,

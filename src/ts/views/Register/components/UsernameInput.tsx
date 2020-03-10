@@ -1,16 +1,15 @@
 /*
  * UsernameInput.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useQuery } from '@apollo/react-hooks'
+import { gql, useQuery } from '@apollo/client'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import {
   RegisterUsernameExistenceQuery,
   RegisterUsernameExistenceQueryVariables
 } from '@Views/Register/components/types/RegisterUsernameExistenceQuery'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 

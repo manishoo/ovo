@@ -1,11 +1,10 @@
 /*
  * MealsList.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import AddCell from '@Common/AddCell/AddCell'
-import CardList from '@Common/CardList/CardList'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { Routes } from '@Models/common'
 import LocationStore from '@Services/LocationStore'

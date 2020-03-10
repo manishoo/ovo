@@ -1,16 +1,17 @@
 /*
- * _ProfileScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * ProfileScreen.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import RecipesList from '@Common/RecipesList/RecipesList'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
@@ -26,7 +27,6 @@ import useProfileTabsHOC, {
   PROFILE_REVIEW_RECIPES_QUERY,
   ProfileTabsResult
 } from '@Views/ProfileScreen/useProfileTabs.hook'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import Avatar from './components/Avatar'

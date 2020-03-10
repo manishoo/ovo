@@ -1,6 +1,6 @@
 /*
  * index.web.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import fetch from 'isomorphic-fetch'

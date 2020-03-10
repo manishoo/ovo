@@ -1,9 +1,9 @@
 /*
- * ForgotPasswordForm.tsx
- * Copyright: Ouranos Studio 2020
+ * NewPasswordForm.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
@@ -13,8 +13,6 @@ import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import { getQueryParam, navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { NewPasswordMutation, NewPasswordMutationVariables } from '@Views/NewPasswordScreen/types/NewPasswordMutation'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 
 
@@ -27,17 +25,16 @@ interface NewPasswordProps {
 }
 
 export class NewPasswordForm extends RX.Component<NewPasswordProps> {
+  state = {
+    password: '',
+    passwordConfirmation: '',
+  }
+  private readonly _token?: string
+
   constructor(props: NewPasswordProps) {
     super(props)
 
     this._token = getQueryParam(props, 't')
-  }
-
-  private readonly _token?: string
-
-  state = {
-    password: '',
-    passwordConfirmation: '',
   }
 
   public render() {

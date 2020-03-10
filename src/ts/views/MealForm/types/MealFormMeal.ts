@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeStatus } from "./../../../models/global-types";
+import { LanguageCode, RecipeStatus } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: MealFormMeal
@@ -3355,6 +3355,7 @@ export interface MealFormMeal_items_alternativeMealItems {
 }
 
 export interface MealFormMeal_items {
+  id: any;
   amount: number | null;
   customUnit: MealFormMeal_items_customUnit | null;
   /**

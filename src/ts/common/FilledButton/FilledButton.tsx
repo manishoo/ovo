@@ -1,6 +1,6 @@
 /*
  * FilledButton.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -30,13 +30,13 @@ enum ButtonMode {
 }
 
 export default class FilledButton extends RX.Component<FilledButtonProps> {
-  state = {
-    pressed: false
-  }
   static defaultProps = {
     mode: ButtonMode.primary,
   }
   static mode = ButtonMode
+  state = {
+    pressed: false
+  }
 
   public render() {
     const { style, containerStyle, label, onPress, fontSize, disabled, suffix } = this.props

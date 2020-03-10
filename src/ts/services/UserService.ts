@@ -1,19 +1,19 @@
 /*
- * UserStore.ts
- * Copyright: Ouranos Studio 2019
+ * UserService.ts
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import client from '@App/client'
+import Storage from '@App/Storage/Storage'
 import NutritionProfileForm from '@Common/NutritionProfileForm/NutritionProfileForm'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
-import MacroTargets from '@Views/CalendarScreen/components/NutritionInfo/MacroTargets'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import gql from 'graphql-tag'
+import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import * as SyncTasks from 'synctasks'
 import { Me, Me_nutritionProfile } from './types/Me'
-import RX from 'reactxp'
-import Storage from '@App/Storage/Storage'
+
 
 enum TriggerKeys {
   me,
@@ -23,9 +23,53 @@ enum TriggerKeys {
 @AutoSubscribeStore
 class UserService extends StoreBase implements IAutoSavablePersistableStore {
   public name = 'UserService'
+  public autoSaveTriggerKeys = TriggerKeys
+  public fragments = {
+    me: gql`
+      fragment Me on User {
+        id
+        username
+        session
+        email
+        firstName
+        lastName
+        avatar {
+          url
+        }
+        gender
+        bodyFat
+        age
+        bio
+        weight {
+          value
+          unit
+        }
+        height {
+          value
+          unit
+        }
+        socialNetworks {
+          instagram
+          twitter
+          website
+          pinterest
+        }
+        nutritionProfile { ...NutritionProfileFormNutritionProfile }
+        membership {
+          type
+        }
+        role
+        meals {
+          ...MealSettingsMeal
+        }
+      }
+
+      ${MealSettingsScreen.fragments.mealSettingsMeal}
+      ${NutritionProfileForm.fragments.nutritionProfile}
+    `
+  }
   private me: Me | null = null
   private token: string | null = null
-  public autoSaveTriggerKeys = TriggerKeys
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
@@ -77,56 +121,12 @@ class UserService extends StoreBase implements IAutoSavablePersistableStore {
   }
 
   logOut() {
+    // TODO: logout
     this.setSession(null)
     this.setUser()
     client.clearStore()
     RX.Storage.clear()
     Storage.clear()
-  }
-
-  public fragments = {
-    me: gql`
-      fragment Me on User {
-        id
-        username
-        session
-        email
-        firstName
-        lastName
-        avatar {
-          url
-        }
-        gender
-        bodyFat
-        age
-        bio
-        weight {
-          value
-          unit
-        }
-        height {
-          value
-          unit
-        }
-        socialNetworks {
-          instagram
-          twitter
-          website
-          pinterest
-        }
-        nutritionProfile { ...NutritionProfileFormNutritionProfile }
-        membership {
-          type
-        }
-        role
-        meals {
-          ...MealSettingsMeal
-        }
-      }
-
-      ${MealSettingsScreen.fragments.mealSettingsMeal}
-      ${NutritionProfileForm.fragments.nutritionProfile}
-    `
   }
 }
 

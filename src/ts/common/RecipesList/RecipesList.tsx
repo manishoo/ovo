@@ -1,6 +1,6 @@
 /*
  * RecipesList.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -13,7 +13,8 @@ import RX from 'reactxp'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 
-export interface RecipesListRecipe extends IngredientRecipe {}
+export interface RecipesListRecipe extends IngredientRecipe {
+}
 
 interface RecipesListProps extends RX.CommonProps {
   style?: any,

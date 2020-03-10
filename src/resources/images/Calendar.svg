@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="26px" height="37px" viewBox="0 0 26 37" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
-    <title>Calendar</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="First-Time" transform="translate(-37.000000, -613.000000)" fill="#DADADA" stroke="#FFFFFF" stroke-width="1.1">
-            <g id="Group-2" transform="translate(0.000000, 597.000000)">
-                <g id="Calendar" transform="translate(38.000000, 17.000000)">
-                    <g id="Sa" transform="translate(9.900000, 28.600000)">
-                        <circle id="Oval" cx="3.3" cy="3.3" r="3.3"></circle>
-                    </g>
-                    <g id="Su" transform="translate(2.200000, 20.900000)">
-                        <circle id="Oval" cx="5.5" cy="5.5" r="5.5"></circle>
-                    </g>
-                    <g id="Mo" transform="translate(9.900000, 14.300000)">
-                        <ellipse id="Oval" cx="7.15" cy="6.6" rx="7.15" ry="6.6"></ellipse>
-                    </g>
-                    <g id="Fr">
-                        <circle id="Oval" cx="9.9" cy="9.9" r="9.9"></circle>
-                    </g>
-                </g>
-            </g>
+<svg width="26px" height="37px" viewBox="0 0 26 37" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+  <title>Calendar</title>
+  <desc>Created with Sketch.</desc>
+  <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="First-Time" transform="translate(-37.000000, -613.000000)" fill="#DADADA" stroke="#FFFFFF"
+       stroke-width="1.1">
+      <g id="Group-2" transform="translate(0.000000, 597.000000)">
+        <g id="Calendar" transform="translate(38.000000, 17.000000)">
+          <g id="Sa" transform="translate(9.900000, 28.600000)">
+            <circle id="Oval" cx="3.3" cy="3.3" r="3.3"></circle>
+          </g>
+          <g id="Su" transform="translate(2.200000, 20.900000)">
+            <circle id="Oval" cx="5.5" cy="5.5" r="5.5"></circle>
+          </g>
+          <g id="Mo" transform="translate(9.900000, 14.300000)">
+            <ellipse id="Oval" cx="7.15" cy="6.6" rx="7.15" ry="6.6"></ellipse>
+          </g>
+          <g id="Fr">
+            <circle id="Oval" cx="9.9" cy="9.9" r="9.9"></circle>
+          </g>
         </g>
+      </g>
     </g>
+  </g>
 </svg>

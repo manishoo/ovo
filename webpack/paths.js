@@ -1,6 +1,6 @@
 /*
  * paths.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const fs = require('fs')

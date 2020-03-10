@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MealInput, LanguageCode, RecipeStatus } from "./../../../models/global-types";
+import { LanguageCode, MealInput, RecipeStatus } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: MealFormUpdateMutation
@@ -3355,6 +3355,7 @@ export interface MealFormUpdateMutation_updateMeal_items_alternativeMealItems {
 }
 
 export interface MealFormUpdateMutation_updateMeal_items {
+  id: any;
   amount: number | null;
   customUnit: MealFormUpdateMutation_updateMeal_items_customUnit | null;
   /**

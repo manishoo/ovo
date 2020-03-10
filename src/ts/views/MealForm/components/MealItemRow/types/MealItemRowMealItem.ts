@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeStatus } from "./../../../../../models/global-types";
+import { LanguageCode, RecipeStatus } from './../../../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: MealItemRowMealItem
@@ -3350,6 +3350,7 @@ export interface MealItemRowMealItem_alternativeMealItems {
 }
 
 export interface MealItemRowMealItem {
+  id: any;
   amount: number | null;
   customUnit: MealItemRowMealItem_customUnit | null;
   /**

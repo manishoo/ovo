@@ -1,17 +1,16 @@
 /*
  * AppBootstrapperWeb.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/client'
 import client from '@App/client'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import RootView from '@Views/RootView/RootView'
-import { ApolloProvider } from 'react-apollo'
-import RX from 'reactxp'
 // Do shimming before anything else.
 import * as ShimHelpers from '@Utils/ShimHelpers'
+import RootView from '@Views/RootView/RootView'
+import RX from 'reactxp'
 import AppBootstrapper from './AppBootstrapper'
 import AppConfig from './AppConfig'
 
@@ -47,14 +46,12 @@ class AppBootstrapperWeb extends AppBootstrapper {
     LocationStore.setHistory(history)
 
     return (
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <RootView
-            history={history}
-            onLayout={this._onLayoutRootView}
-          />
-        </ApolloHooksProvider>
-      </ApolloProvider>
+      <ApolloHooksProvider client={client}>
+        <RootView
+          history={history}
+          onLayout={this._onLayoutRootView}
+        />
+      </ApolloHooksProvider>
     )
   }
 

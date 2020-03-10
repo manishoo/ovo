@@ -1,9 +1,9 @@
 /*
- * Recipe.tsx
- * Copyright: Ouranos Studio 2019
+ * RecipeScreen.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useQuery } from '@apollo/react-hooks'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
@@ -35,9 +35,7 @@ import PublishRecipe from '@Views/RecipeScreen/components/PublishRecipe'
 import { Recipe, Recipe_author } from '@Views/RecipeScreen/types/Recipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from '@Views/RecipeScreen/types/RecipeDeleteMutation'
 import { RecipeQuery, RecipeQueryVariables } from '@Views/RecipeScreen/types/RecipeQuery'
-import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
-import { Mutation } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import ImageSource from 'src/ts/modules/images/index.web'
@@ -54,8 +52,8 @@ interface RecipeCommonProps extends RX.CommonProps {
 interface RecipeProps extends RecipeCommonProps {
   recipe: Recipe,
   loading?: boolean,
+  onDelete: (options: { userId: string, recipeId: string }) => any,
 }
-
 
 interface RecipeState {
   windowHeight: number,
@@ -66,6 +64,27 @@ interface RecipeState {
 }
 
 export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
+  static showModal = (props: RecipeCommonProps) => (
+    RX.Modal.show(
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            key={MODAL_ID}
+            modalId={MODAL_ID}
+            fullWidth
+            fullHeight
+            theme={theme}
+          >
+            <RecipeContainer
+              {...props}
+            />
+          </Modal>
+        )}
+      </ThemeContext.Consumer>,
+      MODAL_ID,
+    )
+  )
+
   public render() {
     const { recipe, loading } = this.props
 
@@ -369,51 +388,17 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
     if (this.state.me && ((this.state.me.id === this.props.recipe.author.id) || (this.state.me.role === Role.operator))) {
       return (
         <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-          <Mutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>
-            variables={{
-              recipeId: this.props.recipe.id,
-            }}
-            update={(cache) => {
-              const profileRecipesQuery = cache.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
-                query: PROFILE_RECIPES_QUERY,
-                variables: {
-                  userId: this.state.me && this.state.me.id,
-                  size: 20,
-                }
-              })
-              if (!profileRecipesQuery) return
-
-              cache.writeQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
-                query: PROFILE_RECIPES_QUERY,
-                data: {
-                  recipes: {
-                    ...profileRecipesQuery.recipes,
-                    recipes: profileRecipesQuery.recipes.recipes.filter(i => i.id !== this.props.recipe.id)
-                  }
-                },
-                variables: {
-                  userId: this.state.me && this.state.me.id,
-                  size: 20,
-                }
-              })
-            }}
-            mutation={gql`
-							mutation RecipeDeleteMutation($recipeId: ObjectId!) {
-								deleteRecipe(recipeId: $recipeId)
-							}
-						`}
-          >
-            {(mutate) => (
-              <FilledButton
-                label={translate('Delete Recipe')}
-                mode={FilledButton.mode.danger}
-                onPress={() => RX.Alert.show(translate('deleteRecipe?'), undefined, [{
-                  text: translate('yes'),
-                  onPress: () => mutate().then(() => navigate(this.props, 'back'))
-                }, { text: translate('no') }])}
-              />
-            )}
-          </Mutation>
+          <FilledButton
+            label={translate('Delete Recipe')}
+            mode={FilledButton.mode.danger}
+            onPress={() => RX.Alert.show(translate('deleteRecipe?'), undefined, [{
+              text: translate('yes'),
+              onPress: () => this.props.onDelete({
+                recipeId: this.props.recipe.id,
+                userId: this.state.me!.id,
+              }).then(() => navigate(this.props, 'back'))
+            }, { text: translate('no') }])}
+          />
           <FilledButton
             label={translate('Edit Recipe')}
             mode={FilledButton.mode.default}
@@ -434,28 +419,8 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
   }
 
   private _getMaximum1024 = (width: number) => (width > Styles.values.mainContentMaxWidth ? Styles.values.mainContentMaxWidth : width) // maximum 1024
-  private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 
-  static showModal = (props: RecipeCommonProps) => (
-    RX.Modal.show(
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <Modal
-            key={MODAL_ID}
-            modalId={MODAL_ID}
-            fullWidth
-            fullHeight
-            theme={theme}
-          >
-            <RecipeContainer
-              {...props}
-            />
-          </Modal>
-        )}
-      </ThemeContext.Consumer>,
-      MODAL_ID,
-    )
-  )
+  private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 }
 
 export default function RecipeContainer(props: RecipeCommonProps) {
@@ -484,10 +449,45 @@ export default function RecipeContainer(props: RecipeCommonProps) {
     )
   }
 
+  const [deleteRecipe] = useMutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>(gql`
+    mutation RecipeDeleteMutation($recipeId: ObjectId!) {
+      deleteRecipe(recipeId: $recipeId)
+    }
+  `)
+
   return (
     <RecipeScreen
       recipe={data.recipe}
       loading={loading}
+      onDelete={({ recipeId, userId }) => deleteRecipe({
+        variables: {
+          recipeId,
+        },
+        update: (cache) => {
+          const profileRecipesQuery = cache.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
+            query: PROFILE_RECIPES_QUERY,
+            variables: {
+              userId,
+              size: 20,
+            }
+          })
+          if (!profileRecipesQuery) return
+
+          cache.writeQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
+            query: PROFILE_RECIPES_QUERY,
+            data: {
+              recipes: {
+                ...profileRecipesQuery.recipes,
+                recipes: profileRecipesQuery.recipes.recipes.filter(i => i.id !== recipeId)
+              }
+            },
+            variables: {
+              userId,
+              size: 20,
+            }
+          })
+        },
+      })}
     />
   )
 }

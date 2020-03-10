@@ -1,6 +1,6 @@
 /*
  * recipe.transformer.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import {
@@ -40,7 +40,7 @@ export function transformRecipeToRecipeInput(recipe: RecipeFormQuery_recipe | Re
       name: ingredient.name,
       id: getOrigId(ingredient.id),
       food: ingredient.item && (determineIfIsFood(ingredient.item) ? ingredient.item.id : null),
-      recipe: ingredient.item && (determineIfIsFood(ingredient.item) ? null: ingredient.item.id),
+      recipe: ingredient.item && (determineIfIsFood(ingredient.item) ? null : ingredient.item.id),
       unit: ingredient.unit ? (determineIfIsWeight(ingredient.unit) ? ingredient.unit.id : 'customUnit') : 'g',
       description: ingredient.description && ingredient.description.map(i => ({ locale: i.locale, text: i.text })),
     }) as IngredientInput),

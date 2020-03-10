@@ -1,8 +1,9 @@
 /*
  * FoodPreview.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
@@ -26,7 +27,6 @@ import getFloatFromString from '@Utils/get-float-from-string'
 import { calculateMealItemNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
 import NutritionInfo from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
@@ -60,6 +60,45 @@ interface FoodPreviewState {
 }
 
 export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPreviewState> {
+  static fragments = {
+    mealItem: gql`
+      fragment FoodPreviewMealItem on MealItem {
+        id
+        name {text locale}
+        description {text locale}
+        amount
+        customUnit {
+          gramWeight
+          name { text locale }
+        }
+        isOptional
+        unit {
+          ... on Weight {
+            amount
+            gramWeight
+            id
+            name { text locale }
+          }
+          ... on CustomUnit {
+            gramWeight
+            name { text locale }
+          }
+        }
+        item {
+          ... on Food {
+            ...IngredientFood
+          }
+          ... on Recipe {
+            ...IngredientRecipe
+          }
+        }
+      }
+
+      ${IngredientCard.fragments.food}
+      ${IngredientCard.fragments.recipe}
+    `
+  }
+
   constructor(props: FoodPreviewProps) {
     super(props)
 
@@ -355,45 +394,6 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
 
   private _dismiss = () => {
     this.props.onDismiss()
-  }
-
-  static fragments = {
-    mealItem: gql`
-      fragment FoodPreviewMealItem on MealItem {
-        id
-        name {text locale}
-        description {text locale}
-        amount
-        customUnit {
-          gramWeight
-          name { text locale }
-        }
-        isOptional
-        unit {
-          ... on Weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-          ... on CustomUnit {
-            gramWeight
-            name { text locale }
-          }
-        }
-        item {
-          ... on Food {
-            ...IngredientFood
-          }
-          ... on Recipe {
-            ...IngredientRecipe
-          }
-        }
-      }
-
-      ${IngredientCard.fragments.food}
-      ${IngredientCard.fragments.recipe}
-    `
   }
 }
 

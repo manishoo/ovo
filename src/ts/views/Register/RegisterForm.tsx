@@ -1,9 +1,9 @@
 /*
- * Register.tsx
- * Copyright: Ouranos Studio 2019
+ * RegisterForm.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import Checkbox from '@Common/Checkbox/Checkbox'
@@ -15,12 +15,9 @@ import UserService from '@Services/UserService'
 import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import { RegisterMutation, RegisterMutationVariables } from '@Views/Register/types/RegisterMutation'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import validator from 'validator'
 import UsernameInput from './components/UsernameInput'
-import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
 
 
 const FORM_WIDTH = 270

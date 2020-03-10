@@ -1,13 +1,13 @@
 /*
  * MacroTargets.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import NutritionProfileForm from '@Common/NutritionProfileForm/NutritionProfileForm'
 import Text from '@Common/Text/Text'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { NutritionProfile } from './types/NutritionProfile'
 
@@ -18,6 +18,16 @@ interface MacroTargetsProps {
 }
 
 export default class MacroTargets extends RX.Component<MacroTargetsProps> {
+  static fragments = {
+    nutritionProfile: gql`
+      fragment NutritionProfile on NutritionProfile {
+        ...NutritionProfileFormNutritionProfile
+      }
+
+      ${NutritionProfileForm.fragments.nutritionProfile}
+    `
+  }
+
   render() {
     const { style, nutritionProfile } = this.props
 
@@ -76,7 +86,7 @@ export default class MacroTargets extends RX.Component<MacroTargetsProps> {
 
   private _renderPercentTarget = (percent: number, gram: number) => {
     return (
-      <RX.View style={styles.row}>
+      <RX.View style={styles.row} key={`${percent}:${gram}`}>
         <Text style={styles.text}>~ </Text>
         <Text style={styles.text}>{gram}</Text>
         <Text style={styles.text}>g ({percent}%)</Text>
@@ -86,22 +96,12 @@ export default class MacroTargets extends RX.Component<MacroTargetsProps> {
 
   private _renderRangeTarget = (min: number, max: number) => {
     return (
-      <RX.View style={styles.row}>
+      <RX.View style={styles.row} key={`${min}:${max}`}>
         <Text style={styles.text}>{min}</Text>
         <Text style={styles.text}>-</Text>
         <Text style={styles.text}>{max}</Text>
       </RX.View>
     )
-  }
-
-  static fragments = {
-    nutritionProfile: gql`
-      fragment NutritionProfile on NutritionProfile {
-        ...NutritionProfileFormNutritionProfile
-      }
-
-      ${NutritionProfileForm.fragments.nutritionProfile}
-    `
   }
 }
 
@@ -117,6 +117,5 @@ const styles = {
     fontWeight: '300',
     marginBottom: Styles.values.spacing / 2,
   }),
-  text: RX.Styles.createTextStyle({
-  })
+  text: RX.Styles.createTextStyle({})
 }

@@ -1,12 +1,12 @@
 /*
  * ShoppingList.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
-import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import CalendarService, { GroceriesByFoodGroup } from '@Services/CalendarService'
 import GroceryList from '@Views/ShoppingList/components/GroceryList/GroceryList'
@@ -26,14 +26,6 @@ interface LoginState {
 }
 
 export default class ShoppingList extends ComponentBase<LoginProps, LoginState> {
-  protected _buildState(props: LoginProps, initialBuild: boolean): Partial<LoginState> | undefined {
-    return {
-      activeTab: initialBuild ? 'shoppingList' : this.state.activeTab,
-      shoppingListGroceriesByFoodGroup: CalendarService.getShoppingList(),
-      pantryGroceriesByFoodGroup: CalendarService.getPantry(),
-    }
-  }
-
   public render() {
     return (
       <Page
@@ -67,6 +59,14 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
         {this._renderTabContent()}
       </Page>
     )
+  }
+
+  protected _buildState(props: LoginProps, initialBuild: boolean): Partial<LoginState> | undefined {
+    return {
+      activeTab: initialBuild ? 'shoppingList' : this.state.activeTab,
+      shoppingListGroceriesByFoodGroup: CalendarService.getShoppingList(),
+      pantryGroceriesByFoodGroup: CalendarService.getPantry(),
+    }
   }
 
   private _renderTabContent = () => {

@@ -1,14 +1,14 @@
 /*
  * FoodAutocomplete.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
+import { Query } from '@apollo/react-components'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import { fullWidth } from '@Utils'
 import { FoodAutocompleteQuery } from '@Views/Introduction/components/types/FoodAutocompleteQuery'
-import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
 import RX from 'reactxp'
 import SubmitButton from './SubmitButton'
 
@@ -25,7 +25,7 @@ interface FoodAutocompleteState {
   text: string,
 }
 
-export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompleteState> {
+class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompleteState> {
   input: any
 
   constructor(props: FoodAutocompleteProps) {
@@ -184,6 +184,8 @@ export default class FoodAutocomplete extends RX.Component<FoodAutocompleteProps
     )
   }
 }
+
+export default FoodAutocomplete
 
 const styles = {
   container: RX.Styles.createViewStyle({

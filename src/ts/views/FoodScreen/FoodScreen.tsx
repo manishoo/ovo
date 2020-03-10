@@ -1,26 +1,25 @@
 /*
  * FoodScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useQuery } from '@apollo/react-hooks'
+import { gql, useQuery } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
 import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { Role } from '@Models/global-types'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { Me } from '@Services/types/Me'
 import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { FoodScreenFoodClass } from './types/FoodScreenFoodClass'
@@ -65,6 +64,27 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
     isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     width: ResponsiveWidthStore.getWidth(),
   }
+
+  public static showModal = (props: FoodScreenCommonProps) => (
+    RX.Modal.show(
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            key={MODAL_ID}
+            modalId={MODAL_ID}
+            fullWidth
+            fullHeight
+            theme={theme}
+          >
+            <FoodScreenContainer
+              {...props}
+            />
+          </Modal>
+        )}
+      </ThemeContext.Consumer>,
+      MODAL_ID,
+    )
+  )
 
   public render() {
     return (
@@ -127,27 +147,6 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
 
     return null
   }
-
-  public static showModal = (props: FoodScreenCommonProps) => (
-    RX.Modal.show(
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <Modal
-            key={MODAL_ID}
-            modalId={MODAL_ID}
-            fullWidth
-            fullHeight
-            theme={theme}
-          >
-            <FoodScreenContainer
-              {...props}
-            />
-          </Modal>
-        )}
-      </ThemeContext.Consumer>,
-      MODAL_ID,
-    )
-  )
 }
 
 export default function FoodScreenContainer(props: FoodScreenCommonProps) {

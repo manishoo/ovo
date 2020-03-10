@@ -1,17 +1,17 @@
 /*
  * SimpleDialog.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
+
+import KeyCodes from '@Utils/KeyCodes'
 import each from 'lodash/each'
 import map from 'lodash/map'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-
-import KeyCodes from '@Utils/KeyCodes'
 import Modal from '../Modal/Modal'
 import SimpleButton from '../SimpleButton/SimpleButton'
 

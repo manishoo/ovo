@@ -1,6 +1,6 @@
 /*
  * CalendarService.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
@@ -59,10 +59,10 @@ enum TriggerKeys {
 @AutoSubscribeStore
 export class CalendarService extends StoreBase implements IAutoSavablePersistableStore {
   public name = 'CalendarService'
+  public autoSaveTriggerKeys = TriggerKeys
   private calendar: Day[] = []
   private shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup = {}
   private pantryGroceriesByFoodGroup: GroceriesByFoodGroup = {}
-  public autoSaveTriggerKeys = TriggerKeys
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
@@ -188,6 +188,64 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
   @autoSubscribe
   getPantry() {
     return this.pantryGroceriesByFoodGroup
+  }
+
+  public removePantryItem(foodId: string) {
+    /**
+     * Remove from pantry and add to shopping list if needed
+     * */
+    Object.keys(this.pantryGroceriesByFoodGroup).map(pantryFoodGroupId => {
+      const pantryGroceryItems = this.pantryGroceriesByFoodGroup[pantryFoodGroupId]
+      this.pantryGroceriesByFoodGroup[pantryFoodGroupId] = pantryGroceryItems.filter(p => p.food.id !== foodId)
+    })
+    this._handleShoppingList()
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  public editPantryItem(foodId: string, grams: number) {
+    /**
+     * Remove from pantry and add to shopping list if needed
+     * */
+    Object.keys(this.pantryGroceriesByFoodGroup).map(pantryFoodGroupId => {
+      const pantryGroceryItems = this.pantryGroceriesByFoodGroup[pantryFoodGroupId]
+      this.pantryGroceriesByFoodGroup[pantryFoodGroupId] = pantryGroceryItems.map(pantryGroceryItem => {
+        if (pantryGroceryItem.food.id === foodId) {
+          return {
+            ...pantryGroceryItem,
+            grams,
+          }
+        }
+
+        return pantryGroceryItem
+      })
+    })
+    this._handleShoppingList()
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  public getPropKeys() {
+    return [
+      'calendar',
+      'pantryGroceriesByFoodGroup',
+      'shoppingListGroceriesByFoodGroup',
+    ]
+  }
+
+  @autoSubscribe
+  getCalendar(): Day[] {
+    return this.calendar
+  }
+
+  public calculateMealTotalCalorie = (meal: DayMeal) => {
+    // let unit = AppConfig.calorieMeasurementUnit
+    const nutrition = calculateMealItemsNutrition(meal.items)
+    return Math.round(nutrition.calories ? nutrition.calories.amount : 0)
   }
 
   private _handleShoppingList() {
@@ -332,64 +390,6 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     })
 
     return finalShoppingList
-  }
-
-  public removePantryItem(foodId: string) {
-    /**
-     * Remove from pantry and add to shopping list if needed
-     * */
-    Object.keys(this.pantryGroceriesByFoodGroup).map(pantryFoodGroupId => {
-      const pantryGroceryItems = this.pantryGroceriesByFoodGroup[pantryFoodGroupId]
-      this.pantryGroceriesByFoodGroup[pantryFoodGroupId] = pantryGroceryItems.filter(p => p.food.id !== foodId)
-    })
-    this._handleShoppingList()
-    this.trigger([
-      TriggerKeys.pantryGroceriesByFoodGroup,
-      TriggerKeys.shoppingListGroceriesByFoodGroup,
-    ])
-  }
-
-  public editPantryItem(foodId: string, grams: number) {
-    /**
-     * Remove from pantry and add to shopping list if needed
-     * */
-    Object.keys(this.pantryGroceriesByFoodGroup).map(pantryFoodGroupId => {
-      const pantryGroceryItems = this.pantryGroceriesByFoodGroup[pantryFoodGroupId]
-      this.pantryGroceriesByFoodGroup[pantryFoodGroupId] = pantryGroceryItems.map(pantryGroceryItem => {
-        if (pantryGroceryItem.food.id === foodId) {
-          return {
-            ...pantryGroceryItem,
-            grams,
-          }
-        }
-
-        return pantryGroceryItem
-      })
-    })
-    this._handleShoppingList()
-    this.trigger([
-      TriggerKeys.pantryGroceriesByFoodGroup,
-      TriggerKeys.shoppingListGroceriesByFoodGroup,
-    ])
-  }
-
-  public getPropKeys() {
-    return [
-      'calendar',
-      'pantryGroceriesByFoodGroup',
-      'shoppingListGroceriesByFoodGroup',
-    ]
-  }
-
-  @autoSubscribe
-  getCalendar(): Day[] {
-    return this.calendar
-  }
-
-  public calculateMealTotalCalorie = (meal: DayMeal) => {
-    // let unit = AppConfig.calorieMeasurementUnit
-    const nutrition = calculateMealItemsNutrition(meal.items)
-    return Math.round(nutrition.calories ? nutrition.calories.amount : 0)
   }
 
 }

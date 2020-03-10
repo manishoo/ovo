@@ -1,6 +1,6 @@
 /*
  * SubmitSelect.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -53,8 +53,7 @@ const styles = {
     flexDirection: 'row',
     flex: 1,
   }),
-  button: RX.Styles.createViewStyle({
-  }),
+  button: RX.Styles.createViewStyle({}),
   containerStyle: RX.Styles.createButtonStyle({
     flex: 3,
   }),

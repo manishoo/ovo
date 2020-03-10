@@ -1,9 +1,9 @@
 /*
- * Day.tsx
- * Copyright: Ouranos Studio 2019
+ * DayComponent.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import MenuItem from '@Common/MenuItem/MenuItem'
@@ -18,9 +18,7 @@ import ItemControl from '@Views/CalendarScreen/components/ItemControl'
 import MacroTargets from '@Views/CalendarScreen/components/NutritionInfo/MacroTargets'
 import NutritionInfo from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import { Day } from '@Views/CalendarScreen/components/types/Day'
-import gql from 'graphql-tag'
 import { DateTime } from 'luxon'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import MealComponent from './MealComponent'
 import {
@@ -31,19 +29,21 @@ import {
 
 const MEAL_WIDTH = 350
 
-export interface DayComponentProps {
+interface DayComponentCommonProps {
   style?: any,
   day?: Day,
   date: DateTime,
-  dayRegenerating?: boolean,
-
-  onDayRegenerate: () => Promise<ExecutionResult<DayComponentMealSuggestionMutation>>,
-  onTitlePress: (date: DateTime) => void,
-
   width: number
   height: number
   isTinyOrSmall: boolean,
   me?: Me,
+  onTitlePress: (date: DateTime) => void,
+}
+
+export interface DayComponentProps extends DayComponentCommonProps {
+  dayRegenerating?: boolean,
+  onDayRegenerate: () => Promise<ExecutionResult<DayComponentMealSuggestionMutation>>,
+  onClearDay: () => void,
 }
 
 //public shouldComponentUpdate(nextProps: Readonly<DayComponentProps>, nextState: Readonly<{}>, nextContext: any): boolean {
@@ -125,15 +125,12 @@ const DayComponent = (props: DayComponentProps) => {
     dayRegenerating,
     onDayRegenerate,
     onTitlePress,
+    onClearDay,
   } = props
 
   const mealWidth = width > MEAL_WIDTH ? MEAL_WIDTH : width
   // const isToday = date.hasSame(DateTime.local(), 'day')
   const _isFreeUser = false // && (Math.round(date.diff(DateTime.local()).as('day')) > 0) && (me && !me!.membership)
-
-  const _onClearDay = () => {
-
-  }
 
   return (
     <RX.View
@@ -205,10 +202,9 @@ const DayComponent = (props: DayComponentProps) => {
                 [Styles.values.marginStart]: Styles.values.spacing / 2,
               }}
             >
-
               <MenuItem
                 label={translate(translate.keys.ClearDay)}
-                onPress={_onClearDay}
+                onPress={onClearDay}
               />
             </DayTitle>
 
@@ -244,7 +240,8 @@ const DayComponent = (props: DayComponentProps) => {
   )
 }
 
-const DayComponentContainer = (props: Omit<DayComponentProps, 'onDayRegenerate' | 'dayRegenerating'>) => {
+const DayComponentContainer = (props: DayComponentCommonProps) => {
+  const client = useApolloClient()
   const [suggestDay, { loading }] = useMutation<DayComponentMealSuggestionMutation, DayComponentMealSuggestionMutationVariables>(DayComponentContainer.operations.suggestDay, {
     update: (proxy, { data }) => data && CalendarService.setDay(data.suggestDay),
   })
@@ -252,6 +249,22 @@ const DayComponentContainer = (props: Omit<DayComponentProps, 'onDayRegenerate' 
   return (
     <DayComponent
       {...props}
+      onClearDay={() => {
+        if (!props.day) return
+
+        client.writeFragment({
+          fragment: DayComponentContainer.fragments.day,
+          fragmentName: 'Day',
+          data: {
+            ...props.day,
+            meals: props.day.meals.map(meal => ({
+              ...meal,
+              items: [],
+            })),
+          } as Day,
+          id: props.day.id,
+        })
+      }}
       dayRegenerating={loading}
       onDayRegenerate={() =>
         suggestDay({

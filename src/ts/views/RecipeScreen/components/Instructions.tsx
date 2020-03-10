@@ -1,13 +1,14 @@
 /*
  * Instructions.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import { ThemeContext } from '@App/ThemeContext'
 import Text from '@Common/Text/Text'
 import { InstructionsInstruction } from '@Views/RecipeScreen/components/types/InstructionsInstruction'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
+
 
 export const fragments = {
   instruction: gql`

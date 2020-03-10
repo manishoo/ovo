@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from "./../../../../../../../models/global-types";
+import { LanguageCode } from './../../../../../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: MealCellMeal
@@ -84,6 +84,8 @@ export interface MealCellMeal_items_item_Recipe {
 export type MealCellMeal_items_item = MealCellMeal_items_item_Food | MealCellMeal_items_item_Recipe;
 
 export interface MealCellMeal_items {
+  id: any;
+  isOptional: boolean | null;
   amount: number | null;
   customUnit: MealCellMeal_items_customUnit | null;
   /**

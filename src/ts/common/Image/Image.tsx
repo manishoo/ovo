@@ -1,11 +1,11 @@
 /*
  * Image.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import gql from 'graphql-tag'
-import RX, { Types } from 'reactxp'
+import { gql } from '@apollo/client'
 import ImageSource from '@Modules/images'
+import RX, { Types } from 'reactxp'
 
 
 export interface ImageProps extends Types.ImageProps {

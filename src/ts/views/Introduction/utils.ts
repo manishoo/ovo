@@ -1,6 +1,6 @@
 /*
  * utils.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { AssistantExpectations, MessageSender, MessageType } from '@Models/global-types'

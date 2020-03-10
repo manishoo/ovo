@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeStatus, RecipeDifficulty } from "./../../../models/global-types";
+import { LanguageCode, RecipeDifficulty, RecipeStatus } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL query operation: RecipeFormQuery
@@ -30,16 +30,6 @@ export interface RecipeFormQuery_recipe_timing {
   prepTime: number | null;
   cookTime: number | null;
   totalTime: number | null;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_name {
-  text: string;
-  locale: LanguageCode;
-}
-
-export interface RecipeFormQuery_recipe_ingredients_description {
-  text: string;
-  locale: LanguageCode;
 }
 
 export interface RecipeFormQuery_recipe_ingredients_customUnit_name {
@@ -1709,14 +1699,6 @@ export type RecipeFormQuery_recipe_ingredients_item = RecipeFormQuery_recipe_ing
 
 export interface RecipeFormQuery_recipe_ingredients {
   id: any;
-  /**
-   * The plain name of the ingredient in the case it was not associated with a food or recipe
-   */
-  name: RecipeFormQuery_recipe_ingredients_name[] | null;
-  /**
-   * Additional descriptions or hints for this ingredient
-   */
-  description: RecipeFormQuery_recipe_ingredients_description[] | null;
   amount: number | null;
   customUnit: RecipeFormQuery_recipe_ingredients_customUnit | null;
   /**

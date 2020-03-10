@@ -1,14 +1,13 @@
 /*
- * _RecipeForm.tsx
- * Copyright: Ouranos Studio 2019
+ * RecipeForm.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation, useQuery } from '@apollo/client'
 import Storage from '@App/Storage/Storage'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
@@ -19,6 +18,7 @@ import InputNumber from '@Common/Input/InputNumber'
 import IntlInput from '@Common/Input/IntlInput'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
@@ -42,8 +42,6 @@ import { ProfileRecipesQuery, ProfileRecipesQueryVariables } from '@Views/Profil
 import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
 import { RecipeFormExtra } from '@Views/RecipeForm/components/RecipeFormExtra/RecipeFormExtra'
 import { fragments as RecipeScreenFragments } from '@Views/RecipeScreen/RecipeScreen'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import InstructionRow from './components/InstructionRow/InstructionRow'
@@ -63,7 +61,7 @@ interface RecipeFormProps {
   recipe?: RecipeFormQuery_recipe,
   fieldErrors: { [k: string]: string }
   onCreate: (variables: RecipeFormCreateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormCreateMutation>>,
-  onUpdate: (variables: RecipeFormUpdateMutationVariables, userId: string) => Promise<any>,
+  onUpdate: (variables: RecipeFormUpdateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormUpdateMutation>>,
   loading?: boolean
 }
 
@@ -134,6 +132,21 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  public componentDidUpdate(prevProps: Readonly<RecipeFormProps>, prevState: RecipeFormState, prevContext: any): void {
+    if (!this.props.recipe) {
+      this._saveStateToStorage()
+    }
+  }
+
+  public componentDidMount(): void {
+    /**
+     * In case we were creating not updating
+     * */
+    if (!this.props.recipe) {
+      this._loadStateFromStorage()
+    }
   }
 
   protected _buildState(props: RecipeFormProps, initialBuild: boolean): Partial<RecipeFormState> | undefined {
@@ -789,21 +802,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       RX.Animated.timing(this._extraFormTranslateYAnimationValue, { toValue: 0 }),
     ])
       .start()
-  }
-
-  public componentDidUpdate(prevProps: Readonly<RecipeFormProps>, prevState: RecipeFormState, prevContext: any): void {
-    if (!this.props.recipe) {
-      this._saveStateToStorage()
-    }
-  }
-
-  public componentDidMount(): void {
-    /**
-     * In case we were creating not updating
-     * */
-    if (!this.props.recipe) {
-      this._loadStateFromStorage()
-    }
   }
 
   private _saveStateToStorage = async () => {

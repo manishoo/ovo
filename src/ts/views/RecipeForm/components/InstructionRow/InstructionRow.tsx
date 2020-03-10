@@ -1,8 +1,9 @@
 /*
  * InstructionRow.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import IntlInput from '@Common/Input/IntlInput'
@@ -10,7 +11,6 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import Keys from '@Utils/KeyCodes'
 import { InstructionRowInstruction } from '@Views/RecipeForm/components/InstructionRow/types/InstructionRowInstruction'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 

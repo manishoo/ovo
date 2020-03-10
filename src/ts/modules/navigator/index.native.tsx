@@ -1,6 +1,6 @@
 /*
- * navigator.ios.tsx
- * Copyright: Ouranos Studio 2019
+ * index.native.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import SelectDialog from '@Common/Select/components/SelectDialog'

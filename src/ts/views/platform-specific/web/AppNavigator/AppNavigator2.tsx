@@ -1,6 +1,6 @@
 /*
  * AppNavigator2.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -129,6 +129,11 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
     )
   }
 
+  componentDidMount(): void {
+    const history = LocationStore.getHistory()
+    history.listen(this._handleLocationChange) // FIXME better place to call this maybe
+  }
+
   protected _buildState(props: AppNavigatorProps & { history: any }, initialBuild: boolean): Partial<WebAppRouterState> | undefined {
     const me = UserStore.getUser()
     const path = LocationStore.getPath()
@@ -141,11 +146,6 @@ export default class AppNavigator extends ComponentBase<AppNavigatorProps & { hi
       isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       routes: props.routes,
     }
-  }
-
-  componentDidMount(): void {
-    const history = LocationStore.getHistory()
-    history.listen(this._handleLocationChange) // FIXME better place to call this maybe
   }
 
   private _renderTabBar = () => {

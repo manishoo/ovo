@@ -1,6 +1,6 @@
 /*
- * Tabbar.tsx
- * Copyright: Ouranos Studio 2019
+ * TabBar.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'

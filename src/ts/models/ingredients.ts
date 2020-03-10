@@ -1,10 +1,10 @@
 /*
  * ingredients.ts
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import NutritionFragment from '@Models/nutrition'
-import gql from 'graphql-tag'
 
 
 export const IngredientFoodFragment = gql`
@@ -97,8 +97,8 @@ export const IngredientRecipeFragment = gql`
 export const IngredientFragment = gql`
   fragment Ingredient on Ingredient {
     id
-    name {text locale}
-    description {text locale}
+#    name {text locale}
+#    description {text locale}
     amount
     customUnit {
       gramWeight

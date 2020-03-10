@@ -1,8 +1,6 @@
 /*
  * html.jsx
- * Copyright: Ouranos Studio 2019
- *
- * The Html component that will be stringified and sent to web clients
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const React = require('react')

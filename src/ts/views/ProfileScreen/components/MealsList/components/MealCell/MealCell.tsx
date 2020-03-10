@@ -1,8 +1,9 @@
 /*
- * MealCard.tsx
- * Copyright: Ouranos Studio 2019
+ * MealCell.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
@@ -18,7 +19,6 @@ import {
   MealCellMeal_items_item,
   MealCellMeal_items_item_Food
 } from '@Views/ProfileScreen/components/MealsList/components/MealCell/types/MealCellMeal'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
@@ -35,6 +35,58 @@ interface AddMealCellProps {
 
 @withNavigation
 export default class MealCell extends RX.Component<AddMealCellProps> {
+  static fragments = {
+    mealCellMeal: gql`
+      fragment MealCellMeal on Meal {
+        id
+        name {text locale}
+        likedByUser
+        likesCount
+        items {
+          id
+          isOptional
+          amount
+          customUnit {
+            gramWeight
+            name { text locale }
+          }
+          unit {
+            ... on Weight {
+              amount
+              gramWeight
+              id
+              name { text locale }
+            }
+            ... on CustomUnit {
+              gramWeight
+              name { text locale }
+            }
+          }
+          item {
+            ... on Food {
+              name { text locale }
+              description { text locale }
+              thumbnail {url}
+            }
+            ... on Recipe {
+              title {text locale}
+              thumbnail {url}
+            }
+          }
+        }
+        hasPermutations
+        author {
+          id
+          username
+          avatar {url}
+        }
+        timing {
+          totalTime
+        }
+      }
+    `
+  }
+
   public render() {
     const { meal } = this.props
 
@@ -112,56 +164,6 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
         )}
       </ThemeContext.Consumer>
     )
-  }
-
-  static fragments = {
-    mealCellMeal: gql`
-      fragment MealCellMeal on Meal {
-        id
-        name {text locale}
-        likedByUser
-        likesCount
-        items {
-          amount
-          customUnit {
-            gramWeight
-            name { text locale }
-          }
-          unit {
-            ... on Weight {
-              amount
-              gramWeight
-              id
-              name { text locale }
-            }
-            ... on CustomUnit {
-              gramWeight
-              name { text locale }
-            }
-          }
-          item {
-            ... on Food {
-              name { text locale }
-              description { text locale }
-              thumbnail {url}
-            }
-            ... on Recipe {
-              title {text locale}
-              thumbnail {url}
-            }
-          }
-        }
-        hasPermutations
-        author {
-          id
-          username
-          avatar {url}
-        }
-        timing {
-          totalTime
-        }
-      }
-    `
   }
 
 }

@@ -1,6 +1,6 @@
 /*
  * MoreButton.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import ImageSource from '@Modules/images'

@@ -1,8 +1,13 @@
+/*
+ * MealItemGridIngredient.ts
+ * Copyright: Mehdi J. Shooshtari 2020
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, RecipeStatus } from "./../../../../../../../models/global-types";
+import { LanguageCode, RecipeStatus } from './../../../../../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: MealItemGridIngredient
@@ -630,7 +635,9 @@ export interface MealItemGridIngredient_item_Recipe_ingredients_unit_CustomUnit 
   name: MealItemGridIngredient_item_Recipe_ingredients_unit_CustomUnit_name[];
 }
 
-export type MealItemGridIngredient_item_Recipe_ingredients_unit = MealItemGridIngredient_item_Recipe_ingredients_unit_Weight | MealItemGridIngredient_item_Recipe_ingredients_unit_CustomUnit;
+export type MealItemGridIngredient_item_Recipe_ingredients_unit =
+  MealItemGridIngredient_item_Recipe_ingredients_unit_Weight
+  | MealItemGridIngredient_item_Recipe_ingredients_unit_CustomUnit;
 
 export interface MealItemGridIngredient_item_Recipe_ingredients_item_Food_name {
   text: string;
@@ -1170,7 +1177,9 @@ export interface MealItemGridIngredient_item_Recipe_ingredients_item_Recipe {
   nutrition: MealItemGridIngredient_item_Recipe_ingredients_item_Recipe_nutrition;
 }
 
-export type MealItemGridIngredient_item_Recipe_ingredients_item = MealItemGridIngredient_item_Recipe_ingredients_item_Food | MealItemGridIngredient_item_Recipe_ingredients_item_Recipe;
+export type MealItemGridIngredient_item_Recipe_ingredients_item =
+  MealItemGridIngredient_item_Recipe_ingredients_item_Food
+  | MealItemGridIngredient_item_Recipe_ingredients_item_Recipe;
 
 export interface MealItemGridIngredient_item_Recipe_ingredients {
   id: any;

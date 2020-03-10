@@ -1,6 +1,6 @@
 /*
  * SafeArea.ios.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const { SafeAreaView } = require('react-native')

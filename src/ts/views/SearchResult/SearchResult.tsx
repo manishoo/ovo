@@ -1,15 +1,15 @@
 /*
  * SearchResult.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { QueryResult } from '@apollo/client'
 import Styles from '@App/Styles'
 import Page from '@Common/Page'
 import RecipesList from '@Common/RecipesList/RecipesList'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
 import { SearchResultQuery, SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
-import { QueryResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import { SEARCH_RESULT_RECIPES_QUERY, SearchResultParameters } from './SearchResultContainer'

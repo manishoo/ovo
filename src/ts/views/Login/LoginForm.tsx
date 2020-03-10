@@ -1,9 +1,9 @@
 /*
- * LoginFormForm.tsx
- * Copyright: Ouranos Studio 2019
+ * LoginForm.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
@@ -13,8 +13,6 @@ import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { LoginMutation, LoginMutationVariables } from '@Views/Login/types/LoginMutation'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 
 
@@ -84,7 +82,7 @@ export class LoginForm extends RX.Component<LoginProps> {
       username: this.state.username,
       password: this.state.password,
     })
-      .then(async ({ data }) => {
+      .then(async ({ data }: any) => {
         if (!data) return
 
         /**

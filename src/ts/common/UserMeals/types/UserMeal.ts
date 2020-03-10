@@ -1,3 +1,8 @@
+/*
+ * UserMeal.ts
+ * Copyright: Mehdi J. Shooshtari 2020
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // This file was automatically generated and should not be edited.

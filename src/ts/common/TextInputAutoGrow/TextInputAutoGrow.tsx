@@ -1,6 +1,6 @@
 /*
  * TextInputAutoGrow.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'

@@ -1,6 +1,6 @@
 /*
  * NewPasswordScreen.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import ImageSource from '@Modules/images'

@@ -1,6 +1,6 @@
 /*
- * get-ingredient-common-fields.tsx
- * Copyright: Ouranos Studio 2020
+ * ingredients.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { Option } from '@Common/Select/Select'
@@ -11,7 +11,7 @@ import { determineIfIsWeight } from '@Views/CalendarScreen/components/MealItemCo
 import RX from 'reactxp'
 
 
-export const handleIngredientAmountChange = (ingredient: Ingredient, amount: number | null, selectedUnit: string, onIngredientChange: (ingredient: Ingredient) => void) =>  {
+export const handleIngredientAmountChange = (ingredient: Ingredient, amount: number | null, selectedUnit: string, onIngredientChange: (ingredient: Ingredient) => void) => {
   ingredient.amount = amount
 
   if (ingredient.item) {
@@ -92,14 +92,14 @@ export function getIngredientCommonFields(ingredient: Ingredient) {
         selectedUnit: ingredient.unit ? (determineIfIsWeight(ingredient.unit) ? ingredient.unit.id : 'customUnit') : 'g',
         units: ([
           ...ingredient.item.weights.map((weight: any) => ({
-            text: <Text translations={weight.name}/>, //FIXME
+            text: <Text translations={weight.name} />, //FIXME
             value: weight.id,
           })),
           ingredient.customUnit ? {
             value: 'customUnit',
             text: <Text translations={ingredient.customUnit.name} />
           } : undefined,
-          { value: 'g', text: <Text translate={'g'}/> }
+          { value: 'g', text: <Text translate={'g'} /> }
         ] as Option[]).filter(Boolean),
       }
     } else {
@@ -109,7 +109,7 @@ export function getIngredientCommonFields(ingredient: Ingredient) {
         thumbnail: ingredient.item.thumbnail,
         selectedUnit: 'serving',
         units: ([
-          { value: 'serving', text: <Text translate={'serving'}/> },
+          { value: 'serving', text: <Text translate={'serving'} /> },
           ingredient.customUnit ? {
             value: 'customUnit',
             text: <Text translations={ingredient.customUnit.name} />
@@ -125,8 +125,11 @@ export function getIngredientCommonFields(ingredient: Ingredient) {
       thumbnail: null,
       selectedUnit: 'g',
       units: ([
-        { value: 'g', text: <Text translate={'grams'}/> },
-        ingredient.customUnit ? { value: 'customUnit', text: <Text translations={ingredient.customUnit.name} /> } : undefined,
+        { value: 'g', text: <Text translate={'grams'} /> },
+        ingredient.customUnit ? {
+          value: 'customUnit',
+          text: <Text translations={ingredient.customUnit.name} />
+        } : undefined,
       ] as Option[]),
       totalTime: null,
     }

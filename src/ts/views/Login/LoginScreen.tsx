@@ -1,6 +1,6 @@
 /*
  * LoginScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -33,7 +33,8 @@ export default class LoginScreen extends ComponentBase<LoginScreenProps, LoginSc
         />
         <LoginForm {...this.props} />
         <Link to={Routes.register}><Text translate='dontHaveAnAccount' /></Link>
-        <Link to={Routes.forgotPassword} style={{ marginTop: Styles.values.spacing / 2 }}><Text translate='forgotPassword' /></Link>
+        <Link to={Routes.forgotPassword} style={{ marginTop: Styles.values.spacing / 2 }}><Text
+          translate='forgotPassword' /></Link>
       </RX.View>
     )
   }

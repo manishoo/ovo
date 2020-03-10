@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="12px" height="21px" viewBox="0 0 12 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
-    <title>BackLight</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Recipe---from-meal-plan" transform="translate(-40.000000, -45.000000)" fill="#FFFFFF" fill-rule="nonzero">
-            <path d="M43.6213203,55.5 L51.5606602,47.5606602 C52.1464466,46.9748737 52.1464466,46.0251263 51.5606602,45.4393398 C50.9748737,44.8535534 50.0251263,44.8535534 49.4393398,45.4393398 L40.4393398,54.4393398 C39.8535534,55.0251263 39.8535534,55.9748737 40.4393398,56.5606602 L49.4393398,65.5606602 C50.0251263,66.1464466 50.9748737,66.1464466 51.5606602,65.5606602 C52.1464466,64.9748737 52.1464466,64.0251263 51.5606602,63.4393398 L43.6213203,55.5 Z" id="BackLight"></path>
-        </g>
+<svg width="12px" height="21px" viewBox="0 0 12 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+  <title>BackLight</title>
+  <desc>Created with Sketch.</desc>
+  <g id="Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Recipe---from-meal-plan" transform="translate(-40.000000, -45.000000)" fill="#FFFFFF" fill-rule="nonzero">
+      <path
+          d="M43.6213203,55.5 L51.5606602,47.5606602 C52.1464466,46.9748737 52.1464466,46.0251263 51.5606602,45.4393398 C50.9748737,44.8535534 50.0251263,44.8535534 49.4393398,45.4393398 L40.4393398,54.4393398 C39.8535534,55.0251263 39.8535534,55.9748737 40.4393398,56.5606602 L49.4393398,65.5606602 C50.0251263,66.1464466 50.9748737,66.1464466 51.5606602,65.5606602 C52.1464466,64.9748737 52.1464466,64.0251263 51.5606602,63.4393398 L43.6213203,55.5 Z"
+          id="BackLight"></path>
     </g>
+  </g>
 </svg>

@@ -1,9 +1,9 @@
 /*
  * FoodPicker.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useQuery } from '@apollo/react-hooks'
+import { gql, useQuery } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
@@ -28,7 +28,6 @@ import Text from '@Common/Text/Text'
 import NutritionFragment from '@Models/nutrition'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { createId } from '@Utils/create-id'
-import gql from 'graphql-tag'
 import debounce from 'lodash/debounce'
 import { useState } from 'react'
 import RX from 'reactxp'
@@ -169,15 +168,15 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
     )
   }
 
-  private _onSearch = (text: string) => {
-    return this.props.onSearch(text)
-  }
-
   protected _buildState(props: FoodPickerProps & RX.CommonProps, initialBuild: boolean): Partial<FoodPickerState> | undefined {
     return {
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
     }
+  }
+
+  private _onSearch = (text: string) => {
+    return this.props.onSearch(text)
   }
 
   private _getModeButtonStyle = (theme: Theme, itemMode: FoodTypes) => {

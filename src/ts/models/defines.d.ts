@@ -1,6 +1,6 @@
 /*
  * defines.d.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 // Indicates that this is a local dev build

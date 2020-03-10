@@ -1,9 +1,9 @@
 /*
  * PublishRecipe.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
@@ -19,7 +19,6 @@ import {
 } from '@Views/RecipeScreen/components/types/PublishRecipeUpdateMutation'
 import { fragments as RecipeScreenFragments } from '@Views/RecipeScreen/RecipeScreen'
 import { Recipe } from '@Views/RecipeScreen/types/Recipe'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 

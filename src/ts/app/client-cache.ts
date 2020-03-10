@@ -1,9 +1,9 @@
 /*
  * client-cache.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { InMemoryCache } from '@apollo/client'
 
 
 const cache = new InMemoryCache({
@@ -13,7 +13,14 @@ const cache = new InMemoryCache({
   //       getCacheKey({ __typename: 'Movie', id }),
   //   }
   // },
-  dataIdFromObject: object => object.id,
+  possibleTypes: {
+    IngredientItem: ['Recipe', 'Food'],
+  },
+  typePolicies: {
+    MealItem: {
+      keyFields: ['item', ['id']]
+    }
+  }
 })
 // @ts-ignore
   .restore(window.__APOLLO_STATE__)

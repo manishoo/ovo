@@ -1,13 +1,12 @@
 /*
  * NutritionProfileForm.tsx
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { gql, useMutation } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
-import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import InputNumber from '@Common/Input/InputNumber'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
@@ -23,10 +22,9 @@ import { NutritionProfileInput, NutritionProfileMode } from '@Models/global-type
 import UserService from '@Services/UserService'
 import trimTypeName from '@Utils/trim-type-name'
 import { ExecutionResult } from 'graphql'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
-import { NutritionProfileFormNutritionProfile } from './types/NutritionProfileFormNutritionProfile'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
+import { NutritionProfileFormNutritionProfile } from './types/NutritionProfileFormNutritionProfile'
 
 
 const MODAL_ID = 'NutritionProfileForm'
@@ -58,6 +56,31 @@ interface NutritionProfileFormState {
 }
 
 export default class NutritionProfileForm extends RX.Component<NutritionProfileFormProps, NutritionProfileFormState> {
+  static fragments = {
+    nutritionProfile: gql`
+      fragment NutritionProfileFormNutritionProfile on NutritionProfile {
+        calories
+        carbs {
+          max
+          min
+          percentage
+        }
+        fat {
+          max
+          min
+          percentage
+        }
+        protein {
+          max
+          min
+          percentage
+        }
+        isStrict
+        mode
+      }
+    `
+  }
+
   constructor(props: NutritionProfileFormProps) {
     super(props)
 
@@ -65,6 +88,28 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
       nutritionProfile: props.nutritionProfile,
     }
   }
+
+  public static showModal = (props: NutritionProfileFormCommonProps) => (
+    RX.Modal.show(
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Modal
+            key={MODAL_ID}
+            modalId={MODAL_ID}
+            fullWidth
+            fullHeight
+            theme={theme}
+          >
+            <NutritionProfileFormContainer
+              modal
+              {...props}
+            />
+          </Modal>
+        )}
+      </ThemeContext.Consumer>,
+      MODAL_ID,
+    )
+  )
 
   render() {
     const { style } = this.props
@@ -207,53 +252,6 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
       </RX.View>
     )
   }
-
-  static fragments = {
-    nutritionProfile: gql`
-      fragment NutritionProfileFormNutritionProfile on NutritionProfile {
-        calories
-        carbs {
-          max
-          min
-          percentage
-        }
-        fat {
-          max
-          min
-          percentage
-        }
-        protein {
-          max
-          min
-          percentage
-        }
-        isStrict
-        mode
-      }
-    `
-  }
-
-  public static showModal = (props: NutritionProfileFormCommonProps) => (
-    RX.Modal.show(
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <Modal
-            key={MODAL_ID}
-            modalId={MODAL_ID}
-            fullWidth
-            fullHeight
-            theme={theme}
-          >
-            <NutritionProfileFormContainer
-              modal
-              {...props}
-            />
-          </Modal>
-        )}
-      </ThemeContext.Consumer>,
-      MODAL_ID,
-    )
-  )
 }
 
 const NutritionProfileModal = (props: NutritionProfileFormProps) => {

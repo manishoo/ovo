@@ -1,9 +1,9 @@
 /*
  * MealSettingsScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
@@ -23,9 +23,7 @@ import {
   MealSettingsScreenMutation,
   MealSettingsScreenMutationVariables
 } from '@Views/MealSettingsScreen/types/MealSettingsScreenMutation'
-import gql from 'graphql-tag'
 import React from 'react'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 
 

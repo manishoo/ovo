@@ -1,11 +1,10 @@
 /*
  * PopupDialog.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import { Option } from '@Common/Popup/Popup'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { fullHeight } from '@Utils'
 import RX from 'reactxp'

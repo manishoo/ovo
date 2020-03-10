@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from "./../../../models/global-types";
+import { LanguageCode } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL query operation: ProfileMealsQuery
@@ -84,6 +84,8 @@ export interface ProfileMealsQuery_meals_meals_items_item_Recipe {
 export type ProfileMealsQuery_meals_meals_items_item = ProfileMealsQuery_meals_meals_items_item_Food | ProfileMealsQuery_meals_meals_items_item_Recipe;
 
 export interface ProfileMealsQuery_meals_meals_items {
+  id: any;
+  isOptional: boolean | null;
   amount: number | null;
   customUnit: ProfileMealsQuery_meals_meals_items_customUnit | null;
   /**

@@ -1,18 +1,17 @@
 /*
  * MealPlanSettingsScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import Page from '@Common/Page'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
-import { NutritionProfileFormContainer } from '@Common/NutritionProfileForm/NutritionProfileForm'
+import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
 import { Me } from '@Services/types/Me'
@@ -24,8 +23,6 @@ import {
   MealPlanSettingsScreenMutationVariables
 } from '@Views/MealPlanSettingsScreen/types/MealPlanSettingsScreenMutation'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -59,13 +56,6 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
       ${MealSettingsScreen.fragments.mealSettingsMeal}
     `
   }
-
-  protected _buildState(props: MealPlanSettingsScreenProps, initialBuild: boolean): Partial<MealPlanSettingsScreenState> | undefined {
-    return {
-      me: UserStore.getUser(),
-    }
-  }
-
   private _userMeals: null | UserMeals = null
 
   static showModal = (props: MealPlanSettingsScreenCommonProps) => (
@@ -124,6 +114,12 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
         </RX.View>
       </Page>
     )
+  }
+
+  protected _buildState(props: MealPlanSettingsScreenProps, initialBuild: boolean): Partial<MealPlanSettingsScreenState> | undefined {
+    return {
+      me: UserStore.getUser(),
+    }
   }
 
   private _onSubmit = () => {

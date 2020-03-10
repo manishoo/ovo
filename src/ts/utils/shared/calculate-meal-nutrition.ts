@@ -1,6 +1,6 @@
 /*
  * calculate-meal-nutrition.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { Nutrition } from '@Models/types/Nutrition'

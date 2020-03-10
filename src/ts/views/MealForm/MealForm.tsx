@@ -1,11 +1,11 @@
 /*
  * MealForm.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation, useQuery } from '@apollo/client'
+import Storage from '@App/Storage/Storage'
 import Styles from '@App/Styles'
-import Page from '@Common/Page'
 import Checkbox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodPreviewOnSubmit } from '@Common/FoodPickerDialog/components/FoodPreview'
@@ -15,6 +15,7 @@ import Input from '@Common/Input/Input'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { Role } from '@Models/global-types'
 import LocationStore from '@Services/LocationStore'
@@ -33,12 +34,9 @@ import { MealFormQuery, MealFormQueryVariables } from '@Views/MealForm/types/Mea
 import { MealFormUpdateMutation, MealFormUpdateMutationVariables } from '@Views/MealForm/types/MealFormUpdateMutation'
 import { ProfileMealsQuery, ProfileMealsQueryVariables } from '@Views/ProfileScreen/types/ProfileMealsQuery'
 import { PROFILE_MEALS_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import SortableList from 'src/ts/modules/SortableList/index.web'
-import Storage from '@App/Storage/Storage'
 
 
 interface MealFormCommonProps extends RX.CommonProps {
@@ -64,6 +62,32 @@ interface MealFormState {
 }
 
 class MealForm extends ComponentBase<MealFormProps, MealFormState> {
+  static fragments = {
+    meal: gql`
+      fragment MealFormMeal on Meal {
+        id
+        name {text locale}
+        likedByUser
+        likesCount
+        items {
+          ...MealItemRowMealItem
+        }
+        instanceOf
+        author {
+          id
+          username
+          avatar {url}
+        }
+        timing {
+          totalTime
+        }
+      }
+
+      ${MealItemRow.fragments.mealItem}
+    `
+
+  }
+
   constructor(props: MealFormProps) {
     super(props)
 
@@ -194,6 +218,20 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         }
       </Page>
     )
+  }
+
+  public componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
+    if (this.state.meal.items.length === 0 && nextProps.meal) {
+      this.setState({
+        meal: nextProps.meal,
+      })
+    }
+  }
+
+  public componentWillMount(): void {
+    if (!this.props.meal) {
+      this._loadStateFromStorage()
+    }
   }
 
   private _onSubmit = () => {
@@ -331,46 +369,6 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
       this.setState({
         meal,
       })
-    }
-  }
-
-  static fragments = {
-    meal: gql`
-      fragment MealFormMeal on Meal {
-        id
-        name {text locale}
-        likedByUser
-        likesCount
-        items {
-          ...MealItemRowMealItem
-        }
-        instanceOf
-        author {
-          id
-          username
-          avatar {url}
-        }
-        timing {
-          totalTime
-        }
-      }
-
-      ${MealItemRow.fragments.mealItem}
-    `
-
-  }
-
-  public componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
-    if (this.state.meal.items.length === 0 && nextProps.meal) {
-      this.setState({
-        meal: nextProps.meal,
-      })
-    }
-  }
-
-  public componentWillMount(): void {
-    if (!this.props.meal) {
-      this._loadStateFromStorage()
     }
   }
 }

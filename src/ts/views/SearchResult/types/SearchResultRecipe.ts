@@ -1,8 +1,13 @@
+/*
+ * SearchResultRecipe.ts
+ * Copyright: Mehdi J. Shooshtari 2020
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode } from "./../../../models/global-types";
+import { LanguageCode } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: SearchResultRecipe
@@ -67,7 +72,9 @@ export interface SearchResultRecipe_ingredients_unit_CustomUnit {
   name: SearchResultRecipe_ingredients_unit_CustomUnit_name[];
 }
 
-export type SearchResultRecipe_ingredients_unit = SearchResultRecipe_ingredients_unit_Weight | SearchResultRecipe_ingredients_unit_CustomUnit;
+export type SearchResultRecipe_ingredients_unit =
+  SearchResultRecipe_ingredients_unit_Weight
+  | SearchResultRecipe_ingredients_unit_CustomUnit;
 
 export interface SearchResultRecipe_ingredients_item_Food_name {
   text: string;
@@ -150,7 +157,9 @@ export interface SearchResultRecipe_ingredients_item_Recipe {
   nutrition: SearchResultRecipe_ingredients_item_Recipe_nutrition;
 }
 
-export type SearchResultRecipe_ingredients_item = SearchResultRecipe_ingredients_item_Food | SearchResultRecipe_ingredients_item_Recipe;
+export type SearchResultRecipe_ingredients_item =
+  SearchResultRecipe_ingredients_item_Food
+  | SearchResultRecipe_ingredients_item_Recipe;
 
 export interface SearchResultRecipe_ingredients {
   id: any;

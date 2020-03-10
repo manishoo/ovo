@@ -1,9 +1,9 @@
 /*
- * Meal.tsx
- * Copyright: Ouranos Studio 2019
+ * MealComponent.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
@@ -24,8 +24,6 @@ import {
   MealComponentSuggestMealMutationVariables
 } from '@Views/CalendarScreen/components/types/MealComponentSuggestMealMutation'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import MealItemComponent from './MealItemComponent'
 import { DayMeal, DayMeal_items } from './types/DayMeal'

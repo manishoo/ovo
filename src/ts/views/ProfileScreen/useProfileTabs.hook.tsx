@@ -1,11 +1,9 @@
 /*
  * useProfileTabs.hook.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
-import { QueryResult } from 'react-apollo'
+import { gql, QueryResult, useQuery } from '@apollo/client'
 import RX from 'reactxp'
 import IngredientCard from '../../common/IngredientCard/IngredientCard'
 import MealCell from './components/MealsList/components/MealCell/MealCell'
@@ -17,7 +15,7 @@ import { ProfileReviewRecipesQuery, ProfileReviewRecipesQueryVariables } from '.
 
 export const PROFILE_MEALS_QUERY = gql`
   query ProfileMealsQuery($lastId: String, $userId: ObjectId) {
-    meals(lastId: $lastId, authorId: $userId) {
+    meals(lastId: $lastId, authorId: $userId) @connection(key: "meals") {
       meals {
         ...MealCellMeal
       }
@@ -32,7 +30,7 @@ export const PROFILE_MEALS_QUERY = gql`
 `
 export const PROFILE_RECIPES_QUERY = gql`
   query ProfileRecipesQuery($lastId: ObjectId, $userId: ObjectId, $size: Int) {
-    recipes(lastId: $lastId, userId: $userId, size: $size) {
+    recipes(lastId: $lastId, userId: $userId, size: $size) @connection(key: "recipes") {
       recipes {
         ...IngredientRecipe
       }
@@ -47,7 +45,7 @@ export const PROFILE_RECIPES_QUERY = gql`
 `
 export const PROFILE_REVIEW_RECIPES_QUERY = gql`
   query ProfileReviewRecipesQuery($lastId: ObjectId, $size: Int) {
-    recipes(lastId: $lastId, size: $size, status: review) {
+    recipes(lastId: $lastId, size: $size, status: review) @connection(key: "reviewRecipes") {
       recipes {
         ...IngredientRecipe
       }
@@ -71,7 +69,7 @@ export interface ProfileTabsResult {
   reviewRecipes: QueryResult<ProfileReviewRecipesQuery, ProfileReviewRecipesQueryVariables>
 }
 
-function useProfileTabs({userId}: ProfileTabsProps): ProfileTabsResult {
+function useProfileTabs({ userId }: ProfileTabsProps): ProfileTabsResult {
   const meals = useQuery<ProfileMealsQuery, ProfileMealsQueryVariables>(PROFILE_MEALS_QUERY, {
     fetchPolicy: 'cache-and-network',
     returnPartialData: true,

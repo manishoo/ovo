@@ -1,19 +1,17 @@
 /*
  * client.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+/**
+ * Apollo Client
+ * */
+import { ApolloClient, ApolloLink, Observable } from '@apollo/client'
+import { onError } from '@apollo/link-error'
 import { cache } from '@App/client-cache'
 import fetch from '@Modules/fetch'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import UserStore from '@Services/UserService'
-/**
- * Apollo Client
- * */
-import { ApolloClient } from 'apollo-client'
-import { ApolloLink, Observable } from 'apollo-link'
-import { onError } from 'apollo-link-error'
-import { withClientState } from 'apollo-link-state'
 import { createUploadLink } from 'apollo-upload-client'
 import AppConfig from './AppConfig'
 
@@ -58,6 +56,10 @@ const requestLink = new ApolloLink((operation, forward) =>
   })
 )
 
+// TODO: batching important operations (https://blog.apollographql.com/batching-client-graphql-queries-a685f5bcd41b)
+// use persisted queries
+//
+
 function sendToLoggingService(errors: any) {
   //
 }
@@ -68,7 +70,9 @@ function logoutUser() {
 }
 
 const client = new ApolloClient({
+  connectToDevTools: true,
   link: ApolloLink.from([
+    // batchLink,
     onError(({ graphQLErrors, networkError, operation }) => {
       if (graphQLErrors) {
         graphQLErrors.map(error => {
@@ -88,20 +92,7 @@ const client = new ApolloClient({
       }
     }),
     requestLink,
-    withClientState({
-      defaults: {
-        isConnected: true
-      },
-      resolvers: {
-        Mutation: {
-          updateNetworkStatus: (_: any, { isConnected }: any, { cache }: any) => {
-            cache.writeData({ data: { isConnected } })
-            return null
-          }
-        }
-      },
-      cache
-    }),
+    // @ts-ignore
     createUploadLink({
       uri: AppConfig.graphQLAddress,
       fetch,

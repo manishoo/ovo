@@ -1,13 +1,12 @@
 /*
  * SimpleMenu.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import KeyCodes from '@Utils/KeyCodes'
 import map from 'lodash/map'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-
-import KeyCodes from '@Utils/KeyCodes'
 
 
 export interface MenuItem {

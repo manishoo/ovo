@@ -1,9 +1,9 @@
 /*
  * nutrition.ts
- * Copyright: Ouranos Studio 2020
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 
 const NutritionFragment = gql`

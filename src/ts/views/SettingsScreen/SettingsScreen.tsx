@@ -1,19 +1,18 @@
 /*
  * SettingsScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
-import client from '@App/client'
+import { ExecutionResult, gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import Page from '@Common/Page'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import FlatButton from '@Common/FlatButton/FlatButton'
 import Image from '@Common/Image/Image'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
@@ -22,13 +21,11 @@ import { Gender, UserUpdateInput } from '@Models/global-types'
 import FilePicker from '@Modules/FilePicker'
 import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
+import { Me } from '@Services/types/Me'
 import UserService from '@Services/UserService'
 import UserStore from '@Services/UserService'
-import { Me } from '@Services/types/Me'
 import { SettingsMutation, SettingsMutationVariables } from '@Views/SettingsScreen/types/SettingsMutation'
-import gql from 'graphql-tag'
 import _set from 'lodash/set'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
