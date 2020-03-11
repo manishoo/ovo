@@ -2,7 +2,16 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { MessageSender, MessageType, AssistantExpectations, MealAvailableTime, MealSize, Gender, NutritionProfileMode, Role } from "./../../../models/global-types";
+import {
+  AssistantExpectations,
+  Gender,
+  MealAvailableTime,
+  MealSize,
+  MessageSender,
+  MessageType,
+  NutritionProfileMode,
+  Role
+} from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: IntroductionMutation
@@ -64,6 +73,7 @@ export interface IntroductionMutation_setup_messages_data_user_nutritionProfile_
 }
 
 export interface IntroductionMutation_setup_messages_data_user_nutritionProfile {
+  id: any;
   calories: number;
   carbs: IntroductionMutation_setup_messages_data_user_nutritionProfile_carbs;
   fat: IntroductionMutation_setup_messages_data_user_nutritionProfile_fat;

@@ -59,6 +59,7 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
   static fragments = {
     nutritionProfile: gql`
       fragment NutritionProfileFormNutritionProfile on NutritionProfile {
+        id
         calories
         carbs {
           max

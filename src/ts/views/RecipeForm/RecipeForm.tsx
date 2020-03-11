@@ -102,8 +102,8 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page
-            scrollViewProps={{
+          <Page lazyRender
+                scrollViewProps={{
               ref: ref => this._scrollView = ref,
             }}
           >

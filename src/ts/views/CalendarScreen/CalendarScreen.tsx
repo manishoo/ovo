@@ -3,9 +3,10 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { graphql } from '@apollo/react-hoc'
+import { graphql, withApollo } from '@apollo/react-hoc'
 import Styles from '@App/Styles'
 import Page from '@Common/Page'
+import Carousel from '@Modules/Carousel'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { DateTime } from 'luxon'
 import RX from 'reactxp'
@@ -34,17 +35,19 @@ interface CalendarState {
   isSmallOrTinyScreenSize: boolean,
 }
 
+export const ANIMATION_DURATION = 300
+
 const DEFAULT = {
   getDayCursor: DateTime.local,
-  daysOnEachSide: 2,
+  daysOnEachSide: 5,
   get renderingDays() {
     return generateRenderingDays(this.getDayCursor(), this.daysOnEachSide)
   }
 }
 
 class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
-  private _scrollView: RX.ScrollView | null = null
-  private _control: null | CalendarControl = null
+  private _carousel: Carousel | null = null
+  private _control: null | any = null
   private _daysOnEachSide = DEFAULT.daysOnEachSide
 
   constructor(props: CalendarProps) {
@@ -62,68 +65,56 @@ class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
   }
 
   componentDidMount() {
-    const scrollView = this._scrollView
-
     this.props.getMoreDays(this.state.renderingDates)
-    // go to today
-    if (scrollView) {
-      setTimeout(() => {
-        this._goToCenter()
-      }, 0)
-    }
   }
 
   public render() {
     const currentDay = this._getDayByDate(this.state.dayCursor, this.props.calendar)
 
     return [
-      <Page
-        style={{
-          flex: 1,
-        }}
-        outerContainerChildren={[
-          <CalendarNavButton
-            onPress={() => this._control!.changeDayCursor(this.state.dayCursor.minus({ day: 1 }))}
-            direction={'toLeft'}
+      <Page lazyRender
             style={{
-              [Styles.values.start]: 0,
+              flex: 1,
             }}
-          />,
-          <CalendarNavButton
-            onPress={() => this._control!.changeDayCursor(this.state.dayCursor.plus({ day: 1 }))}
-            direction={'toRight'}
-            style={{
-              [Styles.values.end]: 0,
-            }}
-          />
-        ]}
+            outerContainerChildren={[
+              <CalendarNavButton
+                onPress={() => this._control!.changeDayCursor(this.state.dayCursor.minus({ day: 1 }))}
+                direction={'toLeft'}
+                style={{
+                  [Styles.values.start]: 0,
+                }}
+              />,
+              <CalendarNavButton
+                onPress={() => this._control!.changeDayCursor(this.state.dayCursor.plus({ day: 1 }))}
+                direction={'toRight'}
+                style={{
+                  [Styles.values.end]: 0,
+                }}
+              />
+            ]}
       >
         <CalendarControl
           ref={ref => this._control = ref}
-          dayCursor={this.state.dayCursor}
           onDateChange={date => this._changeDayCursor(date)}
           width={this.state.width}
-          getDayByDate={date => this._getDayByDate(date, this.props.calendar)}
           style={{
             marginBottom: Styles.values.spacing,
           }}
         />
-        <RX.ScrollView
-          style={[
-            styles.scrollView,
-          ]}
-          horizontal
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          ref={ref => this._scrollView = ref}
+        <Carousel
+          ref={ref => this._carousel = ref}
+          initialSlide={this._daysOnEachSide}
+          slidesToShow={1}
+          slidesToScroll={1}
+          adaptiveHeight
+          speed={ANIMATION_DURATION}
         >
           {
             this.state.renderingDates.map(date => (
               <DayComponent
                 key={date.toISODate()}
                 style={{
-                  width: this._getDayWidth(),
+                  width: this._dayWidth(),
                 }}
                 date={date}
                 onTitlePress={date => this._control!.changeDayCursor(date)}
@@ -134,7 +125,7 @@ class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
               />
             ))
           }
-        </RX.ScrollView>
+        </Carousel>
       </Page>,
       currentDay &&
       <RX.View
@@ -146,7 +137,7 @@ class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
           position: 'absolute',
           right: 0,
           left: 0,
-          bottom: 54, // TODO navbar
+          bottom: 54, // TODO tabBar
           height: 100,
           margin: 'auto',
         }}
@@ -163,31 +154,23 @@ class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
     ]
   }
 
-  private _getDayWidth = () => this.state.width - (Styles.values.spacing * 2)
+  private _dayWidth = () => this.state.width - (Styles.values.spacing * 2)
 
   private _getDayByDate = (date: DateTime, calendar: Day[]) => {
     /**
      * If the date was far away, don't return the day
      * */
-
     return calendar.find(day => DateTime.fromISO(day.date).hasSame(date, 'day'))
   }
-
-  private _goToCenter = () => this._scrollView!.setScrollLeft(this._getDayWidth() * this._daysOnEachSide, false)
 
   private _changeDayCursor = (date: DateTime) => {
     const { renderingDates } = this.state
     const { getMoreDays } = this.props
-    const scrollView = this._scrollView!
+    const carousel = this._carousel!
 
     let position = renderingDates.findIndex(p => p.hasSame(date, 'day'))
 
     const destinationInScrollView: boolean = position >= 0
-
-    if (destinationInScrollView) scrollView.setScrollLeft(position * this._getDayWidth(), true)
-    this.setState({
-      dayCursor: date,
-    })
 
     const newRenderingDates = generateRenderingDays(date, this._daysOnEachSide)
     const newDatesToGet = newRenderingDates.filter(p => !renderingDates.find(p2 => p.hasSame(p2, 'day')))
@@ -195,27 +178,33 @@ class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
       getMoreDays(newDatesToGet)
     }
 
-    if (position < 2 || position > 9) {
-      setTimeout(() => {
-        this.setState({
-          renderingDates: generateRenderingDays(date, this._daysOnEachSide),
-        }, () => scrollView.setScrollLeft(this._daysOnEachSide * this._getDayWidth(), false))
-      }, destinationInScrollView ? 1000 : 0)
+    if (destinationInScrollView) {
+      carousel.goTo(position)
+    } else {
+      this.setState({
+        renderingDates: generateRenderingDays(date, this._daysOnEachSide),
+      }, () => carousel.goTo(this._daysOnEachSide, false))
     }
   }
 }
 
-export default graphql<{}, CalendarQuery, CalendarQueryVariables, CalendarProps>(CalendarOperation, {
+export default withApollo(graphql<any, CalendarQuery, CalendarQueryVariables, CalendarProps>(CalendarOperation, {
   options: {
     fetchPolicy: 'cache-only',
     variables: {
       dates: DEFAULT.renderingDays.map(date => date.toISODate()),
     },
+    notifyOnNetworkStatusChange: true,
   },
-  props: ({ data }) => ({
+  props: ({ data, ownProps: { client } }) => ({
     calendar: data ? data.calendar || [] : [],
     getMoreDays: dates => data ? data.fetchMore({
-      updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+      updateQuery: (_previousQueryResult, { fetchMoreResult, variables }) => {
+        const previousQueryResult = client.readQuery({
+          query: CalendarOperation,
+        })
+        console.log('previousQueryResult', previousQueryResult)
+
         if (!fetchMoreResult) return previousQueryResult
 
         /**
@@ -223,16 +212,20 @@ export default graphql<{}, CalendarQuery, CalendarQueryVariables, CalendarProps>
          * */
         let newCalendar: CalendarQuery_calendar[] = []
         if (previousQueryResult) {
-          newCalendar = previousQueryResult.calendar.filter(p => {
+          newCalendar = previousQueryResult.calendar.map(p => {
             if (dates.find(p1 => DateTime.fromISO(p.date).hasSame(p1, 'day'))) {
-              return !!fetchMoreResult.calendar.find(p2 => DateTime.fromISO(p.date).hasSame(p2.date, 'day'))
+              const foundNewDay = fetchMoreResult.calendar.find(p2 => DateTime.fromISO(p.date).hasSame(p2.date, 'day'))
+
+              if (foundNewDay) {
+                return foundNewDay
+              }
             }
 
-            return true
+            return p
           })
         }
 
-        return {
+        const data = {
           ...previousQueryResult,
           calendar: [
             ...newCalendar,
@@ -245,24 +238,17 @@ export default graphql<{}, CalendarQuery, CalendarQueryVariables, CalendarProps>
              * */
           ].sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
         }
+
+        console.log('data', data)
+        client.writeQuery({
+          query: CalendarOperation,
+          data,
+        })
+        return data
       },
       variables: {
         dates: dates.map(date => date.toISODate()),
       }
     }) : null,
   }),
-})(CalendarScreen)
-
-const styles = {
-  scrollView: RX.Styles.createScrollViewStyle({
-    // @ts-ignore
-    display: 'flex',
-  }),
-  controlWrapper: RX.Styles.createViewStyle({
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  }),
-  controlButton: RX.Styles.createViewStyle({
-    borderRadius: 8,
-  }),
-}
+})(CalendarScreen))

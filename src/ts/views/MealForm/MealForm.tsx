@@ -122,7 +122,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     const { meal } = this.state
 
     return (
-      <Page>
+      <Page lazyRender>
         <Navbar
           title={
             this.props.meal ?

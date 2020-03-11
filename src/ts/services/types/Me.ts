@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { Gender, NutritionProfileMode, Role, MealAvailableTime, MealSize } from "./../../models/global-types";
+import { Gender, MealAvailableTime, MealSize, NutritionProfileMode, Role } from './../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: Me
@@ -48,6 +48,7 @@ export interface Me_nutritionProfile_protein {
 }
 
 export interface Me_nutritionProfile {
+  id: any;
   calories: number;
   carbs: Me_nutritionProfile_carbs;
   fat: Me_nutritionProfile_fat;

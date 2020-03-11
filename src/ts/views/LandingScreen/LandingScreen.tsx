@@ -51,8 +51,8 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
       <ThemeContext.Consumer>
         {({ theme }) => (
           [
-            <Page
-              scrollViewProps={{
+            <Page lazyRender
+                  scrollViewProps={{
                 onScroll: this._onScroll,
               }}
             >

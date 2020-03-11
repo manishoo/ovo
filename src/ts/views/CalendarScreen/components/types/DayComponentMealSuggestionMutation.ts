@@ -33,6 +33,7 @@ export interface DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_
 }
 
 export interface DayComponentMealSuggestionMutation_suggestDay_nutritionProfile {
+  id: any;
   calories: number;
   carbs: DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_carbs;
   fat: DayComponentMealSuggestionMutation_suggestDay_nutritionProfile_fat;

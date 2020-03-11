@@ -84,7 +84,7 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
     if (!me) return
 
     return (
-      <Page>
+      <Page lazyRender>
         <Navbar
           title={translate(translate.keys.editMealPlanSettings)}
         >

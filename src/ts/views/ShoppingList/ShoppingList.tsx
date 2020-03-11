@@ -28,8 +28,8 @@ interface LoginState {
 export default class ShoppingList extends ComponentBase<LoginProps, LoginState> {
   public render() {
     return (
-      <Page
-        style={{
+      <Page lazyRender
+            style={{
           padding: Styles.values.spacing,
         }}
       >

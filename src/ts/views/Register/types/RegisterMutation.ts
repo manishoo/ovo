@@ -2,7 +2,14 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { UserRegistrationInput, Gender, NutritionProfileMode, Role, MealAvailableTime, MealSize } from "./../../../models/global-types";
+import {
+  Gender,
+  MealAvailableTime,
+  MealSize,
+  NutritionProfileMode,
+  Role,
+  UserRegistrationInput
+} from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: RegisterMutation
@@ -48,6 +55,7 @@ export interface RegisterMutation_registerUser_user_nutritionProfile_protein {
 }
 
 export interface RegisterMutation_registerUser_user_nutritionProfile {
+  id: any;
   calories: number;
   carbs: RegisterMutation_registerUser_user_nutritionProfile_carbs;
   fat: RegisterMutation_registerUser_user_nutritionProfile_fat;

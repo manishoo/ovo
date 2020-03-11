@@ -88,7 +88,7 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
 
   public render() {
     return (
-      <Page>
+      <Page lazyRender>
         <Navbar>
           {this._renderControlBar()}
         </Navbar>

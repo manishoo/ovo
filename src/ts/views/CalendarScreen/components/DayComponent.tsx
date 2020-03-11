@@ -150,7 +150,7 @@ const DayComponent = (props: DayComponentProps) => {
             // justifyContent: 'center',
             marginTop: Styles.values.spacing,
             minHeight: height,
-            minWidth: width - Styles.values.spacing * 2,
+            // minWidth: width - Styles.values.spacing * 2,
           }}
         >
           {

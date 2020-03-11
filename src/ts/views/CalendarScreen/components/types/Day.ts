@@ -33,6 +33,7 @@ export interface Day_nutritionProfile_protein {
 }
 
 export interface Day_nutritionProfile {
+  id: any;
   calories: number;
   carbs: Day_nutritionProfile_carbs;
   fat: Day_nutritionProfile_fat;

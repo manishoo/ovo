@@ -92,8 +92,8 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page
-            scrollViewProps={{
+          <Page lazyRender
+                scrollViewProps={{
               onScroll: this._onScroll,
             }}
           >

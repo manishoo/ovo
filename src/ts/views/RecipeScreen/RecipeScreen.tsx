@@ -102,7 +102,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page>
+          <Page lazyRender>
             <Navbar>
               {this._renderControlBar()}
             </Navbar>

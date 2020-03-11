@@ -55,7 +55,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page>
+          <Page lazyRender>
             <Navbar title={translate('Edit Profile')} />
             {this._renderAvatar()}
             <Text translate type={Text.types.title}>Account Info</Text>

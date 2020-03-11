@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { NutritionProfileInput, NutritionProfileMode } from "./../../../models/global-types";
+import { NutritionProfileInput, NutritionProfileMode } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: NutritionProfileMutation
@@ -27,6 +27,7 @@ export interface NutritionProfileMutation_updateNutritionProfile_protein {
 }
 
 export interface NutritionProfileMutation_updateNutritionProfile {
+  id: any;
   calories: number;
   carbs: NutritionProfileMutation_updateNutritionProfile_carbs;
   fat: NutritionProfileMutation_updateNutritionProfile_fat;
