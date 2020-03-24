@@ -41,7 +41,7 @@ export default class RegisterModal extends ComponentBase<{}, RegisterModalState>
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.Animated.View
-            style={this.state.isTinyOrSmall ? [styles.container, this._modalAnimatedStyle] : [styles.login, { backgroundColor: theme.colors.logmodalIdBG }]}>
+            style={this.state.isTinyOrSmall ? [styles.container, this._modalAnimatedStyle] : [styles.login, { backgroundColor: theme.colors.loginModalBG }]}>
             <RX.Text style={styles.closeButton}
                      onPress={() => this.dismiss(() => navigate(this.props, 'back'))}>X</RX.Text>
           </RX.Animated.View>
