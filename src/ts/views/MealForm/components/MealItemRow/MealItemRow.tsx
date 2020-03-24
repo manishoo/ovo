@@ -7,12 +7,12 @@ import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FlatButton from '@Common/FlatButton/FlatButton'
-import { FoodPreviewOnSubmit } from '@Common/FoodPickerDialog/components/FoodPreview'
+import FoodPreview, { FoodPreviewOnSubmit, showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPreview'
+import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import { Ingredient } from '@Models/types/Ingredient'
 import { createId } from '@Utils/create-id'
 import {
   MealItemRowMealItem,
@@ -35,10 +35,13 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
       fragment MealItemRowMealItem on MealItem {
         id
         amount
+        name { text locale }
+        description { text locale }
         customUnit {
           gramWeight
           name { text locale }
         }
+        isOptional
         unit {
           ... on Weight {
             amount
@@ -52,16 +55,14 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
           }
         }
         item {
-          ... on Food {
-            ...IngredientFood
-          }
-          ... on Recipe {
-            ...IngredientRecipe
-          }
+          ...FoodPreviewMealItemIngredientItem
         }
         alternativeMealItems {
           id
           amount
+          name { text locale }
+          description { text locale }
+          isOptional
           customUnit {
             gramWeight
             name { text locale }
@@ -79,18 +80,12 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
             }
           }
           item {
-            ... on Food {
-              ...IngredientFood
-            }
-            ... on Recipe {
-              ...IngredientRecipe
-            }
+            ...FoodPreviewMealItemIngredientItem
           }
         }
       }
 
-      ${IngredientCard.fragments.recipe}
-      ${IngredientCard.fragments.food}
+      ${FoodPreview.fragments.mealItemIngredientItem}
     `
   }
 
@@ -168,7 +163,16 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
       <IngredientCard
         size={150}
         // onPress={mealItem.food ? () => LocationStore.navigate(this.props, `/food/${mealItem.food.id}/`) : undefined}
-        onIngredientChange={editable ? this._onMealItemIngredientChange(mealItem, isMainMealItem) : undefined}
+        onUnitPress={() => showFoodPreviewModal({
+          mealItem: {
+            id: createId(),
+            ...mealItem,
+          },
+          inputRef: () => null,
+          onDismiss: () => null,
+          onSubmit: this._onMealItemIngredientChange(mealItem, isMainMealItem),
+          height: 400,
+        })}
         onDelete={editable ? this._onMealItemDelete(mealItem, isMainMealItem) : undefined}
         ingredient={mealItem}
         style={isMainMealItem ? undefined : styles.mealItem}
@@ -189,7 +193,7 @@ export default class MealItemRow extends RX.Component<MealItemRowProps> {
     }
   }
 
-  private _onMealItemIngredientChange = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => (ingredient: Ingredient) => {
+  private _onMealItemIngredientChange = (mealItem: MealItemRowMealItem_alternativeMealItems, isMainMealItem?: boolean) => (ingredient: FoodPreviewMealItem) => {
     const { onMealItemChange } = this.props
 
     if (isMainMealItem) {

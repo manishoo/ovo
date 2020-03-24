@@ -95,7 +95,7 @@ export default class SimpleMenu extends ComponentBase<MenuProps, MenuState> {
     }
   }
 
-  componentDidUpdate(prevProps: MenuProps, prevState: MenuState, prevContext: any) {
+  UNSAFE_componentDidUpdate(prevProps: MenuProps, prevState: MenuState, prevContext: any) {
     super.componentDidUpdate(prevProps, prevState, prevContext)
 
     if (this.state.focusedIndex !== prevState.focusedIndex) {

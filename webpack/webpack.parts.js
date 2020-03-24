@@ -34,7 +34,7 @@ exports.optimizeChunks = () => ({
       maxInitialRequests: 3,
       automaticNameDelimiter: '~',
       name: true,
-      noEmitOnErrors: true,
+      // noEmitOnErrors: true,
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,

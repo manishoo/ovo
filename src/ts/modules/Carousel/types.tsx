@@ -7,6 +7,9 @@ export interface CarouselProps {
   style?: any,
   children: any,
 
+  onChange?: (slide: number) => void,
+  onSwipe?: (swipeDirection: 'left' | 'right') => void,
+
   adaptiveHeight?: boolean,
   slidesToShow?: number,
   slidesToScroll?: number,

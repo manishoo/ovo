@@ -7,9 +7,7 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
-import { showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPreview'
 import Image from '@Common/Image/Image'
-import LikeButton from '@Common/LikeButton/LikeButton'
 import Link from '@Common/Link/Link'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
@@ -114,9 +112,9 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               this.props.serving &&
               <RX.View style={{ flexDirection: 'row' }}>
                 <RX.View
-                  onPress={this._onServingPress}
+                  // onPress={this._onServingPress}
                   style={[styles.unitWrapper, {
-                    cursor: this.props.onServingChange ? 'pointer' : 'default',
+                    // cursor: this.props.onServingChange ? 'pointer' : 'default',
                     backgroundColor: theme.colors.recipeIngredientUnitBG
                   }]}
                 >
@@ -182,47 +180,47 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
       content
   }
 
-  private _onServingPress = () => {
-    showFoodPreviewModal({
-      inputRef: () => null,
-      onDismiss: () => null,
-      mealItem: {
-        name: [],
-        description: null,
-        customUnit: null,
-        unit: null,
-        item: this.props.recipe,
-        amount: this.props.serving || 1,
-        id: this.props.recipe.id,
-        isOptional: null,
-      },
-      onSubmit: mealItem => this.props.onServingChange && this.props.onServingChange(mealItem.amount || 0),
-      height: 400, // FIXME not a constant!
-    })
-  }
+  // private _onServingPress = () => {
+  //   showFoodPreviewModal({
+  //     inputRef: () => null,
+  //     onDismiss: () => null,
+  //     mealItem: {
+  //       name: [],
+  //       description: null,
+  //       customUnit: null,
+  //       unit: null,
+  //       item: this.props.recipe,
+  //       amount: this.props.serving || 1,
+  //       id: this.props.recipe.id,
+  //       isOptional: null,
+  //     },
+  //     onSubmit: mealItem => this.props.onServingChange && this.props.onServingChange(mealItem.amount || 0),
+  //     height: 400, // FIXME not a constant!
+  //   })
+  // }
 
   private _renderLikes = (theme: Theme) => {
     return null
 
-    let size = this.props.size / 4
-    if (size < 60) {
-      size = 60
-    }
-
-    return (
-      <RX.View style={[styles.likesContainer, { top: (this.props.size) - (size - 10) }]}>
-        <Text
-          style={[styles.likeText, { color: theme.colors.recipeCardLikeText }]}>{this.props.recipe.likesCount}</Text>
-        <LikeButton
-          size={size}
-          liked={this.props.recipe.userLikedRecipe || false}
-          onChange={liked => {
-
-          }}
-        />
-
-      </RX.View>
-    )
+    // let size = this.props.size / 4
+    // if (size < 60) {
+    //   size = 60
+    // }
+    //
+    // return (
+    //   <RX.View style={[styles.likesContainer, { top: (this.props.size) - (size - 10) }]}>
+    //     <Text
+    //       style={[styles.likeText, { color: theme.colors.recipeCardLikeText }]}>{this.props.recipe.likesCount}</Text>
+    //     <LikeButton
+    //       size={size}
+    //       liked={this.props.recipe.userLikedRecipe || false}
+    //       onChange={liked => {
+    //
+    //       }}
+    //     />
+    //
+    //   </RX.View>
+    // )
   }
 
   private _renderTime = (theme: Theme) => {
@@ -236,7 +234,7 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
   }
 
   private _setUI = (isHovering: boolean) => {
-    if (!this.props.recipe.image) {
+    if (!this.props.recipe.thumbnail) {
       this.setState({
         isHovering,
       })

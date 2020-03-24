@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { Role } from "./../../../models/global-types";
+import { Role } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL query operation: PublicProfileScreenQuery

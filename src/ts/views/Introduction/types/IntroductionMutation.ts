@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 import {
@@ -98,7 +99,7 @@ export interface IntroductionMutation_setup_messages_data_user_meals {
 export interface IntroductionMutation_setup_messages_data_user {
   id: string;
   username: string;
-  session: string;
+  session: string | null;
   email: string;
   firstName: string | null;
   lastName: string | null;

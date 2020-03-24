@@ -1,10 +1,10 @@
 {
-  "short_name": "Looney Toons",
-  "name": "Looney Toons",
+  "short_name": "Ovo",
+  "name": "Ovo Assistant",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "192x192",
+      "sizes": "17x17",
       "type": "image/png"
     }
   ],

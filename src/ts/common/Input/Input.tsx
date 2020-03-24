@@ -182,7 +182,8 @@ const styles = {
     padding: Styles.values.spacing / 2,
     borderRadius: Styles.values.normalBorderRadius,
     borderWidth: 1,
-    borderColor: 'transparent'
+    borderColor: 'transparent',
+    minWidth: 20,
   }),
   errorLabel: RX.Styles.createTextStyle({
     marginTop: Styles.values.spacing / 2,

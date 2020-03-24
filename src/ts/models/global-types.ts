@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 //==============================================================
@@ -149,6 +150,21 @@ export interface CustomUnitInput {
   gramWeight?: number | null;
 }
 
+export interface DayInput {
+  id?: any | null;
+  date: any;
+  meals: DayMealInput[];
+  nutritionProfile: NutritionProfileInput;
+}
+
+export interface DayMealInput {
+  id?: any | null;
+  userMeal: UserMealInput;
+  time?: any | null;
+  items?: MealItemInput[] | null;
+  ate?: boolean | null;
+}
+
 export interface IngredientInput {
   id?: any | null;
   name?: TranslationInput[] | null;
@@ -188,6 +204,7 @@ export interface MealItemInput {
 }
 
 export interface NutritionProfileInput {
+  id?: any | null;
   calories: number;
   protein: TargetNutritionInput;
   carbs: TargetNutritionInput;

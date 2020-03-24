@@ -57,6 +57,7 @@ class AppBootstrapperWeb extends AppBootstrapper {
 
   private _onLayoutRootView = (e: RX.Types.ViewOnLayoutEvent) => {
     const { width, height } = e
+
     ResponsiveWidthStore.putWindowSize(width, height)
   }
 }

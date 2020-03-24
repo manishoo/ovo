@@ -14,10 +14,11 @@ module.exports = {
 
       // optional disable SSL validation check
       skipSSLValidation: true,
-      watch: true,
+      watch: false,
       globalTypesFile: './src/ts/models/global-types.ts',
       noAddTypeName: true,
       target: 'typescript',
-    }
+      // includes: ["src/resources"]
+    },
   }
 }

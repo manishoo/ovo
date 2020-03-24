@@ -20,7 +20,7 @@ import { ComponentBase } from 'resub'
 interface ModalProps extends RX.CommonProps {
   modalId: string;
   children?: JSX.Element | JSX.Element[];
-  modalWidth?: number;
+  maxWidth?: number;
   fullWidth?: boolean;
   modalHeight?: number;
   fullHeight?: boolean;
@@ -44,7 +44,8 @@ const _styles = {
   }),
   modalContainer: RX.Styles.createViewStyle({
     flex: -1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderRadius: 10,
   }),
   modalBox: RX.Styles.createViewStyle({
     flex: -1,
@@ -85,9 +86,9 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     })
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // To give children a chance to cancel the ESC handler,
-    // subscribing in componentWillMount so that the children
+    // subscribing in UNSAFE_componentWillMount so that the children
     // could subscribe after.
     super.componentWillMount()
 
@@ -123,42 +124,52 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   }
 
   public render() {
+    const { theme } = this.props
+
     const modalBoxStyles = [_styles.modalBox, this.state.widthStyle, this.state.heightStyle]
     const modalContentStyles = [_styles.modalContainer, this._contentScaleAnimationStyle, this.state.heightStyle]
 
     let modalContent = (
-      <RX.Animated.View style={modalContentStyles}>
-        <RX.View
-          style={modalBoxStyles}
-          onPress={this._clickInside}
-          accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
-          restrictFocusWithin={true}
-          disableTouchOpacityAnimation={true}
-          tabIndex={-1}
+      <ThemeContext.Provider
+        value={{
+          theme,
+          toggleTheme: () => null,
+        }}
+      >
+        <RX.Animated.View
+          style={modalContentStyles}
         >
-          {this.props.children}
-        </RX.View>
-      </RX.Animated.View>
+          <RX.View
+            style={[
+              ...modalBoxStyles,
+              { backgroundColor: theme.colors.bg },
+            ]}
+            onPress={this._clickInside}
+            accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
+            restrictFocusWithin={true}
+            disableTouchOpacityAnimation={true}
+            tabIndex={-1}
+          >
+            {this.props.children}
+          </RX.View>
+        </RX.Animated.View>
+      </ThemeContext.Provider>
     )
 
     return (
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
-          <ThemeContext.Provider
-            value={{
-              theme: this.props.theme,
-              toggleTheme: () => null,
-            }}
+          <RX.Animated.View
+            style={[
+              _styles.modalContainerBackground,
+              this._opacityAnimationStyle,
+            ]}
+            onPress={this._clickOutside}
+            onLongPress={this._onLongPressOutside}
+            disableTouchOpacityAnimation={true}
           >
-            <RX.Animated.View
-              style={[_styles.modalContainerBackground, this._opacityAnimationStyle]}
-              onPress={this._clickOutside}
-              onLongPress={this._onLongPressOutside}
-              disableTouchOpacityAnimation={true}
-            >
-              {modalContent}
-            </RX.Animated.View>
-          </ThemeContext.Provider>
+            {modalContent}
+          </RX.Animated.View>
         </ApolloHooksProvider>
       </ApolloProvider>
 
@@ -171,9 +182,9 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     newState.widthStyle = undefined
     newState.heightStyle = undefined
 
-    if (props.modalWidth) {
+    if (props.maxWidth) {
       newState.widthStyle = RX.Styles.createViewStyle({
-        width: props.modalWidth,
+        maxWidth: props.maxWidth,
       }, false)
     }
     if (props.fullWidth) {

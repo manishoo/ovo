@@ -3,13 +3,13 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import UserService from '@Services/UserService'
-import UserStore from '@Services/UserService'
+import { Routes } from '@Models/common'
+import { MeFragment, MeOperation } from '@Models/graphql/me/me'
 import { navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { LoginMutation, LoginMutationVariables } from '@Views/Login/types/LoginMutation'
@@ -82,15 +82,13 @@ export class LoginForm extends RX.Component<LoginProps> {
       username: this.state.username,
       password: this.state.password,
     })
-      .then(async ({ data }: any) => {
+      .then(async ({ data }) => {
         if (!data) return
 
         /**
          * LoginForm Success
          * */
-        UserStore.setUser(data.loginUser.user)
-        UserStore.setSession(data.loginUser.session)
-        return navigate(this.props, `/${data.loginUser.user.username}`, {
+        return navigate(this.props, Routes.calendar, {
           replace: true,
         })
       })
@@ -98,18 +96,28 @@ export class LoginForm extends RX.Component<LoginProps> {
 }
 
 export default function (props: any) {
+  const client = useApolloClient()
   const [loginUser, { error }] = useMutation<LoginMutation, LoginMutationVariables>(gql`
     mutation LoginMutation($username: String!, $password: String!) {
       loginUser(username: $username, password: $password) {
         user {
           ...Me
         }
-        session
       }
     }
 
-    ${UserService.fragments.me}
-  `)
+    ${MeFragment}
+  `, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data => {
+      client.writeQuery({
+        query: MeOperation,
+        data: {
+          me: data.loginUser.user,
+        },
+      })
+    })
+  })
 
   return (
     <LoginForm

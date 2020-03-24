@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 import {
@@ -80,7 +81,7 @@ export interface SettingsMutation_updateUser_meals {
 export interface SettingsMutation_updateUser {
   id: string;
   username: string;
-  session: string;
+  session: string | null;
   email: string;
   firstName: string | null;
   lastName: string | null;

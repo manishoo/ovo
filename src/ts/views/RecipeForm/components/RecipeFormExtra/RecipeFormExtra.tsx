@@ -5,7 +5,7 @@
 
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import { Me } from '@Services/types/Me'
+import { Me } from '@Models/graphql/me/types/Me'
 import TagsInput from '@Views/RecipeForm/components/TagsInput/TagsInput'
 import { RecipeFormQuery_recipe } from '@Views/RecipeForm/types/RecipeFormQuery'
 import RX from 'reactxp'

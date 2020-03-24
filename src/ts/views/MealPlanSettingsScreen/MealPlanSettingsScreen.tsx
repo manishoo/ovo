@@ -14,23 +14,24 @@ import Navbar from '@Common/Navbar/Navbar'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
-import { Me } from '@Services/types/Me'
-import UserStore from '@Services/UserService'
+import { useMe } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import trimTypeName from '@Utils/trim-type-name'
-import { MealPlanSettingsMeal } from '@Views/MealPlanSettingsScreen/types/MealPlanSettingsMeal'
+import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
+import { PureComponent } from 'react'
+import RX from 'reactxp'
 import {
   MealPlanSettingsScreenMutation,
+  MealPlanSettingsScreenMutation_updateUserMeals,
   MealPlanSettingsScreenMutationVariables
-} from '@Views/MealPlanSettingsScreen/types/MealPlanSettingsScreenMutation'
-import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
-import RX from 'reactxp'
-import { ComponentBase } from 'resub'
+} from './types/MealPlanSettingsScreenMutation'
 
 
 interface MealPlanSettingsScreenCommonProps {
   style?: any,
-  onSubmit: (meals: MealPlanSettingsMeal[]) => void,
+  onSubmit: (meals: MealPlanSettingsScreenMutation_updateUserMeals[]) => void,
   submitMustSave?: boolean,
+  me: Me | null,
 }
 
 interface MealPlanSettingsScreenProps extends MealPlanSettingsScreenCommonProps {
@@ -38,13 +39,9 @@ interface MealPlanSettingsScreenProps extends MealPlanSettingsScreenCommonProps 
   loading?: boolean,
 }
 
-interface MealPlanSettingsScreenState {
-  me: Me | null,
-}
-
 const MODAL_ID = 'mealPlanSettingsModal'
 
-class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, MealPlanSettingsScreenState> {
+class MealPlanSettingsScreen extends PureComponent<MealPlanSettingsScreenProps> {
   static operations = {
     updateMealPlanSettings: gql`
       mutation MealPlanSettingsScreenMutation($userMeals: [UserMealInput!]!) {
@@ -80,7 +77,7 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
   )
 
   render() {
-    const { me } = this.state
+    const { me } = this.props
     if (!me) return
 
     return (
@@ -116,12 +113,6 @@ class MealPlanSettingsScreen extends ComponentBase<MealPlanSettingsScreenProps, 
     )
   }
 
-  protected _buildState(props: MealPlanSettingsScreenProps, initialBuild: boolean): Partial<MealPlanSettingsScreenState> | undefined {
-    return {
-      me: UserStore.getUser(),
-    }
-  }
-
   private _onSubmit = () => {
     const userMeals = this._userMeals
     if (!userMeals) throw new Error()
@@ -144,6 +135,7 @@ export default function MealPlanSettingsScreenContainer(props: MealPlanSettingsS
   return (
     <MealPlanSettingsScreen
       {...props}
+      me={useMe()}
       onUpdateMealPlanSettings={variables => updateUserMeals({ variables })}
       loading={loading}
     />

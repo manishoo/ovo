@@ -14,6 +14,7 @@ import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import { withNavigation } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
+import MealItemRow from '@Views/MealForm/components/MealItemRow/MealItemRow'
 import {
   MealCellMeal,
   MealCellMeal_items_item,
@@ -36,43 +37,14 @@ interface AddMealCellProps {
 @withNavigation
 export default class MealCell extends RX.Component<AddMealCellProps> {
   static fragments = {
-    mealCellMeal: gql`
+    meal: gql`
       fragment MealCellMeal on Meal {
         id
         name {text locale}
         likedByUser
         likesCount
         items {
-          id
-          isOptional
-          amount
-          customUnit {
-            gramWeight
-            name { text locale }
-          }
-          unit {
-            ... on Weight {
-              amount
-              gramWeight
-              id
-              name { text locale }
-            }
-            ... on CustomUnit {
-              gramWeight
-              name { text locale }
-            }
-          }
-          item {
-            ... on Food {
-              name { text locale }
-              description { text locale }
-              thumbnail {url}
-            }
-            ... on Recipe {
-              title {text locale}
-              thumbnail {url}
-            }
-          }
+          ...MealItemRowMealItem
         }
         hasPermutations
         author {
@@ -84,6 +56,8 @@ export default class MealCell extends RX.Component<AddMealCellProps> {
           totalTime
         }
       }
+
+      ${MealItemRow.fragments.mealItem}
     `
   }
 

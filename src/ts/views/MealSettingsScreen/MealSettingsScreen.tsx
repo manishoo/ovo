@@ -124,8 +124,7 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
         ]}
       >
         <Navbar
-          inModal
-          onBackPress={() => Modal.dismissAnimated(MODAL_ID)}
+          modalId={MODAL_ID}
           title={translate(translate.keys.editMealSettings)}
         >
           <RX.View

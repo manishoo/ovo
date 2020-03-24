@@ -19,7 +19,8 @@ import {
 } from '@Common/NutritionProfileForm/types/NutritionProfileMutation'
 import Text from '@Common/Text/Text'
 import { NutritionProfileInput, NutritionProfileMode } from '@Models/global-types'
-import UserService from '@Services/UserService'
+import { MeOperation } from '@Models/graphql/me/me'
+import { MeQuery } from '@Models/graphql/me/types/MeQuery'
 import trimTypeName from '@Utils/trim-type-name'
 import { ExecutionResult } from 'graphql'
 import RX from 'reactxp'
@@ -268,8 +269,7 @@ const NutritionProfileModal = (props: NutritionProfileFormProps) => {
     >
       <Navbar
         title={translate(translate.keys.editMealPlanSettings)}
-        inModal
-        onBackPress={() => Modal.dismissAnimated(MODAL_ID)}
+        modalId={MODAL_ID}
       >
         <RX.View
           style={{
@@ -319,7 +319,22 @@ export const NutritionProfileFormContainer = (props: NutritionProfileFormCommonP
       onNutritionProfileUpdate={nutritionProfile => updateNutritionProfile({
         variables: { nutritionProfile },
         update: (proxy, mutationResult) => {
-          if (mutationResult.data) UserService.setNutritionProfile(mutationResult.data.updateNutritionProfile)
+          if (mutationResult.data) {
+            const meQuery = proxy.readQuery<MeQuery>({
+              query: MeOperation,
+            })
+            if (!meQuery) return
+
+            proxy.writeQuery<MeQuery>({
+              query: MeOperation,
+              data: {
+                me: {
+                  ...meQuery.me,
+                  nutritionProfile: mutationResult.data.updateNutritionProfile,
+                },
+              }
+            })
+          }
         }
       })}
       loading={loading}

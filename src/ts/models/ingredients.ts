@@ -4,7 +4,6 @@
  */
 
 import { gql } from '@apollo/client'
-import NutritionFragment from '@Models/nutrition'
 
 
 export const IngredientFoodFragment = gql`
@@ -18,16 +17,16 @@ export const IngredientFoodFragment = gql`
       id
       name { text locale }
     }
-    image {url}
+    #    image {url}
     thumbnail {url}
     origFoodClassSlug
-    nutrition {
-      ...Nutrition
-    }
-    origFoodGroups { id name { text locale } }
+    #    nutrition {
+    #      ...Nutrition
+    #    }
+    #    origFoodGroups { id name { text locale } }
   }
 
-  ${NutritionFragment}
+  # {NutritionFragment}
 `
 
 export const IngredientRecipeFragment = gql`
@@ -35,70 +34,70 @@ export const IngredientRecipeFragment = gql`
     id
     slug
     title {text locale}
-    image {url}
+    #    image {url}
     timing {
-      cookTime
-      prepTime
+      #      cookTime
+      #      prepTime
       totalTime
     }
     status
-    likesCount
-    userLikedRecipe
+    #    likesCount
+    #    userLikedRecipe
     thumbnail {url}
-    ingredients {
-      id
-      name {text locale}
-      description {text locale}
-      amount
-      customUnit {
-        gramWeight
-        name { text locale }
-      }
-      unit {
-        ... on Weight {
-          amount
-          gramWeight
-          id
-          name { text locale }
-        }
-        ... on CustomUnit {
-          gramWeight
-          name { text locale }
-        }
-      }
-      item {
-        ... on Food {
-          ...IngredientFood
-        }
-        ... on Recipe {
-          id
-          slug
-          title {text locale}
-          nutrition {
-            calories { amount unit }
-          }
-        }
-      }
-    }
+    #    ingredients {
+    #      id
+    #      name {text locale}
+    #      description {text locale}
+    #      amount
+    #      customUnit {
+    #        gramWeight
+    #        name { text locale }
+    #      }
+    #      unit {
+    #        ... on Weight {
+    #          amount
+    #          gramWeight
+    #          id
+    #          name { text locale }
+    #        }
+    #        ... on CustomUnit {
+    #          gramWeight
+    #          name { text locale }
+    #        }
+    #      }
+    #      item {
+    #        ... on Food {
+    #          ...IngredientFood
+    #        }
+    #        ... on Recipe {
+    #          id
+    #          slug
+    #          title {text locale}
+    #          nutrition {
+    #            ...Nutrition
+    #          }
+    #        }
+    #      }
+    #    }
     author {
       id
       username
       avatar {url}
     }
-    nutrition {
-      ...Nutrition
-    }
+    #    nutrition {
+    #      ...Nutrition
+    #    }
   }
 
-  ${IngredientFoodFragment}
-  ${NutritionFragment}
+  #  {IngredientFoodFragment}
+  #  {NutritionFragment}
 `
 
 export const IngredientFragment = gql`
-  fragment Ingredient on Ingredient {
+  fragment BasicIngredient on Ingredient {
     id
-#    name {text locale}
-#    description {text locale}
+    name {text locale}
+    description {text locale}
     amount
     customUnit {
       gramWeight

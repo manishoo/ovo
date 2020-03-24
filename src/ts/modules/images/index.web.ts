@@ -83,6 +83,8 @@ class ImageSource implements ImageSourceBase {
 
   Crown = AppConfig.getImagePath('Crown.svg')
   CrownEmpty = AppConfig.getImagePath('CrownEmpty.svg')
+
+  Check = AppConfig.getImagePath('Check.svg')
 }
 
 export default new ImageSource()

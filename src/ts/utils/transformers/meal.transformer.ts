@@ -4,15 +4,15 @@
  */
 
 import {
-  FoodPreviewMealItem_item,
   FoodPreviewMealItem_item_Food,
+  FoodPreviewMealItem_item_Recipe,
   FoodPreviewMealItem_unit,
   FoodPreviewMealItem_unit_Weight
 } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import { MealInput, MealItemInput } from '@Models/global-types'
 import { getOrigId } from '@Utils/create-id'
 import trimTypeName from '@Utils/trim-type-name'
-import { DayMeal_items } from '@Views/CalendarScreen/components/types/DayMeal'
+import { MealComponentDayMeal_items } from '@Views/CalendarScreen/components/MealComponent/types/MealComponentDayMeal'
 import { MealFormMeal, MealFormMeal_items } from '@Views/MealForm/types/MealFormMeal'
 
 
@@ -21,13 +21,13 @@ export function determineIfIsWeight(toBeDetermined: Partial<FoodPreviewMealItem_
   return toBeDetermined.__typename === 'Weight'
 }
 
-export function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_item>): toBeDetermined is FoodPreviewMealItem_item_Food {
+export function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_item_Food | FoodPreviewMealItem_item_Recipe>): toBeDetermined is FoodPreviewMealItem_item_Food {
   // @ts-ignore __typename
   return toBeDetermined.__typename === 'Food'
 }
 
-export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | DayMeal_items): MealItemInput {
-  function determineIfMealItemIsMealFormMeal_items(mealItem: MealFormMeal_items | DayMeal_items): mealItem is MealFormMeal_items {
+export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | MealComponentDayMeal_items): MealItemInput {
+  function determineIfMealItemIsMealFormMeal_items(mealItem: MealFormMeal_items | MealComponentDayMeal_items): mealItem is MealFormMeal_items {
     return mealItem.hasOwnProperty('alternativeMealItems')
   }
 

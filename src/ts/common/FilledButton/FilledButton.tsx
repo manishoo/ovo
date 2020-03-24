@@ -7,6 +7,7 @@ import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import HoverButton from '@Common/HoverButton/HoverButton'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import RX from 'reactxp'
 
 
@@ -20,6 +21,7 @@ interface FilledButtonProps {
   mode?: ButtonMode,
   suffix?: any,
   pressed?: boolean
+  loading?: boolean
 }
 
 enum ButtonMode {
@@ -38,8 +40,24 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
     pressed: false
   }
 
+  private _height: null | number = null
+  private _scrollView: null | RX.ScrollView = null
+
+  public componentDidUpdate(prevProps: Readonly<FilledButtonProps>, prevState: Readonly<{}>, snapshot?: any): void {
+    if (!this._scrollView) return
+    if (!this._height) return
+
+    if (prevProps.loading !== this.props.loading) {
+      if (this.props.loading) {
+        this._scrollView.setScrollTop(this._height, true)
+      } else {
+        this._scrollView.setScrollTop(0, true)
+      }
+    }
+  }
+
   public render() {
-    const { style, containerStyle, label, onPress, fontSize, disabled, suffix } = this.props
+    const { style, containerStyle, label, onPress, loading, fontSize, disabled, suffix } = this.props
     let { pressed } = this.state
 
     if (this.props.pressed) {
@@ -69,16 +87,45 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
                   disabled ? { backgroundColor: theme.colors.filledButtonDisabledBG } : undefined,
                   style,
                 ]}
-                onPress={onPress}
+                onPress={loading ? undefined : onPress}
               >
-                <RX.Text
-                  style={[{
-                    color: disabled ? theme.colors.filledButtonDisabledTextColor : theme.colors.filledButtonText,
-                    font: Styles.fonts.displayBold,
-                    fontSize: Styles.fontSizes.size14,
-                  }, this._getStyle(theme).labelStyle, { fontSize }]}
-                >{label}</RX.Text>
-                {suffix}
+                <RX.ScrollView
+                  ref={ref => this._scrollView = ref}
+                  scrollEnabled={false}
+                  style={{
+                    height: this._height || undefined,
+                  }}
+                >
+                  <RX.View
+                    style={styles.innerContainer}
+                    onLayout={e => this._height = e.height}
+                  >
+                    <RX.Text
+                      style={[{
+                        color: disabled ? theme.colors.filledButtonDisabledTextColor : theme.colors.filledButtonText,
+                        font: Styles.fonts.displayBold,
+                        fontSize: Styles.fontSizes.size14,
+                      }, this._getStyle(theme).labelStyle, { fontSize }]}
+                    >{label}</RX.Text>
+                    {suffix}
+                  </RX.View>
+                  {
+                    !!this._height && typeof loading === 'boolean' &&
+                    <RX.View
+                      style={[
+                        {
+                          height: this._height,
+                        },
+                        styles.innerContainer
+                      ]}
+                    >
+                      <LoadingIndicator
+                        size={this._height}
+                      />
+                    </RX.View>
+                  }
+
+                </RX.ScrollView>
               </RX.View>
             )}
           />
@@ -147,4 +194,9 @@ const styles = {
     // shadowRadius: 6,
     // margin: 10,
   }),
+  innerContainer: RX.Styles.createViewStyle({
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  })
 }

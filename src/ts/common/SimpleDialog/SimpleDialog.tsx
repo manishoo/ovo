@@ -164,7 +164,7 @@ export default class SimpleDialog extends ComponentBase<SimpleDialogProps, RX.St
         {({ theme }) => (
           <Modal
             modalId={this.props.dialogId}
-            modalWidth={this.props.maxWidth || 450}
+            maxWidth={this.props.maxWidth || 450}
             modalHeight={this.props.maxHeight}
             theme={theme}
           >

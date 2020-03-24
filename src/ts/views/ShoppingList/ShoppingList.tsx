@@ -7,10 +7,7 @@ import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Page from '@Common/Page'
-import Text from '@Common/Text/Text'
 import CalendarService, { GroceriesByFoodGroup } from '@Services/CalendarService'
-import GroceryList from '@Views/ShoppingList/components/GroceryList/GroceryList'
-import GroceryListItem from '@Views/ShoppingList/components/GroceryListItem/GroceryListItem'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -28,8 +25,9 @@ interface LoginState {
 export default class ShoppingList extends ComponentBase<LoginProps, LoginState> {
   public render() {
     return (
-      <Page lazyRender
-            style={{
+      <Page
+        lazyRender
+        style={{
           padding: Styles.values.spacing,
         }}
       >
@@ -56,7 +54,7 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
           />
         </RX.View>
 
-        {this._renderTabContent()}
+        {/*{this._renderTabContent()}*/}
       </Page>
     )
   }
@@ -69,76 +67,76 @@ export default class ShoppingList extends ComponentBase<LoginProps, LoginState> 
     }
   }
 
-  private _renderTabContent = () => {
-    const { activeTab, shoppingListGroceriesByFoodGroup, pantryGroceriesByFoodGroup } = this.state
-
-    switch (activeTab) {
-      case 'pantry':
-        return Object.keys(pantryGroceriesByFoodGroup).map(foodGroupId => {
-          const foodItem = pantryGroceriesByFoodGroup[foodGroupId][0]
-
-          if (!foodItem) return null
-
-          return (
-            <GroceryList
-              title={<Text
-                type={Text.types.body}
-                translations={foodItem.food.origFoodGroups[0][0].name}
-              />}
-            >
-              {
-                pantryGroceriesByFoodGroup[foodGroupId].map(food =>
-                  <GroceryListItem
-                    food={food.food}
-                    type={'pantry'}
-                    grams={food.grams}
-                    editable={false}
-                    onAmountChange={() => {
-                      //
-                    }}
-                    onUnitChange={() => {
-                      //
-                    }}
-                  />
-                )
-              }
-            </GroceryList>
-          )
-        })
-      case 'shoppingList':
-        return Object.keys(shoppingListGroceriesByFoodGroup).map(foodGroupId => {
-          const foodItem = shoppingListGroceriesByFoodGroup[foodGroupId][0]
-
-          if (!foodItem) return null
-
-          return (
-            <GroceryList
-              title={<Text
-                type={Text.types.body}
-                translations={foodItem.food.origFoodGroups[0][0].name}
-              />}
-            >
-              {
-                shoppingListGroceriesByFoodGroup[foodGroupId].map(food =>
-                  <GroceryListItem
-                    food={food.food}
-                    type={'shoppingList'}
-                    grams={food.grams}
-                    editable={false}
-                    onAmountChange={() => {
-                      //
-                    }}
-                    onUnitChange={() => {
-                      //
-                    }}
-                  />
-                )
-              }
-            </GroceryList>
-          )
-        })
-    }
-  }
+  // private _renderTabContent = () => {
+  //   const { activeTab, shoppingListGroceriesByFoodGroup, pantryGroceriesByFoodGroup } = this.state
+  //
+  //   switch (activeTab) {
+  //     case 'pantry':
+  //       return Object.keys(pantryGroceriesByFoodGroup).map(foodGroupId => {
+  //         const foodItem = pantryGroceriesByFoodGroup[foodGroupId][0]
+  //
+  //         if (!foodItem) return null
+  //
+  //         return (
+  //           <GroceryList
+  //             title={<Text
+  //               type={Text.types.body}
+  //               translations={foodItem.food.origFoodGroups[0][0].name}
+  //             />}
+  //           >
+  //             {
+  //               pantryGroceriesByFoodGroup[foodGroupId].map(food =>
+  //                 <GroceryListItem
+  //                   food={food.food}
+  //                   type={'pantry'}
+  //                   grams={food.grams}
+  //                   editable={false}
+  //                   onAmountChange={() => {
+  //                     //
+  //                   }}
+  //                   onUnitChange={() => {
+  //                     //
+  //                   }}
+  //                 />
+  //               )
+  //             }
+  //           </GroceryList>
+  //         )
+  //       })
+  //     case 'shoppingList':
+  //       return Object.keys(shoppingListGroceriesByFoodGroup).map(foodGroupId => {
+  //         const foodItem = shoppingListGroceriesByFoodGroup[foodGroupId][0]
+  //
+  //         if (!foodItem) return null
+  //
+  //         return (
+  //           <GroceryList
+  //             title={<Text
+  //               type={Text.types.body}
+  //               translations={foodItem.food.origFoodGroups[0][0].name}
+  //             />}
+  //           >
+  //             {
+  //               shoppingListGroceriesByFoodGroup[foodGroupId].map(food =>
+  //                 <GroceryListItem
+  //                   food={food.food}
+  //                   type={'shoppingList'}
+  //                   grams={food.grams}
+  //                   editable={false}
+  //                   onAmountChange={() => {
+  //                     //
+  //                   }}
+  //                   onUnitChange={() => {
+  //                     //
+  //                   }}
+  //                 />
+  //               )
+  //             }
+  //           </GroceryList>
+  //         )
+  //       })
+  //   }
+  // }
 }
 
 const styles = {

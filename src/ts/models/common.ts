@@ -12,7 +12,7 @@ export enum Routes {
   mealPlan = '/meal-plan',
   settings = '/settings',
 
-  calendar = '/timeline',
+  calendar = '/eat',
 
   introduction = '/introduction',
 

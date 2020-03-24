@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { UserMealInput, MealAvailableTime, MealSize } from "./../../../models/global-types";
+import { MealAvailableTime, MealSize, UserMealInput } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: MealPlanSettingsScreenMutation

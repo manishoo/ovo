@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
@@ -18,23 +18,26 @@ import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
 import { Routes } from '@Models/common'
 import { Gender, UserUpdateInput } from '@Models/global-types'
+import { useLogOut } from '@Models/graphql/auth/auth'
+import { MeFragment, MeOperation, useMe } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import FilePicker from '@Modules/FilePicker'
 import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
-import { Me } from '@Services/types/Me'
-import UserService from '@Services/UserService'
-import UserStore from '@Services/UserService'
 import { SettingsMutation, SettingsMutationVariables } from '@Views/SettingsScreen/types/SettingsMutation'
 import _set from 'lodash/set'
+import React from 'react'
 import RX from 'reactxp'
-import { ComponentBase } from 'resub'
 
 
 const AVATAR_SIZE = 150
 
 interface SettingsProps {
+  me: Me,
+
   style?: any,
-  onUpdate: (variables: SettingsMutationVariables) => Promise<ExecutionResult<SettingsMutation>>
+  onUpdate: (variables: SettingsMutationVariables) => Promise<ExecutionResult<SettingsMutation>>,
+  onLogOut: () => Promise<any>,
 }
 
 interface SettingsState {
@@ -48,14 +51,28 @@ interface SettingsState {
   password2: string,
 }
 
-class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
+class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
+  constructor(props: SettingsProps) {
+    super(props)
+
+    this.state = {
+      me: props.me,
+
+      newPassword: '',
+      password: '',
+      password2: '',
+    }
+  }
+
   public render() {
     const { me } = this.state
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page lazyRender>
+          <Page
+            lazyRender
+          >
             <Navbar title={translate('Edit Profile')} />
             {this._renderAvatar()}
             <Text translate type={Text.types.title}>Account Info</Text>
@@ -172,14 +189,6 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
     )
   }
 
-  protected _buildState(props: SettingsProps, initialBuild: boolean): Partial<SettingsState> | undefined {
-    if (initialBuild) {
-      return {
-        me: UserStore.getUser()!,
-      }
-    }
-  }
-
   private _renderAvatar = () => {
     const { me } = this.state
 
@@ -279,12 +288,14 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
   }
 
   private _handleLogOut = () => {
-    UserService.logOut()
-    LocationStore.navigate(this.props, Routes.login)
+    this.props.onLogOut()
+      .then(() => LocationStore.navigate(this.props, Routes.login))
   }
 }
 
 export default function () {
+  const client = useApolloClient()
+
   const [updateUser] = useMutation<SettingsMutation, SettingsMutationVariables>(gql`
     mutation SettingsMutation($id: ObjectId!, $user: UserUpdateInput!) {
       updateUser(id: $id, user: $user) {
@@ -292,18 +303,25 @@ export default function () {
       }
     }
 
-    ${UserService.fragments.me}
+    ${MeFragment}
   `, {
-    update: (proxy, { data }) => {
-      if (data) {
-        UserStore.setUser(data.updateUser)
-      }
-    }
+    fetchPolicy: 'no-cache',
+    onCompleted: ({ updateUser }) => {
+      client.writeQuery({
+        query: MeOperation,
+        data: {
+          me: updateUser,
+        },
+      })
+    },
   })
+  const logOut = useLogOut()
 
   return (
     <SettingsScreen
+      me={useMe()!}
       onUpdate={variables => updateUser({ variables })}
+      onLogOut={logOut}
     />
   )
 }

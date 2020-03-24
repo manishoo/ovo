@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 import {
@@ -80,7 +81,7 @@ export interface RegisterMutation_registerUser_user_meals {
 export interface RegisterMutation_registerUser_user {
   id: string;
   username: string;
-  session: string;
+  session: string | null;
   email: string;
   firstName: string | null;
   lastName: string | null;

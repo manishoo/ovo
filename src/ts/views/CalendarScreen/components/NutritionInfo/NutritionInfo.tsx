@@ -8,8 +8,9 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import NutritionFragment from '@Models/nutrition'
 import { Nutrition } from '@Models/types/Nutrition'
+import areFieldsEqual from '@Utils/areFieldsEqual'
 import MacroTargets from '@Views/CalendarScreen/components/NutritionInfo/MacroTargets'
-import React, { Suspense } from 'react'
+import React, { memo, Suspense } from 'react'
 import RX from 'reactxp'
 import { NutritionProfile } from './types/NutritionProfile'
 
@@ -37,7 +38,7 @@ export const fragments = {
   nutrition: NutritionFragment
 }
 
-const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionInfoProps) => {
+const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style }: NutritionInfoProps) => {
   if (nutrition.calories && nutrition.calories.amount === 0) return null
 
   // @ts-ignore
@@ -60,6 +61,12 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
     }
   }
 
+  const colors = {
+    proteins: '#e95855',
+    fats: '#ffd633',
+    carbs: '#60c365',
+  }
+
   return (
     <RX.View style={style}>
       <RX.View style={{ margin: -54 }}>
@@ -79,7 +86,7 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
                 fontFamily: Styles.fonts.displayRegular.fontFamily,
                 fontSize: 8
               }} />}
-              colorScale={['#e95855', '#ffd633', '#60c365']}
+              colorScale={[colors.proteins, colors.fats, colors.carbs]}
               data={[
                 {
                   x: `${translate('proteins')}\n${_getMacroPercent('protein')}%`,
@@ -103,7 +110,7 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
           padding: Styles.values.spacing,
           paddingTop: 0,
           marginTop: -Styles.values.spacing / 2,
-          minWidth: 230, //FIXME
+          minWidth: 260, //FIXME
         }}
       >
         <RX.View
@@ -119,7 +126,7 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
             >
               <Text style={{ fontWeight: 'bold' }} translate={'calories'} />
               <Text
-                style={{ fontWeight: 'bold' }}>{Math.round(nutrition.calories.amount)} {translate(nutrition.calories.unit)}</Text>
+                style={{ fontWeight: 'bold' }}>{Math.round(nutrition.calories.amount)}</Text>
             </RX.View>
           }
           {
@@ -127,11 +134,11 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
             <RX.View
               style={styles.row}
             >
-              <Text style={{ color: '#E53935', fontWeight: 'bold' }} translate={'proteins'} />
+              <Text style={{ color: colors.proteins, fontWeight: 'bold' }} translate={'proteins'} />
               <Text style={{
-                color: '#E53935',
+                color: colors.proteins,
                 fontWeight: 'bold'
-              }}>{Math.round(nutrition.proteins.amount)} {translate(nutrition.proteins.unit)}</Text>
+              }}>{Math.round(nutrition.proteins.amount)}{translate(nutrition.proteins.unit)}</Text>
             </RX.View>
           }
           {
@@ -139,11 +146,11 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
             <RX.View
               style={styles.row}
             >
-              <Text style={{ color: '#FFCC00', fontWeight: 'bold' }} translate={'fats'} />
+              <Text style={{ color: colors.fats, fontWeight: 'bold' }} translate={'fats'} />
               <Text style={{
-                color: '#FFCC00',
+                color: colors.fats,
                 fontWeight: 'bold'
-              }}>{Math.round(nutrition.fats.amount)} {translate(nutrition.fats.unit)}</Text>
+              }}>{Math.round(nutrition.fats.amount)}{translate(nutrition.fats.unit)}</Text>
             </RX.View>
           }
           {
@@ -151,11 +158,11 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
             <RX.View
               style={styles.row}
             >
-              <Text style={{ color: '#43A047', fontWeight: 'bold' }} translate={'totalCarbs'} />
+              <Text style={{ color: colors.carbs, fontWeight: 'bold' }} translate={'carbs'} />
               <Text style={{
-                color: '#43A047',
+                color: colors.carbs,
                 fontWeight: 'bold'
-              }}>{Math.round(nutrition.totalCarbs.amount)} {translate((nutrition.totalCarbs)!.unit)}</Text>
+              }}>{Math.round(nutrition.totalCarbs.amount)}{translate((nutrition.totalCarbs)!.unit)}</Text>
             </RX.View>
           }
         </RX.View>
@@ -170,6 +177,9 @@ const NutritionInfo = ({ nutrition, nutritionProfile, title, style }: NutritionI
       </RX.View>
     </RX.View>
   )
-}
+}, areFieldsEqual([
+  'nutrition',
+  'nutritionProfile',
+]))
 
 export default NutritionInfo

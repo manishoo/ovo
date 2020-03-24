@@ -22,8 +22,13 @@ export default class Carousel extends RX.Component<CarouselProps> {
       swipeToSlide: true,
       centerMode: true,
       swipe: true,
-      waitForAnimate: true,
-      touchThreshold: 10,
+      waitForAnimate: false,
+      touchThreshold: 200,
+      onSwipe: props.onSwipe,
+      beforeChange: (currentSlide: number, nextSlide: number) => {
+        return props.onChange && props.onChange(nextSlide)
+      },
+      lazyLoad: 'progressive',
     }
 
     return (

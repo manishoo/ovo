@@ -3,27 +3,34 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { ApolloCache } from '@apollo/client'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import { calculateMealItemsNutrition } from '@Utils/shared/calculate-meal-nutrition'
+import { CalendarControlOperation } from '@Views/CalendarScreen/components/CalendarControl/operations/CalendarControlOperation'
+import { CalendarControlQuery } from '@Views/CalendarScreen/components/CalendarControl/operations/types/CalendarControlQuery'
 import {
-  Day,
-  Day_meals_items,
-  Day_meals_items_item_Food,
-  Day_meals_items_item_Recipe_ingredients_item
-} from '@Views/CalendarScreen/components/types/Day'
-import { DayMeal } from '@Views/CalendarScreen/components/types/DayMeal'
-import { MealItem } from '@Views/CalendarScreen/components/types/MealItem'
+  DayComponentDay,
+  DayComponentDay_meals_items,
+  DayComponentDay_meals_items_item_Food
+} from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
+import MealComponentContainer from '@Views/CalendarScreen/components/MealComponent/MealComponent'
+import {
+  MealComponentDayMeal,
+  MealComponentDayMeal_items_item_Food
+} from '@Views/CalendarScreen/components/MealComponent/types/MealComponentDayMeal'
+import { MealItemComponentMealItem } from '@Views/CalendarScreen/components/MealItemComponent/types/MealItemComponentMealItem'
+import { CalendarOperation } from '@Views/CalendarScreen/operations/CalendarOperation'
+import { CalendarQuery } from '@Views/CalendarScreen/operations/types/CalendarQuery'
 import { DateTime } from 'luxon'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import * as SyncTasks from 'synctasks'
 
+// function determineIfIsFood(toBeDetermined: Partial<DayComponentDay_meals_items_item_Recipe_ingredients_item>): toBeDetermined is DayComponentDay_meals_items_item_Food {
+//   // @ts-ignore __typename
+//   return toBeDetermined.__typename === 'Food'
+// }
 
-function determineIfIsFood(toBeDetermined: Partial<Day_meals_items_item_Recipe_ingredients_item>): toBeDetermined is Day_meals_items_item_Food {
-  // @ts-ignore __typename
-  return toBeDetermined.__typename === 'Food'
-}
-
-export function calculateMealItemAmount(mealItem: Day_meals_items): number {
+export function calculateMealItemAmount(mealItem: DayComponentDay_meals_items): number {
   let grams = 0
 
   if (mealItem.unit) {
@@ -37,7 +44,7 @@ export function calculateMealItemAmount(mealItem: Day_meals_items): number {
 }
 
 export interface GroceryItem {
-  food: Day_meals_items_item_Food,
+  food: DayComponentDay_meals_items_item_Food,
   grams: number,
   dateAdded?: Date,
 }
@@ -47,7 +54,7 @@ interface GroceriesByFood {
 }
 
 export interface GroceriesByFoodGroup {
-  [k: string]: { food: Day_meals_items_item_Food, grams: number, dateAdded?: Date }[]
+  [k: string]: { food: MealComponentDayMeal_items_item_Food, grams: number, dateAdded?: Date }[]
 }
 
 enum TriggerKeys {
@@ -60,7 +67,7 @@ enum TriggerKeys {
 export class CalendarService extends StoreBase implements IAutoSavablePersistableStore {
   public name = 'CalendarService'
   public autoSaveTriggerKeys = TriggerKeys
-  private calendar: Day[] = []
+  private calendar: DayComponentDay[] = []
   private shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup = {}
   private pantryGroceriesByFoodGroup: GroceriesByFoodGroup = {}
 
@@ -73,111 +80,176 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     return deferred.promise()
   }
 
-  setCalendar(calendar?: Day[]) {
-    if (calendar) {
-      this.calendar = calendar
-    } else {
-      this.calendar = []
-    }
-
-    this._handleShoppingList()
-    this.trigger()
-  }
-
-  setDay(day: Day) {
-    const foundDayIndex = this.calendar.findIndex(p => DateTime.fromISO(p.date).hasSame(DateTime.fromISO(day.date), 'day'))
-
-    if (foundDayIndex !== -1) {
-      this.calendar[foundDayIndex] = day
-    } else {
-      this.calendar.push(day)
-      this.calendar.sort((a, b) => a.date - b.date)
-    }
-
-    this._handleShoppingList()
-    this.trigger()
-  }
-
-  setMeal(dayId: string, meal: DayMeal) {
-    const foundDay = this.calendar.find(p => p.id === dayId)
-    if (!foundDay) throw new Error('day not found')
-
-    foundDay.meals = foundDay.meals.map(m => {
-      if (m.id === meal.id) {
-        return meal
+  setDay(cache: ApolloCache<any>, day: DayComponentDay) {
+    const calendarQuery = cache.readQuery<CalendarQuery>({
+      query: CalendarOperation,
+    })
+    if (!calendarQuery) return
+    cache.writeQuery({
+      query: CalendarOperation,
+      data: {
+        ...calendarQuery,
+        calendar: [
+          ...calendarQuery.calendar.filter(d => d.id !== day.id).filter(d => !DateTime.fromISO(d.date).hasSame(DateTime.fromISO(day.date), 'day')),
+          day,
+        ],
       }
-
-      return m
     })
 
-    this._handleShoppingList()
-    this.trigger()
-  }
-
-  setMealItem(dayId: string, mealId: string, prevMealItemId: string, mealItem: MealItem) {
-    const foundDay = this.calendar.find(p => p.id === dayId)
-    if (!foundDay) throw new Error('day not found')
-
-    foundDay.meals = foundDay.meals.map(meal => {
-      if (meal.id === mealId) {
-        return {
-          ...meal,
-          items: meal.items.map(mi => {
-            if (mi.id === prevMealItemId) {
-              return mealItem
-            }
-
-            return mi
-          })
-        }
-      }
-      return meal
+    const calendarControlQuery = cache.readQuery<CalendarControlQuery>({
+      query: CalendarControlOperation,
     })
-    this._handleShoppingList()
-    this.trigger()
-  }
-
-  public addPantryItem(food: Day_meals_items_item_Food, grams: number) {
-    const foodGroupId = food.origFoodGroups[0][0].id
-
-    const item = {
-      food,
-      grams,
-      dateAdded: new Date()
-    }
-
-    /**
-     * 1) Add to pantry
-     * */
-    if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
-      const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
-
-      if (foodAlreadyExists) {
-        this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
-          grocery.grams += grams
-          grocery.dateAdded = new Date()
-
-          return grocery
-        })
-      } else {
-        this.pantryGroceriesByFoodGroup[foodGroupId] = [
-          ...this.pantryGroceriesByFoodGroup[foodGroupId],
-          item,
+    if (!calendarControlQuery) return
+    cache.writeQuery({
+      query: CalendarControlOperation,
+      data: {
+        ...calendarControlQuery,
+        calendar: [
+          ...calendarControlQuery.calendar.filter(d => d.id !== day.id).filter(d => !DateTime.fromISO(d.date).hasSame(DateTime.fromISO(day.date), 'day')),
+          day,
         ]
       }
-    } else {
-      this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
-    }
+    })
 
-    /**
-     * 2) Remove from shoppingList
-     * */
-    this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
+    this._handleShoppingList()
+    this.trigger()
+  }
 
-    this.trigger([
-      TriggerKeys.pantryGroceriesByFoodGroup,
-      TriggerKeys.shoppingListGroceriesByFoodGroup,
-    ])
+  removeDay(cache: ApolloCache<any>, dayId: string) {
+    const calendarQuery = cache.readQuery<CalendarQuery>({
+      query: CalendarOperation,
+    })
+    if (!calendarQuery) return
+    cache.writeQuery({
+      query: CalendarOperation,
+      data: {
+        ...calendarQuery,
+        calendar: calendarQuery.calendar.filter(day => day.id !== dayId)
+      }
+    })
+
+    const calendarControlQuery = cache.readQuery<CalendarControlQuery>({
+      query: CalendarControlOperation,
+    })
+    if (!calendarControlQuery) return
+    cache.writeQuery({
+      query: CalendarControlOperation,
+      data: {
+        calendar: calendarControlQuery.calendar.filter(day => day.id !== dayId)
+      }
+    })
+
+    this._handleShoppingList()
+    this.trigger()
+  }
+
+  setMeal(cache: ApolloCache<any>, meal: MealComponentDayMeal) {
+    cache.writeFragment({
+      fragmentName: 'MealComponentDayMeal',
+      fragment: MealComponentContainer.fragments.dayMeal,
+      id: `DayMeal:${meal.id}`,
+      data: meal
+    })
+
+    this._handleShoppingList()
+    this.trigger()
+  }
+
+  setMealItem(cache: ApolloCache<any>, mealId: string, prevMealItem: MealItemComponentMealItem, newMealItem: MealItemComponentMealItem) {
+    const meal = cache.readFragment<MealComponentDayMeal>({
+      fragmentName: 'MealComponentDayMeal',
+      fragment: MealComponentContainer.fragments.dayMeal,
+      id: `DayMeal:${mealId}`,
+    }, true)
+    if (!meal) return
+
+    this.setMeal(cache, {
+      ...meal,
+      items: meal.items.map(mealItem => {
+        if (mealItem.id === prevMealItem.id) {
+          return newMealItem
+        }
+
+        return mealItem
+      })
+    })
+
+    // console.log('BEFORE ====>>>')
+    // console.log(prevMealItem.id, cache.readFragment({
+    //   fragmentName: 'MealItem',
+    //   fragment: MealItemComponentContainer.fragments.mealItem,
+    //   id: prevMealItem.id,
+    // }))
+    // console.log(newMealItem.id, cache.readFragment({
+    //   fragmentName: 'MealItem',
+    //   fragment: MealItemComponentContainer.fragments.mealItem,
+    //   id: newMealItem.id,
+    // }))
+    //
+    // cache.writeFragment({
+    //   fragmentName: 'MealItem',
+    //   fragment: MealItemComponentContainer.fragments.mealItem,
+    //   id: prevMealItem.id,
+    //   data: newMealItem,
+    // })
+    //
+    // console.log('AFTER ====>>>')
+    // console.log(prevMealItem.id, cache.readFragment({
+    //   fragmentName: 'MealItem',
+    //   fragment: MealItemComponentContainer.fragments.mealItem,
+    //   id: prevMealItem.id,
+    // }))
+    // console.log(newMealItem.id, cache.readFragment({
+    //   fragmentName: 'MealItem',
+    //   fragment: MealItemComponentContainer.fragments.mealItem,
+    //   id: newMealItem.id,
+    // }))
+
+    // this._handleShoppingList()
+    // this.trigger()
+  }
+
+  public addPantryItem(food: DayComponentDay_meals_items_item_Food, grams: number) {
+    // const foodGroupId = food.origFoodGroups[0][0].id
+    //
+    // const item = {
+    //   food,
+    //   grams,
+    //   dateAdded: new Date()
+    // }
+    //
+    // /**
+    //  * 1) Add to pantry
+    //  * */
+    // if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
+    //   const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
+    //
+    //   if (foodAlreadyExists) {
+    //     this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
+    //       grocery.grams += grams
+    //       grocery.dateAdded = new Date()
+    //
+    //       return grocery
+    //     })
+    //   } else {
+    //     this.pantryGroceriesByFoodGroup[foodGroupId] = [
+    //       ...this.pantryGroceriesByFoodGroup[foodGroupId],
+    //       item,
+    //     ]
+    //   }
+    // } else {
+    //   this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
+    // }
+    //
+    // /**
+    //  * 2) Remove from shoppingList
+    //  * */
+    // this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
+    //
+    // this.trigger([
+    //   TriggerKeys.pantryGroceriesByFoodGroup,
+    //   TriggerKeys.shoppingListGroceriesByFoodGroup,
+    // ])
   }
 
   @autoSubscribe
@@ -237,106 +309,106 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     ]
   }
 
-  @autoSubscribe
-  getCalendar(): Day[] {
-    return this.calendar
-  }
+  // @autoSubscribe
+  // getCalendar(): DayComponentDay[] {
+  //   return this.calendar
+  // }
 
-  public calculateMealTotalCalorie = (meal: DayMeal) => {
+  public calculateMealTotalCalorie = (meal: MealComponentDayMeal) => {
     // let unit = AppConfig.calorieMeasurementUnit
     const nutrition = calculateMealItemsNutrition(meal.items)
     return Math.round(nutrition.calories ? nutrition.calories.amount : 0)
   }
 
   private _handleShoppingList() {
-    const calendar = this.calendar
-
-    const foods: GroceriesByFood = {}
-    const groceriesByFoodGroup: GroceriesByFoodGroup = {}
-
-    /**
-     * Unique by food id
-     * */
-    function handleFood(food: Day_meals_items_item_Food, grams: number) {
-      if (foods[food.id]) {
-        foods[food.id] = {
-          ...foods[food.id],
-          grams: foods[food.id].grams + grams
-        }
-      } else {
-        foods[food.id] = {
-          food,
-          grams,
-        }
-      }
-    }
-
-    function getDateFromTimeString(timeString: string): DateTime {
-      const splitTime = timeString.split(':')
-      if (splitTime[0].length !== 2) throw Error('time format should be HH:mm')
-      if (splitTime[1].length !== 2) throw Error('time format should be HH:mm')
-
-      const mealDate = new Date()
-
-      mealDate.setHours(+splitTime[0])
-      mealDate.setMinutes(+splitTime[1])
-
-      return DateTime.fromJSDate(mealDate)
-    }
-
-    const now = DateTime.local()
-    calendar
-    /**
-     * Only days in the future
-     * */
-      .filter(day => Math.round(DateTime.fromISO(day.date).diff(now).as('days')) >= 0)
-      .map(day => {
-        day.meals
-        /**
-         * Only meals in the future
-         * */
-          .filter(meal => Math.round(DateTime.fromISO(meal.time).diff(now).as('minutes')) >= 0)
-          .map(meal => {
-            meal.items.map(mealItem => {
-              if (mealItem.item) {
-                if (determineIfIsFood(mealItem.item)) {
-                  handleFood(mealItem.item, calculateMealItemAmount(mealItem))
-                } else {
-                  mealItem.item.ingredients.map(ingredient => {
-                    if (ingredient.item) {
-                      if (determineIfIsFood(ingredient.item)) {
-                        handleFood(ingredient.item, calculateMealItemAmount(mealItem))
-                      }
-                    }
-                  })
-                }
-              }
-            })
-          })
-      })
-
-    /**
-     * Unique by food group
-     * */
-    Object.keys(foods).map(foodId => {
-      const food = foods[foodId]
-
-      const foodGroupId = food.food.origFoodGroups[0][0].id
-      if (!foodGroupId) throw new Error('food group not found')
-
-      if (groceriesByFoodGroup[foodGroupId]) {
-        groceriesByFoodGroup[foodGroupId] = [
-          ...groceriesByFoodGroup[foodGroupId],
-          food
-        ]
-      } else {
-        groceriesByFoodGroup[foodGroupId] = [
-          food
-        ]
-      }
-    })
-
-    this.shoppingListGroceriesByFoodGroup = this._excludePantryItemsFromShoppingList(groceriesByFoodGroup, this.pantryGroceriesByFoodGroup)
+    // const calendar = this.calendar
+    //
+    // const foods: GroceriesByFood = {}
+    // const groceriesByFoodGroup: GroceriesByFoodGroup = {}
+    //
+    // /**
+    //  * Unique by food id
+    //  * */
+    // function handleFood(food: DayComponentDay_meals_items_item_Food, grams: number) {
+    //   if (foods[food.id]) {
+    //     foods[food.id] = {
+    //       ...foods[food.id],
+    //       grams: foods[food.id].grams + grams
+    //     }
+    //   } else {
+    //     foods[food.id] = {
+    //       food,
+    //       grams,
+    //     }
+    //   }
+    // }
+    //
+    // function getDateFromTimeString(timeString: string): DateTime {
+    //   const splitTime = timeString.split(':')
+    //   if (splitTime[0].length !== 2) throw Error('time format should be HH:mm')
+    //   if (splitTime[1].length !== 2) throw Error('time format should be HH:mm')
+    //
+    //   const mealDate = new Date()
+    //
+    //   mealDate.setHours(+splitTime[0])
+    //   mealDate.setMinutes(+splitTime[1])
+    //
+    //   return DateTime.fromJSDate(mealDate)
+    // }
+    //
+    // const now = DateTime.local()
+    // calendar
+    // /**
+    //  * Only days in the future
+    //  * */
+    //   .filter(day => Math.round(DateTime.fromISO(day.date).diff(now).as('days')) >= 0)
+    //   .map(day => {
+    //     day.meals
+    //     /**
+    //      * Only meals in the future
+    //      * */
+    //       .filter(meal => Math.round(DateTime.fromISO(meal.time).diff(now).as('minutes')) >= 0)
+    //       .map(meal => {
+    //         meal.items.map(mealItem => {
+    //           if (mealItem.item) {
+    //             if (determineIfIsFood(mealItem.item)) {
+    //               handleFood(mealItem.item, calculateMealItemAmount(mealItem))
+    //             } else {
+    //               mealItem.item.ingredients.map(ingredient => {
+    //                 if (ingredient.item) {
+    //                   if (determineIfIsFood(ingredient.item)) {
+    //                     handleFood(ingredient.item, calculateMealItemAmount(mealItem))
+    //                   }
+    //                 }
+    //               })
+    //             }
+    //           }
+    //         })
+    //       })
+    //   })
+    //
+    // /**
+    //  * Unique by food group
+    //  * */
+    // Object.keys(foods).map(foodId => {
+    //   const food = foods[foodId]
+    //
+    //   const foodGroupId = food.food.origFoodGroups[0][0].id
+    //   if (!foodGroupId) throw new Error('food group not found')
+    //
+    //   if (groceriesByFoodGroup[foodGroupId]) {
+    //     groceriesByFoodGroup[foodGroupId] = [
+    //       ...groceriesByFoodGroup[foodGroupId],
+    //       food
+    //     ]
+    //   } else {
+    //     groceriesByFoodGroup[foodGroupId] = [
+    //       food
+    //     ]
+    //   }
+    // })
+    //
+    // this.shoppingListGroceriesByFoodGroup = this._excludePantryItemsFromShoppingList(groceriesByFoodGroup, this.pantryGroceriesByFoodGroup)
   }
 
   private _excludePantryItemsFromShoppingList(shoppingList: GroceriesByFoodGroup, pantry: GroceriesByFoodGroup): GroceriesByFoodGroup {

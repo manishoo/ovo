@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 import { Gender, MealAvailableTime, MealSize, NutritionProfileMode, Role } from './../../../models/global-types'
@@ -73,7 +74,7 @@ export interface LoginMutation_loginUser_user_meals {
 export interface LoginMutation_loginUser_user {
   id: string;
   username: string;
-  session: string;
+  session: string | null;
   email: string;
   firstName: string | null;
   lastName: string | null;
@@ -93,7 +94,6 @@ export interface LoginMutation_loginUser_user {
 
 export interface LoginMutation_loginUser {
   user: LoginMutation_loginUser_user;
-  session: string;
 }
 
 export interface LoginMutation {

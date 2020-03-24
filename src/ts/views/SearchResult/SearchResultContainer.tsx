@@ -39,7 +39,7 @@ export default class SearchResultContainer extends RX.Component {
     q: '',
   }
 
-  componentWillMount(): void {
+  UNSAFE_componentWillMount(): void {
     if (AppConfig.getPlatformType() === 'web') {
       let q
 

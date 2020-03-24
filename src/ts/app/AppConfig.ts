@@ -69,7 +69,7 @@ class AppConfig {
   }
 
   public get graphQLAddress() {
-    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}`
+    return `${this.serverAddress}/${process.env.GRAPHQL_ENDPOINT || 'gql'}?deduplicate=1`
   }
 
   initialize(params: InitParams) {

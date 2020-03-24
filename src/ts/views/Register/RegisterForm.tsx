@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import Checkbox from '@Common/Checkbox/Checkbox'
@@ -11,8 +11,7 @@ import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
-import UserService from '@Services/UserService'
-import UserStore from '@Services/UserService'
+import { MeFragment, MeOperation } from '@Models/graphql/me/me'
 import { navigate } from '@Utils'
 import { RegisterMutation, RegisterMutationVariables } from '@Views/Register/types/RegisterMutation'
 import RX from 'reactxp'
@@ -130,8 +129,6 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
         /**
          * Register Success
          * */
-        UserStore.setUser(data.registerUser.user)
-        UserStore.setSession(data.registerUser.session)
         return navigate(this.props, Routes.home, {
           replace: true,
         })
@@ -155,6 +152,8 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
 }
 
 export default function (props: {}) {
+  const client = useApolloClient()
+
   const [registerUser] = useMutation<RegisterMutation, RegisterMutationVariables>(gql`
     mutation RegisterMutation($user: UserRegistrationInput!) {
       registerUser(user: $user) {
@@ -165,8 +164,18 @@ export default function (props: {}) {
       }
     }
 
-    ${UserService.fragments.me}
-  `)
+    ${MeFragment}
+  `, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data => {
+      client.writeQuery({
+        query: MeOperation,
+        data: {
+          me: data.registerUser.user,
+        },
+      })
+    }),
+  })
 
   return (
     <RegisterForm

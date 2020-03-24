@@ -5,13 +5,12 @@
 
 import { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
-import { Ingredient } from '@Models/types/Ingredient'
-import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
-import { determineIfIsWeight } from '@Views/CalendarScreen/components/MealItemComponent'
+import { BasicIngredient, BasicIngredient_item, BasicIngredient_item_Food } from '@Models/types/BasicIngredient'
+import { determineIfIsWeight } from '@Views/CalendarScreen/components/MealItemComponent/MealItemComponent'
 import RX from 'reactxp'
 
 
-export const handleIngredientAmountChange = (ingredient: Ingredient, amount: number | null, selectedUnit: string, onIngredientChange: (ingredient: Ingredient) => void) => {
+export const handleIngredientAmountChange = (ingredient: BasicIngredient, amount: number | null, selectedUnit: string, onIngredientChange: (ingredient: BasicIngredient) => void) => {
   ingredient.amount = amount
 
   if (ingredient.item) {
@@ -43,7 +42,7 @@ export const handleIngredientAmountChange = (ingredient: Ingredient, amount: num
   onIngredientChange(ingredient)
 }
 
-export const handleIngredientUnitChange = (ingredient: Ingredient, onIngredientChange: (ingredient: Ingredient) => void) => (selectedUnit: string) => {
+export const handleIngredientUnitChange = (ingredient: BasicIngredient, onIngredientChange: (ingredient: BasicIngredient) => void) => (selectedUnit: string) => {
   if (!ingredient.amount) return null
 
   let newAmount = ingredient.amount
@@ -81,7 +80,12 @@ export const handleIngredientUnitChange = (ingredient: Ingredient, onIngredientC
   handleIngredientAmountChange(ingredient, newAmount, selectedUnit, onIngredientChange)
 }
 
-export function getIngredientCommonFields(ingredient: Ingredient) {
+export function determineIfIsFood(toBeDetermined: Partial<BasicIngredient_item>): toBeDetermined is BasicIngredient_item_Food {
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Food'
+}
+
+export function getIngredientCommonFields(ingredient: BasicIngredient) {
   if (ingredient.item) {
     if (determineIfIsFood(ingredient.item)) {
       return {

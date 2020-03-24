@@ -3,31 +3,36 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-/**
- * Apollo Client
- * */
-import { ApolloClient, ApolloLink, Observable } from '@apollo/client'
+import { ApolloClient, ApolloLink, Observable, Operation } from '@apollo/client'
 import { onError } from '@apollo/link-error'
 import { cache } from '@App/client-cache'
+import resolvers from '@App/resolvers'
+import { MeOperation } from '@Models/graphql/me/me'
+import { MeQuery } from '@Models/graphql/me/types/MeQuery'
 import fetch from '@Modules/fetch'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
-import UserStore from '@Services/UserService'
 import { createUploadLink } from 'apollo-upload-client'
+import { inflate } from 'graphql-deduplicator'
 import AppConfig from './AppConfig'
 
 
-const request = async (operation: any) => {
+const inflateLink = new ApolloLink((operation, forward) => forward(operation).map((response) => inflate(response)))
+
+const request = async (operation: Operation) => {
   operation.setContext({
     headers: {
       'accept-language': AppConfig.locale,
     }
   })
 
-  const token = await UserStore.getSession()
-  if (token) {
+  const meQuery = client.readQuery<MeQuery>({
+    query: MeOperation,
+  })
+
+  if (meQuery && meQuery.me && meQuery.me.session) {
     operation.setContext({
       headers: {
-        authorization: token,
+        authorization: meQuery.me.session,
         'accept-language': AppConfig.locale,
       }
     })
@@ -71,7 +76,9 @@ function logoutUser() {
 
 const client = new ApolloClient({
   connectToDevTools: true,
+  resolvers,
   link: ApolloLink.from([
+    inflateLink,
     // batchLink,
     onError(({ graphQLErrors, networkError, operation }) => {
       if (graphQLErrors) {
@@ -96,7 +103,7 @@ const client = new ApolloClient({
     createUploadLink({
       uri: AppConfig.graphQLAddress,
       fetch,
-    })
+    }),
   ]),
   cache
 })

@@ -6,6 +6,7 @@
 import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import NutritionProfileForm from '@Common/NutritionProfileForm/NutritionProfileForm'
 import Text from '@Common/Text/Text'
 import RX from 'reactxp'
@@ -89,7 +90,7 @@ export default class MacroTargets extends RX.Component<MacroTargetsProps> {
       <RX.View style={styles.row} key={`${percent}:${gram}`}>
         <Text style={styles.text}>~ </Text>
         <Text style={styles.text}>{gram}</Text>
-        <Text style={styles.text}>g ({percent}%)</Text>
+        <Text style={styles.text}>{translate('g')} ({percent}%)</Text>
       </RX.View>
     )
   }
@@ -100,6 +101,7 @@ export default class MacroTargets extends RX.Component<MacroTargetsProps> {
         <Text style={styles.text}>{min}</Text>
         <Text style={styles.text}>-</Text>
         <Text style={styles.text}>{max}</Text>
+        <Text style={styles.text}>{translate('g')}</Text>
       </RX.View>
     )
   }

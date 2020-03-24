@@ -248,6 +248,10 @@ class ImageSource implements ImageSourceBase {
   get CrownEmpty() {
     return require('../../../images/CrownEmpty.png')
   }
+
+  get Check() {
+    return require('../../../images/Check.png')
+  }
 }
 
 export default new ImageSource()

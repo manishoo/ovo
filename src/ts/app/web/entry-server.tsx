@@ -9,7 +9,6 @@ import AppConfig from '@App/AppConfig'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { LanguageCode } from '@Models/global-types'
 import fetch from '@Modules/fetch'
-import LocationStore from '@Services/LocationStore'
 // @ts-ignore
 import { Request, Response } from 'express'
 // @ts-ignore
@@ -27,7 +26,7 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
   const splitPoints: any[] = []
 
   const client = new ApolloClient({
-    // ssrMode: true,
+    ssrMode: true,
     // Remember that this is the interface the SSR server will use to connect to the
     // API server, so we need to ensure it isn't firewalled, etc
     link: createHttpLink({
@@ -42,20 +41,20 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
     cache: new InMemoryCache(),
   })
 
-  let initialUrl = req.url.replace('/en', '')
-  initialUrl = initialUrl.replace('/fa', '')
+  // let initialUrl = req.url.replace('/en', '')
+  // initialUrl = initialUrl.replace('/fa', '')
 
-  LocationStore.setPath(initialUrl)
+  // LocationStore.setPath(initialUrl)
   renderToStringWithData(
     <ApolloProvider client={client}>
       <StaticRouter
-        location={initialUrl}
+        // location={initialUrl}
         context={{
           // @ts-ignore
           splitPoints
         }}
       >
-        <RootView history={createMemoryHistory({ initialEntries: [initialUrl] })} />
+        <RootView history={createMemoryHistory()} />
       </StaticRouter>
     </ApolloProvider>
   )
@@ -80,6 +79,7 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
       res.end()
     })
     .catch(e => {
+      console.log(e)
       console.error(JSON.stringify(e, null, 2))
       console.error('======>>>>> ERROR')
       res.status(500)

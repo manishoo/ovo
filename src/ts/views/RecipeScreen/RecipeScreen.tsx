@@ -21,11 +21,11 @@ import Navbar from '@Common/Navbar/Navbar'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { RecipeStatus, Role } from '@Models/global-types'
+import { useMe } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import NutritionFragment from '@Models/nutrition'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import { Me } from '@Services/types/Me'
-import UserStore from '@Services/UserService'
 import { getParam, navigate } from '@Utils'
 import trimTypeName from '@Utils/trim-type-name'
 import { ProfileRecipesQuery, ProfileRecipesQueryVariables } from '@Views/ProfileScreen/types/ProfileRecipesQuery'
@@ -43,23 +43,25 @@ import Instructions from './components/Instructions'
 
 
 const MODAL_ID = 'recipe-modal'
+const MODAL_MAX_WIDTH = 800
 
-interface RecipeCommonProps extends RX.CommonProps {
+interface RecipeCommonProps {
   style?: any,
   slug?: string,
+  modalId?: string,
 }
 
 interface RecipeProps extends RecipeCommonProps {
   recipe: Recipe,
   loading?: boolean,
   onDelete: (options: { userId: string, recipeId: string }) => any,
+  me: Me | null,
 }
 
 interface RecipeState {
   windowHeight: number,
   windowWidth: number,
   isSmallOrTiny: boolean,
-  me: Me | null,
   serving: number,
 }
 
@@ -71,12 +73,14 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
           <Modal
             key={MODAL_ID}
             modalId={MODAL_ID}
-            fullWidth
+            maxWidth={MODAL_MAX_WIDTH}
+            // fullWidth
             fullHeight
             theme={theme}
           >
             <RecipeContainer
               {...props}
+              modalId={MODAL_ID}
             />
           </Modal>
         )}
@@ -86,7 +90,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
   )
 
   public render() {
-    const { recipe, loading } = this.props
+    const { recipe, loading, modalId } = this.props
 
     if (loading) {
       return (
@@ -102,8 +106,14 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page lazyRender>
-            <Navbar>
+          <Page
+            lazyRender
+            maxWidth={modalId ? MODAL_MAX_WIDTH : undefined}
+            withFooter={!this.props.modalId}
+          >
+            <Navbar
+              modalId={modalId}
+            >
               {this._renderControlBar()}
             </Navbar>
 
@@ -169,7 +179,6 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
       windowHeight: ResponsiveWidthStore.getHeight(),
       windowWidth: ResponsiveWidthStore.getWidth(),
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      me: UserStore.getUser(),
       serving: props.recipe ? props.recipe.serving : (initialBuild ? 1 : this.state.serving) // TODO instead of 1, it should be the number of user's family
     }
   }
@@ -385,7 +394,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
   }
 
   private _renderControlBar = () => {
-    if (this.state.me && ((this.state.me.id === this.props.recipe.author.id) || (this.state.me.role === Role.operator))) {
+    if (this.props.me && ((this.props.me.id === this.props.recipe.author.id) || (this.props.me.role === Role.operator))) {
       return (
         <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           <FilledButton
@@ -395,7 +404,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
               text: translate('yes'),
               onPress: () => this.props.onDelete({
                 recipeId: this.props.recipe.id,
-                userId: this.state.me!.id,
+                userId: this.props.me!.id,
               }).then(() => navigate(this.props, 'back'))
             }, { text: translate('no') }])}
           />
@@ -409,7 +418,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
           />
           <PublishRecipe
             recipe={this.props.recipe}
-            user={this.state.me}
+            user={this.props.me}
           />
         </RX.View>
       )
@@ -457,8 +466,10 @@ export default function RecipeContainer(props: RecipeCommonProps) {
 
   return (
     <RecipeScreen
+      {...props}
       recipe={data.recipe}
       loading={loading}
+      me={useMe()}
       onDelete={({ recipeId, userId }) => deleteRecipe({
         variables: {
           recipeId,
@@ -518,7 +529,7 @@ export const fragments = {
         cookTime
         totalTime
       }
-      ingredients { ...Ingredient }
+      ingredients { ...BasicIngredient }
       instructions {
         step
         text { text locale }

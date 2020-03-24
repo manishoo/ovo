@@ -13,7 +13,7 @@ import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import { renderImageOrPlaceholder } from '@Utils'
-import { Day_meals_items_item_Food } from '@Views/CalendarScreen/components/types/Day'
+import { DayComponentDay_meals_items_item_Food } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
 import RX from 'reactxp'
 
 
@@ -58,7 +58,7 @@ const styles = {
 }
 
 interface GroceryListItemProps {
-  food: Day_meals_items_item_Food
+  food: DayComponentDay_meals_items_item_Food
   grams: number
   type: 'shoppingList' | 'pantry',
   onUnitChange: (unit: any) => any,

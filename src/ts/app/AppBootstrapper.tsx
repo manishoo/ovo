@@ -8,8 +8,6 @@ import { LanguageCode } from '@Models/global-types'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import CalendarService from '@Services/CalendarService'
 import LocationStore from '@Services/LocationStore'
-import UserService from '@Services/UserService'
-import UserStore from '@Services/UserService'
 import { persistCache } from 'apollo-cache-persist'
 import RX from 'reactxp'
 import { autoSave, rehydrate } from 'resub-persist'
@@ -22,7 +20,6 @@ import Storage from './Storage/Storage'
 
 const persistableStores: IAutoSavablePersistableStore[] = [
   CalendarService,
-  UserService,
 ]
 
 async function getSetLocale(): Promise<LanguageCode> {
@@ -95,7 +92,6 @@ export default abstract class AppBootstrapper {
 
   private _startCriticalServices(): SyncTasks.Promise<void> {
     let servicesToStart: Service[] = [
-      UserStore,
       CalendarService,
     ]
 

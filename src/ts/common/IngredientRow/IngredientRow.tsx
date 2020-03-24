@@ -12,7 +12,7 @@ import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
 import { IngredientFoodFragment, IngredientFragment, IngredientRecipeFragment } from '@Models/ingredients'
-import { Ingredient } from '@Models/types/Ingredient'
+import { BasicIngredient } from '@Models/types/BasicIngredient'
 import { renderImageOrPlaceholder } from '@Utils'
 import getFloatFromString from '@Utils/get-float-from-string'
 import { getIngredientCommonFields, handleIngredientAmountChange, handleIngredientUnitChange } from '@Utils/ingredients'
@@ -22,8 +22,8 @@ import ImageSource from 'src/ts/modules/images/index.web'
 
 interface IngredientRowProps {
   style?: any,
-  ingredient: Ingredient,
-  onIngredientChange: (ingredient: Ingredient) => void,
+  ingredient: BasicIngredient,
+  onIngredientChange: (ingredient: BasicIngredient) => void,
   onDelete?: () => void
 }
 

@@ -8,7 +8,9 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import SafeArea from '@Common/SafeArea/SafeArea'
 import ToastContainer from '@Common/ToastContainer/ToastContainer'
+import { MeContext, useMe } from '@Models/graphql/me/me'
 import Navigator from '@Modules/navigator'
+import { useState } from 'react'
 import RX from 'reactxp'
 
 
@@ -17,44 +19,42 @@ interface RootViewProps extends RX.CommonProps {
   history?: any
 }
 
-interface RootViewState {
-  theme: Theme
-}
+export default function RootView({ onLayout, history }: RootViewProps) {
+  const [theme, setTheme] = useState<Theme>(() => new Theme('light'))
+  const me = useMe()
 
-export default class RootView extends RX.Component<RootViewProps, RootViewState> {
-  constructor(props: RootViewProps) {
-    super(props)
-
-    this.state = {
-      theme: new Theme('light'),
-    }
-  }
-
-  public render() {
-    const { theme } = this.state
-
-    return (
-      <ThemeContext.Provider
+  return (
+    <ThemeContext.Provider
+      value={{
+        theme,
+        toggleTheme: (mode: 'dark' | 'light') => setTheme(new Theme(mode))
+      }}
+    >
+      <MeContext.Provider
         value={{
-          theme,
-          toggleTheme: (mode: 'dark' | 'light') => this.setState({ theme: new Theme(mode) })
+          me,
         }}
       >
-        <RX.View style={[
-          styles.root,
-          {
-            backgroundColor: theme.colors.bg,
-          }
-        ]} onLayout={this.props.onLayout}>
+        <RX.View
+          style={[
+            styles.root,
+            {
+              backgroundColor: theme.colors.bg,
+            }
+          ]}
+          onLayout={onLayout}
+        >
           {AppConfig.getPlatformType() === 'ios' && <SafeArea />}
-          <Navigator history={this.props.history} />
+          <Navigator
+            history={history}
+            me={me}
+          />
 
           <ToastContainer />
         </RX.View>
-      </ThemeContext.Provider>
-    )
-  }
-
+      </MeContext.Provider>
+    </ThemeContext.Provider>
+  )
 }
 
 const styles = {

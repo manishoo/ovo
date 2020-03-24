@@ -81,7 +81,7 @@ export class Theme {
           calendarDayName: text,
 
           grey1: 'grey',
-          subtitle: '#9f9f9f',
+          subtitle: '#aeaeae',
           grey2: '#eee',
           white: '#fff',
           yellow: '#F8CD1C',

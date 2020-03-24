@@ -5,14 +5,12 @@
 
 import CalendarService from '@Services/CalendarService'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserService'
 import AppConfig from '../app/AppConfig'
 import ServiceManager from './ServiceManager'
 
 
 export default class ServiceRegistrar {
   static init() {
-    ServiceManager.registerService(UserStore, UserStore.name)
     ServiceManager.registerService(LocationStore, LocationStore.name)
     ServiceManager.registerService(CalendarService, CalendarService.name)
 

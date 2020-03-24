@@ -11,11 +11,10 @@ import { ThemeContext } from '@App/ThemeContext'
 import LocalizedText, { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import { AssistantExpectations, MessageSender, MessageType } from '@Models/global-types'
+import { MeFragment, MeOperation } from '@Models/graphql/me/me'
 import KeyboardAvoidable from '@Modules/KeyboardAvoidable'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import UserService from '@Services/UserService'
-import UserStore from '@Services/UserService'
 import { navigate } from '@Utils'
 import { createId } from '@Utils/create-id'
 import {
@@ -166,10 +165,10 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
 					}
 
 					${MealSettingsScreen.fragments.mealSettingsMeal}
-					${UserService.fragments.me}
+					${MeFragment}
 				`}
       >
-        {(setupConversation, { loading }) => (
+        {(setupConversation, { loading, client }) => (
           <ThemeContext.Consumer>
             {({ theme }) => (
               <KeyboardAvoidable
@@ -202,7 +201,12 @@ export default class Introduction extends ComponentBase<IntroductionProps, Intro
                       onHeightChange={this.onHeightChange}
                       toggleMainKeyboardAvoidable={this.onMainKeyboardAvoidableToggle}
                       onOpenMealPlan={(user) => {
-                        UserStore.setUser(user)
+                        client!.writeQuery({
+                          query: MeOperation,
+                          data: {
+                            me: user
+                          },
+                        })
                         LocationStore.navigate(this.props, Routes.calendar)
                       }}
                       introductionWidth={this.props.introductionWidth || this.state.width}

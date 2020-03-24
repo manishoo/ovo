@@ -14,8 +14,8 @@ import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
 import { NutritionProfileMode, UserMealInput } from '@Models/global-types'
-import MealComponentContainer from '@Views/CalendarScreen/components/MealComponent'
-import MealComponent from '@Views/CalendarScreen/components/MealComponent'
+import MealComponentContainer from '@Views/CalendarScreen/components/MealComponent/MealComponent'
+import MealComponent from '@Views/CalendarScreen/components/MealComponent/MealComponent'
 import {
   GeneratorSampleMutation,
   GeneratorSampleMutationVariables
@@ -36,7 +36,7 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
   const [suggestDayGuest, { loading, data }] = useMutation<GeneratorSampleMutation, GeneratorSampleMutationVariables>(gql`
     mutation GeneratorSampleMutation($userMeals: [UserMealInput!]!, $dietId: ObjectId, $nutritionProfile: NutritionProfileInput!) {
       suggestDayGuest(userMeals: $userMeals, dietId: $dietId, nutritionProfile: $nutritionProfile) {
-        ...DayMeal
+        ...MealComponentDayMeal
       }
     }
 

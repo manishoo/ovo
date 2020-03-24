@@ -3,19 +3,25 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import Text from '@Common/Text/Text'
 // @ts-ignore
 import persianJs from 'persianjs'
+import { useState } from 'react'
 import RX from 'reactxp'
 import Input, { InputProps } from './Input'
 
 
 interface InputNumberProps extends Omit<InputProps, 'value' | 'onChange'> {
   value: string | number | null,
-  onChange: (value: string | null) => void,
+  onChange: (value: string) => void,
   autoSize?: boolean,
+  autoWidth?: boolean,
+  totalHorizontalPadding?: number
 }
 
 export default function InputNumber(props: InputNumberProps) {
+  const [width, setWidth] = useState(0)
+
   const _onChange = (value: string) => {
     if (!value) return props.onChange('')
     if (value === '.') return props.onChange('0.')
@@ -24,12 +30,36 @@ export default function InputNumber(props: InputNumberProps) {
     return props.onChange(persianJs(value).persianNumber().toString())
   }
 
+  const textInputStyle = [
+    props.textInputStyle
+  ]
+  if (props.autoWidth) {
+    textInputStyle.push({
+      width: width + (props.totalHorizontalPadding || 0),
+    })
+  }
+
+  const value = !!props.value ? String(props.value) : ''
+
+
   return (
-    // @ts-ignore
-    <Input
-      {...props}
-      value={!!props.value ? String(props.value) : ''}
-      onChange={_onChange}
-    />
+    <>
+      <RX.View
+        ignorePointerEvents
+        style={{ position: 'absolute' }}
+        onLayout={e => setWidth(e.width)}
+      >
+        <Text style={{ color: 'transparent' }}>{value}</Text>
+      </RX.View>
+      {
+        // @ts-ignore
+        <Input
+          {...props}
+          value={value}
+          textInputStyle={textInputStyle}
+          onChange={_onChange}
+        />
+      }
+    </>
   )
 }

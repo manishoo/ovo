@@ -23,6 +23,7 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
+import NutritionFragment from '@Models/nutrition'
 import getFloatFromString from '@Utils/get-float-from-string'
 import { calculateMealItemNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
@@ -61,42 +62,63 @@ interface FoodPreviewState {
 
 export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPreviewState> {
   static fragments = {
-    mealItem: gql`
-      fragment FoodPreviewMealItem on MealItem {
-        id
-        name {text locale}
-        description {text locale}
-        amount
-        customUnit {
-          gramWeight
-          name { text locale }
-        }
-        isOptional
-        unit {
-          ... on Weight {
-            amount
-            gramWeight
-            id
-            name { text locale }
-          }
-          ... on CustomUnit {
-            gramWeight
-            name { text locale }
+    mealItemIngredientItem: gql`
+      fragment FoodPreviewMealItemIngredientItem on IngredientItem {
+        ... on Food {
+          ...IngredientFood
+          origFoodClassSlug
+          nutrition {
+            ...Nutrition
           }
         }
-        item {
-          ... on Food {
-            ...IngredientFood
+        ... on Recipe {
+          ...IngredientRecipe
+          author {
+            username
           }
-          ... on Recipe {
-            ...IngredientRecipe
+          nutrition {
+            ...Nutrition
           }
         }
       }
 
       ${IngredientCard.fragments.food}
       ${IngredientCard.fragments.recipe}
-    `
+      ${NutritionFragment}
+    `,
+    get mealItem() {
+      return gql`
+        fragment FoodPreviewMealItem on MealItem {
+          id
+          name {text locale}
+          description {text locale}
+          amount
+          customUnit {
+            gramWeight
+            name { text locale }
+          }
+          isOptional
+          unit {
+            ... on Weight {
+              amount
+              gramWeight
+              id
+              name { text locale }
+            }
+            ... on CustomUnit {
+              gramWeight
+              name { text locale }
+            }
+          }
+          item {
+            ...FoodPreviewMealItemIngredientItem
+          }
+        }
+
+        ${this.mealItemIngredientItem}
+        ${NutritionFragment}
+      `
+    }
   }
 
   constructor(props: FoodPreviewProps) {
@@ -193,6 +215,11 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
         text: <Text translations={w.name} />,
       })))
     }
+
+    const mealItemNutrition = calculateMealItemNutrition({
+      ...mealItem,
+      amount: Number(mealItem.amount)
+    })
 
     return [
       <RX.View
@@ -370,12 +397,12 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               flex: 2
             }}
           >
-            <NutritionInfo
-              nutrition={calculateMealItemNutrition({
-                ...mealItem,
-                amount: Number(mealItem.amount)
-              })}
-            />
+            {
+              mealItemNutrition &&
+              <NutritionInfo
+                nutrition={mealItemNutrition}
+              />
+            }
           </RX.View>
         }
       </RX.View>,
@@ -403,7 +430,7 @@ export function showFoodPreviewModal(props: FoodPreviewProps) {
       {({ theme }) => (
         <Modal
           modalId={MODAL_ID}
-          modalWidth={500}
+          maxWidth={500}
           modalHeight={500}
           theme={theme}
         >

@@ -4,7 +4,6 @@
  */
 
 import { gql } from '@apollo/client'
-import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
@@ -29,7 +28,6 @@ import useProfileTabsHOC, {
 } from '@Views/ProfileScreen/useProfileTabs.hook'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Avatar from './components/Avatar'
 import ProfileInfo from './components/ProfileInfo'
 import { ProfileUser } from './types/ProfileUser'
 
@@ -80,7 +78,7 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     }
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.isMyProfile) {
       this._loadStateFromStorage()
     }
@@ -92,28 +90,15 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page lazyRender
-                scrollViewProps={{
+          <Page
+            lazyRender
+            scrollViewProps={{
               onScroll: this._onScroll,
             }}
           >
             {
               !this.props.isMyProfile &&
               <Navbar />
-            }
-
-            {
-              (AppConfig.getPlatformType() !== 'web') &&
-              <RX.View
-                style={styles.avatarContainer}
-              >
-                <Avatar
-                  source={''}
-                  dimensions={75}
-                  borderColor={theme.colors.primary}
-                />
-                {this.renderSettingsIcon()}
-              </RX.View>
             }
 
             <ProfileInfo
@@ -427,11 +412,6 @@ const styles = {
     flex: 1,
     // alignItems: 'center',
     marginTop: Styles.values.spacing
-  }),
-  avatarContainer: RX.Styles.createViewStyle({
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 100,
   }),
   imageStyle: RX.Styles.createImageStyle({
     width: 34,

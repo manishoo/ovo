@@ -20,12 +20,14 @@ interface PageProps {
   outerContainerChildren?: any,
 
   lazyRender?: boolean,
+  withFooter?: boolean,
 }
 
 interface PageState {
   height: number,
   width: number,
   screenWidth: number,
+  isSmallOrTinyScreenSize: boolean,
 
   shouldRender?: boolean,
 }
@@ -38,6 +40,7 @@ export default class Page extends ComponentBase<PageProps, PageState> {
       screenWidth: ResponsiveWidthStore.getWidth(),
       width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeight(),
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       shouldRender: !props.lazyRender,
     }
   }
@@ -54,6 +57,7 @@ export default class Page extends ComponentBase<PageProps, PageState> {
 
   public render() {
     const { width, screenWidth, shouldRender } = this.state
+    const { withFooter = true, maxWidth } = this.props
 
     return (
       <RX.ScrollView
@@ -80,6 +84,7 @@ export default class Page extends ComponentBase<PageProps, PageState> {
             style={[{
               minHeight: this.state.height,
               width,
+              maxWidth,
               paddingTop: Styles.values.spacingLarge,
               padding: Styles.values.spacing,
             }, this.props.innermostViewStyle]}
@@ -107,11 +112,15 @@ export default class Page extends ComponentBase<PageProps, PageState> {
 
           {this.props.outerContainerChildren}
         </RX.Animated.View>
-        <Footer
-          style={{
-            width
-          }}
-        />
+
+        {
+          withFooter && !this.state.isSmallOrTinyScreenSize &&
+          <Footer
+            style={{
+              width
+            }}
+          />
+        }
       </RX.ScrollView>
     )
   }
@@ -121,6 +130,7 @@ export default class Page extends ComponentBase<PageProps, PageState> {
       screenWidth: ResponsiveWidthStore.getWidth(),
       width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
       height: ResponsiveWidthStore.getHeight(),
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     }
   }
 }

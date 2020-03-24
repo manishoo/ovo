@@ -4,11 +4,11 @@
 
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
+import { Me } from '@Models/graphql/me/types/Me'
 import LocationStore from '@Services/LocationStore'
-import { Me } from '@Services/types/Me'
-import UserStore from '@Services/UserService'
 import { trimSlashes } from '@Utils/trim-slashes'
-import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator2'
+import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator'
+import isEqual from 'react-fast-compare'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -51,24 +51,38 @@ const defaultNavOptions: NavOptions = {
 }
 
 interface NavigatorProps {
-  history: History
+  history: History,
+  me: Me | null,
 }
 
 interface NavigatorState {
-  user: Me | null,
-  currentPath: string,
+  path: string,
 }
 
 export default class Navigator extends ComponentBase<NavigatorProps, NavigatorState> {
-  state = {
-    user: UserStore.getUser(),
-    currentPath: LocationStore.getPath(),
+  constructor(props: NavigatorProps) {
+    super(props)
+
+    this.state = {
+      path: LocationStore.getPath(),
+    }
   }
 
-  public render() {
+  public shouldComponentUpdate(nextProps: Readonly<NavigatorProps>, nextState: Readonly<NavigatorState>, nextContext: any): boolean {
+    return (
+      !isEqual(nextProps, this.props) ||
+      !isEqual(nextState, this.state)
+    )
+  }
+
+  render() {
+    const { me, history } = this.props
+    const { path } = this.state
+
     return (
       <AppNavigator
-        history={this.props.history}
+        history={history}
+        me={me}
         routes={[
           /**
            * Recipes
@@ -76,7 +90,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: `/${Routes.recipe}/:slug/edit`,
             exact: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             component: RecipeForm,
             navOptions: {
               ...defaultNavOptions,
@@ -101,7 +115,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             exact: false,
             immersive: true,
             component: RecipeForm,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             navOptions: {
               ...defaultNavOptions,
               title: translate('CreateRecipe'),
@@ -111,7 +125,6 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           /**
            * Foods
            * */
-
           {
             path: `${Routes.food}/:slug`,
             exact: false,
@@ -126,7 +139,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             path: `${Routes.mealForm}/:id`,
             exact: false,
             immersive: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
@@ -137,7 +150,7 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             path: `${Routes.mealForm}/`,
             exact: false,
             immersive: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             component: MealForm,
             navOptions: {
               ...defaultNavOptions,
@@ -148,14 +161,14 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
             path: `${Routes.settings}/`,
             exact: false,
             immersive: true,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             component: SettingsScreen,
             navOptions: defaultNavOptions,
           },
           {
             path: `${Routes.mealPlanSettings}/`,
             exact: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             component: MealPlanSettingsScreen,
             navOptions: defaultNavOptions,
           },
@@ -180,14 +193,14 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: Routes.shoppingList,
             immersive: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             exact: true,
             component: ShoppingList,
           },
           {
             path: Routes.calendar,
             immersive: false,
-            redirectTo: this.state.user ? undefined : Routes.login,
+            redirectTo: me ? undefined : Routes.login,
             exact: true,
             component: CalendarScreen,
           },
@@ -206,14 +219,14 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
           {
             path: '/:username',
             exact: true,
-            component: (this.state.user && (this.state.user.username === trimSlashes(this.state.currentPath))) ? ProfileScreen : PublicProfileScreen,
+            component: (me && (me.username === trimSlashes(path))) ? ProfileScreen : PublicProfileScreen,
           },
           {
             path: '/',
             exact: true,
-            immersive: !this.state.user,
+            immersive: !me,
             component: LandingScreen,
-            redirectTo: this.state.user ? this.state.user.username : undefined
+            redirectTo: me ? me.username : undefined
           },
         ]}
       />
@@ -221,12 +234,8 @@ export default class Navigator extends ComponentBase<NavigatorProps, NavigatorSt
   }
 
   protected _buildState(props: NavigatorProps, initialBuild: boolean): Partial<NavigatorState> | undefined {
-    const user = UserStore.getUser()
-    const currentPath = LocationStore.getPath()
-
     return {
-      user,
-      currentPath,
+      path: LocationStore.getPath()
     }
   }
 }

@@ -23,7 +23,7 @@ export default class PromptWeb extends RX.Component<PromptWebProps> {
     )
   }
 
-  public componentDidUpdate(prevProps: Readonly<PromptWebProps>, prevState: Readonly<{}>, snapshot?: any): void {
+  public UNSAFE_componentDidUpdate(prevProps: Readonly<PromptWebProps>, prevState: Readonly<{}>, snapshot?: any): void {
     if (this.props.when) {
       window.onbeforeunload = () => true
     } else {

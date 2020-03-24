@@ -81,4 +81,6 @@ export interface ImageSourceBase {
 
   Crown: string;
   CrownEmpty: string;
+
+  Check: string;
 }

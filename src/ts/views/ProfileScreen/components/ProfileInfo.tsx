@@ -51,21 +51,18 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
       <RX.View
         style={[styles.container, style]}
       >
-        <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {
-            !this.props.isMyProfile &&
-            <Image
-              source={user.avatar!.url}
-              style={[
-                styles.avatar,
-                {
-                  [Styles.values.marginEnd]: Styles.values.spacing / 2,
-                }
-              ]}
-            />
-          }
+        <RX.View style={{ flexDirection: 'row' }}>
+          <Image
+            source={user.avatar!.url}
+            style={[
+              styles.avatar,
+              {
+                [Styles.values.marginEnd]: Styles.values.spacing,
+              }
+            ]}
+          />
 
-          <RX.View style={{ flexDirection: 'row' }}>
+          <RX.View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             <RX.View>
               <Text type={Text.types.title} style={{ marginBottom: Styles.values.spacing / 2 }}>{this._getName()}</Text>
               <Text type={Text.types.subtitle}>@{user.username}</Text>
@@ -88,7 +85,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
           user.bio &&
           <Text
             type={Text.types.body}
-            style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
+            style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing / 2 }}
           >{user.bio}</Text>
         }
 

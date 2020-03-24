@@ -54,7 +54,7 @@ export default class PublicProfileScreenContainer extends ComponentBase<RX.Commo
     )
   }
 
-  componentWillMount(): void {
+  UNSAFE_componentWillMount(): void {
     if (AppConfig.getPlatformType() === 'web') {
       this._username = this.state.path.replace(/^.*\//g, '') //FIXME maybe use better path?
     }

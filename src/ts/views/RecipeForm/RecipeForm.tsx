@@ -23,14 +23,13 @@ import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
 import { LanguageCode, RecipeDifficulty, RecipeStatus } from '@Models/global-types'
+import { useMe } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import FilePicker from '@Modules/FilePicker'
 import SortableList from '@Modules/SortableList'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import ToastStore, { ToastTypes } from '@Services/ToastStore'
-import { Me } from '@Services/types/Me'
-import UserService from '@Services/UserService'
-import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
 import { createId } from '@Utils/create-id'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
@@ -62,7 +61,8 @@ interface RecipeFormProps {
   fieldErrors: { [k: string]: string }
   onCreate: (variables: RecipeFormCreateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormCreateMutation>>,
   onUpdate: (variables: RecipeFormUpdateMutationVariables, userId: string) => Promise<ExecutionResult<RecipeFormUpdateMutation>>,
-  loading?: boolean
+  loading?: boolean,
+  me: Me,
 }
 
 interface RecipeFormState {
@@ -73,7 +73,6 @@ interface RecipeFormState {
   difficulty?: string,
   totalTimeSet?: boolean,
   height?: number,
-  me: Me,
   hideForm?: boolean
   image?: any,
   thumbnail?: any,
@@ -102,8 +101,9 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <Page lazyRender
-                scrollViewProps={{
+          <Page
+            lazyRender
+            scrollViewProps={{
               ref: ref => this._scrollView = ref,
             }}
           >
@@ -134,7 +134,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     )
   }
 
-  public componentDidUpdate(prevProps: Readonly<RecipeFormProps>, prevState: RecipeFormState, prevContext: any): void {
+  public UNSAFE_componentDidUpdate(prevProps: Readonly<RecipeFormProps>, prevState: RecipeFormState, prevContext: any): void {
     if (!this.props.recipe) {
       this._saveStateToStorage()
     }
@@ -184,7 +184,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         slugEdited: true,
         imagePreview: props.recipe.image ? props.recipe.image.url : undefined,
         height: ResponsiveWidthStore.getHeight(),
-        me: UserStore.getUser()!,
       }
     } else {
       return this._getDefaultState()
@@ -198,7 +197,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       // notes: null,
       // image: null,
     }]
-    const author = UserService.getUser()!
+    const author = this.props.me
 
     return {
       ingredientModalOpen: false,
@@ -235,7 +234,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       slugEdited: false,
       imagePreview: undefined,
       height: ResponsiveWidthStore.getHeight(),
-      me: UserStore.getUser()!,
+      me: author,
       difficulty: undefined,
       totalTimeSet: undefined,
       hideForm: false,
@@ -259,7 +258,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         <RecipeFormExtra
           recipe={this.state.recipe}
           selectedTags={this.state.recipe.tags}
-          user={this.state.me}
+          user={this.props.me}
           onTagsChange={selectedTags => this.setState(prevState => ({
             recipe: {
               ...prevState.recipe,
@@ -589,7 +588,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       mealItemTiming = mealItem.item.timing
     }
 
-    console.log('mealItemTiming', mealItemTiming)
     const cookTime = (this.state.recipe.timing.cookTime || 0) + (mealItemTiming.cookTime || 0)
     const prepTime = (this.state.recipe.timing.prepTime || 0) + (mealItemTiming.prepTime || 0)
     const totalTime = (this.state.recipe.timing.totalTime || 0) + (mealItemTiming.totalTime || 0)
@@ -722,7 +720,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
   private _handleCreate = () => {
     this.props.onCreate({
       recipe: transformRecipeToRecipeInput(this.state.recipe, this.state.image, this.state.thumbnail),
-    }, this.state.me.id)
+    }, this.props.me.id)
       .then(({ data }) => {
         if (data) {
           this.setState({
@@ -755,7 +753,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     this.props.onUpdate({
       id: this.state.recipe.id,
       recipe: transformRecipeToRecipeInput(this.state.recipe, this.state.image, this.state.thumbnail),
-    }, this.state.me.id)
+    }, this.props.me.id)
       .then(() => {
         ToastStore.toast({
           message: translate('RecipeUpdateSuccess'),
@@ -867,6 +865,7 @@ export default function (props: {}) {
 
   return (
     <RecipeForm
+      me={useMe()!}
       recipe={data && data.recipe}
       loading={recipeLoading || createRecipeLoading || updateRecipeLoading}
       fieldErrors={getGraphQLUserInputErrors(error || createRecipeError || updateRecipeError)}

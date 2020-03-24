@@ -26,7 +26,6 @@ export default class Image extends RX.Component<ImageProps> {
     const { style } = this.props
 
     return (
-      // @ts-ignore
       <RX.Image
         style={[styles.container, style]}
         resizeMode={'cover'}

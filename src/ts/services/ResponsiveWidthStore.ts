@@ -103,7 +103,13 @@ class ResponsiveWidthStore extends StoreBase {
 
   @autoSubscribeWithKey(TriggerKeys.Height)
   getHeight(rootViewId: string = MainWindowId): number {
-    return this._rawHeight[rootViewId]
+    if (this.isSmallOrTinyScreenSize()) {
+      // FIXME: fix on pages where tabbar is hidden
+      return this._rawHeight[rootViewId] // - TabBar.height
+    }
+
+    // FIXME: fix on pages where navbar is hidden
+    return this._rawHeight[rootViewId] // - AppNavbar.height
   }
 
   @disableWarnings

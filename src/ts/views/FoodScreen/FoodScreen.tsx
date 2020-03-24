@@ -16,9 +16,9 @@ import Navbar from '@Common/Navbar/Navbar'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { Role } from '@Models/global-types'
+import { MeContext } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import { Me } from '@Services/types/Me'
-import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -27,17 +27,18 @@ import { FoodScreenQuery, FoodScreenQueryVariables } from './types/FoodScreenQue
 
 
 const MODAL_ID = 'FoodScreen'
+const MODAL_MAX_WIDTH = 800
 
-interface FoodScreenCommonProps extends RX.CommonProps {
-  slug?: string
+interface FoodScreenCommonProps {
+  slug?: string,
+  modal?: boolean,
 }
 
-interface FoodScreenProps {
+interface FoodScreenProps extends FoodScreenCommonProps {
   foodClass: FoodScreenFoodClass,
 }
 
 interface FoodScreenState {
-  me: Me | null,
   width: number,
   drawerVisible?: boolean,
   isSmallOrTiny?: boolean,
@@ -59,7 +60,6 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
     `
   }
   state = {
-    me: UserStore.getUser(),
     drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
     isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
     width: ResponsiveWidthStore.getWidth(),
@@ -72,12 +72,14 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
           <Modal
             key={MODAL_ID}
             modalId={MODAL_ID}
-            fullWidth
-            fullHeight
+            maxWidth={MODAL_MAX_WIDTH}
+            // fullWidth
+            // fullHeight
             theme={theme}
           >
             <FoodScreenContainer
               {...props}
+              modal
             />
           </Modal>
         )}
@@ -88,10 +90,20 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
 
   public render() {
     return (
-      <Page lazyRender>
-        <Navbar>
-          {this._renderControlBar()}
-        </Navbar>
+      <Page
+        lazyRender
+        maxWidth={MODAL_MAX_WIDTH}
+        withFooter={!this.props.modal}
+      >
+        <MeContext.Consumer>
+          {({ me }) => (
+            <Navbar
+              modalId={this.props.modal ? MODAL_ID : undefined}
+            >
+              {me && this._renderControlBar(me)}
+            </Navbar>
+          )}
+        </MeContext.Consumer>
 
         <RX.View
           style={[
@@ -117,7 +129,6 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
 
   protected _buildState(props: FoodScreenProps, initialBuild: boolean): Partial<FoodScreenState> | undefined {
     return {
-      me: UserStore.getUser(),
       drawerVisible: ResponsiveWidthStore.isDrawerVisible(),
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
       width: ResponsiveWidthStore.getWidth(),
@@ -128,8 +139,8 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
 
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.drawerVisible ? this.state.width : this.state.width - Styles.values.drawerWidth)
 
-  private _renderControlBar = () => {
-    if (this.props.foodClass && (AppConfig.getPlatformType() === 'web') && this.state.me && (this.state.me.role === Role.operator)) {
+  private _renderControlBar = (me: Me) => {
+    if (this.props.foodClass && (AppConfig.getPlatformType() === 'web') && (me.role === Role.operator)) {
       return (
         <RX.View style={{ flexDirection: 'row' }}>
           <Link to={`${AppConfig.panelAddress}/food-class/${this.props.foodClass.id}`} openInNewTab>
@@ -169,6 +180,7 @@ export default function FoodScreenContainer(props: FoodScreenCommonProps) {
 
   return (
     <FoodScreen
+      {...props}
       foodClass={data.foodClass}
     />
   )

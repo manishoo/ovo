@@ -28,6 +28,25 @@ interface SelectProps {
   textStyle?: any
 }
 
+// <select
+//   style={{
+//     padding: 8,
+//     borderRadius: 5,
+//     marginBottom: Styles.values.spacing,
+//     backgroundColor: theme.colors.textInputBg,
+//     cursor: editable ? 'pointer' : undefined,
+//     // ...style,
+//   }}
+//   value={selectedOption ? selectedOption.value : undefined}
+//   onChange={e => this.props.onChange(e.target.value)}
+// >
+//   {
+//     ...this.props.options.map((({ value, text }) => (
+//       <option value={value}>{text}</option>
+//     )))
+//   }
+// </select>
+
 export default class Select extends RX.Component<SelectProps> {
   private _mountedButton: any
   // @ts-ignore
@@ -40,8 +59,10 @@ export default class Select extends RX.Component<SelectProps> {
 
     return (
       <ThemeContext.Consumer>
-        {({ theme }) => [
-          !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>,
+        {({ theme }) => <>
+          {
+            !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>
+          }
           <RX.View
             style={[styles.selectContainer, {
               backgroundColor: theme.colors.textInputBg,
@@ -53,7 +74,7 @@ export default class Select extends RX.Component<SelectProps> {
           >
             <Text style={textStyle}>{selectedOption && selectedOption.text}</Text>
           </RX.View>
-        ]}
+        </>}
       </ThemeContext.Consumer>
     )
   }
@@ -82,6 +103,7 @@ export default class Select extends RX.Component<SelectProps> {
       },
       positionPriorities: ['bottom', 'left', 'right', 'top'],
       useInnerPositioning: false,
+      cacheable: true,
       onDismiss: () => {
         this._popupDisplayed = false
       }

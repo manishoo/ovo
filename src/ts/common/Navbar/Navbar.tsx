@@ -7,6 +7,7 @@ import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import Modal from '@Common/Modal/Modal'
 import Text from '@Common/Text/Text'
 import ImageSource from '@Modules/images'
 import { withMobileNavigation } from '@Modules/navigator'
@@ -17,7 +18,7 @@ import RX from 'reactxp'
 interface NavbarProps {
   style?: any,
   title?: string,
-  inModal?: boolean,
+  modalId?: string,
   onBackPress?: () => void,
 }
 
@@ -46,10 +47,10 @@ export default class Navbar extends RX.Component<NavbarProps> {
   }
 
   private _handleBack = () => {
-    const { inModal } = this.props
+    const { modalId } = this.props
 
-    if (inModal && this.props.onBackPress) {
-      return this.props.onBackPress()
+    if (modalId) {
+      return Modal.dismissAnimated(modalId)
     }
 
     LocationStore.navigate(this.props, 'back')

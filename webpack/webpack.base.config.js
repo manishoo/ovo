@@ -90,7 +90,7 @@ const productionConfig = merge(
       maxAssetSize: 450000 // in bytes
     }
   },
-  // parts.minifyJS(),
+  parts.minifyJS(),
   parts.loadImages({
     include: paths.src,
     options: {

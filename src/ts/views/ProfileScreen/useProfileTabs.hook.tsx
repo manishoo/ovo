@@ -26,7 +26,7 @@ export const PROFILE_MEALS_QUERY = gql`
     }
   }
 
-  ${MealCell.fragments.mealCellMeal}
+  ${MealCell.fragments.meal}
 `
 export const PROFILE_RECIPES_QUERY = gql`
   query ProfileRecipesQuery($lastId: ObjectId, $userId: ObjectId, $size: Int) {

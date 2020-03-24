@@ -18,9 +18,9 @@ import Navbar from '@Common/Navbar/Navbar'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { Role } from '@Models/global-types'
+import { useMe } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import LocationStore from '@Services/LocationStore'
-import { Me } from '@Services/types/Me'
-import UserStore from '@Services/UserService'
 import { getParam } from '@Utils'
 import { createId } from '@Utils/create-id'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
@@ -32,6 +32,7 @@ import { MealFormDeleteMutation, MealFormDeleteMutationVariables } from '@Views/
 import { MealFormMeal, MealFormMeal_items } from '@Views/MealForm/types/MealFormMeal'
 import { MealFormQuery, MealFormQueryVariables } from '@Views/MealForm/types/MealFormQuery'
 import { MealFormUpdateMutation, MealFormUpdateMutationVariables } from '@Views/MealForm/types/MealFormUpdateMutation'
+import MealCell from '@Views/ProfileScreen/components/MealsList/components/MealCell/MealCell'
 import { ProfileMealsQuery, ProfileMealsQueryVariables } from '@Views/ProfileScreen/types/ProfileMealsQuery'
 import { PROFILE_MEALS_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
 import RX from 'reactxp'
@@ -53,11 +54,11 @@ interface MealFormProps extends MealFormCommonProps {
   createRecipeLoading?: boolean,
   updateRecipeLoading?: boolean,
   deleteMealLoading?: boolean,
+  me: Me,
 }
 
 interface MealFormState {
   meal: MealFormMeal,
-  me: Me,
   bulkCreate?: boolean,
 }
 
@@ -65,25 +66,12 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   static fragments = {
     meal: gql`
       fragment MealFormMeal on Meal {
-        id
-        name {text locale}
-        likedByUser
-        likesCount
-        items {
-          ...MealItemRowMealItem
-        }
+        ...MealCellMeal
         instanceOf
-        author {
-          id
-          username
-          avatar {url}
-        }
-        timing {
-          totalTime
-        }
       }
 
       ${MealItemRow.fragments.mealItem}
+      ${MealCell.fragments.meal}
     `
 
   }
@@ -91,24 +79,21 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
   constructor(props: MealFormProps) {
     super(props)
 
-    const me = UserStore.getUser()!
-
     if (props.meal) {
       this.state = {
-        me,
         meal: props.meal,
       }
     } else {
       this.state = {
-        me,
         meal: {
           id: createId(),
           name: [],
           items: [],
           likedByUser: false,
           instanceOf: false,
+          hasPermutations: false,
           likesCount: 0,
-          author: me,
+          author: props.me,
           timing: {
             totalTime: 0
           }
@@ -133,8 +118,8 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
           {
             this.props.meal &&
             (
-              this.state.me.id === this.props.meal.author.id ||
-              this.state.me.role === Role.operator
+              this.props.me.id === this.props.meal.author.id ||
+              this.props.me.role === Role.operator
             ) &&
             <FilledButton
               label={translate('Delete')}
@@ -185,7 +170,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
 
         {
           !this.props.meal &&
-          this.state.me.role !== Role.user &&
+          this.props.me.role !== Role.user &&
           <RX.View
             style={{
               flexDirection: 'row',
@@ -220,7 +205,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     )
   }
 
-  public componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
+  public UNSAFE_componentWillReceiveProps(nextProps: Readonly<MealFormProps>, nextContext: any): void {
     if (this.state.meal.items.length === 0 && nextProps.meal) {
       this.setState({
         meal: nextProps.meal,
@@ -228,7 +213,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     }
   }
 
-  public componentWillMount(): void {
+  public UNSAFE_componentWillMount(): void {
     if (!this.props.meal) {
       this._loadStateFromStorage()
     }
@@ -244,7 +229,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
       this.props.onUpdate({
         id: this.props.meal.id,
         meal: mealInput,
-      }, this.state.me.id)
+      }, this.props.me.id)
         .then(() => {
           this._clearStateStorage()
           LocationStore.navigate(this.props, 'back')
@@ -256,7 +241,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
       this.props.onCreate({
         meal: mealInput,
         bulkCreate: this.state.bulkCreate,
-      }, this.state.me.id)
+      }, this.props.me.id)
         .then(() => {
           this._clearStateStorage()
           LocationStore.navigate(this.props, 'back')
@@ -274,7 +259,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
         style: 'cancel',
         onPress: () => this.props.onDelete({
           id: meal.id,
-        }, this.state.me.id).then(() => LocationStore.navigate(this.props, 'back'))
+        }, this.props.me.id).then(() => LocationStore.navigate(this.props, 'back'))
       },
       {
         text: translate('cancel'),
@@ -424,6 +409,7 @@ const MealFormContainer = (props: MealFormCommonProps) => {
 
   return (
     <MealForm
+      me={useMe()!}
       fieldErrors={getGraphQLUserInputErrors(deleteMealError || createRecipeError || updateRecipeError)}
       meal={mealFormQueryData && mealFormQueryData.meal}
       createRecipeLoading={createRecipeLoading}
@@ -477,7 +463,7 @@ const MealFormContainer = (props: MealFormCommonProps) => {
             data: {
               meals: {
                 ...profileMealsQuery.meals,
-                meals: profileMealsQuery.meals.meals.filter(meal => !data.deleteMeal.find(id => id === meal.id))
+                meals: profileMealsQuery.meals.meals.filter(meal => data.deleteMeal !== meal.id)
               }
             }
           })

@@ -5,14 +5,12 @@
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import { showFoodPreviewModal } from '@Common/FoodPickerDialog/components/FoodPreview'
 import Image from '@Common/Image/Image'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import { IngredientFoodFragment, IngredientFragment, IngredientRecipeFragment } from '@Models/ingredients'
-import { Ingredient } from '@Models/types/Ingredient'
+import { BasicIngredient } from '@Models/types/BasicIngredient'
 import ImageSource from '@Modules/images'
-import { createId } from '@Utils/create-id'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
 import RX from 'reactxp'
 
@@ -21,8 +19,8 @@ const CLEAR_ICON_DIMENSION = 20
 
 interface IngredientCardProps {
   style?: any,
-  ingredient: Ingredient,
-  onIngredientChange?: (ingredient: Ingredient) => void,
+  ingredient: BasicIngredient,
+  onUnitPress?: () => void,
   onDelete?: () => void,
   onPress?: (e: RX.Types.SyntheticEvent) => void,
   size: number,
@@ -87,9 +85,13 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
               !this.props.hideTitle &&
               <>
                 <Text translations={this._getIngredientTitle() || []} style={styles.name} />{/*FIXME remove !*/}
-                {ingredient.description &&
-                <Text translations={ingredient.description}
-                      style={{ color: theme.colors.subtitle, marginBottom: 5, }} />}
+                {
+                  ingredient.description &&
+                  <Text
+                    translations={ingredient.description}
+                    style={{ color: theme.colors.subtitle, marginBottom: 5, }}
+                  />
+                }
               </>
             }
 
@@ -105,9 +107,9 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
               {
                 !this.props.hideUnits &&
                 <RX.View
-                  onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
+                  onPress={this.props.onUnitPress}
                   style={[styles.unitWrapper, {
-                    cursor: this.props.onIngredientChange ? 'pointer' : undefined,
+                    cursor: this.props.onUnitPress ? 'pointer' : undefined,
                     backgroundColor: theme.colors.recipeIngredientUnitBG
                   }]}
                 >
@@ -133,9 +135,9 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
               {
                 ingredient.isOptional &&
                 <RX.View
-                  onPress={this.props.onIngredientChange ? this._handleUnitPress : undefined}
+                  onPress={this.props.onUnitPress}
                   style={[styles.unitWrapper, {
-                    cursor: this.props.onIngredientChange ? 'pointer' : undefined,
+                    cursor: this.props.onUnitPress ? 'pointer' : undefined,
                     backgroundColor: theme.colors.recipeIngredientRequiredBG
                   }]}
                 >
@@ -177,6 +179,7 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
     if (determineIfIsFood(ingredient.item)) {
       return ingredient.item.name
     } else {
+      // @ts-ignore
       return ingredient.item.title
     }
   }
@@ -192,24 +195,6 @@ export default class IngredientCard extends RX.Component<IngredientCardProps> {
     //   .start(() => {
     //     this.props.onDelete()
     //   })
-  }
-
-  private _handleUnitPress = () => {
-    showFoodPreviewModal({
-      mealItem: {
-        id: createId(),
-        ...this.props.ingredient,
-      },
-      inputRef: () => null,
-      onDismiss: () => null,
-      onSubmit: (mealItem => {
-        if (this.props.onIngredientChange) {
-          this.props.onIngredientChange(mealItem)
-        }
-      }),
-      height: 400,
-    })
-    return
   }
 
   private _setUI = (isHovering: boolean) => {

@@ -35,7 +35,7 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
                 style={[styles.container, {
                   borderWidth: borderless ? 0 : 1,
                   borderColor: theme.colors.flatButtonBorderColor,
-                  backgroundColor: theme.colors.flatButtonBGColor
+                  // backgroundColor: theme.colors.flatButtonBGColor
                 }, style]}
                 onPress={onPress}
                 activeOpacity={0.7}

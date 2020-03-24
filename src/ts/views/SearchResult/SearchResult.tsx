@@ -34,7 +34,8 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     const { recipesData } = this.props
 
     return (
-      <Page lazyRender
+      <Page
+        lazyRender
             scrollViewProps={{
           onScroll: this._onScroll(this._handleOnReachEnd),
         }}
