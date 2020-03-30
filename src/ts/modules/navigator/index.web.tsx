@@ -7,7 +7,6 @@ import { Routes } from '@Models/common'
 import { Me } from '@Models/graphql/me/types/Me'
 import LocationStore from '@Services/LocationStore'
 import { trimSlashes } from '@Utils/trim-slashes'
-import AppNavigator from '@Views/platform-specific/web/AppNavigator/AppNavigator'
 import isEqual from 'react-fast-compare'
 import { withRouter } from 'react-router-dom'
 import RX from 'reactxp'
@@ -31,6 +30,7 @@ import {
   SettingsScreen,
   ShoppingList,
 } from './routes'
+import AppNavigator from './web/AppNavigator/AppNavigator'
 
 
 export function withNavigation(T: any): any {

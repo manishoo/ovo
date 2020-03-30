@@ -8,17 +8,17 @@ import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import { calculateMealItemsNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { CalendarControlOperation } from '@Views/CalendarScreen/components/CalendarControl/operations/CalendarControlOperation'
 import { CalendarControlQuery } from '@Views/CalendarScreen/components/CalendarControl/operations/types/CalendarControlQuery'
+import { MealItemComponentMealItem } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/components/MealItemComponent/types/MealItemComponentMealItem'
+import { MealComponentFragments } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/MealComponentOperation'
+import {
+  MealComponentDayMeal,
+  MealComponentDayMeal_items_item_Food
+} from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/types/MealComponentDayMeal'
 import {
   DayComponentDay,
   DayComponentDay_meals_items,
   DayComponentDay_meals_items_item_Food
 } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
-import MealComponentContainer from '@Views/CalendarScreen/components/MealComponent/MealComponent'
-import {
-  MealComponentDayMeal,
-  MealComponentDayMeal_items_item_Food
-} from '@Views/CalendarScreen/components/MealComponent/types/MealComponentDayMeal'
-import { MealItemComponentMealItem } from '@Views/CalendarScreen/components/MealItemComponent/types/MealItemComponentMealItem'
 import { CalendarOperation } from '@Views/CalendarScreen/operations/CalendarOperation'
 import { CalendarQuery } from '@Views/CalendarScreen/operations/types/CalendarQuery'
 import { DateTime } from 'luxon'
@@ -67,7 +67,6 @@ enum TriggerKeys {
 export class CalendarService extends StoreBase implements IAutoSavablePersistableStore {
   public name = 'CalendarService'
   public autoSaveTriggerKeys = TriggerKeys
-  private calendar: DayComponentDay[] = []
   private shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup = {}
   private pantryGroceriesByFoodGroup: GroceriesByFoodGroup = {}
 
@@ -143,22 +142,65 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     this.trigger()
   }
 
-  setMeal(cache: ApolloCache<any>, meal: MealComponentDayMeal) {
+  setMeal(cache: ApolloCache<any>, meal: MealComponentDayMeal, updateShoppingList: boolean = true) {
     cache.writeFragment({
       fragmentName: 'MealComponentDayMeal',
-      fragment: MealComponentContainer.fragments.dayMeal,
+      fragment: MealComponentFragments.dayMeal,
       id: `DayMeal:${meal.id}`,
       data: meal
     })
 
+    if (updateShoppingList) {
+      this._handleShoppingList()
+    }
+  }
+
+  getMeal(cache: ApolloCache<any>, mealId: string): MealComponentDayMeal | null {
+    return cache.readFragment({
+      fragmentName: 'MealComponentDayMeal',
+      fragment: MealComponentFragments.dayMeal,
+      id: `DayMeal:${mealId}`,
+    })
+  }
+
+  moveMealItem(cache: ApolloCache<any>, fromMealId: string, toMealId: string, toIndex: number, mealItemId: string) {
+    const fromMeal = this.getMeal(cache, fromMealId)
+    if (!fromMeal) throw new Error('fromMeal not found')
+
+    let movedMealItem: undefined | MealItemComponentMealItem = undefined
+
+    this.setMeal(cache, {
+      ...fromMeal,
+      items: fromMeal.items.filter(p => {
+        if (String(p.id) !== String(mealItemId)) {
+          return true
+        } else {
+          movedMealItem = p
+          return false
+        }
+      })
+    }, false)
+
+    if (!movedMealItem) throw new Error('mealItem not found')
+
+    const toMeal = this.getMeal(cache, toMealId)
+    if (!toMeal) throw new Error('toMeal not found')
+
+    const items = [...toMeal.items]
+    items.splice(toIndex, 0, movedMealItem!)
+
+    this.setMeal(cache, {
+      ...toMeal,
+      items,
+    }, false)
+
     this._handleShoppingList()
-    this.trigger()
   }
 
   setMealItem(cache: ApolloCache<any>, mealId: string, prevMealItem: MealItemComponentMealItem, newMealItem: MealItemComponentMealItem) {
     const meal = cache.readFragment<MealComponentDayMeal>({
       fragmentName: 'MealComponentDayMeal',
-      fragment: MealComponentContainer.fragments.dayMeal,
+      fragment: MealComponentFragments.dayMeal,
       id: `DayMeal:${mealId}`,
     }, true)
     if (!meal) return

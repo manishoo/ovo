@@ -3,13 +3,14 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { PureComponent } from 'react'
 import Helmet from 'react-helmet'
 import Slider, { Settings } from 'react-slick'
 import RX from 'reactxp'
 import { CarouselProps } from './types'
 
 
-export default class Carousel extends RX.Component<CarouselProps> {
+export default class Carousel extends PureComponent<CarouselProps> {
   private _slider: Slider | null = null
 
   render() {
@@ -19,15 +20,14 @@ export default class Carousel extends RX.Component<CarouselProps> {
       dots: false,
       infinite: false,
       arrows: false,
+      swipe: false,
+
       swipeToSlide: true,
-      centerMode: true,
-      swipe: true,
+      // centerMode: true,
       waitForAnimate: false,
       touchThreshold: 200,
       onSwipe: props.onSwipe,
-      beforeChange: (currentSlide: number, nextSlide: number) => {
-        return props.onChange && props.onChange(nextSlide)
-      },
+      beforeChange: this._handleBeforeChange,
       lazyLoad: 'progressive',
     }
 
@@ -54,6 +54,10 @@ export default class Carousel extends RX.Component<CarouselProps> {
         </Slider>
       </>
     )
+  }
+
+  private _handleBeforeChange = (currentSlide: number, nextSlide: number) => {
+    return this.props.onChange && this.props.onChange(nextSlide)
   }
 
   public goTo = (slideNo: number, animate: boolean = true) => {

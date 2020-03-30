@@ -21,13 +21,13 @@ import InputNumber from '@Common/Input/InputNumber'
 import IntlInput from '@Common/Input/IntlInput'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
+import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import NutritionFragment from '@Models/nutrition'
 import getFloatFromString from '@Utils/get-float-from-string'
 import { calculateMealItemNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
-import NutritionInfo from '@Views/CalendarScreen/components/NutritionInfo/NutritionInfo'
 import RX from 'reactxp'
 
 
@@ -62,30 +62,47 @@ interface FoodPreviewState {
 
 export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPreviewState> {
   static fragments = {
-    mealItemIngredientItem: gql`
-      fragment FoodPreviewMealItemIngredientItem on IngredientItem {
-        ... on Food {
-          ...IngredientFood
-          origFoodClassSlug
-          nutrition {
-            ...Nutrition
-          }
-        }
-        ... on Recipe {
-          ...IngredientRecipe
-          author {
-            username
-          }
-          nutrition {
-            ...Nutrition
-          }
+    food: gql`
+      fragment FoodPreviewFood on Food {
+        ...IngredientFood
+        origFoodClassSlug
+        nutrition {
+          ...Nutrition
         }
       }
 
-      ${IngredientCard.fragments.food}
-      ${IngredientCard.fragments.recipe}
       ${NutritionFragment}
+      ${IngredientCard.fragments.food}
     `,
+    recipe: gql`
+      fragment FoodPreviewRecipe on Recipe {
+        ...IngredientRecipe
+        author {
+          username
+        }
+        nutrition {
+          ...Nutrition
+        }
+      }
+
+      ${NutritionFragment}
+      ${IngredientCard.fragments.recipe}
+    `,
+    get mealItemIngredientItem() {
+      return gql`
+        fragment FoodPreviewMealItemIngredientItem on IngredientItem {
+          ... on Food {
+            ...FoodPreviewFood
+          }
+          ... on Recipe {
+            ...FoodPreviewRecipe
+          }
+        }
+
+        ${this.food}
+        ${this.recipe}
+      `
+    },
     get mealItem() {
       return gql`
         fragment FoodPreviewMealItem on MealItem {
@@ -110,6 +127,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               name { text locale }
             }
           }
+          hasAlternatives
           item {
             ...FoodPreviewMealItemIngredientItem
           }
@@ -184,7 +202,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
   private _onSubmit = (userMealId?: string) => {
     this.props.onSubmit({
       ...this.state.mealItem,
-      amount: getFloatFromString(this.state.mealItem.amount)
+      amount: getFloatFromString(this.state.mealItem.amount),
+      hasAlternatives: false,
     }, userMealId)
     this.props.onDismiss()
   }

@@ -22,6 +22,7 @@ interface FilledButtonProps {
   suffix?: any,
   pressed?: boolean
   loading?: boolean
+  flat?: boolean,
 }
 
 enum ButtonMode {
@@ -29,6 +30,7 @@ enum ButtonMode {
   success = 'success',
   default = 'default',
   danger = 'danger',
+  link = 'link',
 }
 
 export default class FilledButton extends RX.Component<FilledButtonProps> {
@@ -57,7 +59,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
   }
 
   public render() {
-    const { style, containerStyle, label, onPress, loading, fontSize, disabled, suffix } = this.props
+    const { style, containerStyle, label, onPress, loading, fontSize, disabled, suffix, flat } = this.props
     let { pressed } = this.state
 
     if (this.props.pressed) {
@@ -80,7 +82,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
                   styles.container,
                   this._getStyle(theme).style,
                   isHovering && !disabled ? this._getStyle(theme).hoverStyle : undefined,
-                  {
+                  flat ? undefined : {
                     borderBottomWidth: pressed ? 1 : 3,
                     marginTop: pressed ? 2 : 0,
                   },
@@ -139,40 +141,61 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
     let hoverStyle = {}
     let labelStyle = {}
 
-    if (this.props.mode === ButtonMode.default) {
-      style = {
-        ...style,
-        borderWidth: 1,
-        backgroundColor: theme.colors.filledButtonDefaultModeBG,
-        borderColor: theme.colors.filledButtonDefaultModeBorder,
-      }
-      labelStyle = {
-        ...labelStyle,
-        color: theme.colors.filledButtonDefaultModeTextColor,
-        fontWeight: 'bold',
-      }
-      hoverStyle = {
-        ...hoverStyle,
-        backgroundColor: theme.colors.filledButtonDefaultHoverBG,
-      }
-    }
-
-    if (this.props.mode === ButtonMode.primary || this.props.mode === ButtonMode.danger) {
-      style = {
-        ...style,
-        borderWidth: 1,
-        // borderBottomWidth: 3,
-        borderColor: theme.colors.filledButtonDefaultModeBorder,
-        backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
-      }
-      labelStyle = {
-        ...labelStyle,
-        fontWeight: 'bold',
-      }
-      hoverStyle = {
-        ...hoverStyle,
-        backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
-      }
+    switch (this.props.mode) {
+      case ButtonMode.default:
+        style = {
+          ...style,
+          borderWidth: 1,
+          backgroundColor: theme.colors.filledButtonDefaultModeBG,
+          borderColor: theme.colors.filledButtonDefaultModeBorder,
+        }
+        labelStyle = {
+          ...labelStyle,
+          color: theme.colors.filledButtonDefaultModeTextColor,
+          fontWeight: 'bold',
+        }
+        hoverStyle = {
+          ...hoverStyle,
+          backgroundColor: theme.colors.filledButtonDefaultHoverBG,
+        }
+        break
+      case ButtonMode.primary:
+      case ButtonMode.danger:
+        style = {
+          ...style,
+          borderWidth: 1,
+          // borderBottomWidth: 3,
+          borderColor: theme.colors.filledButtonDefaultModeBorder,
+          backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
+        }
+        labelStyle = {
+          ...labelStyle,
+          fontWeight: 'bold',
+        }
+        hoverStyle = {
+          ...hoverStyle,
+          backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
+        }
+        break
+      case ButtonMode.link:
+        style = {
+          ...style,
+          borderWidth: 0,
+          // borderBottomWidth: 3,
+          // borderColor: theme.colors.filledButtonDefaultModeBorder,
+          // backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
+        }
+        labelStyle = {
+          ...labelStyle,
+          color: theme.colors.primary,
+          // fontWeight: 'bold',
+        }
+        hoverStyle = {
+          ...hoverStyle,
+          // color: theme.colors.primary,
+          // backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
+        }
+        break
     }
 
     return { style, labelStyle, hoverStyle }

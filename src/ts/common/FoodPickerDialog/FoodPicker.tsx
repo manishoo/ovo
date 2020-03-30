@@ -21,13 +21,12 @@ import {
   FoodPickerQuery_recipes_recipes,
   FoodPickerQueryVariables
 } from '@Common/FoodPickerDialog/types/FoodPickerQuery'
-import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
-import NutritionFragment from '@Models/nutrition'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { createId } from '@Utils/create-id'
+import getDefaultMealItem from '@Utils/get-default-meal-item'
 import debounce from 'lodash/debounce'
 import { useState } from 'react'
 import RX from 'reactxp'
@@ -175,7 +174,7 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
     }
   }
 
-  private _onSearch = (text: string) => {
+  private readonly _onSearch = (text: string) => {
     return this.props.onSearch(text)
   }
 
@@ -370,16 +369,7 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
 
     return (
       <FoodPreview
-        mealItem={{
-          isOptional: false,
-          description: [],
-          id: createId(),
-          amount: null,
-          unit: null,
-          customUnit: null,
-          name: [],
-          item: mealItemItem,
-        }}
+        mealItem={getDefaultMealItem(mealItemItem)}
         inputRef={(ref: any) => this.previewInput = ref}
         onDismiss={this._cancelSelection}
         onSubmit={this._onFoodSubmit}
@@ -428,30 +418,27 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
   }
 }
 
-function FoodPickerContainer(props: FoodPickerCommonProps) {
-  const [nameSearchQuery, setNameSearchQuery] = useState('')
-  const [foodsPage, setFoodsPage] = useState(1)
-  const [recipesPage, setRecipesPage] = useState(1)
-  const { data, loading, fetchMore } = useQuery<FoodPickerQuery, FoodPickerQueryVariables>(gql`
+export function useFoodsSearch(nameSearchQuery: string) {
+  return useQuery<FoodPickerQuery, FoodPickerQueryVariables>(gql`
     query FoodPickerQuery($nameSearchQuery: String, $foodsPage: Int, $skipFoods: Boolean!, $recipesPage: Int, $skipRecipes: Boolean!) {
       foods (nameSearchQuery: $nameSearchQuery, page: $foodsPage) @skip(if: $skipFoods) {
         foods {
-          ...FoodPickerFood
+          ...FoodPreviewFood
         }
         pagination {
           hasNext
         }
       }
       recipes (nameSearchQuery: $nameSearchQuery, page: $recipesPage) @skip(if: $skipRecipes) {
-        recipes { ...IngredientRecipe }
+        recipes { ...FoodPreviewRecipe }
         pagination {
           hasNext
         }
       }
     }
 
-    ${FoodPickerContainer.fragments.food}
-    ${IngredientCard.fragments.recipe}
+    ${FoodPreview.fragments.food}
+    ${FoodPreview.fragments.recipe}
   `, {
     skip: nameSearchQuery.length === 0,
     variables: {
@@ -462,6 +449,13 @@ function FoodPickerContainer(props: FoodPickerCommonProps) {
     client,
     returnPartialData: true,
   })
+}
+
+function FoodPickerContainer(props: FoodPickerCommonProps) {
+  const [nameSearchQuery, setNameSearchQuery] = useState('')
+  const [foodsPage, setFoodsPage] = useState(1)
+  const [recipesPage, setRecipesPage] = useState(1)
+  const { data, loading, fetchMore } = useFoodsSearch(nameSearchQuery)
 
   return (
     <FoodPicker
@@ -518,30 +512,6 @@ function FoodPickerContainer(props: FoodPickerCommonProps) {
       onSearch={searchQuery => setNameSearchQuery(searchQuery)}
     />
   )
-}
-
-FoodPickerContainer.fragments = {
-  food: gql`
-    fragment FoodPickerFood on Food {
-      id
-      name { text locale }
-      description { text locale }
-      origFoodGroups { id name { text locale } }
-      weights {
-        amount
-        gramWeight
-        id
-        name { text locale }
-      }
-      image {url}
-      thumbnail {url}
-      nutrition {
-        ...Nutrition
-      }
-    }
-
-    ${NutritionFragment}
-  `
 }
 
 export default FoodPickerContainer

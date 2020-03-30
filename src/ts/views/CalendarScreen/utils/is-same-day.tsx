@@ -20,6 +20,6 @@ const getDate = (d: string | Date) => {
   }
 }
 
-export function areOnSameDay(d1: Date, d2: Date) {
-  return DateTime.fromJSDate(getDate(d1)).hasSame(DateTime.fromJSDate(getDate(d2)), 'day')
+export function haveSame(d1: Date, d2: Date, unit: 'day' | 'week' = 'day') {
+  return DateTime.fromJSDate(getDate(d1)).hasSame(DateTime.fromJSDate(getDate(d2)), unit)
 }

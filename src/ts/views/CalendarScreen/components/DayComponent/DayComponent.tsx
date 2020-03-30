@@ -8,86 +8,48 @@ import { graphql, MutationFunctionOptions, MutationResult } from '@apollo/react-
 import Styles from '@App/Styles'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import MenuItem from '@Common/MenuItem/MenuItem'
-import Text from '@Common/Text/Text'
-import { DayInput } from '@Models/global-types'
+import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import { useMe } from '@Models/graphql/me/me'
-import { Me, Me_meals, Me_nutritionProfile } from '@Models/graphql/me/types/Me'
+import { Me } from '@Models/graphql/me/types/Me'
 import CalendarService from '@Services/CalendarService'
 import { getDayColor } from '@Utils'
 import areFieldsEqual from '@Utils/areFieldsEqual'
 import { calculateDayNutrition } from '@Utils/shared/calculate-meal-nutrition'
-import trimTypeName from '@Utils/trim-type-name'
+import { MealComponentFragments } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/MealComponentOperation'
 import {
   DayComponentClearDayMutation,
   DayComponentClearDayMutationVariables
 } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentClearDayMutation'
-import { DayComponentDay } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
+import {
+  DayComponentDay,
+  DayComponentDay_meals
+} from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
 import {
   DayComponentNewDayMutation,
-  DayComponentNewDayMutation_newDay,
   DayComponentNewDayMutationVariables
 } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentNewDayMutation'
-import { DateTime } from 'luxon'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react'
 import RX from 'reactxp'
 import { compose } from 'redux'
 import DayEmpty from '../DayEmpty/DayEmpty'
 import DayPayWall from '../DayPayWall/DayPayWall'
-import ItemControl from '../ItemControl/ItemControl'
-import MealComponent from '../MealComponent/MealComponent'
-import MacroTargets from '../NutritionInfo/MacroTargets'
-import NutritionInfo from '../NutritionInfo/NutritionInfo'
+import DayTitle from './components/DayTitle/DayTitle'
+import DeleteSpace from './components/DeleteSpace/DeleteSpace'
+import MealComponent from './components/MealComponent/MealComponent'
+import { createDayInput } from './utils/create-day-input'
 
 
-const ObjectId = require('../../../../utils/object-id.js')
 const MEAL_WIDTH = 350
-
-const createDayInput = (date: DateTime, meals: Me_meals[], nutritionProfile: Me_nutritionProfile, optimistic?: boolean) => {
-  const day = {
-    meals: meals.map(userMeal => {
-      const mealDate = date
-      mealDate.set({
-        hour: Number(userMeal.time.split(':')[0]),
-        minute: Number(userMeal.time.split(':')[1])
-      })
-
-      return {
-        items: [],
-        userMeal: trimTypeName(userMeal),
-        time: mealDate.toISODate(),
-        id: ObjectId(),
-        ate: false,
-      }
-    }),
-    id: ObjectId(),
-    date: date.toISODate(),
-    nutritionProfile: trimTypeName(nutritionProfile),
-  } as DayInput
-
-  if (optimistic) {
-    // @ts-ignore
-    day.__typename = 'Day'
-    day.meals = day.meals.map(dayMeal => {
-      // @ts-ignore
-      dayMeal.__typename = 'DayMeal'
-      // @ts-ignore
-      dayMeal.mealId = null
-      return dayMeal
-    })
-  }
-
-  return day as DayComponentNewDayMutation_newDay & DayInput
-}
 
 interface DayComponentCommonProps {
   style?: any,
   day?: DayComponentDay,
-  date: DateTime,
+  date: Date,
   width: number
   minHeight: number
   isTinyOrSmall: boolean,
   me?: Me,
-  onTitlePress: (date: DateTime) => void,
+  onTitlePress: (date: Date) => void,
   loading?: boolean,
 }
 
@@ -101,224 +63,6 @@ export interface DayComponentProps extends DayComponentCommonProps {
   clearDayResult: MutationResult<DayComponentClearDayMutation>,
   clearDay: (args: MutationFunctionOptions<DayComponentClearDayMutation, DayComponentClearDayMutationVariables>) => Promise<MutationResult<DayComponentClearDayMutation>>,
 }
-
-//public shouldComponentUpdate(nextProps: Readonly<DayComponentProps>, nextState: Readonly<{}>, nextContext: any): boolean {
-//     return (nextProps.dayRegenerating !== this.props.dayRegenerating)
-//   }
-
-interface DayTitleProps {
-  date: DateTime,
-  dayRegenerating?: boolean,
-  onRegenerate: () => void,
-  color: string,
-  style?: any,
-  itemControlVisible?: boolean,
-  onTitlePress: () => void,
-  children?: any,
-}
-
-const DayTitle = ({ dayRegenerating, date, color, onRegenerate, style, itemControlVisible, onTitlePress, children }: DayTitleProps) => {
-  const today = DateTime.local()
-  const isOnSameWeek = today.hasSame(date, 'week')
-  const isToday = date.hasSame(today, 'day')
-  const isTomorrow = Math.round(date.diffNow('day').as('day')) === 1
-  const isYesterday = Math.round(date.diffNow('day').as('day')) === -1
-
-  let text = date.toLocaleString({
-    day: isOnSameWeek ? undefined : '2-digit',
-    month: isOnSameWeek ? undefined : 'short',
-    weekday: 'long',
-  })
-
-  if (isToday) {
-    text = translate(translate.keys.Today)
-  }
-  if (isTomorrow) {
-    text = translate(translate.keys.Tomorrow)
-  }
-  if (isYesterday) {
-    text = translate(translate.keys.Yesterday)
-  }
-
-  return (
-    <RX.View
-      style={[
-        styles.titleContainer,
-        style
-      ]}
-    >
-      <Text
-        onPress={onTitlePress}
-        style={[
-          styles.dayDate,
-          { color }
-        ]}
-      >{text}</Text>
-
-      {
-        itemControlVisible &&
-        <ItemControl
-          visible={itemControlVisible}
-          onRegenerate={onRegenerate}
-          regenerating={dayRegenerating}
-        >
-          {children}
-        </ItemControl>
-      }
-    </RX.View>
-  )
-}
-
-/*
-class DayComponent extends React.PureComponent<DayComponentProps> {
-  // public shouldComponentUpdate(nextProps: Readonly<DayComponentProps>, nextState: Readonly<{}>, nextContext: any): boolean {
-  //   return (
-  //     (nextProps.height !== this.props.height) ||
-  //     (nextProps.width !== this.props.width) ||
-  //     (nextProps.isTinyOrSmall !== this.props.isTinyOrSmall) ||
-  //     (nextProps.dayRegenerating !== this.props.dayRegenerating) ||
-  //     (nextProps.dayCreating !== this.props.dayCreating) ||
-  //     (JSON.stringify(nextProps.day) !== JSON.stringify(this.props.day))
-  //   )
-  // }
-
-  public render(): React.ReactNode {
-    const {
-      style,
-      day,
-      height,
-      width,
-      date,
-      isTinyOrSmall,
-      // me,
-      dayRegenerating,
-      onDayRegenerate,
-      onTitlePress,
-      onClearDay,
-    } = this.props
-
-    const mealWidth = width > MEAL_WIDTH ? MEAL_WIDTH : width
-    // const isToday = date.hasSame(DateTime.local(), 'day')
-    const _isFreeUser = false // && (Math.round(date.diff(DateTime.local()).as('day')) > 0) && (me && !me!.membership)
-
-    return (
-      <RX.View
-        style={[
-          style,
-          {
-            flex: 1,
-            alignItems: 'center',
-            minHeight: height,
-            maxWidth: width - Styles.values.spacing * 2,
-          }
-        ]}
-      >
-        {
-          !day &&
-          <RX.View
-            style={{
-              position: 'absolute',
-              // flex: 1,
-              alignItems: 'center',
-              // justifyContent: 'center',
-              // marginTop: Styles.values.spacing,
-              top: Styles.values.spacing,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              // minHeight: height,
-              // minWidth: width - Styles.values.spacing * 2,
-            }}
-          >
-            {
-              // is it in the future?
-              _isFreeUser ?
-                <DayPayWall /> :
-                [
-                  <DayTitle
-                    date={date}
-                    onRegenerate={onDayRegenerate}
-                    color={getDayColor(date.toJSDate())}
-                    dayRegenerating={dayRegenerating}
-                    itemControlVisible={false}
-                    onTitlePress={() => onTitlePress(date)}
-                  />,
-                  <DayEmpty
-                    {...this.props}
-                    onDayRegenerate={onDayRegenerate}
-                  />
-                ]
-            }
-          </RX.View>
-        }
-
-        {
-          day &&
-          <RX.View
-            style={{
-              flex: 1,
-              flexDirection: isTinyOrSmall ? 'column' : 'row',
-              // minHeight: height,
-              // minWidth: width - Styles.values.spacing * 2,
-              alignItems: isTinyOrSmall ? 'center' : 'flex-start',
-              justifyContent: isTinyOrSmall ? 'flex-start' : 'center',
-              alignSelf: 'stretch',
-              marginTop: Styles.values.spacing,
-            }}
-          >
-            <RX.View
-              style={styles.container}
-            >
-              <DayTitle
-                date={date}
-                onRegenerate={onDayRegenerate}
-                color={getDayColor(date.toJSDate())}
-                dayRegenerating={dayRegenerating}
-                itemControlVisible
-                onTitlePress={() => onTitlePress(date)}
-                style={{
-                  [Styles.values.marginStart]: Styles.values.spacing / 2,
-                }}
-              >
-                <MenuItem
-                  label={translate(translate.keys.ClearDay)}
-                  onPress={onClearDay}
-                />
-              </DayTitle>
-
-              {
-                day.meals.map(meal => (
-                  <MealComponent
-                    key={meal.id}
-                    meal={meal}
-                    dayId={day.id}
-                    style={{
-                      width: mealWidth,
-                      maxWidth: MEAL_WIDTH,
-                    }}
-                  />
-                ))
-              }
-            </RX.View>
-            {
-              day.meals.filter(m => m.items.length > 0).length > 0 &&
-              <NutritionInfo
-                title={translate('Total Nutrition')}
-                nutrition={calculateDayNutrition(day)}
-                nutritionProfile={day.nutritionProfile}
-                style={{
-                  marginTop: isTinyOrSmall ? undefined : 45,
-                  [Styles.values.marginStart]: isTinyOrSmall ? undefined : Styles.values.spacing,
-                }}
-              />
-            }
-          </RX.View>
-        }
-      </RX.View>
-    )
-  }
-}
-*/
 
 export function DayComponent(props: DayComponentProps) {
   const {
@@ -342,13 +86,18 @@ export function DayComponent(props: DayComponentProps) {
   const me = useMe()!
 
   const mealWidth = width > MEAL_WIDTH ? MEAL_WIDTH : width
-  // const isToday = date.hasSame(DateTime.local(), 'day')
-  const _isFreeUser = false // && (Math.round(date.diff(DateTime.local()).as('day')) > 0) && (me && !me!.membership)
+  const _mealStyle = useMemo(() => ({
+      width: mealWidth,
+      maxWidth: MEAL_WIDTH,
+    }
+  ), [width])
+  // const isToday = date.hasSame(Date.local(), 'day')
+  const _isFreeUser = false // && (Math.round(date.diff(Date.local()).as('day')) > 0) && (me && !me!.membership)
 
   const dayInput = createDayInput(props.date, me.meals, me.nutritionProfile)
   const dayOptimisticResponse = createDayInput(props.date, me.meals, me.nutritionProfile, true)
 
-  const onClearDay = () => {
+  const onClearDay = useCallback(() => {
     if (!props.day) return
 
     return clearDay({
@@ -359,131 +108,198 @@ export function DayComponent(props: DayComponentProps) {
         clearDay: props.day.id,
       }
     })
-  }
-  const onDayCreate = () => newDay({
+  }, [!!props.day])
+
+  const onDayCreate = useCallback(() => newDay({
     variables: {
       day: dayInput
     },
     optimisticResponse: {
       newDay: dayOptimisticResponse
     }
-  })
+  }), [props.date, me.meals.map(i => i.id).join(), me.nutritionProfile.id])
+
   const dayRegenerating = generateDayLoading
-  const onDayRegenerate = () => generateDay({
+  const onDayRegenerate = useCallback(() => generateDay({
     variables: {
       day: dayInput,
       generate: true,
     }
-  })
+  }), [props.date, me.meals.map(i => i.id).join(), me.nutritionProfile.id])
+
+  const [spaceIndex, setSpaceIndex] = useState<string | undefined>()
+  const [draggingItem, setDraggingItem] = useState<string | undefined>()
+
+  const _setMealDraggingItem = useCallback((meal: DayComponentDay_meals) => (mealItemId?: string) => {
+    if (mealItemId) {
+      setDraggingItem(`${meal.id}:${mealItemId}`)
+    } else {
+      setDraggingItem(undefined)
+    }
+  }, [])
+
+  const _getMealDraggingItem = useCallback((meal: DayComponentDay_meals) => {
+    if (!draggingItem) return
+
+    const [mealId, mealItemId] = draggingItem.split(':')
+
+    if (mealId === meal.id) {
+      return mealItemId
+    }
+  }, [draggingItem])
+
+  const _setMealSpaceIndex = useCallback((meal: DayComponentDay_meals) => (mealItemIndex?: number) => {
+    if (mealItemIndex !== undefined) {
+      setSpaceIndex(`${meal.id}:${mealItemIndex}`)
+    } else {
+      setSpaceIndex(undefined)
+    }
+  }, [])
+
+  const _getMealSpaceIndex = useCallback((meal: DayComponentDay_meals) => {
+    if (!spaceIndex) return
+
+    const [id, index] = spaceIndex.split(':')
+
+    if (id === meal.id) {
+      return Number(index)
+    }
+  }, [spaceIndex])
+
+  const showNutritionInfoVisible = day && day.meals.filter(m => m.items.length > 0).length > 0
+
+  const _mealComponentRefs: { [k: string]: any } = {}
+
+  const _onMealItemDelete = useCallback((mealId: string, mealItemId: string) => {
+    const mealComponentRef = _mealComponentRefs[mealId]
+    if (!mealComponentRef) return
+
+    setSpaceIndex(undefined)
+    setDraggingItem(undefined)
+
+    mealComponentRef.deleteMealItem(mealItemId)
+  }, [JSON.stringify(_mealComponentRefs)])
+
+  useEffect(() => {
+    setSpaceIndex(undefined)
+    setDraggingItem(undefined)
+  }, [])
+
+  const _onDayTitlePress = useCallback(() => onTitlePress(date), [date])
+
+  const containerStyle = useMemo(() => RX.Styles.createViewStyle({
+    flex: 1,
+    alignItems: 'center',
+    minHeight,
+    width,
+    maxWidth: width,
+  }, false), [width, minHeight])
+
+  const _dayContainer = useMemo(() => RX.Styles.createViewStyle({
+    flex: 1,
+    flexDirection: isTinyOrSmall ? 'column' : 'row',
+    alignItems: isTinyOrSmall ? 'center' : 'flex-start',
+    justifyContent: isTinyOrSmall ? 'flex-start' : 'center',
+    alignSelf: 'stretch',
+    marginTop: Styles.values.spacing,
+  }, false), [isTinyOrSmall])
+
+  const _daySideView = useMemo(() => RX.Styles.createViewStyle({
+    marginTop: isTinyOrSmall ? undefined : 56,
+    width: 260,
+    alignSelf: 'stretch',
+  }, false), [isTinyOrSmall])
 
   return (
     <RX.View
       style={[
         style,
-        {
-          flex: 1,
-          alignItems: 'center',
-          minHeight,
-          maxWidth: width - Styles.values.spacing * 2,
-        }
+        containerStyle,
       ]}
     >
       {
-        !day &&
-        <RX.View
-          style={{
-            position: 'absolute',
-            alignItems: 'center',
-            top: Styles.values.spacing,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        >
-          {
-            // is it in the future?
-            _isFreeUser ?
-              <DayPayWall /> :
-              <>
-                <DayTitle
-                  date={date}
-                  onRegenerate={onDayRegenerate}
-                  color={getDayColor(date.toJSDate())}
-                  dayRegenerating={dayRegenerating || loading}
-                  itemControlVisible={false}
-                  onTitlePress={() => onTitlePress(date)}
-                />
-                <DayEmpty
-                  {...props}
-                  loading={loading}
-                  onDayRegenerate={onDayRegenerate}
-                  dayRegenerating={dayRegenerating}
-                  dayCreating={newDayLoading}
-                  onDayCreate={onDayCreate}
-                />
-              </>
-          }
-        </RX.View>
-      }
-
-      {
-        day &&
-        <RX.View
-          style={{
-            flex: 1,
-            flexDirection: isTinyOrSmall ? 'column' : 'row',
-            alignItems: isTinyOrSmall ? 'center' : 'flex-start',
-            justifyContent: isTinyOrSmall ? 'flex-start' : 'center',
-            alignSelf: 'stretch',
-            marginTop: Styles.values.spacing,
-          }}
-        >
-          <RX.View
-            style={styles.container}
+        day
+          ? <RX.View
+            style={_dayContainer}
           >
-            <DayTitle
-              date={date}
-              onRegenerate={onDayRegenerate}
-              color={getDayColor(date.toJSDate())}
-              dayRegenerating={dayRegenerating || loading}
-              itemControlVisible
-              onTitlePress={() => onTitlePress(date)}
-              style={{
-                [Styles.values.marginStart]: Styles.values.spacing / 2,
-              }}
+            <RX.View
+              style={styles.container}
             >
-              <MenuItem
-                label={translate(translate.keys.ClearDay)}
-                onPress={onClearDay}
-              />
-            </DayTitle>
-
-            {
-              day.meals.map(meal => (
-                <MealComponent
-                  key={meal.userMeal!.id}
-                  meal={meal}
-                  dayId={day.id}
-                  style={{
-                    width: mealWidth,
-                    maxWidth: MEAL_WIDTH,
-                  }}
+              <DayTitle
+                date={date}
+                onRegenerate={onDayRegenerate}
+                color={getDayColor(date)}
+                dayRegenerating={dayRegenerating || loading}
+                itemControlVisible
+                onTitlePress={_onDayTitlePress}
+                style={styles.dayTitle}
+              >
+                <MenuItem
+                  label={translate(translate.keys.ClearDay)}
+                  onPress={onClearDay}
                 />
-              ))
+              </DayTitle>
+
+              {
+                day.meals.map(meal => (
+                  <MealComponent
+                    ref={ref => _mealComponentRefs[meal.id] = ref}
+                    key={meal.userMeal!.id}
+                    meal={meal}
+                    dayId={day.id}
+                    style={_mealStyle}
+
+                    spaceIndex={_getMealSpaceIndex(meal)}
+                    setSpaceIndex={_setMealSpaceIndex}
+                    draggingItem={_getMealDraggingItem(meal)}
+                    setDraggingItem={_setMealDraggingItem}
+                  />
+                ))
+              }
+            </RX.View>
+
+            <RX.View
+              style={_daySideView}
+            >
+              {
+                draggingItem
+                  ? <DeleteSpace
+                    onMealItemDelete={_onMealItemDelete}
+                  />
+                  : showNutritionInfoVisible && <NutritionInfo
+                  title={translate('Total Nutrition')}
+                  nutrition={calculateDayNutrition(day)}
+                />
+              }
+            </RX.View>
+          </RX.View>
+          : <RX.View
+            style={styles.dayEmptyContainer}
+          >
+            {
+              // is it in the future?
+              _isFreeUser ?
+                <DayPayWall /> :
+                <>
+                  <DayTitle
+                    date={date}
+                    onRegenerate={onDayRegenerate}
+                    color={getDayColor(date)}
+                    dayRegenerating={dayRegenerating || loading}
+                    itemControlVisible={false}
+                    onTitlePress={_onDayTitlePress}
+                  />
+                  <DayEmpty
+                    {...props}
+                    loading={loading}
+                    onDayRegenerate={onDayRegenerate}
+                    dayRegenerating={dayRegenerating}
+                    dayCreating={newDayLoading}
+                    onDayCreate={onDayCreate}
+                  />
+                </>
             }
           </RX.View>
-          {
-            day.meals.filter(m => m.items.length > 0).length > 0 &&
-            <NutritionInfo
-              title={translate('Total Nutrition')}
-              nutrition={calculateDayNutrition(day)}
-              nutritionProfile={day.nutritionProfile}
-              style={{
-                marginTop: isTinyOrSmall ? undefined : 45,
-              }}
-            />
-          }
-        </RX.View>
       }
     </RX.View>
   )
@@ -494,16 +310,12 @@ DayComponent.fragments = {
     fragment DayComponentDay on Day {
       id
       date
-      nutritionProfile {
-        ...NutritionProfile
-      }
       meals {
         ...MealComponentDayMeal
       }
     }
 
-    ${MacroTargets.fragments.nutritionProfile}
-    ${MealComponent.fragments.dayMeal}
+    ${MealComponentFragments.dayMeal}
   `
 }
 
@@ -573,15 +385,15 @@ const styles = {
   dayName: RX.Styles.createTextStyle({
     fontSize: 12,
   }),
-  dayDate: RX.Styles.createTextStyle({
-    fontSize: 30,
-    fontWeight: 'bold',
+  dayTitle: RX.Styles.createViewStyle({
+    [Styles.values.marginStart]: Styles.values.spacing / 2,
   }),
-  titleContainer: RX.Styles.createViewStyle({
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  dayEmptyContainer: RX.Styles.createViewStyle({
+    position: 'absolute',
     alignItems: 'center',
-    paddingBottom: Styles.values.spacing,
-    paddingHorizontal: Styles.values.spacingLarge / 2,
+    top: Styles.values.spacing,
+    left: 0,
+    right: 0,
+    bottom: 0,
   })
 }

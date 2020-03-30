@@ -99,7 +99,9 @@ export class Theme {
           },
 
           red: '#d32f2f',
+          lighterRed: '#e68888',
           darkerRed: '#a92626',
+          darkestRed: '#7d1d1d',
 
           mealCardBackgroundColor: '#fff',
           mealItemSubtitle: text,

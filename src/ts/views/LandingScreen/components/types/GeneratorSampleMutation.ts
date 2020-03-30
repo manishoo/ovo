@@ -1088,6 +1088,7 @@ export interface GeneratorSampleMutation_suggestDayGuest_items {
    */
   unit: GeneratorSampleMutation_suggestDayGuest_items_unit | null;
   isOptional: boolean | null;
+  hasAlternatives: boolean | null;
   item: GeneratorSampleMutation_suggestDayGuest_items_item | null;
 }
 

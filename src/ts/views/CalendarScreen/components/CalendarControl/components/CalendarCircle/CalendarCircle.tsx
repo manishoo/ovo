@@ -11,7 +11,7 @@ import Image from '@Common/Image/Image'
 import Text from '@Common/Text/Text'
 import ImageSource from '@Modules/images'
 import { getDayColor } from '@Utils'
-import { areOnSameDay } from '@Views/CalendarScreen/utils/is-same-day'
+import { haveSame } from '@Views/CalendarScreen/utils/is-same-day'
 import setHours from 'date-fns/setHours'
 import setMinutes from 'date-fns/setMinutes'
 import debounce from 'lodash/debounce'
@@ -46,10 +46,6 @@ export default class CalendarCircle extends React.PureComponent<CalendarCirclePr
       fragment CalendarCircleDay on Day {
         id
         date
-        nutritionProfile {
-          id
-          calories
-        }
         meals {
           id
           time
@@ -285,7 +281,7 @@ export default class CalendarCircle extends React.PureComponent<CalendarCirclePr
       }
     })
 
-    return Math.round((totalCaloriesAte * 100) / day.nutritionProfile.calories)
+    // return Math.round((totalCaloriesAte * 100) / day.nutritionProfile.calories)
   }
 
   private _scale = (scale: number, animated: boolean = true) => {
@@ -325,7 +321,7 @@ export default class CalendarCircle extends React.PureComponent<CalendarCirclePr
     this._blinkAnimation.start()
   }
 
-  private _isToday = () => areOnSameDay(this.props.date, new Date())
+  private _isToday = () => haveSame(this.props.date, new Date(), 'day')
 }
 
 const styles = {

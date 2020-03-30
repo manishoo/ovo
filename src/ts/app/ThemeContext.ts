@@ -4,7 +4,7 @@
  */
 
 import { Theme } from '@App/Theme'
-import React from 'react'
+import React, { useContext } from 'react'
 
 
 export const ThemeContext = React.createContext({
@@ -12,3 +12,9 @@ export const ThemeContext = React.createContext({
   toggleTheme: (mode: 'dark' | 'light') => {
   },
 })
+
+export const useTheme = () => {
+  const { theme } = useContext(ThemeContext)
+
+  return theme
+}

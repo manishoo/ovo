@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloQueryResult, graphql } from '@apollo/react-hoc'
+import { ApolloQueryResult, useQuery } from '@apollo/react-hoc'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
@@ -12,11 +12,11 @@ import { Routes } from '@Models/common'
 import { DataProvider, LayoutProvider, RecyclerListView } from '@Modules/RecyclerListView'
 import LocationStore from '@Services/LocationStore'
 import { DayComponentDay } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
-import { areOnSameDay } from '@Views/CalendarScreen/utils/is-same-day'
+import { haveSame } from '@Views/CalendarScreen/utils/is-same-day'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
 import debounce from 'lodash/debounce'
-import React from 'react'
+import React, { forwardRef, useCallback } from 'react'
 import RX from 'reactxp'
 import { ANIMATION_DURATION, filterDatesWithCache, updateCalendarCache } from '../../CalendarScreen'
 import generateRenderingDays from '../../utils/generate-rendering-days'
@@ -206,12 +206,12 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
     const rlv = this._rlv!
     const allData = dataProvider.getAllData()
 
-    const position = allData.findIndex(p => areOnSameDay(p.date, date)) - (this._circlesOnEachSide / 4)
+    const position = allData.findIndex(p => haveSame(p.date, date, 'day')) - (this._circlesOnEachSide / 4)
 
     const newRenderingDates = generateRenderingDays(date, this._circlesOnEachSide)
-    const newDatesToGet = newRenderingDates.filter(p => allData.find(p2 => areOnSameDay(p, p2.date)))
+    const newDatesToGet = newRenderingDates.filter(p => allData.find(p2 => haveSame(p, p2.date, 'day')))
 
-    if (!(this._currentActiveDate && areOnSameDay(this._currentActiveDate, date))) {
+    if (!(this._currentActiveDate && haveSame(this._currentActiveDate, date, 'day'))) {
       this.props.onDateChange(date)
     }
 
@@ -287,7 +287,7 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
 
   private _rowRenderer = (type: any, { date, scale }: { date: Date, scale: number }, _index: number, { days, loadingDays }: { days: DayComponentDay[], loadingDays: Date[] }) => (
     <CalendarCircle
-      loading={!!loadingDays.find(d => areOnSameDay(d, date))}
+      loading={!!loadingDays.find(d => haveSame(d, date, 'day'))}
       disableAnimation={this._disableAnimation}
       size={CIRCLE_SIZE}
       onPress={this._onCirclePress}
@@ -298,7 +298,7 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
   )
 
   private _getDayByDate = (date: Date, days: CalendarControlQuery_calendar[]) => {
-    return days.find(day => areOnSameDay(date, day.date))
+    return days.find(day => haveSame(date, day.date, 'day'))
   }
 
   private _getCalendarCircleScale = (date: Date, position: number, scrollLeft: number): number => {
@@ -418,58 +418,60 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
   }
 }
 
-export default graphql<CalendarControlCommonProps, CalendarControlQuery, CalendarControlQueryVariables, CalendarControlProps>(CalendarControlOperation, {
-  withRef: true,
-  options: {
-    fetchPolicy: 'cache-only'
-  },
-  props: ({ data, ownProps }) => ({
-    ...ownProps,
-    days: data ? data.calendar || [] : [],
-    // loadingDays: data && data.loading && data.variables.dates ? data.variables.dates.map(d => Date.fromISO(d)) : [],
-    getMoreDays: dates => data!.fetchMore({
-      updateQuery: (previousQueryResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return previousQueryResult
+export default forwardRef<CalendarControl, CalendarControlCommonProps>(function CalendarControlContainer(props: CalendarControlCommonProps, ref) {
+    const { data, fetchMore } = useQuery<CalendarControlQuery, CalendarControlQueryVariables>(CalendarControlOperation, {
+      fetchPolicy: 'cache-only'
+    })
 
-        /**
-         * If days were removed
-         * */
-        let newCalendarDays: CalendarControlQuery_calendar[] = []
-        if (previousQueryResult) {
-          newCalendarDays = previousQueryResult.calendar.map(p => {
-            if (dates.find(p1 => areOnSameDay(p1, p.date))) {
-              const foundNewDay = fetchMoreResult.calendar.find(p2 => areOnSameDay(p.date, p2.date))
-              if (foundNewDay) {
-                return foundNewDay
-              }
+    return (
+      <CalendarControl
+        {...props}
+        ref={ref}
+        days={data ? data.calendar || [] : []}
+        getMoreDays={useCallback(dates => fetchMore({
+          updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return previousQueryResult
+
+            /**
+             * If days were removed
+             * */
+            let newCalendarDays: CalendarControlQuery_calendar[] = []
+            if (previousQueryResult) {
+              newCalendarDays = previousQueryResult.calendar.map(p => {
+                if (dates.find(p1 => haveSame(p1, p.date, 'day'))) {
+                  const foundNewDay = fetchMoreResult.calendar.find(p2 => haveSame(p.date, p2.date, 'day'))
+                  if (foundNewDay) {
+                    return foundNewDay
+                  }
+                }
+
+                return p
+              })
             }
 
-            return p
-          })
-        }
-
-        updateCalendarCache(client, dates)
-        return {
-          ...previousQueryResult,
-          calendar: [
-            ...newCalendarDays,
-            /**
-             * If days were added
-             * */
-            ...fetchMoreResult.calendar.filter(p => !newCalendarDays.find(p1 => p1.id === p.id)),
-            /**
-             * Sort days based on date
-             * */
-          ].sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
-        }
-      },
-      variables: {
-        dates: dates.map(d => d.toISOString()),
-      },
-    })
-  }),
-})(CalendarControl)
-
+            updateCalendarCache(client, dates)
+            return {
+              ...previousQueryResult,
+              calendar: [
+                ...newCalendarDays,
+                /**
+                 * If days were added
+                 * */
+                ...fetchMoreResult.calendar.filter(p => !newCalendarDays.find(p1 => p1.id === p.id)),
+                /**
+                 * Sort days based on date
+                 * */
+              ].sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+            }
+          },
+          variables: {
+            dates: dates.map(d => d.toISOString()),
+          },
+        }), [])}
+      />
+    )
+  }
+)
 const styles = {
   controlWrapper: RX.Styles.createViewStyle({
     flexDirection: 'row',

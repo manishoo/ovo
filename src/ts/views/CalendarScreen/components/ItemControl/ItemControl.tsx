@@ -66,24 +66,28 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
           style,
         ]}
       >
-        <HoverView
-          style={{ cursor: 'pointer' }}
-          onPress={this.props.regenerating ? undefined : this.props.onRegenerate}
-          onRenderChild={isHovering => (
-            <RX.Animated.Image
-              source={Image.source.Regenerate}
-              style={[
-                {
-                  width: 25,
-                  height: 25,
-                  opacity: isHovering ? 1 : 0.3,
-                  [Styles.values.marginEnd]: Styles.values.spacing / 2,
-                },
-                this._ellipsisAnimationStyle
-              ]}
-            />
-          )}
-        />
+        {
+          this.props.onRegenerate &&
+          <HoverView
+            style={{ cursor: 'pointer' }}
+            onPress={this.props.regenerating ? undefined : this.props.onRegenerate}
+            onRenderChild={isHovering => (
+              <RX.Animated.Image
+                source={Image.source.Regenerate}
+                style={[
+                  {
+                    width: 25,
+                    height: 25,
+                    opacity: isHovering ? 1 : 0.3,
+                    [Styles.values.marginEnd]: Styles.values.spacing / 2,
+                  },
+                  this._ellipsisAnimationStyle
+                ]}
+              />
+            )}
+          />
+        }
+
         {
           this.props.children &&
           <HoverView

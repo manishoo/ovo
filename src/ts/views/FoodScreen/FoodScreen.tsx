@@ -175,6 +175,8 @@ export default function FoodScreenContainer(props: FoodScreenCommonProps) {
     }
   })
 
+  console.log('data', data)
+
   if (!data) return null
   if (!data.foodClass) return null
 

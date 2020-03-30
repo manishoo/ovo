@@ -236,6 +236,7 @@ enum FaLocale {
   Snack = 'اسنک',
   Settings = 'تنظیمات',
   editMealPlanSettings = 'تنظیمات برنامه‌غذایی',
+  editNutritionProfile = 'هدف غذایی',
 
   Groceries = 'سبد خرید',
 

@@ -6,6 +6,8 @@
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import Image from '@Common/Image/Image'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import Text from '@Common/Text/Text'
 import debounce from 'lodash/debounce'
 import RX from 'reactxp'
@@ -25,6 +27,7 @@ export interface InputProps extends RX.Types.TextInputProps {
   usesNetwork?: boolean,
 
   errorMessage?: string,
+  loading?: boolean,
 }
 
 interface InputState {
@@ -55,6 +58,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
       inputRef,
       required,
       errorMessage,
+      loading,
       ...props
     } = this.props
 
@@ -85,6 +89,25 @@ export default class Input extends RX.Component<InputProps, InputState> {
               ]}
               {...props}
             />
+
+            {
+              this.props.clearButtonMode === 'while-editing' && value && value.length > 0 &&
+              <RX.View
+                onPress={loading ? undefined : this._onClearText}
+                style={styles.clearContainer}
+              >
+                {
+                  loading
+                    ? <LoadingIndicator size={25} />
+                    : <Image
+                      source={Image.source.Clear}
+                      style={styles.clear}
+                    />
+                }
+
+              </RX.View>
+            }
+
             {!!errorMessage &&
             <RX.Text
               style={[
@@ -99,6 +122,10 @@ export default class Input extends RX.Component<InputProps, InputState> {
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _onClearText = () => {
+    this.props.onChange!('')
   }
 
   private _renderRequiredStart = (theme: Theme) => {
@@ -171,6 +198,8 @@ export default class Input extends RX.Component<InputProps, InputState> {
 const styles = {
   container: RX.Styles.createViewStyle({
     marginBottom: Styles.values.spacing,
+
+    justifyContent: 'center',
     // borderBottomWidth: 2,
     // paddingBottom: 5,
   }),
@@ -187,5 +216,19 @@ const styles = {
   }),
   errorLabel: RX.Styles.createTextStyle({
     marginTop: Styles.values.spacing / 2,
+  }),
+  clear: RX.Styles.createImageStyle({
+    width: 15,
+    height: 15,
+  }),
+  clearContainer: RX.Styles.createViewStyle({
+    position: 'absolute',
+    [Styles.values.end]: 0,
+
+    cursor: 'pointer',
+
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   })
 }

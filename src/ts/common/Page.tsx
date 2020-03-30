@@ -7,6 +7,7 @@ import Styles from '@App/Styles'
 import Footer from '@Common/Footer/Footer'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import { createContext, FC, useCallback, useMemo, useState } from 'react'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
@@ -21,6 +22,7 @@ interface PageProps {
 
   lazyRender?: boolean,
   withFooter?: boolean,
+  setScrollContext?: boolean,
 }
 
 interface PageState {
@@ -30,6 +32,34 @@ interface PageState {
   isSmallOrTinyScreenSize: boolean,
 
   shouldRender?: boolean,
+}
+
+export const PageScrollContext = createContext({
+  scrollTop: 0,
+  pageHeight: 0,
+})
+
+const PageScrollProvider: FC<RX.Types.ScrollViewProps> = ({ children, ...props }) => {
+  const [scrollTop, setScrollTop] = useState(0)
+  const [pageHeight, setPageHeight] = useState(0)
+  const context = useMemo(() => ({
+    scrollTop,
+    pageHeight,
+  }), [scrollTop, pageHeight])
+
+  return (
+    <RX.ScrollView
+      {...props}
+      onScroll={useCallback((newScrollTop) => setScrollTop(newScrollTop), [])}
+      onContentSizeChange={(_width, height) => setPageHeight(height - 417)}
+    >
+      <PageScrollContext.Provider
+        value={context}
+      >
+        {children}
+      </PageScrollContext.Provider>
+    </RX.ScrollView>
+  )
 }
 
 export default class Page extends ComponentBase<PageProps, PageState> {
@@ -57,10 +87,12 @@ export default class Page extends ComponentBase<PageProps, PageState> {
 
   public render() {
     const { width, screenWidth, shouldRender } = this.state
-    const { withFooter = true, maxWidth } = this.props
+    const { withFooter = true, maxWidth, setScrollContext } = this.props
+
+    const Container = setScrollContext ? PageScrollProvider : RX.ScrollView
 
     return (
-      <RX.ScrollView
+      <Container
         {...this.props.scrollViewProps}
         style={[
           styles.container, {
@@ -121,7 +153,7 @@ export default class Page extends ComponentBase<PageProps, PageState> {
             }}
           />
         }
-      </RX.ScrollView>
+      </Container>
     )
   }
 

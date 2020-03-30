@@ -1072,5 +1072,6 @@ export interface FoodPreviewMealItem {
    * The active unit for this ingredient. Empty value means grams
    */
   unit: FoodPreviewMealItem_unit | null;
+  hasAlternatives: boolean | null;
   item: FoodPreviewMealItem_item | null;
 }

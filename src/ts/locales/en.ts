@@ -164,6 +164,7 @@ enum Content {
   Yesterday = 'Yesterday',
   Settings = 'Settings',
   editMealPlanSettings = 'Edit MealPlan Settings',
+  editNutritionProfile = 'Edit Nutrition Profile',
   Pantry = 'Pantry',
   Groceries = 'Groceries',
   cuisine = 'cuisine',
@@ -225,6 +226,8 @@ enum Content {
 
   'Add Alternative Meal Item' = 'Add Alternative Meal Item',
   'Log Meal' = 'Log Meal',
+
+  'Targets' = 'Targets'
 
 }
 

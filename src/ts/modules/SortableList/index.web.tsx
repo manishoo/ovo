@@ -18,7 +18,7 @@ const InnerSortableList = SortableContainer(({ items, renderItem }) => {
       {
         // @ts-ignore
         items.map((value, index) => (
-          <SortableItem key={`item-${value.id}`} index={index}>
+          <SortableItem key={value && `item-${value.id}`} index={index}>
             {renderItem(value, index)}
           </SortableItem>
         ))
@@ -35,7 +35,7 @@ export default class SortableList extends RX.Component<SortableListProps> {
   render() {
     return (
       <InnerSortableList
-        pressDelay={300}
+        pressDelay={100}
         // shouldCancelStart={(e: any) => {
         //   console.log('event', e.target.outerHTML.includes('id="handler"'))
         //   return !e.target.outerHTML.includes('id="handler"')

@@ -140,10 +140,7 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
           style={modalContentStyles}
         >
           <RX.View
-            style={[
-              ...modalBoxStyles,
-              { backgroundColor: theme.colors.bg },
-            ]}
+            style={modalBoxStyles}
             onPress={this._clickInside}
             accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
             restrictFocusWithin={true}

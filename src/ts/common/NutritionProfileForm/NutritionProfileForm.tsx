@@ -9,7 +9,6 @@ import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import InputNumber from '@Common/Input/InputNumber'
-import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Modal from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
@@ -23,6 +22,7 @@ import { MeOperation } from '@Models/graphql/me/me'
 import { MeQuery } from '@Models/graphql/me/types/MeQuery'
 import trimTypeName from '@Utils/trim-type-name'
 import { ExecutionResult } from 'graphql'
+import debounce from 'lodash/debounce'
 import RX from 'reactxp'
 import { ThemeContext } from 'src/ts/app/ThemeContext'
 import { NutritionProfileFormNutritionProfile } from './types/NutritionProfileFormNutritionProfile'
@@ -33,9 +33,26 @@ const MODAL_ID = 'NutritionProfileForm'
 const styles = {
   container: RX.Styles.createViewStyle({}),
   minMax: RX.Styles.createViewStyle({
-    width: 80,
+    width: 60,
     marginBottom: 0,
     [Styles.values.marginEnd]: Styles.values.spacing / 4
+  }),
+  percentageButton: RX.Styles.createViewStyle({
+    [Styles.values.marginStart]: Styles.values.spacing / 2,
+  }),
+  label: RX.Styles.createTextStyle({
+    fontWeight: '500',
+    marginBottom: Styles.values.spacing / 2,
+  }),
+  rowContainer: RX.Styles.createViewStyle({
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Styles.values.spacing,
+  }),
+  errorContainer: RX.Styles.createViewStyle({
+    padding: Styles.values.spacing / 2,
+    borderRadius: 8,
+    width: 300,
   }),
 }
 
@@ -48,12 +65,13 @@ interface NutritionProfileFormCommonProps {
 interface NutritionProfileFormProps extends NutritionProfileFormCommonProps {
   onNutritionProfileUpdate: (nutritionProfile: NutritionProfileInput) => Promise<ExecutionResult<NutritionProfileMutation>>
   loading?: boolean,
-  error?: boolean,
+  errors: string[],
   style?: any,
 }
 
 interface NutritionProfileFormState {
   nutritionProfile: NutritionProfileFormNutritionProfile,
+  calories: number,
 }
 
 export default class NutritionProfileForm extends RX.Component<NutritionProfileFormProps, NutritionProfileFormState> {
@@ -86,8 +104,11 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
   constructor(props: NutritionProfileFormProps) {
     super(props)
 
+    this._updateMinMax = debounce(this._updateMinMax, 1000)
+    this._handleMinMax = debounce(this._handleMinMax, 1000)
     this.state = {
       nutritionProfile: props.nutritionProfile,
+      calories: props.nutritionProfile.calories,
     }
   }
 
@@ -114,8 +135,16 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
   )
 
   render() {
-    const { style } = this.props
-    const { nutritionProfile } = this.state
+    const { style, errors, theme } = this.props
+    const { nutritionProfile, calories } = this.state
+
+    const _errorTextStyle = RX.Styles.createTextStyle({
+      color: theme.colors.darkestRed,
+    }, false)
+
+    const _errorContainerStyle = RX.Styles.createViewStyle({
+      backgroundColor: theme.colors.lighterRed,
+    }, false)
 
     return (
       <RX.View
@@ -123,13 +152,10 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
       >
         <InputNumber
           label={translate('calories')}
-          value={nutritionProfile.calories}
-          onChange={(calories) => this.setState(prevState => ({
-            nutritionProfile: {
-              ...prevState.nutritionProfile,
-              calories: Number(calories),
-            }
-          }))}
+          value={calories}
+          onChange={(value) => this.setState({
+            calories: Number(value)
+          }, () => this._updateMinMax(Number(value)))}
           style={{ width: 100 }}
         />
 
@@ -148,6 +174,7 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
               }
             }))}
             mode={nutritionProfile.mode === 'range' ? FilledButton.mode.primary : FilledButton.mode.default}
+            pressed={nutritionProfile.mode === 'range'}
           />
           <FilledButton
             label={'as Percentage'}
@@ -158,6 +185,8 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
               }
             }))}
             mode={nutritionProfile.mode === 'percentage' ? FilledButton.mode.primary : FilledButton.mode.default}
+            pressed={nutritionProfile.mode === 'percentage'}
+            style={styles.percentageButton}
           />
         </RX.View>
 
@@ -174,8 +203,50 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
               this._renderPercentForm(translate('Carbs'), 'carbs'),
             ]
         }
+
+        {
+          errors.map((error, index) => (
+            <RX.View
+              key={index}
+              style={[
+                styles.errorContainer,
+                _errorContainerStyle
+              ]}
+            >
+              <Text style={_errorTextStyle}>{error}</Text>
+            </RX.View>
+          ))
+        }
       </RX.View>
     )
+  }
+
+  private readonly _updateMinMax = (targetCalories: number) => {
+    this.setState(prevState => {
+      const proportion = targetCalories / prevState.nutritionProfile.calories
+
+      return {
+        nutritionProfile: {
+          ...prevState.nutritionProfile,
+          carbs: {
+            ...prevState.nutritionProfile.carbs,
+            min: Math.round(prevState.nutritionProfile.carbs.min * proportion),
+            max: Math.round(prevState.nutritionProfile.carbs.max * proportion),
+          },
+          protein: {
+            ...prevState.nutritionProfile.protein,
+            min: Math.round(prevState.nutritionProfile.protein.min * proportion),
+            max: Math.round(prevState.nutritionProfile.protein.max * proportion),
+          },
+          fat: {
+            ...prevState.nutritionProfile.fat,
+            min: Math.round(prevState.nutritionProfile.fat.min * proportion),
+            max: Math.round(prevState.nutritionProfile.fat.max * proportion),
+          },
+          calories: targetCalories,
+        },
+      }
+    })
   }
 
   public getNutritionProfile = () => trimTypeName(this.state.nutritionProfile)
@@ -184,80 +255,108 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
     const { nutritionProfile } = this.state
 
     return (
-      <RX.View
-        style={{
-          flexDirection: 'row',
-        }}
-      >
-        <InputNumber
-          label={label}
-          value={nutritionProfile[field].percentage}
-          onChange={(min) => this.setState(prevState => ({
-            nutritionProfile: {
-              ...prevState.nutritionProfile,
-              [field]: {
-                ...prevState.nutritionProfile[field],
-                percentage: Number(min),
-              },
-            }
-          }))}
-          style={styles.minMax}
-        />
-        <Text translate={'%'} style={{ fontSize: 12 }} />
-      </RX.View>
+      <>
+        <Text style={styles.label}>{label}</Text>
+        <RX.View
+          style={styles.rowContainer}
+        >
+          <InputNumber
+            value={nutritionProfile[field].percentage}
+            onChange={(min) => this.setState(prevState => ({
+              nutritionProfile: {
+                ...prevState.nutritionProfile,
+                [field]: {
+                  ...prevState.nutritionProfile[field],
+                  percentage: Number(min),
+                },
+              }
+            }))}
+            style={styles.minMax}
+          />
+          <Text translate={'%'} style={{ fontSize: 12 }} />
+        </RX.View>
+      </>
     )
+  }
+
+  private _handleMinMax = (value: number, field: 'protein' | 'fat' | 'carbs', minMax: 'min' | 'max') => {
+    switch (minMax) {
+      case 'min':
+        return this.setState(prevState => ({
+          nutritionProfile: {
+            ...prevState.nutritionProfile,
+            [field]: {
+              ...prevState.nutritionProfile[field],
+              min: value > prevState.nutritionProfile[field].max ? prevState.nutritionProfile[field].max : value,
+            },
+          }
+        }))
+      case 'max':
+        return this.setState(prevState => ({
+          nutritionProfile: {
+            ...prevState.nutritionProfile,
+            [field]: {
+              ...prevState.nutritionProfile[field],
+              max: value < prevState.nutritionProfile[field].min ? prevState.nutritionProfile[field].min : value,
+            },
+          }
+        }))
+    }
   }
 
   private _renderRangeForm = (label: any, field: 'carbs' | 'protein' | 'fat') => {
     const { nutritionProfile } = this.state
 
     return (
-      <RX.View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-          marginBottom: Styles.values.spacing,
-        }}
-      >
-        <InputNumber
-          label={label}
-          value={nutritionProfile[field].min}
-          onChange={(min) => this.setState(prevState => ({
-            nutritionProfile: {
-              ...prevState.nutritionProfile,
-              [field]: {
-                ...prevState.nutritionProfile[field],
-                min: Number(min),
-              },
-            }
-          }))}
-          style={styles.minMax}
-        />
-        <Text translate={'g'} style={{ fontSize: 12 }} />
-        <RX.View style={{ width: Styles.values.spacing / 2 }} />
-        <Text translate={'to'} />
-        <RX.View style={{ width: Styles.values.spacing / 2 }} />
-        <InputNumber
-          value={nutritionProfile[field].max}
-          onChange={(max) => this.setState(prevState => ({
-            nutritionProfile: {
-              ...prevState.nutritionProfile,
-              [field]: {
-                ...prevState.nutritionProfile[field],
-                max: Number(max),
-              },
-            }
-          }))}
-          style={styles.minMax}
-        />
-        <Text translate={'g'} style={{ fontSize: 12 }} />
-      </RX.View>
+      <>
+        <Text style={styles.label}>{label}</Text>
+        <RX.View
+          style={styles.rowContainer}
+        >
+          <InputNumber
+            value={nutritionProfile[field].min || 0}
+            onChange={(min) => this.setState(prevState => ({
+              nutritionProfile: {
+                ...prevState.nutritionProfile,
+                [field]: {
+                  ...prevState.nutritionProfile[field],
+                  min: Number(min),
+                },
+              }
+            }), () => this._handleMinMax(Number(min), field, 'min'))}
+            style={styles.minMax}
+          />
+          <Text translate={'g'} />
+          <RX.View style={{ width: Styles.values.spacing / 2 }} />
+          <Text translate={'to'} />
+          <RX.View style={{ width: Styles.values.spacing / 2 }} />
+          <InputNumber
+            value={nutritionProfile[field].max || 0}
+            onChange={(max) => this.setState(prevState => ({
+              nutritionProfile: {
+                ...prevState.nutritionProfile,
+                [field]: {
+                  ...prevState.nutritionProfile[field],
+                  max: Number(max),
+                },
+              }
+            }), () => this._handleMinMax(Number(max), field, 'max'))}
+            style={styles.minMax}
+          />
+          <Text translate={'g'} />
+        </RX.View>
+      </>
     )
   }
 }
 
 const NutritionProfileModal = (props: NutritionProfileFormProps) => {
   let formRef: any
+
+  const _onSubmit = () =>
+    formRef &&
+    props.onNutritionProfileUpdate(formRef.getNutritionProfile())
+      .then(() => Modal.dismissAnimated(MODAL_ID))
 
   return (
     <RX.View
@@ -268,7 +367,7 @@ const NutritionProfileModal = (props: NutritionProfileFormProps) => {
       }}
     >
       <Navbar
-        title={translate(translate.keys.editMealPlanSettings)}
+        title={translate(translate.keys.editNutritionProfile)}
         modalId={MODAL_ID}
       >
         <RX.View
@@ -278,14 +377,13 @@ const NutritionProfileModal = (props: NutritionProfileFormProps) => {
             [Styles.values.marginStart]: Styles.values.spacing,
           }}
         >
-          <Text
-            translate={translate.keys.Save}
-            onPress={() => formRef && props.onNutritionProfileUpdate(formRef.getNutritionProfile()).then(() => Modal.dismissAnimated(MODAL_ID))}
+          <FilledButton
+            mode={FilledButton.mode.link}
+            label={translate(translate.keys.Save)}
+            onPress={_onSubmit}
+            loading={props.loading}
+            flat
           />
-          {
-            props.loading &&
-            <LoadingIndicator size={30} />
-          }
         </RX.View>
       </Navbar>
 
@@ -338,7 +436,7 @@ export const NutritionProfileFormContainer = (props: NutritionProfileFormCommonP
         }
       })}
       loading={loading}
-      error={!!error}
+      errors={error ? error.graphQLErrors.map(i => i.message) : []}
     />
   )
 }

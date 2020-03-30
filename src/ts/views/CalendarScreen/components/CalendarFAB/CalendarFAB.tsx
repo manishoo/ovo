@@ -10,15 +10,15 @@ import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
-import { transformMealItemToMealItemInput } from '@Utils/transformers/meal.transformer'
+import { transformMealItemToIngredientInput } from '@Utils/transformers/meal.transformer'
 import differenceInMinutes from 'date-fns/differenceInMinutes'
 import RX from 'reactxp'
-import { DayComponentDay } from '../DayComponent/types/DayComponentDay'
-import MealComponent from '../MealComponent/MealComponent'
+import MealComponentOperations from '../DayComponent/components/MealComponent/operations/MealComponentOperation'
 import {
   MealComponentLogMealMutation,
   MealComponentLogMealMutationVariables
-} from '../MealComponent/types/MealComponentLogMealMutation'
+} from '../DayComponent/components/MealComponent/operations/types/MealComponentLogMealMutation'
+import { DayComponentDay } from '../DayComponent/types/DayComponentDay'
 
 
 interface CalendarFABProps {
@@ -48,7 +48,7 @@ const CalendarFAB = ({ style, day }: CalendarFABProps) => {
   const _defaultValue = closestMealId
 
   // log meal
-  const [logMeal, { loading: logMealLoading }] = useMutation<MealComponentLogMealMutation, MealComponentLogMealMutationVariables>(MealComponent.operations.logMeal, {})
+  const [logMeal, { loading: logMealLoading }] = useMutation<MealComponentLogMealMutation, MealComponentLogMealMutationVariables>(MealComponentOperations.logMeal, {})
 
   return (
     <FilledButton
@@ -61,8 +61,8 @@ const CalendarFAB = ({ style, day }: CalendarFABProps) => {
             userMealId: userMealId!,
             date,
             mealItems: [
-              ...day.meals.find(dayMeal => dayMeal.userMeal.id === userMealId)!.items.map(transformMealItemToMealItemInput),
-              transformMealItemToMealItemInput(mealItem),
+              ...day.meals.find(dayMeal => dayMeal.userMeal.id === userMealId)!.items.map(transformMealItemToIngredientInput),
+              transformMealItemToIngredientInput(mealItem),
             ]
           },
           optimisticResponse: () => ({

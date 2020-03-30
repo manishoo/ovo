@@ -10,6 +10,7 @@ import { Routes } from '@Models/common'
 import { navigate } from '@Utils'
 import Keys from '@Utils/KeyCodes'
 import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
+import { forwardRef, useCallback, useState } from 'react'
 import RX from 'reactxp'
 
 
@@ -18,60 +19,72 @@ interface ExploreSearchProps {
   variables: SearchResultQueryVariables,
   onChange?: (variables: SearchResultQueryVariables) => void,
   onSubmit?: (variables: SearchResultQueryVariables) => void,
+  onFocus?: () => void,
+  onBlur?: () => void,
+  autoFocus?: boolean,
+  loading?: boolean,
 }
 
 interface ExploreSearchState extends SearchResultQueryVariables {
 }
 
-export default class ExploreSearch extends RX.Component<ExploreSearchProps, ExploreSearchState> {
-  _input: any
+export default forwardRef((props: ExploreSearchProps, ref) => {
+  const [isFocusing, setIsFocusing] = useState(props.autoFocus)
 
-  public render() {
-    const { style } = this.props
+  const _onBlur = useCallback(() => {
+    setIsFocusing(false)
+    props.onBlur && props.onBlur()
+  }, [])
+  const _onFocus = useCallback(() => {
+    setIsFocusing(true)
+    props.onFocus && props.onFocus()
+  }, [])
 
-    return (
-      <RX.View
-        style={[styles.container, style]}
-      >
-        <Input
-          inputRef={(ref: any) => this._input = ref}
-          autoFocus
-          value={this.props.variables.nameSearchQuery}
-          onChange={nameSearchQuery => this.props.onChange ? this.props.onChange({
-            ...this.props.variables,
-            nameSearchQuery,
-          }) : () => {
-          }}
-          placeholder={translate('e.g. Easy Sesame Chicken')}
-          onKeyPress={(e) => {
-            if (e.keyCode === Keys.Return) {
-              if (this.props.onSubmit) {
-                this.props.onSubmit({
-                  ...this.props.variables,
-                  nameSearchQuery: this.props.variables.nameSearchQuery,
-                })
-              }
-
-              // FIXME FOR NATIVE
-              navigate(this.props, `${Routes.searchRecipes}?q=${this.props.variables.nameSearchQuery}`)
+  return (
+    <RX.View
+      style={[styles.container, props.style]}
+    >
+      <Input
+        inputRef={ref}
+        autoFocus={props.autoFocus}
+        onBlur={_onBlur}
+        onFocus={_onFocus}
+        value={props.variables.nameSearchQuery}
+        onChange={nameSearchQuery => props.onChange ? props.onChange({
+          ...props.variables,
+          nameSearchQuery,
+        }) : () => {
+        }}
+        placeholder={translate('Search')}
+        clearButtonMode={'while-editing'}
+        loading={props.loading}
+        onKeyPress={(e) => {
+          if (e.keyCode === Keys.Return) {
+            if (props.onSubmit) {
+              props.onSubmit({
+                ...props.variables,
+                nameSearchQuery: props.variables.nameSearchQuery,
+              })
             }
-          }}
-          textInputStyle={{
-            fontSize: Styles.fontSizes.size16,
-          }}
-          style={styles.container}
-        />
-      </RX.View>
-    )
-  }
 
-  public focus = () => this._input.focus()
-}
+            // FIXME FOR NATIVE
+            navigate(props, `${Routes.searchRecipes}?q=${props.variables.nameSearchQuery}`)
+          }
+        }}
+        textInputStyle={{
+          fontSize: Styles.fontSizes.size16,
+          textAlign: isFocusing ? 'inherit' : 'center'
+        }}
+        style={styles.container}
+      />
+    </RX.View>
+  )
+})
 
 const styles = {
   container: RX.Styles.createViewStyle({
     minWidth: 125,
-    width: 215,
+    width: 250,
     marginBottom: 0,
   }),
 }

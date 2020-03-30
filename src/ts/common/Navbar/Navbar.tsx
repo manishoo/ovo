@@ -83,7 +83,7 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: Styles.values.spacing * 2,
+    paddingBottom: Styles.values.spacing,
     // backgroundColor: 'red',
   }),
   backText: RX.Styles.createTextStyle({

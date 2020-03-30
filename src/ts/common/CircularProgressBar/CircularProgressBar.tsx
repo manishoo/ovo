@@ -60,6 +60,8 @@ export default class CircularProgressBar extends RX.Component<CircularProgressBa
               stroke: '#fafafa',
               strokeLinecap: 'round',
               strokeLinejoin: 'round',
+
+              transition: 'all 0.3s'
             }}
           />
         }
@@ -78,6 +80,8 @@ export default class CircularProgressBar extends RX.Component<CircularProgressBa
             stroke: this.props.strokeColor,
             strokeLinecap: 'round',
             strokeLinejoin: 'round',
+
+            transition: 'all 0.3s'
           }}
         />
       </svg>

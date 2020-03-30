@@ -39,7 +39,7 @@ export default function InputNumber(props: InputNumberProps) {
     })
   }
 
-  const value = !!props.value ? String(props.value) : ''
+  const value = ((!!props.value) || (props.value === 0)) ? String(props.value) : ''
 
 
   return (

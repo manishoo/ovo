@@ -14,8 +14,9 @@ import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
 import { NutritionProfileMode, UserMealInput } from '@Models/global-types'
-import MealComponentContainer from '@Views/CalendarScreen/components/MealComponent/MealComponent'
-import MealComponent from '@Views/CalendarScreen/components/MealComponent/MealComponent'
+import MealComponentContainer
+  from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/MealComponent'
+import { MealComponentFragments } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/MealComponentOperation'
 import {
   GeneratorSampleMutation,
   GeneratorSampleMutationVariables
@@ -40,7 +41,7 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
       }
     }
 
-    ${MealComponent.fragments.dayMeal}
+    ${MealComponentFragments.dayMeal}
   `, {
     variables: {
       nutritionProfile: {

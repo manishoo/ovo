@@ -3,45 +3,11 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import {
-  LanguageCode,
-  MealAvailableTime,
-  MealSize,
-  NutritionProfileMode,
-  RecipeStatus
-} from './../../../../models/global-types'
+import { LanguageCode, MealAvailableTime, MealSize, RecipeStatus } from './../../../../models/global-types'
 
 // ====================================================
 // GraphQL query operation: CalendarQuery
 // ====================================================
-
-export interface CalendarQuery_calendar_nutritionProfile_carbs {
-  max: number;
-  min: number;
-  percentage: number | null;
-}
-
-export interface CalendarQuery_calendar_nutritionProfile_fat {
-  max: number;
-  min: number;
-  percentage: number | null;
-}
-
-export interface CalendarQuery_calendar_nutritionProfile_protein {
-  max: number;
-  min: number;
-  percentage: number | null;
-}
-
-export interface CalendarQuery_calendar_nutritionProfile {
-  id: any;
-  calories: number;
-  carbs: CalendarQuery_calendar_nutritionProfile_carbs;
-  fat: CalendarQuery_calendar_nutritionProfile_fat;
-  protein: CalendarQuery_calendar_nutritionProfile_protein;
-  isStrict: boolean;
-  mode: NutritionProfileMode;
-}
 
 export interface CalendarQuery_calendar_meals_userMeal {
   id: string;
@@ -1119,6 +1085,7 @@ export interface CalendarQuery_calendar_meals_items {
    */
   unit: CalendarQuery_calendar_meals_items_unit | null;
   isOptional: boolean | null;
+  hasAlternatives: boolean | null;
   item: CalendarQuery_calendar_meals_items_item | null;
 }
 
@@ -1137,7 +1104,6 @@ export interface CalendarQuery_calendar_meals {
 export interface CalendarQuery_calendar {
   id: any;
   date: any;
-  nutritionProfile: CalendarQuery_calendar_nutritionProfile;
   meals: CalendarQuery_calendar_meals[];
 }
 

@@ -9,10 +9,10 @@ import {
   FoodPreviewMealItem_unit,
   FoodPreviewMealItem_unit_Weight
 } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
-import { MealInput, MealItemInput } from '@Models/global-types'
+import { IngredientInput, MealInput, MealItemInput } from '@Models/global-types'
 import { getOrigId } from '@Utils/create-id'
 import trimTypeName from '@Utils/trim-type-name'
-import { MealComponentDayMeal_items } from '@Views/CalendarScreen/components/MealComponent/types/MealComponentDayMeal'
+import { MealComponentDayMeal_items } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/types/MealComponentDayMeal'
 import { MealFormMeal, MealFormMeal_items } from '@Views/MealForm/types/MealFormMeal'
 
 
@@ -26,11 +26,7 @@ export function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_it
   return toBeDetermined.__typename === 'Food'
 }
 
-export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | MealComponentDayMeal_items): MealItemInput {
-  function determineIfMealItemIsMealFormMeal_items(mealItem: MealFormMeal_items | MealComponentDayMeal_items): mealItem is MealFormMeal_items {
-    return mealItem.hasOwnProperty('alternativeMealItems')
-  }
-
+export function transformMealItemToIngredientInput(mealItem: MealFormMeal_items | MealComponentDayMeal_items): IngredientInput {
   return {
     name: [],
     food: mealItem.item && (determineIfIsFood(mealItem.item) ? mealItem.item.id : null),
@@ -43,19 +39,13 @@ export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items | 
     } : undefined,
     id: getOrigId(mealItem.id),
     amount: mealItem.amount,
-    alternativeMealItems: determineIfMealItemIsMealFormMeal_items(mealItem) ? mealItem.alternativeMealItems.map(alternativeMealItem => ({
-      name: [],
-      food: alternativeMealItem.item && (determineIfIsFood(alternativeMealItem.item) ? alternativeMealItem.item.id : null),
-      recipe: alternativeMealItem.item && (determineIfIsFood(alternativeMealItem.item) ? null : alternativeMealItem.item.id),
-      unit: alternativeMealItem.unit ? (determineIfIsWeight(alternativeMealItem.unit) ? alternativeMealItem.unit.id : 'customUnit') : 'g',
-      // description: alternativeMealItem.description && alternativeMealItem.description.map(t => trimTypeName(t)),
-      customUnit: alternativeMealItem.customUnit ? {
-        name: alternativeMealItem.customUnit.name.map(t => trimTypeName(t)),
-        gramWeight: alternativeMealItem.customUnit.gramWeight,
-      } : undefined,
-      id: getOrigId(alternativeMealItem.id),
-      amount: alternativeMealItem.amount,
-    })) : []
+  }
+}
+
+export function transformMealItemToMealItemInput(mealItem: MealFormMeal_items): MealItemInput {
+  return {
+    ...transformMealItemToIngredientInput(mealItem),
+    alternativeMealItems: mealItem.alternativeMealItems.map(alternativeMealItem => transformMealItemToIngredientInput(alternativeMealItem))
   }
 }
 
