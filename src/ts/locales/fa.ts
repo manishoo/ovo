@@ -96,6 +96,7 @@ enum FaLocale {
   'assistantIntro1' = 'سلام!\n من پرانا هستم',
   'assistantIntro2' = 'من میتونم کمکت کنم غذاتو راحت تر تهیه کنی و خیلی چیزای دیگه',
   'hiAssistant' = 'سلام پرانا \uD83D\uDC4B',
+  'Ok' = 'باشه',
   'AssistantInputPlaceholder' = 'پیام',
   'getNamePlaceholder' = 'مثل محمد',
   'getAgePlaceholder' = 'مثل ۳۲',
@@ -290,6 +291,8 @@ enum FaLocale {
 
   'Add Alternative Meal Item' = 'افزودن غذای آلترناتیو',
   'Log Meal' = 'لاگ کردن',
+
+  finishSetup = 'کامل کن اطلاعاتتو'
 
 }
 

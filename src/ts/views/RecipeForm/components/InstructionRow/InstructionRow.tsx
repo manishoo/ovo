@@ -4,13 +4,15 @@
  */
 
 import { gql } from '@apollo/client'
+import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import IntlInput from '@Common/Input/IntlInput'
+import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import Keys from '@Utils/KeyCodes'
 import { InstructionRowInstruction } from '@Views/RecipeForm/components/InstructionRow/types/InstructionRowInstruction'
+import { forwardRef, Ref } from 'react'
 import RX from 'reactxp'
 
 
@@ -23,7 +25,6 @@ interface InstructionRowProps {
   onChange: (instruction: InstructionRowInstruction) => void,
   onEnterPressed: (instruction: InstructionRowInstruction) => void,
   onDeletePressed: (instruction: InstructionRowInstruction) => void,
-  onDelete: (step: number) => void,
   step: number,
 }
 
@@ -36,48 +37,58 @@ export const fragments = {
   `
 }
 
-export default class InstructionRow extends RX.Component<InstructionRowProps> {
-  onDeletePress = () => this.props.onDelete(this.props.instruction.step)
+function InstructionRow(props: InstructionRowProps, ref: Ref<any>) {
+  const { style, instruction } = props
 
-  public render() {
-    const { style, instruction } = this.props
+  const _onInstructionChange = (value: string) => {
+    const { instruction } = props
 
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <RX.View>
-            <RX.View
-              style={[styles.container, style]}
-            >
-              <RX.View style={styles.clearWrapper}>
-                <Text>{instruction.step}</Text>
-              </RX.View>
-              <IntlInput
-                autoFocus={instruction.step > 1 && (instruction.text[0].text.length === 0)}
-                translations={instruction.text}
-                onTranslationsChange={translations => this.props.onChange({
-                  ...this.props.instruction,
-                  text: translations,
-                })}
-                placeholder={this.props.step === 1 && translate('e.g. Cook the Rice...')}
-                returnKeyType={'done'}
-                style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
-                onKeyPress={e => {
-                  if (e.keyCode === Keys.Enter) {
-                    this.props.onEnterPressed(instruction)
-                  }
-                  if (e.keyCode === Keys.Delete) {
-                    this.props.onDeletePressed(instruction)
-                  }
-                }}
-              />
-            </RX.View>
-          </RX.View>
-        )}
-      </ThemeContext.Consumer>
-    )
+    const text = instruction.text.length > 0
+      ? instruction.text.map((t, index) => index === 0 ? { text: value, locale: t.locale } : t)
+      : [{ text: value, locale: AppConfig.locale }]
+
+    props.onChange({
+      ...props.instruction,
+      text,
+    })
   }
+
+  const value = instruction.text[0] ? instruction.text[0].text : ''
+
+  return (
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <RX.View
+          style={[styles.container, style]}
+        >
+          <RX.View style={styles.clearWrapper}>
+            <Text>{instruction.step}</Text>
+          </RX.View>
+          <Input
+            inputRef={ref}
+            // autoFocus={instruction.step > 1 && (instruction.text[0].text.length === 0)}
+            value={value}
+            // translations={instruction.text}
+            onChangeText={_onInstructionChange}
+            placeholder={props.step === 1 && translate('e.g. Cook the Rice...')}
+            returnKeyType={'done'}
+            style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
+            onKeyPress={e => {
+              if (e.keyCode === Keys.Enter) {
+                props.onEnterPressed(instruction)
+              }
+              if (e.keyCode === Keys.Delete) {
+                value.length === 0 && props.onDeletePressed(instruction)
+              }
+            }}
+          />
+        </RX.View>
+      )}
+    </ThemeContext.Consumer>
+  )
 }
+
+export default forwardRef(InstructionRow)
 
 const styles = {
   name: RX.Styles.createTextStyle({

@@ -108,6 +108,8 @@ export interface BasicIngredient_item_Recipe_author_avatar {
 export interface BasicIngredient_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: BasicIngredient_item_Recipe_author_avatar | null;
 }
 

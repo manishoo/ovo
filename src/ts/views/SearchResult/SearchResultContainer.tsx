@@ -16,7 +16,7 @@ import SearchResult from './SearchResult'
 
 export const SEARCH_RESULT_RECIPES_QUERY = gql`
   query SearchResultQuery($nameSearchQuery: String!, $lastId: ObjectId, $tags: [String!]) {
-    recipes(nameSearchQuery: $nameSearchQuery, lastId: $lastId, tags: $tags) {
+    recipes(nameSearchQuery: $nameSearchQuery, lastId: $lastId, tags: $tags, size: 20) {
       recipes {
         ...IngredientRecipe
       }

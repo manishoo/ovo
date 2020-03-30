@@ -82,6 +82,8 @@ export const IngredientRecipeFragment = gql`
     author {
       id
       username
+      firstName
+      lastName
       avatar {url}
     }
     #    nutrition {

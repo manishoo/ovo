@@ -95,8 +95,8 @@ const DAY_COLORS = [
   { day: 0, color: '#E53935' }, // sunday
   { day: 1, color: '#FFCC00' },
   { day: 2, color: '#F06292' },
-  { day: 3, color: '#43A047' },
-  { day: 4, color: '#FF9209' },
+  { day: 3, color: '#4caf50' },
+  { day: 4, color: '#f57c00' },
   { day: 5, color: '#1E88E5' },
 ]
 

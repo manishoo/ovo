@@ -62,6 +62,10 @@ export interface MeQuery_me_membership {
   type: string;
 }
 
+export interface MeQuery_me_achievements {
+  finishedSetup: boolean | null;
+}
+
 export interface MeQuery_me_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -89,6 +93,7 @@ export interface MeQuery_me {
   nutritionProfile: MeQuery_me_nutritionProfile;
   membership: MeQuery_me_membership | null;
   role: Role;
+  achievements: MeQuery_me_achievements;
   meals: MeQuery_me_meals[];
 }
 

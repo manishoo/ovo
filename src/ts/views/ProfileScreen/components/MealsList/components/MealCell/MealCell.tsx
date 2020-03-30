@@ -157,7 +157,7 @@ const styles = {
   }),
   title: RX.Styles.createTextStyle({
     // marginTop: Styles.values.spacingLarge / 2,
-    font: Styles.fonts.displayLight,
+    fontWeight: '300',
   }),
   avatarImage: RX.Styles.createImageStyle({
     width: 50,
@@ -176,7 +176,7 @@ const styles = {
     alignItems: 'center',
   }),
   likeText: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayLight,
+    fontWeight: '300',
     top: 2,
     [Styles.values.end]: -15,
     fontSize: Styles.fontSizes.size16,
@@ -188,10 +188,10 @@ const styles = {
     [Styles.values.start]: 16,
   }),
   timingUnit: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayLight,
+    fontWeight: '300',
   }),
   timingNumber: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayBold,
+    fontWeight: 'bold', // displayBold
     fontSize: Styles.fontSizes.size16,
     [Styles.values.marginEnd]: 3,
   }),

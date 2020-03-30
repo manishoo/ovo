@@ -568,7 +568,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Food {
   weights: MealComponentLogMealMutation_logMeal_items_item_Food_weights[];
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition;
+  nutrition: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition | null;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_title {
@@ -591,6 +591,8 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_author_a
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealComponentLogMealMutation_logMeal_items_item_Recipe_author_avatar | null;
 }
 
@@ -1067,7 +1069,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Recipe_thumbnail | null;
   author: MealComponentLogMealMutation_logMeal_items_item_Recipe_author;
-  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition;
+  nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealComponentLogMealMutation_logMeal_items_item =

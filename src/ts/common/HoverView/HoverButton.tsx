@@ -11,10 +11,17 @@ export interface HoverViewProps extends RX.Types.ViewProps {
   title?: string;
   disabled?: boolean;
   style?: any
+  defaultCursor?: boolean
 }
 
 export interface HoverViewState {
   isHovering: boolean;
+}
+
+const _styles = {
+  container: RX.Styles.createViewStyle({
+    cursor: 'pointer',
+  })
 }
 
 export default class HoverView extends RX.Component<HoverViewProps, HoverViewState> {
@@ -22,6 +29,10 @@ export default class HoverView extends RX.Component<HoverViewProps, HoverViewSta
     return (
       <RX.View
         {...this.props}
+        style={[
+          this.props.defaultCursor ? undefined : _styles.container,
+          this.props.style,
+        ]}
         onMouseEnter={this._onHoverStart}
         onMouseLeave={this._onHoverEnd}
       >

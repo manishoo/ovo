@@ -562,7 +562,7 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Food {
   weights: DayComponentNewDayMutation_newDay_meals_items_item_Food_weights[];
   thumbnail: DayComponentNewDayMutation_newDay_meals_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: DayComponentNewDayMutation_newDay_meals_items_item_Food_nutrition;
+  nutrition: DayComponentNewDayMutation_newDay_meals_items_item_Food_nutrition | null;
 }
 
 export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_title {
@@ -585,6 +585,8 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_autho
 export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_author_avatar | null;
 }
 
@@ -1061,7 +1063,7 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_thumbnail | null;
   author: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_author;
-  nutrition: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_nutrition;
+  nutrition: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_nutrition | null;
 }
 
 export type DayComponentNewDayMutation_newDay_meals_items_item =

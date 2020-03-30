@@ -12,11 +12,11 @@ import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodPickerMealItem, FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import Image from '@Common/Image/Image'
-import IngredientRow from '@Common/IngredientRow/IngredientRow'
 import Input from '@Common/Input/Input'
 import InputNumber from '@Common/Input/InputNumber'
 import IntlInput from '@Common/Input/IntlInput'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import MealItemComponent from '@Common/MealItemComponent/MealItemComponent'
 import Navbar from '@Common/Navbar/Navbar'
 import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import Page from '@Common/Page'
@@ -271,6 +271,8 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     )
   }
 
+  private _instructionsRef: any = {}
+
   private _renderFormContent = (theme: Theme) => {
     if (this.state.hideForm) return null
 
@@ -327,7 +329,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
                     style={{
                       color: theme.colors.selectBorderColor,
                       fontSize: theme.fontSizes.size16,
-                      font: theme.fonts.displayBold
+                      fontWeight: 'bold' //displayBold
                     }}
                   >UploadImage</Text>
               }
@@ -389,14 +391,27 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               <SortableList
                 items={this.state.recipe.ingredients}
                 renderItem={(ingredient, index) => (
-                  <IngredientRow
-                    ingredient={ingredient}
-                    onDelete={this._onIngredientDelete(index)}
-                    // onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
-                    onIngredientChange={this._onIngredientChange}
-                    style={styles.ingredient}
+                  <MealItemComponent
+                    mealItem={ingredient}
+                    onMealItemRemove={this._onIngredientDelete(index)}
+                    onMealItemChange={this._onIngredientChange}
+                    style={[
+                      styles.ingredient,
+                      {
+                        backgroundColor: theme.colors.bg
+                      }
+                    ]}
                   />
                 )}
+                // renderItem={(ingredient, index) => (
+                //   <IngredientRow
+                //     ingredient={ingredient}
+                //     onDelete={this._onIngredientDelete(index)}
+                //     // onPress={ingredient.food ? () => LocationStore.navigate(this.props, `/food/${ingredient.food.id}/`) : undefined}
+                //     onIngredientChange={this._onIngredientChange}
+                //     style={styles.ingredient}
+                //   />
+                // )}
                 onItemsChange={(ingredients) => this.setState(prevState => ({
                   recipe: {
                     ...prevState.recipe,
@@ -415,6 +430,7 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
               this.state.recipe.ingredients.length > 0 &&
               <NutritionInfo
                 title={translate('Recipe Nutrition')}
+                showMacros={false}
                 nutrition={calculateMealItemsNutrition(this.state.recipe.ingredients)}
               />
             }
@@ -424,17 +440,21 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
         {/**
          * Instructions
          * */}
-        <Text translate style={{ marginBottom: Styles.values.spacing / 2 }}>Instructions</Text>
+        <Text translate style={{
+          marginBottom: Styles.values.spacing / 2,
+          fontWeight: '500',
+          color: theme.colors.labelInput
+        }}>Instructions</Text>
         {
           this.state.recipe.instructions.map(instruction => (
             <InstructionRow
+              ref={ref => this._instructionsRef[instruction.step] = ref}
               key={instruction.step}
               step={instruction.step}
               instruction={instruction}
               onEnterPressed={this._onInstructionAdd}
-              onDeletePressed={ins => this._handleInstructionDelete(ins)}
+              onDeletePressed={this._handleInstructionDelete}
               onChange={this._onInstructionChange}
-              onDelete={this._onInstructionDelete}
             />
           ))
         }
@@ -607,8 +627,6 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
   }
 
   private _handleInstructionDelete = (instruction: RecipeFormQuery_recipe_instructions) => {
-    const instructions = [...this.state.recipe.instructions]
-
     /**
      * If the instruction text was deleted
      * */
@@ -619,59 +637,36 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
       this.setState(prevState => ({
         recipe: {
           ...prevState.recipe,
-          instructions: instructions
+          instructions: prevState.recipe.instructions
             .filter(i => i.step !== instruction.step)
             .map((i, index) => {
               i.step = index + 1
               return i
             })
         }
-      }))
+      }), () => {
+        if (this._instructionsRef[instruction.step - 1]) {
+          setImmediate(() => this._instructionsRef[instruction.step - 1].focus())
+        }
+      })
       return
     }
   }
 
   private _onInstructionChange = (instruction: RecipeFormQuery_recipe_instructions) => {
-    const instructions = [...this.state.recipe.instructions]
-
-    const foundInstruction = instructions.find(p => p.step === instruction.step)
-    if (!foundInstruction) {
-      console.error('Instruction not found')
-      return
-    }
-
-    foundInstruction.text = instruction.text
-    // foundInstruction.image = instruction.image
-
-    /**
-     * If the instruction text was deleted
-     * */
-    // if (
-    //   instruction.text[0] &&
-    //   instruction.text[0].text.length === 0 &&
-    //   instruction.step !== 1
-    // ) {
-    //   this.setState(prevState => ({
-    //     recipe: {
-    //       ...prevState.recipe,
-    //       instructions: instructions
-    //         .filter(i => i.step !== instruction.step)
-    //         .map((i, index) => {
-    //           i.step = index + 1
-    //           return i
-    //         })
-    //     }
-    //   }))
-    //   return
-    // }
-
     /**
      * If the instruction was changed
      * */
     this.setState(prevState => ({
       recipe: {
         ...prevState.recipe,
-        instructions
+        instructions: prevState.recipe.instructions.map(ins => {
+          if (ins.step === instruction.step) {
+            return instruction
+          }
+
+          return ins
+        })
       }
     }))
   }
@@ -696,21 +691,14 @@ class RecipeForm extends ComponentBase<RecipeFormProps, RecipeFormState> {
     this.setState(prevState => ({
       recipe: {
         ...prevState.recipe,
-        instructions: instructions.map((i, index) => {
-          i.step = index + 1
-          return i
-        })
+        instructions: instructions.map((i, index) => ({
+          ...i,
+          index: index + 1
+        }))
       }
-    }))
-  }
-
-  private _onInstructionDelete = (step: number) => {
-    this.setState(prevState => ({
-      recipe: {
-        ...prevState.recipe,
-        instructions: prevState.recipe.instructions.filter(p => p.step !== step)
-      },
-    }))
+    }), () => {
+      setImmediate(() => this._instructionsRef[instruction.step + 1] && this._instructionsRef[instruction.step + 1].focus())
+    })
   }
 
   private _generateSlug = (title: string) => {

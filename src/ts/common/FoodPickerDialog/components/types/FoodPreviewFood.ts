@@ -507,5 +507,5 @@ export interface FoodPreviewFood {
   weights: FoodPreviewFood_weights[];
   thumbnail: FoodPreviewFood_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: FoodPreviewFood_nutrition;
+  nutrition: FoodPreviewFood_nutrition | null;
 }

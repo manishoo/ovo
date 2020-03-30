@@ -4,6 +4,7 @@
  */
 
 import { LanguageCode, MealAvailableTime, MealSize } from '@Models/global-types'
+import { isTouchDevice } from '@Utils/is-touch'
 import { CalendarSystem, Settings } from 'luxon'
 import RX from 'reactxp'
 
@@ -20,7 +21,9 @@ class AppConfig {
   public panelAddress: string = 'http://panel.prana.global'
   public calorieMeasurementUnit: 'kcal' | 'kJ' = 'kcal'
   public contentMaxWidth = 975
-  defaultUserMeals = [
+  public defaultCalories = 2300
+  public defaultScrollBarWidth = 20
+  public defaultUserMeals = [
     {
       id: 'breakfast',
       name: 'Breakfast',
@@ -64,7 +67,7 @@ class AppConfig {
     this._appVersion = '0.0.0.1'
     this._frontendHost = (typeof document !== 'undefined') && document.location ? document.location.host : ''
     this._platformType = RX.Platform.getType()
-    this._isTouchInterface = this._platformType === 'ios' || this._platformType === 'android'
+    this._isTouchInterface = this._platformType === 'ios' || this._platformType === 'android' || isTouchDevice()
     this._startupTime = Date.now()
   }
 

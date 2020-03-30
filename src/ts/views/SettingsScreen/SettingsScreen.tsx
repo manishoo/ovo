@@ -72,6 +72,7 @@ class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
         {({ theme }) => (
           <Page
             lazyRender
+            maxWidth={500}
           >
             <Navbar title={translate('Edit Profile')} />
             {this._renderAvatar()}
@@ -289,7 +290,7 @@ class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
 
   private _handleLogOut = () => {
     this.props.onLogOut()
-      .then(() => LocationStore.navigate(this.props, Routes.login))
+      .then(() => LocationStore.navigate(this.props, Routes.home))
   }
 }
 

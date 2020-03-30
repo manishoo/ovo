@@ -64,9 +64,11 @@ const DeleteSpace = ({ style, onMealItemDelete }: DeleteSpaceProps) => {
 
     try {
       const mealItem = JSON.parse(mealItemStringified) as FoodPreviewMealItem
-      const meal = JSON.parse(mealStringified) as MealComponentDayMeal
+      if (mealStringified) {
+        const meal = JSON.parse(mealStringified) as MealComponentDayMeal
 
-      onMealItemDelete(meal.id, mealItem.id)
+        onMealItemDelete(meal.id, mealItem.id)
+      }
     } catch (e) {
       console.error(e)
     }

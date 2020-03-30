@@ -3,12 +3,13 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { Theme } from '@App/Theme'
-import { ThemeContext } from '@App/ThemeContext'
 import Image from '@Common/Image/Image'
 import ImageSource from '@Modules/images'
+import { AssistantMessage } from '@Views/AssistantChat/components/ChatBox'
 import RX from 'reactxp'
 
+
+const POPUP_ID = 'AssistantMessage'
 
 function getRandomFromArray(array: any[]): any {
   return array[Math.floor(Math.random() * array.length)]
@@ -17,10 +18,7 @@ function getRandomFromArray(array: any[]): any {
 interface AssistantProps {
   style?: any,
   size: number,
-  onPress?: () => any,
-  onMouseOver?: () => any,
-  onMouseLeave?: () => any,
-  glowMode?: 'light' | 'dark'
+  playful?: boolean,
 }
 
 interface AssistantState {
@@ -41,73 +39,144 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
       { scale: this._glowScaleAnimationValue }
     ]
   })
+  private _containerTranslateXAnimationValue = RX.Animated.createValue(0)
+  private _containerTranslateYAnimationValue = RX.Animated.createValue(0)
+  private _containerRotateAnimationValue = RX.Animated.createValue(0)
+  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
+    transform: [
+      { translateX: this._containerTranslateXAnimationValue },
+      { translateY: this._containerTranslateYAnimationValue },
+      { rotate: this._containerRotateAnimationValue },
+    ]
+  })
+  private _rollingTimer?: number
+  private _jumpingTimer?: number
+  private _containerRef: any
+  private _lastRollDirection: boolean = true
 
   public render() {
     const { style, size } = this.props
 
     return (
-      <RX.Image
-        source={ImageSource.Logo}
-        style={{
-          width: size,
-          height: size,
-        }}
-      />
-    )
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <RX.View
-            onPress={this.props.onPress}
-            activeOpacity={1}
-            onMouseOver={this.props.onMouseOver}
-            onMouseLeave={this.props.onMouseLeave}
-            style={[
-              styles.container,
-              style,
-              {
-                width: this.props.size * 2,
-                height: this.props.size * 2,
-                padding: -this.props.size * 2
-              }
-            ]}
-          >
-            {this._renderExtra()}
-            <Image
-              source={ImageSource.Assistant}
-              style={{
-                width: size,
-                height: size,
-              }}
-            />
-            {/*{this._renderMouth()}*/}
-            {this._renderEyeLids(theme)}
-          </RX.View>
-        )}
-      </ThemeContext.Consumer>
+      <RX.Animated.View
+        ref={ref => this._containerRef = ref}
+        style={this._containerAnimationStyle}
+        onPress={this._onPress}
+      >
+        <Image
+          source={ImageSource.Logo}
+          style={{
+            width: size,
+            height: size,
+          }}
+          resizeMode={'cover'}
+        />
+        {this._renderEyeLids()}
+      </RX.Animated.View>
     )
   }
 
-  // componentDidMount(): void {
-  //   this._blink()
-  //   this._glow(this._getGlowTime())
-  // }
+  componentDidMount(): void {
+    this._blink()
 
-  private _renderExtra = () => {
-    return (
-      <RX.Animated.Image
-        source={this.props.glowMode === 'dark' ? ImageSource.AssistantExtra : ImageSource.AssistantExtraWhite}
-        style={[
-          styles.extra,
-          {
-            height: this.props.size * 2,
-            width: this.props.size * 2,
-          },
-          this._glowAnimationStyle
-        ]}
-      />
-    )
+    if (this.props.playful) {
+      this._rollingTimer = setTimeout(this._roll, this._getRollTime())
+    }
+  }
+
+  public say = (msg: string) => {
+    clearTimeout(this._rollingTimer)
+    this._showPopup(msg)
+    setTimeout(this._jump(), 1000)
+  }
+
+  private _onPress = () => {
+    RX.Popup.dismissAll()
+  }
+
+  private _showPopup = (message: string) => {
+    let popupOptions: RX.Types.PopupOptions = {
+      getAnchor: () => {
+        return this._containerRef
+      },
+      renderPopup: (anchorPosition: RX.Types.PopupPosition, anchorOffset: number, popupWidth: number, popupHeight: number) => {
+        return (
+          <AssistantMessage
+            text={message}
+          />
+        )
+      },
+      positionPriorities: ['top'],
+      useInnerPositioning: false,
+      dismissIfShown: true,
+      cacheable: true,
+      onDismiss: () => null
+    }
+
+    RX.Popup.show(popupOptions, POPUP_ID)
+  }
+
+  private _jump = () => {
+    RX.Animated.sequence([
+      RX.Animated.timing(this._containerTranslateYAnimationValue, {
+        toValue: -10,
+        duration: 250,
+        easing: RX.Animated.Easing.Out()
+      }),
+      RX.Animated.timing(this._containerTranslateYAnimationValue, {
+        toValue: 0,
+        duration: 350,
+        easing: RX.Animated.Easing.InBack()
+      }),
+      RX.Animated.timing(this._containerTranslateYAnimationValue, {
+        toValue: -15,
+        duration: 350,
+        easing: RX.Animated.Easing.Out()
+      }),
+      RX.Animated.timing(this._containerTranslateYAnimationValue, {
+        toValue: 0,
+        duration: 350,
+        easing: RX.Animated.Easing.In()
+      })
+    ])
+      .start(() => {
+        this._jumpingTimer = setTimeout(this._jump, this._getRollTime())
+      })
+  }
+
+  private _roll = () => {
+    const roll = (right: boolean) => RX.Animated.parallel([
+      RX.Animated.timing(this._containerTranslateXAnimationValue, {
+        toValue: right ? 10 : -10,
+        duration: 1000,
+      }),
+      RX.Animated.timing(this._containerRotateAnimationValue, {
+        toValue: right ? 35 : -35,
+        duration: 1000,
+      }),
+    ])
+
+    return new Promise(resolve => {
+      RX.Animated.sequence([
+        roll(!!this._lastRollDirection),
+        roll(!this._lastRollDirection),
+        RX.Animated.parallel([
+          RX.Animated.timing(this._containerTranslateXAnimationValue, {
+            toValue: 0,
+            easing: RX.Animated.Easing.Out(),
+          }),
+          RX.Animated.timing(this._containerRotateAnimationValue, {
+            toValue: 0,
+            easing: RX.Animated.Easing.Out(),
+          }),
+        ])
+      ])
+        .start(() => {
+          this._lastRollDirection = !this._lastRollDirection
+
+          this._rollingTimer = setTimeout(this._roll, this._getRollTime())
+        })
+    })
   }
 
   private _getBlinkTime = () => {
@@ -122,13 +191,13 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
     ])
   }
 
-  private _getGlowTime = () => {
+  private _getRollTime = () => {
     return getRandomFromArray([
-      5000,
-      5000,
-      6000,
       7000,
       7000,
+      9000,
+      12000,
+      12000,
     ])
   }
 
@@ -143,7 +212,7 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
           duration: duration / 2,
         })
           .start(() => {
-            this._glow(this._getGlowTime())
+            this._glow(this._getRollTime())
           })
       })
   }
@@ -158,22 +227,22 @@ export default class Assistant extends RX.Component<AssistantProps, AssistantSta
     })
   }
 
-  private _renderEyeLids = (theme: Theme) => {
+  private _renderEyeLids = () => {
     if (!this.state.eyesClosed) return null
 
-    const eyeLidSize = (this.props.size || 65) / 3
+    const eyeLidSize = (this.props.size || 65) / 2.5
 
     return (
-      <RX.View style={[styles.eyeContainer, { width: this.props.size }]}>
+      <RX.View style={[styles.eyeContainer, { width: this.props.size, top: 20 }]}>
         <RX.View style={[styles.eyeLid, {
-          width: eyeLidSize,
-          height: eyeLidSize * 1.2,
-          backgroundColor: theme.colors.assistantFaceColor,
+          width: eyeLidSize * 0.9,
+          height: eyeLidSize,
+          backgroundColor: '#FFDE34',
         }]} />
         <RX.View style={[styles.eyeLid, {
-          width: eyeLidSize,
-          height: eyeLidSize * 1.2,
-          backgroundColor: theme.colors.assistantFaceColor,
+          width: eyeLidSize * 0.9,
+          height: eyeLidSize,
+          backgroundColor: '#FFDE34',
         }]} />
       </RX.View>
     )
@@ -192,7 +261,7 @@ const styles = {
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     paddingBottom: 5
   }),
   extra: RX.Styles.createImageStyle({

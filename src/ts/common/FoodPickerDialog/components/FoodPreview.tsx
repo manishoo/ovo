@@ -25,6 +25,8 @@ import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import Select, { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import NutritionFragment from '@Models/nutrition'
+import { IngredientFood } from '@Models/types/IngredientFood'
+import { IngredientRecipe } from '@Models/types/IngredientRecipe'
 import getFloatFromString from '@Utils/get-float-from-string'
 import { calculateMealItemNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { determineIfIsFood } from '@Utils/transformers/meal.transformer'
@@ -34,6 +36,11 @@ import RX from 'reactxp'
 export function determineIfIsWeight(toBeDetermined: FoodPreviewMealItem_unit): toBeDetermined is FoodPreviewMealItem_unit_Weight {
   // @ts-ignore __typename
   return toBeDetermined.__typename == 'Weight'
+}
+
+const isItemRecipe = (i: IngredientFood | IngredientRecipe): i is IngredientRecipe => {
+  // @ts-ignore
+  return i.__typename === 'Recipe'
 }
 
 const MODAL_ID = 'FoodPreview'
@@ -139,17 +146,17 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     }
   }
 
+  private _amountInputRef: any
+
   constructor(props: FoodPreviewProps) {
     super(props)
 
     let selectedWeightValue
-    let description
+    let description = null
     let defaultAmount = ''
 
     if (props.mealItem.description && props.mealItem.description.length > 0) {
       description = props.mealItem.description
-    } else {
-      description = props.mealItem.item && determineIfIsFood(props.mealItem.item) ? props.mealItem.item.description : []
     }
 
     if (props.mealItem.item && determineIfIsFood(props.mealItem.item)) {
@@ -173,6 +180,12 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
         description,
       },
       selectedWeightValue
+    }
+  }
+
+  componentDidMount() {
+    if (this._amountInputRef) {
+      this._amountInputRef.selectAll()
     }
   }
 
@@ -215,6 +228,74 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
         ...mealItem,
       }
     }))
+  }
+
+  private _handleMealItemUnitChange = (selectedUnit: string) => {
+    const { mealItem } = this.state
+
+    const amount = +(mealItem.amount || 0)
+    let newAmount = amount
+
+    this.setState({
+      selectedWeightValue: selectedUnit,
+    })
+
+    let unit: FoodPreviewMealItem_unit | null = null
+    let customUnit = mealItem.customUnit
+
+    if (selectedUnit) {
+      if (selectedUnit === 'custom') {
+        customUnit = mealItem.customUnit || {
+          name: [],
+          gramWeight: null
+        }
+        unit = customUnit
+      } else if (mealItem.item && determineIfIsFood(mealItem.item)) {
+        unit = mealItem.item.weights.find(p => p.id === selectedUnit) || null
+      }
+    }
+
+    /**
+     * Change amount according to the selected unit
+     * */
+    if (!mealItem.item) return
+
+    const previousUnit = mealItem.unit
+
+    if (!isItemRecipe(mealItem.item)) {
+      switch (selectedUnit) {
+        case undefined:
+          if (previousUnit && previousUnit.gramWeight) {
+            newAmount = (+amount * previousUnit.gramWeight)
+          }
+          break
+        case 'customUnit':
+          if (mealItem.customUnit && mealItem.customUnit.gramWeight) {
+            newAmount = ((+amount * mealItem.customUnit.gramWeight) / (previousUnit && previousUnit.gramWeight ? previousUnit.gramWeight : 1))
+          }
+          break
+        default:
+          const weight = mealItem.item.weights.find(p => p.id === selectedUnit)
+          if (!weight) throw new Error('selectedUnit is unknown')
+          if (!weight.gramWeight) throw new Error('weight does not have gramWeight')
+
+          newAmount = ((+amount * ((previousUnit && previousUnit.gramWeight ? previousUnit.gramWeight : 1))) / weight.gramWeight)
+      }
+    } else {
+      switch (selectedUnit) {
+        case 'serving':
+        case 'g':
+        default:
+          break
+      }
+    }
+
+    this._onMealItemChange({
+      amount: String(newAmount),
+      unit,
+      customUnit
+    })
+
   }
 
   private _renderContent = (theme: Theme) => {
@@ -289,8 +370,11 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
           >
             <InputNumber
               autoFocus
-              inputRef={inputRef}
-              value={mealItem.amount}
+              inputRef={(ref: any) => {
+                inputRef(ref)
+                this._amountInputRef = ref
+              }}
+              value={String(Math.round(Number(mealItem.amount)))}
               onChange={amount => this._onMealItemChange({ amount })}
               label={translate('Amount')}
               keyboardType={'number-pad'}
@@ -301,29 +385,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               <Select
                 value={this.state.selectedWeightValue}
                 options={units}
-                onChange={(value) => this.setState({
-                  selectedWeightValue: value,
-                }, () => {
-                  let unit: FoodPreviewMealItem_unit | null = null
-                  let customUnit = mealItem.customUnit
-
-                  if (value) {
-                    if (value === 'custom') {
-                      customUnit = mealItem.customUnit || {
-                        name: [],
-                        gramWeight: null
-                      }
-                      unit = customUnit
-                    } else if (mealItem.item && determineIfIsFood(mealItem.item)) {
-                      unit = mealItem.item.weights.find(p => p.id === value) || null
-                    }
-                  }
-
-                  this._onMealItemChange({
-                    unit,
-                    customUnit
-                  })
-                })}
+                onChange={this._handleMealItemUnitChange}
               />
             </RX.View>
           </RX.View>
@@ -419,6 +481,8 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
             {
               mealItemNutrition &&
               <NutritionInfo
+                showMacros={false}
+                showDetails={false}
                 nutrition={mealItemNutrition}
               />
             }

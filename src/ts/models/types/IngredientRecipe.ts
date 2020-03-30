@@ -29,6 +29,8 @@ export interface IngredientRecipe_author_avatar {
 export interface IngredientRecipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: IngredientRecipe_author_avatar | null;
 }
 

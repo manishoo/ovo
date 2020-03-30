@@ -72,7 +72,7 @@ export default class Select extends RX.Component<SelectProps> {
             activeOpacity={0.7}
             ref={ref => this._mountedButton = ref}
           >
-            <Text style={textStyle}>{selectedOption && selectedOption.text}</Text>
+            <Text style={[styles.selectItemText, textStyle]}>{selectedOption && selectedOption.text}</Text>
           </RX.View>
         </>}
       </ThemeContext.Consumer>
@@ -138,4 +138,7 @@ const styles = {
     fontWeight: '500',
     marginBottom: Styles.values.spacing / 2,
   }),
+  selectItemText: RX.Styles.createTextStyle({
+    textAlign: 'center'
+  })
 }

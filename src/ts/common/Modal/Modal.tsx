@@ -3,19 +3,22 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloProvider, ApolloProvider as ApolloHooksProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
-import { ThemeContext } from '@App/ThemeContext'
+import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 
 import KeyCodes from '@Utils/KeyCodes'
 import assert from 'assert'
+import { createContext } from 'react'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
+
+export const ModalContext = createContext<{ modalId?: string, isRoute?: boolean }>({})
 
 interface ModalProps extends RX.CommonProps {
   modalId: string;
@@ -24,7 +27,9 @@ interface ModalProps extends RX.CommonProps {
   fullWidth?: boolean;
   modalHeight?: number;
   fullHeight?: boolean;
-  theme: Theme
+  url?: string,
+  theme: Theme,
+  route?: boolean,
 }
 
 interface ModalState {
@@ -40,18 +45,21 @@ const _styles = {
   modalContainerBackground: RX.Styles.createViewStyle({
     ...Styles.values.absolutelyExtended,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    flexDirection: 'row'
+    flexDirection: 'row',
+
+    // @ts-ignore web
+    zIndex: 2
   }),
   modalContainer: RX.Styles.createViewStyle({
     flex: -1,
     flexDirection: 'row',
-    borderRadius: 10,
   }),
   modalBox: RX.Styles.createViewStyle({
     flex: -1,
     alignItems: 'center',
     justifyContent: 'center',
     // margin: 32
+    // borderRadius: 10,
   })
 }
 
@@ -93,6 +101,10 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     super.componentWillMount()
 
     RX.Input.keyUpEvent.subscribe(this._onKeyUp)
+
+    if (this.props.url) {
+      LocationStore.pushHistory(this.props.url)
+    }
   }
 
   componentDidMount() {
@@ -124,16 +136,16 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   }
 
   public render() {
-    const { theme } = this.props
+    const { theme, children, modalId, route } = this.props
 
     const modalBoxStyles = [_styles.modalBox, this.state.widthStyle, this.state.heightStyle]
     const modalContentStyles = [_styles.modalContainer, this._contentScaleAnimationStyle, this.state.heightStyle]
 
     let modalContent = (
-      <ThemeContext.Provider
+      <ModalContext.Provider
         value={{
-          theme,
-          toggleTheme: () => null,
+          modalId,
+          isRoute: route
         }}
       >
         <RX.Animated.View
@@ -147,27 +159,25 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
             disableTouchOpacityAnimation={true}
             tabIndex={-1}
           >
-            {this.props.children}
+            {children}
           </RX.View>
         </RX.Animated.View>
-      </ThemeContext.Provider>
+      </ModalContext.Provider>
     )
 
     return (
       <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <RX.Animated.View
-            style={[
-              _styles.modalContainerBackground,
-              this._opacityAnimationStyle,
-            ]}
-            onPress={this._clickOutside}
-            onLongPress={this._onLongPressOutside}
-            disableTouchOpacityAnimation={true}
-          >
-            {modalContent}
-          </RX.Animated.View>
-        </ApolloHooksProvider>
+        <RX.Animated.View
+          style={[
+            _styles.modalContainerBackground,
+            this._opacityAnimationStyle,
+          ]}
+          onPress={this._clickOutside}
+          onLongPress={this._onLongPressOutside}
+          disableTouchOpacityAnimation={true}
+        >
+          {modalContent}
+        </RX.Animated.View>
       </ApolloProvider>
 
     )
@@ -224,7 +234,9 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
 
   private _clickOutside = (e: RX.Types.SyntheticEvent) => {
     e.stopPropagation()
+
     Modal.dismissAnimated(this.props.modalId)
+      .then(() => this.props.route && LocationStore.goBack())
   }
 
   private _animateClose(onAnimationComplete: () => void) {

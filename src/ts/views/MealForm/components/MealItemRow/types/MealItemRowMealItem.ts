@@ -551,7 +551,7 @@ export interface MealItemRowMealItem_item_Food {
   weights: MealItemRowMealItem_item_Food_weights[];
   thumbnail: MealItemRowMealItem_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealItemRowMealItem_item_Food_nutrition;
+  nutrition: MealItemRowMealItem_item_Food_nutrition | null;
 }
 
 export interface MealItemRowMealItem_item_Recipe_title {
@@ -574,6 +574,8 @@ export interface MealItemRowMealItem_item_Recipe_author_avatar {
 export interface MealItemRowMealItem_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealItemRowMealItem_item_Recipe_author_avatar | null;
 }
 
@@ -1050,7 +1052,7 @@ export interface MealItemRowMealItem_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealItemRowMealItem_item_Recipe_thumbnail | null;
   author: MealItemRowMealItem_item_Recipe_author;
-  nutrition: MealItemRowMealItem_item_Recipe_nutrition;
+  nutrition: MealItemRowMealItem_item_Recipe_nutrition | null;
 }
 
 export type MealItemRowMealItem_item = MealItemRowMealItem_item_Food | MealItemRowMealItem_item_Recipe;
@@ -1597,7 +1599,7 @@ export interface MealItemRowMealItem_alternativeMealItems_item_Food {
   weights: MealItemRowMealItem_alternativeMealItems_item_Food_weights[];
   thumbnail: MealItemRowMealItem_alternativeMealItems_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealItemRowMealItem_alternativeMealItems_item_Food_nutrition;
+  nutrition: MealItemRowMealItem_alternativeMealItems_item_Food_nutrition | null;
 }
 
 export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_title {
@@ -1620,6 +1622,8 @@ export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_author_ava
 export interface MealItemRowMealItem_alternativeMealItems_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealItemRowMealItem_alternativeMealItems_item_Recipe_author_avatar | null;
 }
 
@@ -2096,7 +2100,7 @@ export interface MealItemRowMealItem_alternativeMealItems_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealItemRowMealItem_alternativeMealItems_item_Recipe_thumbnail | null;
   author: MealItemRowMealItem_alternativeMealItems_item_Recipe_author;
-  nutrition: MealItemRowMealItem_alternativeMealItems_item_Recipe_nutrition;
+  nutrition: MealItemRowMealItem_alternativeMealItems_item_Recipe_nutrition | null;
 }
 
 export type MealItemRowMealItem_alternativeMealItems_item = MealItemRowMealItem_alternativeMealItems_item_Food | MealItemRowMealItem_alternativeMealItems_item_Recipe;

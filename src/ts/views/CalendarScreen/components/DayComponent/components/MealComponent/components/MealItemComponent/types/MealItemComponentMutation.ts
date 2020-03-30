@@ -553,7 +553,7 @@ export interface MealItemComponentMutation_suggestMealItem_item_Food {
   weights: MealItemComponentMutation_suggestMealItem_item_Food_weights[];
   thumbnail: MealItemComponentMutation_suggestMealItem_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealItemComponentMutation_suggestMealItem_item_Food_nutrition;
+  nutrition: MealItemComponentMutation_suggestMealItem_item_Food_nutrition | null;
 }
 
 export interface MealItemComponentMutation_suggestMealItem_item_Recipe_title {
@@ -576,6 +576,8 @@ export interface MealItemComponentMutation_suggestMealItem_item_Recipe_author_av
 export interface MealItemComponentMutation_suggestMealItem_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealItemComponentMutation_suggestMealItem_item_Recipe_author_avatar | null;
 }
 
@@ -1052,7 +1054,7 @@ export interface MealItemComponentMutation_suggestMealItem_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealItemComponentMutation_suggestMealItem_item_Recipe_thumbnail | null;
   author: MealItemComponentMutation_suggestMealItem_item_Recipe_author;
-  nutrition: MealItemComponentMutation_suggestMealItem_item_Recipe_nutrition;
+  nutrition: MealItemComponentMutation_suggestMealItem_item_Recipe_nutrition | null;
 }
 
 export type MealItemComponentMutation_suggestMealItem_item =

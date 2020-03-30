@@ -3,12 +3,12 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { Routes } from '@Models/common'
-import { Action, History, Location } from 'history'
+import { Action, History, Location, LocationDescriptorObject } from 'history'
 import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
 import * as SyncTasks from 'synctasks'
+import LocationDescriptor = History.LocationDescriptor
 
 
 @AutoSubscribeStore
@@ -46,27 +46,37 @@ class LocationStore extends StoreBase implements IPersistableStore {
     ]
   }
 
-  navigate(props: any, route: Routes | string, config: any = { params: {} }): void {
+  pushHistory(routeName: string) {
+    if (!this.history) return
+
+    this.history.push(routeName)
+  }
+
+  goBack() {
+    if (!this.history) return
+
+    this.history.goBack()
+  }
+
+  navigate(props: any, route: LocationDescriptor<History.PoorMansUnknown>, config: any = { params: {} }): void {
     if (!this.history) return
 
     const type = RX.Platform.getType()
     const params = config.params || {}
     const replace = config.params && config.params.replace
-    let routeName = String(route)
 
     if (type === 'web') {
-      Object.keys(params).forEach(key => {
-        routeName = routeName.replace(`/:${key}`, `/${params[key]}`)
-      })
+      // Object.keys(params).forEach(key => {
+      //   routeName = routeName.replace(`/:${key}`, `/${params[key]}`)
+      // })
 
-      if (routeName === 'back') {
+      if (route === 'back') {
         return this.history.goBack()
       }
 
-      this.setPath(routeName)
-
-      this.history.push(routeName)
+      this.history.push(route as LocationDescriptorObject)
     } else {
+      let routeName = String(route)
       Object.keys(params).forEach(key => {
         routeName = routeName.replace(`/:${key}`, '')
       })

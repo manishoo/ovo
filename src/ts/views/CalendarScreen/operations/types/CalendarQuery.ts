@@ -562,7 +562,7 @@ export interface CalendarQuery_calendar_meals_items_item_Food {
   weights: CalendarQuery_calendar_meals_items_item_Food_weights[];
   thumbnail: CalendarQuery_calendar_meals_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: CalendarQuery_calendar_meals_items_item_Food_nutrition;
+  nutrition: CalendarQuery_calendar_meals_items_item_Food_nutrition | null;
 }
 
 export interface CalendarQuery_calendar_meals_items_item_Recipe_title {
@@ -585,6 +585,8 @@ export interface CalendarQuery_calendar_meals_items_item_Recipe_author_avatar {
 export interface CalendarQuery_calendar_meals_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: CalendarQuery_calendar_meals_items_item_Recipe_author_avatar | null;
 }
 
@@ -1061,7 +1063,7 @@ export interface CalendarQuery_calendar_meals_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: CalendarQuery_calendar_meals_items_item_Recipe_thumbnail | null;
   author: CalendarQuery_calendar_meals_items_item_Recipe_author;
-  nutrition: CalendarQuery_calendar_meals_items_item_Recipe_nutrition;
+  nutrition: CalendarQuery_calendar_meals_items_item_Recipe_nutrition | null;
 }
 
 export type CalendarQuery_calendar_meals_items_item =

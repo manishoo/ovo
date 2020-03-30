@@ -62,6 +62,10 @@ export interface Me_membership {
   type: string;
 }
 
+export interface Me_achievements {
+  finishedSetup: boolean | null;
+}
+
 export interface Me_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -89,5 +93,6 @@ export interface Me {
   nutritionProfile: Me_nutritionProfile;
   membership: Me_membership | null;
   role: Role;
+  achievements: Me_achievements;
   meals: Me_meals[];
 }

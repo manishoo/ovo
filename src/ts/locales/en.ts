@@ -76,6 +76,7 @@ enum Content {
   'assistantIntro1' = 'Hi! I\'m Prana, your new Personal assistant.',
   'assistantIntro2' = 'I can help you manage eating, activities, habits, and so much more.',
   'hiAssistant' = 'Hi Prana \uD83D\uDC4B',
+  'Ok' = 'Ok',
   'AssistantInputPlaceholder' = 'Message',
   'getNamePlaceholder' = 'Enter your first name',
   'getAgePlaceholder' = 'Enter your age',
@@ -197,9 +198,9 @@ enum Content {
   noLimit = 'No limit',
   noTime = '5 minutes',
   someTime = '30 minutes',
-  AlreadyAMember = 'Already a Member? Login',
+  AlreadyAMember = 'Login',
   Or = 'Or',
-  GetStartedNow = 'Get Started Now',
+  GetStartedNow = 'Get Started',
 
   'landing_1_t' = 'A MealPlanner for mere Mortals',
   'landing_1_s' = 'Plan your meals ahead of time so you don\'t have to worry about what to cook when the time comes',
@@ -227,7 +228,9 @@ enum Content {
   'Add Alternative Meal Item' = 'Add Alternative Meal Item',
   'Log Meal' = 'Log Meal',
 
-  'Targets' = 'Targets'
+  'Targets' = 'Targets',
+
+  finishSetup = 'Finish setting up your account'
 
 }
 

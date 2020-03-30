@@ -32,6 +32,7 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
         {({ theme }) => (
           <HoverButton
             style={containerStyle}
+            onPress={onPress}
             onRenderChild={isHovering => (
               <RX.View
                 style={[styles.container, {
@@ -39,7 +40,6 @@ export default class FlatButton extends RX.Component<FlatButtonProps> {
                   borderColor: color || theme.colors.flatButtonBorderColor,
                   // backgroundColor: theme.colors.flatButtonBGColor
                 }, style]}
-                onPress={onPress}
                 activeOpacity={0.7}
               >
                 <Text style={[styles.text, {

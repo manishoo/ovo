@@ -17,13 +17,15 @@ const styles = {
     flex: 1,
     alignItems: 'stretch',
     paddingTop: Styles.values.spacing * 3,
-    paddingBottom: Styles.values.spacing * 3,
+    paddingBottom: Styles.values.spacing,
     marginHorizontal: Styles.values.spacing * 2,
     // maxWidth: Styles.values.mainContentMaxWidth,
     alignSelf: 'center',
+    paddingHorizontal: Styles.values.spacing,
+    maxWidth: Styles.values.mainContentMaxWidth,
   }),
   footerTitle: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayBold,
+    fontWeight: 'bold', // displayBold
   }),
   socialMediaIcon: RX.Styles.createImageStyle({
     width: 30,
@@ -87,11 +89,12 @@ const Footer = ({ style }: { style?: any }) => {
                 <Image
                   source={ImageSource.Brand}
                   style={{
-                    width: 127,
-                    height: 35,
+                    width: 150,
+                    height: 61,
                     alignSelf: 'flex-end',
                     marginBottom: Styles.values.spacing * 2,
                   }}
+                  resizeMode={'contain'}
                 />
                 <RX.View>
                   <Image
@@ -210,13 +213,13 @@ const Footer = ({ style }: { style?: any }) => {
             <Text
               translate
               style={{
-                position: 'absolute',
-                bottom: Styles.values.spacing,
+                // position: 'absolute',
+                // bottom: Styles.values.spacing,
                 color: theme.colors.footerTitleColor,
-                font: Styles.fonts.displayLight,
+                fontWeight: '300',
                 fontSize: 12,
-                fontWeight: 100,
                 textAlign: 'center',
+                paddingTop: Styles.values.spacing * 2,
               }}
             >landingfooterAck</Text>
           </RX.View>

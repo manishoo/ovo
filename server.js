@@ -34,6 +34,7 @@ app.use('/img', serve(paths.images, true))
 app.use('/manifest.json', serve(paths.manifest, true))
 app.use('/app.css', serve(paths.appCss, true))
 app.use('/sw.js', serve(paths.buildSW))
+app.use('/favicons', serve(paths.favicons))
 app.use(favicon(paths.favicon))
 
 if (isProd) {

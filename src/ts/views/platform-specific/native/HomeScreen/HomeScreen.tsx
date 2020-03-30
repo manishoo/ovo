@@ -11,8 +11,7 @@ import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { getParam, map } from '@Utils'
-import { AssistantMessage } from '@Views/Introduction/components/ChatBox'
-import ProfileScreenContainer from '@Views/ProfileScreen/ProfileScreenContainer'
+import { AssistantMessage } from '@Views/AssistantChat/components/ChatBox'
 import SearchResultContainer from '@Views/SearchResult/SearchResultContainer'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -84,7 +83,7 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
 
           </RX.View>
           <RX.View style={{ width: this.state.width }}>
-            <ProfileScreenContainer />
+            {/*<ProfileScreenContainer />*/}
           </RX.View>
         </RX.ScrollView>
 

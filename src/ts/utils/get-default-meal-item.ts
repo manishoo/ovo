@@ -18,7 +18,7 @@ export function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_it
 }
 
 export default function getDefaultMealItem(foodOrRecipe: FoodPreviewMealItem_item) {
-  let unit
+  let unit = null
   let amount = 1
 
   if (determineIfIsFood(foodOrRecipe)) {
@@ -34,7 +34,7 @@ export default function getDefaultMealItem(foodOrRecipe: FoodPreviewMealItem_ite
 
   return {
     isOptional: false,
-    description: [{ text: 'shit', locale: 'en' }],
+    description: [],
     id: createId(),
     amount,
     unit,

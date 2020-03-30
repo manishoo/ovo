@@ -26,7 +26,7 @@ class ImageSource implements ImageSourceBase {
   ShoppingList = AppConfig.getImagePath('ShoppingList.svg')
   ShoppingListActive = AppConfig.getImagePath('ShoppingListActive.svg')
 
-  Brand = AppConfig.getImagePath('Brand.png')
+  Brand = AppConfig.getImagePath('Brand.svg')
   BrandWhite = AppConfig.getImagePath('BrandWhite.svg')
   Phone = AppConfig.getImagePath('Phone.png')
   Assistant = AppConfig.getImagePath('Assistant.svg')
@@ -64,7 +64,7 @@ class ImageSource implements ImageSourceBase {
   RemoveIconWhite = AppConfig.getImagePath('RemoveIconWhite.png')
 
   Path = AppConfig.getImagePath('Path.png')
-  Logo = AppConfig.getImagePath('Logo.png')
+  Logo = AppConfig.getImagePath('Logo.svg')
 
   Trash = AppConfig.getImagePath('Trash.svg')
   Cog = AppConfig.getImagePath('Cog.png')

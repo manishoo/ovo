@@ -19,6 +19,7 @@ const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
     <MealItemComponent
       {...props}
       mealItemRegenerating={loading}
+      showDescription={false}
       onMealItemRegenerate={props.meal && useCallback(() => suggestMealItem({
         variables: {
           date: props.meal!.time,

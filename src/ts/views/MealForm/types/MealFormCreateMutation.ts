@@ -556,7 +556,7 @@ export interface MealFormCreateMutation_createMeal_items_item_Food {
   weights: MealFormCreateMutation_createMeal_items_item_Food_weights[];
   thumbnail: MealFormCreateMutation_createMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealFormCreateMutation_createMeal_items_item_Food_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_item_Food_nutrition | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_title {
@@ -579,6 +579,8 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe_author_avat
 export interface MealFormCreateMutation_createMeal_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealFormCreateMutation_createMeal_items_item_Recipe_author_avatar | null;
 }
 
@@ -1055,7 +1057,7 @@ export interface MealFormCreateMutation_createMeal_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealFormCreateMutation_createMeal_items_item_Recipe_thumbnail | null;
   author: MealFormCreateMutation_createMeal_items_item_Recipe_author;
-  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealFormCreateMutation_createMeal_items_item = MealFormCreateMutation_createMeal_items_item_Food | MealFormCreateMutation_createMeal_items_item_Recipe;
@@ -1602,7 +1604,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
   weights: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_weights[];
   thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food_nutrition | null;
 }
 
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_title {
@@ -1625,6 +1627,8 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
 export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_author_avatar | null;
 }
 
@@ -2101,7 +2105,7 @@ export interface MealFormCreateMutation_createMeal_items_alternativeMealItems_it
   status: RecipeStatus;
   thumbnail: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_thumbnail | null;
   author: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_author;
-  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition;
+  nutrition: MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe_nutrition | null;
 }
 
 export type MealFormCreateMutation_createMeal_items_alternativeMealItems_item = MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Food | MealFormCreateMutation_createMeal_items_alternativeMealItems_item_Recipe;

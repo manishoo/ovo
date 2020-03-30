@@ -507,10 +507,11 @@ export interface FoodPickerQuery_foods_foods {
   weights: FoodPickerQuery_foods_foods_weights[];
   thumbnail: FoodPickerQuery_foods_foods_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: FoodPickerQuery_foods_foods_nutrition;
+  nutrition: FoodPickerQuery_foods_foods_nutrition | null;
 }
 
 export interface FoodPickerQuery_foods_pagination {
+  page: number;
   hasNext: boolean;
 }
 
@@ -539,6 +540,8 @@ export interface FoodPickerQuery_recipes_recipes_author_avatar {
 export interface FoodPickerQuery_recipes_recipes_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: FoodPickerQuery_recipes_recipes_author_avatar | null;
 }
 
@@ -1015,10 +1018,11 @@ export interface FoodPickerQuery_recipes_recipes {
   status: RecipeStatus;
   thumbnail: FoodPickerQuery_recipes_recipes_thumbnail | null;
   author: FoodPickerQuery_recipes_recipes_author;
-  nutrition: FoodPickerQuery_recipes_recipes_nutrition;
+  nutrition: FoodPickerQuery_recipes_recipes_nutrition | null;
 }
 
 export interface FoodPickerQuery_recipes_pagination {
+  page: number;
   hasNext: boolean;
 }
 

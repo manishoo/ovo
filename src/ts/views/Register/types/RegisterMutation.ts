@@ -69,6 +69,10 @@ export interface RegisterMutation_registerUser_user_membership {
   type: string;
 }
 
+export interface RegisterMutation_registerUser_user_achievements {
+  finishedSetup: boolean | null;
+}
+
 export interface RegisterMutation_registerUser_user_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -96,6 +100,7 @@ export interface RegisterMutation_registerUser_user {
   nutritionProfile: RegisterMutation_registerUser_user_nutritionProfile;
   membership: RegisterMutation_registerUser_user_membership | null;
   role: Role;
+  achievements: RegisterMutation_registerUser_user_achievements;
   meals: RegisterMutation_registerUser_user_meals[];
 }
 

@@ -16,13 +16,14 @@ const _styles = {
   dayDate: RX.Styles.createTextStyle({
     fontSize: 30,
     fontWeight: 'bold',
+    marginBottom: 0,
   }),
   titleContainer: RX.Styles.createViewStyle({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: Styles.values.spacing,
-    paddingHorizontal: Styles.values.spacingLarge / 2,
+    paddingBottom: Styles.values.spacing / 2,
+    paddingHorizontal: Styles.values.spacing / 2,
   })
 }
 
@@ -70,6 +71,7 @@ const DayTitle = ({ dayRegenerating, date, color, onRegenerate, style, itemContr
     >
       <Text
         onPress={onTitlePress}
+        type={Text.types.title}
         style={[
           _styles.dayDate,
           { color }

@@ -57,8 +57,15 @@ export default class Text extends RX.Component<TextProps> {
   }
 
   private _getFont = () => {
-    return {
-      fontFamily: Styles.fonts[AppConfig.locale].displayRegular.fontFamily,
+    switch (this.props.type) {
+      case TextType.title:
+        return {
+          fontFamily: Styles.fonts[AppConfig.locale].display.fontFamily,
+        }
+      default:
+        return {
+          fontFamily: Styles.fonts[AppConfig.locale].text.fontFamily,
+        }
     }
   }
 
@@ -75,6 +82,7 @@ export default class Text extends RX.Component<TextProps> {
     if (this.props.type === TextType.title) {
       style = {
         ...style,
+        color: theme.colors.textDark,
         fontSize: 20,
         marginBottom: 16,
         fontWeight: 'bold',
@@ -93,7 +101,7 @@ export default class Text extends RX.Component<TextProps> {
     if (this.props.type === TextType.body) {
       style = {
         ...style,
-        fontWeight: 100,
+        fontWeight: '100',
       }
     }
 
@@ -133,6 +141,9 @@ export default class Text extends RX.Component<TextProps> {
 
 const styles = {
   container: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayRegular,
+    // fontWeight: Styles.fonts.displayRegular,
+
+    // @ts-ignore web
+    transition: 'all 0.3s'
   }),
 }

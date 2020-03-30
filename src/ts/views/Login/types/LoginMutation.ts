@@ -62,6 +62,10 @@ export interface LoginMutation_loginUser_user_membership {
   type: string;
 }
 
+export interface LoginMutation_loginUser_user_achievements {
+  finishedSetup: boolean | null;
+}
+
 export interface LoginMutation_loginUser_user_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -89,6 +93,7 @@ export interface LoginMutation_loginUser_user {
   nutritionProfile: LoginMutation_loginUser_user_nutritionProfile;
   membership: LoginMutation_loginUser_user_membership | null;
   role: Role;
+  achievements: LoginMutation_loginUser_user_achievements;
   meals: LoginMutation_loginUser_user_meals[];
 }
 

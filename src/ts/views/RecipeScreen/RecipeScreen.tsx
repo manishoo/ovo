@@ -11,13 +11,15 @@ import { ThemeContext } from '@App/ThemeContext'
 import ErrorComponent from '@Common/ErrorComponent/ErrorComponent'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
-import IngredientCard from '@Common/IngredientCard/IngredientCard'
 import IngredientRow from '@Common/IngredientRow/IngredientRow'
+import Input from '@Common/Input/Input'
 import Link from '@Common/Link/Link'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import Modal from '@Common/Modal/Modal'
+import MealItemComponent from '@Common/MealItemComponent/MealItemComponent'
+import { ModalContext } from '@Common/Modal/Modal'
 import Navbar from '@Common/Navbar/Navbar'
+import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import { RecipeStatus, Role } from '@Models/global-types'
@@ -26,29 +28,27 @@ import { Me } from '@Models/graphql/me/types/Me'
 import NutritionFragment from '@Models/nutrition'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import { getParam, navigate } from '@Utils'
-import trimTypeName from '@Utils/trim-type-name'
 import { ProfileRecipesQuery, ProfileRecipesQueryVariables } from '@Views/ProfileScreen/types/ProfileRecipesQuery'
 import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
 import IngredientServingControl from '@Views/RecipeScreen/components/IngredientServingControl'
 import PublishRecipe from '@Views/RecipeScreen/components/PublishRecipe'
+import RecipeModal, { MODAL_ID, MODAL_MAX_WIDTH } from '@Views/RecipeScreen/RecipeModal'
 import { Recipe, Recipe_author } from '@Views/RecipeScreen/types/Recipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from '@Views/RecipeScreen/types/RecipeDeleteMutation'
 import { RecipeQuery, RecipeQueryVariables } from '@Views/RecipeScreen/types/RecipeQuery'
 import { DateTime } from 'luxon'
+import { useCallback } from 'react'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import ImageSource from 'src/ts/modules/images/index.web'
 import Instructions from './components/Instructions'
 
 
-const MODAL_ID = 'recipe-modal'
-const MODAL_MAX_WIDTH = 800
-
-interface RecipeCommonProps {
+export interface RecipeCommonProps {
   style?: any,
   slug?: string,
-  modalId?: string,
 }
 
 interface RecipeProps extends RecipeCommonProps {
@@ -66,113 +66,14 @@ interface RecipeState {
 }
 
 export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
+  private _linkInputRef: any
+
   static showModal = (props: RecipeCommonProps) => (
     RX.Modal.show(
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <Modal
-            key={MODAL_ID}
-            modalId={MODAL_ID}
-            maxWidth={MODAL_MAX_WIDTH}
-            // fullWidth
-            fullHeight
-            theme={theme}
-          >
-            <RecipeContainer
-              {...props}
-              modalId={MODAL_ID}
-            />
-          </Modal>
-        )}
-      </ThemeContext.Consumer>,
+      <RecipeModal />,
       MODAL_ID,
     )
   )
-
-  public render() {
-    const { recipe, loading, modalId } = this.props
-
-    if (loading) {
-      return (
-        <RX.View
-          ignorePointerEvents
-          style={Styles.values.absolutelyExtended}
-        >
-          <LoadingIndicator />
-        </RX.View>
-      )
-    }
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <Page
-            lazyRender
-            maxWidth={modalId ? MODAL_MAX_WIDTH : undefined}
-            withFooter={!this.props.modalId}
-          >
-            <Navbar
-              modalId={modalId}
-            >
-              {this._renderControlBar()}
-            </Navbar>
-
-            {
-              recipe.image &&
-              <RX.View
-                style={[
-                  styles.coverContainer,
-                  {
-                    height: this._getWindowWidthConsideringDrawer() / 2,
-                    borderRadius: this.state.isSmallOrTiny ? 0 : 20,
-                  }
-                ]}
-              >
-                <RX.Image
-                  source={recipe.image.url}
-                  resizeMode={'cover'}
-                  style={styles.image}
-                />
-              </RX.View>
-            }
-
-            <RX.View style={styles.innerContainer}>
-              <RX.View
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Text style={styles.title} translations={recipe.title} />
-                {
-                  (
-                    (recipe.status === RecipeStatus.public) ||
-                    (recipe.status === RecipeStatus.review)
-                  ) &&
-                  <Image
-                    source={recipe.status === RecipeStatus.public ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
-                    style={styles.verifiedBadge}
-                    resizeMode={'cover'}
-                  />
-                }
-              </RX.View>
-
-              {this._renderAuthorAndDescriptionSection(theme)}
-
-              {this._renderRecipeTimingAndComplexity(theme)}
-
-              {this._renderIngredientsSection(theme)}
-
-              {this._renderInstructionsSection(theme)}
-
-              {this._renderNutritionInfo(theme)}
-
-            </RX.View>
-          </Page>
-        )}
-      </ThemeContext.Consumer>
-    )
-  }
 
   protected _buildState(props: RecipeProps, initialBuild: boolean): Partial<RecipeState> | undefined {
     return {
@@ -183,92 +84,290 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
     }
   }
 
-  private _renderRecipeTimingAndComplexity = (theme: Theme) => {
-    const recipe = this.props.recipe
+  public render() {
+    const { recipe } = this.props
 
     return (
-      <RX.View style={[styles.instructions.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
-        {
-          recipe.difficulty && [
-            <Text translate style={styles.label}>Complexity</Text>,
-            <Text type={Text.types.body} style={{ marginBottom: Styles.values.spacing * 2 }}>{recipe.difficulty}</Text>
-          ]
-        }
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <ModalContext.Consumer>
+            {({ modalId }) => (
+              <Page
+                lazyRender
+                maxWidth={modalId ? MODAL_MAX_WIDTH : undefined}
+                style={{
+                  borderRadius: 10,
+                }}
+              >
+                <Navbar>
+                  {this._renderControlBar()}
+                </Navbar>
 
-        {(Object.keys(recipe.timing).length > 0) && <Text translate style={styles.label}>Timing</Text>}
-        {
-          recipe.timing.prepTime !== null &&
-          <Text
-            type={Text.types.body}
-            style={{ marginBottom: 5 }}
-          >{translate('prepTime')}: {recipe.timing.prepTime}</Text>
-        }
-        {
-          recipe.timing.cookTime !== null &&
-          <Text
-            type={Text.types.body}
-            style={{ marginBottom: 5 }}
-          >{translate('cookTime')}: {recipe.timing.cookTime}</Text>
-        }
-        {
-          recipe.timing.totalTime !== null &&
-          <Text
-            type={Text.types.body}
-            style={{ marginBottom: 5 }}
-          >{translate('totalTime')}: {recipe.timing.totalTime}</Text>
-        }
-      </RX.View>
+                {
+                  recipe.image &&
+                  <RX.View
+                    style={[
+                      styles.coverContainer,
+                      {
+                        height: this._getWindowWidthConsideringDrawer() * 2 / 3,
+                        borderRadius: this.state.isSmallOrTiny ? 0 : 20,
+                      }
+                    ]}
+                  >
+                    <RX.Image
+                      source={recipe.image.url}
+                      resizeMode={'cover'}
+                      style={styles.image}
+                    />
+                  </RX.View>
+                }
+
+                <RX.View style={styles.innerContainer}>
+                  <RX.View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <Text style={styles.title} translations={recipe.title} onPress={() => {
+                    }} />
+                    {
+                      (
+                        (recipe.status === RecipeStatus.public) ||
+                        (recipe.status === RecipeStatus.review)
+                      ) &&
+                      <Image
+                        source={recipe.status === RecipeStatus.public ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
+                        style={styles.verifiedBadge}
+                        resizeMode={'cover'}
+                      />
+                    }
+                  </RX.View>
+
+                  {this._renderAuthorAndDescriptionSection(theme)}
+                  {this._renderRecipeTimingAndComplexity(theme)}
+                  {this._renderIngredientsSection(theme)}
+                  {this._renderInstructionsSection(theme)}
+                  {/*{this._renderNutritionInfo(theme)}*/}
+                  {this._renderLink()}
+                </RX.View>
+              </Page>
+            )}
+          </ModalContext.Consumer>
+        )}
+      </ThemeContext.Consumer>
     )
   }
 
-  private _renderNutritionInfo = (theme: Theme) => {
-    const recipe = this.props.recipe
+  private _renderLink = () => {
+    const link = `${AppConfig.getFrontendBaseUrl()}/recipe/${this.props.recipe.slug}`
 
-    if (!recipe.nutrition) return null
+    const onPress = (e: RX.Types.SyntheticEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-    if (Object.values(trimTypeName(recipe.nutrition)).filter(Boolean).length === 0) return null
-
-    const carbs = (recipe.nutrition.totalCarbs || recipe.nutrition.totalAvailableCarbs)
+      if (this._linkInputRef) {
+        setImmediate(() => this._linkInputRef.selectAll())
+        RX.Clipboard.setText(link)
+        ToastStore.toast({
+          type: ToastTypes.Success,
+          message: translate('Copied to Clipboard!')
+        })
+      }
+    }
 
     return (
-      <RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
-        <RX.View>
-          <Text
-            translate
-            type={Text.types.title}
-            style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}
-          >Nutrition (per serving)</Text>
-
-          {
-            recipe.nutrition.calories &&
-            <Text
-              type={Text.types.body}
-              style={{ marginBottom: 5 }}
-            >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {translate(recipe.nutrition.calories.unit)}</Text>
-          }
-          {
-            recipe.nutrition.proteins && <Text
-              type={Text.types.body}
-              style={{ marginBottom: 5 }}
-            >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {translate(recipe.nutrition.proteins.unit)}</Text>
-          }
-          {
-            carbs &&
-            <Text
-              type={Text.types.body}
-              style={{ marginBottom: 5 }}
-            >{translate('carbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>}
-          {
-            recipe.nutrition.fats &&
-            <Text
-              type={Text.types.body}
-              style={{ marginBottom: 5 }}
-            >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {translate(recipe.nutrition.fats.unit)}</Text>
-          }
+      <RX.View>
+        <RX.View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}
+          onPress={onPress}
+        >
+          <FilledButton
+            label={translate('Copy link')}
+            pressed
+            style={{
+              [Styles.values.borderTopEndRadius]: 0,
+              [Styles.values.borderBottomEndRadius]: 0,
+              marginTop: 0,
+              borderWidth: 0,
+            }}
+          />
+          <Input
+            inputRef={(ref: any) => this._linkInputRef = ref}
+            value={link}
+            style={{
+              flex: 1,
+              marginBottom: 0,
+            }}
+            textInputStyle={{
+              [Styles.values.borderTopStartRadius]: 0,
+              [Styles.values.borderBottomStartRadius]: 0,
+              padding: 10,
+            }}
+          />
         </RX.View>
       </RX.View>
     )
   }
+
+  private _renderRecipeTimingAndComplexity = (theme: Theme) => {
+    const recipe = this.props.recipe
+    const VictoryPieLazy = require('reactxp-chart').VictoryPie
+    const VictoryLabel = require('reactxp-chart').VictoryLabel
+
+    const _getLabel = ({ datum }: any) => {
+      switch (datum._x) {
+        case 0:
+          return translate('prepTime')
+        case 1:
+          return translate('cookTime')
+        case 2:
+          return translate('totalTime')
+      }
+    }
+
+    const timingChartData = []
+
+    if (recipe.timing.prepTime) timingChartData.push({ x: 'prepTime', y: recipe.timing.prepTime })
+    if (recipe.timing.cookTime) timingChartData.push({ x: 'cookTime', y: recipe.timing.cookTime })
+
+    const prepTimeColor = '#cddc39'
+    const cookTimeColor = '#ffb300'
+
+    return (
+      <RX.View style={[styles.instructions.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
+        {(Object.keys(recipe.timing).length > 0) && <Text translate style={styles.label}>Timing</Text>}
+
+        <RX.View
+          style={{
+            flexDirection: 'row',
+          }}
+        >
+          <RX.View
+            style={{
+              width: 65,
+              height: 65,
+              alignItems: 'center',
+              justifyContent: 'center',
+              [Styles.values.marginEnd]: Styles.values.spacing
+            }}
+          >
+            <VictoryPieLazy
+              innerRadius={() => 130}
+              labelRadius={() => 50}
+              padding={0}
+              labels={() => null}
+              style={{
+                data: {
+                  fill: ({ datum }: any) => {
+                    switch (datum.x) {
+                      case 'prepTime':
+                        return prepTimeColor
+                      case 'cookTime':
+                        return cookTimeColor
+                    }
+                  },
+                }
+              }}
+              data={timingChartData}
+            />
+
+            <Text
+              style={{
+                position: 'absolute',
+                fontWeight: 'bold',
+                fontSize: 24,
+              }}
+            >{recipe.timing.totalTime}</Text>
+          </RX.View>
+          <RX.View>
+            {
+              recipe.timing.prepTime !== null &&
+              <Text
+                type={Text.types.body}
+                style={{ marginBottom: 5, color: prepTimeColor, fontWeight: '500' }}
+              >{translate('prepTime')}: <Text
+                style={{ color: theme.colors.text }}>{recipe.timing.prepTime}</Text></Text>
+            }
+            {
+              recipe.timing.cookTime !== null &&
+              <Text
+                type={Text.types.body}
+                style={{ marginBottom: 5, color: cookTimeColor, fontWeight: '500' }}
+              >{translate('cookTime')}: <Text
+                style={{ color: theme.colors.text }}>{recipe.timing.cookTime}</Text></Text>
+            }
+            {
+              recipe.timing.totalTime !== null &&
+              <Text
+                type={Text.types.body}
+                style={{ marginBottom: 5, fontWeight: 'bold' }}
+              >{translate('totalTime')}: {recipe.timing.totalTime} {translate(translate.keys.min)}</Text>
+            }
+          </RX.View>
+        </RX.View>
+
+        {
+          recipe.difficulty && [
+            <Text translate style={[styles.label, { marginTop: Styles.values.spacing * 2 }]}>Complexity</Text>,
+            <Text type={Text.types.body}>{recipe.difficulty}</Text>
+          ]
+        }
+      </RX.View>
+    )
+  }
+
+  // private _renderNutritionInfo = (theme: Theme) => {
+  //   const recipe = this.props.recipe
+  //
+  //   if (!recipe.nutrition) return null
+  //
+  //   if (Object.values(trimTypeName(recipe.nutrition)).filter(Boolean).length === 0) return null
+  //
+  //   const carbs = (recipe.nutrition.totalCarbs || recipe.nutrition.totalAvailableCarbs)
+  //
+  //   return (
+  //     <RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
+  //       <RX.View>
+  //         <Text
+  //           translate
+  //           type={Text.types.title}
+  //           style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}
+  //         >Nutrition (per serving)</Text>
+  //
+  //         {
+  //           recipe.nutrition.calories &&
+  //           <Text
+  //             type={Text.types.body}
+  //             style={{ marginBottom: 5 }}
+  //           >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {translate(recipe.nutrition.calories.unit)}</Text>
+  //         }
+  //         {
+  //           recipe.nutrition.proteins && <Text
+  //             type={Text.types.body}
+  //             style={{ marginBottom: 5 }}
+  //           >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {translate(recipe.nutrition.proteins.unit)}</Text>
+  //         }
+  //         {
+  //           carbs &&
+  //           <Text
+  //             type={Text.types.body}
+  //             style={{ marginBottom: 5 }}
+  //           >{translate('carbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>}
+  //         {
+  //           recipe.nutrition.fats &&
+  //           <Text
+  //             type={Text.types.body}
+  //             style={{ marginBottom: 5 }}
+  //           >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {translate(recipe.nutrition.fats.unit)}</Text>
+  //         }
+  //       </RX.View>
+  //     </RX.View>
+  //   )
+  // }
 
   private _renderIngredientsSection = (theme: Theme) => {
     const recipe = this.props.recipe
@@ -284,6 +383,43 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
           />
         </RX.View>
 
+        <RX.View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}
+        >
+          <RX.View>
+            {
+              recipe.ingredients.map(ingredient => (
+                <MealItemComponent
+                  key={ingredient.id}
+                  mealItem={{
+                    ...ingredient,
+                    hasAlternatives: false,
+                    amount: Number(Number(((ingredient.amount || 0) / recipe.serving) * this.state.serving).toFixed(1)),
+                  }}
+                  style={{
+                    // marginBottom: Styles.values.spacing,
+                    backgroundColor: theme.colors.bg,
+                    [Styles.values.paddingStart]: 0,
+                  }}
+                />
+              ))
+            }
+          </RX.View>
+
+          {
+            recipe.nutrition &&
+            <NutritionInfo
+              title={translate('Nutrition per serving')}
+              nutrition={recipe.nutrition}
+              showMacros={false}
+            />
+          }
+        </RX.View>
+
+        {/*
         <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {
             recipe.ingredients.map(ingredient => (
@@ -303,6 +439,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
             ))
           }
         </RX.View>
+*/}
       </RX.View>
     )
   }
@@ -315,7 +452,13 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
     return (
       <RX.View style={[styles.instructions.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
         <Text translate style={styles.label}>Instructions</Text>
-        <Instructions instructions={recipe.instructions} />
+
+        {
+          recipe.origin && recipe.origin.url && recipe.origin.sourceUrl
+            ? <FilledButton label={translate('Read Instructions')}
+                            onPress={() => RX.Linking.openUrl(`${recipe.origin!.sourceUrl}/${recipe.origin!.url}`)} />
+            : <Instructions instructions={recipe.instructions} />
+        }
       </RX.View>
     )
   }
@@ -432,7 +575,8 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
   private _getWindowWidthConsideringDrawer = () => this._getMaximum1024(this.state.isSmallOrTiny ? this.state.windowWidth : this.state.windowWidth - Styles.values.drawerWidth)
 }
 
-export default function RecipeContainer(props: RecipeCommonProps) {
+const useRecipeData = ({ slug }: { slug: string }) => {
+  const me = useMe()
   const { data, loading, error } = useQuery<RecipeQuery, RecipeQueryVariables>(gql`
     query RecipeQuery($slug: String!) {
       recipe(slug: $slug) {
@@ -445,11 +589,75 @@ export default function RecipeContainer(props: RecipeCommonProps) {
     fetchPolicy: 'cache-and-network',
     returnPartialData: true,
     variables: {
-      slug: props.slug || getParam(props, 'slug'),
+      slug,
     }
   })
 
-  if (!data) return <LoadingIndicator />
+  const [deleteRecipe] = useMutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>(gql`
+    mutation RecipeDeleteMutation($recipeId: ObjectId!) {
+      deleteRecipe(recipeId: $recipeId)
+    }
+  `)
+
+  const onDeleteRecipe = useCallback(({ recipeId, userId }) => deleteRecipe({
+    variables: {
+      recipeId,
+    },
+    update: (cache) => {
+      const profileRecipesQuery = cache.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
+        query: PROFILE_RECIPES_QUERY,
+        variables: {
+          userId,
+          size: 20,
+        }
+      })
+      if (!profileRecipesQuery) return
+
+      cache.writeQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
+        query: PROFILE_RECIPES_QUERY,
+        data: {
+          recipes: {
+            ...profileRecipesQuery.recipes,
+            recipes: profileRecipesQuery.recipes.recipes.filter(i => i.id !== recipeId)
+          }
+        },
+        variables: {
+          userId,
+          size: 20,
+        }
+      })
+    },
+  }), [])
+
+  return {
+    me,
+    data,
+    loading,
+    error,
+    onDeleteRecipe,
+  }
+}
+
+export default function RecipeContainer(props: RecipeCommonProps) {
+  const {
+    data,
+    error,
+    me,
+    onDeleteRecipe,
+    loading,
+  } = useRecipeData({ slug: props.slug || getParam(props, 'slug') })
+
+  if (loading) {
+    return (
+      <RX.View
+        ignorePointerEvents
+        style={Styles.values.absolutelyExtended}
+      >
+        <LoadingIndicator />
+      </RX.View>
+    )
+  }
+  if (!data) return null
   if (error) {
     return (
       <ErrorComponent
@@ -458,47 +666,13 @@ export default function RecipeContainer(props: RecipeCommonProps) {
     )
   }
 
-  const [deleteRecipe] = useMutation<RecipeDeleteMutation, RecipeDeleteMutationVariables>(gql`
-    mutation RecipeDeleteMutation($recipeId: ObjectId!) {
-      deleteRecipe(recipeId: $recipeId)
-    }
-  `)
-
   return (
     <RecipeScreen
       {...props}
       recipe={data.recipe}
       loading={loading}
-      me={useMe()}
-      onDelete={({ recipeId, userId }) => deleteRecipe({
-        variables: {
-          recipeId,
-        },
-        update: (cache) => {
-          const profileRecipesQuery = cache.readQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
-            query: PROFILE_RECIPES_QUERY,
-            variables: {
-              userId,
-              size: 20,
-            }
-          })
-          if (!profileRecipesQuery) return
-
-          cache.writeQuery<ProfileRecipesQuery, ProfileRecipesQueryVariables>({
-            query: PROFILE_RECIPES_QUERY,
-            data: {
-              recipes: {
-                ...profileRecipesQuery.recipes,
-                recipes: profileRecipesQuery.recipes.recipes.filter(i => i.id !== recipeId)
-              }
-            },
-            variables: {
-              userId,
-              size: 20,
-            }
-          })
-        },
-      })}
+      me={me}
+      onDelete={onDeleteRecipe}
     />
   )
 }
@@ -529,6 +703,10 @@ export const fragments = {
         cookTime
         totalTime
       }
+      origin {
+        url
+        sourceUrl
+      }
       ingredients { ...BasicIngredient }
       instructions {
         step
@@ -537,11 +715,12 @@ export const fragments = {
         #        notes { text locale }
       }
       nutrition {
-        calories {...NutrientUnit}
-        proteins {...NutrientUnit}
-        totalCarbs {...NutrientUnit}
-        totalAvailableCarbs {...NutrientUnit}
-        fats {...NutrientUnit}
+        ...Nutrition
+        #        calories {...NutrientUnit}
+        #        proteins {...NutrientUnit}
+        #        totalCarbs {...NutrientUnit}
+        #        totalAvailableCarbs {...NutrientUnit}
+        #        fats {...NutrientUnit}
       }
       difficulty
       description { text locale }
@@ -552,11 +731,11 @@ export const fragments = {
       tags
     }
 
-    fragment NutrientUnit on NutrientUnit {
-      amount
-      id
-      unit
-    }
+    #    fragment NutrientUnit on NutrientUnit {
+    #      amount
+    #      id
+    #      unit
+    #    }
 
     ${IngredientRow.fragments.ingredient}
     ${NutritionFragment}
@@ -573,14 +752,14 @@ const styles = {
   }),
   innerContainer: RX.Styles.createViewStyle({
     // padding: Styles.values.spacing,
-    paddingVertical: Styles.values.spacing,
+    paddingVertical: Styles.values.spacingLarge,
   }),
   coverContainer: RX.Styles.createViewStyle({}),
   image: RX.Styles.createImageStyle({
     flex: 1,
   }),
   title: RX.Styles.createTextStyle({
-    fontSize: Styles.fontSizes.size32,
+    fontSize: 36,
     fontWeight: '500',
     marginBottom: 10,
   }),
@@ -597,12 +776,12 @@ const styles = {
   authorAndDescriptionSection: {
     container: RX.Styles.createViewStyle({
       alignItems: 'flex-start',
-      borderTopWidth: 1,
-      borderStyle: 'dashed',
+      // borderTopWidth: 1,
+      // borderStyle: 'dashed',
       // padding: Styles.values.spacing * 2,
       marginTop: Styles.values.spacing,
-      paddingTop: Styles.values.spacing * 2,
-      paddingBottom: Styles.values.spacing * 3,
+      // paddingTop: Styles.values.spacing * 2,
+      paddingBottom: Styles.values.spacing * 2,
     }),
     avatar: RX.Styles.createImageStyle({
       width: 80,

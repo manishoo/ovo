@@ -41,7 +41,7 @@ const CalendarNavButton = ({ style, onPress, direction, chevronStyle }: Calendar
         >
           <LinearGradient
             direction={direction}
-            colors={['transparent', 'rgba(0, 0, 0, 0.8)']}
+            colors={['transparent', 'rgba(0, 0, 0, 0.3)']}
           />
           <RX.Image
             source={ImageSource.BackDark}

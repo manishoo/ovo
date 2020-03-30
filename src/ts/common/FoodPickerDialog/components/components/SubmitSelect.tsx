@@ -4,9 +4,11 @@
  */
 
 import Styles from '@App/Styles'
+import { useTheme } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Select, { Option } from '@Common/Select/Select'
+import pSBC from '@Utils/pSBC'
 import { useState } from 'react'
 import RX from 'reactxp'
 
@@ -18,6 +20,7 @@ export interface SubmitSelectProps {
 }
 
 const SubmitSelect = ({ options, defaultValue, onSubmit }: SubmitSelectProps) => {
+  const theme = useTheme()
   const [selectedValue, setSelectedValue] = useState(defaultValue)
 
   return (
@@ -31,16 +34,18 @@ const SubmitSelect = ({ options, defaultValue, onSubmit }: SubmitSelectProps) =>
           onSubmit(selectedValue)
         }}
         style={styles.button}
+        pressed
         containerStyle={styles.containerStyle}
-        suffix={
-          <Select
-            value={selectedValue}
-            options={options}
-            onChange={selectedValue => setSelectedValue(selectedValue)}
-            style={styles.select}
-            textStyle={{ color: '#fff' }}
-          />
-        }
+      />
+      <Select
+        value={selectedValue}
+        options={options}
+        onChange={selectedValue => setSelectedValue(selectedValue)}
+        style={[styles.select, {
+          backgroundColor: theme.colors.primary,
+          borderColor: pSBC(-0.5, theme.colors.primary)
+        }]}
+        textStyle={{ color: '#fff', fontWeight: 'bold' }}
       />
     </RX.View>
   )
@@ -53,14 +58,26 @@ const styles = {
     flexDirection: 'row',
     flex: 1,
   }),
-  button: RX.Styles.createViewStyle({}),
+  button: RX.Styles.createViewStyle({
+    [Styles.values.borderTopEndRadius]: 0,
+    [Styles.values.borderBottomEndRadius]: 0,
+  }),
   containerStyle: RX.Styles.createButtonStyle({
     flex: 3,
   }),
   select: RX.Styles.createViewStyle({
+    flex: 1,
     marginBottom: 0,
-    [Styles.values.marginStart]: Styles.values.spacing / 2,
-    backgroundColor: '#1bce88'
+
+    borderRadius: 10,
+
+    [Styles.values.marginStart]: 2,
+
+    marginTop: 2,
+    borderBottomWidth: 1,
+
+    [Styles.values.borderTopStartRadius]: 0,
+    [Styles.values.borderBottomStartRadius]: 0,
   })
 }
 

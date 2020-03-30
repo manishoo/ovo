@@ -12,14 +12,18 @@ import {
   FoodPickerQuery_recipes_recipes
 } from '@Common/FoodPickerDialog/types/FoodPickerQuery'
 import MealItemComponent from '@Common/MealItemComponent/MealItemComponent'
+import CalendarService from '@Services/CalendarService'
 import getDefaultMealItem from '@Utils/get-default-meal-item'
 import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
 import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
-import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo, useState } from 'react'
+import debounce from 'lodash/debounce'
+import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import RX from 'reactxp'
 
 
 const levenSort = require('leven-sort')
+
+const DROPDOWN_HEIGHT = 360
 
 const _styles = {
   dropDownContainer: RX.Styles.createViewStyle({
@@ -27,7 +31,9 @@ const _styles = {
     borderRadius: 8,
     overflow: 'visible',
     marginTop: 13,
-    maxHeight: 360,
+    maxHeight: DROPDOWN_HEIGHT,
+
+    ...Styles.values.defaultShadow,
 
     // @ts-ignore
     transition: 'all 0.3s'
@@ -51,32 +57,36 @@ const _styles = {
   })
 }
 
+const whicheverIsLarger = (a: number, b: number) => a > b ? a : b
+
 const AppSearchComponent = ({ onSubmit, inputRef }: any, ref: any) => {
-  const defaultState = { nameSearchQuery: '' }
-  const [variables, setVariables] = useState<SearchResultQueryVariables>(defaultState)
-  const { data, loading } = useFoodsSearch(variables.nameSearchQuery)
+  const [nameSearchQuery, setNameSearchQuery] = useState('')
   const [dropDownVisible, setDropDownVisible] = useState(false)
-  // const [underlayVisible, setUnderlayVisible] = useState(false)
+  const { theme } = useContext(ThemeContext)
+
+  const { data, loading, fetchMore } = useFoodsSearch(nameSearchQuery)
 
   const foods = (data && data.foods && data.foods.foods) || []
   const recipes = (data && data.recipes && data.recipes.recipes) || []
+  const page = data && data.foods && data.recipes ? whicheverIsLarger(data.foods.pagination.page, data.recipes.pagination.page) : 1
 
-  let foodsAndRecipes: (FoodPickerQuery_recipes_recipes | FoodPickerQuery_foods_foods)[] = levenSort([
-    ...foods.map(i => ({
-      id: i.id,
-      name: i.name[0].text,
-    })),
-    ...recipes.map(i => ({
-      id: i.id,
-      name: i.title[0].text,
-    })),
-  ], variables.nameSearchQuery, 'name')
-  const mealItems = foodsAndRecipes.map(i => [
-    ...foods,
-    ...recipes,
-  ].find(p => p.id === i.id)!).map(getDefaultMealItem)
+  const sort = useCallback((foods1: FoodPickerQuery_foods_foods[], recipes1: FoodPickerQuery_recipes_recipes[]) =>
+    levenSort([
+      ...foods1.map(i => ({
+        id: i.id,
+        name: i.name[0].text,
+      })),
+      ...recipes1.map(i => ({
+        id: i.id,
+        name: i.title[0].text,
+      })),
+    ], nameSearchQuery, 'name')
+      .map((i: any) => [
+        ...foods1,
+        ...recipes1,
+      ].find(p => p.id === i.id)!), [])
 
-  const { theme } = useContext(ThemeContext)
+  const mealItems = [...foods, ...recipes].map(getDefaultMealItem)
 
   const dropDownContainerStyle = useMemo(() => RX.Styles.createViewStyle({
     backgroundColor: theme.colors.cardBg,
@@ -96,13 +106,18 @@ const AppSearchComponent = ({ onSubmit, inputRef }: any, ref: any) => {
   const _onDragStart = useCallback((mealItem: FoodPreviewMealItem) => (e: RX.Types.DragEvent) => {
     e.dataTransfer.dropEffect = 'copy'
     e.dataTransfer.effectAllowed = 'copy'
+
     e.dataTransfer.setData('mealItem', JSON.stringify(mealItem))
+
+    CalendarService.setDraggingMealItem(mealItem)
 
     setImmediate(() => setDropDownVisible(false))
   }, [dropDownVisible])
 
   const _onDragEnd = useCallback(() => {
     setDropDownVisible(true)
+
+    CalendarService.setDraggingMealItem()
   }, [dropDownVisible])
 
   const _onInputFocus = useCallback(() => {
@@ -113,17 +128,72 @@ const AppSearchComponent = ({ onSubmit, inputRef }: any, ref: any) => {
     setDropDownVisible
   }))
 
+  const scrollViewHeight = useRef<number>()
+
+  const _onReachEnd = useCallback(debounce((nameSearchQuery: string, page: number) => {
+    if (loading) return
+
+    fetchMore({
+      variables: {
+        nameSearchQuery,
+        recipesPage: page + 1,
+        foodsPage: page + 1,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+        if (!fetchMoreResult.foods.pagination.hasNext && !fetchMoreResult.recipes.pagination.hasNext) return prev
+
+        return Object.assign({}, prev, {
+          foods: {
+            pagination: {
+              ...prev.foods.pagination,
+              page: fetchMoreResult.foods.pagination.page,
+            },
+            foods: [
+              ...prev.foods.foods,
+              ...fetchMoreResult.foods.foods,
+            ],
+          },
+          recipes: {
+            pagination: {
+              ...prev.recipes.pagination,
+              page: fetchMoreResult.recipes.pagination.page,
+            },
+            recipes: [
+              ...prev.recipes.recipes,
+              ...fetchMoreResult.recipes.recipes,
+            ],
+          }
+        })
+      }
+    })
+  }, 100), [])
+
+  const _handleOnScroll = useCallback((scrollTop: number) => {
+    const offset = 50
+
+    if (scrollViewHeight.current) {
+      if ((DROPDOWN_HEIGHT + scrollTop) >= scrollViewHeight.current - offset) {
+        _onReachEnd(nameSearchQuery, page)
+      }
+    }
+  }, [scrollViewHeight.current, nameSearchQuery, page])
+
+  const _onExploreSearchChange = useCallback(debounce(({ nameSearchQuery }: SearchResultQueryVariables) => {
+    setNameSearchQuery(nameSearchQuery)
+  }, 500), [])
+
   return <>
     <ExploreSearch
       ref={inputRef}
       onFocus={_onInputFocus}
       variables={{
-        nameSearchQuery: variables.nameSearchQuery,
+        nameSearchQuery,
       }}
-      onChange={variables => setVariables(variables)}
+      onChange={_onExploreSearchChange}
       onSubmit={() => {
         onSubmit()
-        setVariables(defaultState)
+        setNameSearchQuery('')
       }}
       loading={loading}
     />
@@ -144,15 +214,18 @@ const AppSearchComponent = ({ onSubmit, inputRef }: any, ref: any) => {
         />
         <RX.ScrollView
           style={_styles.scrollView}
+          onContentSizeChange={(width, height) => scrollViewHeight.current = height}
+          onScroll={_handleOnScroll}
         >
           {
             mealItems.map(mealItem => (
               <MealItemComponent
-                onDragStart={_onDragStart(mealItem)}
-                onDragEnd={_onDragEnd}
                 key={mealItem.item!.id}
                 mealItem={mealItem}
+                onDragStart={_onDragStart(mealItem)}
+                onDragEnd={_onDragEnd}
                 style={_styles.mealItemComponent}
+                showAmounts={false}
               />
             ))
           }

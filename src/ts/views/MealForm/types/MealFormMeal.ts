@@ -556,7 +556,7 @@ export interface MealFormMeal_items_item_Food {
   weights: MealFormMeal_items_item_Food_weights[];
   thumbnail: MealFormMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealFormMeal_items_item_Food_nutrition;
+  nutrition: MealFormMeal_items_item_Food_nutrition | null;
 }
 
 export interface MealFormMeal_items_item_Recipe_title {
@@ -579,6 +579,8 @@ export interface MealFormMeal_items_item_Recipe_author_avatar {
 export interface MealFormMeal_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealFormMeal_items_item_Recipe_author_avatar | null;
 }
 
@@ -1055,7 +1057,7 @@ export interface MealFormMeal_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealFormMeal_items_item_Recipe_thumbnail | null;
   author: MealFormMeal_items_item_Recipe_author;
-  nutrition: MealFormMeal_items_item_Recipe_nutrition;
+  nutrition: MealFormMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealFormMeal_items_item = MealFormMeal_items_item_Food | MealFormMeal_items_item_Recipe;
@@ -1602,7 +1604,7 @@ export interface MealFormMeal_items_alternativeMealItems_item_Food {
   weights: MealFormMeal_items_alternativeMealItems_item_Food_weights[];
   thumbnail: MealFormMeal_items_alternativeMealItems_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealFormMeal_items_alternativeMealItems_item_Food_nutrition;
+  nutrition: MealFormMeal_items_alternativeMealItems_item_Food_nutrition | null;
 }
 
 export interface MealFormMeal_items_alternativeMealItems_item_Recipe_title {
@@ -1625,6 +1627,8 @@ export interface MealFormMeal_items_alternativeMealItems_item_Recipe_author_avat
 export interface MealFormMeal_items_alternativeMealItems_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealFormMeal_items_alternativeMealItems_item_Recipe_author_avatar | null;
 }
 
@@ -2101,7 +2105,7 @@ export interface MealFormMeal_items_alternativeMealItems_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealFormMeal_items_alternativeMealItems_item_Recipe_thumbnail | null;
   author: MealFormMeal_items_alternativeMealItems_item_Recipe_author;
-  nutrition: MealFormMeal_items_alternativeMealItems_item_Recipe_nutrition;
+  nutrition: MealFormMeal_items_alternativeMealItems_item_Recipe_nutrition | null;
 }
 
 export type MealFormMeal_items_alternativeMealItems_item = MealFormMeal_items_alternativeMealItems_item_Food | MealFormMeal_items_alternativeMealItems_item_Recipe;

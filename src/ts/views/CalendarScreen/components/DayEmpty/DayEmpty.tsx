@@ -51,7 +51,7 @@ export default class DayEmpty extends RX.Component<DayEmptyProps> {
                   <LoadingIndicator />
                 </RX.View>
                 : <>
-                  <Text type={Text.types.subtitle} style={{ fontSize: 14 }}
+                  <Text type={Text.types.subtitle} style={{ fontSize: 14, textAlign: 'center' }}
                         translate={'This day doesn\'t have a meal plan yet'} />
                   <RX.View>
                     <FilledButton

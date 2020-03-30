@@ -29,6 +29,8 @@ export interface ProfileRecipesQuery_recipes_recipes_author_avatar {
 export interface ProfileRecipesQuery_recipes_recipes_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: ProfileRecipesQuery_recipes_recipes_author_avatar | null;
 }
 

@@ -567,7 +567,7 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Food {
   weights: GeneratorSampleMutation_suggestDayGuest_items_item_Food_weights[];
   thumbnail: GeneratorSampleMutation_suggestDayGuest_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: GeneratorSampleMutation_suggestDayGuest_items_item_Food_nutrition;
+  nutrition: GeneratorSampleMutation_suggestDayGuest_items_item_Food_nutrition | null;
 }
 
 export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_title {
@@ -590,6 +590,8 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_autho
 export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_author_avatar | null;
 }
 
@@ -1066,7 +1068,7 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_thumbnail | null;
   author: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_author;
-  nutrition: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_nutrition;
+  nutrition: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_nutrition | null;
 }
 
 export type GeneratorSampleMutation_suggestDayGuest_items_item = GeneratorSampleMutation_suggestDayGuest_items_item_Food | GeneratorSampleMutation_suggestDayGuest_items_item_Recipe;

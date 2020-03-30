@@ -33,6 +33,11 @@ export interface Recipe_timing {
   totalTime: number | null;
 }
 
+export interface Recipe_origin {
+  url: string | null;
+  sourceUrl: string | null;
+}
+
 export interface Recipe_ingredients_name {
   text: string;
   locale: LanguageCode;
@@ -132,6 +137,8 @@ export interface Recipe_ingredients_item_Recipe_author_avatar {
 export interface Recipe_ingredients_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: Recipe_ingredients_item_Recipe_author_avatar | null;
 }
 
@@ -179,40 +186,467 @@ export interface Recipe_instructions {
 
 export interface Recipe_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface Recipe_nutrition_proteins {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface Recipe_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface Recipe_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface Recipe_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface Recipe_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface Recipe_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface Recipe_nutrition {
   calories: Recipe_nutrition_calories | null;
-  proteins: Recipe_nutrition_proteins | null;
   totalCarbs: Recipe_nutrition_totalCarbs | null;
-  totalAvailableCarbs: Recipe_nutrition_totalAvailableCarbs | null;
   fats: Recipe_nutrition_fats | null;
+  proteins: Recipe_nutrition_proteins | null;
+  fiber: Recipe_nutrition_fiber | null;
+  totalAvailableCarbs: Recipe_nutrition_totalAvailableCarbs | null;
+  sodium: Recipe_nutrition_sodium | null;
+  cholesterol: Recipe_nutrition_cholesterol | null;
+  potassium: Recipe_nutrition_potassium | null;
+  sugar: Recipe_nutrition_sugar | null;
+  sucrose: Recipe_nutrition_sucrose | null;
+  glucose: Recipe_nutrition_glucose | null;
+  fructose: Recipe_nutrition_fructose | null;
+  lactose: Recipe_nutrition_lactose | null;
+  maltose: Recipe_nutrition_maltose | null;
+  galactose: Recipe_nutrition_galactose | null;
+  starch: Recipe_nutrition_starch | null;
+  saturatedFats: Recipe_nutrition_saturatedFats | null;
+  monounsaturatedFats: Recipe_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: Recipe_nutrition_polyunsaturatedFats | null;
+  transFats: Recipe_nutrition_transFats | null;
+  omega3: Recipe_nutrition_omega3 | null;
+  omega6: Recipe_nutrition_omega6 | null;
+  ALA: Recipe_nutrition_ALA | null;
+  DHA: Recipe_nutrition_DHA | null;
+  EPA: Recipe_nutrition_EPA | null;
+  DPA: Recipe_nutrition_DPA | null;
+  caffeine: Recipe_nutrition_caffeine | null;
+  theobromine: Recipe_nutrition_theobromine | null;
+  calcium: Recipe_nutrition_calcium | null;
+  choline: Recipe_nutrition_choline | null;
+  copper: Recipe_nutrition_copper | null;
+  fluoride: Recipe_nutrition_fluoride | null;
+  folate: Recipe_nutrition_folate | null;
+  iron: Recipe_nutrition_iron | null;
+  lycopene: Recipe_nutrition_lycopene | null;
+  magnesium: Recipe_nutrition_magnesium | null;
+  manganese: Recipe_nutrition_manganese | null;
+  niacin: Recipe_nutrition_niacin | null;
+  phosphorus: Recipe_nutrition_phosphorus | null;
+  retinol: Recipe_nutrition_retinol | null;
+  riboflavin: Recipe_nutrition_riboflavin | null;
+  selenium: Recipe_nutrition_selenium | null;
+  thiamine: Recipe_nutrition_thiamine | null;
+  alphaCarotene: Recipe_nutrition_alphaCarotene | null;
+  betaCarotene: Recipe_nutrition_betaCarotene | null;
+  pantothenicAcid: Recipe_nutrition_pantothenicAcid | null;
+  vitA: Recipe_nutrition_vitA | null;
+  vitAIU: Recipe_nutrition_vitAIU | null;
+  vitB6: Recipe_nutrition_vitB6 | null;
+  vitB12: Recipe_nutrition_vitB12 | null;
+  vitC: Recipe_nutrition_vitC | null;
+  vitD: Recipe_nutrition_vitD | null;
+  vitD2: Recipe_nutrition_vitD2 | null;
+  vitD3: Recipe_nutrition_vitD3 | null;
+  vitE: Recipe_nutrition_vitE | null;
+  vitK: Recipe_nutrition_vitK | null;
+  zinc: Recipe_nutrition_zinc | null;
+  tryptophan: Recipe_nutrition_tryptophan | null;
+  threonine: Recipe_nutrition_threonine | null;
+  isoleucine: Recipe_nutrition_isoleucine | null;
+  leucine: Recipe_nutrition_leucine | null;
+  lysine: Recipe_nutrition_lysine | null;
+  methionine: Recipe_nutrition_methionine | null;
+  cystine: Recipe_nutrition_cystine | null;
+  phenylalanine: Recipe_nutrition_phenylalanine | null;
+  tyrosine: Recipe_nutrition_tyrosine | null;
+  valine: Recipe_nutrition_valine | null;
+  arginine: Recipe_nutrition_arginine | null;
+  histidine: Recipe_nutrition_histidine | null;
+  alanine: Recipe_nutrition_alanine | null;
+  asparticAcid: Recipe_nutrition_asparticAcid | null;
+  glutamicAcid: Recipe_nutrition_glutamicAcid | null;
+  glycine: Recipe_nutrition_glycine | null;
+  proline: Recipe_nutrition_proline | null;
+  serine: Recipe_nutrition_serine | null;
+  hydroxyproline: Recipe_nutrition_hydroxyproline | null;
 }
 
 export interface Recipe_description {
@@ -234,9 +668,10 @@ export interface Recipe {
   likesCount: number;
   userLikedRecipe: boolean | null;
   timing: Recipe_timing;
+  origin: Recipe_origin | null;
   ingredients: Recipe_ingredients[];
   instructions: Recipe_instructions[];
-  nutrition: Recipe_nutrition;
+  nutrition: Recipe_nutrition | null;
   difficulty: RecipeDifficulty | null;
   description: Recipe_description[] | null;
   image: Recipe_image | null;

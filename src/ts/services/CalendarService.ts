@@ -4,6 +4,7 @@
  */
 
 import { ApolloCache } from '@apollo/client'
+import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import { calculateMealItemsNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { CalendarControlOperation } from '@Views/CalendarScreen/components/CalendarControl/operations/CalendarControlOperation'
@@ -506,6 +507,17 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     return finalShoppingList
   }
 
+  private _draggingMealItem?: FoodPreviewMealItem
+
+  public setDraggingMealItem(mealItem?: FoodPreviewMealItem) {
+    this._draggingMealItem = mealItem
+    this.trigger()
+  }
+
+  @autoSubscribe
+  public getDraggingMealItem() {
+    return this._draggingMealItem
+  }
 }
 
 export default new CalendarService()

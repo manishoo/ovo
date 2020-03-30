@@ -3,90 +3,139 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import Assistant from '@Common/Assistant/Assistant'
 import FilledButton from '@Common/FilledButton/FilledButton'
-import FlatButton from '@Common/FlatButton/FlatButton'
+import AppFooter from '@Common/Footer/Footer'
 import Image from '@Common/Image/Image'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
+import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import { navigate } from '@Utils'
 import GeneratorSample from '@Views/LandingScreen/components/GeneratorSample'
 import GoDownIndicator from '@Views/LandingScreen/components/GoDownIndicator'
+import LandingHeader from '@Views/LandingScreen/components/LandingHeader/LandingHeader'
+import { RouteChildrenProps } from 'react-router'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import Page from 'src/ts/common/Page'
 
 
-const HEADER_MAX_WIDTH = 950
+const { SectionsContainer, Section, Header, Footer, ScrollToTopOnMount } = require('react-fullpage')
+
 const HEADER_FULL_HEIGHT = 140
-const CONTENT_MAX_WIDTH = 975
+const CONTENT_MAX_WIDTH = Styles.values.mainContentMaxWidth
 
 // const HEADER_HEIGHT = 80
+const GENERATOR_SECTION = 6
 
-interface AssistantScreenProps extends RX.CommonProps {
+interface LandingScreenProps extends RX.CommonProps {
   style?: any,
 }
 
-interface AssistantScreenState {
+interface LandingScreenState {
   height: number,
   width: number,
-  scrollTop: number,
+  isSmallOrTinyScreenSize?: boolean,
+  isTinyWidth?: boolean,
+
+  activeSection: number,
+  scrollDisabled?: boolean,
 }
 
-export default class LandingScreen extends ComponentBase<AssistantScreenProps, AssistantScreenState> {
-  private _containerBackgroundColorAnimationValue = RX.Animated.createValue(0)
-  private _containerAnimationStyle = RX.Styles.createAnimatedViewStyle({
-    backgroundColor: RX.Animated.interpolate(this._containerBackgroundColorAnimationValue, [1400, 2800, 3800, 4800], ['red', 'blue', 'yellow', 'orange']),
-  })
+export default class LandingScreen extends ComponentBase<LandingScreenProps & RouteChildrenProps<null, { isInBackground: boolean }>, LandingScreenState> {
+  private _sectionsContainerRef: any
 
   public render() {
+    const options = {
+      sectionClassName: 'section',
+      anchors: ['sectionOne', 'sectionTwo', 'sectionThree', 'sectionFour', 'sectionFive', 'sectionSix', 'get-a-plan'],
+      scrollBar: false,
+      navigation: true,
+      verticalAlign: false,
+      // sectionPaddingTop: '102px',
+      // sectionPaddingBottom: '64px',
+      arrowNavigation: true,
+      delay: 300,
+      scrollCallback: (states: any) => this.setState({ activeSection: states.activeSection, scrollDisabled: false })
+    }
+    const isInBackground = this.props.location.state && this.props.location.state.isInBackground
+
+    const { text: textColor, bg: bgColor } = this._getColorForSection()
+
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          [
-            <Page
-              lazyRender
-                  scrollViewProps={{
-                onScroll: this._onScroll,
-              }}
-            >
-              {this._renderHeader(theme)}
-              <RX.View
+          <>
+            <ScrollToTopOnMount />
+
+            <Header>
+              <LandingHeader
+                onLinkPress={this.scrollTo}
+                backgroundColor={this.state.activeSection === GENERATOR_SECTION ? this._getColorForSection(GENERATOR_SECTION).bg : undefined}
+                textColor={textColor}
                 style={[
                   {
-                    height: this.state.height - 64 /*double padding*/ - 72 /*header*/,
-                    paddingBottom: Styles.values.spacing * 8,
-                    minHeight: 650
+                    width: this.state.width > CONTENT_MAX_WIDTH ? CONTENT_MAX_WIDTH : this.state.width,
                   },
-                  styles.initialPageContainer,
-                ]}>
-                <RX.View
-                  style={{
+                  this.state.activeSection === GENERATOR_SECTION && {
+                    backgroundColor: bgColor,
+                  },
+                ]}
+              />
+            </Header>
+            <SectionsContainer
+              {...options}
+              disabled={isInBackground || this.state.scrollDisabled}
+              activeSection={this.state.activeSection}
+              ref={(ref: any) => this._sectionsContainerRef = ref}
+              navigationStyle={{
+                right: 0,
+                [Styles.values.end]: 0,
+                color: textColor,
+              }}
+              navigationAnchorStyle={{
+                backgroundColor: textColor,
+              }}
+            >
+              <Section verticalAlign color={this._getColorForSection(0).bg}>
+                <RX.View style={[
+                  styles.alignCenter,
+                  {
+                    height: this.state.height/* - 102*/,
                     justifyContent: 'center',
-                  }}
-                >
+                    alignItems: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
+                    padding: Styles.values.spacing,
+                  }
+                ]}>
                   <Text
                     translate
-                    style={styles.title}
+                    style={[styles.title, {
+                      color: textColor,
+                      textAlign: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
+                      [Styles.values.marginEnd]: this.state.isTinyWidth ? Styles.values.spacing * 3 : undefined,
+                    }]}
                     selectable
+                    type={Text.types.title}
                   >landingTitle</Text>
                   <Text
                     translate
-                    style={[styles.subtitle, { color: theme.colors.landingSubtitle }]}
+                    style={[styles.subtitle, {
+                      color: textColor,
+                      // color: theme.colors.landingSubtitle,
+                      textAlign: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
+                      [Styles.values.marginEnd]: this.state.isTinyWidth ? Styles.values.spacing * 3 : undefined,
+                    }]}
                   >landingSubtitle</Text>
 
-                  <RX.View style={{ alignItems: 'stretch', width: 316 }}>
+                  <RX.View style={{ alignItems: 'stretch', width: 403 }}>
                     <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing }}>
                       <Image
                         source={ImageSource.GooglePlayButton}
-                        style={styles.storeButton}
+                        style={[styles.storeButton, { [Styles.values.marginEnd]: Styles.values.spacing, }]}
                         resizeMode={'contain'}
                       />
                       <Image
@@ -98,160 +147,189 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
                     <Text
                       translate={translate.keys.Or}
                       style={{
+                        color: textColor,
                         textAlign: 'center',
                         marginTop: Styles.values.spacing / 2,
                         marginBottom: Styles.values.spacing / 2,
                       }}
                     />
-                    <FilledButton label={translate.keys.GetStartedNow} onPress={() => null} />
+                    {/*<FilledButton label={translate.keys.GetStartedNow} onPress={this._openSetupModal} />*/}
+                    <RX.View>
+                      <FilledButton
+                        label={translate.keys.GetStartedNow}
+                        onPress={() => LocationStore.navigate(this.props, {
+                          pathname: Routes.setupProcess,
+                          state: { background: { ...this.props.location, state: { isInBackground: true } } }
+                        })}
+                      />
+                    </RX.View>
+                  </RX.View>
+
+                  <RX.View
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <GoDownIndicator />
                   </RX.View>
                 </RX.View>
-                <RX.View
+              </Section>
+              <Section color={this._getColorForSection(1).bg} verticalAlign>
+                {this._renderSection(theme, translate('landing_1_t'), translate('landing_1_s'))}
+              </Section>
+              <Section color={this._getColorForSection(2).bg} verticalAlign>
+                {this._renderSection(theme, translate('landing_2_t'), translate('landing_2_s'))}
+              </Section>
+              <Section color={this._getColorForSection(3).bg} verticalAlign>
+                {this._renderSection(theme, translate('landing_3_t'), translate('landing_3_s'))}
+              </Section>
+              <Section color={this._getColorForSection(4).bg} verticalAlign>
+                {this._renderSection(theme, translate('landing_4_t'), translate('landing_4_s'))}
+              </Section>
+              <Section color={this._getColorForSection(5).bg} verticalAlign>
+                {this._renderSection(theme, translate('landing_4_t'), translate('landing_4_s'))}
+              </Section>
+              <Section
+                // verticalAlign
+                onScroll={this._onLastSectionScroll}
+              >
+                {this._renderGeneratorSample()}
+
+                <AppFooter
                   style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    alignItems: 'center',
+                    width: this.state.width,
                   }}
-                >
-                  <GoDownIndicator />
-                </RX.View>
-              </RX.View>
+                />
+              </Section>
+            </SectionsContainer>
 
-              {this._renderSection(theme, translate('landing_1_t'), translate('landing_1_s'))}
-              {this._renderSection(theme, translate('landing_2_t'), translate('landing_2_s'))}
-              {this._renderSection(theme, translate('landing_3_t'), translate('landing_3_s'))}
-              {this._renderSection(theme, translate('landing_4_t'), translate('landing_4_s'))}
-              {this._renderGeneratorSample()}
+            {false && this._renderBottomCall2Action()}
 
-              {false && this._renderBottomCall2Action()}
-            </Page>,
-            this._renderPhone()
-          ]
+            {this._renderPhone()}
+          </>
         )}
       </ThemeContext.Consumer>
     )
   }
 
-  protected _buildState(props: AssistantScreenProps, initialBuild: boolean): Partial<AssistantScreenState> | undefined {
-    return {
-      scrollTop: initialBuild ? HEADER_FULL_HEIGHT : this.state.scrollTop,
+  protected _buildState(props: LandingScreenProps, initialBuild: boolean): Partial<LandingScreenState> | undefined {
+    const state: Partial<LandingScreenState> = {
       height: ResponsiveWidthStore.getHeight(),
       width: ResponsiveWidthStore.getWidth(),
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      isTinyWidth: ResponsiveWidthStore.isTinyWidth(),
+    }
+
+    if (initialBuild) {
+      state.activeSection = 0
+    }
+
+    return state
+  }
+
+  private _getColorForSection = (activeSection: number = this.state.activeSection) => {
+    switch (activeSection) {
+      case 0:
+        return {
+          text: '#4a4a4a',
+          bg: '#fafafa',//'#1E88E5', // #4a148c
+        }
+      case 1:
+        return {
+          text: '#fff',
+          bg: Styles.values.rainbow[4],//'#1a237e',
+        }
+      case 2:
+        return {
+          text: '#000',
+          bg: Styles.values.rainbow[2],//'#1565c0',
+        }
+      case 3:
+        return {
+          text: '#fff',
+          bg: Styles.values.rainbow[3],//'#4caf50',
+        }
+      case 4:
+        return {
+          text: '#fff',
+          bg: Styles.values.rainbow[1],//'#fec401',
+        }
+      case 5:
+        return {
+          text: '#fff',
+          bg: Styles.values.rainbow[0],//'#ff9800',
+        }
+      case 6:
+        return {
+          text: '#fff',
+          bg: Styles.values.rainbow[6],//'#b71c1c',
+        }
+    }
+
+    throw new Error('section undefined')
+  }
+
+  private _onLastSectionScroll = (e: any) => {
+    if (e.target.scrollTop === 0 && this.state.scrollDisabled) {
+      setTimeout(() => this.setState({
+        scrollDisabled: false,
+      }), 100)
+    } else if (!this.state.scrollDisabled) {
+      this.setState({
+        scrollDisabled: true,
+      })
     }
   }
 
-  private _onScroll = (newScrollTop: number) => {
-    RX.Animated.timing(this._containerBackgroundColorAnimationValue, {
-      toValue: newScrollTop,
-    })
-      .start()
-    this.setState({
-      scrollTop: newScrollTop // padding from top,
-    })
-  }
-
-  private _renderHeader = (theme: Theme) => {
-    const navTitleStyle = {
-      [Styles.values.marginEnd]: Styles.values.spacing,
-      color: theme.colors.text,
-    }
-
-    return (
-      <RX.View style={styles.headerContainer}>
-        <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Image
-            source={ImageSource.Logo}
-            style={{
-              width: 40,
-              height: 40,
-              [Styles.values.marginEnd]: 5,
-            }}
-            resizeMode={'contain'}
-          />
-          <RX.View
-            activeOpacity={0.7}
-          >
-            <Image
-              source={ImageSource.Brand}
-              style={styles.brand}
-              resizeMode={'contain'}
-            />
-          </RX.View>
-          <FlatButton
-            borderless
-            onPress={() => navigate(this.props, Routes.login)}
-            label={translate('Meal Planner')}
-            labelStyle={navTitleStyle}
-          />
-          <FlatButton
-            borderless
-            onPress={() => navigate(this.props, Routes.login)}
-            label={translate('Recipes')}
-            labelStyle={navTitleStyle}
-          />
-          <FlatButton
-            borderless
-            onPress={() => navigate(this.props, Routes.login)}
-            label={translate('Stories')}
-            labelStyle={navTitleStyle}
-          />
-          <FlatButton
-            borderless
-            onPress={() => navigate(this.props, Routes.login)}
-            label={translate('About')}
-            labelStyle={navTitleStyle}
-          />
-        </RX.View>
-        <RX.View>
-          <FilledButton
-            onPress={() => navigate(this.props, Routes.register)}
-            label={translate('Sign Up')}
-          />
-          <FlatButton
-            borderless
-            onPress={() => navigate(this.props, Routes.login)}
-            label={translate(translate.keys.AlreadyAMember)}
-          />
-        </RX.View>
-      </RX.View>
-    )
-  }
-
-  private _getPhoneFixedStyle = () => {
-    const end = 3920
-
-    /**
-     * On web, set position to fixed, on mobile, use the state
-     * */
-    const condition = AppConfig.getPlatformType() === 'web' && (this.state.scrollTop <= end)
-    return {
-      top: condition ? HEADER_FULL_HEIGHT : (end - this.state.scrollTop + HEADER_FULL_HEIGHT),
-      right: this.state.width > CONTENT_MAX_WIDTH ? ((this.state.width - CONTENT_MAX_WIDTH) / 2) : 16,
-      position: condition ? 'fixed' : 'absolute',
-    }
+  private scrollTo = (section: number) => {
+    this.setState({ activeSection: section }, this._sectionsContainerRef && this._sectionsContainerRef.handleResize)
   }
 
   private _renderPhone = () => {
-    const phoneHeight = 650
-    const phoneWidth = 361
+    if (this.state.activeSection >= GENERATOR_SECTION) return
+
+    let phoneHeight = this.state.height * 2 / 3
+    let phoneWidth = phoneHeight / 1.8
+
+    let phoneStyle = [
+      styles.phoneContainer,
+      {
+        top: (this.state.height / 2) - (phoneHeight / 2),
+        right: this.state.width > CONTENT_MAX_WIDTH ? (((this.state.width - CONTENT_MAX_WIDTH) / 2) + 32) : 32,
+
+        // @ts-ignore web
+        position: 'fixed',
+      }
+    ]
+
+    if (this.state.isSmallOrTinyScreenSize) {
+      if (this.state.activeSection == 0) return
+
+      phoneHeight = this.state.height / 2
+      phoneWidth = this.state.width
+      phoneStyle = [
+        styles.phoneContainer,
+        {
+          top: this.state.height / 6,
+        }
+      ]
+    }
 
     return (
       <RX.View
         ignorePointerEvents
         // @ts-ignore
-        style={[
-          styles.phoneContainer,
-          this._getPhoneFixedStyle()
-        ]}
+        style={phoneStyle}
       >
         <Image
           source={ImageSource.Phone}
           style={{
             width: phoneWidth,
             height: phoneHeight,
-            right: 2,
             // @ts-ignore
             pointerEvents: 'none'
           }}
@@ -261,8 +339,8 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
           ignorePointerEvents
           style={[
             {
-              top: 52,
-              width: phoneWidth - 91,
+              top: 55,
+              // width: phoneWidth - 91,
               height: phoneHeight - 80,
               borderBottomLeftRadius: phoneHeight / 23,
               borderBottomRightRadius: phoneHeight / 23,
@@ -271,7 +349,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
           ]}
         >
           {
-            // this._renderPhoneInnerImage(phoneWidth - 91, phoneHeight - 80)
+            this._renderPhoneInnerImage(phoneWidth - 91, phoneHeight - 80)
           }
         </RX.View>
       </RX.View>
@@ -279,11 +357,11 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
   }
 
   private _renderPhoneInnerImage = (width: number, height: number) => {
-    const { scrollTop: primaryScrollTop } = this.state
+    const { activeSection } = this.state
 
     const found = [
       {
-        scrollTop: 1400,
+        section: 0,
         component: <RX.Image
           source={ImageSource.SC1}
           style={{
@@ -294,7 +372,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
         />,
       },
       {
-        scrollTop: 2800,
+        section: 1,
         component: <RX.Image
           source={ImageSource.SC2}
           style={{
@@ -305,7 +383,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
         />,
       },
       {
-        scrollTop: 3800,
+        section: 2,
         component: <RX.Image
           source={ImageSource.SC3}
           style={{
@@ -316,7 +394,7 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
         />,
       },
       {
-        scrollTop: 4800,
+        section: 3,
         component: <RX.Image
           source={ImageSource.SC4}
           style={{
@@ -326,32 +404,41 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
           resizeMode={'contain'}
         />,
       },
-    ].find(({ scrollTop }) => scrollTop >= primaryScrollTop)
+    ].find(({ section }) => section === activeSection)
     if (!found) return null
 
     return found.component
   }
 
   private _renderSection = (theme: Theme, title: string, subtitle: string) => {
-    const { height, width } = this.state
-
-    let sectionWidth = width
-    if (width >= 950) {
-      sectionWidth = 950
-    }
+    const { text: textColor } = this._getColorForSection()
 
     return (
-      <RX.View style={[styles.sectionContainer, { minHeight: height, width: sectionWidth }]}>
-        <RX.View style={{ flexDirection: 'row', padding: Styles.values.spacing }}>
+      <>
+        {
+          this.state.isSmallOrTinyScreenSize &&
+          <RX.View
+            ignorePointerEvents
+            style={{
+              width: this.state.width,
+              height: this.state.height / 2,
+              alignSelf: 'center',
+
+              marginBottom: Styles.values.spacing,
+            }}
+          />
+        }
+        <RX.View style={styles.sectionContainer}>
           <RX.View>
             <RX.View style={[styles.circle, { borderColor: theme.colors.sectionCircle }]} />
           </RX.View>
-          <RX.View style={{ maxWidth: 500 }}>
-            <Text style={[styles.sectionTitle, { color: theme.colors.landingSectionTitle }]}>{title}</Text>
-            <Text style={[styles.sectionSubtitle, { color: theme.colors.landingSectionSubtitle }]}>{subtitle}</Text>
+          <RX.View style={{ maxWidth: 350, flex: 1 }}>
+            <Text type={Text.types.title}
+                  style={[styles.sectionTitle, { color: textColor }]}>{title}</Text>
+            <Text style={[styles.sectionSubtitle, { color: textColor }]}>{subtitle}</Text>
           </RX.View>
         </RX.View>
-      </RX.View>
+      </>
     )
   }
 
@@ -359,7 +446,6 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
     return [
       <Assistant
         size={150}
-        glowMode={'dark'}
       />,
       <FilledButton
         label={translate('LandingStartFree')}
@@ -372,59 +458,38 @@ export default class LandingScreen extends ComponentBase<AssistantScreenProps, A
   }
 
   private _renderGeneratorSample = () => {
-    const { height, width } = this.state
+    const { height, activeSection, width } = this.state
 
-    let sectionWidth = width
-    if (width >= 950) {
-      sectionWidth = 950
-    }
-
+    const { text: textColor, bg: bgColor } = this._getColorForSection(GENERATOR_SECTION)
     return (
-      <RX.View style={{ alignItems: 'center' }}>
-        <Text style={styles.sectionTitle} translate={'Wanna give it a shot?'} />
-        <Text style={[styles.sectionSubtitle, { marginBottom: Styles.values.spacing }]}
-              translate={'Get a meal plan, right now'} />
-        <GeneratorSample
-          style={[
-            styles.sectionContainer,
-          ]}
-        />
+      <RX.View style={{
+        flex: 1,
+        alignItems: 'center',
+        paddingTop: (height / 3)/* - 102*/,
+        paddingBottom: height / 3,
+        justifyContent: 'center',
+        backgroundColor: bgColor
+      }}>
+        <RX.View
+          style={{
+            minHeight: height * 1 / 3,
+          }}
+        >
+          <Text
+            type={Text.types.title}
+            style={[styles.sectionTitle, { color: textColor }]}
+            translate={'Wanna give it a shot?'} />
+          <Text
+            style={[styles.sectionSubtitle, { marginBottom: Styles.values.spacing, color: textColor }]}
+            translate={'Get a meal plan, right here, right now!'} />
+          <GeneratorSample screenWidth={width} />
+        </RX.View>
       </RX.View>
     )
   }
 }
 
 const styles = {
-  container: RX.Styles.createScrollViewStyle({
-    flex: 1,
-    // alignItems: 'center'
-  }),
-  headerContainer: RX.Styles.createViewStyle({
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    // position: 'absolute',
-    // top: 0,
-    // left: 0,
-    // right: 0,
-    minHeight: 50,
-    maxWidth: HEADER_MAX_WIDTH,
-    // padding: Styles.values.spacing,
-    marginTop: Styles.values.spacing,
-    // @ts-ignore
-    // margin: 'auto' //FIXME only web
-  }),
-  // brandContainer: RX.Styles.createViewStyle({
-  //   position: 'absolute',
-  //   left: Styles.values.spacing,
-  //   top: Styles.values.spacing,
-  // }),
-  brand: RX.Styles.createImageStyle({
-    width: 109,
-    height: 30,
-    [Styles.values.marginEnd]: Styles.values.spacing,
-  }),
   loginButtonContainer: RX.Styles.createViewStyle({
     padding: Styles.values.spacing,
     backgroundColor: '#fff',
@@ -441,15 +506,16 @@ const styles = {
     right: 0,
   }),
   title: RX.Styles.createTextStyle({
-    fontSize: 60,
-    font: Styles.fonts.displayBold,
+    fontSize: 70,
+    fontWeight: 'bold',
     lineHeight: 60,
-    maxWidth: 400,
+    maxWidth: 403,
     marginBottom: Styles.values.spacing / 2,
   }),
   subtitle: RX.Styles.createTextStyle({
-    fontSize: Styles.fontSizes.size16,
-    marginBottom: Styles.values.spacing,
+    fontSize: 20,
+    marginVertical: Styles.values.spacing,
+    maxWidth: 403
   }),
   introductionContainer: RX.Styles.createViewStyle({
     position: 'absolute',
@@ -458,7 +524,7 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     // alignItems: 'center',
-    marginTop: Styles.values.spacing
+    // marginTop: Styles.values.spacing
   }),
   sectionImage: RX.Styles.createImageStyle({
     width: 333,
@@ -472,7 +538,18 @@ const styles = {
   }),
   sectionContainer: RX.Styles.createViewStyle({
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: Styles.values.mainContentMaxWidth,
+    paddingHorizontal: Styles.values.spacing,
+
+    // @ts-ignore
+    margin: 'auto',
+  }),
+  alignCenter: RX.Styles.createViewStyle({
+    maxWidth: Styles.values.mainContentMaxWidth,
+
+    // @ts-ignore
+    margin: 'auto',
   }),
   circle: RX.Styles.createViewStyle({
     borderWidth: 6,
@@ -484,7 +561,7 @@ const styles = {
   }),
   sectionTitle: RX.Styles.createTextStyle({
     fontSize: Styles.fontSizes.size32,
-    font: Styles.fonts.displayBold,
+    fontWeight: 'bold', // displayBold
     marginBottom: 5,
   }),
   sectionSubtitle: RX.Styles.createTextStyle({
@@ -492,7 +569,7 @@ const styles = {
     fontWeight: '100',
   }),
   footerTitle: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayBold,
+    fontWeight: 'bold', // displayBold
   }),
   socialMediaIcon: RX.Styles.createImageStyle({
     width: 30,
@@ -504,8 +581,8 @@ const styles = {
     marginTop: Styles.values.spacing
   }),
   storeButton: RX.Styles.createViewStyle({
-    width: 150,
-    height: 45,
-    [Styles.values.marginEnd]: Styles.values.spacing,
+    flex: 1,
+    // width: 150,
+    height: 60,
   })
 }

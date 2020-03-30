@@ -14,7 +14,7 @@ export enum Routes {
 
   calendar = '/eat',
 
-  introduction = '/introduction',
+  setupProcess = '/setup',
 
   /**
    * Recipes
@@ -28,13 +28,13 @@ export enum Routes {
   /**
    * Foods
    * */
-  food = '/food',
+  food = 'food',
 
   /**
    * Meals
    * */
   meal = '/meal',
-  mealForm = '/create-meal',
+  mealForm = '/meal',
   mealSettings = '/meal-settings',
   mealPlanSettings = '/meal-plan-settings',
 

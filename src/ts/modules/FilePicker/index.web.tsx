@@ -4,7 +4,6 @@
  */
 
 import AppConfig from '@App/AppConfig'
-// @ts-ignore
 import imageCompression from 'browser-image-compression'
 import React from 'react'
 import RX from 'reactxp'
@@ -72,12 +71,14 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
       full: await imageCompression(image, this.props.fullImageOptions || {
         maxSizeMB: 0.5,
         maxWidthOrHeight: 1920,
-        useWebWorker: true
+        useWebWorker: true,
+        onProgress: () => null,
       }),
       thumb: this.props.withThumbnail && await imageCompression(image, this.props.thumbImageOptions || {
         maxSizeMB: 0.08,
         maxWidthOrHeight: 500,
-        useWebWorker: true
+        useWebWorker: true,
+        onProgress: () => null,
       }),
     }
   }

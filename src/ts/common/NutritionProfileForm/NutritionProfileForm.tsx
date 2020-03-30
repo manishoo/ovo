@@ -119,8 +119,6 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
           <Modal
             key={MODAL_ID}
             modalId={MODAL_ID}
-            fullWidth
-            fullHeight
             theme={theme}
           >
             <NutritionProfileFormContainer

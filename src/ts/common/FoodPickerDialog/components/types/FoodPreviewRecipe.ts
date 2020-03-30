@@ -29,6 +29,8 @@ export interface FoodPreviewRecipe_author_avatar {
 export interface FoodPreviewRecipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: FoodPreviewRecipe_author_avatar | null;
 }
 
@@ -505,5 +507,5 @@ export interface FoodPreviewRecipe {
   status: RecipeStatus;
   thumbnail: FoodPreviewRecipe_thumbnail | null;
   author: FoodPreviewRecipe_author;
-  nutrition: FoodPreviewRecipe_nutrition;
+  nutrition: FoodPreviewRecipe_nutrition | null;
 }

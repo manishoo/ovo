@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import Checkbox from '@Common/Checkbox/Checkbox'
@@ -23,7 +23,8 @@ const FORM_WIDTH = 270
 
 interface RegisterFormProps {
   style?: any,
-  onSubmit: (variables: RegisterMutationVariables) => Promise<ExecutionResult<RegisterMutation>>,
+  onSubmit: (variables: RegisterMutationVariables) => void,
+  maxWidth?: boolean,
 }
 
 export class RegisterForm extends RX.Component<RegisterFormProps> {
@@ -39,13 +40,13 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
   }
 
   public render() {
-    const { style } = this.props
+    const { style, maxWidth = false } = this.props
 
     return (
       <RX.View
         style={[styles.container, style]}
       >
-        <RX.View style={styles.inputContainer}>
+        <RX.View style={maxWidth ? undefined : styles.inputContainer}>
           <Input
             value={this.state.email}
             onChange={this._onChange('email')}
@@ -124,15 +125,6 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
         email: this.state.email,
       }
     })
-      .then(async ({ data }) => {
-        if (!data) return
-        /**
-         * Register Success
-         * */
-        return navigate(this.props, Routes.home, {
-          replace: true,
-        })
-      })
   }
 
   // @ts-ignore
@@ -180,7 +172,16 @@ export default function (props: {}) {
   return (
     <RegisterForm
       {...props}
-      onSubmit={(variables: RegisterMutationVariables) => registerUser({ variables })}
+      onSubmit={(variables: RegisterMutationVariables) => registerUser({ variables })
+        .then(async ({ data }) => {
+          if (!data) return
+          /**
+           * Register Success
+           * */
+          return navigate(props, Routes.calendar, {
+            replace: true,
+          })
+        })}
     />
   )
 }
@@ -188,14 +189,14 @@ export default function (props: {}) {
 const styles = {
   container: RX.Styles.createViewStyle({
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
     padding: Styles.values.spacing,
   }),
   inputContainer: RX.Styles.createViewStyle({
     width: FORM_WIDTH,
   }),
   submitButton: RX.Styles.createViewStyle({
-    marginTop: Styles.values.spacing,
+    flex: 1,
   }),
   logo: RX.Styles.createImageStyle({
     width: 150,

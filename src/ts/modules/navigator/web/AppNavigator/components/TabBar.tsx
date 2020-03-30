@@ -8,6 +8,7 @@ import { ThemeContext } from '@App/ThemeContext'
 import Image from '@Common/Image/Image'
 import Link from '@Common/Link/Link'
 import { Routes } from '@Models/common'
+import { Me } from '@Models/graphql/me/types/Me'
 import ImageSource from '@Modules/images'
 import RX from 'reactxp'
 
@@ -25,10 +26,11 @@ export enum TabBarItems {
 
 interface TabBarProps {
   activeItem: TabBarItems,
-  innerContainerStyle?: any
+  innerContainerStyle?: any,
+  me: Me | null,
 }
 
-export default function TabBar({ activeItem, innerContainerStyle }: TabBarProps) {
+export default function TabBar({ activeItem, innerContainerStyle, me }: TabBarProps) {
   return (
     <ThemeContext.Consumer>
       {({ theme }) => (
@@ -68,17 +70,41 @@ export default function TabBar({ activeItem, innerContainerStyle }: TabBarProps)
                 />
               </Link>
             </RX.View>
-            <RX.View
-              style={styles.iconWrapper}
-            >
-              <Link to={'/'}>
-                <Image
-                  source={activeItem === TabBarItems.profile ? ImageSource.RectangleActive : ImageSource.Rectangle}
-                  style={styles.icon}
-                  resizeMode={'contain'}
-                />
-              </Link>
-            </RX.View>
+            {
+              me &&
+              <RX.View
+                style={styles.iconWrapper}
+              >
+                <Link
+                  to={`/${me.username}`}
+                >
+                  <RX.View
+                    style={{
+                      borderWidth: 1,
+                      padding: 1,
+                      borderColor: activeItem === TabBarItems.profile ? '#4a4a4a' : 'transparent',
+                      borderRadius: 100,
+                      width: 27,
+                      height: 27,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Image
+                      source={me.avatar!.url}
+                      resizeMode={'contain'}
+                      style={[
+                        styles.icon,
+                        {
+                          [Styles.values.marginStart]: 0,
+                          borderRadius: 100,
+                        }
+                      ]}
+                    />
+                  </RX.View>
+                </Link>
+              </RX.View>
+            }
           </RX.View>
         </RX.View>
       )}
@@ -90,10 +116,11 @@ TabBar.height = TAB_BAR_HEIGHT
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    // position: 'absolute',
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+
     justifyContent: 'center',
     alignItems: 'center',
     borderTopWidth: 1,

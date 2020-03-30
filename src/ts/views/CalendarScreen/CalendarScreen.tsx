@@ -6,15 +6,23 @@
 import { ApolloClient, ApolloQueryResult, graphql, withApollo } from '@apollo/react-hoc'
 import client from '@App/client'
 import Styles from '@App/Styles'
+import Assistant from '@Common/Assistant/Assistant'
+import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import Page from '@Common/Page'
+import { Routes } from '@Models/common'
+import { MeContext } from '@Models/graphql/me/me'
+import CalendarService from '@Services/CalendarService'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { CalendarCacheQuery } from '@Views/CalendarScreen/operations/types/CalendarCacheQuery'
 import { haveSame } from '@Views/CalendarScreen/utils/is-same-day'
 import addDays from 'date-fns/addDays'
 import subDays from 'date-fns/subDays'
 import uniqBy from 'lodash/uniqBy'
-import { PureComponent, useCallback } from 'react'
+import { useCallback } from 'react'
 import RX from 'reactxp'
+import { ComponentBase } from 'resub'
 import CalendarCarousel from './components/CalendarCarousel/CalendarCarousel'
 import CalendarControl from './components/CalendarControl/CalendarControl'
 import CalendarFAB from './components/CalendarFAB/CalendarFAB'
@@ -25,16 +33,37 @@ import { CalendarQuery, CalendarQuery_calendar, CalendarQueryVariables } from '.
 import generateRenderingDays from './utils/generate-rendering-days'
 
 
+const CALENDAR_FOOTER_HEIGHT = 100
+
 const styles = {
   calendarControlStyle: RX.Styles.createViewStyle({
-    marginBottom: Styles.values.spacing,
+    // marginBottom: Styles.values.spacing,
   }),
   prevNavButton: RX.Styles.createViewStyle({
-    [Styles.values.start]: 0,
+    [Styles.values.start]: -4,
   }),
   nextNavButton: RX.Styles.createViewStyle({
-    [Styles.values.end]: 0,
+    [Styles.values.end]: -4,
   }),
+  pageInner: RX.Styles.createViewStyle({
+    padding: 0,
+    paddingBottom: CALENDAR_FOOTER_HEIGHT,
+  }),
+  flex: RX.Styles.createViewStyle({
+    flex: 1,
+  }),
+  footerContainer: RX.Styles.createViewStyle({
+    flexDirection: 'row',
+    alignSelf: 'center',
+    position: 'absolute',
+    right: 0,
+    left: 0,
+    bottom: 0, // TODO tabBar
+    height: CALENDAR_FOOTER_HEIGHT,
+
+    // @ts-ignore web
+    margin: 'auto',
+  })
 }
 
 interface CalendarProps extends RX.CommonProps {
@@ -51,6 +80,7 @@ interface CalendarState {
   isSmallOrTinyScreenSize: boolean,
   loadingDays: Date[],
   scrollTop: number,
+  draggingMealItem?: FoodPreviewMealItem
 }
 
 export const ANIMATION_DURATION = 200
@@ -65,21 +95,16 @@ const DEFAULT = {
   }
 }
 
-class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
+class CalendarScreen extends ComponentBase<CalendarProps, CalendarState> {
   private _carousel: CalendarCarousel | null = null
   private _control: null | any = null
   private _daysOnEachSide = DEFAULT.daysOnEachSide
-
-  // private _dayCursor: Date
 
   constructor(props: CalendarProps) {
     super(props)
 
     RX.StatusBar.setTranslucent(true)
 
-    // this._onScroll = debounce(this._onScroll, 1000)
-    // this._dayCursor =
-    // DEFAULT.getDayCursor()
     this.state = {
       dayCursor: DEFAULT.getDayCursor,
       renderingDates: DEFAULT.renderingDays,
@@ -91,8 +116,18 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
     }
   }
 
+  private _assistantRef: Assistant | null = null
+
   componentDidMount() {
     this._getMoreDays(this.state.renderingDates)
+
+    /**
+     * If the user haven't finished setup or the assistant has something
+     * to say
+     * */
+    if (this._assistantRef) {
+      this._assistantRef.say(translate(translate.keys.finishSetup))
+    }
   }
 
   public render() {
@@ -100,38 +135,14 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
     const { loadingDays } = this.state
     const currentDay = this._getDayByDate(this.state.dayCursor, days)
 
-    const _calendarNavButtonChevronStyle = RX.Styles.createViewStyle({
-      marginTop: this.state.height / 2,
-    }, false)
-
     return (
       <>
         <Page
           setScrollContext
           lazyRender
-          style={{
-            flex: 1,
-          }}
-          innermostViewStyle={{
-            padding: 0,
-          }}
-          // scrollViewProps={{
-          //   onScroll: this._onScroll
-          // }}
-          outerContainerChildren={<>
-            <CalendarNavButton
-              onPress={this._onPrevSlide}
-              direction={'toLeft'}
-              chevronStyle={_calendarNavButtonChevronStyle}
-              style={styles.prevNavButton}
-            />
-            <CalendarNavButton
-              onPress={this._onNextSlide}
-              direction={'toRight'}
-              chevronStyle={_calendarNavButtonChevronStyle}
-              style={styles.nextNavButton}
-            />
-          </>}
+          style={styles.flex}
+          innermostViewStyle={styles.pageInner}
+          outerContainerChildren={this._renderControls()}
         >
           <CalendarControl
             ref={(ref: any) => this._control = ref}
@@ -151,35 +162,86 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
             isTinyOrSmall={this.state.isSmallOrTinyScreenSize}
             loadingDays={loadingDays}
             renderingDates={this.state.renderingDates}
+            draggingMealItem={this.state.draggingMealItem}
           />
-
         </Page>
-        {
-          currentDay &&
-          <RX.View
-            ignorePointerEvents
-            // @ts-ignore web
-            style={{
-              width: this.state.width,
-              alignSelf: 'center',
-              position: 'absolute',
-              right: 0,
-              left: 0,
-              bottom: 0, // TODO tabBar
-              height: 100,
-              margin: 'auto',
-            }}
-          >
+
+        <RX.View
+          ignorePointerEvents
+          // @ts-ignore web
+          style={[
+            styles.footerContainer,
+            { width: this.state.width }
+          ]}
+        >
+          <MeContext.Consumer>
+            {({ me }) => (
+              me && !me.achievements.finishedSetup &&
+              <Link
+                to={{
+                  pathname: Routes.setupProcess,
+                  state: { background: { ...this.props.location, state: { isInBackground: true } } }
+                }}
+                style={{
+                  position: 'absolute',
+                  bottom: Styles.values.spacing,
+                  [Styles.values.start]: Styles.values.spacingLarge,
+                }}
+              >
+                <Assistant
+                  ref={ref => this._assistantRef = ref}
+                  size={70}
+                  playful
+                />
+              </Link>
+            )}
+          </MeContext.Consumer>
+
+
+          {
+            currentDay &&
             <CalendarFAB
               day={currentDay}
               style={{
-                bottom: Styles.values.spacing,
-                [Styles.values.end]: Styles.values.spacing,
                 position: 'absolute',
+                bottom: Styles.values.spacing,
+                [Styles.values.end]: Styles.values.spacingLarge,
               }}
             />
-          </RX.View>
-        }
+          }
+        </RX.View>
+      </>
+    )
+  }
+
+  protected _buildState(props: CalendarProps, initialBuild: boolean): Partial<CalendarState> | undefined {
+    return {
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
+      height: ResponsiveWidthStore.getHeight() - Styles.values.spacing * 2,
+      isSmallOrTinyScreenSize: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
+      draggingMealItem: CalendarService.getDraggingMealItem()
+    }
+  }
+
+  private _renderControls = () => {
+    const _calendarNavButtonChevronStyle = RX.Styles.createViewStyle({
+      marginTop: this.state.height / 2,
+    }, false)
+
+    return (
+      <>
+        <CalendarNavButton
+          onPress={this._onPrevSlide}
+          direction={'toLeft'}
+          chevronStyle={_calendarNavButtonChevronStyle}
+          style={styles.prevNavButton}
+        />
+        <CalendarNavButton
+          onPress={this._onNextSlide}
+          direction={'toRight'}
+          chevronStyle={_calendarNavButtonChevronStyle}
+          style={styles.nextNavButton}
+        />
       </>
     )
   }
@@ -203,19 +265,7 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
     this._control!.changeDayCursor(addDays(dayCursor, 1))
   }
 
-  private _getDayByDate = (date: Date, calendar: DayComponentDay[]) => {
-    // const { dayCursor } = this.state
-
-    /**
-     * If it was in two days away
-     * */
-    // if (Math.abs(date.diff(dayCursor, 'day').as('day')) > 1) return
-
-    /**
-     * If the date was far away, don't return the day
-     * */
-    return calendar.find(day => haveSame(day.date, date, 'day'))
-  }
+  private _getDayByDate = (date: Date, calendar: DayComponentDay[]) => calendar.find(day => haveSame(day.date, date, 'day'))
 
   private _changeDayCursor = (date: Date) => {
     const { renderingDates } = this.state
@@ -228,18 +278,6 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
     const newRenderingDates = generateRenderingDays(date, this._daysOnEachSide)
     const newDatesToGet = newRenderingDates.filter(p => !renderingDates.find(p2 => haveSame(p2, p, 'day')))
 
-    // // FIXME
-    // this.setState({
-    //   dayCursor: date,
-    // })
-    //
-    // setTimeout(() => {
-    //   if (newDatesToGet.length > 0) {
-    //     console.log('newDatesToGet', newDatesToGet)
-    //     this._getMoreDays(newDatesToGet)
-    //   }
-    // }, 1000)
-
     this.setState({
       dayCursor: date,
       loadingDays: filterDatesWithCache(client, newDatesToGet),
@@ -250,13 +288,6 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
         carousel.goTo(this._daysOnEachSide, false)
       }
 
-      // this.props.getMoreDays(newDatesToGet)
-      //   .then(() => {
-      //     this.setState({
-      //       loadingDays: [],
-      //     })
-      //   })
-      // setTimeout(() => {
       if (newDatesToGet.length > 0) {
         this.setState({
           renderingDates: destinationInScrollView ? this.state.renderingDates : newRenderingDates,
@@ -265,55 +296,15 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
           .then(() => {
             this.setState({
               loadingDays: [],
-              // dayCursor: date,
             })
           })
       } else {
         this.setState({
           loadingDays: [],
           renderingDates: destinationInScrollView ? this.state.renderingDates : newRenderingDates,
-          // dayCursor: date,
         })
       }
-      // }, 1000)
     })
-
-    /*
-        this.setState({
-          dayCursor: date,
-          loadingDays: filterDatesWithCache(client, newDatesToGet),
-          renderingDates: destinationInScrollView ? this.state.renderingDates : newRenderingDates,
-        }, () => {
-          if (destinationInScrollView) {
-            carousel.goTo(position)
-          } else {
-            carousel.goTo(this._daysOnEachSide, false)
-          }
-
-          // this.props.getMoreDays(newDatesToGet)
-          //   .then(() => {
-          //     this.setState({
-          //       loadingDays: [],
-          //     })
-          //   })
-          // setTimeout(() => {
-            if (newDatesToGet.length > 0) {
-              this.props.getMoreDays(newDatesToGet)
-                .then(() => {
-                  this.setState({
-                    loadingDays: [],
-                    // dayCursor: date,
-                  })
-                })
-            } else {
-              this.setState({
-                loadingDays: [],
-                // dayCursor: date,
-              })
-            }
-          // }, 1000)
-        })
-    */
 
     if (destinationInScrollView) {
       carousel.goTo(position)
@@ -337,77 +328,6 @@ class CalendarScreen extends PureComponent<CalendarProps, CalendarState> {
     })
   }
 }
-
-// export default function() {
-//   const [dates, setDates] = useState<Date[]>([])
-//   const { data, variables, loading, fetchMore } = useQuery<CalendarQuery, CalendarQueryVariables>(CalendarOperation, {
-//     fetchPolicy: 'cache-only',
-//     variables: {
-//       dates: dates.map(date => date.toJSDate()),
-//     }
-//   })
-// console.log('data', data)
-// console.log('variables', variables)
-// console.log('loading', loading)
-//   return (
-//     <CalendarScreen
-//       days={data ? data.calendar || [] : []}
-//       loadingDays={loading ? variables.dates.map(d => Date.fromISO(d)) : []}
-//       getMoreDays={dates => {
-//         // setDates(dates)
-//         data ? fetchMore({
-//           variables: {
-//             dates: dates.map(date => date.toJSDate()),
-//           },
-//           updateQuery: (_previousQueryResult, { fetchMoreResult }) => {
-//             // const previousQueryResult: CalendarQuery | null = client.readQuery({
-//             //   query: CalendarOperation,
-//             // })
-//             if (!fetchMoreResult) return _previousQueryResult
-//
-//             /**
-//              * If days were removed
-//              * */
-//             let newCalendar: CalendarQuery_calendar[] = []
-//             if (_previousQueryResult) {
-//               newCalendar = _previousQueryResult.calendar.map(p => {
-//                 if (dates.find(p1 => Date.fromISO(p.date).hasSame(p1, 'day'))) {
-//                   const foundNewDay = fetchMoreResult.calendar.find(p2 => Date.fromISO(p.date).hasSame(p2.date, 'day'))
-//
-//                   if (foundNewDay) {
-//                     return foundNewDay
-//                   }
-//                 }
-//
-//                 return p
-//               })
-//             }
-//
-//             const data = {
-//               ..._previousQueryResult,
-//               calendar: [
-//                 ...newCalendar,
-//                 /**
-//                  * If days were added
-//                  * */
-//                 ...fetchMoreResult.calendar.filter(p => !newCalendar.find(p1 => p1.id === p.id)),
-//                 /**
-//                  * Sort days based on date
-//                  * */
-//               ].sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
-//             }
-//
-//             // client.writeQuery({
-//             //   query: CalendarOperation,
-//             //   data,
-//             // })
-//             return data
-//           }
-//         }) : null
-//       }}
-//     />
-//   )
-// }
 
 export function updateCalendarCache(client: ApolloClient<any>, dates: Date[]) {
   const { calendarCache } = client.readQuery<CalendarCacheQuery>({

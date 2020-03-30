@@ -39,22 +39,18 @@ interface TrashCanProps {
   style?: any,
   size?: number,
   isHovering?: boolean,
+  color?: string,
 }
 
-const TrashCan: React.FC<TrashCanProps> = ({ style, size = 50, isHovering }) => {
+const TrashCan: React.FC<TrashCanProps> = ({ style, size = 50, isHovering, color }) => {
   const theme = useTheme()
 
-  // useEffect(() => {
-  //   if (isHovering) {
-  //
-  //   } else {
-  //
-  //   }
-  // }, [isHovering])
+  let primaryColor = color || theme.colors.red
 
   const _containerStyle = useMemo(() => RX.Styles.createViewStyle({
     padding: size / 10,
     height: size * 2.5,
+    top: -size / 4,
   }, false), [size])
 
   const _trashHandleStyle = useMemo(() => RX.Styles.createViewStyle({
@@ -64,7 +60,7 @@ const TrashCan: React.FC<TrashCanProps> = ({ style, size = 50, isHovering }) => 
     borderTopLeftRadius: size / 5,
     borderTopRightRadius: size / 5,
 
-    backgroundColor: theme.colors.red,
+    backgroundColor: primaryColor,
   }, false), [size])
 
   const _trashLidStyle = useMemo(() => RX.Styles.createViewStyle({
@@ -74,7 +70,7 @@ const TrashCan: React.FC<TrashCanProps> = ({ style, size = 50, isHovering }) => 
     borderTopLeftRadius: size / 5,
     borderTopRightRadius: size / 5,
 
-    backgroundColor: theme.colors.red,
+    backgroundColor: primaryColor,
   }, false), [size])
 
   const _trashCanStyle = useMemo(() => RX.Styles.createViewStyle({
@@ -85,7 +81,7 @@ const TrashCan: React.FC<TrashCanProps> = ({ style, size = 50, isHovering }) => 
     borderBottomRightRadius: size / 5,
 
     marginTop: size / 20,
-    backgroundColor: theme.colors.red,
+    backgroundColor: primaryColor,
   }, false), [size])
 
   const _trashBarStyle = useMemo(() => RX.Styles.createViewStyle({

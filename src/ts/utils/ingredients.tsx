@@ -6,7 +6,7 @@
 import { Option } from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import { BasicIngredient, BasicIngredient_item, BasicIngredient_item_Food } from '@Models/types/BasicIngredient'
-import { determineIfIsWeight } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/components/MealItemComponent/MealItemComponent'
+import { determineIfIsWeight } from '@Utils/transformers/recipe.transformer'
 import RX from 'reactxp'
 
 

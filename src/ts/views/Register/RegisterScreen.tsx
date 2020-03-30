@@ -3,6 +3,8 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import Styles from '@App/Styles'
+import Assistant from '@Common/Assistant/Assistant'
 import Image from '@Common/Image/Image'
 import ImageSource from '@Modules/images'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
@@ -29,12 +31,17 @@ export default class RegisterScreen extends ComponentBase<RegisterScreenProps, R
           <Image
             source={ImageSource.KitchenIllustration}
             style={styles.image}
+            resizeMode={'cover'}
           />
         }
-        <Image
-          source={ImageSource.Brand}
-          style={styles.brand}
-        />
+        <RX.View style={{ flexDirection: 'row' }}>
+          <Assistant size={70} />
+          <Image
+            source={ImageSource.Brand}
+            style={styles.brand}
+            resizeMode={'contain'}
+          />
+        </RX.View>
         <RegisterForm />
       </RX.View>
     )
@@ -61,7 +68,7 @@ const styles = {
     height: 500,
   }),
   brand: RX.Styles.createImageStyle({
-    width: 165,
-    height: 75,
+    width: 120,
+    [Styles.values.marginStart]: Styles.values.spacing
   })
 }

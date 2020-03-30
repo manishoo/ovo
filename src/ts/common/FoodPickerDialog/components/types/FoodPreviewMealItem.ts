@@ -551,7 +551,7 @@ export interface FoodPreviewMealItem_item_Food {
   weights: FoodPreviewMealItem_item_Food_weights[];
   thumbnail: FoodPreviewMealItem_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: FoodPreviewMealItem_item_Food_nutrition;
+  nutrition: FoodPreviewMealItem_item_Food_nutrition | null;
 }
 
 export interface FoodPreviewMealItem_item_Recipe_title {
@@ -574,6 +574,8 @@ export interface FoodPreviewMealItem_item_Recipe_author_avatar {
 export interface FoodPreviewMealItem_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: FoodPreviewMealItem_item_Recipe_author_avatar | null;
 }
 
@@ -1050,7 +1052,7 @@ export interface FoodPreviewMealItem_item_Recipe {
   status: RecipeStatus;
   thumbnail: FoodPreviewMealItem_item_Recipe_thumbnail | null;
   author: FoodPreviewMealItem_item_Recipe_author;
-  nutrition: FoodPreviewMealItem_item_Recipe_nutrition;
+  nutrition: FoodPreviewMealItem_item_Recipe_nutrition | null;
 }
 
 export type FoodPreviewMealItem_item = FoodPreviewMealItem_item_Food | FoodPreviewMealItem_item_Recipe;

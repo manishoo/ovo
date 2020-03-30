@@ -45,6 +45,9 @@ export const MeFragment = gql`
       type
     }
     role
+    achievements {
+      finishedSetup
+    }
     meals {
       ...MealSettingsMeal
     }

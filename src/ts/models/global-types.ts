@@ -81,6 +81,7 @@ export enum MessageSender {
  * Message Type
  */
 export enum MessageType {
+  ack = 'ack',
   email = "email",
   food = "food",
   form = "form",

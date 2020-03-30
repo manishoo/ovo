@@ -156,17 +156,12 @@ export default class CalendarCircle extends React.PureComponent<CalendarCirclePr
                 top: 16,
                 borderRadius: this.props.size,
                 backgroundColor: day && !isInFuture ? dayColor : '#eee',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <RX.Animated.View
-                style={[
-                  {
-                    position: 'absolute',
-                    bottom: 7,
-                    alignSelf: 'center',
-                  },
-                  this._blinkAnimatedStyle,
-                ]}
+                style={this._blinkAnimatedStyle}
               >
                 <Text
                   style={[
@@ -182,6 +177,7 @@ export default class CalendarCircle extends React.PureComponent<CalendarCirclePr
                   locale: AppConfig.locale
                 })}</Text>
                 <Text
+                  type={Text.types.title}
                   style={[
                     styles.dayDate,
                     {
@@ -338,6 +334,7 @@ const styles = {
   dayDate: RX.Styles.createTextStyle({
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 0,
   }),
   progressBar: RX.Styles.createViewStyle({
     transform: [{ rotate: '135deg' }]

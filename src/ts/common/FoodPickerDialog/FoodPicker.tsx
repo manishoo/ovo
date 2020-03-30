@@ -23,6 +23,7 @@ import {
 } from '@Common/FoodPickerDialog/types/FoodPickerQuery'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import Navbar from '@Common/Navbar/Navbar'
 import Text from '@Common/Text/Text'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { createId } from '@Utils/create-id'
@@ -35,9 +36,9 @@ import { ComponentBase } from 'resub'
 import FoodPreview, { FoodPreviewOnSubmit } from './components/FoodPreview'
 
 
-const WINDOW_MAX_WIDTH = 500
+const CONTAINER_MAX_WIDTH = 500
 const LIST_ITEM_HEIGHT = 50
-const INNER_CONTAINER_HEIGHT = 500
+const CONTAINER_MAX_HEIGHT = 500
 
 export enum FoodTypes {
   all = 'All',
@@ -71,8 +72,8 @@ interface FoodPickerProps extends FoodPickerCommonProps {
 }
 
 interface FoodPickerState {
-  width?: number,
-  height?: number,
+  width: number,
+  height: number,
   selectedItem?: FoodPreviewMealItem_item,
   mode: FoodTypes,
   searchQuery?: string,
@@ -87,13 +88,12 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
     super(props)
 
     this._onSearch = debounce(this._onSearch, 500)
-    this.state = {
-      mode: props.foodTypes[0],
-    }
   }
 
   public render() {
     const { style } = this.props
+
+    const isSmallSize = this.state.width < CONTAINER_MAX_WIDTH
 
     return (
       <ThemeContext.Consumer>
@@ -101,56 +101,65 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
           <RX.View
             style={[
               styles.container,
-              { backgroundColor: theme.colors.white },
               {
                 height: this.state.height,
-                maxHeight: INNER_CONTAINER_HEIGHT,
+                maxHeight: isSmallSize ? undefined : CONTAINER_MAX_HEIGHT,
+                width: this.state.width,
+                backgroundColor: theme.colors.white,
+                borderRadius: isSmallSize ? 0 : 10,
+                padding: isSmallSize ? Styles.values.spacing : Styles.values.spacing * 2,
               },
               style,
             ]}
           >
-            <RX.View style={[styles.innerContainer, { width: this.state.width }]}>
-              <RX.Animated.View
-                style={[
-                  styles.inputContainer,
-                  {
-                    height: this.inputContainerAnimatedHeight,
-                  }
-                ]}
-              >
+            {
+              isSmallSize &&
+              <Navbar
+                style={{
+                  paddingBottom: 0
+                }}
+              />
+            }
+
+            <RX.Animated.View
+              style={[
+                styles.inputContainer,
                 {
-                  !this.state.selectedItem &&
-                  <RX.TextInput
-                    ref={(ref: any) => this.textInput = ref}
-                    value={this.state.searchQuery}
-                    onChangeText={searchQuery => this.setState({ searchQuery }, () => this.state.searchQuery && this._onSearch(this.state.searchQuery))}
-                    style={styles.textInput}
-                    autoFocus
-                    placeholder={translate('mealItemExample')}
-                  />
+                  height: this.inputContainerAnimatedHeight,
                 }
-
-                {this.state.selectedItem && this._renderPreview(this.state.selectedItem)}
-              </RX.Animated.View>
-
-              <RX.View
-                style={{ flexDirection: 'row', marginBottom: Styles.values.spacing / 2 }}>
-                {
-                  this.props.foodTypes.map(foodType => (
-                    <FlatButton
-                      label={translate(foodType)}
-                      onPress={() => this.setState({ mode: foodType })}
-                      {...this._getModeButtonStyle(theme, foodType)}
-                    />
-                  ))
-                }
-              </RX.View>
-
+              ]}
+            >
               {
-                this._renderTabContent()
+                !this.state.selectedItem &&
+                <RX.TextInput
+                  ref={(ref: any) => this.textInput = ref}
+                  value={this.state.searchQuery}
+                  onChangeText={searchQuery => this.setState({ searchQuery }, () => this.state.searchQuery && this._onSearch(this.state.searchQuery))}
+                  style={styles.textInput}
+                  autoFocus
+                  placeholder={translate('mealItemExample')}
+                />
               }
 
+              {this.state.selectedItem && this._renderPreview(this.state.selectedItem)}
+            </RX.Animated.View>
+
+            <RX.View
+              style={styles.buttonsContainer}>
+              {
+                this.props.foodTypes.map(foodType => (
+                  <FlatButton
+                    label={translate(foodType)}
+                    onPress={() => this.setState({ mode: foodType })}
+                    {...this._getModeButtonStyle(theme, foodType)}
+                  />
+                ))
+              }
             </RX.View>
+
+            {
+              this._renderTabContent()
+            }
 
             {
               this.props.loading &&
@@ -168,10 +177,16 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
   }
 
   protected _buildState(props: FoodPickerProps & RX.CommonProps, initialBuild: boolean): Partial<FoodPickerState> | undefined {
-    return {
+    const state: Partial<FoodPickerState> = {
       width: ResponsiveWidthStore.getWidth(),
       height: ResponsiveWidthStore.getHeight(),
     }
+
+    if (initialBuild) {
+      state.mode = props.foodTypes[0]
+    }
+
+    return state
   }
 
   private readonly _onSearch = (text: string) => {
@@ -192,6 +207,8 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
     }
   }
 
+  private _getTabContentHeight = () => this.state.height - (77 + 64 + 72)
+
   private _renderTabContent = () => {
     const { mode } = this.state
 
@@ -200,12 +217,15 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
       template: '_mealItem',
     }
 
+    const contentHeight = this._getTabContentHeight()
+
     switch (mode) {
       case FoodTypes.all:
         return (
           <RX.ScrollView
             style={{
-              height: INNER_CONTAINER_HEIGHT - (77 + 64),
+              height: contentHeight,
+              maxHeight: this.state.width > 500 ? CONTAINER_MAX_HEIGHT : undefined,
               paddingBottom: Styles.values.spacing,
             }}
           >
@@ -260,7 +280,8 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
         return (
           <RX.View
             style={{
-              height: INNER_CONTAINER_HEIGHT - (77 + 64),
+              height: contentHeight,
+              maxHeight: this.state.width > 500 ? CONTAINER_MAX_HEIGHT : undefined,
             }}
           >
             <VirtualListView
@@ -291,7 +312,8 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
         return (
           <RX.View
             style={{
-              height: INNER_CONTAINER_HEIGHT - (77 + 64),
+              height: contentHeight,
+              maxHeight: this.state.width > 500 ? CONTAINER_MAX_HEIGHT : undefined,
             }}
           >
             <VirtualListView
@@ -373,7 +395,7 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
         inputRef={(ref: any) => this.previewInput = ref}
         onDismiss={this._cancelSelection}
         onSubmit={this._onFoodSubmit}
-        height={INNER_CONTAINER_HEIGHT}
+        height={CONTAINER_MAX_HEIGHT}
         selectProps={this.props.selectProps}
         showOptional={this.props.showOptional}
         submitButtonLabel={this.props.submitButtonLabel}
@@ -401,7 +423,7 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
   private _toggleInputContainer = (on: boolean) => {
     return new Promise((resolve) => {
       RX.Animated.timing(this.inputContainerAnimatedHeight, {
-        toValue: on ? INNER_CONTAINER_HEIGHT : 50,
+        toValue: on ? this.state.height : 50,
         duration: on ? 400 : 200,
         easing: RX.Animated.Easing.Default(),
       }).start(resolve)
@@ -418,7 +440,7 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
   }
 }
 
-export function useFoodsSearch(nameSearchQuery: string) {
+export function useFoodsSearch(nameSearchQuery: string, recipesPage?: number, foodsPage?: number) {
   return useQuery<FoodPickerQuery, FoodPickerQueryVariables>(gql`
     query FoodPickerQuery($nameSearchQuery: String, $foodsPage: Int, $skipFoods: Boolean!, $recipesPage: Int, $skipRecipes: Boolean!) {
       foods (nameSearchQuery: $nameSearchQuery, page: $foodsPage) @skip(if: $skipFoods) {
@@ -426,12 +448,14 @@ export function useFoodsSearch(nameSearchQuery: string) {
           ...FoodPreviewFood
         }
         pagination {
+          page
           hasNext
         }
       }
       recipes (nameSearchQuery: $nameSearchQuery, page: $recipesPage) @skip(if: $skipRecipes) {
         recipes { ...FoodPreviewRecipe }
         pagination {
+          page
           hasNext
         }
       }
@@ -440,9 +464,12 @@ export function useFoodsSearch(nameSearchQuery: string) {
     ${FoodPreview.fragments.food}
     ${FoodPreview.fragments.recipe}
   `, {
+    fetchPolicy: 'cache-and-network',
     skip: nameSearchQuery.length === 0,
     variables: {
       nameSearchQuery,
+      recipesPage: recipesPage,
+      foodsPage: foodsPage,
       skipRecipes: false,
       skipFoods: false,
     },
@@ -518,12 +545,7 @@ export default FoodPickerContainer
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    padding: Styles.values.spacing * 2,
-    alignItems: 'center',
-    borderRadius: 8,
-  }),
-  innerContainer: RX.Styles.createViewStyle({
-    maxWidth: WINDOW_MAX_WIDTH,
+    maxWidth: CONTAINER_MAX_WIDTH,
   }),
   inputContainer: RX.Styles.createViewStyle({
     alignSelf: 'stretch',
@@ -575,5 +597,9 @@ const styles = {
   moreButton: RX.Styles.createTextStyle({
     fontSize: 12,
     [Styles.values.marginStart]: Styles.values.spacing / 2,
+  }),
+  buttonsContainer: RX.Styles.createViewStyle({
+    flexDirection: 'row',
+    marginVertical: Styles.values.spacing / 2,
   })
 }

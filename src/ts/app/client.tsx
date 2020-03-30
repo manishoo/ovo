@@ -10,7 +10,6 @@ import resolvers from '@App/resolvers'
 import { MeOperation } from '@Models/graphql/me/me'
 import { MeQuery } from '@Models/graphql/me/types/MeQuery'
 import fetch from '@Modules/fetch'
-import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import { createUploadLink } from 'apollo-upload-client'
 import { inflate } from 'graphql-deduplicator'
 import AppConfig from './AppConfig'
@@ -84,18 +83,18 @@ const client = new ApolloClient({
       if (graphQLErrors) {
         graphQLErrors.map(error => {
           sendToLoggingService(error)
-          ToastStore.toast({
-            message: error.message,
-            type: ToastTypes.Error,
-          })
+          // ToastStore.toast({
+          //   message: error.message,
+          //   type: ToastTypes.Error,
+          // })
         })
       }
       if (networkError) {
         logoutUser()
-        ToastStore.toast({
-          message: networkError.message,
-          type: ToastTypes.Error,
-        })
+        // ToastStore.toast({
+        //   message: networkError.message,
+        //   type: ToastTypes.Error,
+        // })
       }
     }),
     requestLink,

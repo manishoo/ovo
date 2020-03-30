@@ -4,10 +4,6 @@
  */
 
 export interface FontBase {
-  monospace: string;
-
-  displayLight: string;
-  displayRegular: string;
-  displaySemibold: string;
-  displayBold: string;
+  text: string;
+  display: string;
 }

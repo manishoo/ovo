@@ -6,6 +6,7 @@
 import { gql } from '@apollo/client'
 import { graphql, MutationFunctionOptions, MutationResult } from '@apollo/react-hoc'
 import Styles from '@App/Styles'
+import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import MenuItem from '@Common/MenuItem/MenuItem'
 import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
@@ -16,6 +17,7 @@ import { getDayColor } from '@Utils'
 import areFieldsEqual from '@Utils/areFieldsEqual'
 import { calculateDayNutrition } from '@Utils/shared/calculate-meal-nutrition'
 import { MealComponentFragments } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/MealComponentOperation'
+import NutritionBar from '@Views/CalendarScreen/components/DayComponent/components/NutritionBar/NutritionBar'
 import {
   DayComponentClearDayMutation,
   DayComponentClearDayMutationVariables
@@ -28,7 +30,7 @@ import {
   DayComponentNewDayMutation,
   DayComponentNewDayMutationVariables
 } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentNewDayMutation'
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import RX from 'reactxp'
 import { compose } from 'redux'
 import DayEmpty from '../DayEmpty/DayEmpty'
@@ -51,6 +53,7 @@ interface DayComponentCommonProps {
   me?: Me,
   onTitlePress: (date: Date) => void,
   loading?: boolean,
+  draggingMealItem?: FoodPreviewMealItem,
 }
 
 export interface DayComponentProps extends DayComponentCommonProps {
@@ -81,16 +84,17 @@ export function DayComponent(props: DayComponentProps) {
     clearDayResult: { loading: clearDayLoading },
     clearDay,
     loading,
+    draggingMealItem,
   } = props
 
   const me = useMe()!
 
   const mealWidth = width > MEAL_WIDTH ? MEAL_WIDTH : width
-  const _mealStyle = useMemo(() => ({
-      width: mealWidth,
-      maxWidth: MEAL_WIDTH,
-    }
-  ), [width])
+  const _mealStyle = useMemo(() => RX.Styles.createViewStyle({
+    width: mealWidth,
+    maxWidth: MEAL_WIDTH,
+  }, false), [width])
+
   // const isToday = date.hasSame(Date.local(), 'day')
   const _isFreeUser = false // && (Math.round(date.diff(Date.local()).as('day')) > 0) && (me && !me!.membership)
 
@@ -128,27 +132,8 @@ export function DayComponent(props: DayComponentProps) {
   }), [props.date, me.meals.map(i => i.id).join(), me.nutritionProfile.id])
 
   const [spaceIndex, setSpaceIndex] = useState<string | undefined>()
-  const [draggingItem, setDraggingItem] = useState<string | undefined>()
 
-  const _setMealDraggingItem = useCallback((meal: DayComponentDay_meals) => (mealItemId?: string) => {
-    if (mealItemId) {
-      setDraggingItem(`${meal.id}:${mealItemId}`)
-    } else {
-      setDraggingItem(undefined)
-    }
-  }, [])
-
-  const _getMealDraggingItem = useCallback((meal: DayComponentDay_meals) => {
-    if (!draggingItem) return
-
-    const [mealId, mealItemId] = draggingItem.split(':')
-
-    if (mealId === meal.id) {
-      return mealItemId
-    }
-  }, [draggingItem])
-
-  const _setMealSpaceIndex = useCallback((meal: DayComponentDay_meals) => (mealItemIndex?: number) => {
+  const _setMealSpaceIndex = useCallback((meal: DayComponentDay_meals, mealItemIndex?: number) => {
     if (mealItemIndex !== undefined) {
       setSpaceIndex(`${meal.id}:${mealItemIndex}`)
     } else {
@@ -158,37 +143,40 @@ export function DayComponent(props: DayComponentProps) {
 
   const _getMealSpaceIndex = useCallback((meal: DayComponentDay_meals) => {
     if (!spaceIndex) return
+    if (!draggingMealItem) return
 
     const [id, index] = spaceIndex.split(':')
 
     if (id === meal.id) {
-      return Number(index)
+      return {
+        index: +index,
+        mealItem: draggingMealItem,
+      }
     }
-  }, [spaceIndex])
+  }, [spaceIndex, draggingMealItem])
 
   const showNutritionInfoVisible = day && day.meals.filter(m => m.items.length > 0).length > 0
 
-  const _mealComponentRefs: { [k: string]: any } = {}
+  const _mealComponentRefs = useRef<{ [k: string]: any }>({})
 
   const _onMealItemDelete = useCallback((mealId: string, mealItemId: string) => {
-    const mealComponentRef = _mealComponentRefs[mealId]
+    const mealComponentRef = _mealComponentRefs.current[mealId]
     if (!mealComponentRef) return
 
     setSpaceIndex(undefined)
-    setDraggingItem(undefined)
+    CalendarService.setDraggingMealItem()
 
     mealComponentRef.deleteMealItem(mealItemId)
-  }, [JSON.stringify(_mealComponentRefs)])
+  }, [_mealComponentRefs])
 
   useEffect(() => {
     setSpaceIndex(undefined)
-    setDraggingItem(undefined)
+    CalendarService.setDraggingMealItem()
   }, [])
 
   const _onDayTitlePress = useCallback(() => onTitlePress(date), [date])
 
   const containerStyle = useMemo(() => RX.Styles.createViewStyle({
-    flex: 1,
     alignItems: 'center',
     minHeight,
     width,
@@ -201,7 +189,6 @@ export function DayComponent(props: DayComponentProps) {
     alignItems: isTinyOrSmall ? 'center' : 'flex-start',
     justifyContent: isTinyOrSmall ? 'flex-start' : 'center',
     alignSelf: 'stretch',
-    marginTop: Styles.values.spacing,
   }, false), [isTinyOrSmall])
 
   const _daySideView = useMemo(() => RX.Styles.createViewStyle({
@@ -210,8 +197,12 @@ export function DayComponent(props: DayComponentProps) {
     alignSelf: 'stretch',
   }, false), [isTinyOrSmall])
 
+  const dayNutrition = day ? calculateDayNutrition(day) : null
+  const mealItemsCount = day ? day.meals.reduce(((accumulatedValue, meal) => accumulatedValue + meal.items.length), 0) : 0
+
   return (
     <RX.View
+      key={String(date)}
       style={[
         style,
         containerStyle,
@@ -241,37 +232,46 @@ export function DayComponent(props: DayComponentProps) {
               </DayTitle>
 
               {
-                day.meals.map(meal => (
+                isTinyOrSmall && dayNutrition && Object.keys(dayNutrition).length > 0 &&
+                <NutritionBar
+                  nutrition={dayNutrition}
+                />
+              }
+
+              {
+                day.meals.map((meal, index) => (
                   <MealComponent
-                    ref={ref => _mealComponentRefs[meal.id] = ref}
+                    ref={ref => _mealComponentRefs.current[meal.id] = ref}
                     key={meal.userMeal!.id}
                     meal={meal}
                     dayId={day.id}
                     style={_mealStyle}
-
+                    showIAteThis={index === 0}
                     spaceIndex={_getMealSpaceIndex(meal)}
                     setSpaceIndex={_setMealSpaceIndex}
-                    draggingItem={_getMealDraggingItem(meal)}
-                    setDraggingItem={_setMealDraggingItem}
                   />
                 ))
               }
             </RX.View>
 
-            <RX.View
-              style={_daySideView}
-            >
-              {
-                draggingItem
-                  ? <DeleteSpace
-                    onMealItemDelete={_onMealItemDelete}
+            {
+              !isTinyOrSmall && mealItemsCount > 0 &&
+              <RX.View
+                style={_daySideView}
+              >
+                {
+                  draggingMealItem
+                    ? <DeleteSpace
+                      onMealItemDelete={_onMealItemDelete}
+                    />
+                    : showNutritionInfoVisible && dayNutrition && <NutritionInfo
+                    title={translate('Total Nutrition')}
+                    nutrition={dayNutrition}
                   />
-                  : showNutritionInfoVisible && <NutritionInfo
-                  title={translate('Total Nutrition')}
-                  nutrition={calculateDayNutrition(day)}
-                />
-              }
-            </RX.View>
+                }
+              </RX.View>
+            }
+
           </RX.View>
           : <RX.View
             style={styles.dayEmptyContainer}
@@ -371,12 +371,15 @@ export default compose<FunctionComponent<DayComponentCommonProps>>(
   'day',
   'date',
   'loading',
+  'draggingMealItem',
 ])))
 
 const styles = {
   container: RX.Styles.createViewStyle({
     // alignItems: 'center',
-    alignSelf: 'stretch',
+    alignSelf: 'center',
+    overflow: 'visible',
+
   }),
   circle: RX.Styles.createViewStyle({
     paddingTop: 60,
@@ -389,11 +392,11 @@ const styles = {
     [Styles.values.marginStart]: Styles.values.spacing / 2,
   }),
   dayEmptyContainer: RX.Styles.createViewStyle({
-    position: 'absolute',
+    // position: 'absolute',
     alignItems: 'center',
-    top: Styles.values.spacing,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    // top: Styles.values.spacing,
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
   })
 }

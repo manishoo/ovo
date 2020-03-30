@@ -138,20 +138,6 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
               />
             }
 
-            {
-              !this.props.hideAvatar &&
-              <Link to={`/${recipe.author.username}`} style={styles.avatarContainer}>
-                <Image
-                  source={recipe.author.avatar!.url}
-                  style={{
-                    width: this.props.size / 5,
-                    height: this.props.size / 5,
-                    borderRadius: 100,
-                  }}
-                />
-              </Link>
-            }
-
             {!this.props.imageOnly && this._renderLikes(theme)}
             {!this.props.imageOnly && this._renderTime(theme)}
 
@@ -169,6 +155,30 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
                   style={styles.clearIcon}
                 />
               </RX.View>
+            }
+
+            {
+              !this.props.hideAvatar &&
+              <Link to={`/${recipe.author.username}`}>
+                <RX.View
+                  style={styles.avatarContainer}
+                >
+                  <Image
+                    source={recipe.author.avatar!.url}
+                    style={{
+                      width: this.props.size / 5,
+                      height: this.props.size / 5,
+                      borderRadius: 100,
+                      [Styles.values.marginEnd]: Styles.values.spacing / 2,
+                    }}
+                  />
+
+                  <RX.View>
+                    <Text style={{ fontWeight: '500' }}>{recipe.author.firstName} {recipe.author.lastName}</Text>
+                    <Text style={{ color: theme.colors.text, fontWeight: '300' }}>Member</Text>
+                  </RX.View>
+                </RX.View>
+              </Link>
             }
           </RX.Animated.View>
         )}
@@ -285,7 +295,7 @@ const styles = {
   }),
   title: RX.Styles.createTextStyle({
     marginTop: Styles.values.spacingLarge / 2,
-    font: Styles.fonts.displayLight,
+    fontWeight: '300',
   }),
   avatarImage: RX.Styles.createImageStyle({
     width: 50,
@@ -293,9 +303,9 @@ const styles = {
     borderRadius: 25,
   }),
   avatarContainer: RX.Styles.createViewStyle({
-    position: 'absolute',
-    top: 10,
-    [Styles.values.end]: 10,
+    flexDirection: 'row',
+    marginTop: Styles.values.spacing / 2,
+    alignItems: 'center',
   }),
   likesContainer: RX.Styles.createViewStyle({
     position: 'absolute',
@@ -304,7 +314,7 @@ const styles = {
     alignItems: 'center',
   }),
   likeText: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayLight,
+    fontWeight: '300',
     top: 2,
     [Styles.values.end]: -15,
     fontSize: Styles.fontSizes.size16,
@@ -316,10 +326,10 @@ const styles = {
     [Styles.values.start]: 16,
   }),
   timingUnit: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayLight,
+    fontWeight: '300',
   }),
   timingNumber: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayBold,
+    fontWeight: 'bold', // displayBold
     fontSize: Styles.fontSizes.size16,
     [Styles.values.marginEnd]: 3,
   }),

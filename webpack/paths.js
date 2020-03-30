@@ -27,7 +27,8 @@ module.exports = {
   public: resolveApp('web'),
   manifest: resolveApp('web/manifest.json'),
   appCss: resolveApp('web/app.css'),
-  favicon: resolveApp('web/favicon.ico'),
+  favicons: resolveApp('web/favicons'),
+  favicon: resolveApp('web/favicons/favicon.ico'),
   images: resolveApp('web/images'),
   fonts: resolveApp('web/fonts'),
 

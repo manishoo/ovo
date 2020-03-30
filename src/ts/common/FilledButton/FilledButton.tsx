@@ -3,12 +3,19 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
-import { ThemeContext } from '@App/ThemeContext'
+import { useTheme } from '@App/ThemeContext'
 import HoverButton from '@Common/HoverButton/HoverButton'
+// import Link from '@Common/Link/Link'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
+// @ts-ignore import
+import pSBC from '@Utils/pSBC.js'
+import { History } from 'history'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import RX from 'reactxp'
+import LocationDescriptor = History.LocationDescriptor
 
 
 interface FilledButtonProps {
@@ -22,7 +29,8 @@ interface FilledButtonProps {
   suffix?: any,
   pressed?: boolean
   loading?: boolean
-  flat?: boolean,
+  flat?: boolean
+  to?: LocationDescriptor<History.PoorMansUnknown>
 }
 
 enum ButtonMode {
@@ -33,121 +41,48 @@ enum ButtonMode {
   link = 'link',
 }
 
-export default class FilledButton extends RX.Component<FilledButtonProps> {
-  static defaultProps = {
-    mode: ButtonMode.primary,
-  }
-  static mode = ButtonMode
-  state = {
-    pressed: false
-  }
+const FilledButton = (props: FilledButtonProps) => {
+  const {
+    style,
+    containerStyle,
+    label,
+    onPress,
+    loading,
+    fontSize,
+    disabled,
+    suffix,
+    flat,
+    mode = ButtonMode.primary,
+  } = props
 
-  private _height: null | number = null
-  private _scrollView: null | RX.ScrollView = null
+  const theme = useTheme()
+  const [pressed, setPressed] = useState(props.pressed)
+  const _scrollViewRef = useRef<RX.ScrollView | null>(null)
+  const _scrollViewHeight = useRef<number>()
 
-  public componentDidUpdate(prevProps: Readonly<FilledButtonProps>, prevState: Readonly<{}>, snapshot?: any): void {
-    if (!this._scrollView) return
-    if (!this._height) return
+  useEffect(() => {
+    if (!_scrollViewRef.current) return
+    if (!_scrollViewHeight.current) return
 
-    if (prevProps.loading !== this.props.loading) {
-      if (this.props.loading) {
-        this._scrollView.setScrollTop(this._height, true)
-      } else {
-        this._scrollView.setScrollTop(0, true)
-      }
+    _scrollViewRef.current.setScrollTop(loading ? _scrollViewHeight.current : 0, true)
+  }, [loading])
+
+  const _getStyle = useCallback((theme: Theme) => {
+    let style: any = {
+      borderWidth: 0,
+      borderColor: theme.colors.filledButtonDefaultModeBorder,
     }
-  }
-
-  public render() {
-    const { style, containerStyle, label, onPress, loading, fontSize, disabled, suffix, flat } = this.props
-    let { pressed } = this.state
-
-    if (this.props.pressed) {
-      pressed = this.props.pressed
-    }
-    if (disabled) {
-      pressed = false
-    }
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <HoverButton
-            style={containerStyle}
-            onPressIn={() => this.setState({ pressed: true })}
-            onPressOut={() => this.setState({ pressed: false })}
-            onRenderChild={isHovering => (
-              <RX.View
-                style={[
-                  styles.container,
-                  this._getStyle(theme).style,
-                  isHovering && !disabled ? this._getStyle(theme).hoverStyle : undefined,
-                  flat ? undefined : {
-                    borderBottomWidth: pressed ? 1 : 3,
-                    marginTop: pressed ? 2 : 0,
-                  },
-                  disabled ? { backgroundColor: theme.colors.filledButtonDisabledBG } : undefined,
-                  style,
-                ]}
-                onPress={loading ? undefined : onPress}
-              >
-                <RX.ScrollView
-                  ref={ref => this._scrollView = ref}
-                  scrollEnabled={false}
-                  style={{
-                    height: this._height || undefined,
-                  }}
-                >
-                  <RX.View
-                    style={styles.innerContainer}
-                    onLayout={e => this._height = e.height}
-                  >
-                    <RX.Text
-                      style={[{
-                        color: disabled ? theme.colors.filledButtonDisabledTextColor : theme.colors.filledButtonText,
-                        font: Styles.fonts.displayBold,
-                        fontSize: Styles.fontSizes.size14,
-                      }, this._getStyle(theme).labelStyle, { fontSize }]}
-                    >{label}</RX.Text>
-                    {suffix}
-                  </RX.View>
-                  {
-                    !!this._height && typeof loading === 'boolean' &&
-                    <RX.View
-                      style={[
-                        {
-                          height: this._height,
-                        },
-                        styles.innerContainer
-                      ]}
-                    >
-                      <LoadingIndicator
-                        size={this._height}
-                      />
-                    </RX.View>
-                  }
-
-                </RX.ScrollView>
-              </RX.View>
-            )}
-          />
-        )}
-      </ThemeContext.Consumer>
-    )
-  }
-
-  private _getStyle = (theme: Theme) => {
-    let style = {}
     let hoverStyle = {}
-    let labelStyle = {}
 
-    switch (this.props.mode) {
+    let labelStyle: any = {
+      fontFamily: Styles.fonts[AppConfig.locale].text,
+    }
+
+    switch (mode) {
       case ButtonMode.default:
         style = {
           ...style,
-          borderWidth: 1,
           backgroundColor: theme.colors.filledButtonDefaultModeBG,
-          borderColor: theme.colors.filledButtonDefaultModeBorder,
         }
         labelStyle = {
           ...labelStyle,
@@ -161,12 +96,11 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
         break
       case ButtonMode.primary:
       case ButtonMode.danger:
+        const bg = mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red
         style = {
           ...style,
-          borderWidth: 1,
-          // borderBottomWidth: 3,
-          borderColor: theme.colors.filledButtonDefaultModeBorder,
-          backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
+          borderColor: pSBC(-0.5, bg),
+          backgroundColor: bg,
         }
         labelStyle = {
           ...labelStyle,
@@ -174,7 +108,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
         }
         hoverStyle = {
           ...hoverStyle,
-          backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
+          backgroundColor: mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
         }
         break
       case ButtonMode.link:
@@ -183,7 +117,7 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
           borderWidth: 0,
           // borderBottomWidth: 3,
           // borderColor: theme.colors.filledButtonDefaultModeBorder,
-          // backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
+          // backgroundColor: this.mode === ButtonMode.primary ? theme.colors.filledButtonBG : theme.colors.red,
         }
         labelStyle = {
           ...labelStyle,
@@ -193,18 +127,86 @@ export default class FilledButton extends RX.Component<FilledButtonProps> {
         hoverStyle = {
           ...hoverStyle,
           // color: theme.colors.primary,
-          // backgroundColor: this.props.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
+          // backgroundColor: this.mode === ButtonMode.primary ? theme.colors.filledButtonHoverBG : theme.colors.darkerRed,
         }
         break
     }
-
     return { style, labelStyle, hoverStyle }
-  }
+
+  }, [theme.mode, mode])
+
+  return (
+    <HoverButton
+      style={containerStyle}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      onPress={loading ? undefined : onPress}
+      // disabled={!onPress}
+      // disabledOpacity={1}
+      onRenderChild={isHovering => (
+        <RX.View
+          style={[
+            styles.container,
+            _getStyle(theme).style,
+            isHovering && !disabled ? _getStyle(theme).hoverStyle : undefined,
+            flat || disabled ? undefined : {
+              borderBottomWidth: pressed && !disabled ? 1 : 3,
+              marginTop: pressed && !disabled ? 2 : 0,
+            },
+            disabled ? { backgroundColor: theme.colors.filledButtonDisabledBG } : undefined,
+            style,
+          ]}
+        >
+          <RX.ScrollView
+            ref={ref => _scrollViewRef.current = ref}
+            scrollEnabled={false}
+            style={{
+              height: _scrollViewHeight.current || undefined,
+            }}
+          >
+            <RX.View
+              style={styles.innerContainer}
+              onLayout={e => _scrollViewHeight.current = e.height}
+            >
+              <RX.Text
+                style={[{
+                  color: disabled ? theme.colors.filledButtonDisabledTextColor : theme.colors.filledButtonText,
+                  fontWeight: 'bold', // displayBold
+                  fontSize: Styles.fontSizes.size14,
+                }, _getStyle(theme).labelStyle, { fontSize }]}
+              >{label}</RX.Text>
+              {suffix}
+            </RX.View>
+            {
+              !!_scrollViewHeight.current && typeof loading === 'boolean' &&
+              <RX.View
+                style={[
+                  {
+                    height: _scrollViewHeight.current,
+                  },
+                  styles.innerContainer
+                ]}
+              >
+                <LoadingIndicator
+                  size={_scrollViewHeight.current}
+                />
+              </RX.View>
+            }
+
+          </RX.ScrollView>
+        </RX.View>
+      )}
+    />
+  )
 }
+
+FilledButton.mode = ButtonMode
+
+export default FilledButton
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',

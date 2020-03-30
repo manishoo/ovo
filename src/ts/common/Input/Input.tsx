@@ -28,6 +28,8 @@ export interface InputProps extends RX.Types.TextInputProps {
 
   errorMessage?: string,
   loading?: boolean,
+
+  selectAllOnPress?: boolean
 }
 
 interface InputState {
@@ -49,6 +51,8 @@ export default class Input extends RX.Component<InputProps, InputState> {
     }
   }
 
+  private _textInputRef: any
+
   public render() {
     const {
       style,
@@ -59,6 +63,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
       required,
       errorMessage,
       loading,
+      selectAllOnPress,
       ...props
     } = this.props
 
@@ -67,6 +72,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
         {({ theme }) => (
           <RX.View
             style={[styles.container, style]}
+            onPress={selectAllOnPress ? () => this._textInputRef.selectAll() : undefined}
           >
             {
               !!label &&
@@ -78,7 +84,10 @@ export default class Input extends RX.Component<InputProps, InputState> {
                 ]}
               >{required && this._renderRequiredStart(theme)}{label}</Text>}
             <RX.TextInput
-              ref={inputRef}
+              ref={ref => {
+                this._textInputRef = ref
+                inputRef && inputRef(ref)
+              }}
               value={value}
               onChangeText={this._onChangeText}
               style={[

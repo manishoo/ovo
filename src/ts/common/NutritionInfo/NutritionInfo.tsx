@@ -5,6 +5,7 @@
 
 import Styles from '@App/Styles'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import NutritionPie from '@Common/NutritionInfo/components/NutritionPie/NutritionPie'
 import Text from '@Common/Text/Text'
 import NutritionFragment from '@Models/nutrition'
 import { Nutrition } from '@Models/types/Nutrition'
@@ -33,92 +34,40 @@ interface NutritionInfoProps {
   title?: string,
   nutritionProfile?: NutritionProfile,
   style?: any,
+  showDetails?: boolean,
+  showMacros?: boolean,
+  showPie?: boolean,
 }
 
 export const fragments = {
   nutrition: NutritionFragment
 }
 
-const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style }: NutritionInfoProps) => {
+const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style, showDetails = true, showMacros = true, showPie = true }: NutritionInfoProps) => {
   if (nutrition.calories && nutrition.calories.amount === 0) return null
-
-  // @ts-ignore
-  const VictoryPieLazy = require('reactxp-chart').VictoryPie
-  // @ts-ignore
-  const VictoryLabel = require('reactxp-chart').VictoryLabel
-
-  const _getMacroPercent = (macro: 'protein' | 'fat' | 'carbs') => {
-    const total =
-      (nutrition.proteins!.amount * 4) +
-      (nutrition.fats!.amount * 9) +
-      (nutrition.totalCarbs!.amount * 4)
-    switch (macro) {
-      case 'protein':
-        return Math.round(((nutrition.proteins!.amount * 4) * 100) / total)
-      case 'fat':
-        return Math.round(((nutrition.fats!.amount * 9) * 100) / total)
-      case 'carbs':
-        return Math.round(((nutrition.totalCarbs!.amount * 4) * 100) / total)
-    }
-  }
-
-  const _getLabel = ({ datum }: any) => {
-    switch (datum._x) {
-      case 0:
-        return `${translate('proteins')}\n${_getMacroPercent('protein')}%`
-      case 1:
-        return `${translate('fats')}\n${_getMacroPercent('fat')}%`
-      case 2:
-        return `${translate('carbs')}\n${_getMacroPercent('carbs')}%`
-    }
-  }
-
-  const colors = {
-    proteins: '#e95855',
-    fats: '#ffd633',
-    carbs: '#60c365',
-  }
+  if (!nutrition.proteins) return null
+  if (!nutrition.fats) return null
+  if (!nutrition.totalCarbs) return null
 
   return (
     <RX.View style={style}>
-      <RX.View style={{ margin: -54, marginTop: -73 }}>
-        {
-          (
-            nutrition.proteins &&
-            nutrition.fats &&
-            nutrition.totalCarbs
-          ) &&
-          <VictoryPieLazy
-            animate={{ duration: 500 }}
-            height={250}
-            width={250}
-            labels={_getLabel}
-            labelRadius={() => 50}
-            labelComponent={<VictoryLabel
-              textAnchor={'middle'}
-              style={{
-                fill: '#fff',
-                fontFamily: Styles.fonts.displayRegular.fontFamily,
-                fontSize: 8,
-                fontWeight: '100'
-              }}
-            />}
-            colorScale={[colors.proteins, colors.fats, colors.carbs]}
-            data={[
-              nutrition.proteins.amount * 4,
-              nutrition.fats.amount * 9,
-              nutrition.totalCarbs.amount * 4,
-            ]}
-          />
-        }
-      </RX.View>
+      {
+        showPie &&
+        <NutritionPie
+          nutrition={nutrition}
+          size={250}
+          pieProps={{
+            padding: { bottom: Styles.values.spacing / 2 }
+          }}
+        />
+      }
 
       <RX.View
         style={{
           padding: Styles.values.spacing,
           paddingTop: 0,
-          marginTop: -Styles.values.spacing / 2,
-          minWidth: 260, //FIXME
+          // marginTop: -Styles.values.spacing / 2,
+          // minWidth: simple ? undefined : 260, //FIXME
         }}
       >
         <RX.View
@@ -149,9 +98,10 @@ const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style }: Nutri
               <RX.View
                 style={styles.row}
               >
-                <Text style={{ color: colors.proteins, fontWeight: 'bold' }} translate={'proteins'} />
+                <Text style={{ color: Styles.values.macroColors.proteins, fontWeight: 'bold' }}
+                      translate={'proteins'} />
                 <Text style={{
-                  color: colors.proteins,
+                  color: Styles.values.macroColors.proteins,
                   fontWeight: 'bold'
                 }}>{Math.round(nutrition.proteins.amount)}{translate(nutrition.proteins.unit)}</Text>
               </RX.View>
@@ -161,9 +111,9 @@ const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style }: Nutri
               <RX.View
                 style={styles.row}
               >
-                <Text style={{ color: colors.fats, fontWeight: 'bold' }} translate={'fats'} />
+                <Text style={{ color: Styles.values.macroColors.fats, fontWeight: 'bold' }} translate={'fats'} />
                 <Text style={{
-                  color: colors.fats,
+                  color: Styles.values.macroColors.fats,
                   fontWeight: 'bold'
                 }}>{Math.round(nutrition.fats.amount)}{translate(nutrition.fats.unit)}</Text>
               </RX.View>
@@ -173,22 +123,27 @@ const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style }: Nutri
               <RX.View
                 style={styles.row}
               >
-                <Text style={{ color: colors.carbs, fontWeight: 'bold' }} translate={'carbs'} />
+                <Text style={{ color: Styles.values.macroColors.carbs, fontWeight: 'bold' }} translate={'carbs'} />
                 <Text style={{
-                  color: colors.carbs,
+                  color: Styles.values.macroColors.carbs,
                   fontWeight: 'bold'
                 }}>{Math.round(nutrition.totalCarbs.amount)}{translate((nutrition.totalCarbs)!.unit)}</Text>
               </RX.View>
             }
           </RX.View>
-          <RX.View style={{ flex: 2 }}>
-            <MacroTargets
-              nutritionProfile={nutritionProfile}
-            />
-          </RX.View>
+          {
+            showMacros &&
+            <RX.View style={{ flex: 2 }}>
+              <MacroTargets
+                nutritionProfile={nutritionProfile}
+              />
+            </RX.View>
+          }
         </RX.View>
 
-        <NutritionDetail nutrition={nutrition} />
+        {
+          showDetails && <NutritionDetail nutrition={nutrition} />
+        }
       </RX.View>
     </RX.View>
   )

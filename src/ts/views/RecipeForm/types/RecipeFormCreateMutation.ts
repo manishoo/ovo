@@ -33,6 +33,11 @@ export interface RecipeFormCreateMutation_createRecipe_timing {
   totalTime: number | null;
 }
 
+export interface RecipeFormCreateMutation_createRecipe_origin {
+  url: string | null;
+  sourceUrl: string | null;
+}
+
 export interface RecipeFormCreateMutation_createRecipe_ingredients_name {
   text: string;
   locale: LanguageCode;
@@ -132,6 +137,8 @@ export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_a
 export interface RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: RecipeFormCreateMutation_createRecipe_ingredients_item_Recipe_author_avatar | null;
 }
 
@@ -179,40 +186,467 @@ export interface RecipeFormCreateMutation_createRecipe_instructions {
 
 export interface RecipeFormCreateMutation_createRecipe_nutrition_calories {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormCreateMutation_createRecipe_nutrition_proteins {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormCreateMutation_createRecipe_nutrition_totalCarbs {
   amount: number;
-  id: string | null;
-  unit: string;
-}
-
-export interface RecipeFormCreateMutation_createRecipe_nutrition_totalAvailableCarbs {
-  amount: number;
-  id: string | null;
   unit: string;
 }
 
 export interface RecipeFormCreateMutation_createRecipe_nutrition_fats {
   amount: number;
-  id: string | null;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_proteins {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_fiber {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_totalAvailableCarbs {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_sodium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_cholesterol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_potassium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_sugar {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_sucrose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_glucose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_fructose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_lactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_maltose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_galactose {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_starch {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_saturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_monounsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_polyunsaturatedFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_transFats {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_omega3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_omega6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_ALA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_DHA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_EPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_DPA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_caffeine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_theobromine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_calcium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_choline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_copper {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_fluoride {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_folate {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_iron {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_lycopene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_magnesium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_manganese {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_niacin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_phosphorus {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_retinol {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_riboflavin {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_selenium {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_thiamine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_alphaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_betaCarotene {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_pantothenicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitA {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitAIU {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitB6 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitB12 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitC {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitD {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitD2 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitD3 {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitE {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_vitK {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_zinc {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_tryptophan {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_threonine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_isoleucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_leucine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_lysine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_methionine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_cystine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_phenylalanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_tyrosine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_valine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_arginine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_histidine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_alanine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_asparticAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_glutamicAcid {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_glycine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_proline {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_serine {
+  amount: number;
+  unit: string;
+}
+
+export interface RecipeFormCreateMutation_createRecipe_nutrition_hydroxyproline {
+  amount: number;
   unit: string;
 }
 
 export interface RecipeFormCreateMutation_createRecipe_nutrition {
   calories: RecipeFormCreateMutation_createRecipe_nutrition_calories | null;
-  proteins: RecipeFormCreateMutation_createRecipe_nutrition_proteins | null;
   totalCarbs: RecipeFormCreateMutation_createRecipe_nutrition_totalCarbs | null;
-  totalAvailableCarbs: RecipeFormCreateMutation_createRecipe_nutrition_totalAvailableCarbs | null;
   fats: RecipeFormCreateMutation_createRecipe_nutrition_fats | null;
+  proteins: RecipeFormCreateMutation_createRecipe_nutrition_proteins | null;
+  fiber: RecipeFormCreateMutation_createRecipe_nutrition_fiber | null;
+  totalAvailableCarbs: RecipeFormCreateMutation_createRecipe_nutrition_totalAvailableCarbs | null;
+  sodium: RecipeFormCreateMutation_createRecipe_nutrition_sodium | null;
+  cholesterol: RecipeFormCreateMutation_createRecipe_nutrition_cholesterol | null;
+  potassium: RecipeFormCreateMutation_createRecipe_nutrition_potassium | null;
+  sugar: RecipeFormCreateMutation_createRecipe_nutrition_sugar | null;
+  sucrose: RecipeFormCreateMutation_createRecipe_nutrition_sucrose | null;
+  glucose: RecipeFormCreateMutation_createRecipe_nutrition_glucose | null;
+  fructose: RecipeFormCreateMutation_createRecipe_nutrition_fructose | null;
+  lactose: RecipeFormCreateMutation_createRecipe_nutrition_lactose | null;
+  maltose: RecipeFormCreateMutation_createRecipe_nutrition_maltose | null;
+  galactose: RecipeFormCreateMutation_createRecipe_nutrition_galactose | null;
+  starch: RecipeFormCreateMutation_createRecipe_nutrition_starch | null;
+  saturatedFats: RecipeFormCreateMutation_createRecipe_nutrition_saturatedFats | null;
+  monounsaturatedFats: RecipeFormCreateMutation_createRecipe_nutrition_monounsaturatedFats | null;
+  polyunsaturatedFats: RecipeFormCreateMutation_createRecipe_nutrition_polyunsaturatedFats | null;
+  transFats: RecipeFormCreateMutation_createRecipe_nutrition_transFats | null;
+  omega3: RecipeFormCreateMutation_createRecipe_nutrition_omega3 | null;
+  omega6: RecipeFormCreateMutation_createRecipe_nutrition_omega6 | null;
+  ALA: RecipeFormCreateMutation_createRecipe_nutrition_ALA | null;
+  DHA: RecipeFormCreateMutation_createRecipe_nutrition_DHA | null;
+  EPA: RecipeFormCreateMutation_createRecipe_nutrition_EPA | null;
+  DPA: RecipeFormCreateMutation_createRecipe_nutrition_DPA | null;
+  caffeine: RecipeFormCreateMutation_createRecipe_nutrition_caffeine | null;
+  theobromine: RecipeFormCreateMutation_createRecipe_nutrition_theobromine | null;
+  calcium: RecipeFormCreateMutation_createRecipe_nutrition_calcium | null;
+  choline: RecipeFormCreateMutation_createRecipe_nutrition_choline | null;
+  copper: RecipeFormCreateMutation_createRecipe_nutrition_copper | null;
+  fluoride: RecipeFormCreateMutation_createRecipe_nutrition_fluoride | null;
+  folate: RecipeFormCreateMutation_createRecipe_nutrition_folate | null;
+  iron: RecipeFormCreateMutation_createRecipe_nutrition_iron | null;
+  lycopene: RecipeFormCreateMutation_createRecipe_nutrition_lycopene | null;
+  magnesium: RecipeFormCreateMutation_createRecipe_nutrition_magnesium | null;
+  manganese: RecipeFormCreateMutation_createRecipe_nutrition_manganese | null;
+  niacin: RecipeFormCreateMutation_createRecipe_nutrition_niacin | null;
+  phosphorus: RecipeFormCreateMutation_createRecipe_nutrition_phosphorus | null;
+  retinol: RecipeFormCreateMutation_createRecipe_nutrition_retinol | null;
+  riboflavin: RecipeFormCreateMutation_createRecipe_nutrition_riboflavin | null;
+  selenium: RecipeFormCreateMutation_createRecipe_nutrition_selenium | null;
+  thiamine: RecipeFormCreateMutation_createRecipe_nutrition_thiamine | null;
+  alphaCarotene: RecipeFormCreateMutation_createRecipe_nutrition_alphaCarotene | null;
+  betaCarotene: RecipeFormCreateMutation_createRecipe_nutrition_betaCarotene | null;
+  pantothenicAcid: RecipeFormCreateMutation_createRecipe_nutrition_pantothenicAcid | null;
+  vitA: RecipeFormCreateMutation_createRecipe_nutrition_vitA | null;
+  vitAIU: RecipeFormCreateMutation_createRecipe_nutrition_vitAIU | null;
+  vitB6: RecipeFormCreateMutation_createRecipe_nutrition_vitB6 | null;
+  vitB12: RecipeFormCreateMutation_createRecipe_nutrition_vitB12 | null;
+  vitC: RecipeFormCreateMutation_createRecipe_nutrition_vitC | null;
+  vitD: RecipeFormCreateMutation_createRecipe_nutrition_vitD | null;
+  vitD2: RecipeFormCreateMutation_createRecipe_nutrition_vitD2 | null;
+  vitD3: RecipeFormCreateMutation_createRecipe_nutrition_vitD3 | null;
+  vitE: RecipeFormCreateMutation_createRecipe_nutrition_vitE | null;
+  vitK: RecipeFormCreateMutation_createRecipe_nutrition_vitK | null;
+  zinc: RecipeFormCreateMutation_createRecipe_nutrition_zinc | null;
+  tryptophan: RecipeFormCreateMutation_createRecipe_nutrition_tryptophan | null;
+  threonine: RecipeFormCreateMutation_createRecipe_nutrition_threonine | null;
+  isoleucine: RecipeFormCreateMutation_createRecipe_nutrition_isoleucine | null;
+  leucine: RecipeFormCreateMutation_createRecipe_nutrition_leucine | null;
+  lysine: RecipeFormCreateMutation_createRecipe_nutrition_lysine | null;
+  methionine: RecipeFormCreateMutation_createRecipe_nutrition_methionine | null;
+  cystine: RecipeFormCreateMutation_createRecipe_nutrition_cystine | null;
+  phenylalanine: RecipeFormCreateMutation_createRecipe_nutrition_phenylalanine | null;
+  tyrosine: RecipeFormCreateMutation_createRecipe_nutrition_tyrosine | null;
+  valine: RecipeFormCreateMutation_createRecipe_nutrition_valine | null;
+  arginine: RecipeFormCreateMutation_createRecipe_nutrition_arginine | null;
+  histidine: RecipeFormCreateMutation_createRecipe_nutrition_histidine | null;
+  alanine: RecipeFormCreateMutation_createRecipe_nutrition_alanine | null;
+  asparticAcid: RecipeFormCreateMutation_createRecipe_nutrition_asparticAcid | null;
+  glutamicAcid: RecipeFormCreateMutation_createRecipe_nutrition_glutamicAcid | null;
+  glycine: RecipeFormCreateMutation_createRecipe_nutrition_glycine | null;
+  proline: RecipeFormCreateMutation_createRecipe_nutrition_proline | null;
+  serine: RecipeFormCreateMutation_createRecipe_nutrition_serine | null;
+  hydroxyproline: RecipeFormCreateMutation_createRecipe_nutrition_hydroxyproline | null;
 }
 
 export interface RecipeFormCreateMutation_createRecipe_description {
@@ -234,9 +668,10 @@ export interface RecipeFormCreateMutation_createRecipe {
   likesCount: number;
   userLikedRecipe: boolean | null;
   timing: RecipeFormCreateMutation_createRecipe_timing;
+  origin: RecipeFormCreateMutation_createRecipe_origin | null;
   ingredients: RecipeFormCreateMutation_createRecipe_ingredients[];
   instructions: RecipeFormCreateMutation_createRecipe_instructions[];
-  nutrition: RecipeFormCreateMutation_createRecipe_nutrition;
+  nutrition: RecipeFormCreateMutation_createRecipe_nutrition | null;
   difficulty: RecipeDifficulty | null;
   description: RecipeFormCreateMutation_createRecipe_description[] | null;
   image: RecipeFormCreateMutation_createRecipe_image | null;

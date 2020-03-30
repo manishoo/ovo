@@ -20,6 +20,7 @@ interface RecipesListProps extends RX.CommonProps {
   renderCell: (item: any, size: number) => any,
   hideAvatar?: boolean,
   loading?: boolean,
+  columns?: number,
 }
 
 interface RecipesListState {
@@ -59,18 +60,17 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
   }
 
   protected _buildState(props: RecipesListProps, initialBuild: boolean): Partial<RecipesListState> | undefined {
-    let columns = 3
+    let columns = this.props.columns || 3
 
     switch (ResponsiveWidthStore.getResponsiveWidth()) {
       case ResponsiveWidth.Large:
-        columns = 4
+        columns = columns + 1
         break
       case ResponsiveWidth.Medium:
-        columns = 3
         break
       case ResponsiveWidth.Small:
       default:
-        columns = 2
+        columns = columns - 1
         break
     }
 

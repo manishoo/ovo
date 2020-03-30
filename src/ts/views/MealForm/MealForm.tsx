@@ -6,6 +6,7 @@
 import { ExecutionResult, gql, useMutation, useQuery } from '@apollo/client'
 import Storage from '@App/Storage/Storage'
 import Styles from '@App/Styles'
+import { ThemeContext } from '@App/ThemeContext'
 import Checkbox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodPreviewOnSubmit } from '@Common/FoodPickerDialog/components/FoodPreview'
@@ -14,6 +15,7 @@ import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
 import Input from '@Common/Input/Input'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import MealItemComponent from '@Common/MealItemComponent/MealItemComponent'
 import Navbar from '@Common/Navbar/Navbar'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
@@ -107,101 +109,112 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
     const { meal } = this.state
 
     return (
-      <Page lazyRender>
-        <Navbar
-          title={
-            this.props.meal ?
-              translate('Meal') :
-              translate('Create Meal')
-          }
-        >
-          {
-            this.props.meal &&
-            (
-              this.props.me.id === this.props.meal.author.id ||
-              this.props.me.role === Role.operator
-            ) &&
-            <FilledButton
-              label={translate('Delete')}
-              onPress={this._onDelete}
-              mode={FilledButton.mode.danger}
+      <ThemeContext.Consumer>
+        {({ theme }) => (
+          <Page lazyRender>
+            <Navbar
+              title={
+                this.props.meal ?
+                  translate('Meal') :
+                  translate('Create Meal')
+              }
+            >
+              {
+                this.props.meal &&
+                (
+                  this.props.me.id === this.props.meal.author.id ||
+                  this.props.me.role === Role.operator
+                ) &&
+                <FilledButton
+                  label={translate('Delete')}
+                  onPress={this._onDelete}
+                  mode={FilledButton.mode.danger}
+                />
+              }
+            </Navbar>
+
+            {/**
+             * Ingredient input
+             * */}
+            {
+              !this.props.meal &&
+              <Input
+                label={translate('Main Meal Items')}
+                placeholder={translate('e.g. Banana')}
+                onFocus={() => showFoodPicker({
+                  foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
+                  onDismiss: () => null,
+                  onSubmit: this._onMealItemCreation,
+                  showOptional: true,
+                  submitButtonLabel: translate('Add Meal Item')
+                })}
+                errorMessage={fieldErrors['items']}
+              />
+            }
+
+            <SortableList
+              items={meal.items}
+              disabled={!this.props.meal}
+              renderItem={(mealItem, index) => (
+                <MealItemComponent
+                  mealItem={mealItem}
+                  onMealItemRemove={this._onMealItemDelete}
+                  onMealItemChange={mealItem1 => this._onMealItemChange({
+                    ...mealItem1,
+                    alternativeMealItems: mealItem.alternativeMealItems
+                  })}
+                  style={[
+                    {
+                      backgroundColor: theme.colors.bg,
+                      marginBottom: Styles.values.spacing / 2,
+                    }
+                  ]}
+                />
+              )}
+              onItemsChange={items => this.setState(prevState => ({
+                meal: {
+                  ...prevState.meal,
+                  items,
+                },
+              }))}
             />
-          }
-        </Navbar>
 
-        {/**
-         * Ingredient input
-         * */}
-        {
-          !this.props.meal &&
-          <Input
-            label={translate('Main Meal Items')}
-            placeholder={translate('e.g. Banana')}
-            onFocus={() => showFoodPicker({
-              foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
-              onDismiss: () => null,
-              onSubmit: this._onMealItemCreation,
-              showOptional: true,
-              submitButtonLabel: translate('Add Meal Item')
-            })}
-            errorMessage={fieldErrors['items']}
-          />
-        }
+            {
+              !this.props.meal &&
+              this.props.me.role !== Role.user &&
+              <RX.View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: Styles.values.spacing,
+                  marginBottom: Styles.values.spacing,
+                }}
+              >
+                <Checkbox
+                  size={20}
+                  onChange={checked => this.setState({ bulkCreate: checked })}
+                  value={this.state.bulkCreate}
+                />
+                <Text
+                  style={{ [Styles.values.marginStart]: Styles.values.spacing / 2 }}
+                  translate
+                >Bulk create</Text>
+              </RX.View>
+            }
 
-        <SortableList
-          items={meal.items}
-          disabled={!this.props.meal}
-          renderItem={(mealItem) => (
-            <MealItemRow
-              key={mealItem.id}
-              mealItem={mealItem}
-              editable={!this.props.meal}
-              onMealItemChange={this._onMealItemChange}
-              onMealItemDelete={this._onMealItemDelete}
-            />
-          )}
-          onItemsChange={items => this.setState(prevState => ({
-            meal: {
-              ...prevState.meal,
-              items,
-            },
-          }))}
-        />
-
-        {
-          !this.props.meal &&
-          this.props.me.role !== Role.user &&
-          <RX.View
-            style={{
-              flexDirection: 'row',
-              marginTop: Styles.values.spacing,
-              marginBottom: Styles.values.spacing,
-            }}
-          >
-            <Checkbox
-              size={20}
-              onChange={checked => this.setState({ bulkCreate: checked })}
-              value={this.state.bulkCreate}
-            />
-            <Text
-              style={{ [Styles.values.marginStart]: Styles.values.spacing / 2 }}
-              translate
-            >Bulk create</Text>
-          </RX.View>
-        }
-
-        {
-          !this.props.meal &&
-          <FilledButton
-            label={translate(translate.keys.Submit)}
-            onPress={this._onSubmit}
-            suffix={(
-              (createRecipeLoading || updateRecipeLoading) &&
-              <LoadingIndicator size={17} />
-            )}
-          />
-        }
-      </Page>
+            {
+              !this.props.meal &&
+              <FilledButton
+                label={translate(translate.keys.Submit)}
+                onPress={this._onSubmit}
+                suffix={(
+                  (createRecipeLoading || updateRecipeLoading) &&
+                  <LoadingIndicator size={17} />
+                )}
+              />
+            }
+          </Page>
+        )}
+      </ThemeContext.Consumer>
     )
   }
 
@@ -361,6 +374,7 @@ class MealForm extends ComponentBase<MealFormProps, MealFormState> {
 const MealFormContainer = (props: MealFormCommonProps) => {
   const mealId = getParam(props, 'id')
 
+  const me = useMe()!
   const { data: mealFormQueryData, loading: mealFormQueryLoading } = useQuery<MealFormQuery, MealFormQueryVariables>(gql`
     query MealFormQuery($id: ObjectId!) {
       meal(id: $id) {
@@ -409,7 +423,7 @@ const MealFormContainer = (props: MealFormCommonProps) => {
 
   return (
     <MealForm
-      me={useMe()!}
+      me={me}
       fieldErrors={getGraphQLUserInputErrors(deleteMealError || createRecipeError || updateRecipeError)}
       meal={mealFormQueryData && mealFormQueryData.meal}
       createRecipeLoading={createRecipeLoading}

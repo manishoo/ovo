@@ -18,23 +18,11 @@ export class Theme {
     menuItem: 16
   }
   public fonts = {
-    monospace: {
-      fontFamily: FontRefs.monospace,
+    display: {
+      fontFamily: FontRefs.display,
     } as RX.Types.FontInfo,
-    displayLight: {
-      fontFamily: FontRefs.displayLight,
-    } as RX.Types.FontInfo,
-    displayRegular: {
-      fontFamily: FontRefs.displayRegular,
-      fontWeight: '400'
-    } as RX.Types.FontInfo,
-    displaySemibold: {
-      fontFamily: FontRefs.displaySemibold,
-      fontWeight: '600'
-    } as RX.Types.FontInfo,
-    displayBold: {
-      fontFamily: FontRefs.displayBold,
-      fontWeight: '700'
+    text: {
+      fontFamily: FontRefs.text,
     } as RX.Types.FontInfo,
   }
 
@@ -50,7 +38,7 @@ export class Theme {
         const primary = '#00BA72' //#00c54f #00BA72
         const primaryDarker = '#009B60'
         const red = '#d32f2f'
-        const text = '#515B66'
+        const text = '#4a4a4a'
 
         return {
           primary,
@@ -58,6 +46,8 @@ export class Theme {
           cardBg: '#fff',
 
           text,
+          hamburger: text,
+          textDark: '#343a41',
           borderLight: '#eee',
           mealItemBorder: 'rgba(0, 186, 114, 0.5)',
 
@@ -130,6 +120,7 @@ export class Theme {
           filledButtonDefaultModeBG: '#fff',
           filledButtonDefaultHoverBG: '#F2F2F2',
           filledButtonDefaultModeBorder: '#F2F2F2',
+          filledButtonPrimaryModeBorder: '#029e62',
           filledButtonDefaultModeTextColor: '#B2B2B0',
           filledButtonText: '#fff',
           filledButtonHoverBG: primaryDarker,

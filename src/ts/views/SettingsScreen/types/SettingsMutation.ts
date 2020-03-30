@@ -69,6 +69,10 @@ export interface SettingsMutation_updateUser_membership {
   type: string;
 }
 
+export interface SettingsMutation_updateUser_achievements {
+  finishedSetup: boolean | null;
+}
+
 export interface SettingsMutation_updateUser_meals {
   id: string;
   availableTime: MealAvailableTime;
@@ -96,6 +100,7 @@ export interface SettingsMutation_updateUser {
   nutritionProfile: SettingsMutation_updateUser_nutritionProfile;
   membership: SettingsMutation_updateUser_membership | null;
   role: Role;
+  achievements: SettingsMutation_updateUser_achievements;
   meals: SettingsMutation_updateUser_meals[];
 }
 

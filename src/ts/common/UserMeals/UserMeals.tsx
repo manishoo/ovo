@@ -35,7 +35,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
   }
 
   render() {
-    const { style, onMealsChange } = this.props
+    const { style } = this.props
     const { meals } = this.state
 
     return (
@@ -47,13 +47,19 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
             <SortableList
               items={meals}
               renderItem={this._renderMealItem(theme)}
-              onItemsChange={(meals) => this.setState({ meals }, () => onMealsChange && onMealsChange(meals))}
+              onItemsChange={(meals) => this.setState({ meals }, this._onMealsChange)}
             />
             {this._renderAddMealItem(theme)}
           </RX.View>
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _onMealsChange = () => {
+    const { onMealsChange } = this.props
+
+    onMealsChange && onMealsChange(this.state.meals)
   }
 
   public getMeals = () => this.state.meals
@@ -69,7 +75,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
                 ...meals,
                 meal,
               ]
-            }))
+            }), this._onMealsChange)
           }
         })}
         style={[
@@ -159,9 +165,12 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
 
                     return m
                   })
-                }))
+                }), this._onMealsChange)
               }
             })}
+            style={{
+              cursor: 'pointer',
+            }}
           >
             <RX.Image
               source={ImageSource.Cog}
@@ -178,7 +187,10 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
           <RX.View
             onPress={() => this.setState(({ meals }) => ({
               meals: meals.filter(p => p.id !== meal.id)
-            }))}
+            }), this._onMealsChange)}
+            style={{
+              cursor: 'pointer',
+            }}
           >
             <RX.Image
               source={ImageSource.Trash}
@@ -204,7 +216,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
 
         return m
       })
-    }))
+    }), this._onMealsChange)
   }
 }
 
@@ -218,6 +230,9 @@ const styles = {
     // flex: 1,
   }),
   mealItemContainer: RX.Styles.createViewStyle({
+    // @ts-ignore web
+    cursor: 'grab',
+
     flexDirection: 'row',
     padding: Styles.values.spacing / 2,
     paddingHorizontal: Styles.values.spacing,
@@ -231,6 +246,7 @@ const styles = {
     paddingHorizontal: 5,
   }),
   addMeal: RX.Styles.createViewStyle({
+    cursor: 'pointer',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

@@ -4,10 +4,12 @@
  */
 
 import { ApolloQueryResult, useQuery } from '@apollo/react-hoc'
+import AppConfig from '@App/AppConfig'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import { PageScrollContext } from '@Common/Page'
 import { Routes } from '@Models/common'
 import { DataProvider, LayoutProvider, RecyclerListView } from '@Modules/RecyclerListView'
 import LocationStore from '@Services/LocationStore'
@@ -56,7 +58,7 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
   private _rlv: RecyclerListView<any, any> | null = null
   private _scrollViewWidth = 0
   private _circlesOnEachSide: number
-  public static height = CIRCLE_SIZE + Styles.values.spacing * 2
+  public static height = CIRCLE_SIZE + Styles.values.spacing
   private _viewportWidth: number
   private readonly _layoutProvider: LayoutProvider
   private readonly _dataProvider: DataProvider
@@ -66,13 +68,11 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
   private _disableScrolling = false
   private _circleWidth = CIRCLE_SIZE // + (Styles.values.spacing / 2)
   private _currentActiveDate: Date | null = null
+  private _scrollOffset: number
 
   constructor(props: CalendarControlProps) {
     super(props)
 
-    // if (props.width > MAX_CONTROL_WIDTH) {
-    //   props.width = MAX_CONTROL_WIDTH
-    // }
     let numberFittingInScreen = Math.floor((props.width > MAX_CONTROL_WIDTH ? MAX_CONTROL_WIDTH : props.width) / this._circleWidth)
     if ((numberFittingInScreen % 2) !== 0) {
       // even
@@ -95,6 +95,7 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
       }
     )
     this._scrollLeft = (this._circlesOnEachSide / 2) * this._circleWidth
+    this._scrollOffset = (this._circlesOnEachSide / 2) * this._circleWidth
 
     this._setScrollLeft = debounce(this._setScrollLeft, 100)
     this.changeDayCursor = debounce(this.changeDayCursor, 200)
@@ -112,7 +113,10 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
     if (nextProps.width !== this.props.width) {
       this._setCircleNumbers(nextProps.width)
       this.setState({
-        dataProvider: this._dataProvider.cloneWithRows(generateRenderingDays(new Date(), this._circlesOnEachSide)),
+        dataProvider: this._dataProvider.cloneWithRows(generateRenderingDays(new Date(), this._circlesOnEachSide).map((date, index) => ({
+          date,
+          scale: this._getCalendarCircleScale(date, index, this._scrollLeft),
+        }))),
       })
     }
   }
@@ -122,71 +126,95 @@ export class CalendarControl extends React.PureComponent<CalendarControlProps, C
     const { dataProvider, loadingDays } = this.state
 
     return (
-      <RX.View
-        style={[styles.controlWrapper, style]}
-      >
-        <RX.ScrollView
-          scrollEnabled={false}
-          style={{
-            height: CIRCLE_SIZE,
-          }}
-        >
-          <RX.View
-            style={{
-              alignItems: 'center'
-            }}
+      <PageScrollContext.Consumer>
+        {({ setScrollEnabled }) => (
+          <RX.GestureView
+            style={[styles.controlWrapper, style]}
+            onScrollWheel={AppConfig.isTouchInterface() ? undefined : this._onScrollWheel}
           >
-            <RecyclerListView
-              ref={ref => this._rlv = ref}
-              dataProvider={dataProvider}
-              layoutProvider={this._layoutProvider}
-              // @ts-ignore
-              rowRenderer={this._rowRenderer}
-              initialOffset={(this._circlesOnEachSide * 3 / 4) * this._circleWidth}
-              isHorizontal
-              onScroll={(rawEvent, offsetX, offsetY) => this._onScroll(offsetX)}
-              onEndReached={this._reachEndHandler}
-              onEndReachedThreshold={100}
-              renderAheadOffset={100}
-              extendedState={{
-                days: this.props.days,
-                loadingDays,
-              }}
+            <RX.ScrollView
+              scrollEnabled={false}
               style={{
-                width: this._viewportWidth,
-
-                // To hide the scrollbar
-                height: CIRCLE_SIZE + Styles.values.spacing,
-                paddingBottom: Styles.values.spacing,
+                height: CIRCLE_SIZE,
               }}
-              scrollViewProps={{
-                onContentSizeChanged: (width: number) => this._scrollViewWidth = width,
-              } as RX.Types.ScrollViewProps}
+            >
+              <RX.View
+                onMouseEnter={this._onMouseEnter(setScrollEnabled)}
+                onMouseLeave={this.onMouseLeave(setScrollEnabled)}
+                style={{
+                  alignItems: 'center',
+                }}
+              >
+                <RecyclerListView
+                  ref={ref => this._rlv = ref}
+                  dataProvider={dataProvider}
+                  layoutProvider={this._layoutProvider}
+                  // @ts-ignore
+                  rowRenderer={this._rowRenderer}
+                  initialOffset={(this._circlesOnEachSide * 3 / 4) * this._circleWidth}
+                  isHorizontal
+                  onScroll={(rawEvent, offsetX, offsetY) => this._onScroll(offsetX)}
+                  onEndReached={this._reachEndHandler}
+                  onEndReachedThreshold={100}
+                  renderAheadOffset={100}
+                  extendedState={{
+                    days: this.props.days,
+                    loadingDays,
+                  }}
+                  style={{
+                    width: this._viewportWidth,
+
+                    // To hide the scrollbar
+                    height: CIRCLE_SIZE + Styles.values.spacing,
+                    paddingBottom: Styles.values.spacing,
+                  }}
+                  scrollViewProps={{
+                    onContentSizeChanged: (width: number) => this._scrollViewWidth = width,
+                  } as RX.Types.ScrollViewProps}
+                />
+              </RX.View>
+            </RX.ScrollView>
+
+            <FilledButton
+              mode={FilledButton.mode.default}
+              label={translate(translate.keys.Today)}
+              onPress={() => this.changeDayCursor(new Date)}
+              containerStyle={{
+                position: 'absolute',
+                top: 0,
+                [Styles.values.start]: Styles.values.spacing,
+              }}
             />
-          </RX.View>
-        </RX.ScrollView>
-        <FilledButton
-          mode={FilledButton.mode.default}
-          label={translate(translate.keys.Today)}
-          onPress={() => this.changeDayCursor(new Date)}
-          containerStyle={{
-            position: 'absolute',
-            top: 0,
-            [Styles.values.start]: Styles.values.spacing,
-          }}
-        />
-        <FilledButton
-          mode={FilledButton.mode.default}
-          label={translate(translate.keys.Settings)}
-          onPress={() => LocationStore.navigate(this.props, Routes.mealPlanSettings)}
-          containerStyle={{
-            position: 'absolute',
-            top: 0,
-            [Styles.values.end]: Styles.values.spacing,
-          }}
-        />
-      </RX.View>
+            <FilledButton
+              mode={FilledButton.mode.default}
+              label={translate(translate.keys.Settings)}
+              onPress={() => LocationStore.navigate(this.props, Routes.mealPlanSettings)}
+              containerStyle={{
+                position: 'absolute',
+                top: 0,
+                [Styles.values.end]: Styles.values.spacing,
+              }}
+            />
+          </RX.GestureView>
+        )}
+      </PageScrollContext.Consumer>
     )
+  }
+
+  private _onMouseEnter = (setScrollEnabled: (enabled: boolean) => void) => (e: RX.Types.MouseEvent) => {
+    console.log('_onMouseEnter')
+    setScrollEnabled(false)
+  }
+
+  private onMouseLeave = (setScrollEnabled: (enabled: boolean) => void) => (e: RX.Types.MouseEvent) => {
+    console.log('onMouseLeave')
+    setScrollEnabled(true)
+  }
+
+  private _onScrollWheel = (gestureState: RX.Types.ScrollWheelGestureState) => {
+    this._rlv!.scrollToOffset(this._scrollLeft + (gestureState.scrollAmount), 0, false)
+
+    this._scrollOffset = this._scrollLeft + (gestureState.scrollAmount)
   }
 
   componentDidMount() {

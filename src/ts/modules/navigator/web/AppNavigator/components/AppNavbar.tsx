@@ -11,12 +11,12 @@ import Link from '@Common/Link/Link'
 import { Routes } from '@Models/common'
 import { Me } from '@Models/graphql/me/types/Me'
 import { useContext } from 'react'
-import { matchPath } from 'react-router'
+import { matchPath, useLocation } from 'react-router'
 import RX from 'reactxp'
 
 
 const NAVBAR_HEIGHT = 54
-const NAVBAR_MAX_WIDTH = 975
+const NAVBAR_MAX_WIDTH = Styles.values.mainContentMaxWidth
 
 interface AppNavbarProps {
   style?: any,
@@ -26,10 +26,12 @@ interface AppNavbarProps {
   showIcons: boolean,
 }
 
-export default function AppNavbar({ style, me, width, path, showIcons }: AppNavbarProps) {
+export default function AppNavbar({ style, me, width, showIcons }: AppNavbarProps) {
   const { theme } = useContext(ThemeContext)
+  const location = useLocation()
+
   const _isActive = (pathname: string): boolean => {
-    return !!matchPath(path, {
+    return !!matchPath(location.pathname, {
       path: pathname,
       exact: true,
     })
@@ -65,45 +67,32 @@ export default function AppNavbar({ style, me, width, path, showIcons }: AppNavb
           <RX.View
             style={styles.iconsWrapper}
           >
-            <Link
-              key={1}
-              to={Routes.calendar}
-              style={Object.assign({},
-                {
-                  color: _isActive(Routes.calendar) ? '#fff' : '#4a4a4a'
-                })
-              }
-            >
-              <Image
-                source={_isActive(Routes.calendar) ? Image.source.CalendarActive : Image.source.Calendar}
-                style={styles.icon}
-                resizeMode={'contain'}
-              />
-            </Link>
+            {
+              me &&
+              <Link
+                key={1}
+                to={Routes.calendar}
+                style={Object.assign({},
+                  {
+                    color: _isActive(Routes.calendar) ? '#fff' : '#4a4a4a'
+                  })
+                }
+              >
+                <Image
+                  source={_isActive(Routes.calendar) ? Image.source.CalendarActive : Image.source.Calendar}
+                  style={styles.icon}
+                  resizeMode={'contain'}
+                />
+              </Link>
+            }
 
             <Link
               key={2}
-              to={Routes.shoppingList}
-              style={Object.assign({},
-                {
-                  color: _isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
-                })
-              }
-            >
-              <Image
-                source={_isActive(Routes.shoppingList) ? Image.source.ShoppingListActive : Image.source.ShoppingList}
-                style={styles.icon}
-                resizeMode={'contain'}
-              />
-            </Link>
-
-            <Link
-              key={3}
               to={Routes.searchRecipes}
               style={Object.assign({}, { color: _isActive(Routes.searchRecipes) ? '#fff' : '#4a4a4a' })}
             >
               <Image
-                source={_isActive(Routes.searchRecipes) ? Image.source.SearchWhite : Image.source.Search}
+                source={_isActive(Routes.searchRecipes) ? Image.source.SearchActive : Image.source.Search}
                 style={[styles.icon, { transform: AppConfig.isRTL() ? undefined : [{ rotate: '90deg' }] }]}
                 resizeMode={'contain'}
               />
@@ -112,18 +101,52 @@ export default function AppNavbar({ style, me, width, path, showIcons }: AppNavb
             {
               me &&
               <Link
+                key={3}
+                to={Routes.shoppingList}
+                style={Object.assign({},
+                  {
+                    color: _isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
+                  })
+                }
+              >
+                <Image
+                  source={_isActive(Routes.shoppingList) ? Image.source.ShoppingListActive : Image.source.ShoppingList}
+                  style={styles.icon}
+                  resizeMode={'contain'}
+                />
+              </Link>
+            }
+
+            {
+              me &&
+              <Link
                 key={0}
                 to={`/${me.username}`}
               >
-                <Image
-                  source={me.avatar!.url}
-                  style={[
-                    styles.icon,
-                    {
-                      borderRadius: 100,
-                    }
-                  ]}
-                />
+                <RX.View
+                  style={{
+                    borderWidth: 1,
+                    padding: 1,
+                    borderColor: _isActive(`/${me.username}`) ? '#4a4a4a' : 'transparent',
+                    borderRadius: 100,
+                    width: 27,
+                    height: 27,
+                    [Styles.values.marginStart]: Styles.values.spacing,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Image
+                    source={me.avatar!.url}
+                    style={[
+                      styles.icon,
+                      {
+                        [Styles.values.marginStart]: 0,
+                        borderRadius: 100,
+                      }
+                    ]}
+                  />
+                </RX.View>
               </Link>
             }
           </RX.View>

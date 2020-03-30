@@ -556,7 +556,7 @@ export interface MealCellMeal_items_item_Food {
   weights: MealCellMeal_items_item_Food_weights[];
   thumbnail: MealCellMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealCellMeal_items_item_Food_nutrition;
+  nutrition: MealCellMeal_items_item_Food_nutrition | null;
 }
 
 export interface MealCellMeal_items_item_Recipe_title {
@@ -579,6 +579,8 @@ export interface MealCellMeal_items_item_Recipe_author_avatar {
 export interface MealCellMeal_items_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealCellMeal_items_item_Recipe_author_avatar | null;
 }
 
@@ -1055,7 +1057,7 @@ export interface MealCellMeal_items_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealCellMeal_items_item_Recipe_thumbnail | null;
   author: MealCellMeal_items_item_Recipe_author;
-  nutrition: MealCellMeal_items_item_Recipe_nutrition;
+  nutrition: MealCellMeal_items_item_Recipe_nutrition | null;
 }
 
 export type MealCellMeal_items_item = MealCellMeal_items_item_Food | MealCellMeal_items_item_Recipe;
@@ -1604,7 +1606,7 @@ export interface MealCellMeal_items_alternativeMealItems_item_Food {
   weights: MealCellMeal_items_alternativeMealItems_item_Food_weights[];
   thumbnail: MealCellMeal_items_alternativeMealItems_item_Food_thumbnail | null;
   origFoodClassSlug: string;
-  nutrition: MealCellMeal_items_alternativeMealItems_item_Food_nutrition;
+  nutrition: MealCellMeal_items_alternativeMealItems_item_Food_nutrition | null;
 }
 
 export interface MealCellMeal_items_alternativeMealItems_item_Recipe_title {
@@ -1627,6 +1629,8 @@ export interface MealCellMeal_items_alternativeMealItems_item_Recipe_author_avat
 export interface MealCellMeal_items_alternativeMealItems_item_Recipe_author {
   id: string;
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   avatar: MealCellMeal_items_alternativeMealItems_item_Recipe_author_avatar | null;
 }
 
@@ -2103,7 +2107,7 @@ export interface MealCellMeal_items_alternativeMealItems_item_Recipe {
   status: RecipeStatus;
   thumbnail: MealCellMeal_items_alternativeMealItems_item_Recipe_thumbnail | null;
   author: MealCellMeal_items_alternativeMealItems_item_Recipe_author;
-  nutrition: MealCellMeal_items_alternativeMealItems_item_Recipe_nutrition;
+  nutrition: MealCellMeal_items_alternativeMealItems_item_Recipe_nutrition | null;
 }
 
 export type MealCellMeal_items_alternativeMealItems_item =

@@ -3,15 +3,14 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import Styles from '@App/Styles'
+import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import { ANIMATION_DURATION } from '@Views/CalendarScreen/CalendarScreen'
-import { CalendarControl } from '@Views/CalendarScreen/components/CalendarControl/CalendarControl'
 import DayComponent from '@Views/CalendarScreen/components/DayComponent/DayComponent'
 import { DayComponentDay } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentDay'
 import { haveSame } from '@Views/CalendarScreen/utils/is-same-day'
 import { PureComponent } from 'react'
 import RX from 'reactxp'
-import Carousel from 'src/ts/modules/Carousel'
+import Carousel from 'src/ts/modules/Carousel/index-slick'
 
 
 interface CalendarCarouselProps {
@@ -27,6 +26,7 @@ interface CalendarCarouselProps {
   width: number,
   isTinyOrSmall: boolean,
   days: DayComponentDay[],
+  draggingMealItem?: FoodPreviewMealItem
 }
 
 export default class CalendarCarousel extends PureComponent<CalendarCarouselProps> {
@@ -36,6 +36,7 @@ export default class CalendarCarousel extends PureComponent<CalendarCarouselProp
     const {
       initialSlide, onTitlePress,
       height, width, isTinyOrSmall, loadingDays,
+      draggingMealItem,
     } = this.props
 
     return (
@@ -58,9 +59,10 @@ export default class CalendarCarousel extends PureComponent<CalendarCarouselProp
               date={date}
               onTitlePress={onTitlePress}
               day={this._getDay(date)}
-              minHeight={height - 54 - CalendarControl.height - Styles.values.spacingLarge}
+              minHeight={0}
               width={width}
               isTinyOrSmall={isTinyOrSmall}
+              draggingMealItem={draggingMealItem}
             />
           ))
         }

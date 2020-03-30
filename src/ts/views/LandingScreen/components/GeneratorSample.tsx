@@ -11,6 +11,7 @@ import FilledButton from '@Common/FilledButton/FilledButton'
 import FlatButton from '@Common/FlatButton/FlatButton'
 import InputNumber from '@Common/Input/InputNumber'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
 import { NutritionProfileMode, UserMealInput } from '@Models/global-types'
@@ -22,18 +23,41 @@ import {
   GeneratorSampleMutationVariables
 } from '@Views/LandingScreen/components/types/GeneratorSampleMutation'
 import RegisterForm from '@Views/Register/RegisterForm'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import { Col, Container, Row, useScreenClass } from 'react-grid-system'
 import RX from 'reactxp'
 
 
+const MEAL_WIDTH = 350
+
 export interface GeneratorSampleProps {
-  style: any,
+  style?: any,
+  screenWidth: number,
 }
 
-export default function GeneratorSample({ style }: GeneratorSampleProps) {
-  const [open, setOpen] = useState(false)
+export default function GeneratorSample({ style, screenWidth }: GeneratorSampleProps) {
+  const open = useRef(false)
   const [userMeals, setUserMeals] = useState<UserMealInput[]>(AppConfig.defaultUserMeals)
-  const viewHeight = RX.Animated.createValue(0)
+  const [calories, setCalories] = useState(AppConfig.defaultCalories)
+  const [viewHeight] = useState(RX.Animated.createValue(0))
+  const nutritionProfile = {
+    mode: NutritionProfileMode.range,
+    calories: calories,
+    protein: {
+      max: 1000,
+      min: 0,
+    },
+    carbs: {
+      max: 1000,
+      min: 0,
+    },
+    fat: {
+      max: 1000,
+      min: 0,
+    },
+    isStrict: false,
+  }
+  const _userMealsRef = useRef<any>()
   const [suggestDayGuest, { loading, data }] = useMutation<GeneratorSampleMutation, GeneratorSampleMutationVariables>(gql`
     mutation GeneratorSampleMutation($userMeals: [UserMealInput!]!, $dietId: ObjectId, $nutritionProfile: NutritionProfileInput!) {
       suggestDayGuest(userMeals: $userMeals, dietId: $dietId, nutritionProfile: $nutritionProfile) {
@@ -44,26 +68,20 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
     ${MealComponentFragments.dayMeal}
   `, {
     variables: {
-      nutritionProfile: {
-        mode: NutritionProfileMode.range,
-        calories: 2300,
-        protein: {
-          max: 1000,
-          min: 0,
-        },
-        carbs: {
-          max: 1000,
-          min: 0,
-        },
-        fat: {
-          max: 1000,
-          min: 0,
-        },
-        isStrict: false,
-      },
+      nutritionProfile,
       userMeals,
     }
   })
+  const setHeight = (height: number) => RX.Animated.timing(viewHeight, { toValue: height }).start()
+
+  const mealWidth = screenWidth > MEAL_WIDTH ? MEAL_WIDTH : screenWidth
+  const _mealStyle = useMemo(() => ({
+      width: mealWidth,
+      maxWidth: MEAL_WIDTH,
+      alignSelf: 'center',
+    }
+  ), [screenWidth])
+  const screenClass = useScreenClass()
 
   return (
     <ThemeContext.Consumer>
@@ -79,12 +97,11 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
               borderRadius: 20,
             }}
           >
-            <InputNumber value={2300} onChange={() => {
-            }} label={'Calories'} />
+            <InputNumber value={calories} onChange={value => setCalories(Number(value))} label={'Calories'} />
             <FlatButton
               onPress={() => {
-                RX.Animated.timing(viewHeight, { toValue: open ? 0 : 250 }).start()
-                setOpen(!open)
+                setHeight((open.current ? 0 : (_userMealsRef.current.getMeals().length + 1) * 44))
+                open.current = !open.current
               }}
               borderless label={'Advanced Options'} />
             <RX.Animated.View
@@ -95,14 +112,20 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
               ]}
             >
               <UserMeals
+                ref={ref => _userMealsRef.current = ref}
                 // @ts-ignore
                 meals={userMeals}
-                onMealsChange={meals => setUserMeals(meals)}
+                onMealsChange={(meals) => setHeight((meals.length + 1) * 44)}
               />
             </RX.Animated.View>
             <FilledButton
-              label={'Generate'}
-              onPress={() => suggestDayGuest()}
+              label={translate(data && data.suggestDayGuest.length > 0 ? 'Regenerate' : 'Generate')}
+              onPress={() => suggestDayGuest({
+                variables: {
+                  nutritionProfile,
+                  userMeals: _userMealsRef.current.getMeals(),
+                }
+              })}
               suffix={(
                 loading &&
                 <LoadingIndicator size={17} />
@@ -110,31 +133,62 @@ export default function GeneratorSample({ style }: GeneratorSampleProps) {
             />
           </RX.View>,
           data && data.suggestDayGuest.length > 0 &&
-          <RX.View style={{ flexDirection: 'row', alignSelf: 'stretch' }}>
-            <RX.View style={{ flex: 1, alignItems: 'center', paddingTop: Styles.values.spacing }}>
-              <RX.View style={{ width: 270 }}>
-                <Text translate={'Ready for more?'} type={Text.types.title} />
-                <Text
-                  translate={'With a free account, you can customize your preferences, track your intake, create recipes, and much more.'}
-                  type={Text.types.body} />
-              </RX.View>
-              <RegisterForm />
-            </RX.View>
-            <RX.View style={{
-              flex: 1,
-              padding: Styles.values.spacing,
-              borderWidth: 0,
-              [Styles.values.borderStartWidth]: 1,
-              borderColor: theme.colors.borderLight
-            }}>
-              {
-                data && data.suggestDayGuest.map(dayMeal => (
-                  <MealComponentContainer meal={dayMeal} />
-                ))
-              }
-              {/*<DayComponentContainer date={DateTime.local()} />*/}
-            </RX.View>
-          </RX.View>
+          <Container>
+            <Row nogutter>
+              <Col
+                sm={12}
+                md={6}
+              >
+                <RX.View
+                  style={[
+                    {
+                      alignItems: 'center',
+                      padding: Styles.values.spacing,
+                    },
+                    !['xs', 'sm'].includes(screenClass) ? {
+                      [Styles.values.paddingEnd]: Styles.values.spacing * 2,
+                      borderWidth: 0,
+                      [Styles.values.borderEndWidth]: 1,
+                      borderColor: theme.colors.borderLight,
+                    } : undefined
+                  ]}
+                >
+                  {
+                    data && data.suggestDayGuest.map(dayMeal => (
+                      <MealComponentContainer editable={false} meal={dayMeal} style={_mealStyle} />
+                    ))
+                  }
+                </RX.View>
+              </Col>
+              <Col
+                sm={12}
+                md={6}
+              >
+                <RX.View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}
+                >
+                  <RX.View
+                    style={{
+                      maxWidth: 270 + 32,
+                      padding: Styles.values.spacing,
+                    }}
+                  >
+                    <Text translate={'Ready for more?'} type={Text.types.title} />
+                    <Text
+                      translate={'With a free account, you can customize your preferences, track your intake, create recipes, and much more.'}
+                      type={Text.types.body}
+                    />
+
+                    <RegisterForm />
+                  </RX.View>
+
+                </RX.View>
+              </Col>
+            </Row>
+          </Container>
         ]
       )}
     </ThemeContext.Consumer>

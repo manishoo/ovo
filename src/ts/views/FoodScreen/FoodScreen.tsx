@@ -72,9 +72,9 @@ export class FoodScreen extends ComponentBase<FoodScreenProps, FoodScreenState> 
           <Modal
             key={MODAL_ID}
             modalId={MODAL_ID}
+            // maxWidth={MODAL_MAX_WIDTH}
             maxWidth={MODAL_MAX_WIDTH}
-            // fullWidth
-            // fullHeight
+            fullHeight
             theme={theme}
           >
             <FoodScreenContainer
