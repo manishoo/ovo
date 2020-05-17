@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
@@ -23,6 +23,7 @@ import {
   MealSettingsScreenMutation,
   MealSettingsScreenMutationVariables
 } from '@Views/MealSettingsScreen/types/MealSettingsScreenMutation'
+import { ExecutionResult } from 'graphql'
 import React from 'react'
 import RX from 'reactxp'
 
@@ -124,7 +125,6 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
         ]}
       >
         <Navbar
-          modalId={MODAL_ID}
           title={translate(translate.keys.editMealSettings)}
         >
           <RX.View
@@ -149,7 +149,7 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
           <Input
             value={meal.name}
             label={translate(translate.keys.Name)}
-            onChangeText={name => this.setState(({ meal }) => ({
+            onChange={name => this.setState(({ meal }) => ({
               meal: {
                 ...meal,
                 name,
@@ -164,8 +164,8 @@ class MealSettingsScreen extends RX.Component<MealSettingsScreenProps, MealSetti
               { value: MealSize.tiny, text: translate('tiny') },
               { value: MealSize.small, text: translate('small') },
               { value: MealSize.normal, text: translate('normal') },
-              { value: MealSize.huge, text: translate('huge') },
               { value: MealSize.big, text: translate('big') },
+              { value: MealSize.huge, text: translate('huge') },
             ]}
             onChange={size => this.setState(({ meal }) => ({
               meal: {

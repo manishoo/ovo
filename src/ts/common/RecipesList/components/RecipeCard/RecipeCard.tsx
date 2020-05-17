@@ -128,11 +128,11 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
 
             {
               (
-                (recipe.status === RecipeStatus.public) ||
-                (recipe.status === RecipeStatus.review)
+                (recipe.status === RecipeStatus.verified) ||
+                (recipe.status === RecipeStatus.reviewing)
               ) &&
               <Image
-                source={recipe.status === RecipeStatus.public ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
+                source={recipe.status === RecipeStatus.verified ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
                 style={styles.verifiedBadge}
                 resizeMode={'cover'}
               />
@@ -235,7 +235,15 @@ export default class RecipeCard extends RX.Component<RecipeCellProps, RecipeCell
 
   private _renderTime = (theme: Theme) => {
     return (
-      <RX.View style={[styles.timingContainer, { top: ((this.props.size) - 30) }]}>
+      <RX.View
+        style={[
+          styles.timingContainer,
+          {
+            top: ((this.props.size) - 40),
+            backgroundColor: 'rgba(0, 0, 0, 0.2)'
+          }
+        ]}
+      >
         <Text
           style={[styles.timingNumber, { color: theme.colors.recipeCardTimingNumberColor, }]}>{this.props.recipe.timing.totalTime}</Text>
         <Text translate style={[styles.timingUnit, { color: theme.colors.recipeCardTimingUnitColor }]}>min</Text>
@@ -295,7 +303,8 @@ const styles = {
   }),
   title: RX.Styles.createTextStyle({
     marginTop: Styles.values.spacingLarge / 2,
-    fontWeight: '300',
+    fontWeight: 'bold',
+    fontSize: 16,
   }),
   avatarImage: RX.Styles.createImageStyle({
     width: 50,
@@ -323,10 +332,14 @@ const styles = {
     flexDirection: 'row',
     position: 'absolute',
     alignItems: 'flex-end',
-    [Styles.values.start]: 16,
+    [Styles.values.start]: 10,
+    padding: Styles.values.spacing / 2,
+    paddingVertical: Styles.values.spacing / 4,
+    borderRadius: 10,
   }),
   timingUnit: RX.Styles.createTextStyle({
     fontWeight: '300',
+    top: -2,
   }),
   timingNumber: RX.Styles.createTextStyle({
     fontWeight: 'bold', // displayBold
@@ -358,8 +371,8 @@ const styles = {
     [Styles.values.marginStart]: Styles.values.spacing / 4,
   }),
   verifiedBadge: RX.Styles.createImageStyle({
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
     position: 'absolute',
     top: Styles.values.spacing / 2,
     [Styles.values.start]: Styles.values.spacing / 2,

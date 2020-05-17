@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
@@ -13,6 +13,7 @@ import { MeFragment, MeOperation } from '@Models/graphql/me/me'
 import { navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { LoginMutation, LoginMutationVariables } from '@Views/Login/types/LoginMutation'
+import { ExecutionResult } from 'graphql'
 import RX from 'reactxp'
 
 

@@ -115,7 +115,7 @@ export default class MealSettings extends RX.Component<MealSettingsProps, MealSe
     const { onSubmit } = this.props
 
     onSubmit({
-      mealPlanSettings: {
+      planSettings: {
         protein: Math.ceil(this.state.protein * 100),
         fat: Math.ceil(this.state.fat * 100),
         carbs: Math.ceil(this.state.carbs * 100),

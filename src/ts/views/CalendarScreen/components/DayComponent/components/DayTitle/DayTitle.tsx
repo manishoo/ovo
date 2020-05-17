@@ -4,11 +4,9 @@
  */
 
 import Styles from '@App/Styles'
-import { translate } from '@Common/LocalizedText/LocalizedText'
+import { useTheme } from '@App/ThemeContext'
 import Text from '@Common/Text/Text'
 import ItemControl from '@Views/CalendarScreen/components/ItemControl/ItemControl'
-import { haveSame } from '@Views/CalendarScreen/utils/is-same-day'
-import { DateTime } from 'luxon'
 import RX from 'reactxp'
 
 
@@ -28,38 +26,21 @@ const _styles = {
 }
 
 interface DayTitleProps {
-  date: Date,
+  title: string,
   dayRegenerating?: boolean,
   onRegenerate: () => void,
-  color: string,
+  color?: string,
   style?: any,
   itemControlVisible?: boolean,
   onTitlePress: () => void,
   children?: any,
 }
 
-const DayTitle = ({ dayRegenerating, date, color, onRegenerate, style, itemControlVisible, onTitlePress, children }: DayTitleProps) => {
-  const today = new Date()
-  const isOnSameWeek = haveSame(today, date, 'week')
-  const isToday = haveSame(date, today, 'day')
-  const datetime = DateTime.fromJSDate(date)
-  const isTomorrow = Math.round(datetime.diffNow('day').as('day')) === 1
-  const isYesterday = Math.round(datetime.diffNow('day').as('day')) === -1
+const DayTitle = ({ dayRegenerating, title, color, onRegenerate, style, itemControlVisible, onTitlePress, children }: DayTitleProps) => {
+  const theme = useTheme()
 
-  let text = datetime.toLocaleString({
-    day: isOnSameWeek ? undefined : '2-digit',
-    month: isOnSameWeek ? undefined : 'short',
-    weekday: 'long',
-  })
-
-  if (isToday) {
-    text = translate(translate.keys.Today)
-  }
-  if (isTomorrow) {
-    text = translate(translate.keys.Tomorrow)
-  }
-  if (isYesterday) {
-    text = translate(translate.keys.Yesterday)
+  if (!color) {
+    color = theme.colors.text
   }
 
   return (
@@ -76,7 +57,7 @@ const DayTitle = ({ dayRegenerating, date, color, onRegenerate, style, itemContr
           _styles.dayDate,
           { color }
         ]}
-      >{text}</Text>
+      >{title}</Text>
 
       {
         itemControlVisible &&

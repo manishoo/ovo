@@ -38,7 +38,7 @@ export class PopupPopup extends RX.Component<PopupDialogProps & { anchorPosition
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.View style={[styles.container, {
-            backgroundColor: theme.colors.white,
+            backgroundColor: theme.colors.cardBg,
             borderColor: theme.colors.selectBorderColor
           }, this.props.style]}>
             {this.props.children}
@@ -81,7 +81,7 @@ export default class PopupDialog extends ComponentBase<PopupDialogProps & RX.Com
                 this._containerAnimationStyle,
               ]}
             >
-              <RX.View style={[styles.container, { backgroundColor: theme.colors.white }, style]}>
+              <RX.View style={[styles.container, { backgroundColor: theme.colors.cardBg }, style]}>
                 {this.props.children}
               </RX.View>
             </RX.Animated.View>

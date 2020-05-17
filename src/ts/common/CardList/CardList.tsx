@@ -17,7 +17,7 @@ interface RecipesListProps extends RX.CommonProps {
   showAddButton?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   renderAddCell: (size: number) => any,
-  renderCell: (item: any, size: number) => any,
+  renderCell: (item: any, size: number, index: number) => any,
   hideAvatar?: boolean,
   loading?: boolean,
   columns?: number,
@@ -41,7 +41,7 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
       >
         {this.props.showAddButton && this.props.renderAddCell(size)}
 
-        {this.props.items.map(item => this.props.renderCell(item, size))}
+        {this.props.items.map((item, index) => this.props.renderCell(item, size, index))}
 
         {
           this.props.loading && <RX.View

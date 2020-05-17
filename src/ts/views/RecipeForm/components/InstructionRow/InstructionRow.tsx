@@ -69,7 +69,7 @@ function InstructionRow(props: InstructionRowProps, ref: Ref<any>) {
             // autoFocus={instruction.step > 1 && (instruction.text[0].text.length === 0)}
             value={value}
             // translations={instruction.text}
-            onChangeText={_onInstructionChange}
+            onChange={_onInstructionChange}
             placeholder={props.step === 1 && translate('e.g. Cook the Rice...')}
             returnKeyType={'done'}
             style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}

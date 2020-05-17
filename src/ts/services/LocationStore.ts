@@ -21,7 +21,10 @@ class LocationStore extends StoreBase implements IPersistableStore {
     let deferred = SyncTasks.Defer<void>()
 
     deferred.resolve(void 0)
-    window.addEventListener('popstate', e => this._onUrlChange(e))
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', e => this._onUrlChange(e))
+    }
 
     return deferred.promise()
   }
@@ -72,6 +75,10 @@ class LocationStore extends StoreBase implements IPersistableStore {
 
       if (route === 'back') {
         return this.history.goBack()
+      }
+
+      if (replace) {
+        return this.history.replace(route as LocationDescriptorObject)
       }
 
       this.history.push(route as LocationDescriptorObject)

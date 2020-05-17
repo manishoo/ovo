@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import client from '@App/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
@@ -14,10 +14,13 @@ import Navbar from '@Common/Navbar/Navbar'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
 import UserMeals from '@Common/UserMeals/UserMeals'
-import { useMe } from '@Models/graphql/me/me'
+import { MeOperation, useMe } from '@Models/graphql/me/me'
 import { Me } from '@Models/graphql/me/types/Me'
+import { MeQuery } from '@Models/graphql/me/types/MeQuery'
+import LocationStore from '@Services/LocationStore'
 import trimTypeName from '@Utils/trim-type-name'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
+import { ExecutionResult } from 'graphql'
 import { PureComponent } from 'react'
 import RX from 'reactxp'
 import {
@@ -39,7 +42,7 @@ interface MealPlanSettingsScreenProps extends MealPlanSettingsScreenCommonProps 
   loading?: boolean,
 }
 
-const MODAL_ID = 'mealPlanSettingsModal'
+const MODAL_ID = 'planSettingsModal'
 
 class MealPlanSettingsScreen extends PureComponent<MealPlanSettingsScreenProps> {
   static operations = {
@@ -81,7 +84,7 @@ class MealPlanSettingsScreen extends PureComponent<MealPlanSettingsScreenProps> 
     if (!me) return
 
     return (
-      <Page lazyRender>
+      <Page>
         <Navbar
           title={translate(translate.keys.editMealPlanSettings)}
         >
@@ -122,20 +125,36 @@ class MealPlanSettingsScreen extends PureComponent<MealPlanSettingsScreenProps> 
       userMeals: meals.map(trimTypeName),
     })
       .then(() => {
-        Modal.dismissAnimated(MODAL_ID).then(() => this.props.onSubmit(meals))
+        // Modal.dismissAnimated(MODAL_ID).then(() => this.props.onSubmit(meals))
+        LocationStore.navigate(this.props, 'back')
       })
   }
 }
 
 export default function MealPlanSettingsScreenContainer(props: MealPlanSettingsScreenCommonProps) {
+  const me = useMe()!
+
   const [updateUserMeals, { loading }] = useMutation<MealPlanSettingsScreenMutation, MealPlanSettingsScreenMutationVariables>(MealPlanSettingsScreen.operations.updateMealPlanSettings, {
-    client
+    client,
+    update: (cache, { data }) => {
+      if (!data) return
+
+      cache.writeQuery<MeQuery>({
+        query: MeOperation,
+        data: {
+          me: {
+            ...me,
+            meals: data.updateUserMeals,
+          }
+        },
+      })
+    }
   })
 
   return (
     <MealPlanSettingsScreen
       {...props}
-      me={useMe()}
+      me={me}
       onUpdateMealPlanSettings={variables => updateUserMeals({ variables })}
       loading={loading}
     />

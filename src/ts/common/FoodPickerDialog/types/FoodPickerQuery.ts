@@ -35,6 +35,16 @@ export interface FoodPickerQuery_foods_foods_thumbnail {
   url: string;
 }
 
+export interface FoodPickerQuery_foods_foods_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_foods_foods_origFoodGroups {
+  id: string;
+  name: FoodPickerQuery_foods_foods_origFoodGroups_name[];
+}
+
 export interface FoodPickerQuery_foods_foods_nutrition_calories {
   amount: number;
   unit: string;
@@ -507,6 +517,7 @@ export interface FoodPickerQuery_foods_foods {
   weights: FoodPickerQuery_foods_foods_weights[];
   thumbnail: FoodPickerQuery_foods_foods_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: FoodPickerQuery_foods_foods_origFoodGroups[][];
   nutrition: FoodPickerQuery_foods_foods_nutrition | null;
 }
 
@@ -525,12 +536,145 @@ export interface FoodPickerQuery_recipes_recipes_title {
   locale: LanguageCode;
 }
 
+export interface FoodPickerQuery_recipes_recipes_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface FoodPickerQuery_recipes_recipes_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface FoodPickerQuery_recipes_recipes_thumbnail {
   url: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_customUnit {
+  gramWeight: number | null;
+  name: FoodPickerQuery_recipes_recipes_ingredients_customUnit_name[];
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: FoodPickerQuery_recipes_recipes_ingredients_unit_Weight_name[];
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: FoodPickerQuery_recipes_recipes_ingredients_unit_CustomUnit_name[];
+}
+
+export type FoodPickerQuery_recipes_recipes_ingredients_unit =
+  FoodPickerQuery_recipes_recipes_ingredients_unit_Weight
+  | FoodPickerQuery_recipes_recipes_ingredients_unit_CustomUnit;
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights_name[];
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: FoodPickerQuery_recipes_recipes_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Food {
+  id: string;
+  name: FoodPickerQuery_recipes_recipes_ingredients_item_Food_name[];
+  description: FoodPickerQuery_recipes_recipes_ingredients_item_Food_description[] | null;
+  weights: FoodPickerQuery_recipes_recipes_ingredients_item_Food_weights[];
+  thumbnail: FoodPickerQuery_recipes_recipes_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: FoodPickerQuery_recipes_recipes_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPickerQuery_recipes_recipes_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: FoodPickerQuery_recipes_recipes_ingredients_item_Recipe_title[];
+}
+
+export type FoodPickerQuery_recipes_recipes_ingredients_item =
+  FoodPickerQuery_recipes_recipes_ingredients_item_Food
+  | FoodPickerQuery_recipes_recipes_ingredients_item_Recipe;
+
+export interface FoodPickerQuery_recipes_recipes_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: FoodPickerQuery_recipes_recipes_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: FoodPickerQuery_recipes_recipes_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: FoodPickerQuery_recipes_recipes_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: FoodPickerQuery_recipes_recipes_ingredients_unit | null;
+  item: FoodPickerQuery_recipes_recipes_ingredients_item | null;
 }
 
 export interface FoodPickerQuery_recipes_recipes_author_avatar {
@@ -1014,9 +1158,11 @@ export interface FoodPickerQuery_recipes_recipes {
   id: string;
   slug: string;
   title: FoodPickerQuery_recipes_recipes_title[];
+  servingName: FoodPickerQuery_recipes_recipes_servingName[] | null;
   timing: FoodPickerQuery_recipes_recipes_timing;
   status: RecipeStatus;
   thumbnail: FoodPickerQuery_recipes_recipes_thumbnail | null;
+  ingredients: FoodPickerQuery_recipes_recipes_ingredients[];
   author: FoodPickerQuery_recipes_recipes_author;
   nutrition: FoodPickerQuery_recipes_recipes_nutrition | null;
 }

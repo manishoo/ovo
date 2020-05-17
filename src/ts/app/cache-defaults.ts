@@ -5,8 +5,8 @@
 
 import { ApolloCache } from '@apollo/client'
 import { MeOperation } from '@Models/graphql/me/me'
-import { CalendarControlOperation } from '@Views/CalendarScreen/components/CalendarControl/operations/CalendarControlOperation'
-import { CalendarControlQuery } from '@Views/CalendarScreen/components/CalendarControl/operations/types/CalendarControlQuery'
+import { CalendarOverviewOperation } from '@Views/CalendarScreen/components/CalendarOverview/operations/CalendarOverviewOperation'
+import { CalendarOverviewQuery } from '@Views/CalendarScreen/components/CalendarOverview/operations/types/CalendarOverviewQuery'
 import { CalendarCacheOperation, CalendarOperation } from '@Views/CalendarScreen/operations/CalendarOperation'
 import { CalendarCacheQuery } from '@Views/CalendarScreen/operations/types/CalendarCacheQuery'
 import { CalendarQuery } from '@Views/CalendarScreen/operations/types/CalendarQuery'
@@ -19,8 +19,8 @@ export default function writeDefaults(cache: ApolloCache<any>) {
       calendar: []
     }
   })
-  cache.writeQuery<CalendarControlQuery>({
-    query: CalendarControlOperation,
+  cache.writeQuery<CalendarOverviewQuery>({
+    query: CalendarOverviewOperation,
     data: {
       calendar: []
     }

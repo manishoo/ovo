@@ -102,6 +102,7 @@ export interface SettingsMutation_updateUser {
   role: Role;
   achievements: SettingsMutation_updateUser_achievements;
   meals: SettingsMutation_updateUser_meals[];
+  plan: any;
 }
 
 export interface SettingsMutation {

@@ -113,7 +113,7 @@ export default class ItemControl extends RX.Component<ItemControlProps> {
     )
   }
 
-  private _animate = (start: boolean = true) => {
+  private readonly _animate = (start: boolean = true) => {
     if (start) {
       this._loopAnimation = RX.Animated.timing(this._ellipsisAnimationValue, {
         toValue: 360,

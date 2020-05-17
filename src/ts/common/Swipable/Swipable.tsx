@@ -16,6 +16,13 @@ const scale = (num: number, in_min: number, in_max: number, out_min: number, out
 }
 
 const _styles = {
+  innerContainer: RX.Styles.createViewStyle({
+    position: 'absolute',
+    [Styles.values.end]: 0,
+    top: 0,
+    bottom: 0,
+    alignSelf: 'flex-end'
+  }),
   container: RX.Styles.createViewStyle({
     flex: 1,
     overflow: 'visible',
@@ -104,6 +111,7 @@ const BUTTON_WIDTH = 100
 export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons = [], withoutGesture = false, background, threshold, ...props }: SwipableItemProps, ref: Ref<any>) => {
   const theme = useTheme()
   const [dimensions, setDimensions] = useState<{ height: number, width: number } | undefined>()
+
   const [translatedXAnimationValue] = useState(RX.Animated.createValue(0))
 
   const [thresholdTriggerable, setThresholdTriggerable] = useState(false)
@@ -135,11 +143,8 @@ export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons =
   }), [translatedXAnimationValue])
 
   const _containerStyle = useMemo(() => RX.Styles.createViewStyle({
-    height: dimensions ? dimensions.height : undefined,
-    width: dimensions ? dimensions.width : undefined,
-
     backgroundColor,
-  }, false), [dimensions && dimensions.height, dimensions && dimensions.width, backgroundColor])
+  }, false), [backgroundColor])
 
   const _animate = useCallback((translatedXValue: number, thresholdContainerWidthValue: number, thresholdViewWidth: number, animated: boolean = true) => {
     if (_animation.current) {
@@ -225,10 +230,12 @@ export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons =
     return _animate(AppConfig.isRTL() ? -d : d, thresholdContainerWidth, width, false)
   }, [dimensions, AppConfig.isRTL(), thresholdTriggerable])
 
+
   const _onLayout = useCallback(e => {
-    console.log('ON LAYOUT', e)
-    setDimensions({ height: e.height, width: e.width })
-  }, [])
+    if (!dimensions) {
+      setDimensions({ height: e.height, width: e.width })
+    }
+  }, [!!dimensions])
 
   const _reset = useCallback((animated: boolean = false) => {
     _animate(0, 0, 350, animated)
@@ -242,13 +249,7 @@ export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons =
   const content = (
     <>
       <RX.View
-        style={{
-          position: 'absolute',
-          [Styles.values.end]: 0,
-          top: 0,
-          bottom: 0,
-          alignSelf: 'flex-end'
-        }}
+        style={_styles.innerContainer}
       >
         {
           endButtons.map(button => (
@@ -286,7 +287,7 @@ export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons =
         style={_overlayAnimationStyle}
       >
         <RX.View
-          onLayout={dimensions ? undefined : _onLayout}
+          onLayout={_onLayout}
         >
           {props.children}
         </RX.View>
@@ -296,7 +297,7 @@ export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons =
 
   if (withoutGesture) {
     return (
-      <RX.View
+      <RX.Animated.View
         style={[
           _styles.container,
           _containerStyle,
@@ -304,7 +305,7 @@ export const SwipableItem = forwardRef(({ style, startButtons = [], endButtons =
         ]}
       >
         {content}
-      </RX.View>
+      </RX.Animated.View>
     )
   }
 

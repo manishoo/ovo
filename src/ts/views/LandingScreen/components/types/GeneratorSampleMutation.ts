@@ -95,6 +95,16 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Food_thumbna
   url: string;
 }
 
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Food_origFoodGroups {
+  id: string;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Food_origFoodGroups_name[];
+}
+
 export interface GeneratorSampleMutation_suggestDayGuest_items_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -567,6 +577,7 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Food {
   weights: GeneratorSampleMutation_suggestDayGuest_items_item_Food_weights[];
   thumbnail: GeneratorSampleMutation_suggestDayGuest_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: GeneratorSampleMutation_suggestDayGuest_items_item_Food_origFoodGroups[][];
   nutrition: GeneratorSampleMutation_suggestDayGuest_items_item_Food_nutrition | null;
 }
 
@@ -575,12 +586,145 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_title
   locale: LanguageCode;
 }
 
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit =
+  GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_Weight
+  | GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_name[];
+  description: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item =
+  GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Food
+  | GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item_Recipe;
+
+export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_unit | null;
+  item: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients_item | null;
 }
 
 export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_author_avatar {
@@ -1064,9 +1208,11 @@ export interface GeneratorSampleMutation_suggestDayGuest_items_item_Recipe {
   id: string;
   slug: string;
   title: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_title[];
+  servingName: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_servingName[] | null;
   timing: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_thumbnail | null;
+  ingredients: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_ingredients[];
   author: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_author;
   nutrition: GeneratorSampleMutation_suggestDayGuest_items_item_Recipe_nutrition | null;
 }

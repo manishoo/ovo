@@ -17,7 +17,7 @@ export function getLastInputType(messages: AssistantChatMutation_setup_messages[
   let expect: AssistantExpectations | null = null
   let items: AssistantChatMutation_setup_messages_data_items[] | null = []
   let skip: boolean | null = false
-  let mealPlanSettings: any = null
+  let planSettings: any = null
   let data: any = null
 
   messages.forEach((message) => {
@@ -36,7 +36,7 @@ export function getLastInputType(messages: AssistantChatMutation_setup_messages[
 
         items = message.data.items
         skip = message.data.skip
-        mealPlanSettings = message.data.mealPlanSettings
+        planSettings = message.data.planSettings
       }
 
       data = message.data
@@ -50,7 +50,7 @@ export function getLastInputType(messages: AssistantChatMutation_setup_messages[
     expect,
     inputType,
     items,
-    mealPlanSettings,
+    planSettings,
     skip,
     data,
   }

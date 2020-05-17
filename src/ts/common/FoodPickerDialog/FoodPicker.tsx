@@ -105,7 +105,7 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
                 height: this.state.height,
                 maxHeight: isSmallSize ? undefined : CONTAINER_MAX_HEIGHT,
                 width: this.state.width,
-                backgroundColor: theme.colors.white,
+                backgroundColor: theme.colors.cardBg,
                 borderRadius: isSmallSize ? 0 : 10,
                 padding: isSmallSize ? Styles.values.spacing : Styles.values.spacing * 2,
               },
@@ -434,8 +434,8 @@ class FoodPicker extends ComponentBase<FoodPickerProps & RX.CommonProps, FoodPic
     if (!this.state.selectedItem) return
 
     this.props.onSubmit({
-      id: createId(),
       ...mealItem,
+      id: createId(),
     }, userMealId)
   }
 }
@@ -452,7 +452,7 @@ export function useFoodsSearch(nameSearchQuery: string, recipesPage?: number, fo
           hasNext
         }
       }
-      recipes (nameSearchQuery: $nameSearchQuery, page: $recipesPage) @skip(if: $skipRecipes) {
+      recipes (nameSearchQuery: $nameSearchQuery, page: $recipesPage, showMyRecipes: true) @skip(if: $skipRecipes) {
         recipes { ...FoodPreviewRecipe }
         pagination {
           page

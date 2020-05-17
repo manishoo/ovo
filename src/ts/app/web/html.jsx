@@ -8,6 +8,13 @@ const PropTypes = require('prop-types')
 
 const isProd = process.env.NODE_ENV === 'production'
 
+const Splash = (
+  <div id="splash">
+    <img src="/img/Logo.svg" className="logo" />
+    <img src="/img/GooeyRingSpinner.svg" className="loading" />
+  </div>
+)
+
 const Html = props => {
   const { assets, chunkNames, lang, state = {}, title } = props
 
@@ -38,7 +45,7 @@ const Html = props => {
   }
 
   return (
-    <html lang={lang || 'en'} dir={lang === 'fa' ? 'rtl' : 'ltr'}>
+    <html lang={lang || 'en'} dir={['fa', 'ar'].includes(lang) ? 'rtl' : 'ltr'}>
     <head>
       <meta charSet='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -65,6 +72,7 @@ const Html = props => {
     <body>
     <input type="hidden" name="appVersion" id="appVersion" value="{{ version }}" />
     {content}
+    {Splash}
     <script dangerouslySetInnerHTML={{
       __html: `window.__APOLLO_STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')};`,
     }} />

@@ -20,6 +20,7 @@ import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { navigate } from '@Utils'
 import authorized from '@Utils/authorized'
 import MealsList from '@Views/ProfileScreen/components/MealsList/MealsList'
+import PlansList from '@Views/ProfileScreen/components/PlansList/PlansList'
 import useProfileTabsHOC, {
   PROFILE_MEALS_QUERY,
   PROFILE_RECIPES_QUERY,
@@ -91,7 +92,6 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
       <ThemeContext.Consumer>
         {({ theme }) => (
           <Page
-            lazyRender
             scrollViewProps={{
               onScroll: this._onScroll,
             }}
@@ -135,10 +135,24 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
               {
                 authorized([Role.admin, Role.operator], user.role) &&
                 <FilledButton
-                  label={translate('Reviews')}
+                  label={translate(translate.keys.Plans)}
                   onPress={() => this.setState({ activeTab: 2 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
                   pressed={this.state.activeTab === 2}
                   mode={this.state.activeTab === 2 ? FilledButton.mode.primary : FilledButton.mode.default}
+                  style={{
+                    padding: 16
+                  }}
+                  fontSize={16}
+                  containerStyle={styles.tabButton}
+                />
+              }
+              {
+                authorized([Role.admin, Role.operator], user.role) &&
+                <FilledButton
+                  label={translate('Reviews')}
+                  onPress={() => this.setState({ activeTab: 3 }, this.props.isMyProfile ? this._saveStateToStorage : undefined)}
+                  pressed={this.state.activeTab === 3}
+                  mode={this.state.activeTab === 3 ? FilledButton.mode.primary : FilledButton.mode.default}
                   style={{
                     padding: 16
                   }}
@@ -225,6 +239,10 @@ export class ProfileScreen extends ComponentBase<ProfileScreenInnerProps & Profi
           />
         )
       case 2:
+        return (
+          <PlansList showAdd />
+        )
+      case 3:
         return (
           <RecipesList
             recipes={reviewRecipes.data && reviewRecipes.data.recipes ? reviewRecipes.data.recipes.recipes : []}

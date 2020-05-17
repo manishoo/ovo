@@ -31,13 +31,14 @@ enum TextType {
   title = 'title',
   subtitle = 'subtitle',
   body = 'body',
+  link = 'link',
 }
 
 export default class Text extends RX.Component<TextProps> {
   static types = TextType
 
   public render() {
-    const { style } = this.props
+    const { style, selectable = true } = this.props
 
     const Component = this._getComponent()
 
@@ -46,6 +47,7 @@ export default class Text extends RX.Component<TextProps> {
         {({ theme }) => (
           <Component
             {...this.props}
+            ellipsizeMode={'tail'}
             importantForAccessibility={ImportantForAccessibility.Yes}
             style={[styles.container, this._getFont(), this._getStyle(theme), style]}
           >
@@ -60,19 +62,21 @@ export default class Text extends RX.Component<TextProps> {
     switch (this.props.type) {
       case TextType.title:
         return {
-          fontFamily: Styles.fonts[AppConfig.locale].display.fontFamily,
+          fontFamily: Styles.fonts.display.fontFamily,
         }
       default:
         return {
-          fontFamily: Styles.fonts[AppConfig.locale].text.fontFamily,
+          fontFamily: Styles.fonts.text.fontFamily,
         }
     }
   }
 
   private _getStyle = (theme: Theme) => {
-    let style = {}
+    let style: any = {
+      color: theme.colors.text,
+    }
 
-    if (this.props.onPress) {
+    if (this.props.onPress || this.props.type === TextType.link) {
       style = {
         ...style,
         color: theme.colors.linkColor,
@@ -141,8 +145,6 @@ export default class Text extends RX.Component<TextProps> {
 
 const styles = {
   container: RX.Styles.createTextStyle({
-    // fontWeight: Styles.fonts.displayRegular,
-
     // @ts-ignore web
     transition: 'all 0.3s'
   }),

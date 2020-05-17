@@ -4,6 +4,7 @@
  */
 
 import { useMutation } from '@apollo/client'
+import { useTheme } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { FoodTypes } from '@Common/FoodPickerDialog/FoodPicker'
 import { showFoodPicker } from '@Common/FoodPickerDialog/FoodPickerDialog'
@@ -11,6 +12,7 @@ import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import { transformMealItemToIngredientInput } from '@Utils/transformers/meal.transformer'
+import { useCalendarContext } from '@Views/CalendarScreen/CalendarScreen'
 import differenceInMinutes from 'date-fns/differenceInMinutes'
 import RX from 'reactxp'
 import MealComponentOperations from '../DayComponent/components/MealComponent/operations/MealComponentOperation'
@@ -27,6 +29,9 @@ interface CalendarFABProps {
 }
 
 const CalendarFAB = ({ style, day }: CalendarFABProps) => {
+  const theme = useTheme()
+  const { planId } = useCalendarContext()
+
   const now = new Date()
   let date = new Date()
   let closestMealDiff = Infinity
@@ -42,7 +47,7 @@ const CalendarFAB = ({ style, day }: CalendarFABProps) => {
 
     return {
       text: meal.userMeal.name,
-      value: meal.userMeal.id
+      value: meal.id
     }
   })
   const _defaultValue = closestMealId
@@ -52,26 +57,34 @@ const CalendarFAB = ({ style, day }: CalendarFABProps) => {
 
   return (
     <FilledButton
-      label={<Text style={{ fontSize: 40, bottom: 3 }}>+</Text>}
+      label={<Text
+        style={{
+          fontSize: 40,
+          bottom: 3,
+          color: theme.colors.textLight,
+        }}
+      >+</Text>}
       onPress={() => showFoodPicker({
         foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
         onDismiss: () => null,
-        onSubmit: (mealItem, userMealId) => logMeal({
+        onSubmit: (mealItem, dayMealId) => logMeal({
           variables: {
-            userMealId: userMealId!,
+            dayMealId: dayMealId!,
+            planId,
             date,
             mealItems: [
-              ...day.meals.find(dayMeal => dayMeal.userMeal.id === userMealId)!.items.map(transformMealItemToIngredientInput),
+              ...day.meals.find(dayMeal => dayMeal.id === dayMealId)!.items.map(transformMealItemToIngredientInput),
               transformMealItemToIngredientInput(mealItem),
             ]
           },
           optimisticResponse: () => ({
             logMeal: {
-              ...day.meals.find(dayMeal => dayMeal.userMeal.id === userMealId)!,
+              ...day.meals.find(dayMeal => dayMeal.id === dayMealId)!,
               items: [
-                ...day.meals.find(dayMeal => dayMeal.userMeal.id === userMealId)!.items,
+                ...day.meals.find(dayMeal => dayMeal.id === dayMealId)!.items,
                 {
                   ...mealItem,
+                  hasAlternatives: false,
                   // @ts-ignore
                   __typename: 'MealItem'
                 }

@@ -14,12 +14,145 @@ export interface FoodPreviewRecipe_title {
   locale: LanguageCode;
 }
 
+export interface FoodPreviewRecipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface FoodPreviewRecipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface FoodPreviewRecipe_thumbnail {
   url: string;
+}
+
+export interface FoodPreviewRecipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: FoodPreviewRecipe_ingredients_customUnit_name[];
+}
+
+export interface FoodPreviewRecipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: FoodPreviewRecipe_ingredients_unit_Weight_name[];
+}
+
+export interface FoodPreviewRecipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: FoodPreviewRecipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type FoodPreviewRecipe_ingredients_unit =
+  FoodPreviewRecipe_ingredients_unit_Weight
+  | FoodPreviewRecipe_ingredients_unit_CustomUnit;
+
+export interface FoodPreviewRecipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: FoodPreviewRecipe_ingredients_item_Food_weights_name[];
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: FoodPreviewRecipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Food {
+  id: string;
+  name: FoodPreviewRecipe_ingredients_item_Food_name[];
+  description: FoodPreviewRecipe_ingredients_item_Food_description[] | null;
+  weights: FoodPreviewRecipe_ingredients_item_Food_weights[];
+  thumbnail: FoodPreviewRecipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: FoodPreviewRecipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewRecipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: FoodPreviewRecipe_ingredients_item_Recipe_title[];
+}
+
+export type FoodPreviewRecipe_ingredients_item =
+  FoodPreviewRecipe_ingredients_item_Food
+  | FoodPreviewRecipe_ingredients_item_Recipe;
+
+export interface FoodPreviewRecipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: FoodPreviewRecipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: FoodPreviewRecipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: FoodPreviewRecipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: FoodPreviewRecipe_ingredients_unit | null;
+  item: FoodPreviewRecipe_ingredients_item | null;
 }
 
 export interface FoodPreviewRecipe_author_avatar {
@@ -503,9 +636,11 @@ export interface FoodPreviewRecipe {
   id: string;
   slug: string;
   title: FoodPreviewRecipe_title[];
+  servingName: FoodPreviewRecipe_servingName[] | null;
   timing: FoodPreviewRecipe_timing;
   status: RecipeStatus;
   thumbnail: FoodPreviewRecipe_thumbnail | null;
+  ingredients: FoodPreviewRecipe_ingredients[];
   author: FoodPreviewRecipe_author;
   nutrition: FoodPreviewRecipe_nutrition | null;
 }

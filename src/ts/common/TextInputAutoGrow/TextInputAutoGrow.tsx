@@ -58,8 +58,12 @@ export default class TextInputAutoGrow extends RX.Component<TextInputAutoGrowPro
   }
 
   private _getValue = () => {
-    if (this.props.translations && this.props.translations.length > 0) {
-      return this.props.translations[0].text
+    if (this.props.translations) {
+      if (this.props.translations.length > 0) {
+        return this.props.translations[0].text
+      } else {
+        return ''
+      }
     }
 
     return this.props.value

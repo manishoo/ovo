@@ -22,8 +22,8 @@ const MainWindowId = 'MainWindowId'
 @AutoSubscribeStore
 class ResponsiveWidthStore extends StoreBase {
   private _drawerVisible: boolean = false
-  private _rawWidth: { [index: string]: number } = { [MainWindowId]: 0 }
-  private _rawHeight: { [index: string]: number } = { [MainWindowId]: 0 }
+  private _rawWidth: { [index: string]: number } = { [MainWindowId]: 10000 }
+  private _rawHeight: { [index: string]: number } = { [MainWindowId]: 10000 }
   private _responsiveWidth: { [index: string]: ResponsiveWidth } = { [MainWindowId]: ResponsiveWidth.Medium }
 
   constructor() {

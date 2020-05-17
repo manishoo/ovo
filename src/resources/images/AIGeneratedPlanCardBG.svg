@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="660px" height="440px" viewBox="0 0 660 440" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+  <title>Rectangle</title>
+  <desc>Created with Sketch.</desc>
+  <defs>
+    <linearGradient x1="0.25781251%" y1="49.7500002%" x2="101.257813%" y2="49.7500002%" id="linearGradient-1">
+      <stop stop-color="#3023AE" offset="0%"></stop>
+      <stop stop-color="#53A0FD" offset="47.5247532%"></stop>
+      <stop stop-color="#B4EC51" offset="100%"></stop>
+    </linearGradient>
+  </defs>
+  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Artboard" transform="translate(-98.000000, -72.000000)" fill="url(#linearGradient-1)">
+      <rect id="Rectangle" x="98" y="72" width="660" height="440"></rect>
+    </g>
+  </g>
+</svg>

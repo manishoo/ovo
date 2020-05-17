@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
@@ -21,6 +21,7 @@ import {
   TagsInputDeleteMutation,
   TagsInputDeleteMutationVariables
 } from '@Views/RecipeForm/components/TagsInput/types/TagsInputDeleteMutation'
+import { ExecutionResult } from 'graphql'
 import { useContext, useState } from 'react'
 import RX from 'reactxp'
 import { TagInputMutation, TagInputMutation_addTag, TagInputMutationVariables } from './types/TagInputMutation'
@@ -135,7 +136,11 @@ export function TagsInput(props: TagsInputProps) {
           <RX.View
             style={styles.panel}
           >
-            <Text style={{ fontSize: 16, marginBottom: Styles.values.spacing }}>{capitalize(key)}</Text>
+            <Text style={{
+              marginBottom: Styles.values.spacing / 2,
+              fontWeight: '300',
+              // color: theme.colors.labelInput
+            }}>{capitalize(key)}</Text>
 
             <RX.View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {

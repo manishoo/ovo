@@ -34,15 +34,17 @@ export default forwardRef((props: ExploreSearchProps, ref) => {
   const [blur, setBlur] = useState(true)
 
   const _onBlur = useCallback(() => {
-    setIsFocusing(false)
-    setBlur(true)
-    props.onBlur && props.onBlur()
-  }, [])
+    if (isFocusing) {
+      setIsFocusing(false)
+      setBlur(true)
+      props.onBlur && props.onBlur()
+    }
+  }, [props.onBlur, isFocusing])
   const _onFocus = useCallback(() => {
     setIsFocusing(true)
     setBlur(false)
     props.onFocus && props.onFocus()
-  }, [])
+  }, [props.onFocus, isFocusing])
 
   const _onChange = useCallback((value: string) => {
     setInput(value)
@@ -64,7 +66,7 @@ export default forwardRef((props: ExploreSearchProps, ref) => {
         value={input}
         onChange={_onChange}
         placeholder={translate('Search')}
-        clearButtonMode={blur ? undefined : 'while-editing'}
+        clearButtonMode={'while-editing'}
         loading={props.loading}
         onKeyPress={(e) => {
           if (e.keyCode === Keys.Return) {

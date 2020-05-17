@@ -15,7 +15,8 @@ export enum ResponsiveWidth {
 }
 
 export const WidthBreakPoints = {
-  tiny: 451,
-  small: 800,
-  medium: 1280
+  tiny: 576,
+  small: 768,
+  medium: 992,
+  large: 1200,
 }

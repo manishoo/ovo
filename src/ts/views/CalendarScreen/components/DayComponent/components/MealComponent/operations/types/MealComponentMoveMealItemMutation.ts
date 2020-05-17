@@ -17,4 +17,5 @@ export interface MealComponentMoveMealItemMutationVariables {
   toUserMealId: string;
   toIndex: number;
   mealItemId: any;
+  planId: any;
 }

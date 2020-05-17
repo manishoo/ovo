@@ -14,6 +14,11 @@ export interface PublishRecipeUpdateMutation_updateRecipe_title {
   locale: LanguageCode;
 }
 
+export interface PublishRecipeUpdateMutation_updateRecipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface PublishRecipeUpdateMutation_updateRecipe_author_avatar {
   url: string;
 }
@@ -108,6 +113,16 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_
   url: string;
 }
 
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food {
   id: string;
   name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_name[];
@@ -115,6 +130,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food 
   weights: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_weights[];
   thumbnail: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups[][];
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_title {
@@ -122,12 +138,145 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
   locale: LanguageCode;
 }
 
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit =
+  PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight
+  | PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_name[];
+  description: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item =
+  PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food
+  | PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe;
+
+export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit | null;
+  item: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item | null;
 }
 
 export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_author_avatar {
@@ -146,9 +295,11 @@ export interface PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recip
   id: string;
   slug: string;
   title: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_title[];
+  servingName: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_servingName[] | null;
   timing: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_thumbnail | null;
+  ingredients: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients[];
   author: PublishRecipeUpdateMutation_updateRecipe_ingredients_item_Recipe_author;
 }
 
@@ -662,6 +813,7 @@ export interface PublishRecipeUpdateMutation_updateRecipe {
   id: string;
   title: PublishRecipeUpdateMutation_updateRecipe_title[];
   serving: number;
+  servingName: PublishRecipeUpdateMutation_updateRecipe_servingName[] | null;
   slug: string;
   status: RecipeStatus;
   author: PublishRecipeUpdateMutation_updateRecipe_author;

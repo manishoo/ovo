@@ -96,6 +96,16 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Food_thumbnail 
   url: string;
 }
 
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Food_origFoodGroups {
+  id: string;
+  name: MealComponentLogMealMutation_logMeal_items_item_Food_origFoodGroups_name[];
+}
+
 export interface MealComponentLogMealMutation_logMeal_items_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -568,6 +578,7 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Food {
   weights: MealComponentLogMealMutation_logMeal_items_item_Food_weights[];
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: MealComponentLogMealMutation_logMeal_items_item_Food_origFoodGroups[][];
   nutrition: MealComponentLogMealMutation_logMeal_items_item_Food_nutrition | null;
 }
 
@@ -576,12 +587,145 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit =
+  MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_Weight
+  | MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_name[];
+  description: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item =
+  MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Food
+  | MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item_Recipe;
+
+export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_unit | null;
+  item: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients_item | null;
 }
 
 export interface MealComponentLogMealMutation_logMeal_items_item_Recipe_author_avatar {
@@ -1065,9 +1209,11 @@ export interface MealComponentLogMealMutation_logMeal_items_item_Recipe {
   id: string;
   slug: string;
   title: MealComponentLogMealMutation_logMeal_items_item_Recipe_title[];
+  servingName: MealComponentLogMealMutation_logMeal_items_item_Recipe_servingName[] | null;
   timing: MealComponentLogMealMutation_logMeal_items_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: MealComponentLogMealMutation_logMeal_items_item_Recipe_thumbnail | null;
+  ingredients: MealComponentLogMealMutation_logMeal_items_item_Recipe_ingredients[];
   author: MealComponentLogMealMutation_logMeal_items_item_Recipe_author;
   nutrition: MealComponentLogMealMutation_logMeal_items_item_Recipe_nutrition | null;
 }
@@ -1114,7 +1260,9 @@ export interface MealComponentLogMealMutation {
 }
 
 export interface MealComponentLogMealMutationVariables {
-  date: any;
-  userMealId: string;
+  date?: any | null;
+  dayId?: any | null;
+  dayMealId: any;
   mealItems: IngredientInput[];
+  planId: any;
 }

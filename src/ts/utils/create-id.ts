@@ -3,8 +3,10 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+const ObjectId = require('@Utils/object-id.js')
+
 export function createId(seed?: string) {
-  return `${Math.random()}-client`
+  return `${ObjectId()}-client`
 }
 
 export function isClientId(id: string) {

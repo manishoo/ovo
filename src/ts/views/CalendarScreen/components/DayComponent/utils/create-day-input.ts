@@ -4,17 +4,18 @@
  */
 
 import { DayInput } from '@Models/global-types'
-import { Me_meals, Me_nutritionProfile } from '@Models/graphql/me/types/Me'
+import { Me } from '@Models/graphql/me/types/Me'
+import { createId } from '@Utils/create-id'
 import trimTypeName from '@Utils/trim-type-name'
 import { DayComponentNewDayMutation_newDay } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentNewDayMutation'
 
 
 const ObjectId = require('@Utils/object-id.js')
 
-export const createDayInput = (date: Date, meals: Me_meals[], nutritionProfile: Me_nutritionProfile, optimistic?: boolean) => {
+export const createDayInput = (me: Me, date?: Date, optimistic?: boolean, planId?: string) => {
   const day = {
-    meals: meals.map(userMeal => {
-      const mealDate = date
+    meals: me.meals.map(userMeal => {
+      const mealDate = new Date() // FIXME
 
       mealDate.setHours(Number(userMeal.time.split(':')[0]))
       mealDate.setMinutes(Number(userMeal.time.split(':')[1]))
@@ -27,15 +28,22 @@ export const createDayInput = (date: Date, meals: Me_meals[], nutritionProfile: 
         ate: false,
       }
     }),
-    id: ObjectId(),
-    date: date.toISOString(),
-    nutritionProfile: trimTypeName(nutritionProfile),
+    // id: createId(),
+    date: date ? date.toISOString() : undefined,
+    planId: planId || me.plan,
   } as DayInput
 
   if (optimistic) {
     // @ts-ignore
     day.__typename = 'Day'
+    day.id = createId()
     day.meals = day.meals.map(dayMeal => {
+      dayMeal.userMeal = {
+        ...dayMeal.userMeal,
+        // @ts-ignore
+        __typename: 'UserMeal',
+      }
+
       // @ts-ignore
       dayMeal.__typename = 'DayMeal'
       // @ts-ignore

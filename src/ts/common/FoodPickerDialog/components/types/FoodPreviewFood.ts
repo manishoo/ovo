@@ -35,6 +35,16 @@ export interface FoodPreviewFood_thumbnail {
   url: string;
 }
 
+export interface FoodPreviewFood_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewFood_origFoodGroups {
+  id: string;
+  name: FoodPreviewFood_origFoodGroups_name[];
+}
+
 export interface FoodPreviewFood_nutrition_calories {
   amount: number;
   unit: string;
@@ -507,5 +517,6 @@ export interface FoodPreviewFood {
   weights: FoodPreviewFood_weights[];
   thumbnail: FoodPreviewFood_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: FoodPreviewFood_origFoodGroups[][];
   nutrition: FoodPreviewFood_nutrition | null;
 }

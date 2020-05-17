@@ -5,10 +5,10 @@
 
 import Assistant from '@Common/Assistant/Assistant'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import Link from '@Common/Link/Link'
 import { __ } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
-import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { getParam, map } from '@Utils'
 import { AssistantMessage } from '@Views/AssistantChat/components/ChatBox'
@@ -103,15 +103,18 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
           this.isIntro() && this.renderIntroDialog()
         }
 
-        <Assistant
-          size={80}
-          onPress={() => LocationStore.navigate(this.props, Routes.assistant)}
+        <Link
+          to={Routes.assistant}
           style={{
             position: 'absolute',
             bottom: this.state.assistantBottom,
             alignSelf: 'center',
           }}
-        />
+        >
+          <Assistant
+            size={80}
+          />
+        </Link>
       </RX.View>
     )
   }

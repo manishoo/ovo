@@ -6,8 +6,11 @@
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import CalorieIndicator from '@Common/CalorieIndicator/CalorieIndicator'
 import Text from '@Common/Text/Text'
-import Content from '@Locales/en'
+import TimingPie from '@Common/TimingPie/TimingPie'
+import EnLocale from '@Locales/en'
+import { MealAvailableTime, MealSize } from '@Models/global-types'
 import ImageSource from '@Modules/images'
 import SortableList from '@Modules/SortableList'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
@@ -86,11 +89,67 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
         ]}
       >
         <Text
-          translate={Content.CreateUserMeal}
+          translate={EnLocale.CreateUserMeal}
           style={{ color: theme.colors.userMealsMealItemBG }}
         />
       </RX.View>
     )
+  }
+
+  private _getCalorieForMealSize = (mealSize: MealSize) => {
+    switch (mealSize) {
+      case MealSize.tiny:
+        return 99
+      case MealSize.small:
+        return 199
+      case MealSize.normal:
+        return 499
+      case MealSize.big:
+        return 799
+      case MealSize.huge:
+        return 801
+    }
+  }
+
+  private _getTimingForMealAvailableTime = (availableTime: MealAvailableTime) => {
+    switch (availableTime) {
+      case MealAvailableTime.noTime:
+        return {
+          prepTime: 5,
+          cookTime: 55,
+          totalTime: 5,
+        }
+      case MealAvailableTime.littleTime:
+        return {
+          prepTime: 15,
+          cookTime: 45,
+          totalTime: 15,
+        }
+      case MealAvailableTime.someTime:
+        return {
+          prepTime: 30,
+          cookTime: 30,
+          totalTime: 30,
+        }
+      case MealAvailableTime.moreTime:
+        return {
+          prepTime: 45,
+          cookTime: 15,
+          totalTime: 45,
+        }
+      case MealAvailableTime.lotsOfTime:
+        return {
+          prepTime: 60,
+          cookTime: 0,
+          totalTime: 60,
+        }
+      case MealAvailableTime.noLimit:
+        return {
+          prepTime: 0,
+          cookTime: 1,
+          totalTime: Infinity,
+        }
+    }
   }
 
   private _renderMealItem = (theme: Theme) => (meal: MealSettingsMeal) => {
@@ -140,8 +199,21 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
               }
             ]}
           />
-        </RX.View>
 
+          <CalorieIndicator
+            calories={this._getCalorieForMealSize(meal.size)}
+            style={styles.timingPie}
+          />
+          <TimingPie
+            size={30}
+            timing={this._getTimingForMealAvailableTime(meal.availableTime)}
+            // prepTimeColor='red'
+            cookTimeColor={meal.availableTime === MealAvailableTime.noLimit ? 'rgba(255, 255, 255, 0.5)' : '#fff'}
+            labelStyle={{
+              color: theme.colors.textLight
+            }}
+          />
+        </RX.View>
 
         <RX.View
           style={{
@@ -149,6 +221,8 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
             alignItems: 'center',
           }}
         >
+
+
           {/**
            * Settings icon
            * */}
@@ -221,6 +295,10 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
 }
 
 const styles = {
+  timingPie: RX.Styles.createViewStyle({
+    [Styles.values.marginEnd]: Styles.values.spacing / 2,
+    [Styles.values.marginStart]: Styles.values.spacing,
+  }),
   bar: RX.Styles.createViewStyle({
     width: 15,
     height: 1,

@@ -252,6 +252,10 @@ class ImageSource implements ImageSourceBase {
   get Check() {
     return require('../../../images/Check.png')
   }
+
+  get AIGeneratedPlanCardBG() {
+    return require('../../../images/AIGeneratedPlanCardBG.png')
+  }
 }
 
 export default new ImageSource()

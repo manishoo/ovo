@@ -22,6 +22,7 @@ import Navbar from '@Common/Navbar/Navbar'
 import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import Page from '@Common/Page'
 import Text from '@Common/Text/Text'
+import TimingPie from '@Common/TimingPie/TimingPie'
 import { RecipeStatus, Role } from '@Models/global-types'
 import { useMe } from '@Models/graphql/me/me'
 import { Me } from '@Models/graphql/me/types/Me'
@@ -34,7 +35,7 @@ import { ProfileRecipesQuery, ProfileRecipesQueryVariables } from '@Views/Profil
 import { PROFILE_RECIPES_QUERY } from '@Views/ProfileScreen/useProfileTabs.hook'
 import IngredientServingControl from '@Views/RecipeScreen/components/IngredientServingControl'
 import PublishRecipe from '@Views/RecipeScreen/components/PublishRecipe'
-import RecipeModal, { MODAL_ID, MODAL_MAX_WIDTH } from '@Views/RecipeScreen/RecipeModal'
+import { MODAL_MAX_WIDTH } from '@Views/RecipeScreen/RecipeModal'
 import { Recipe, Recipe_author } from '@Views/RecipeScreen/types/Recipe'
 import { RecipeDeleteMutation, RecipeDeleteMutationVariables } from '@Views/RecipeScreen/types/RecipeDeleteMutation'
 import { RecipeQuery, RecipeQueryVariables } from '@Views/RecipeScreen/types/RecipeQuery'
@@ -68,13 +69,6 @@ interface RecipeState {
 export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
   private _linkInputRef: any
 
-  static showModal = (props: RecipeCommonProps) => (
-    RX.Modal.show(
-      <RecipeModal />,
-      MODAL_ID,
-    )
-  )
-
   protected _buildState(props: RecipeProps, initialBuild: boolean): Partial<RecipeState> | undefined {
     return {
       windowHeight: ResponsiveWidthStore.getHeight(),
@@ -93,15 +87,16 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
           <ModalContext.Consumer>
             {({ modalId }) => (
               <Page
-                lazyRender
                 maxWidth={modalId ? MODAL_MAX_WIDTH : undefined}
                 style={{
                   borderRadius: 10,
                 }}
               >
-                <Navbar>
-                  {this._renderControlBar()}
-                </Navbar>
+                {
+                  !!this.props.me && <Navbar>
+                    {this._renderControlBar()}
+                  </Navbar>
+                }
 
                 {
                   recipe.image &&
@@ -133,11 +128,11 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
                     }} />
                     {
                       (
-                        (recipe.status === RecipeStatus.public) ||
-                        (recipe.status === RecipeStatus.review)
+                        (recipe.status === RecipeStatus.verified) ||
+                        (recipe.status === RecipeStatus.reviewing)
                       ) &&
                       <Image
-                        source={recipe.status === RecipeStatus.public ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
+                        source={recipe.status === RecipeStatus.verified ? ImageSource.VerifiedBadge : ImageSource.VerifyingBadge}
                         style={styles.verifiedBadge}
                         resizeMode={'cover'}
                       />
@@ -215,27 +210,6 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
 
   private _renderRecipeTimingAndComplexity = (theme: Theme) => {
     const recipe = this.props.recipe
-    const VictoryPieLazy = require('reactxp-chart').VictoryPie
-    const VictoryLabel = require('reactxp-chart').VictoryLabel
-
-    const _getLabel = ({ datum }: any) => {
-      switch (datum._x) {
-        case 0:
-          return translate('prepTime')
-        case 1:
-          return translate('cookTime')
-        case 2:
-          return translate('totalTime')
-      }
-    }
-
-    const timingChartData = []
-
-    if (recipe.timing.prepTime) timingChartData.push({ x: 'prepTime', y: recipe.timing.prepTime })
-    if (recipe.timing.cookTime) timingChartData.push({ x: 'cookTime', y: recipe.timing.cookTime })
-
-    const prepTimeColor = '#cddc39'
-    const cookTimeColor = '#ffb300'
 
     return (
       <RX.View style={[styles.instructions.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
@@ -246,49 +220,19 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
             flexDirection: 'row',
           }}
         >
-          <RX.View
+          <TimingPie
+            timing={recipe.timing}
             style={{
-              width: 65,
-              height: 65,
-              alignItems: 'center',
-              justifyContent: 'center',
               [Styles.values.marginEnd]: Styles.values.spacing
             }}
-          >
-            <VictoryPieLazy
-              innerRadius={() => 130}
-              labelRadius={() => 50}
-              padding={0}
-              labels={() => null}
-              style={{
-                data: {
-                  fill: ({ datum }: any) => {
-                    switch (datum.x) {
-                      case 'prepTime':
-                        return prepTimeColor
-                      case 'cookTime':
-                        return cookTimeColor
-                    }
-                  },
-                }
-              }}
-              data={timingChartData}
-            />
+          />
 
-            <Text
-              style={{
-                position: 'absolute',
-                fontWeight: 'bold',
-                fontSize: 24,
-              }}
-            >{recipe.timing.totalTime}</Text>
-          </RX.View>
           <RX.View>
             {
               recipe.timing.prepTime !== null &&
               <Text
                 type={Text.types.body}
-                style={{ marginBottom: 5, color: prepTimeColor, fontWeight: '500' }}
+                style={{ marginBottom: 5, color: Styles.values.timingColors.prepTimeColor, fontWeight: '500' }}
               >{translate('prepTime')}: <Text
                 style={{ color: theme.colors.text }}>{recipe.timing.prepTime}</Text></Text>
             }
@@ -296,7 +240,7 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
               recipe.timing.cookTime !== null &&
               <Text
                 type={Text.types.body}
-                style={{ marginBottom: 5, color: cookTimeColor, fontWeight: '500' }}
+                style={{ marginBottom: 5, color: Styles.values.timingColors.cookTimeColor, fontWeight: '500' }}
               >{translate('cookTime')}: <Text
                 style={{ color: theme.colors.text }}>{recipe.timing.cookTime}</Text></Text>
             }
@@ -319,55 +263,6 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
       </RX.View>
     )
   }
-
-  // private _renderNutritionInfo = (theme: Theme) => {
-  //   const recipe = this.props.recipe
-  //
-  //   if (!recipe.nutrition) return null
-  //
-  //   if (Object.values(trimTypeName(recipe.nutrition)).filter(Boolean).length === 0) return null
-  //
-  //   const carbs = (recipe.nutrition.totalCarbs || recipe.nutrition.totalAvailableCarbs)
-  //
-  //   return (
-  //     <RX.View style={[styles.ingredients.container, { borderColor: theme.colors.recipeSeparatorBorderColor }]}>
-  //       <RX.View>
-  //         <Text
-  //           translate
-  //           type={Text.types.title}
-  //           style={[styles.label, { [Styles.values.marginEnd]: Styles.values.spacing }]}
-  //         >Nutrition (per serving)</Text>
-  //
-  //         {
-  //           recipe.nutrition.calories &&
-  //           <Text
-  //             type={Text.types.body}
-  //             style={{ marginBottom: 5 }}
-  //           >{translate('calories')}: {recipe.nutrition.calories.amount.toFixed()} {translate(recipe.nutrition.calories.unit)}</Text>
-  //         }
-  //         {
-  //           recipe.nutrition.proteins && <Text
-  //             type={Text.types.body}
-  //             style={{ marginBottom: 5 }}
-  //           >{translate('proteins')}: {recipe.nutrition.proteins.amount.toFixed()} {translate(recipe.nutrition.proteins.unit)}</Text>
-  //         }
-  //         {
-  //           carbs &&
-  //           <Text
-  //             type={Text.types.body}
-  //             style={{ marginBottom: 5 }}
-  //           >{translate('carbs')}: {carbs.amount.toFixed()} {translate(carbs.unit)}</Text>}
-  //         {
-  //           recipe.nutrition.fats &&
-  //           <Text
-  //             type={Text.types.body}
-  //             style={{ marginBottom: 5 }}
-  //           >{translate('fats')}: {recipe.nutrition.fats.amount.toFixed()} {translate(recipe.nutrition.fats.unit)}</Text>
-  //         }
-  //       </RX.View>
-  //     </RX.View>
-  //   )
-  // }
 
   private _renderIngredientsSection = (theme: Theme) => {
     const recipe = this.props.recipe
@@ -551,18 +446,23 @@ export class RecipeScreen extends ComponentBase<RecipeProps, RecipeState> {
               }).then(() => navigate(this.props, 'back'))
             }, { text: translate('no') }])}
           />
-          <FilledButton
-            label={translate('Edit Recipe')}
-            mode={FilledButton.mode.default}
-            onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })}
-            style={{
-              [Styles.values.marginStart]: Styles.values.spacing / 2
-            }}
-          />
-          <PublishRecipe
-            recipe={this.props.recipe}
-            user={this.props.me}
-          />
+          {
+            this.props.recipe.status !== RecipeStatus.verified &&
+            <>
+              <FilledButton
+                label={translate('Edit Recipe')}
+                mode={FilledButton.mode.default}
+                onPress={() => LocationStore.navigate(this.props, `/recipe/${this.props.recipe.slug}/edit`, { params: {} })}
+                style={{
+                  [Styles.values.marginStart]: Styles.values.spacing / 2
+                }}
+              />
+              <PublishRecipe
+                recipe={this.props.recipe}
+                user={this.props.me}
+              />
+            </>
+          }
         </RX.View>
       )
     }
@@ -587,7 +487,7 @@ const useRecipeData = ({ slug }: { slug: string }) => {
     ${RecipeContainer.fragments.recipe}
   `, {
     fetchPolicy: 'cache-and-network',
-    returnPartialData: true,
+    // returnPartialData: true,
     variables: {
       slug,
     }
@@ -647,6 +547,12 @@ export default function RecipeContainer(props: RecipeCommonProps) {
     loading,
   } = useRecipeData({ slug: props.slug || getParam(props, 'slug') })
 
+  console.log(
+    loading,
+    data,
+    error,
+  )
+
   if (loading) {
     return (
       <RX.View
@@ -686,6 +592,10 @@ export const fragments = {
         locale
       }
       serving
+      servingName {
+        text
+        locale
+      }
       slug
       status
       author {

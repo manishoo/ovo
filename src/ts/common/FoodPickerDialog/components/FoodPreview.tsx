@@ -112,7 +112,7 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     },
     get mealItem() {
       return gql`
-        fragment FoodPreviewMealItem on MealItem {
+        fragment FoodPreviewMealItem on Ingredient {
           id
           name {text locale}
           description {text locale}
@@ -134,7 +134,6 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
               name { text locale }
             }
           }
-          hasAlternatives
           item {
             ...FoodPreviewMealItemIngredientItem
           }
@@ -216,7 +215,6 @@ export default class FoodPreview extends RX.Component<FoodPreviewProps, FoodPrev
     this.props.onSubmit({
       ...this.state.mealItem,
       amount: getFloatFromString(this.state.mealItem.amount),
-      hasAlternatives: false,
     }, userMealId)
     this.props.onDismiss()
   }

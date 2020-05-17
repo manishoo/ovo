@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
@@ -20,12 +20,14 @@ import Text from '@Common/Text/Text'
 import CalendarService from '@Services/CalendarService'
 import usePrevious from '@Utils/hooks/usePrevious'
 import { transformMealItemToIngredientInput } from '@Utils/transformers/meal.transformer'
+import { useCalendarContext } from '@Views/CalendarScreen/CalendarScreen'
 import {
   MealComponentMoveMealItemMutation,
   MealComponentMoveMealItemMutationVariables
 } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/types/MealComponentMoveMealItemMutation'
 import ItemControl from '@Views/CalendarScreen/components/ItemControl/ItemControl'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
+import { ExecutionResult } from 'graphql'
 import debounce from 'lodash/debounce'
 import React, {
   forwardRef,
@@ -67,6 +69,7 @@ interface MealComponentCommonProps {
 
   editable?: boolean,
   showIAteThis?: boolean,
+  swipable?: boolean
 }
 
 type onMoveMealItem = (fromMealId: string, fromUserMealId: string, toMealId: string, toUserMealId: string, mealItemId: string, toIndex: number) => Promise<ExecutionResult<MealComponentMoveMealItemMutation>>
@@ -75,7 +78,7 @@ interface MealComponentProps extends MealComponentCommonProps {
   onMealRegenerate: () => Promise<ExecutionResult<MealComponentSuggestMealMutation>>,
   mealRegenerating?: boolean,
 
-  onLogMeal?: (variables: MealComponentLogMealMutationVariables, previousMeal: MealComponentDayMeal) => Promise<ExecutionResult<MealComponentLogMealMutation>>,
+  onLogMeal?: (variables: Omit<MealComponentLogMealMutationVariables, 'planId'>, previousMeal: MealComponentDayMeal) => Promise<ExecutionResult<MealComponentLogMealMutation>>,
   logMealLoading?: boolean,
 
   onEatMeal?: () => Promise<ExecutionResult<MealComponentEatMealMutation>>,
@@ -101,8 +104,10 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
     spaceIndex,
     editable = true,
     showIAteThis = false,
+    swipable = true,
   } = props
 
+  const { planId } = useCalendarContext()
   const { theme } = useContext(ThemeContext)
 
   const mealStringified = JSON.stringify(meal)
@@ -120,81 +125,86 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
       0,
       {
         ...mealItem,
+        hasAlternatives: false,
         // @ts-ignore
         __typename: 'MealItem',
       }
     )
 
     return onLogMeal!({
-      date: meal.time,
-      userMealId: meal.userMeal.id,
+      date: planId ? undefined : meal.time,
+      dayMealId: meal.id,
       mealItems: mealItems.map(transformMealItemToIngredientInput)
     }, {
       ...meal,
       items: mealItems,
     })
-  }, [mealStringified])
+  }, [mealStringified, planId])
 
-  const _onMealItemChange = useCallback(debounce((mealItem: FoodPickerMealItem) => {
+  const _onMealItemChange = useCallback(debounce((mealItem: any) => {
     const mealItems: MealComponentDayMeal_items[] = meal.items.map(item => {
       if (item.id === mealItem.id) {
-        return mealItem
+        return {
+          ...mealItem as FoodPickerMealItem,
+          hasAlternatives: false,
+        }
       }
 
       return item
     })
 
     return onLogMeal!({
-      date: meal.time,
-      userMealId: meal.userMeal.id,
+      date: planId ? undefined : meal.time,
+      dayMealId: meal.id,
       mealItems: mealItems.map(transformMealItemToIngredientInput)
     }, {
       ...meal,
       items: mealItems,
     })
-  }, 500), [mealStringified])
+  }, 500), [mealStringified, planId])
 
-  const _onMealOrderChange = useCallback((items: FoodPickerMealItem[]) => {
+  const _onMealOrderChange = useCallback((items: MealComponentDayMeal_items[]) => {
     return onLogMeal!({
-      date: meal.time,
-      userMealId: meal.userMeal.id,
+      date: planId ? undefined : meal.time,
+      dayMealId: meal.id,
       mealItems: items.map(transformMealItemToIngredientInput)
     }, {
       ...meal,
       items,
     })
-  }, [mealStringified])
+  }, [mealStringified, planId])
 
   const _onRemoveMealItem = useCallback((mealItemId: string) => {
     const mealItems: MealComponentDayMeal_items[] = meal.items.filter(p => p.id !== mealItemId)
 
     return onLogMeal!({
-      date: meal.time,
-      userMealId: meal.userMeal.id,
+      date: planId ? undefined : meal.time,
+      dayMealId: meal.id,
       mealItems: mealItems.map(transformMealItemToIngredientInput)
     }, {
       ...meal,
       items: mealItems,
     })
-  }, [mealStringified])
+  }, [mealStringified, planId])
 
   useImperativeHandle(ref, () => ({
     deleteMealItem: _onRemoveMealItem,
-    addMealItem: (mealItem: FoodPickerMealItem, index?: number) => _onAddMealItem(mealItem, index)
+    addMealItem: (mealItem: FoodPickerMealItem, index?: number) => _onAddMealItem(mealItem, index),
+    resizeWrapper: (height: number) => _swipableItemRef.current.resize(height)
   }))
 
   const _swipableItemRef = useRef<any>()
 
   const _onClearMealItems = useCallback(() => {
     return onLogMeal!({
-      date: meal.time,
-      userMealId: meal.userMeal.id,
+      date: planId ? undefined : meal.time,
+      dayMealId: meal.id,
       mealItems: []
     }, {
       ...meal,
       items: [],
     })
-  }, [mealStringified])
+  }, [mealStringified, planId])
 
   const _onMealRegenerate = () => {
     if (mealRegenerating) return
@@ -204,7 +214,11 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
         /**
          * Reset refreshing state on threshold if ...
          * */
-        setTimeout(() => _swipableItemRef.current.reset(true), 1000)
+        setTimeout(() => {
+          if (_swipableItemRef.current) {
+            _swipableItemRef.current.reset(true)
+          }
+        }, 1000)
       })
   }
 
@@ -234,6 +248,13 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
     onDragEnd = dragAndDrop.onDragEnd
   }
 
+  const _mealNameStyle = useMemo(() => [
+    styles.mealName,
+    RX.Styles.createTextStyle({
+      textDecorationLine: meal.ate ? 'line-through' : undefined,
+    }, false),
+  ], [meal.ate])
+
   let mealItems = [...meal.items]
 
   if (spaceIndex !== undefined) {
@@ -242,13 +263,154 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
     mealItems
       .splice(spaceIndex.index, 0, {
         ...spaceIndex.mealItem,
+        hasAlternatives: false,
         id: spaceIndex.mealItem.id
       })
   }
 
   useEffect(() => {
-    _swipableItemRef.current.reset()
+    if (_swipableItemRef.current) {
+      _swipableItemRef.current.reset()
+    }
   }, [meal.mealId])
+
+  const content = (
+    <RX.View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.cardBg,
+          borderColor: theme.colors.borderLight,
+        },
+      ]}
+    >
+      <RX.GestureView
+        preferredPan={PreferredPanGesture.Horizontal}
+        panPixelThreshold={20}
+        releaseOnRequest={true}
+        onPanHorizontal={_swipableItemRef.current ? e => _swipableItemRef.current.handleGesture(e) : undefined}
+        mouseOverCursor={GestureMouseCursor.Grab}
+      >
+        <HoverView
+          defaultCursor
+          onRenderChild={isHovering => (
+            <RX.View
+              style={styles.headerContainer}
+            >
+              <RX.View
+                style={{
+                  flex: 1,
+                }}
+              >
+                <RX.View
+                  style={{
+                    flexDirection: 'row',
+                    [Styles.values.start]: Styles.values.spacing,
+                    marginTop: Styles.values.spacingLarge,
+                    marginBottom: Styles.values.spacing / 4,
+                  }}
+                >
+                  <Text style={_mealNameStyle}>{meal.userMeal.name}</Text>
+                  {
+                    onEatMeal && showIAteThis &&
+                    <HoverView
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        [Styles.values.marginStart]: Styles.values.spacing / 2,
+                        cursor: 'pointer',
+                        opacity: eatMealLoading ? 0.8 : 1,
+                      }}
+                      onPress={onEatMeal}
+                      onRenderChild={isHovering1 => (
+                        <>
+                          <Checkbox
+                            value={!!meal.ate}
+                            size={15}
+                            isHovering={isHovering1}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: meal.ate ? theme.colors.primary : theme.colors.subtitle,
+                              [Styles.values.marginStart]: Styles.values.spacing / 2
+                            }}
+                            type={Text.types.subtitle}
+                          >I ate this</Text>
+                        </>
+                      )}
+                    />
+                  }
+                </RX.View>
+                <Text
+                  style={styles.mealCalorie}>{CalendarService.calculateMealTotalCalorie(meal)} {translate(translate.keys.Calories)}</Text>
+              </RX.View>
+
+              {
+                editable && !AppConfig.isTouchInterface() &&
+                <ItemControl
+                  visible={isHovering || mealRegenerating}
+                  onRegenerate={_onMealRegenerate}
+                  regenerating={mealRegenerating}
+                  style={{
+                    position: 'absolute',
+                    [Styles.values.end]: Styles.values.spacing,
+                  }}
+                >
+                  <MenuItem
+                    label={translate('Add Meal Item')}
+                    onPress={() => showFoodPicker({
+                      foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
+                      onDismiss: () => null,
+                      onSubmit: mealItem => _onAddMealItem(mealItem),
+                      submitButtonLabel: translate('Add Meal Item')
+                    })}
+                  />
+                  <MenuItem
+                    label={translate('Edit Meal Settings')}
+                    onPress={() => MealSettingsScreen.showModal({
+                      theme,
+                      meal: meal.userMeal,
+                      submitMustSave: true,
+                      onSubmit: meal => null
+                    })}
+                  />
+                  <MenuItem
+                    label={translate('Clear Meals Items')}
+                    onPress={_onClearMealItems}
+                  />
+                </ItemControl>
+              }
+            </RX.View>
+          )}
+        />
+      </RX.GestureView>
+
+      {
+        mealItems.map((mealItem, index) => (
+          <RX.View
+            key={mealItem.id}
+            style={{
+              opacity: (spaceIndex && mealItem.id === spaceIndex.mealItem.id) ? 0.3 : 1
+            }}
+          >
+            <MealItemComponent
+              key={mealItem.id}
+              meal={meal}
+              dayId={dayId}
+              mealItem={mealItem}
+              onMealItemChange={onLogMeal && _onMealItemChange}
+              onMealItemRemove={onLogMeal && _onRemoveMealItem}
+              onDragStart={onDragStart ? onDragStart(mealItem, index) : undefined}
+              onDragEnd={onDragEnd}
+              onDragEnter={onDragEnter && onDragEnter(index)}
+            />
+          </RX.View>
+        ))
+      }
+
+    </RX.View>
+  )
 
   return (
     <HoverView
@@ -266,158 +428,26 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
         style,
       ]}
       onRenderChild={isHovering => (
-        <SwipableItem
-          ref={ref => _swipableItemRef.current = ref}
-          withoutGesture
-          background={'transparent'}
-          threshold={{
-            element: triggerable => (
-              <RefreshIcon
-                size={50}
-                color={triggerable ? theme.colors.primary : theme.colors.text}
-                spin={mealRegenerating}
-              />
-            ),
-            onTrigger: _onMealRegenerate,
-            thresholdPercentage: 50,
-          }}
-        >
-          <RX.View
-            style={[
-              styles.container,
-              {
-                backgroundColor: theme.colors.mealCardBackgroundColor,
-                borderColor: theme.colors.borderLight,
-              },
-            ]}
+        swipable ?
+          <SwipableItem
+            ref={ref => _swipableItemRef.current = ref}
+            withoutGesture
+            background={'transparent'}
+            threshold={{
+              element: triggerable => (
+                <RefreshIcon
+                  size={50}
+                  color={triggerable ? theme.colors.primary : theme.colors.text}
+                  spin={mealRegenerating}
+                />
+              ),
+              onTrigger: _onMealRegenerate,
+              thresholdPercentage: 50,
+            }}
           >
-            <RX.GestureView
-              preferredPan={PreferredPanGesture.Horizontal}
-              panPixelThreshold={20}
-              releaseOnRequest={true}
-              onPanHorizontal={_swipableItemRef.current ? e => _swipableItemRef.current.handleGesture(e) : undefined}
-              mouseOverCursor={GestureMouseCursor.Grab}
-            >
-              <HoverView
-                defaultCursor
-                onRenderChild={isHovering => (
-                  <RX.View
-                    style={styles.headerContainer}
-                  >
-                    <RX.View
-                      style={{
-                        flex: 1,
-                      }}
-                    >
-                      <RX.View
-                        style={{
-                          flexDirection: 'row',
-                          [Styles.values.start]: Styles.values.spacing,
-                          marginTop: Styles.values.spacingLarge,
-                          marginBottom: Styles.values.spacing / 4,
-                        }}
-                      >
-                        <Text style={styles.mealName}>{meal.userMeal.name}</Text>
-                        {
-                          onEatMeal &&
-                          <HoverView
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              [Styles.values.marginStart]: Styles.values.spacing / 2,
-                              cursor: 'pointer',
-                              opacity: eatMealLoading ? 0.8 : 1,
-                            }}
-                            onPress={onEatMeal}
-                            onRenderChild={isHovering1 => (
-                              <>
-                                <Checkbox
-                                  value={!!meal.ate}
-                                  size={15}
-                                  isHovering={isHovering1}
-                                />
-                                <Text
-                                  style={{
-                                    fontSize: 12,
-                                    color: meal.ate ? theme.colors.primary : theme.colors.subtitle,
-                                    [Styles.values.marginStart]: Styles.values.spacing / 2
-                                  }}
-                                  type={Text.types.subtitle}
-                                >I ate this</Text>
-                              </>
-                            )}
-                          />
-                        }
-                      </RX.View>
-                      <Text
-                        style={styles.mealCalorie}>{CalendarService.calculateMealTotalCalorie(meal)} {translate(translate.keys.Calories)}</Text>
-                    </RX.View>
-
-                    {
-                      editable && !AppConfig.isTouchInterface() &&
-                      <ItemControl
-                        visible={isHovering || mealRegenerating}
-                        onRegenerate={_onMealRegenerate}
-                        regenerating={mealRegenerating}
-                        style={{
-                          position: 'absolute',
-                          [Styles.values.end]: Styles.values.spacing,
-                        }}
-                      >
-                        <MenuItem
-                          label={translate('Add Meal Item')}
-                          onPress={() => showFoodPicker({
-                            foodTypes: [FoodTypes.all, FoodTypes.food, FoodTypes.recipe],
-                            onDismiss: () => null,
-                            onSubmit: mealItem => _onAddMealItem(mealItem),
-                            submitButtonLabel: translate('Add Meal Item')
-                          })}
-                        />
-                        <MenuItem
-                          label={translate('Edit Meal Settings')}
-                          onPress={() => MealSettingsScreen.showModal({
-                            theme,
-                            meal: meal.userMeal,
-                            submitMustSave: true,
-                            onSubmit: meal => null
-                          })}
-                        />
-                        <MenuItem
-                          label={translate('Clear Meals Items')}
-                          onPress={_onClearMealItems}
-                        />
-                      </ItemControl>
-                    }
-                  </RX.View>
-                )}
-              />
-            </RX.GestureView>
-
-            {
-              mealItems.map((mealItem, index) => (
-                <RX.View
-                  key={mealItem.id}
-                  style={{
-                    opacity: (spaceIndex && mealItem.id === spaceIndex.mealItem.id) ? 0.3 : 1
-                  }}
-                >
-                  <MealItemComponent
-                    key={mealItem.id}
-                    meal={meal}
-                    dayId={dayId}
-                    mealItem={mealItem}
-                    onMealItemChange={onLogMeal && _onMealItemChange}
-                    onMealItemRemove={onLogMeal && _onRemoveMealItem}
-                    onDragStart={onDragStart ? onDragStart(mealItem, index) : undefined}
-                    onDragEnd={onDragEnd}
-                    onDragEnter={onDragEnter && onDragEnter(index)}
-                  />
-                </RX.View>
-              ))
-            }
-
-          </RX.View>
-        </SwipableItem>
+            {content}
+          </SwipableItem>
+          : content
       )}
     />
   )
@@ -426,7 +456,7 @@ const MealComponent = forwardRef((props: MealComponentProps, ref: Ref<any>) => {
 interface UseDragAndDropProp {
   setSpaceIndex: (meal: MealComponentDayMeal, index?: number) => void,
   onRemoveMealItem: (mealItemId: string) => any,
-  onMealOrderChange: (items: FoodPickerMealItem[]) => void,
+  onMealOrderChange: (items: MealComponentDayMeal_items[]) => void,
   onAddMealItem: (mealItem: FoodPickerMealItem, index?: number) => void,
   onMoveMealItem: onMoveMealItem,
   spaceIndex?: { index: number, mealItem: FoodPreviewMealItem },
@@ -462,6 +492,7 @@ export const onDrop = ({ meal, spaceIndex, onMoveMealItem, onAddMealItem, setSpa
           mealItems
             .splice(spaceIndex.index, 0, {
               ...spaceIndex.mealItem,
+              hasAlternatives: false,
               id: spaceIndex.mealItem.id
             })
 
@@ -508,22 +539,6 @@ const useDragAndDrop = (props: UseDragAndDropProp) => {
   const onDragEnter = useCallback((index: number) => (e: RX.Types.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-
-    // const mealItemStringified = e.dataTransfer.getData('mealItem')
-    //
-    // if (mealItemStringified) {
-    //   try {
-    //     console.log('mealItemStringified', mealItemStringified)
-    //     const mealItem = JSON.parse(mealItemStringified) as FoodPreviewMealItem
-    //
-    //     setDraggingItem(meal, mealItem)
-    //     setSpaceIndex(meal, index)
-    //   } catch (e) {
-    //     console.error(e)
-    //   }
-    // } else {
-    //   setSpaceIndex(meal, index)
-    // }
 
     setSpaceIndex(meal, index)
   }, [mealStringified])
@@ -690,6 +705,7 @@ const MealComponentAnimationContainer = ({ meal, ...props }: MealComponentAnimat
           <MealComponent
             {...props}
             meal={_nextMeal}
+            swipable={false}
           />
         </RX.Animated.View>
       }
@@ -698,6 +714,8 @@ const MealComponentAnimationContainer = ({ meal, ...props }: MealComponentAnimat
 }
 
 const MealComponentContainer = ({ editable = true, ...props }: MealComponentCommonProps, ref: React.Ref<any>) => {
+  const { planId } = useCalendarContext()
+
   const [logMeal, { loading: logMealLoading }] = useMutation<MealComponentLogMealMutation, MealComponentLogMealMutationVariables>(MealComponentOperations.logMeal, {
     update: (proxy, { data }) => data && props.dayId && CalendarService.setMeal(proxy, data.logMeal),
   })
@@ -720,30 +738,38 @@ const MealComponentContainer = ({ editable = true, ...props }: MealComponentComm
   })
 
   const onLogMeal = useCallback((variables, mealOptimisticResponse) => logMeal({
-    variables,
+    variables: {
+      ...variables,
+      dayId: props.dayId,
+      planId,
+    },
     optimisticResponse: () => ({
       logMeal: mealOptimisticResponse
     }),
-  }), [])
+  }), [planId])
   const onMealRegenerate = useCallback(() => suggestMeal({
     variables: {
-      date: props.meal.time,
-      userMealId: props.meal.userMeal.id,
+      dayId: props.dayId,
+      dayMealId: props.meal.id,
+      planId,
     },
   }), [
     props.meal.time,
     props.meal.userMeal.id,
+    planId,
   ])
   const onEatMeal = useCallback(() => eatMeal({
     variables: {
       dayId: props.dayId,
       userMealId: props.meal.userMeal.id,
       eaten: !props.meal.ate,
+      planId,
     },
   }), [
     props.dayId,
     props.meal.userMeal.id,
     props.meal.ate,
+    planId,
   ])
   const onMoveMealItem = useCallback((fromMealId: string, fromUserMealId: string, toMealId: string, toUserMealId: string, mealItemId: string, toIndex: number) => moveMealItem({
     variables: {
@@ -752,10 +778,12 @@ const MealComponentContainer = ({ editable = true, ...props }: MealComponentComm
       toUserMealId,
       mealItemId,
       toIndex,
+      planId,
     },
     update: (proxy, { data }) => data && props.dayId && CalendarService.moveMealItem(proxy, fromMealId, toMealId, toIndex, mealItemId),
   }), [
     props.dayId,
+    planId
   ])
 
   return (

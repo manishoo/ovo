@@ -34,7 +34,6 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
 
     return (
       <Page
-        lazyRender
             scrollViewProps={{
               onScroll: this._onScroll,
         }}
@@ -136,7 +135,6 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
         }
       },
       variables: {
-        nameSearchQuery: '',
         ...this.state.variables,
         lastId: refetch ? null : lastId,
       }

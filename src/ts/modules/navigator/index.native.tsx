@@ -42,8 +42,8 @@ const CardStack = createStackNavigator(
       path: 'food/:foodId',
       screen: FoodScreen,
     },
-    // mealPlan: {
-    //   calendar: 'mealPlan',
+    // plan: {
+    //   calendar: 'plan',
     //   screen: MealPlanContainer,
     // },
     shoppingList: {
@@ -73,8 +73,8 @@ const CardStack = createStackNavigator(
 const AppStack = createStackNavigator(
   {
     main: CardStack,
-    // mealPlan: {
-    //   calendar: 'mealPlan',
+    // plan: {
+    //   calendar: 'plan',
     //   screen: MealPlanContainer,
     // },
     // [Routes.assistant]: {

@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
@@ -14,6 +14,7 @@ import {
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables
 } from '@Views/ForgotPasswordScreen/types/ForgotPasswordMutation'
+import { ExecutionResult } from 'graphql'
 import RX from 'reactxp'
 import validator from 'validator'
 

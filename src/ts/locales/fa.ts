@@ -4,6 +4,13 @@
  */
 
 enum FaLocale {
+  'lightTheme' = 'روز',
+  'darkTheme' = 'شب',
+
+  'FindYourPlan.title' = 'FindYourPlan.title',
+  'FindYourPlan.title2' = 'FindYourPlan.title2',
+
+  NewPlan = 'برنامه جدید',
   'hello' = 'سلام',
   'getStarted' = 'شروع!',
   'saturday' = 'شنبه',
@@ -34,11 +41,14 @@ enum FaLocale {
   'Dishes' = 'دیش ها',
   'CreateRecipe' = 'دیش جدید',
   'CreateNewMeal' = 'سفره جدید',
+  'Create' = 'ساختن',
+  'mealEmptyUseInput' = 'سفره خالیست',
+  'ingredientsEmptyUseInput' = 'ادد کن ممد',
 
   'Feed' = 'برای من',
   'Back' = 'بازگشت',
   'ensureSafeAccount' = 'To ensure a safe account, we require your password to be at least 8 characters, including an uppercase letter and a number.',
-  'terms' = 'By creating a new account or signing in, You are agreeing to Prana’s Terms of Service and Privacy Policy.',
+  'terms' = 'By creating a new account or signing in, You are agreeing to Ovo’s Terms of Service and Privacy Policy.',
   'MealPlan&ShoppingList' = 'برنامه غذایی و لیست خرید',
   'Articles' = 'مقالات',
   'DrawerBrowse' = 'دسته‌بندی ها',
@@ -77,20 +87,39 @@ enum FaLocale {
   'landing_3_t' = 'طرزتهیه\u200Cها و غذاهای جدید رو تجربه کنین',
   'landing_3_s' = 'خوشمزه\u200Cهایی که توی آشپزخونه\u200Cها ساخته میشن تمومی ندارن، تو دنیای اینترنت غذا\u200Cها از این آشپزخونه به اون آشپزخونه سفر میکنن. تجربه کنین و دست\u200Cپختتون رو با دیگران به اشتراک بگذارین.',
 
+  'en' = 'English',
+  'de' = 'Deutsch',
+  'fa' = 'فارسی',
+
   'landing_4_t' = 'لیست خریدتون طبق برنامتون آماده میشه',
   'landing_4_s' = 'خرید کردن با لیست خریدی که طبق نیاز و برنامه اختصاصی\nخودتون آماده شده راحت\u200Cتره.',
 
-  'landingfooterAck' = 'استفاده از مطالب پرانا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است. کلیه حقوق این سایت متعلق به prana.green می\u200Cباشد.',
+  'landingfooterAck' = 'استفاده از مطالب Ovo فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است. کلیه حقوق این سایت متعلق به ovopal.com می\u200Cباشد.',
 
   'landingTitle' = 'دستیار هوشمند تغذیه',
   'landingSubtitle' = 'دکتر و آشپز و فروشگاهو بزار تو جیبت!',
   'LandingStartFree' = 'رایگان شروع کنید! \uD83D\uDCB8',
 
-  'LandingFooterCentralOffice' = 'دفتر مرکزی',
-  'LandingFooterAboutPrana' = 'درباره پرانا',
+  'LandingFooterTitle' = 'لینک ها',
+  'AboutOvo' = 'درباره پرانا',
   'LandingFooterContactUs' = 'ارتباط با ما',
-  'LandingFooterTerms' = 'مقررات استفاده',
+  'Terms' = 'مقررات استفاده',
+  'Privacy' = 'پرایوسی',
   'LandingFooterSocialMediaText' = 'پرانا را در شبکه های اجتماعی دنبال کنید',
+
+  'Partners' = 'پارتنر ها',
+  'Recipe Developers' = 'رسپی دولوپر',
+  'Health Professionals' = 'متخصصین سلامتی',
+  'Fitness Trainers' = 'ترینر ها',
+  'Corporations' = 'سازمان ها',
+  'Help' = 'کمک',
+  'FAQ' = 'FAQ',
+  'Learn More' = 'Learn More',
+  'Team' = 'تیم',
+  'Health Education' = 'آموزش سلامتی',
+  'Legal' = 'قانونی',
+  'Cookies' = 'کوکی ها',
+
   'LandingReadMore' = 'بیشتر بخوانید',
 
   'assistantIntro1' = 'سلام!\n من پرانا هستم',
@@ -206,6 +235,8 @@ enum FaLocale {
 
   'serving' = 'وعده',
   'Serving' = 'وعده',
+  'Tags' = 'برچسب ها',
+  'ServingName' = 'نام وعده',
   'kg' = 'کیلوگرم',
   'lb' = 'پوند',
   'mg' = 'میلی‌گرم',
@@ -215,6 +246,9 @@ enum FaLocale {
   ', and ' = '، و ',
   Calories = 'کالری',
   Reviews = 'دستور تهیه های در انتظار تائید',
+  Plans = 'برنامه ها',
+  day = 'روز',
+  newDay = 'روز جدید',
   'Rejecting' = 'در حال رد درخواست',
   'Reject Request' = 'رد درخواست',
   'Accepting' = 'در حال تائید',
@@ -285,14 +319,14 @@ enum FaLocale {
 
   forgotPassword = 'فراموشی رمز عبور',
 
-  'Main Meal Items' = 'موارد اصلی',
-
   'optional' = 'اختیاری',
 
   'Add Alternative Meal Item' = 'افزودن غذای آلترناتیو',
   'Log Meal' = 'لاگ کردن',
 
-  finishSetup = 'کامل کن اطلاعاتتو'
+  finishSetup = 'کامل کن اطلاعاتتو',
+
+  dragOrInput = 'یه میل آیتم بنداز اینجا یا از اینپوت استفاده کن',
 
 }
 

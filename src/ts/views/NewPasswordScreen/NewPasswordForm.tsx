@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
@@ -13,6 +13,7 @@ import ToastStore, { ToastTypes } from '@Services/ToastStore'
 import { getQueryParam, navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { NewPasswordMutation, NewPasswordMutationVariables } from '@Views/NewPasswordScreen/types/NewPasswordMutation'
+import { ExecutionResult } from 'graphql'
 import RX from 'reactxp'
 
 

@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloClient, ExecutionResult, gql, useMutation } from '@apollo/client'
+import { ApolloClient, gql, useMutation } from '@apollo/client'
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import Assistant from '@Common/Assistant/Assistant'
@@ -21,6 +21,7 @@ import {
   AssistantChatMutationVariables
 } from '@Views/AssistantChat/types/AssistantChatMutation'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
+import { ExecutionResult } from 'graphql'
 import { useCallback } from 'react'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -46,7 +47,7 @@ const INITIAL_MESSAGES: AssistantChatMutation_setup_messages[] = [
       expect: null,
       skip: false,
       items: [],
-      mealPlanSettings: null,
+      planSettings: null,
       meals: [],
       user: null,
     },
@@ -61,7 +62,7 @@ const INITIAL_MESSAGES: AssistantChatMutation_setup_messages[] = [
       expect: AssistantExpectations.nickname,
       skip: false,
       items: [],
-      mealPlanSettings: null,
+      planSettings: null,
       meals: [],
       user: null,
     },
@@ -260,7 +261,7 @@ class AssistantChat extends ComponentBase<AssistantChatProps, AssistantChatState
             expect: AssistantExpectations.nickname,
             skip: false,
             items: [],
-            mealPlanSettings: null,
+            planSettings: null,
             meals: [],
             user: null,
           },
@@ -380,7 +381,7 @@ export default function AssistantChatContainer(props: Omit<AssistantChatProps, '
           data {
             expect
             skip
-            mealPlanSettings {
+            planSettings {
               carbs
               fat
               protein

@@ -14,6 +14,11 @@ export interface RecipeFormUpdateMutation_updateRecipe_title {
   locale: LanguageCode;
 }
 
+export interface RecipeFormUpdateMutation_updateRecipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface RecipeFormUpdateMutation_updateRecipe_author_avatar {
   url: string;
 }
@@ -108,6 +113,16 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_thu
   url: string;
 }
 
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food {
   id: string;
   name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_name[];
@@ -115,6 +130,7 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food {
   weights: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_weights[];
   thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Food_origFoodGroups[][];
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_title {
@@ -122,12 +138,145 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_t
   locale: LanguageCode;
 }
 
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit =
+  RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_Weight
+  | RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_name[];
+  description: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item =
+  RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Food
+  | RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item_Recipe;
+
+export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_unit | null;
+  item: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients_item | null;
 }
 
 export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_author_avatar {
@@ -146,9 +295,11 @@ export interface RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe {
   id: string;
   slug: string;
   title: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_title[];
+  servingName: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_servingName[] | null;
   timing: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_thumbnail | null;
+  ingredients: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_ingredients[];
   author: RecipeFormUpdateMutation_updateRecipe_ingredients_item_Recipe_author;
 }
 
@@ -662,6 +813,7 @@ export interface RecipeFormUpdateMutation_updateRecipe {
   id: string;
   title: RecipeFormUpdateMutation_updateRecipe_title[];
   serving: number;
+  servingName: RecipeFormUpdateMutation_updateRecipe_servingName[] | null;
   slug: string;
   status: RecipeStatus;
   author: RecipeFormUpdateMutation_updateRecipe_author;

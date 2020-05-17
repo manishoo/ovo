@@ -81,6 +81,16 @@ export interface MealItemComponentMealItem_item_Food_thumbnail {
   url: string;
 }
 
+export interface MealItemComponentMealItem_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Food_origFoodGroups {
+  id: string;
+  name: MealItemComponentMealItem_item_Food_origFoodGroups_name[];
+}
+
 export interface MealItemComponentMealItem_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -553,6 +563,7 @@ export interface MealItemComponentMealItem_item_Food {
   weights: MealItemComponentMealItem_item_Food_weights[];
   thumbnail: MealItemComponentMealItem_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: MealItemComponentMealItem_item_Food_origFoodGroups[][];
   nutrition: MealItemComponentMealItem_item_Food_nutrition | null;
 }
 
@@ -561,12 +572,145 @@ export interface MealItemComponentMealItem_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface MealItemComponentMealItem_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface MealItemComponentMealItem_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface MealItemComponentMealItem_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: MealItemComponentMealItem_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealItemComponentMealItem_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: MealItemComponentMealItem_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type MealItemComponentMealItem_item_Recipe_ingredients_unit =
+  MealItemComponentMealItem_item_Recipe_ingredients_unit_Weight
+  | MealItemComponentMealItem_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_name[];
+  description: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: MealItemComponentMealItem_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: MealItemComponentMealItem_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type MealItemComponentMealItem_item_Recipe_ingredients_item =
+  MealItemComponentMealItem_item_Recipe_ingredients_item_Food
+  | MealItemComponentMealItem_item_Recipe_ingredients_item_Recipe;
+
+export interface MealItemComponentMealItem_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: MealItemComponentMealItem_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: MealItemComponentMealItem_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: MealItemComponentMealItem_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: MealItemComponentMealItem_item_Recipe_ingredients_unit | null;
+  item: MealItemComponentMealItem_item_Recipe_ingredients_item | null;
 }
 
 export interface MealItemComponentMealItem_item_Recipe_author_avatar {
@@ -1050,9 +1194,11 @@ export interface MealItemComponentMealItem_item_Recipe {
   id: string;
   slug: string;
   title: MealItemComponentMealItem_item_Recipe_title[];
+  servingName: MealItemComponentMealItem_item_Recipe_servingName[] | null;
   timing: MealItemComponentMealItem_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: MealItemComponentMealItem_item_Recipe_thumbnail | null;
+  ingredients: MealItemComponentMealItem_item_Recipe_ingredients[];
   author: MealItemComponentMealItem_item_Recipe_author;
   nutrition: MealItemComponentMealItem_item_Recipe_nutrition | null;
 }

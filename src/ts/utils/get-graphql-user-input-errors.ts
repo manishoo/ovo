@@ -6,7 +6,7 @@
 import { ApolloError } from '@apollo/client'
 
 
-export default function getGraphQLUserInputErrors(error?: ApolloError) {
+export default function getGraphQLUserInputErrors(error?: ApolloError): any {
   let fieldErrors = {}
 
   if (!error) return fieldErrors

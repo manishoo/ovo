@@ -32,7 +32,7 @@ export function RecipeFormExtra(props: RecipeFormExtraProps) {
       />
 
       <FilledButton
-        label={translate(translate.keys.Submit)}
+        label={translate(translate.keys['Add Tag'])}
         onPress={() => props.onSubmit(props.selectedTags)}
       />
     </RX.View>

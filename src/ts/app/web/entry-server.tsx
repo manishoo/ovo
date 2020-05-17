@@ -41,20 +41,16 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
     cache: new InMemoryCache(),
   })
 
-  // let initialUrl = req.url.replace('/en', '')
-  // initialUrl = initialUrl.replace('/fa', '')
-
-  // LocationStore.setPath(initialUrl)
   renderToStringWithData(
     <ApolloProvider client={client}>
       <StaticRouter
-        // location={initialUrl}
+        location={req.url}
         context={{
           // @ts-ignore
           splitPoints
         }}
       >
-        <RootView history={createMemoryHistory()} />
+        <RootView />
       </StaticRouter>
     </ApolloProvider>
   )

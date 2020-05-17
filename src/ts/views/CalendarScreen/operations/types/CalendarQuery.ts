@@ -90,6 +90,16 @@ export interface CalendarQuery_calendar_meals_items_item_Food_thumbnail {
   url: string;
 }
 
+export interface CalendarQuery_calendar_meals_items_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Food_origFoodGroups {
+  id: string;
+  name: CalendarQuery_calendar_meals_items_item_Food_origFoodGroups_name[];
+}
+
 export interface CalendarQuery_calendar_meals_items_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -562,6 +572,7 @@ export interface CalendarQuery_calendar_meals_items_item_Food {
   weights: CalendarQuery_calendar_meals_items_item_Food_weights[];
   thumbnail: CalendarQuery_calendar_meals_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: CalendarQuery_calendar_meals_items_item_Food_origFoodGroups[][];
   nutrition: CalendarQuery_calendar_meals_items_item_Food_nutrition | null;
 }
 
@@ -570,12 +581,145 @@ export interface CalendarQuery_calendar_meals_items_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface CalendarQuery_calendar_meals_items_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface CalendarQuery_calendar_meals_items_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface CalendarQuery_calendar_meals_items_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit =
+  CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_Weight
+  | CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_name[];
+  description: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item =
+  CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Food
+  | CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item_Recipe;
+
+export interface CalendarQuery_calendar_meals_items_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_unit | null;
+  item: CalendarQuery_calendar_meals_items_item_Recipe_ingredients_item | null;
 }
 
 export interface CalendarQuery_calendar_meals_items_item_Recipe_author_avatar {
@@ -1059,9 +1203,11 @@ export interface CalendarQuery_calendar_meals_items_item_Recipe {
   id: string;
   slug: string;
   title: CalendarQuery_calendar_meals_items_item_Recipe_title[];
+  servingName: CalendarQuery_calendar_meals_items_item_Recipe_servingName[] | null;
   timing: CalendarQuery_calendar_meals_items_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: CalendarQuery_calendar_meals_items_item_Recipe_thumbnail | null;
+  ingredients: CalendarQuery_calendar_meals_items_item_Recipe_ingredients[];
   author: CalendarQuery_calendar_meals_items_item_Recipe_author;
   nutrition: CalendarQuery_calendar_meals_items_item_Recipe_nutrition | null;
 }
@@ -1105,7 +1251,7 @@ export interface CalendarQuery_calendar_meals {
 
 export interface CalendarQuery_calendar {
   id: any;
-  date: any;
+  date: any | null;
   meals: CalendarQuery_calendar_meals[];
 }
 
@@ -1115,4 +1261,5 @@ export interface CalendarQuery {
 
 export interface CalendarQueryVariables {
   dates: any[];
+  planId: any;
 }

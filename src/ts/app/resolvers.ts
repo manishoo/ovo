@@ -12,7 +12,7 @@ import Storage from '@App/Storage/Storage'
 export default {
   Mutation: {
     logOut: (_root, _args, { cache }) => {
-      client.resetStore()
+      client.clearStore()
         .then(() => {
           Storage.clear()
             .then(() => {

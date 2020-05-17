@@ -4,6 +4,7 @@
  */
 
 import { cache } from '@App/client-cache'
+import { ThemeMode } from '@App/Theme'
 import { LanguageCode } from '@Models/global-types'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import CalendarService from '@Services/CalendarService'
@@ -26,10 +27,24 @@ async function getSetLocale(): Promise<LanguageCode> {
   let locale: LanguageCode = await Storage.getItem('locale')
 
   if (!locale) {
-    locale = await Storage.setItem('locale', LanguageCode.en)
+    if (typeof window !== 'undefined') {
+      locale = await Storage.setItem('locale', LanguageCode.en)
+    } else {
+      locale = await Storage.setItem('locale', LanguageCode.en)
+    }
   }
 
   return locale!
+}
+
+async function getTheme(): Promise<ThemeMode> {
+  let theme: ThemeMode = await Storage.getItem('theme')
+
+  if (!theme) {
+    return ThemeMode.light
+  }
+
+  return theme!
 }
 
 async function persistAndRehydrate() {
@@ -44,44 +59,48 @@ async function persistAndRehydrate() {
 
 export default abstract class AppBootstrapper {
   constructor() {
+    this._initiate()
+  }
+
+  private async _initiate() {
     RX.International.allowRTL(true)
     RX.App.initialize(__DEV__, __DEV__)
 
     ServiceRegistrar.init()
 
-    this._startCriticalServices()
-      .thenAsync(value => {
-        getSetLocale()
-          .then(locale => {
-            this._getInitialUrl()
-              .then(url => {
-                if (url) {
-                  // do something with the url
-                  LocationStore.setPath(url)
-                  // set locale
-                  AppConfig.setLocale(locale)
-                }
+    await persistCache({
+      cache,
+      // @ts-ignore
+      storage: Storage
+    })
 
-                // persist apollo cache
-                persistCache({
-                  cache,
-                  // @ts-ignore
-                  storage: Storage
-                })
-                  .then(() => {
-                    persistAndRehydrate()
-                      .then(() => {
-                        // init the app
-                        RX.UserInterface.setMainView(this._renderRootView())
-                        // RX.UserInterface.useCustomScrollbars(true)
-                        RX.International.forceRTL(AppConfig.isRTL())
-                        this._hideSplash()
-                      })
-                  })
-              })
+    const theme = await getTheme()
 
-          })
-      })
+    await persistAndRehydrate()
+
+    await this._startCriticalServices().toEs6Promise()
+
+    const locale = await getSetLocale()
+
+    const url = await this._getInitialUrl()
+
+    if (url) {
+      // do something with the url
+      LocationStore.setPath(url)
+    }
+
+    // set locale
+    AppConfig.setLocale(locale)
+    // set theme
+    AppConfig.setTheme(theme)
+
+    // persist apollo cache
+
+    // init the app
+    RX.UserInterface.setMainView(this._renderRootView())
+    // RX.UserInterface.useCustomScrollbars(true)
+    RX.International.forceRTL(AppConfig.isRTL())
+    this._hideSplash()
   }
 
   protected abstract _renderRootView(): any

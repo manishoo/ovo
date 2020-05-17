@@ -64,6 +64,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
       errorMessage,
       loading,
       selectAllOnPress,
+      onChange,
       ...props
     } = this.props
 
@@ -79,7 +80,10 @@ export default class Input extends RX.Component<InputProps, InputState> {
               <Text
                 style={[
                   styles.label,
-                  { color: theme.colors.labelInput },
+                  {
+                    color: theme.colors.labelInput,
+                    fontWeight: required ? 'bold' : undefined,
+                  },
                   this._getLabelStyle(theme)
                 ]}
               >{required && this._renderRequiredStart(theme)}{label}</Text>}
@@ -133,7 +137,10 @@ export default class Input extends RX.Component<InputProps, InputState> {
     )
   }
 
-  private _onClearText = () => {
+  private _onClearText = (e: RX.Types.SyntheticEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     this.props.onChange!('')
   }
 
@@ -186,16 +193,18 @@ export default class Input extends RX.Component<InputProps, InputState> {
   }
 
   private _onChangeText = async (v: string) => {
-    if (this.state.isPristine) {
-      this.setState({
-        isPristine: false,
-      })
+    if (this.props.validate) {
+      if (this.state.isPristine) {
+        this.setState({
+          isPristine: false,
+        })
+      }
+      await this._validateInput(v)
     }
-    await this._validateInput(v)
     return this.props.onChange!(v)
   }
 
-  private _validateInput = async (v: any) => {
+  private readonly _validateInput = async (v: any) => {
     if (this.props.validate) {
       const isValid = await this.props.validate(v)
 
@@ -213,7 +222,7 @@ const styles = {
     // paddingBottom: 5,
   }),
   label: RX.Styles.createTextStyle({
-    fontWeight: '500',
+    // fontWeight: '500',
     marginBottom: Styles.values.spacing / 2,
   }),
   textInput: RX.Styles.createTextInputStyle({

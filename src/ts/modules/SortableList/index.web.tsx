@@ -35,7 +35,7 @@ export default class SortableList extends RX.Component<SortableListProps> {
   render() {
     return (
       <InnerSortableList
-        pressDelay={100}
+        pressDelay={this.props.disabled ? 10000 : 100}
         // shouldCancelStart={(e: any) => {
         //   console.log('event', e.target.outerHTML.includes('id="handler"'))
         //   return !e.target.outerHTML.includes('id="handler"')

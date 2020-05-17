@@ -26,6 +26,8 @@ interface SelectProps {
   children?: any,
   editable?: boolean,
   textStyle?: any
+  containerStyle?: any
+  labelStyle?: any
 }
 
 // <select
@@ -53,15 +55,15 @@ export default class Select extends RX.Component<SelectProps> {
   private _popupDisplayed: boolean = false
 
   public render() {
-    const { style, label, editable = true, textStyle } = this.props
+    const { style, label, editable = true, textStyle, containerStyle, labelStyle } = this.props
 
     const selectedOption = this.props.options.find(p => p.value === this.props.value)
 
     return (
       <ThemeContext.Consumer>
-        {({ theme }) => <>
+        {({ theme }) => <RX.View style={containerStyle}>
           {
-            !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>
+            !!label && <Text style={[styles.label, { color: theme.colors.labelInput }, labelStyle]}>{label}</Text>
           }
           <RX.View
             style={[styles.selectContainer, {
@@ -74,7 +76,7 @@ export default class Select extends RX.Component<SelectProps> {
           >
             <Text style={[styles.selectItemText, textStyle]}>{selectedOption && selectedOption.text}</Text>
           </RX.View>
-        </>}
+        </RX.View>}
       </ThemeContext.Consumer>
     )
   }

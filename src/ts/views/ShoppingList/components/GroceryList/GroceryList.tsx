@@ -16,8 +16,9 @@ const styles = {
     // @ts-ignore
     transition: 'all 0.5s',
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 10,
     marginBottom: Styles.values.spacing,
+    paddingBottom: Styles.values.spacing,
     maxWidth: MEAL_MAX_WIDTH,
   }),
   mealName: RX.Styles.createTextStyle({

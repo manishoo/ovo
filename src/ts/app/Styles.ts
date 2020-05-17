@@ -88,6 +88,19 @@ export default class Styles {
       '#1E88E5',
     ],
 
+    powerRange: {
+      1: '#64dd17',
+      2: '#aeea00',
+      3: '#ffd600',
+      4: '#ffab00',
+      5: '#ff6d00',
+    },
+
+    timingColors: {
+      prepTimeColor: '#cddc39',
+      cookTimeColor: '#ffb300',
+    },
+
     absolutelyExtended: {
       position: 'absolute',
       left: 0,
@@ -111,6 +124,14 @@ export default class Styles {
 
   public static fonts = {
     typography: '"Comfortaa", "DINRoundPro", helvetica, sans-serif',
+
+    text: {
+      fontFamily: FontRefs.text,
+    } as RX.Types.FontInfo,
+    display: {
+      fontFamily: FontRefs.display,
+      // fontWeight: '400'
+    } as RX.Types.FontInfo,
 
     fa: {
       text: {

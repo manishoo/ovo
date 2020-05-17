@@ -95,6 +95,7 @@ export interface MeQuery_me {
   role: Role;
   achievements: MeQuery_me_achievements;
   meals: MeQuery_me_meals[];
+  plan: any;
 }
 
 export interface MeQuery {

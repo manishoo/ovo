@@ -90,6 +90,16 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Food_thumbna
   url: string;
 }
 
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Food_origFoodGroups {
+  id: string;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Food_origFoodGroups_name[];
+}
+
 export interface DayComponentNewDayMutation_newDay_meals_items_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -562,6 +572,7 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Food {
   weights: DayComponentNewDayMutation_newDay_meals_items_item_Food_weights[];
   thumbnail: DayComponentNewDayMutation_newDay_meals_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: DayComponentNewDayMutation_newDay_meals_items_item_Food_origFoodGroups[][];
   nutrition: DayComponentNewDayMutation_newDay_meals_items_item_Food_nutrition | null;
 }
 
@@ -570,12 +581,145 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_title
   locale: LanguageCode;
 }
 
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit =
+  DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_Weight
+  | DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_name[];
+  description: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item =
+  DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Food
+  | DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item_Recipe;
+
+export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_unit | null;
+  item: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients_item | null;
 }
 
 export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe_author_avatar {
@@ -1059,9 +1203,11 @@ export interface DayComponentNewDayMutation_newDay_meals_items_item_Recipe {
   id: string;
   slug: string;
   title: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_title[];
+  servingName: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_servingName[] | null;
   timing: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_thumbnail | null;
+  ingredients: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_ingredients[];
   author: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_author;
   nutrition: DayComponentNewDayMutation_newDay_meals_items_item_Recipe_nutrition | null;
 }
@@ -1105,7 +1251,7 @@ export interface DayComponentNewDayMutation_newDay_meals {
 
 export interface DayComponentNewDayMutation_newDay {
   id: any;
-  date: any;
+  date: any | null;
   meals: DayComponentNewDayMutation_newDay_meals[];
 }
 

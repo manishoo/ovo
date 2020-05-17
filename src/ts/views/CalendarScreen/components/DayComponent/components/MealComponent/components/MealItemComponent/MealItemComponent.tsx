@@ -7,12 +7,15 @@ import { gql, useMutation } from '@apollo/client'
 import FoodPreview from '@Common/FoodPickerDialog/components/FoodPreview'
 import MealItemComponent, { MealItemComponentCommonProps } from '@Common/MealItemComponent/MealItemComponent'
 import CalendarService from '@Services/CalendarService'
+import { useCalendarContext } from '@Views/CalendarScreen/CalendarScreen'
+import { MealComponentDayMeal_items } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/types/MealComponentDayMeal'
 import React, { useCallback } from 'react'
 import RX from 'reactxp'
 import { MealItemComponentMutation, MealItemComponentMutationVariables } from './types/MealItemComponentMutation'
 
 
-const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
+const MealItemComponentContainer = (props: Omit<MealItemComponentCommonProps, 'mealItem'> & { mealItem: MealComponentDayMeal_items }) => {
+  const { planId } = useCalendarContext()
   const [suggestMealItem, { loading }] = useMutation<MealItemComponentMutation, MealItemComponentMutationVariables>(MealItemComponentContainer.operations.suggestMealItem)
 
   return (
@@ -22,15 +25,17 @@ const MealItemComponentContainer = (props: MealItemComponentCommonProps) => {
       showDescription={false}
       onMealItemRegenerate={props.meal && useCallback(() => suggestMealItem({
         variables: {
-          date: props.meal!.time,
-          userMealId: props.meal!.userMeal.id,
           mealItemId: props.mealItem.id,
+          dayId: props.dayId,
+          dayMealId: props.meal!.id,
+          planId,
         },
         update: (proxy, { data }) => data && props.dayId && CalendarService.setMealItem(proxy, props.meal!.id, props.mealItem, data.suggestMealItem),
       }), [
         props.meal.time,
         props.meal.userMeal.id,
         props.mealItem.id,
+        planId,
       ])}
     />
   )
@@ -72,8 +77,8 @@ MealItemComponentContainer.fragments = {
 
 MealItemComponentContainer.operations = {
   suggestMealItem: gql`
-    mutation MealItemComponentMutation($userMealId: String!, $mealItemId: String!, $date: DateTime!) {
-      suggestMealItem(userMealId: $userMealId, mealItemId: $mealItemId, date: $date) {
+    mutation MealItemComponentMutation($dayId: ObjectId!, $dayMealId: ObjectId!, $planId: ObjectId!, $mealItemId: ObjectId!) {
+      suggestMealItem(dayId: $dayId, dayMealId: $dayMealId, planId: $planId, mealItemId: $mealItemId) {
         ...MealItemComponentMealItem
       }
     }

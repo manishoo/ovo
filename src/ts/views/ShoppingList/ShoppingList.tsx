@@ -4,142 +4,20 @@
  */
 
 import Styles from '@App/Styles'
+import CheckBox from '@Common/Checkbox/Checkbox'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
+import MealItemComponent from '@Common/MealItemComponent/MealItemComponent'
 import Page from '@Common/Page'
+import Text from '@Common/Text/Text'
 import CalendarService, { GroceriesByFoodGroup } from '@Services/CalendarService'
+import ServiceConsumer from '@Services/utils/ServiceConsumer'
+import GroceryList from '@Views/ShoppingList/components/GroceryList/GroceryList'
+import { useCallback, useState } from 'react'
 import RX from 'reactxp'
-import { ComponentBase } from 'resub'
 
 
-interface LoginProps {
-  style?: any,
-}
-
-interface LoginState {
-  shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup,
-  pantryGroceriesByFoodGroup: GroceriesByFoodGroup,
-  activeTab: 'shoppingList' | 'pantry'
-}
-
-export default class ShoppingList extends ComponentBase<LoginProps, LoginState> {
-  public render() {
-    return (
-      <Page
-        lazyRender
-        style={{
-          padding: Styles.values.spacing,
-        }}
-      >
-        <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
-          <FilledButton
-            label={translate(translate.keys.ShoppingList)}
-            onPress={() => this.setState({ activeTab: 'shoppingList' })}
-            mode={this.state.activeTab === 'shoppingList' ? FilledButton.mode.primary : FilledButton.mode.default}
-            style={{
-              padding: 16
-            }}
-            fontSize={16}
-            containerStyle={styles.tabButton}
-          />
-          <FilledButton
-            label={translate(translate.keys.Pantry)}
-            onPress={() => this.setState({ activeTab: 'pantry' })}
-            mode={this.state.activeTab === 'pantry' ? FilledButton.mode.primary : FilledButton.mode.default}
-            style={{
-              padding: 16
-            }}
-            fontSize={16}
-            containerStyle={styles.tabButton}
-          />
-        </RX.View>
-
-        {/*{this._renderTabContent()}*/}
-      </Page>
-    )
-  }
-
-  protected _buildState(props: LoginProps, initialBuild: boolean): Partial<LoginState> | undefined {
-    return {
-      activeTab: initialBuild ? 'shoppingList' : this.state.activeTab,
-      shoppingListGroceriesByFoodGroup: CalendarService.getShoppingList(),
-      pantryGroceriesByFoodGroup: CalendarService.getPantry(),
-    }
-  }
-
-  // private _renderTabContent = () => {
-  //   const { activeTab, shoppingListGroceriesByFoodGroup, pantryGroceriesByFoodGroup } = this.state
-  //
-  //   switch (activeTab) {
-  //     case 'pantry':
-  //       return Object.keys(pantryGroceriesByFoodGroup).map(foodGroupId => {
-  //         const foodItem = pantryGroceriesByFoodGroup[foodGroupId][0]
-  //
-  //         if (!foodItem) return null
-  //
-  //         return (
-  //           <GroceryList
-  //             title={<Text
-  //               type={Text.types.body}
-  //               translations={foodItem.food.origFoodGroups[0][0].name}
-  //             />}
-  //           >
-  //             {
-  //               pantryGroceriesByFoodGroup[foodGroupId].map(food =>
-  //                 <GroceryListItem
-  //                   food={food.food}
-  //                   type={'pantry'}
-  //                   grams={food.grams}
-  //                   editable={false}
-  //                   onAmountChange={() => {
-  //                     //
-  //                   }}
-  //                   onUnitChange={() => {
-  //                     //
-  //                   }}
-  //                 />
-  //               )
-  //             }
-  //           </GroceryList>
-  //         )
-  //       })
-  //     case 'shoppingList':
-  //       return Object.keys(shoppingListGroceriesByFoodGroup).map(foodGroupId => {
-  //         const foodItem = shoppingListGroceriesByFoodGroup[foodGroupId][0]
-  //
-  //         if (!foodItem) return null
-  //
-  //         return (
-  //           <GroceryList
-  //             title={<Text
-  //               type={Text.types.body}
-  //               translations={foodItem.food.origFoodGroups[0][0].name}
-  //             />}
-  //           >
-  //             {
-  //               shoppingListGroceriesByFoodGroup[foodGroupId].map(food =>
-  //                 <GroceryListItem
-  //                   food={food.food}
-  //                   type={'shoppingList'}
-  //                   grams={food.grams}
-  //                   editable={false}
-  //                   onAmountChange={() => {
-  //                     //
-  //                   }}
-  //                   onUnitChange={() => {
-  //                     //
-  //                   }}
-  //                 />
-  //               )
-  //             }
-  //           </GroceryList>
-  //         )
-  //       })
-  //   }
-  // }
-}
-
-const styles = {
+const _styles = {
   container: RX.Styles.createViewStyle({
     padding: Styles.values.spacing,
     paddingHorizontal: Styles.values.spacingLarge,
@@ -166,4 +44,131 @@ const styles = {
   listWrapper: RX.Styles.createViewStyle({
     paddingTop: Styles.values.spacing,
   })
+}
+
+interface LoginProps {
+  style?: any,
+}
+
+export default function ShoppingList() {
+  const [activeTab, setActiveTab] = useState<'shoppingList' | 'pantry'>('shoppingList')
+
+  const _renderTabContent = useCallback((shoppingListGroceriesByFoodGroup: GroceriesByFoodGroup, pantryGroceriesByFoodGroup: GroceriesByFoodGroup) => {
+    switch (activeTab) {
+      case 'pantry':
+        return Object.keys(pantryGroceriesByFoodGroup).map(foodGroupId => {
+          const foodItem = pantryGroceriesByFoodGroup[foodGroupId][0]
+
+          if (!foodItem) return null
+
+          return (
+            <GroceryList
+              title={<Text
+                type={Text.types.title}
+                translations={foodItem.food.origFoodGroups[0][0].name}
+              />}
+            >
+              {
+                pantryGroceriesByFoodGroup[foodGroupId].map(food =>
+                  <MealItemComponent
+                    mealItem={{
+                      amount: food.grams,
+                      item: food.food,
+                      id: food.food.id,
+                      name: [],
+                      description: [],
+                      customUnit: null,
+                      isOptional: false,
+                      unit: null,
+                    }}
+                  >
+                    <CheckBox
+                      value={true}
+                      onChange={() => CalendarService.removePantryItem(food.food.id)}
+                    />
+                  </MealItemComponent>
+                )
+              }
+            </GroceryList>
+          )
+        })
+      case 'shoppingList':
+        return Object.keys(shoppingListGroceriesByFoodGroup).map(foodGroupId => {
+          const foodItem = shoppingListGroceriesByFoodGroup[foodGroupId][0]
+
+          if (!foodItem) return null
+
+          return (
+            <GroceryList
+              title={<Text
+                type={Text.types.title}
+                translations={foodItem.food.origFoodGroups[0][0].name}
+              />}
+            >
+              {
+                shoppingListGroceriesByFoodGroup[foodGroupId].map(food =>
+                  <MealItemComponent
+                    mealItem={{
+                      amount: food.grams,
+                      item: food.food,
+                      id: food.food.id,
+                      name: [],
+                      description: [],
+                      customUnit: null,
+                      isOptional: false,
+                      unit: null,
+                    }}
+                  >
+                    <CheckBox
+                      value={false}
+                      onChange={() => CalendarService.addPantryItem(food.food, food.grams)}
+                    />
+                  </MealItemComponent>
+                )
+              }
+            </GroceryList>
+          )
+        })
+    }
+  }, [activeTab])
+
+  return (
+    <Page
+      style={{
+        padding: Styles.values.spacing,
+      }}
+    >
+      <RX.View style={{ flexDirection: 'row', marginBottom: Styles.values.spacing }}>
+        <FilledButton
+          label={translate(translate.keys.ShoppingList)}
+          onPress={useCallback(() => setActiveTab('shoppingList'), [])}
+          mode={activeTab === 'shoppingList' ? FilledButton.mode.primary : FilledButton.mode.default}
+          style={{
+            padding: 16
+          }}
+          fontSize={16}
+          containerStyle={_styles.tabButton}
+        />
+        <FilledButton
+          label={translate(translate.keys.Pantry)}
+          onPress={useCallback(() => setActiveTab('pantry'), [])}
+          mode={activeTab === 'pantry' ? FilledButton.mode.primary : FilledButton.mode.default}
+          style={{
+            padding: 16
+          }}
+          fontSize={16}
+          containerStyle={_styles.tabButton}
+        />
+      </RX.View>
+
+      <ServiceConsumer
+        state={{
+          shoppingList: () => CalendarService.getShoppingList(),
+          pantry: () => CalendarService.getPantry()
+        }}
+      >
+        {({ shoppingList, pantry }) => _renderTabContent(shoppingList, pantry)}
+      </ServiceConsumer>
+    </Page>
+  )
 }

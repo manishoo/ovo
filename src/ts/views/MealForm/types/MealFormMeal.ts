@@ -84,6 +84,16 @@ export interface MealFormMeal_items_item_Food_thumbnail {
   url: string;
 }
 
+export interface MealFormMeal_items_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Food_origFoodGroups {
+  id: string;
+  name: MealFormMeal_items_item_Food_origFoodGroups_name[];
+}
+
 export interface MealFormMeal_items_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -556,6 +566,7 @@ export interface MealFormMeal_items_item_Food {
   weights: MealFormMeal_items_item_Food_weights[];
   thumbnail: MealFormMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: MealFormMeal_items_item_Food_origFoodGroups[][];
   nutrition: MealFormMeal_items_item_Food_nutrition | null;
 }
 
@@ -564,12 +575,145 @@ export interface MealFormMeal_items_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface MealFormMeal_items_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface MealFormMeal_items_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface MealFormMeal_items_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: MealFormMeal_items_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealFormMeal_items_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: MealFormMeal_items_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type MealFormMeal_items_item_Recipe_ingredients_unit =
+  MealFormMeal_items_item_Recipe_ingredients_unit_Weight
+  | MealFormMeal_items_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealFormMeal_items_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: MealFormMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: MealFormMeal_items_item_Recipe_ingredients_item_Food_name[];
+  description: MealFormMeal_items_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: MealFormMeal_items_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: MealFormMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: MealFormMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: MealFormMeal_items_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type MealFormMeal_items_item_Recipe_ingredients_item =
+  MealFormMeal_items_item_Recipe_ingredients_item_Food
+  | MealFormMeal_items_item_Recipe_ingredients_item_Recipe;
+
+export interface MealFormMeal_items_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: MealFormMeal_items_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: MealFormMeal_items_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: MealFormMeal_items_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: MealFormMeal_items_item_Recipe_ingredients_unit | null;
+  item: MealFormMeal_items_item_Recipe_ingredients_item | null;
 }
 
 export interface MealFormMeal_items_item_Recipe_author_avatar {
@@ -1053,9 +1197,11 @@ export interface MealFormMeal_items_item_Recipe {
   id: string;
   slug: string;
   title: MealFormMeal_items_item_Recipe_title[];
+  servingName: MealFormMeal_items_item_Recipe_servingName[] | null;
   timing: MealFormMeal_items_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: MealFormMeal_items_item_Recipe_thumbnail | null;
+  ingredients: MealFormMeal_items_item_Recipe_ingredients[];
   author: MealFormMeal_items_item_Recipe_author;
   nutrition: MealFormMeal_items_item_Recipe_nutrition | null;
 }
@@ -1130,6 +1276,16 @@ export interface MealFormMeal_items_alternativeMealItems_item_Food_weights {
 
 export interface MealFormMeal_items_alternativeMealItems_item_Food_thumbnail {
   url: string;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Food_origFoodGroups {
+  id: string;
+  name: MealFormMeal_items_alternativeMealItems_item_Food_origFoodGroups_name[];
 }
 
 export interface MealFormMeal_items_alternativeMealItems_item_Food_nutrition_calories {
@@ -1604,6 +1760,7 @@ export interface MealFormMeal_items_alternativeMealItems_item_Food {
   weights: MealFormMeal_items_alternativeMealItems_item_Food_weights[];
   thumbnail: MealFormMeal_items_alternativeMealItems_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: MealFormMeal_items_alternativeMealItems_item_Food_origFoodGroups[][];
   nutrition: MealFormMeal_items_alternativeMealItems_item_Food_nutrition | null;
 }
 
@@ -1612,12 +1769,145 @@ export interface MealFormMeal_items_alternativeMealItems_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface MealFormMeal_items_alternativeMealItems_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface MealFormMeal_items_alternativeMealItems_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit =
+  MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_Weight
+  | MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_name[];
+  description: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item =
+  MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Food
+  | MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item_Recipe;
+
+export interface MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_unit | null;
+  item: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients_item | null;
 }
 
 export interface MealFormMeal_items_alternativeMealItems_item_Recipe_author_avatar {
@@ -2101,9 +2391,11 @@ export interface MealFormMeal_items_alternativeMealItems_item_Recipe {
   id: string;
   slug: string;
   title: MealFormMeal_items_alternativeMealItems_item_Recipe_title[];
+  servingName: MealFormMeal_items_alternativeMealItems_item_Recipe_servingName[] | null;
   timing: MealFormMeal_items_alternativeMealItems_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: MealFormMeal_items_alternativeMealItems_item_Recipe_thumbnail | null;
+  ingredients: MealFormMeal_items_alternativeMealItems_item_Recipe_ingredients[];
   author: MealFormMeal_items_alternativeMealItems_item_Recipe_author;
   nutrition: MealFormMeal_items_alternativeMealItems_item_Recipe_nutrition | null;
 }
@@ -2143,6 +2435,7 @@ export interface MealFormMeal_items {
   description: MealFormMeal_items_description[] | null;
   customUnit: MealFormMeal_items_customUnit | null;
   isOptional: boolean | null;
+  hasAlternatives: boolean | null;
   /**
    * The active unit for this ingredient. Empty value means grams
    */

@@ -277,7 +277,7 @@ export default class NutritionProfileForm extends RX.Component<NutritionProfileF
     )
   }
 
-  private _handleMinMax = (value: number, field: 'protein' | 'fat' | 'carbs', minMax: 'min' | 'max') => {
+  private readonly _handleMinMax = (value: number, field: 'protein' | 'fat' | 'carbs', minMax: 'min' | 'max') => {
     switch (minMax) {
       case 'min':
         return this.setState(prevState => ({
@@ -366,7 +366,6 @@ const NutritionProfileModal = (props: NutritionProfileFormProps) => {
     >
       <Navbar
         title={translate(translate.keys.editNutritionProfile)}
-        modalId={MODAL_ID}
       >
         <RX.View
           style={{

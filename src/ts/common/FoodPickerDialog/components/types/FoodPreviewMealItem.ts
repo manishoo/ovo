@@ -79,6 +79,16 @@ export interface FoodPreviewMealItem_item_Food_thumbnail {
   url: string;
 }
 
+export interface FoodPreviewMealItem_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Food_origFoodGroups {
+  id: string;
+  name: FoodPreviewMealItem_item_Food_origFoodGroups_name[];
+}
+
 export interface FoodPreviewMealItem_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -551,6 +561,7 @@ export interface FoodPreviewMealItem_item_Food {
   weights: FoodPreviewMealItem_item_Food_weights[];
   thumbnail: FoodPreviewMealItem_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: FoodPreviewMealItem_item_Food_origFoodGroups[][];
   nutrition: FoodPreviewMealItem_item_Food_nutrition | null;
 }
 
@@ -559,12 +570,145 @@ export interface FoodPreviewMealItem_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface FoodPreviewMealItem_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface FoodPreviewMealItem_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface FoodPreviewMealItem_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: FoodPreviewMealItem_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: FoodPreviewMealItem_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: FoodPreviewMealItem_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type FoodPreviewMealItem_item_Recipe_ingredients_unit =
+  FoodPreviewMealItem_item_Recipe_ingredients_unit_Weight
+  | FoodPreviewMealItem_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_name[];
+  description: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: FoodPreviewMealItem_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: FoodPreviewMealItem_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type FoodPreviewMealItem_item_Recipe_ingredients_item =
+  FoodPreviewMealItem_item_Recipe_ingredients_item_Food
+  | FoodPreviewMealItem_item_Recipe_ingredients_item_Recipe;
+
+export interface FoodPreviewMealItem_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: FoodPreviewMealItem_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: FoodPreviewMealItem_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: FoodPreviewMealItem_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: FoodPreviewMealItem_item_Recipe_ingredients_unit | null;
+  item: FoodPreviewMealItem_item_Recipe_ingredients_item | null;
 }
 
 export interface FoodPreviewMealItem_item_Recipe_author_avatar {
@@ -1048,9 +1192,11 @@ export interface FoodPreviewMealItem_item_Recipe {
   id: string;
   slug: string;
   title: FoodPreviewMealItem_item_Recipe_title[];
+  servingName: FoodPreviewMealItem_item_Recipe_servingName[] | null;
   timing: FoodPreviewMealItem_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: FoodPreviewMealItem_item_Recipe_thumbnail | null;
+  ingredients: FoodPreviewMealItem_item_Recipe_ingredients[];
   author: FoodPreviewMealItem_item_Recipe_author;
   nutrition: FoodPreviewMealItem_item_Recipe_nutrition | null;
 }
@@ -1074,6 +1220,5 @@ export interface FoodPreviewMealItem {
    * The active unit for this ingredient. Empty value means grams
    */
   unit: FoodPreviewMealItem_unit | null;
-  hasAlternatives: boolean | null;
   item: FoodPreviewMealItem_item | null;
 }

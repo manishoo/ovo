@@ -90,6 +90,16 @@ export interface MealComponentDayMeal_items_item_Food_thumbnail {
   url: string;
 }
 
+export interface MealComponentDayMeal_items_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Food_origFoodGroups {
+  id: string;
+  name: MealComponentDayMeal_items_item_Food_origFoodGroups_name[];
+}
+
 export interface MealComponentDayMeal_items_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -562,6 +572,7 @@ export interface MealComponentDayMeal_items_item_Food {
   weights: MealComponentDayMeal_items_item_Food_weights[];
   thumbnail: MealComponentDayMeal_items_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: MealComponentDayMeal_items_item_Food_origFoodGroups[][];
   nutrition: MealComponentDayMeal_items_item_Food_nutrition | null;
 }
 
@@ -570,12 +581,145 @@ export interface MealComponentDayMeal_items_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface MealComponentDayMeal_items_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface MealComponentDayMeal_items_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface MealComponentDayMeal_items_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type MealComponentDayMeal_items_item_Recipe_ingredients_unit =
+  MealComponentDayMeal_items_item_Recipe_ingredients_unit_Weight
+  | MealComponentDayMeal_items_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_name[];
+  description: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: MealComponentDayMeal_items_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: MealComponentDayMeal_items_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type MealComponentDayMeal_items_item_Recipe_ingredients_item =
+  MealComponentDayMeal_items_item_Recipe_ingredients_item_Food
+  | MealComponentDayMeal_items_item_Recipe_ingredients_item_Recipe;
+
+export interface MealComponentDayMeal_items_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: MealComponentDayMeal_items_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: MealComponentDayMeal_items_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: MealComponentDayMeal_items_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: MealComponentDayMeal_items_item_Recipe_ingredients_unit | null;
+  item: MealComponentDayMeal_items_item_Recipe_ingredients_item | null;
 }
 
 export interface MealComponentDayMeal_items_item_Recipe_author_avatar {
@@ -1059,9 +1203,11 @@ export interface MealComponentDayMeal_items_item_Recipe {
   id: string;
   slug: string;
   title: MealComponentDayMeal_items_item_Recipe_title[];
+  servingName: MealComponentDayMeal_items_item_Recipe_servingName[] | null;
   timing: MealComponentDayMeal_items_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: MealComponentDayMeal_items_item_Recipe_thumbnail | null;
+  ingredients: MealComponentDayMeal_items_item_Recipe_ingredients[];
   author: MealComponentDayMeal_items_item_Recipe_author;
   nutrition: MealComponentDayMeal_items_item_Recipe_nutrition | null;
 }

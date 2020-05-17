@@ -4,7 +4,7 @@
  */
 
 import AppConfig from '@App/AppConfig'
-import { Theme } from '@App/Theme'
+import { Theme, ThemeMode } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import SafeArea from '@Common/SafeArea/SafeArea'
 import ToastContainer from '@Common/ToastContainer/ToastContainer'
@@ -16,18 +16,17 @@ import RX from 'reactxp'
 
 interface RootViewProps extends RX.CommonProps {
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void;
-  history?: any
 }
 
-export default function RootView({ onLayout, history }: RootViewProps) {
-  const [theme, setTheme] = useState<Theme>(() => new Theme('light'))
+export default function RootView({ onLayout }: RootViewProps) {
+  const [theme, setTheme] = useState<Theme>(() => new Theme(AppConfig.theme))
   const me = useMe()
 
   return (
     <ThemeContext.Provider
       value={{
         theme,
-        toggleTheme: (mode: 'dark' | 'light') => setTheme(new Theme(mode))
+        toggleTheme: (mode: ThemeMode) => setTheme(new Theme(mode))
       }}
     >
       <MeContext.Provider
@@ -45,10 +44,7 @@ export default function RootView({ onLayout, history }: RootViewProps) {
           onLayout={onLayout}
         >
           {AppConfig.getPlatformType() === 'ios' && <SafeArea />}
-          <Navigator
-            history={history}
-            me={me}
-          />
+          <Navigator me={me} />
 
           <ToastContainer />
         </RX.View>

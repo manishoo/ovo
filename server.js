@@ -12,8 +12,10 @@ const compression = require('compression')
 const chalk = require('chalk')
 const favicon = require('serve-favicon')
 const paths = require('./webpack/paths')
-const shimBrowser = require('./shim-browser')
 const config = require('./server.config')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const publicPath = '/static/'
 
@@ -42,7 +44,7 @@ if (isProd) {
 
   app.get('/*', (req, res) => {
     const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
-    shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
+    // shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
     return require('./web/build/server-bundle').default(assets)(req, res, lang)
   })
 } else {
@@ -56,6 +58,7 @@ if (isProd) {
 }
 
 app.use((err, req, res, next) => {
+  console.log('err', err)
   console.error(chalk`{red error:} {underline.redBright ${err.message}}`)
   res.status(err.status || 500)
 })

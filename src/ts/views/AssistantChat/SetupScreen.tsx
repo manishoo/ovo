@@ -25,7 +25,6 @@ const _styles = {
   }),
   modalContainerBackground: RX.Styles.createViewStyle({
     position: 'absolute',
-    backgroundColor: '#5168ec',
     borderRadius: 10000,
 
     // @ts-ignore web
@@ -35,6 +34,9 @@ const _styles = {
 
 interface SetupScreenProps {
   style?: any,
+
+  location: any, // FIXME in mobile
+  history: any, // FIXME in mobile
 }
 
 interface SetupScreenState {
@@ -88,13 +90,13 @@ export default class SetupScreen extends ComponentBase<SetupScreenProps, SetupSc
           <RX.View style={{
             ...Styles.values.absolutelyExtended,
             alignItems: 'center',
-
-            // @ts-ignore // FIXME
-            zIndex: 11,
           }}>
             <RX.Animated.View
               style={[
                 _styles.modalContainerBackground,
+                {
+                  backgroundColor: theme.colors.bg,
+                },
                 _fullScreenStyle,
                 this._circleAnimationStyle,
               ]}
@@ -120,7 +122,8 @@ export default class SetupScreen extends ComponentBase<SetupScreenProps, SetupSc
               <RX.View
                 ignorePointerEvents
                 style={{
-                  backgroundColor: '#5168ec',
+                  // backgroundColor: '#5168ec',
+                  backgroundColor: theme.colors.bg,
                   [Styles.values.borderBottomEndRadius]: 10,
                   position: 'absolute',
                   [Styles.values.start]: Styles.values.spacing / 2,
@@ -132,6 +135,7 @@ export default class SetupScreen extends ComponentBase<SetupScreenProps, SetupSc
               >
                 <Back
                   onPress={this._onChatClose}
+                  color={theme.colors.text}
                 />
               </RX.View>
             </RX.Animated.View>
@@ -212,10 +216,4 @@ export default class SetupScreen extends ComponentBase<SetupScreenProps, SetupSc
 
     this._scrollViewRef.setScrollTop(top)
   }
-}
-
-export const showSetupModal = ({ style, onDismiss }: any) => {
-  return RX.Modal.show(
-    <SetupScreen />,
-    MODAL_ID)
 }

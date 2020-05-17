@@ -7,6 +7,7 @@ import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import Back from '@Common/Back/Back'
 import Modal, { ModalContext } from '@Common/Modal/Modal'
+import Text from '@Common/Text/Text'
 import { withMobileNavigation } from '@Modules/navigator'
 import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
@@ -43,9 +44,9 @@ export default class Navbar extends RX.Component<NavbarProps> {
                 }
                 <RX.View style={{ flexDirection: 'row' }}>
                   <Back color={theme.colors.navbarBackButtonColor} onPress={this._handleBack(modalId, isRoute)} />
-                  <RX.Text style={styles.titleContainer}>
-                    <RX.Text style={[styles.title, { fontSize: 18, }]}>{this.props.title}</RX.Text>
-                  </RX.Text>
+                  <Text style={styles.titleContainer}>
+                    <Text style={[styles.title, { fontSize: 18, top: 3 }]}>{this.props.title}</Text>
+                  </Text>
                 </RX.View>
                 {this.props.children}
               </RX.View>

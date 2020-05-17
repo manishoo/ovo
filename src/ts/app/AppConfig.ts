@@ -3,6 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { ThemeMode } from '@App/Theme'
 import { LanguageCode, MealAvailableTime, MealSize } from '@Models/global-types'
 import { isTouchDevice } from '@Utils/is-touch'
 import { CalendarSystem, Settings } from 'luxon'
@@ -19,7 +20,9 @@ class AppConfig {
   public locale: LanguageCode = LanguageCode.en
   public calendarSystem: CalendarSystem = 'gregory'
   public panelAddress: string = 'http://panel.prana.global'
+  public emailTo: string = 'hi@eatwithovo.com'
   public calorieMeasurementUnit: 'kcal' | 'kJ' = 'kcal'
+  public theme: ThemeMode = ThemeMode.light
   public contentMaxWidth = 975
   public defaultCalories = 2300
   public defaultScrollBarWidth = 20
@@ -132,6 +135,10 @@ class AppConfig {
 
   isNode(): boolean {
     return process.env.isNode == 'true'
+  }
+
+  setTheme(theme: ThemeMode) {
+    this.theme = theme
   }
 
   setLocale(locale: LanguageCode) {

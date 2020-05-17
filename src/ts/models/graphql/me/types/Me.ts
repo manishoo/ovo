@@ -95,4 +95,5 @@ export interface Me {
   role: Role;
   achievements: Me_achievements;
   meals: Me_meals[];
+  plan: any;
 }

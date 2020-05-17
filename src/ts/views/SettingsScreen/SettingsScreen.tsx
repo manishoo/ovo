@@ -3,7 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ExecutionResult, gql, useApolloClient, useMutation } from '@apollo/client'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
@@ -24,7 +24,9 @@ import { Me } from '@Models/graphql/me/types/Me'
 import FilePicker from '@Modules/FilePicker'
 import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
+import UsernameInput from '@Views/Register/components/UsernameInput'
 import { SettingsMutation, SettingsMutationVariables } from '@Views/SettingsScreen/types/SettingsMutation'
+import { ExecutionResult } from 'graphql'
 import _set from 'lodash/set'
 import React from 'react'
 import RX from 'reactxp'
@@ -71,7 +73,6 @@ class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
       <ThemeContext.Consumer>
         {({ theme }) => (
           <Page
-            lazyRender
             maxWidth={500}
           >
             <Navbar title={translate('Edit Profile')} />
@@ -109,10 +110,9 @@ class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
               placeholder={translate('Tell others about yourself')}
               onChangeText={this._onChange(['bio'])}
             />
-            <Input
+            <UsernameInput
               value={me.username}
               onChange={this._onChange(['username'])}
-              label={translate('Username')}
             />
 
             <Input
@@ -244,7 +244,17 @@ class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
   private _onChange = (fieldNameAddress: string[]) => (value: any) => {
     const me = { ...this.state.me }
 
-    _set(me, fieldNameAddress, value)
+    if (fieldNameAddress.length > 1) {
+      // @ts-ignore
+      me[fieldNameAddress[0]] = {
+        // @ts-ignore
+        ...me[fieldNameAddress[0]],
+        [fieldNameAddress[1]]: value
+      }
+    } else {
+      _set(me, fieldNameAddress, value)
+    }
+
     this.setState({
       me
     })
@@ -282,7 +292,7 @@ class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
         /**
          * If profile image changed, reload the page
          * */
-        if (this.state.avatarImage) {
+        if (this.state.avatarImage && typeof window !== 'undefined') {
           window.location.reload()
         }
       })

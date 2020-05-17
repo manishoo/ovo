@@ -35,6 +35,16 @@ export interface IngredientFood_thumbnail {
   url: string;
 }
 
+export interface IngredientFood_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface IngredientFood_origFoodGroups {
+  id: string;
+  name: IngredientFood_origFoodGroups_name[];
+}
+
 export interface IngredientFood {
   id: string;
   name: IngredientFood_name[];
@@ -42,4 +52,5 @@ export interface IngredientFood {
   weights: IngredientFood_weights[];
   thumbnail: IngredientFood_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: IngredientFood_origFoodGroups[][];
 }

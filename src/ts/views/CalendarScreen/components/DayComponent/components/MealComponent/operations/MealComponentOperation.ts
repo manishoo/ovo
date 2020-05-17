@@ -31,8 +31,8 @@ export const MealComponentFragments = {
 
 const MealComponentOperations = {
   suggestMeal: gql`
-    mutation MealComponentSuggestMealMutation($userMealId: String!, $date: DateTime!) {
-      suggestMeal(userMealId: $userMealId, date: $date) {
+    mutation MealComponentSuggestMealMutation($dayId: ObjectId!, $dayMealId: ObjectId!, $planId: ObjectId!) {
+      suggestMeal(dayId: $dayId, dayMealId: $dayMealId, planId: $planId) {
         ...MealComponentDayMeal
       }
     }
@@ -40,8 +40,8 @@ const MealComponentOperations = {
     ${MealComponentFragments.dayMeal}
   `,
   logMeal: gql`
-    mutation MealComponentLogMealMutation($date: DateTime!, $userMealId: String!, $mealItems: [IngredientInput!]!) {
-      logMeal(date: $date, userMealId: $userMealId, mealItems: $mealItems) {
+    mutation MealComponentLogMealMutation($date: DateTime, $dayId: ObjectId, $dayMealId: ObjectId!, $mealItems: [IngredientInput!]!, $planId: ObjectId!) {
+      logMeal(date: $date, dayId: $dayId, dayMealId: $dayMealId, ingredientInputs: $mealItems, planId: $planId) {
         ...MealComponentDayMeal
       }
     }
@@ -49,13 +49,13 @@ const MealComponentOperations = {
     ${MealComponentFragments.dayMeal}
   `,
   eatMeal: gql`
-    mutation MealComponentEatMealMutation($dayId: ObjectId!, $eaten: Boolean!, $userMealId: String!) {
-      eatMeal(dayId: $dayId, eaten: $eaten, userMealId: $userMealId)
+    mutation MealComponentEatMealMutation($dayId: ObjectId!, $eaten: Boolean!, $userMealId: String!, $planId: ObjectId!) {
+      eatMeal(dayId: $dayId, eaten: $eaten, userMealId: $userMealId, planId: $planId)
     }
   `,
   moveMealItem: gql`
-    mutation MealComponentMoveMealItemMutation($dayId: ObjectId!, $fromUserMealId: String!, $toUserMealId: String!, $toIndex: Int!, $mealItemId: ObjectId!) {
-      moveMealItem(dayId: $dayId, fromUserMealId: $fromUserMealId, toUserMealId: $toUserMealId, toIndex: $toIndex, mealItemId: $mealItemId)
+    mutation MealComponentMoveMealItemMutation($dayId: ObjectId!, $fromUserMealId: String!, $toUserMealId: String!, $toIndex: Int!, $mealItemId: ObjectId!, $planId: ObjectId!) {
+      moveMealItem(dayId: $dayId, fromUserMealId: $fromUserMealId, toUserMealId: $toUserMealId, toIndex: $toIndex, mealItemId: $mealItemId, planId: $planId)
     }
   `,
 }

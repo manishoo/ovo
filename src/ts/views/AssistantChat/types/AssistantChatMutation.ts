@@ -18,7 +18,7 @@ import {
 // GraphQL mutation operation: AssistantChatMutation
 // ====================================================
 
-export interface AssistantChatMutation_setup_messages_data_mealPlanSettings {
+export interface AssistantChatMutation_setup_messages_data_planSettings {
   carbs: number | null;
   fat: number | null;
   protein: number | null;
@@ -120,6 +120,7 @@ export interface AssistantChatMutation_setup_messages_data_user {
   role: Role;
   achievements: AssistantChatMutation_setup_messages_data_user_achievements;
   meals: AssistantChatMutation_setup_messages_data_user_meals[];
+  plan: any;
 }
 
 export interface AssistantChatMutation_setup_messages_data_items {
@@ -130,7 +131,7 @@ export interface AssistantChatMutation_setup_messages_data_items {
 export interface AssistantChatMutation_setup_messages_data {
   expect: AssistantExpectations | null;
   skip: boolean | null;
-  mealPlanSettings: AssistantChatMutation_setup_messages_data_mealPlanSettings | null;
+  planSettings: AssistantChatMutation_setup_messages_data_planSettings | null;
   meals: AssistantChatMutation_setup_messages_data_meals[] | null;
   user: AssistantChatMutation_setup_messages_data_user | null;
   items: AssistantChatMutation_setup_messages_data_items[] | null;

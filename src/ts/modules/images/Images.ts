@@ -83,4 +83,5 @@ export interface ImageSourceBase {
   CrownEmpty: string;
 
   Check: string;
+  AIGeneratedPlanCardBG: string;
 }

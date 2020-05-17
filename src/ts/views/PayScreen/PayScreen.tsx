@@ -19,7 +19,7 @@ export default class PayScreen extends RX.Component<PayScreenProps> {
       <RX.View
         style={[styles.container, style]}
       >
-        <Text>Buy Prana</Text>
+        <Text>Buy Ovo</Text>
       </RX.View>
     )
   }

@@ -11,25 +11,33 @@ import RX from 'reactxp'
 
 interface AddRecipeCellProps {
   wrapperStyle?: any,
-  translatedText: string,
+  translatedText?: string,
   onPress: () => void,
   size?: any,
+  innerContainerStyle?: any,
+  color?: string,
 }
 
 @withNavigation
 export default class AddCell extends RX.Component<AddRecipeCellProps> {
-  private _previewScaleAnimatedValue = RX.Animated.createValue(1)
+  private _previewScaleAnimatedValue = RX.Animated.createValue(0.8)
   private _previewAnimatedStyle = RX.Styles.createAnimatedViewStyle({
     transform: [{ scale: this._previewScaleAnimatedValue }]
   })
 
   public render() {
+    const { color } = this.props
+
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.View
             style={[
               styles.container,
+              {
+                width: this.props.size,
+                height: this.props.size,
+              },
               this.props.wrapperStyle,
             ]}
             onPress={this.props.onPress}
@@ -43,9 +51,10 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
                 {
                   width: this.props.size,
                   height: this.props.size,
-                  borderRadius: this.props.size / 20,
-                  borderColor: theme.colors.addCardBorder
+                  borderRadius: 10,
+                  borderColor: color || theme.colors.addCardBorder
                 },
+                this.props.innerContainerStyle,
               ]}>
               <RX.Animated.View
                 style={[
@@ -54,7 +63,7 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
                     width: this.props.size / 5,
                     height: this.props.size / 5,
                     borderRadius: this.props.size,
-                    backgroundColor: theme.colors.addRecipeCardCircleBG,
+                    backgroundColor: color || theme.colors.addRecipeCardCircleBG,
                   },
                   this._previewAnimatedStyle,
                 ]}
@@ -63,6 +72,7 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
                   style={[
                     styles.plusIconVerticalLine, {
                       backgroundColor: theme.colors.addRecipeCardCirclePlus,
+                      width: this.props.size / 70,
                       height: this.props.size / 10,
                     }
                   ]}
@@ -71,17 +81,13 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
                   style={[
                     styles.plusIconHorizontalLine, {
                       backgroundColor: theme.colors.addRecipeCardCirclePlus,
+                      height: this.props.size / 70,
                       width: this.props.size / 10,
                     }
                   ]}
                 />
               </RX.Animated.View>
             </RX.View>
-            {/*<Text
-              translate
-              onPress={this.props.onPress}
-              style={{ color: theme.colors.addRecipeCardText }}
-            >{this.props.translatedText}</Text>*/}
           </RX.View>
         )}
       </ThemeContext.Consumer>
@@ -90,7 +96,7 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
 
   private _setUI = (isHovering: boolean) => {
     RX.Animated.timing(this._previewScaleAnimatedValue, {
-      toValue: isHovering ? 1.5 : 1,
+      toValue: isHovering ? 1.2 : 0.8,
       duration: 300,
     }).start()
   }
@@ -107,7 +113,7 @@ export default class AddCell extends RX.Component<AddRecipeCellProps> {
 const styles = {
   container: RX.Styles.createViewStyle({
     cursor: 'pointer',
-    [Styles.values.marginEnd]: Styles.values.spacing
+    marginHorizontal: Styles.values.spacing / 4,
     // alignItems: 'center',
   }),
   innerContainer: RX.Styles.createViewStyle({

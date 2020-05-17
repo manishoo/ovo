@@ -69,7 +69,7 @@ export function getQueryParam(props: any, paramName: string) {
   if (type === 'web') {
     let q
 
-    if (location.search) {
+    if (typeof location !== 'undefined' && location.search) {
       if (location.search[0] === '?') {
         q = location.search.replace('?', '')
       }
@@ -90,7 +90,7 @@ export function getimage(imageObject?: Image) {
   return '' // placeholder image
 }
 
-const DAY_COLORS = [
+export const DAY_COLORS = [
   { day: 6, color: '#5E35B1' }, // saturday
   { day: 0, color: '#E53935' }, // sunday
   { day: 1, color: '#FFCC00' },
@@ -100,8 +100,15 @@ const DAY_COLORS = [
   { day: 5, color: '#1E88E5' },
 ]
 
-export function getDayColor(date: Date) {
+export function getDayColorByDate(date: Date) {
   const found = DAY_COLORS.find(p => p.day === date.getDay())
+  if (!found) return '#fff'
+
+  return found.color
+}
+
+export function getDayColorByDay(number: number) {
+  const found = DAY_COLORS.find(p => p.day === number)
   if (!found) return '#fff'
 
   return found.color

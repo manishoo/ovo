@@ -51,6 +51,7 @@ export const MeFragment = gql`
     meals {
       ...MealSettingsMeal
     }
+    plan
   }
 
   ${MealSettingsScreen.fragments.mealSettingsMeal}

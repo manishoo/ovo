@@ -8,7 +8,12 @@ const { renderToString } = require('react-dom/server')
 const Html = require('./html')
 
 const renderDevApp = (res) => {
-  const html = renderToString(<Html lang={'en'} />)
+  const html = renderToString(
+    <Html
+      lang={'en'}
+      title={'Ovo | Loveliest Eating Companion'}
+    />
+  )
 
   res.send(`<!doctype html>${html}`)
 }

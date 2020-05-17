@@ -13,4 +13,5 @@ export interface DayComponentClearDayMutation {
 
 export interface DayComponentClearDayMutationVariables {
   dayId: any;
+  planId: any;
 }

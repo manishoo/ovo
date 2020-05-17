@@ -3,21 +3,30 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-if (!document) var document = { cookie: '' } // fix crashes on node
+if (!document) { // noinspection ES6ConvertVarToLetConst
+  var document = { cookie: '' }
+} // fix crashes on node
 
+// noinspection ES6ConvertVarToLetConst
 /**
  * Javascript class that mimics how WCF serializes a object of type MongoDB.Bson.ObjectId
  * and converts between that format and the standard 24 character representation.
  */
 var ObjectId = (function () {
+  // noinspection ES6ConvertVarToLetConst
   var increment = Math.floor(Math.random() * (16777216))
+  // noinspection ES6ConvertVarToLetConst
   var pid = Math.floor(Math.random() * (65536))
+  // noinspection ES6ConvertVarToLetConst
   var machine = Math.floor(Math.random() * (16777216))
 
+  // noinspection ES6ConvertVarToLetConst
   var setMachineCookie = function () {
+    // noinspection ES6ConvertVarToLetConst
     var cookieList = document.cookie.split('; ')
     for (var i in cookieList) {
       var cookie = cookieList[i].split('=')
+      // noinspection ES6ConvertVarToLetConst
       var cookieMachineId = parseInt(cookie[1], 10)
       if (cookie[0] == 'mongoMachineId' && cookieMachineId && cookieMachineId >= 0 && cookieMachineId <= 16777215) {
         machine = cookieMachineId
@@ -28,6 +37,7 @@ var ObjectId = (function () {
   }
   if (typeof (localStorage) != 'undefined') {
     try {
+      // noinspection ES6ConvertVarToLetConst
       var mongoMachineId = parseInt(localStorage['mongoMachineId'])
       if (mongoMachineId >= 0 && mongoMachineId <= 16777215) {
         machine = Math.floor(localStorage['mongoMachineId'])
@@ -80,8 +90,11 @@ ObjectId.prototype.getDate = function () {
 }
 
 ObjectId.prototype.toArray = function () {
+  // noinspection ES6ConvertVarToLetConst
   var strOid = this.toString()
+  // noinspection ES6ConvertVarToLetConst
   var array = []
+  // noinspection ES6ConvertVarToLetConst
   var i
   for (i = 0; i < 12; i++) {
     array[i] = parseInt(strOid.slice(i * 2, i * 2 + 2), 16)
@@ -100,9 +113,13 @@ ObjectId.prototype.toString = function () {
     return 'Invalid ObjectId'
   }
 
+  // noinspection ES6ConvertVarToLetConst
   var timestamp = this.timestamp.toString(16)
+  // noinspection ES6ConvertVarToLetConst
   var machine = this.machine.toString(16)
+  // noinspection ES6ConvertVarToLetConst
   var pid = this.pid.toString(16)
+  // noinspection ES6ConvertVarToLetConst
   var increment = this.increment.toString(16)
   return '00000000'.substr(0, 8 - timestamp.length) + timestamp +
     '000000'.substr(0, 6 - machine.length) + machine +

@@ -95,6 +95,7 @@ export interface LoginMutation_loginUser_user {
   role: Role;
   achievements: LoginMutation_loginUser_user_achievements;
   meals: LoginMutation_loginUser_user_meals[];
+  plan: any;
 }
 
 export interface LoginMutation_loginUser {

@@ -10,7 +10,7 @@ const webpack = require('webpack')
 const BabiliPlugin = require('babili-webpack-plugin')
 // const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const paths = require('./paths')
-const { CheckerPlugin } = require('awesome-typescript-loader')
+// const { CheckerPlugin } = require('awesome-typescript-loader')
 const localIdentName = '[name]_[local]_[hash:base64:5]'
 const isProd = (process.env.NODE_ENV === 'production')
 
@@ -162,14 +162,22 @@ exports.loadJS = () => ({
           }
       },
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          experimentalWatchApi: true,
+          experimentalFileCaching: true,
+        }
+      },
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       { enforce: "pre", test: /\.tsx?$/, loader: "source-map-loader" },
     ],
   },
   plugins: [
-    new CheckerPlugin()
+    // new CheckerPlugin()
   ]
   // externals: {
   //   'react': 'React',

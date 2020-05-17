@@ -14,6 +14,11 @@ export interface RecipeQuery_recipe_title {
   locale: LanguageCode;
 }
 
+export interface RecipeQuery_recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface RecipeQuery_recipe_author_avatar {
   url: string;
 }
@@ -108,6 +113,16 @@ export interface RecipeQuery_recipe_ingredients_item_Food_thumbnail {
   url: string;
 }
 
+export interface RecipeQuery_recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: RecipeQuery_recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
 export interface RecipeQuery_recipe_ingredients_item_Food {
   id: string;
   name: RecipeQuery_recipe_ingredients_item_Food_name[];
@@ -115,6 +130,7 @@ export interface RecipeQuery_recipe_ingredients_item_Food {
   weights: RecipeQuery_recipe_ingredients_item_Food_weights[];
   thumbnail: RecipeQuery_recipe_ingredients_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: RecipeQuery_recipe_ingredients_item_Food_origFoodGroups[][];
 }
 
 export interface RecipeQuery_recipe_ingredients_item_Recipe_title {
@@ -122,12 +138,145 @@ export interface RecipeQuery_recipe_ingredients_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface RecipeQuery_recipe_ingredients_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface RecipeQuery_recipe_ingredients_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface RecipeQuery_recipe_ingredients_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit =
+  RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_Weight
+  | RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_name[];
+  description: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item =
+  RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Food
+  | RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item_Recipe;
+
+export interface RecipeQuery_recipe_ingredients_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_unit | null;
+  item: RecipeQuery_recipe_ingredients_item_Recipe_ingredients_item | null;
 }
 
 export interface RecipeQuery_recipe_ingredients_item_Recipe_author_avatar {
@@ -146,9 +295,11 @@ export interface RecipeQuery_recipe_ingredients_item_Recipe {
   id: string;
   slug: string;
   title: RecipeQuery_recipe_ingredients_item_Recipe_title[];
+  servingName: RecipeQuery_recipe_ingredients_item_Recipe_servingName[] | null;
   timing: RecipeQuery_recipe_ingredients_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: RecipeQuery_recipe_ingredients_item_Recipe_thumbnail | null;
+  ingredients: RecipeQuery_recipe_ingredients_item_Recipe_ingredients[];
   author: RecipeQuery_recipe_ingredients_item_Recipe_author;
 }
 
@@ -662,6 +813,7 @@ export interface RecipeQuery_recipe {
   id: string;
   title: RecipeQuery_recipe_title[];
   serving: number;
+  servingName: RecipeQuery_recipe_servingName[] | null;
   slug: string;
   status: RecipeStatus;
   author: RecipeQuery_recipe_author;

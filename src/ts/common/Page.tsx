@@ -55,9 +55,13 @@ const PageScrollProvider: FC<RX.Types.ScrollViewProps> = ({ children, ...props }
   return (
     <RX.ScrollView
       {...props}
-      scrollEnabled={scrollEnabled}
+      // scrollEnabled={scrollEnabled}
       onScroll={useCallback((newScrollTop) => setScrollTop(newScrollTop), [])}
       onContentSizeChange={(_width, height) => setPageHeight(height - 417)}
+      style={{
+        // @ts-ignore
+        overflowY: scrollEnabled ? undefined : 'hidden',
+      }}
     >
       <PageScrollContext.Provider
         value={context}

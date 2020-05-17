@@ -37,7 +37,7 @@ class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompl
     }
   }
 
-  onChangeText = (text: string) => {
+  onChange = (text: string) => {
     this.setState({
       text,
     })
@@ -69,7 +69,7 @@ class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompl
         value={text}
         placeholder='Enter food name'
         style={styles.textInput}
-        onChangeText={this.onChangeText}
+        onChange={this.onChange}
         // @ts-ignore
         onKeyPress={this.onKeyPress}
         onBlur={() => null}
@@ -115,7 +115,7 @@ class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompl
       return (
         <RX.View
           key={f.id}
-          style={[styles.suggestionItem, { backgroundColor: theme.colors.white }]}
+          style={[styles.suggestionItem, { backgroundColor: theme.colors.cardBg }]}
           onPress={onSuggestionPress(f)}
         >
           <RX.Text>{f.name}</RX.Text>
@@ -166,7 +166,7 @@ class FoodAutocomplete extends RX.Component<FoodAutocompleteProps, FoodAutocompl
               {this.renderSuggestions(theme)}
             </Query>
             <RX.View
-              style={[styles.inputContainer, { backgroundColor: theme.colors.white }]}
+              style={[styles.inputContainer, { backgroundColor: theme.colors.cardBg }]}
             >
               {this.renderFoods(selectedFoods)}
               {this.renderInput()}

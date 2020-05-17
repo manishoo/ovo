@@ -102,6 +102,7 @@ export interface RegisterMutation_registerUser_user {
   role: Role;
   achievements: RegisterMutation_registerUser_user_achievements;
   meals: RegisterMutation_registerUser_user_meals[];
+  plan: any;
 }
 
 export interface RegisterMutation_registerUser {

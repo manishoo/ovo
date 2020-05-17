@@ -7,9 +7,22 @@ import { LanguageCode } from '@Models/global-types'
 
 
 export enum Routes {
+  about = '/about',
+  terms = '/terms',
+  team = '/team',
+  recipeDevelopers = '/recipe-developers',
+  privacy = '/privacy-policy',
+  healthProfessionals = '/health-professionals',
+  fitnessTrainers = '/fitness-trainers',
+  faq = '/faq',
+  corporations = '/corporations',
+  cookies = '/how-we-use-cookies',
+
+  findYourPlan = '/find-your-plan',
   mealDetails = 'mealDetails',
   selectDialog = 'selectDialog',
-  mealPlan = '/meal-plan',
+  newPlan = '/new-plan',
+  plan = '/meal-plan',
   settings = '/settings',
 
   calendar = '/eat',
@@ -19,7 +32,7 @@ export enum Routes {
   /**
    * Recipes
    * */
-  recipe = 'recipe',
+  recipe = '/recipe',
   recipeForm = '/create-recipe',
   searchRecipes = '/recipes',
 
@@ -28,7 +41,7 @@ export enum Routes {
   /**
    * Foods
    * */
-  food = 'food',
+  food = '/food',
 
   /**
    * Meals
@@ -36,7 +49,7 @@ export enum Routes {
   meal = '/meal',
   mealForm = '/meal',
   mealSettings = '/meal-settings',
-  mealPlanSettings = '/meal-plan-settings',
+  planSettings = '/meal-plan-settings',
 
   home = '/',
   // profile = '/',

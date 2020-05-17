@@ -3,7 +3,6 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Nutrition } from '@Models/types/Nutrition'
@@ -54,7 +53,7 @@ const NutritionPie = ({ style, nutrition, size, pieProps }: NutritionPieProps) =
   }
 
   return (
-    <RX.View>
+    <RX.View style={style}>
       {
         (
           nutrition.proteins &&
@@ -71,7 +70,7 @@ const NutritionPie = ({ style, nutrition, size, pieProps }: NutritionPieProps) =
             textAnchor={'middle'}
             style={{
               fill: '#fff',
-              fontFamily: Styles.fonts[AppConfig.locale].text, //FIXME
+              fontFamily: Styles.fonts.text, //FIXME
               fontSize: 12,
               fontWeight: '100'
             }}

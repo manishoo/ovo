@@ -13,7 +13,11 @@ import { IngredientInput, MealInput, MealItemInput } from '@Models/global-types'
 import { getOrigId } from '@Utils/create-id'
 import trimTypeName from '@Utils/trim-type-name'
 import { MealComponentDayMeal_items } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/types/MealComponentDayMeal'
-import { MealFormMeal, MealFormMeal_items } from '@Views/MealForm/types/MealFormMeal'
+import {
+  MealFormMeal,
+  MealFormMeal_items,
+  MealFormMeal_items_alternativeMealItems
+} from '@Views/MealForm/types/MealFormMeal'
 
 
 export function determineIfIsWeight(toBeDetermined: Partial<FoodPreviewMealItem_unit>): toBeDetermined is FoodPreviewMealItem_unit_Weight {
@@ -26,7 +30,7 @@ export function determineIfIsFood(toBeDetermined: Partial<FoodPreviewMealItem_it
   return toBeDetermined.__typename === 'Food'
 }
 
-export function transformMealItemToIngredientInput(mealItem: MealFormMeal_items | MealComponentDayMeal_items): IngredientInput {
+export function transformMealItemToIngredientInput(mealItem: MealFormMeal_items | MealFormMeal_items_alternativeMealItems | MealComponentDayMeal_items): IngredientInput {
   return {
     name: [],
     food: mealItem.item && (determineIfIsFood(mealItem.item) ? mealItem.item.id : null),

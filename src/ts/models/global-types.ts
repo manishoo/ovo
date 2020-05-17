@@ -21,11 +21,11 @@ export enum AssistantExpectations {
   goal = "goal",
   height = "height",
   meal = "meal",
-  mealPlan = "mealPlan",
-  mealPlanSettings = "mealPlanSettings",
   meals = "meals",
   nickname = "nickname",
   normalRoutine = "normalRoutine",
+  plan = 'plan',
+  planSettings = 'planSettings',
   register = "register",
   weight = "weight",
 }
@@ -42,8 +42,13 @@ export enum Gender {
  * Language codes
  */
 export enum LanguageCode {
+  ar = 'ar',
+  de = 'de',
   en = "en",
+  es = 'es',
   fa = "fa",
+  fr = 'fr',
+  it = 'it',
 }
 
 /**
@@ -86,11 +91,11 @@ export enum MessageType {
   food = "food",
   form = "form",
   height = "height",
-  mealPlan = "mealPlan",
-  mealPlanSettings = "mealPlanSettings",
   meals = "meals",
   number = "number",
   password = "password",
+  plan = 'plan',
+  planSettings = 'planSettings',
   select = "select",
   text = "text",
   weight = "weight",
@@ -118,9 +123,9 @@ export enum RecipeDifficulty {
  * Recipe Status
  */
 export enum RecipeStatus {
-  private = "private",
-  public = "public",
-  review = "review",
+  reviewing = 'reviewing',
+  unverified = 'unverified',
+  verified = 'verified',
 }
 
 /**
@@ -153,9 +158,9 @@ export interface CustomUnitInput {
 
 export interface DayInput {
   id?: any | null;
-  date: any;
+  date?: any | null;
+  planId: any;
   meals: DayMealInput[];
-  nutritionProfile: NutritionProfileInput;
 }
 
 export interface DayMealInput {
@@ -214,11 +219,19 @@ export interface NutritionProfileInput {
   mode: NutritionProfileMode;
 }
 
+export interface PlanInput {
+  name?: TranslationInput[] | null;
+  description?: TranslationInput[] | null;
+  coverImage?: any | null;
+  thumbnailImage?: any | null;
+}
+
 export interface RecipeInput {
   title: TranslationInput[];
   ingredients: IngredientInput[];
   instructions: InstructionInput[];
   serving: number;
+  servingName?: TranslationInput[] | null;
   timing: TimingInput;
   difficulty?: RecipeDifficulty | null;
   slug?: string | null;

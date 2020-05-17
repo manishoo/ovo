@@ -5,7 +5,7 @@
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import LocalizedText from '@Common/LocalizedText/LocalizedText'
+import Text from '@Common/Text/Text'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 // @ts-ignore FIXME
 import pSBC from '@Utils/pSBC'
@@ -20,8 +20,8 @@ interface AssistantChatButtonProps {
 }
 
 export default class AssistantChatButton extends RX.Component<AssistantChatButtonProps, { large: boolean }> {
-  private _widthAnimated: any
-  private _marginTopAnimated: any
+  private readonly _widthAnimated: any
+  private readonly _marginTopAnimated: any
   private _borderRadiusAnimated: any
 
   constructor(props: AssistantChatButtonProps) {
@@ -95,7 +95,8 @@ export default class AssistantChatButton extends RX.Component<AssistantChatButto
                   large ? {} : { [Styles.values.borderBottomEndRadius]: 5 }
                 ]}
               >
-                <RX.Text
+                <Text
+                  translate='hiAssistant'
                   style={{
                     color: theme.colors.assistantUserMessageTextColor,
                     flex: 1,
@@ -103,7 +104,7 @@ export default class AssistantChatButton extends RX.Component<AssistantChatButto
                     fontSize: large ? Styles.fontSizes.size16 : Styles.fontSizes.size14,
                     fontWeight: large ? 'bold' : '400',
                   }}
-                ><LocalizedText>hiAssistant</LocalizedText></RX.Text>
+                />
               </RX.Animated.View>
             )}
           </ThemeContext.Consumer>

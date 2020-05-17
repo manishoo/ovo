@@ -3,7 +3,6 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { useTheme } from '@App/ThemeContext'
@@ -60,6 +59,8 @@ const FilledButton = (props: FilledButtonProps) => {
   const _scrollViewRef = useRef<RX.ScrollView | null>(null)
   const _scrollViewHeight = useRef<number>()
 
+  useEffect(() => setPressed(props.pressed), [props.pressed])
+
   useEffect(() => {
     if (!_scrollViewRef.current) return
     if (!_scrollViewHeight.current) return
@@ -75,7 +76,7 @@ const FilledButton = (props: FilledButtonProps) => {
     let hoverStyle = {}
 
     let labelStyle: any = {
-      fontFamily: Styles.fonts[AppConfig.locale].text,
+      fontFamily: Styles.fonts.text,
     }
 
     switch (mode) {
@@ -138,11 +139,11 @@ const FilledButton = (props: FilledButtonProps) => {
   return (
     <HoverButton
       style={containerStyle}
-      onPressIn={() => setPressed(true)}
-      onPressOut={() => setPressed(false)}
+      onPressIn={props.pressed ? undefined : () => setPressed(true)}
+      onPressOut={props.pressed ? undefined : () => setPressed(false)}
       onPress={loading ? undefined : onPress}
-      // disabled={!onPress}
-      // disabledOpacity={1}
+      disabled={disabled}
+      disabledOpacity={1}
       onRenderChild={isHovering => (
         <RX.View
           style={[

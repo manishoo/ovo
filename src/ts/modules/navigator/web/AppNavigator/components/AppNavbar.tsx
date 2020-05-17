@@ -5,12 +5,15 @@
 
 import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
-import { ThemeContext } from '@App/ThemeContext'
+import { ThemeContext, useTheme } from '@App/ThemeContext'
 import Image from '@Common/Image/Image'
 import Link from '@Common/Link/Link'
+import Text from '@Common/Text/Text'
 import { Routes } from '@Models/common'
 import { Me } from '@Models/graphql/me/types/Me'
-import { useContext } from 'react'
+import CalendarService from '@Services/CalendarService'
+import ServiceConsumer from '@Services/utils/ServiceConsumer'
+import { FC, useContext, useMemo } from 'react'
 import { matchPath, useLocation } from 'react-router'
 import RX from 'reactxp'
 
@@ -18,12 +21,70 @@ import RX from 'reactxp'
 const NAVBAR_HEIGHT = 54
 const NAVBAR_MAX_WIDTH = Styles.values.mainContentMaxWidth
 
+const styles = {
+  container: RX.Styles.createViewStyle({
+    height: NAVBAR_HEIGHT,
+    borderBottomWidth: 1,
+    alignItems: 'center',
+  }),
+  innerContainer: RX.Styles.createViewStyle({
+    flex: 1,
+    paddingHorizontal: Styles.values.spacing,
+    flexDirection: 'row',
+    alignItems: 'center',
+    maxWidth: NAVBAR_MAX_WIDTH,
+  }),
+  brand: RX.Styles.createImageStyle({
+    width: 60,
+    height: 16,
+    position: 'absolute',
+    [Styles.values.start]: Styles.values.spacing,
+  }),
+  icon: RX.Styles.createImageStyle({
+    width: 25,
+    height: 25,
+    [Styles.values.marginStart]: Styles.values.spacing,
+  }),
+  iconsWrapper: RX.Styles.createViewStyle({
+    flexDirection: 'row',
+    position: 'absolute',
+    [Styles.values.end]: Styles.values.spacing,
+  }),
+}
+
 interface AppNavbarProps {
   style?: any,
   me: Me | null,
-  path: string,
   width: number,
   showIcons: boolean,
+}
+
+const Indicator: FC<{}> = (props) => {
+  const theme = useTheme()
+
+  const indicatorWrapper = useMemo(() => RX.Styles.createViewStyle({
+    padding: 3,
+    position: 'absolute',
+    bottom: 0,
+    [Styles.values.end]: 0,
+    borderRadius: 100,
+    backgroundColor: theme.colors.red,
+  }, false), [theme.colors.red])
+
+  const indicatorText = useMemo(() => RX.Styles.createTextStyle({
+    fontSize: 10,
+    color: theme.colors.textLight,
+  }, false), [theme.colors.textLight])
+
+  if (props.children == 0) return null
+
+  return (
+    <RX.View
+      style={indicatorWrapper}
+    >
+      <Text style={indicatorText}>{props.children}</Text>
+    </RX.View>
+  )
 }
 
 export default function AppNavbar({ style, me, width, showIcons }: AppNavbarProps) {
@@ -100,21 +161,34 @@ export default function AppNavbar({ style, me, width, showIcons }: AppNavbarProp
 
             {
               me &&
-              <Link
-                key={3}
-                to={Routes.shoppingList}
-                style={Object.assign({},
-                  {
-                    color: _isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
-                  })
-                }
-              >
-                <Image
-                  source={_isActive(Routes.shoppingList) ? Image.source.ShoppingListActive : Image.source.ShoppingList}
-                  style={styles.icon}
-                  resizeMode={'contain'}
-                />
-              </Link>
+              <RX.View>
+                <ServiceConsumer
+                  state={{
+                    shoppingList: () => CalendarService.getShoppingList(),
+                  }}
+                >
+                  {({ shoppingList }) => (
+                    <Link
+                      key={3}
+                      to={Routes.shoppingList}
+                      style={Object.assign({},
+                        {
+
+                          color: _isActive(Routes.shoppingList) ? '#fff' : '#4a4a4a'
+                        })
+                      }
+                    >
+                      <Image
+                        source={_isActive(Routes.shoppingList) ? Image.source.ShoppingListActive : Image.source.ShoppingList}
+                        style={styles.icon}
+                        resizeMode={'contain'}
+                      />
+
+                      <Indicator>{Object.keys(shoppingList).reduce((previousValue, foodGroupId) => previousValue + shoppingList[foodGroupId].length, 0)}</Indicator>
+                    </Link>
+                  )}
+                </ServiceConsumer>
+              </RX.View>
             }
 
             {
@@ -157,34 +231,3 @@ export default function AppNavbar({ style, me, width, showIcons }: AppNavbarProp
 }
 
 AppNavbar.height = NAVBAR_HEIGHT
-
-const styles = {
-  container: RX.Styles.createViewStyle({
-    height: NAVBAR_HEIGHT,
-    borderBottomWidth: 1,
-    alignItems: 'center',
-  }),
-  innerContainer: RX.Styles.createViewStyle({
-    flex: 1,
-    paddingHorizontal: Styles.values.spacing,
-    flexDirection: 'row',
-    alignItems: 'center',
-    maxWidth: NAVBAR_MAX_WIDTH,
-  }),
-  brand: RX.Styles.createImageStyle({
-    width: 60,
-    height: 16,
-    position: 'absolute',
-    [Styles.values.start]: Styles.values.spacing,
-  }),
-  icon: RX.Styles.createImageStyle({
-    width: 25,
-    height: 25,
-    [Styles.values.marginStart]: Styles.values.spacing,
-  }),
-  iconsWrapper: RX.Styles.createViewStyle({
-    flexDirection: 'row',
-    position: 'absolute',
-    [Styles.values.end]: Styles.values.spacing,
-  })
-}

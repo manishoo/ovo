@@ -4,7 +4,6 @@
  */
 
 import AppConfig from '@App/AppConfig'
-import imageCompression from 'browser-image-compression'
 import React from 'react'
 import RX from 'reactxp'
 import { FilePickerProps } from './types'
@@ -66,7 +65,11 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
     }
   }
 
-  private _compressImage = async (image: File) => {
+  private _compressImage = async (image: any) => {
+    if (typeof File === undefined) throw new Error('No File')
+
+    const imageCompression = require('browser-image-compression').default
+
     return {
       full: await imageCompression(image, this.props.fullImageOptions || {
         maxSizeMB: 0.5,

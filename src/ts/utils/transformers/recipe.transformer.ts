@@ -49,6 +49,7 @@ export function transformRecipeToRecipeInput(recipe: RecipeFormQuery_recipe | Re
       step: instruction.step,
     }) as InstructionInput).filter(p => p.text.length > 0),
     serving: recipe.serving,
+    servingName: recipe.servingName,
     timing: {
       totalTime: recipe.timing.totalTime,
       prepTime: recipe.timing.prepTime,

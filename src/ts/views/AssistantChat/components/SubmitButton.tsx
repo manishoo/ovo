@@ -28,7 +28,7 @@ export default class SubmitButton extends RX.Component<SubmitButtonProps> {
         <ThemeContext.Consumer>
           {({ theme }) => (
             <RX.View
-              style={[styles.skipButton, { backgroundColor: theme.colors.white }, style]}
+              style={[styles.skipButton, { backgroundColor: theme.colors.cardBg }, style]}
               activeOpacity={0.7}
               onPress={onSkip}
             >

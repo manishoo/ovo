@@ -8,7 +8,6 @@ import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import Assistant from '@Common/Assistant/Assistant'
 import FilledButton from '@Common/FilledButton/FilledButton'
-import AppFooter from '@Common/Footer/Footer'
 import Image from '@Common/Image/Image'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
@@ -17,7 +16,6 @@ import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import GeneratorSample from '@Views/LandingScreen/components/GeneratorSample'
-import GoDownIndicator from '@Views/LandingScreen/components/GoDownIndicator'
 import LandingHeader from '@Views/LandingScreen/components/LandingHeader/LandingHeader'
 import { RouteChildrenProps } from 'react-router'
 import RX from 'reactxp'
@@ -52,7 +50,7 @@ export default class LandingScreen extends ComponentBase<LandingScreenProps & Ro
   public render() {
     const options = {
       sectionClassName: 'section',
-      anchors: ['sectionOne', 'sectionTwo', 'sectionThree', 'sectionFour', 'sectionFive', 'sectionSix', 'get-a-plan'],
+      anchors: ['sectionOne'/*, 'sectionTwo', 'sectionThree', 'sectionFour', 'sectionFive', 'sectionSix', 'get-a-plan'*/],
       scrollBar: false,
       navigation: true,
       verticalAlign: false,
@@ -70,24 +68,106 @@ export default class LandingScreen extends ComponentBase<LandingScreenProps & Ro
       <ThemeContext.Consumer>
         {({ theme }) => (
           <>
-            <ScrollToTopOnMount />
+            {/*<ScrollToTopOnMount />*/}
 
-            <Header>
-              <LandingHeader
-                onLinkPress={this.scrollTo}
-                backgroundColor={this.state.activeSection === GENERATOR_SECTION ? this._getColorForSection(GENERATOR_SECTION).bg : undefined}
-                textColor={textColor}
-                style={[
-                  {
-                    width: this.state.width > CONTENT_MAX_WIDTH ? CONTENT_MAX_WIDTH : this.state.width,
-                  },
-                  this.state.activeSection === GENERATOR_SECTION && {
-                    backgroundColor: bgColor,
-                  },
-                ]}
-              />
-            </Header>
-            <SectionsContainer
+            <RX.View style={[
+              styles.alignCenter,
+              {
+                height: this.state.height/* - 102*/,
+                width: this.state.width,
+                justifyContent: 'center',
+                alignItems: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
+                padding: Styles.values.spacing,
+              }
+            ]}>
+              <Text
+                translate
+                style={[styles.title, {
+                  color: textColor,
+                  textAlign: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
+                  [Styles.values.marginEnd]: this.state.isTinyWidth ? Styles.values.spacing * 3 : undefined,
+                }]}
+                selectable
+                type={Text.types.title}
+              >landingTitle</Text>
+              <Text
+                translate
+                style={[styles.subtitle, {
+                  color: textColor,
+                  // color: theme.colors.landingSubtitle,
+                  textAlign: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
+                  [Styles.values.marginEnd]: this.state.isTinyWidth ? Styles.values.spacing * 3 : undefined,
+                }]}
+              >landingSubtitle</Text>
+
+              <RX.View style={{ alignItems: 'stretch', width: 403 }}>
+                <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing }}>
+                  <Image
+                    source={ImageSource.GooglePlayButton}
+                    style={[styles.storeButton, { [Styles.values.marginEnd]: Styles.values.spacing, }]}
+                    resizeMode={'contain'}
+                  />
+                  <Image
+                    source={ImageSource.AppStoreButton}
+                    style={styles.storeButton}
+                    resizeMode={'contain'}
+                  />
+                </RX.View>
+                <Text
+                  translate={translate.keys.Or}
+                  style={{
+                    color: textColor,
+                    textAlign: 'center',
+                    marginTop: Styles.values.spacing / 2,
+                    marginBottom: Styles.values.spacing / 2,
+                  }}
+                />
+                {/*<FilledButton label={translate.keys.GetStartedNow} onPress={this._openSetupModal} />*/}
+                <RX.View>
+                  <FilledButton
+                    label={translate.keys.GetStartedNow}
+                    onPress={() => LocationStore.navigate(this.props, {
+                      pathname: Routes.setupProcess,
+                      state: { background: { ...this.props.location, state: { isInBackground: true } } }
+                    })}
+                  />
+                </RX.View>
+              </RX.View>
+
+              {/*<RX.View
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <GoDownIndicator />
+                  </RX.View>*/}
+            </RX.View>
+
+            <LandingHeader
+              onLinkPress={this.scrollTo}
+              backgroundColor={this.state.activeSection === GENERATOR_SECTION ? this._getColorForSection(GENERATOR_SECTION).bg : undefined}
+              textColor={textColor}
+              style={[
+                {
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  width: this.state.width > CONTENT_MAX_WIDTH ? CONTENT_MAX_WIDTH : this.state.width,
+                },
+                this.state.activeSection === GENERATOR_SECTION && {
+                  backgroundColor: bgColor,
+                },
+              ]}
+            />
+            {/*<Header>
+
+            </Header>*/}
+            {/*<SectionsContainer
               {...options}
               disabled={isInBackground || this.state.scrollDisabled}
               activeSection={this.state.activeSection}
@@ -105,7 +185,7 @@ export default class LandingScreen extends ComponentBase<LandingScreenProps & Ro
                 <RX.View style={[
                   styles.alignCenter,
                   {
-                    height: this.state.height/* - 102*/,
+                    height: this.state.height,
                     justifyContent: 'center',
                     alignItems: this.state.isSmallOrTinyScreenSize ? 'center' : undefined,
                     padding: Styles.values.spacing,
@@ -153,7 +233,7 @@ export default class LandingScreen extends ComponentBase<LandingScreenProps & Ro
                         marginBottom: Styles.values.spacing / 2,
                       }}
                     />
-                    {/*<FilledButton label={translate.keys.GetStartedNow} onPress={this._openSetupModal} />*/}
+                    <FilledButton label={translate.keys.GetStartedNow} onPress={this._openSetupModal} />
                     <RX.View>
                       <FilledButton
                         label={translate.keys.GetStartedNow}
@@ -205,7 +285,7 @@ export default class LandingScreen extends ComponentBase<LandingScreenProps & Ro
                   }}
                 />
               </Section>
-            </SectionsContainer>
+            </SectionsContainer>*/}
 
             {false && this._renderBottomCall2Action()}
 

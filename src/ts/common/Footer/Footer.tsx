@@ -3,11 +3,25 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import AppConfig from '@App/AppConfig'
+import Storage from '@App/Storage/Storage'
 import Styles from '@App/Styles'
+import { ThemeMode } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import HoverButton from '@Common/HoverButton/HoverButton'
+import FBIcon from '@Common/icons/FB/FB'
+import INIcon from '@Common/icons/IN/IN'
+import PINIcon from '@Common/icons/PIN/PIN'
+import TELIcon from '@Common/icons/TEL/TEL'
+import TWIcon from '@Common/icons/TW/TW'
+import YTIcon from '@Common/icons/YT/YT'
 import Image from '@Common/Image/Image'
+import Link from '@Common/Link/Link'
+import { translate } from '@Common/LocalizedText/LocalizedText'
+import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
+import { Routes } from '@Models/common'
+import { LanguageCode } from '@Models/global-types'
 import RX from 'reactxp'
 import ImageSource from 'src/ts/modules/images/index.web'
 
@@ -21,7 +35,7 @@ const styles = {
     marginHorizontal: Styles.values.spacing * 2,
     // maxWidth: Styles.values.mainContentMaxWidth,
     alignSelf: 'center',
-    paddingHorizontal: Styles.values.spacing,
+    paddingHorizontal: Styles.values.spacing * 2,
     maxWidth: Styles.values.mainContentMaxWidth,
   }),
   footerTitle: RX.Styles.createTextStyle({
@@ -33,10 +47,25 @@ const styles = {
     marginHorizontal: Styles.values.spacing
   }),
   socialMediaText: RX.Styles.createTextStyle({
-    fontSize: Styles.fontSizes.size16,
-    marginTop: Styles.values.spacing
+    // fontSize: Styles.fontSizes.size16,
+    marginBottom: Styles.values.spacing
   })
 }
+
+const LANGUAGE_OPTIONS = [
+  { text: 'English', value: LanguageCode.en },
+  { text: 'Deutsch', value: LanguageCode.de },
+  { text: 'Français', value: LanguageCode.fr },
+  { text: 'Español', value: LanguageCode.es },
+  { text: 'Italiano', value: LanguageCode.it },
+  { text: 'فارسی', value: LanguageCode.fa },
+  { text: 'عربی', value: LanguageCode.ar },
+]
+
+const THEME_OPTIONS = [
+  { text: translate('lightTheme'), value: ThemeMode.light },
+  { text: translate('darkTheme'), value: ThemeMode.dark },
+]
 
 const Footer = ({ style }: { style?: any }) => {
   return (
@@ -57,33 +86,159 @@ const Footer = ({ style }: { style?: any }) => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginRight: Styles.values.spacing,
-                marginLeft: Styles.values.spacing,
               }}
             >
-              <RX.View style={{ [Styles.values.marginEnd]: Styles.values.spacing * 2 }}>
-                <Text
-                  translate
-                  style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}
-                >LandingFooterCentralOffice</Text>
-                <Text
-                  translate
-                  onPress={() => {
+              <RX.View style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                [Styles.values.marginEnd]: Styles.values.spacing * 2
+              }}>
+                <RX.View
+                  style={{
+                    [Styles.values.marginEnd]: Styles.values.spacing * 2
                   }}
-                  style={{ marginTop: Styles.values.spacing }}
-                >LandingFooterAboutPrana</Text>
-                <Text
-                  translate
-                  onPress={() => {
+                >
+                  <Text
+                    translate='Partners'
+                    style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}
+                  />
+                  <Link
+                    to={Routes.recipeDevelopers}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Recipe Developers'
+                    />
+                  </Link>
+                  <Link
+                    to={Routes.healthProfessionals}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Health Professionals'
+                    />
+                  </Link>
+                  <Link
+                    to={Routes.fitnessTrainers}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Fitness Trainers'
+                    />
+                  </Link>
+                  <Link
+                    to={Routes.corporations}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Corporations'
+                    />
+                  </Link>
+                </RX.View>
+                <RX.View
+                  style={{
+                    [Styles.values.marginEnd]: Styles.values.spacing * 2
                   }}
-                  style={{ marginTop: Styles.values.spacing }}
-                >LandingFooterContactUs</Text>
-                <Text
-                  translate
-                  onPress={() => {
+                >
+                  <Text
+                    translate='Help'
+                    style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}
+                  />
+                  <Link
+                    to={Routes.faq}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='FAQ'
+                    />
+                  </Link>
+
+                  <Text
+                    type={Text.types.link}
+                    translate='LandingFooterContactUs'
+                    onPress={() => RX.Linking.launchEmail({
+                      to: [AppConfig.emailTo],
+                    })}
+                    style={{ marginTop: Styles.values.spacing }}
+                  />
+                </RX.View>
+                <RX.View
+                  style={{
+                    [Styles.values.marginEnd]: Styles.values.spacing * 2
                   }}
-                  style={{ marginTop: Styles.values.spacing }}
-                >LandingFooterTerms</Text>
+                >
+                  <Text
+                    translate='Learn More'
+                    style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}
+                  />
+                  <Link
+                    to={Routes.about}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='AboutOvo'
+                    />
+                  </Link>
+                  <Link
+                    to={Routes.team}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Team'
+                    />
+                  </Link>
+                  <Link
+                    to='#'
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Health Education'
+                    />
+                  </Link>
+
+                </RX.View>
+
+                <RX.View>
+                  <Text
+                    translate='Legal'
+                    style={[styles.footerTitle, { color: theme.colors.footerTitleColor }]}
+                  />
+                  <Link
+                    to={Routes.terms}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Terms'
+                    />
+                  </Link>
+                  <Link
+                    to={Routes.privacy}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Privacy'
+                    />
+                  </Link>
+                  <Link
+                    to={Routes.cookies}
+                    style={{ marginTop: Styles.values.spacing }}
+                  >
+                    <Text
+                      type={Text.types.link}
+                      translate='Cookies'
+                    />
+                  </Link>
+                </RX.View>
               </RX.View>
               <RX.View>
                 <Image
@@ -97,121 +252,152 @@ const Footer = ({ style }: { style?: any }) => {
                   resizeMode={'contain'}
                 />
                 <RX.View>
-                  <Image
-                    source={ImageSource.GooglePlayButton}
-                    resizeMode={'contain'}
+                  <Link
+                    to='#'
                     style={{
-                      width: 151,
-                      height: 45,
                       [Styles.values.marginStart]: Styles.values.spacing,
                       marginBottom: Styles.values.spacing,
                     }}
-                  />
-                  <Image
-                    source={ImageSource.AppStoreButton}
-                    resizeMode={'contain'}
+                  >
+                    <Image
+                      source={ImageSource.GooglePlayButton}
+                      resizeMode={'contain'}
+                      style={{
+                        width: 151,
+                        height: 45,
+                      }}
+                    />
+                  </Link>
+                  <Link
+                    to='#'
                     style={{
-                      width: 151,
-                      height: 49,
                       [Styles.values.marginStart]: Styles.values.spacing,
                       marginBottom: Styles.values.spacing,
                     }}
-                  />
+                  >
+                    <Image
+                      source={ImageSource.AppStoreButton}
+                      resizeMode={'contain'}
+                      style={{
+                        width: 151,
+                        height: 49,
+                      }}
+                    />
+                  </Link>
                 </RX.View>
               </RX.View>
             </RX.View>
             <RX.View
               style={{
-                alignItems: 'center',
-                marginTop: Styles.values.spacing * 4,
+                flexDirection: 'row'
               }}
             >
+              <Select
+                label='Language'
+                value={AppConfig.locale}
+                options={LANGUAGE_OPTIONS}
+                onChange={value => {
+                  Storage.setItem('locale', value)
+                    .then(() => (typeof window !== 'undefined') && window.location.reload())
+                }}
+                labelStyle={{
+                  fontWeight: 'bold',
+                }}
+                containerStyle={{
+                  width: 151,
+                  [Styles.values.marginEnd]: Styles.values.spacing,
+                  // alignSelf: 'flex-end'
+                }}
+              />
+              <Select
+                label='Theme'
+                value={AppConfig.theme}
+                options={THEME_OPTIONS}
+                labelStyle={{
+                  fontWeight: 'bold',
+                }}
+                onChange={value => {
+                  Storage.setItem('theme', value)
+                    .then(() => (typeof window !== 'undefined') && window.location.reload())
+                }}
+                containerStyle={{
+                  width: 151,
+                  // alignSelf: 'flex-end'
+                }}
+              />
+            </RX.View>
+            <RX.View
+              style={{
+                alignItems: 'center',
+                marginTop: Styles.values.spacing * 2,
+              }}
+            >
+              <Text
+                translate='LandingFooterSocialMediaText'
+                style={[styles.socialMediaText, { color: theme.colors.footerTitleColor }]}
+              />
+
               <RX.View
                 style={{
                   flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: (6 * 30) + (6 * Styles.values.spacing / 2)
                 }}
               >
                 <HoverButton
                   onRenderChild={isHovering => (
-                    <Image
-                      source={ImageSource.FaceBookIcon}
-                      resizeMode={'contain'}
-                      style={[
-                        styles.socialMediaIcon,
-                        { opacity: isHovering ? 0.8 : 1, }
-                      ]}
+                    <FBIcon
+                      size={30}
+                      color={isHovering ? undefined : theme.colors.text}
                     />
                   )}
                 />
                 <HoverButton
                   onRenderChild={isHovering => (
-                    <Image
-                      source={ImageSource.YoutubeIcon}
-                      resizeMode={'contain'}
-                      style={[
-                        styles.socialMediaIcon,
-                        { opacity: isHovering ? 0.8 : 1, }
-                      ]}
+                    <YTIcon
+                      size={30}
+                      color={isHovering ? undefined : theme.colors.text}
                     />
                   )}
                 />
                 <HoverButton
                   onRenderChild={isHovering => (
-                    <Image
-                      source={ImageSource.TwitterIcon}
-                      resizeMode={'contain'}
-                      style={[
-                        styles.socialMediaIcon,
-                        { opacity: isHovering ? 0.8 : 1, }
-                      ]}
+                    <TWIcon
+                      size={30}
+                      color={isHovering ? undefined : theme.colors.text}
                     />
                   )}
                 />
                 <HoverButton
                   onRenderChild={isHovering => (
-                    <Image
-                      source={ImageSource.PinterestIcon}
-                      resizeMode={'contain'}
-                      style={[
-                        styles.socialMediaIcon,
-                        { opacity: isHovering ? 0.8 : 1, }
-                      ]}
+                    <PINIcon
+                      size={30}
+                      color={isHovering ? undefined : theme.colors.text}
                     />
                   )}
                 />
                 <HoverButton
                   onRenderChild={isHovering => (
-                    <Image
-                      source={ImageSource.InstagramIcon}
-                      resizeMode={'contain'}
-                      style={[
-                        styles.socialMediaIcon,
-                        { opacity: isHovering ? 0.8 : 1, }
-                      ]}
+                    <INIcon
+                      size={30}
+                      color={isHovering ? undefined : theme.colors.text}
                     />
                   )}
                 />
                 <HoverButton
                   onRenderChild={isHovering => (
-                    <Image
-                      source={ImageSource.TelegramIcon}
-                      resizeMode={'contain'}
-                      style={[
-                        styles.socialMediaIcon,
-                        { opacity: isHovering ? 0.8 : 1, }
-                      ]}
+                    <TELIcon
+                      size={30}
+                      color={isHovering ? undefined : theme.colors.text}
                     />
                   )}
                 />
               </RX.View>
-              <Text
-                translate
-                style={[styles.socialMediaText, { color: theme.colors.footerTitleColor }]}
-              >LandingFooterSocialMediaText</Text>
+
             </RX.View>
 
             <Text
-              translate
+              translate='landingfooterAck'
               style={{
                 // position: 'absolute',
                 // bottom: Styles.values.spacing,
@@ -221,7 +407,7 @@ const Footer = ({ style }: { style?: any }) => {
                 textAlign: 'center',
                 paddingTop: Styles.values.spacing * 2,
               }}
-            >landingfooterAck</Text>
+            />
           </RX.View>
         </RX.View>
       )}

@@ -79,7 +79,7 @@ const cache = new InMemoryCache({
   // },
 })
 // @ts-ignore
-  .restore(window.__APOLLO_STATE__)
+  .restore(typeof window === 'undefined' ? undefined : window.__APOLLO_STATE__)
 
 writeDefaults(cache)
 

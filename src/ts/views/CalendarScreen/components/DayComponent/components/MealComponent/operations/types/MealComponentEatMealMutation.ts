@@ -15,4 +15,5 @@ export interface MealComponentEatMealMutationVariables {
   dayId: any;
   eaten: boolean;
   userMealId: string;
+  planId: any;
 }

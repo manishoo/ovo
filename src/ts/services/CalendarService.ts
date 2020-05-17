@@ -4,11 +4,14 @@
  */
 
 import { ApolloCache } from '@apollo/client'
+import client from '@App/client'
 import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
+import { MeOperation } from '@Models/graphql/me/me'
+import { MeQuery } from '@Models/graphql/me/types/MeQuery'
 import { IAutoSavablePersistableStore } from '@Models/resub-persist'
 import { calculateMealItemsNutrition } from '@Utils/shared/calculate-meal-nutrition'
-import { CalendarControlOperation } from '@Views/CalendarScreen/components/CalendarControl/operations/CalendarControlOperation'
-import { CalendarControlQuery } from '@Views/CalendarScreen/components/CalendarControl/operations/types/CalendarControlQuery'
+import { CalendarOverviewOperation } from '@Views/CalendarScreen/components/CalendarOverview/operations/CalendarOverviewOperation'
+import { CalendarOverviewQuery } from '@Views/CalendarScreen/components/CalendarOverview/operations/types/CalendarOverviewQuery'
 import { MealItemComponentMealItem } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/components/MealItemComponent/types/MealItemComponentMealItem'
 import { MealComponentFragments } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/MealComponentOperation'
 import {
@@ -26,10 +29,11 @@ import { DateTime } from 'luxon'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import * as SyncTasks from 'synctasks'
 
-// function determineIfIsFood(toBeDetermined: Partial<DayComponentDay_meals_items_item_Recipe_ingredients_item>): toBeDetermined is DayComponentDay_meals_items_item_Food {
-//   // @ts-ignore __typename
-//   return toBeDetermined.__typename === 'Food'
-// }
+
+function determineIfIsFood(toBeDetermined: any): toBeDetermined is DayComponentDay_meals_items_item_Food {
+  // @ts-ignore __typename
+  return toBeDetermined.__typename === 'Food'
+}
 
 export function calculateMealItemAmount(mealItem: DayComponentDay_meals_items): number {
   let grams = 0
@@ -74,19 +78,25 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
 
-    this._handleShoppingList()
+    setImmediate(() => this._handleShoppingList())
     deferred.resolve(void 0)
 
     return deferred.promise()
   }
 
-  setDay(cache: ApolloCache<any>, day: DayComponentDay) {
+  setDay(cache: ApolloCache<any>, day: DayComponentDay, planId: string, affectOverview: boolean = true) {
     const calendarQuery = cache.readQuery<CalendarQuery>({
       query: CalendarOperation,
+      variables: {
+        planId,
+      }
     })
     if (!calendarQuery) return
     cache.writeQuery({
       query: CalendarOperation,
+      variables: {
+        planId,
+      },
       data: {
         ...calendarQuery,
         calendar: [
@@ -95,49 +105,70 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
         ],
       }
     })
-
-    const calendarControlQuery = cache.readQuery<CalendarControlQuery>({
-      query: CalendarControlOperation,
-    })
-    if (!calendarControlQuery) return
-    cache.writeQuery({
-      query: CalendarControlOperation,
-      data: {
-        ...calendarControlQuery,
-        calendar: [
-          ...calendarControlQuery.calendar.filter(d => d.id !== day.id).filter(d => !DateTime.fromISO(d.date).hasSame(DateTime.fromISO(day.date), 'day')),
-          day,
-        ]
-      }
-    })
+    if (affectOverview) {
+      const calendarControlQuery = cache.readQuery<CalendarOverviewQuery>({
+        variables: {
+          planId,
+        },
+        query: CalendarOverviewOperation,
+      })
+      if (!calendarControlQuery) return
+      cache.writeQuery({
+        query: CalendarOverviewOperation,
+        variables: {
+          planId,
+        },
+        data: {
+          ...calendarControlQuery,
+          calendar: [
+            ...calendarControlQuery.calendar.filter(d => d.id !== day.id).filter(d => !DateTime.fromISO(d.date).hasSame(DateTime.fromISO(day.date), 'day')),
+            day,
+          ]
+        }
+      })
+    }
 
     this._handleShoppingList()
     this.trigger()
   }
 
-  removeDay(cache: ApolloCache<any>, dayId: string) {
+  removeDay(cache: ApolloCache<any>, dayId: string, planId: string, affectOverview: boolean = true) {
     const calendarQuery = cache.readQuery<CalendarQuery>({
       query: CalendarOperation,
+      variables: {
+        planId,
+      },
     })
     if (!calendarQuery) return
     cache.writeQuery({
       query: CalendarOperation,
+      variables: {
+        planId,
+      },
       data: {
         ...calendarQuery,
         calendar: calendarQuery.calendar.filter(day => day.id !== dayId)
       }
     })
 
-    const calendarControlQuery = cache.readQuery<CalendarControlQuery>({
-      query: CalendarControlOperation,
-    })
-    if (!calendarControlQuery) return
-    cache.writeQuery({
-      query: CalendarControlOperation,
-      data: {
-        calendar: calendarControlQuery.calendar.filter(day => day.id !== dayId)
-      }
-    })
+    if (affectOverview) {
+      const calendarControlQuery = cache.readQuery<CalendarOverviewQuery>({
+        query: CalendarOverviewOperation,
+        variables: {
+          planId,
+        },
+      })
+      if (!calendarControlQuery) return
+      cache.writeQuery({
+        query: CalendarOverviewOperation,
+        variables: {
+          planId,
+        },
+        data: {
+          calendar: calendarControlQuery.calendar.filter(day => day.id !== dayId)
+        }
+      })
+    }
 
     this._handleShoppingList()
     this.trigger()
@@ -153,15 +184,8 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
 
     if (updateShoppingList) {
       this._handleShoppingList()
+      this.trigger()
     }
-  }
-
-  getMeal(cache: ApolloCache<any>, mealId: string): MealComponentDayMeal | null {
-    return cache.readFragment({
-      fragmentName: 'MealComponentDayMeal',
-      fragment: MealComponentFragments.dayMeal,
-      id: `DayMeal:${mealId}`,
-    })
   }
 
   moveMealItem(cache: ApolloCache<any>, fromMealId: string, toMealId: string, toIndex: number, mealItemId: string) {
@@ -196,6 +220,15 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     }, false)
 
     this._handleShoppingList()
+    this.trigger()
+  }
+
+  getMeal(cache: ApolloCache<any>, mealId: string): MealComponentDayMeal | null {
+    return cache.readFragment({
+      fragmentName: 'MealComponentDayMeal',
+      fragment: MealComponentFragments.dayMeal,
+      id: `DayMeal:${mealId}`,
+    })
   }
 
   setMealItem(cache: ApolloCache<any>, mealId: string, prevMealItem: MealItemComponentMealItem, newMealItem: MealItemComponentMealItem) {
@@ -248,51 +281,70 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
     //   id: newMealItem.id,
     // }))
 
-    // this._handleShoppingList()
-    // this.trigger()
+    this._handleShoppingList()
+    this.trigger()
   }
 
   public addPantryItem(food: DayComponentDay_meals_items_item_Food, grams: number) {
-    // const foodGroupId = food.origFoodGroups[0][0].id
-    //
-    // const item = {
-    //   food,
-    //   grams,
-    //   dateAdded: new Date()
-    // }
-    //
-    // /**
-    //  * 1) Add to pantry
-    //  * */
-    // if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
-    //   const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
-    //
-    //   if (foodAlreadyExists) {
-    //     this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
-    //       grocery.grams += grams
-    //       grocery.dateAdded = new Date()
-    //
-    //       return grocery
-    //     })
-    //   } else {
-    //     this.pantryGroceriesByFoodGroup[foodGroupId] = [
-    //       ...this.pantryGroceriesByFoodGroup[foodGroupId],
-    //       item,
-    //     ]
-    //   }
-    // } else {
-    //   this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
-    // }
-    //
-    // /**
-    //  * 2) Remove from shoppingList
-    //  * */
-    // this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
-    //
-    // this.trigger([
-    //   TriggerKeys.pantryGroceriesByFoodGroup,
-    //   TriggerKeys.shoppingListGroceriesByFoodGroup,
-    // ])
+    const foodGroupId = food.origFoodGroups[0][0].id
+
+    const item = {
+      food,
+      grams,
+      dateAdded: new Date()
+    }
+
+    /**
+     * 1) Add to pantry
+     * */
+    if (this.pantryGroceriesByFoodGroup[foodGroupId]) {
+      const foodAlreadyExists = this.pantryGroceriesByFoodGroup[foodGroupId].find(p => p.food.id === food.id)
+
+      if (foodAlreadyExists) {
+        this.pantryGroceriesByFoodGroup[foodGroupId] = this.pantryGroceriesByFoodGroup[foodGroupId].map(grocery => {
+          grocery.grams += grams
+          grocery.dateAdded = new Date()
+
+          return grocery
+        })
+      } else {
+        this.pantryGroceriesByFoodGroup[foodGroupId] = [
+          ...this.pantryGroceriesByFoodGroup[foodGroupId],
+          item,
+        ]
+      }
+    } else {
+      this.pantryGroceriesByFoodGroup[foodGroupId] = [item]
+    }
+
+    /**
+     * 2) Remove from shoppingList
+     * */
+    this.shoppingListGroceriesByFoodGroup[foodGroupId] = this.shoppingListGroceriesByFoodGroup[foodGroupId].filter(p => p.food.id !== food.id)
+
+    this.trigger([
+      TriggerKeys.pantryGroceriesByFoodGroup,
+      TriggerKeys.shoppingListGroceriesByFoodGroup,
+    ])
+  }
+
+  private _getMyCalendar() {
+    const meQuery = client.readQuery<MeQuery>({
+      query: MeOperation,
+    })
+    if (!meQuery) throw new Error('no meQuery')
+
+    if (!meQuery.me) return []
+
+    const calendarQuery = client.readQuery<CalendarQuery>({
+      query: CalendarOperation,
+      variables: {
+        planId: meQuery.me.plan,
+      },
+    })
+    if (!calendarQuery) throw new Error('no calendarQuery')
+
+    return calendarQuery.calendar
   }
 
   @autoSubscribe
@@ -364,94 +416,82 @@ export class CalendarService extends StoreBase implements IAutoSavablePersistabl
   }
 
   private _handleShoppingList() {
-    // const calendar = this.calendar
-    //
-    // const foods: GroceriesByFood = {}
-    // const groceriesByFoodGroup: GroceriesByFoodGroup = {}
-    //
-    // /**
-    //  * Unique by food id
-    //  * */
-    // function handleFood(food: DayComponentDay_meals_items_item_Food, grams: number) {
-    //   if (foods[food.id]) {
-    //     foods[food.id] = {
-    //       ...foods[food.id],
-    //       grams: foods[food.id].grams + grams
-    //     }
-    //   } else {
-    //     foods[food.id] = {
-    //       food,
-    //       grams,
-    //     }
-    //   }
-    // }
-    //
-    // function getDateFromTimeString(timeString: string): DateTime {
-    //   const splitTime = timeString.split(':')
-    //   if (splitTime[0].length !== 2) throw Error('time format should be HH:mm')
-    //   if (splitTime[1].length !== 2) throw Error('time format should be HH:mm')
-    //
-    //   const mealDate = new Date()
-    //
-    //   mealDate.setHours(+splitTime[0])
-    //   mealDate.setMinutes(+splitTime[1])
-    //
-    //   return DateTime.fromJSDate(mealDate)
-    // }
-    //
-    // const now = DateTime.local()
-    // calendar
-    // /**
-    //  * Only days in the future
-    //  * */
-    //   .filter(day => Math.round(DateTime.fromISO(day.date).diff(now).as('days')) >= 0)
-    //   .map(day => {
-    //     day.meals
-    //     /**
-    //      * Only meals in the future
-    //      * */
-    //       .filter(meal => Math.round(DateTime.fromISO(meal.time).diff(now).as('minutes')) >= 0)
-    //       .map(meal => {
-    //         meal.items.map(mealItem => {
-    //           if (mealItem.item) {
-    //             if (determineIfIsFood(mealItem.item)) {
-    //               handleFood(mealItem.item, calculateMealItemAmount(mealItem))
-    //             } else {
-    //               mealItem.item.ingredients.map(ingredient => {
-    //                 if (ingredient.item) {
-    //                   if (determineIfIsFood(ingredient.item)) {
-    //                     handleFood(ingredient.item, calculateMealItemAmount(mealItem))
-    //                   }
-    //                 }
-    //               })
-    //             }
-    //           }
-    //         })
-    //       })
-    //   })
-    //
-    // /**
-    //  * Unique by food group
-    //  * */
-    // Object.keys(foods).map(foodId => {
-    //   const food = foods[foodId]
-    //
-    //   const foodGroupId = food.food.origFoodGroups[0][0].id
-    //   if (!foodGroupId) throw new Error('food group not found')
-    //
-    //   if (groceriesByFoodGroup[foodGroupId]) {
-    //     groceriesByFoodGroup[foodGroupId] = [
-    //       ...groceriesByFoodGroup[foodGroupId],
-    //       food
-    //     ]
-    //   } else {
-    //     groceriesByFoodGroup[foodGroupId] = [
-    //       food
-    //     ]
-    //   }
-    // })
-    //
-    // this.shoppingListGroceriesByFoodGroup = this._excludePantryItemsFromShoppingList(groceriesByFoodGroup, this.pantryGroceriesByFoodGroup)
+    const calendar = this._getMyCalendar()
+
+    const foods: GroceriesByFood = {}
+
+    /**
+     * Unique by food id
+     * */
+    function handleFood(food: DayComponentDay_meals_items_item_Food, grams: number) {
+      console.log('food', food, grams)
+      if (foods[food.id]) {
+        foods[food.id] = {
+          ...foods[food.id],
+          grams: foods[food.id].grams + grams
+        }
+      } else {
+        foods[food.id] = {
+          food,
+          grams,
+        }
+      }
+    }
+
+    const now = DateTime.local()
+    calendar
+    /**
+     * Only days in the future
+     * */
+      .filter(day => Math.round(DateTime.fromISO(day.date).diff(now).as('days')) >= 0)
+      .map(day => {
+        day.meals
+        /**
+         * Only meals in the future
+         * */
+          .filter(meal => Math.round(DateTime.fromISO(meal.time).diff(now).as('minutes')) >= 0)
+          .map(meal => {
+            meal.items.map(mealItem => {
+              if (mealItem.item) {
+                if (determineIfIsFood(mealItem.item)) {
+                  handleFood(mealItem.item, calculateMealItemAmount(mealItem))
+                } else {
+                  mealItem.item.ingredients.map(ingredient => {
+                    if (ingredient.item) {
+                      if (determineIfIsFood(ingredient.item)) {
+                        handleFood(ingredient.item, calculateMealItemAmount(mealItem))
+                      }
+                    }
+                  })
+                }
+              }
+            })
+          })
+      })
+
+    const groceriesByFoodGroup: GroceriesByFoodGroup = {}
+    /**
+     * Unique by food group
+     * */
+    Object.keys(foods).map(foodId => {
+      const food = foods[foodId]
+
+      const foodGroupId = food.food.origFoodGroups[0][0].id
+      if (!foodGroupId) throw new Error('food group not found')
+
+      if (groceriesByFoodGroup[foodGroupId]) {
+        groceriesByFoodGroup[foodGroupId] = [
+          ...groceriesByFoodGroup[foodGroupId],
+          food
+        ]
+      } else {
+        groceriesByFoodGroup[foodGroupId] = [
+          food
+        ]
+      }
+    })
+
+    this.shoppingListGroceriesByFoodGroup = this._excludePantryItemsFromShoppingList(groceriesByFoodGroup, this.pantryGroceriesByFoodGroup)
   }
 
   private _excludePantryItemsFromShoppingList(shoppingList: GroceriesByFoodGroup, pantry: GroceriesByFoodGroup): GroceriesByFoodGroup {

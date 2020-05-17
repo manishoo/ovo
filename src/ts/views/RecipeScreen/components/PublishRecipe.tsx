@@ -75,7 +75,7 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
       (user.role === Role.admin) ||
       (user.id !== recipe.author.id) // If it wasn't your recipe
     ) {
-      if (recipe.status === RecipeStatus.review) {
+      if (recipe.status === RecipeStatus.reviewing) {
         if (loading) {
           return translate('Rejecting')
         }
@@ -84,7 +84,7 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
       }
     }
 
-    if (recipe.status === RecipeStatus.public) {
+    if (recipe.status === RecipeStatus.verified) {
       if (loading) {
         return translate('Bringing down')
       }
@@ -92,7 +92,7 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
       return translate('Bring down')
     }
 
-    if (recipe.status === RecipeStatus.private) {
+    if (recipe.status === RecipeStatus.unverified) {
       if (loading) {
         return translate('Requesting for Publication')
       }
@@ -100,7 +100,7 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
       return translate('Request Publication')
     }
 
-    if (recipe.status === RecipeStatus.review) {
+    if (recipe.status === RecipeStatus.reviewing) {
       if (loading) {
         return translate('Cancelling')
       }
@@ -110,15 +110,15 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
   }
 
   const _getStatus = (accept?: boolean) => {
-    if (accept) return RecipeStatus.public
+    if (accept) return RecipeStatus.verified
 
     switch (recipe.status) {
-      case RecipeStatus.review:
-        return RecipeStatus.private // reject
-      case RecipeStatus.private:
-        return RecipeStatus.review // request for publication
-      case RecipeStatus.public:
-        return RecipeStatus.private // restore
+      case RecipeStatus.reviewing:
+        return RecipeStatus.unverified // reject
+      case RecipeStatus.unverified:
+        return RecipeStatus.reviewing // request for publication
+      case RecipeStatus.verified:
+        return RecipeStatus.unverified // restore
     }
   }
 
@@ -144,15 +144,15 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
 
   const _getFirstLabelMode = () => {
     switch (recipe.status) {
-      case RecipeStatus.review:
+      case RecipeStatus.reviewing:
         if (user.id === recipe.author.id) {
           return FilledButton.mode.default
         } else {
           return FilledButton.mode.danger
         }
-      case RecipeStatus.private:
+      case RecipeStatus.unverified:
         return FilledButton.mode.primary
-      case RecipeStatus.public:
+      case RecipeStatus.verified:
       default:
         return FilledButton.mode.default
     }
@@ -176,7 +176,7 @@ export default function PublishRecipe({ recipe, user }: PublishRecipeProps) {
          * Accept button (for operator)
          * */
         authorized([Role.operator], user.role) &&
-        recipe.status === RecipeStatus.review &&
+        recipe.status === RecipeStatus.reviewing &&
         <FilledButton
           label={_getLabel2()}
           onPress={_onPress(true)}

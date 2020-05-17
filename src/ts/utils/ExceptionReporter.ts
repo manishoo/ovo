@@ -14,6 +14,7 @@ export default class ExceptionReporter {
   private _handlers: ExceptionReporterDelegate[] = []
 
   constructor() {
+    if (typeof window === 'undefined') return
     window.onerror = (event: Event | string, source?: string, fileNum?: number, columnNum?: number, ...extData: any[]) => {
       // Modern Browsers will support this
       let stack = ''
@@ -46,6 +47,7 @@ export default class ExceptionReporter {
   }
 
   registerAlertView() {
+    if (typeof window === 'undefined') return
     this._handlers.push((event, source, fileno, columnNumber) => {
       window.alert('DEBUG ALERT: Uncaught Exception\n' + event + '\n' + source + ' (' + fileno + ',' + columnNumber + ')')
       return false

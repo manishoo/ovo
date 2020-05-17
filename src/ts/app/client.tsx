@@ -4,7 +4,6 @@
  */
 
 import { ApolloClient, ApolloLink, Observable, Operation } from '@apollo/client'
-import { onError } from '@apollo/link-error'
 import { cache } from '@App/client-cache'
 import resolvers from '@App/resolvers'
 import { MeOperation } from '@Models/graphql/me/me'
@@ -77,27 +76,27 @@ const client = new ApolloClient({
   connectToDevTools: true,
   resolvers,
   link: ApolloLink.from([
-    inflateLink,
     // batchLink,
-    onError(({ graphQLErrors, networkError, operation }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(error => {
-          sendToLoggingService(error)
-          // ToastStore.toast({
-          //   message: error.message,
-          //   type: ToastTypes.Error,
-          // })
-        })
-      }
-      if (networkError) {
-        logoutUser()
-        // ToastStore.toast({
-        //   message: networkError.message,
-        //   type: ToastTypes.Error,
-        // })
-      }
-    }),
+    // onError(({ graphQLErrors, networkError, operation }) => {
+    //   if (graphQLErrors) {
+    //     graphQLErrors.map(error => {
+    //       sendToLoggingService(error)
+    //       // ToastStore.toast({
+    //       //   message: error.message,
+    //       //   type: ToastTypes.Error,
+    //       // })
+    //     })
+    //   }
+    //   if (networkError) {
+    //     logoutUser()
+    //     // ToastStore.toast({
+    //     //   message: networkError.message,
+    //     //   type: ToastTypes.Error,
+    //     // })
+    //   }
+    // }),
     requestLink,
+    inflateLink,
     // @ts-ignore
     createUploadLink({
       uri: AppConfig.graphQLAddress,

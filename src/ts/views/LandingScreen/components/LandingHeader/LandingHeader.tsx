@@ -107,7 +107,9 @@ const LandingHeader = ({ style, onLinkPress, textColor, backgroundColor }: Landi
           </Visible>
           <Visible md lg xl>
             <a href="#get-a-plan">
-              <Text onPress={() => onLinkPress(3)} translate={'Get a Plan'} style={navTitleStyle} />
+              <Text
+                // onPress={() => onLinkPress(3)}
+                translate={'Get a Plan'} style={navTitleStyle} />
             </a>
             <a href='#'>
               <Text translate={'Blog'} style={navTitleStyle} />
@@ -193,13 +195,13 @@ const LandingDropDown = ({ visible, onLinkPress }: { visible: boolean, onLinkPre
       ]}
     >
       <Text onPress={() => onLinkPress(5)} translate={'Get a Plan'} style={navTitleStyle}>
-        <Link to={{ hash: '#get-a-plan' }} />
+        <Link to={{ hash: '#get-a-plan' }}><RX.View /></Link>
       </Text>
       <Text translate={'Blog'} style={navTitleStyle}>
-        <Link to={{ hash: '#' }} />
+        <Link to={{ hash: '#' }}><RX.View /></Link>
       </Text>
       <Text translate={'About'} style={navTitleStyle}>
-        <Link to={{ hash: '#' }} />
+        <Link to={{ hash: '#' }}><RX.View /></Link>
       </Text>
     </RX.Animated.View>
   )

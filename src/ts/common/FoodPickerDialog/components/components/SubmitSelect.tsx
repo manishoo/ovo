@@ -8,6 +8,7 @@ import { useTheme } from '@App/ThemeContext'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Select, { Option } from '@Common/Select/Select'
+// @ts-ignore
 import pSBC from '@Utils/pSBC'
 import { useState } from 'react'
 import RX from 'reactxp'

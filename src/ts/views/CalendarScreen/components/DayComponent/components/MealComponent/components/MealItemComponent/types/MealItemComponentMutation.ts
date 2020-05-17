@@ -81,6 +81,16 @@ export interface MealItemComponentMutation_suggestMealItem_item_Food_thumbnail {
   url: string;
 }
 
+export interface MealItemComponentMutation_suggestMealItem_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Food_origFoodGroups {
+  id: string;
+  name: MealItemComponentMutation_suggestMealItem_item_Food_origFoodGroups_name[];
+}
+
 export interface MealItemComponentMutation_suggestMealItem_item_Food_nutrition_calories {
   amount: number;
   unit: string;
@@ -553,6 +563,7 @@ export interface MealItemComponentMutation_suggestMealItem_item_Food {
   weights: MealItemComponentMutation_suggestMealItem_item_Food_weights[];
   thumbnail: MealItemComponentMutation_suggestMealItem_item_Food_thumbnail | null;
   origFoodClassSlug: string;
+  origFoodGroups: MealItemComponentMutation_suggestMealItem_item_Food_origFoodGroups[][];
   nutrition: MealItemComponentMutation_suggestMealItem_item_Food_nutrition | null;
 }
 
@@ -561,12 +572,145 @@ export interface MealItemComponentMutation_suggestMealItem_item_Recipe_title {
   locale: LanguageCode;
 }
 
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_servingName {
+  text: string;
+  locale: LanguageCode;
+}
+
 export interface MealItemComponentMutation_suggestMealItem_item_Recipe_timing {
+  cookTime: number | null;
+  prepTime: number | null;
   totalTime: number | null;
 }
 
 export interface MealItemComponentMutation_suggestMealItem_item_Recipe_thumbnail {
   url: string;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_customUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_customUnit {
+  gramWeight: number | null;
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_customUnit_name[];
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_Weight_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_Weight {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_Weight_name[];
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_CustomUnit_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_CustomUnit {
+  gramWeight: number | null;
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_CustomUnit_name[];
+}
+
+export type MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit =
+  MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_Weight
+  | MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit_CustomUnit;
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_description {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_weights_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_weights {
+  amount: number;
+  gramWeight: number | null;
+  id: any;
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_weights_name[];
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_thumbnail {
+  url: string;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_origFoodGroups_name {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_origFoodGroups {
+  id: string;
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_origFoodGroups_name[];
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food {
+  id: string;
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_name[];
+  description: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_description[] | null;
+  weights: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_weights[];
+  thumbnail: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_thumbnail | null;
+  origFoodClassSlug: string;
+  origFoodGroups: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food_origFoodGroups[][];
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Recipe_title {
+  text: string;
+  locale: LanguageCode;
+}
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Recipe {
+  id: string;
+  slug: string;
+  title: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Recipe_title[];
+}
+
+export type MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item =
+  MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Food
+  | MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item_Recipe;
+
+export interface MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients {
+  id: any;
+  /**
+   * The plain name of the ingredient in the case it was not associated with a food or recipe
+   */
+  name: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_name[] | null;
+  /**
+   * Additional descriptions or hints for this ingredient
+   */
+  description: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_description[] | null;
+  amount: number | null;
+  customUnit: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_customUnit | null;
+  /**
+   * The active unit for this ingredient. Empty value means grams
+   */
+  unit: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_unit | null;
+  item: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients_item | null;
 }
 
 export interface MealItemComponentMutation_suggestMealItem_item_Recipe_author_avatar {
@@ -1050,9 +1194,11 @@ export interface MealItemComponentMutation_suggestMealItem_item_Recipe {
   id: string;
   slug: string;
   title: MealItemComponentMutation_suggestMealItem_item_Recipe_title[];
+  servingName: MealItemComponentMutation_suggestMealItem_item_Recipe_servingName[] | null;
   timing: MealItemComponentMutation_suggestMealItem_item_Recipe_timing;
   status: RecipeStatus;
   thumbnail: MealItemComponentMutation_suggestMealItem_item_Recipe_thumbnail | null;
+  ingredients: MealItemComponentMutation_suggestMealItem_item_Recipe_ingredients[];
   author: MealItemComponentMutation_suggestMealItem_item_Recipe_author;
   nutrition: MealItemComponentMutation_suggestMealItem_item_Recipe_nutrition | null;
 }
@@ -1087,7 +1233,8 @@ export interface MealItemComponentMutation {
 }
 
 export interface MealItemComponentMutationVariables {
-  userMealId: string;
-  mealItemId: string;
-  date: any;
+  dayId: any;
+  dayMealId: any;
+  planId: any;
+  mealItemId: any;
 }

@@ -43,7 +43,7 @@ export default class SearchResultContainer extends RX.Component {
     if (AppConfig.getPlatformType() === 'web') {
       let q
 
-      if (location.search) {
+      if (typeof location !== 'undefined' && location.search) {
         if (location.search[0] === '?') {
           q = location.search.replace('?', '')
         }

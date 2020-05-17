@@ -99,7 +99,7 @@ const productionConfig = merge(
     }
   }),
   // should go after loading images
-  parts.optimizeImages(),
+  // parts.optimizeImages(),
   parts.optimizeChunks(),
 )
 

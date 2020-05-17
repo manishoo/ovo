@@ -9,8 +9,7 @@ import NutritionPie from '@Common/NutritionInfo/components/NutritionPie/Nutritio
 import Text from '@Common/Text/Text'
 import NutritionFragment from '@Models/nutrition'
 import { Nutrition } from '@Models/types/Nutrition'
-import areFieldsEqual from '@Utils/areFieldsEqual'
-import React, { memo } from 'react'
+import React from 'react'
 import RX from 'reactxp'
 import NutritionDetail from './components/NutritionDetail/NutritionDetail'
 import MacroTargets from './MacroTargets'
@@ -43,7 +42,7 @@ export const fragments = {
   nutrition: NutritionFragment
 }
 
-const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style, showDetails = true, showMacros = true, showPie = true }: NutritionInfoProps) => {
+const NutritionInfo = ({ nutrition, nutritionProfile, title, style, showDetails = true, showMacros = true, showPie = true }: NutritionInfoProps) => {
   if (nutrition.calories && nutrition.calories.amount === 0) return null
   if (!nutrition.proteins) return null
   if (!nutrition.fats) return null
@@ -147,9 +146,6 @@ const NutritionInfo = memo(({ nutrition, nutritionProfile, title, style, showDet
       </RX.View>
     </RX.View>
   )
-}, areFieldsEqual([
-  'nutrition',
-  'nutritionProfile',
-]))
+}
 
 export default NutritionInfo

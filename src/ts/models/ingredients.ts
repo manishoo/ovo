@@ -23,7 +23,9 @@ export const IngredientFoodFragment = gql`
     #    nutrition {
     #      ...Nutrition
     #    }
-    #    origFoodGroups { id name { text locale } }
+
+    # FIXME? like this?
+    origFoodGroups { id name { text locale } }
   }
 
   # {NutritionFragment}
@@ -34,51 +36,52 @@ export const IngredientRecipeFragment = gql`
     id
     slug
     title {text locale}
+    servingName {text locale}
     #    image {url}
     timing {
-      #      cookTime
-      #      prepTime
+      cookTime
+      prepTime
       totalTime
     }
     status
     #    likesCount
     #    userLikedRecipe
     thumbnail {url}
-    #    ingredients {
-    #      id
-    #      name {text locale}
-    #      description {text locale}
-    #      amount
-    #      customUnit {
-    #        gramWeight
-    #        name { text locale }
-    #      }
-    #      unit {
-    #        ... on Weight {
-    #          amount
-    #          gramWeight
-    #          id
-    #          name { text locale }
-    #        }
-    #        ... on CustomUnit {
-    #          gramWeight
-    #          name { text locale }
-    #        }
-    #      }
-    #      item {
-    #        ... on Food {
-    #          ...IngredientFood
-    #        }
-    #        ... on Recipe {
-    #          id
-    #          slug
-    #          title {text locale}
-    #          nutrition {
-    #            ...Nutrition
-    #          }
-    #        }
-    #      }
-    #    }
+
+    # FIXME maybe not include recipe ingredients in foodpicker?
+    ingredients {
+      id
+      name {text locale}
+      description {text locale}
+      amount
+      customUnit {
+        gramWeight
+        name { text locale }
+      }
+      unit {
+        ... on Weight {
+          amount
+          gramWeight
+          id
+          name { text locale }
+        }
+        ... on CustomUnit {
+          gramWeight
+          name { text locale }
+        }
+      }
+      item {
+        ... on Food {
+          ...IngredientFood
+        }
+        ... on Recipe {
+          id
+          slug
+          title {text locale}
+        }
+      }
+    }
+
     author {
       id
       username
@@ -91,8 +94,7 @@ export const IngredientRecipeFragment = gql`
     #    }
   }
 
-  #  {IngredientFoodFragment}
-  #  {NutritionFragment}
+  ${IngredientFoodFragment}
 `
 
 export const IngredientFragment = gql`

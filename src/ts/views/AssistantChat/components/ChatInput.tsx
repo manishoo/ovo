@@ -35,7 +35,7 @@ type Item = AssistantChatMutation_setup_messages_data_items
 export interface MessageInput {
   inputType: MessageType,
   expect: AssistantExpectations,
-  mealPlanSettings: any,
+  planSettings: any,
   skip: boolean,
   items?: Item[],
   data: AssistantChatMutation_setup_messages_data,
@@ -142,9 +142,9 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
     switch (inputType) {
       case MessageType.meals: {
         let bottomAnimation = RX.Animated.timing(this._animatedBottomValue,
-          { toValue: 20, duration: 350, easing: RX.Animated.Easing.InOut() })
+          { toValue: 0, duration: 350, easing: RX.Animated.Easing.InOut() })
 
-        onHeightChange(305)
+        onHeightChange(409)
         return bottomAnimation.start()
       }
       case MessageType.form: {
@@ -173,7 +173,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
         )
         return bottomAnimation.start()
       }
-      case MessageType.mealPlanSettings: {
+      case MessageType.planSettings: {
         onHeightChange(310)
         let bottomAnimation = RX.Animated.timing(this._animatedBottomValue,
           {
@@ -212,7 +212,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
         items,
         skip,
         expect,
-        mealPlanSettings,
+        planSettings,
         data
       },
       loading,
@@ -239,7 +239,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
         return {
           ...containerStyle,
           width: this.props.introductionWidth,
-          height: 320,
+          height: 409,
         }
       }
       return {
@@ -261,8 +261,8 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
             }}
           >
             <FilledButton
-              label={expect === AssistantExpectations.mealPlan ? translate(translate.keys.Ok) : translate(translate.keys.hiAssistant)}
-              onPress={expect === AssistantExpectations.mealPlan ? this.props.onOpenMealPlan : this.props.onGetStartedPress}
+              label={expect === AssistantExpectations.plan ? translate(translate.keys.Ok) : translate(translate.keys.hiAssistant)}
+              onPress={expect === AssistantExpectations.plan ? this.props.onOpenMealPlan : this.props.onGetStartedPress}
             />
           </RX.View>
         )
@@ -286,7 +286,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
             style={styles.selectItemContainer}
           >
             {
-              items.map(item => (
+              (items || []).map(item => (
                 <RX.View
                   key={item.text}
                   style={[styles.selectItem, {
@@ -310,7 +310,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
             key='scs'
             style={[
               createViewStyle(),
-              { backgroundColor: theme.colors.white },
+              { backgroundColor: theme.colors.cardBg },
               this._animatedStyle,
             ]}
           >
@@ -385,7 +385,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
                       >
                         <UserMeals
                           ref={ref => this._userMeals = ref}
-                          meals={data.meals}
+                          meals={data.meals || []}
                         />
                       </RX.ScrollView>,
                       <SubmitButton
@@ -400,11 +400,11 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
                         disabled={loading}
                       />
                     ]
-                  case MessageType.mealPlanSettings:
+                  case MessageType.planSettings:
                     return (
                       <MealSettings
                         onSubmit={this._onMealSettingsSubmit}
-                        settings={mealPlanSettings}
+                        settings={planSettings}
                       />
                     )
                   case MessageType.form:
@@ -563,7 +563,7 @@ export default class ChatInput extends RX.Component<ChatInputProps, ChatInputSta
     const { onSubmit } = this.props
 
     onSubmit({
-      message: `protein: %${data.mealPlanSettings.protein}\nfat: %${data.mealPlanSettings.fat}\ncarbs: %${data.mealPlanSettings.carbs}\nTDEE: ${data.mealPlanSettings.tdee}calories`,
+      message: `protein: %${data.planSettings.protein}\nfat: %${data.planSettings.fat}\ncarbs: %${data.planSettings.carbs}\nTDEE: ${data.planSettings.tdee}calories`,
       data: JSON.stringify(data),
     })
   }

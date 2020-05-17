@@ -30,7 +30,7 @@ export const PROFILE_MEALS_QUERY = gql`
 `
 export const PROFILE_RECIPES_QUERY = gql`
   query ProfileRecipesQuery($lastId: ObjectId, $userId: ObjectId, $size: Int) {
-    recipes(lastId: $lastId, userId: $userId, size: $size) @connection(key: "recipes") {
+    recipes(lastId: $lastId, userId: $userId, size: $size, showMyRecipes: true) @connection(key: "recipes") {
       recipes {
         ...IngredientRecipe
       }
@@ -45,7 +45,7 @@ export const PROFILE_RECIPES_QUERY = gql`
 `
 export const PROFILE_REVIEW_RECIPES_QUERY = gql`
   query ProfileReviewRecipesQuery($lastId: ObjectId, $size: Int) {
-    recipes(lastId: $lastId, size: $size, status: review) @connection(key: "reviewRecipes") {
+    recipes(lastId: $lastId, size: $size, status: reviewing) @connection(key: "reviewRecipes") {
       recipes {
         ...IngredientRecipe
       }

@@ -39,7 +39,7 @@ export default function UsernameInput(props: any) {
         if (!data) return false
         if (loading) return false
 
-        props.onValidChange(!data.usernameExists)
+        if (props.onValidChange) props.onValidChange(!data.usernameExists)
         return !data.usernameExists
       }}
       autoCapitalize='none'

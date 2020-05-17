@@ -3,8 +3,7 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { gql } from '@apollo/client'
-import { graphql, MutationFunctionOptions, MutationResult } from '@apollo/react-hoc'
+import { gql, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { FoodPreviewMealItem } from '@Common/FoodPickerDialog/components/types/FoodPreviewMealItem'
 import { translate } from '@Common/LocalizedText/LocalizedText'
@@ -13,9 +12,8 @@ import NutritionInfo from '@Common/NutritionInfo/NutritionInfo'
 import { useMe } from '@Models/graphql/me/me'
 import { Me } from '@Models/graphql/me/types/Me'
 import CalendarService from '@Services/CalendarService'
-import { getDayColor } from '@Utils'
-import areFieldsEqual from '@Utils/areFieldsEqual'
 import { calculateDayNutrition } from '@Utils/shared/calculate-meal-nutrition'
+import { useCalendarContext } from '@Views/CalendarScreen/CalendarScreen'
 import { MealComponentFragments } from '@Views/CalendarScreen/components/DayComponent/components/MealComponent/operations/MealComponentOperation'
 import NutritionBar from '@Views/CalendarScreen/components/DayComponent/components/NutritionBar/NutritionBar'
 import {
@@ -30,9 +28,8 @@ import {
   DayComponentNewDayMutation,
   DayComponentNewDayMutationVariables
 } from '@Views/CalendarScreen/components/DayComponent/types/DayComponentNewDayMutation'
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import RX from 'reactxp'
-import { compose } from 'redux'
 import DayEmpty from '../DayEmpty/DayEmpty'
 import DayPayWall from '../DayPayWall/DayPayWall'
 import DayTitle from './components/DayTitle/DayTitle'
@@ -43,31 +40,34 @@ import { createDayInput } from './utils/create-day-input'
 
 const MEAL_WIDTH = 350
 
-interface DayComponentCommonProps {
+export interface DayComponentProps {
   style?: any,
   day?: DayComponentDay,
-  date: Date,
+  date?: Date,
   width: number
   minHeight: number
   isTinyOrSmall: boolean,
   me?: Me,
-  onTitlePress: (date: Date) => void,
+  onTitlePress: (date?: Date) => void,
   loading?: boolean,
   draggingMealItem?: FoodPreviewMealItem,
+  title: string,
+  dayColor: string,
 }
 
-export interface DayComponentProps extends DayComponentCommonProps {
-  newDayResult: MutationResult<DayComponentNewDayMutation>,
-  newDay: (args: MutationFunctionOptions<DayComponentNewDayMutation, DayComponentNewDayMutationVariables>) => Promise<MutationResult<DayComponentNewDayMutation>>,
+//
+// export interface DayComponentProps extends DayComponentCommonProps {
+//   newDayResult: MutationResult<DayComponentNewDayMutation>,
+//   newDay: (args: MutationFunctionOptions<DayComponentNewDayMutation, DayComponentNewDayMutationVariables>) => Promise<MutationResult<DayComponentNewDayMutation>>,
+//
+//   generateDayResult: MutationResult<DayComponentNewDayMutation>,
+//   generateDay: (args: MutationFunctionOptions<DayComponentNewDayMutation, DayComponentNewDayMutationVariables>) => Promise<MutationResult<DayComponentNewDayMutation>>,
+//
+//   clearDayResult: MutationResult<DayComponentClearDayMutation>,
+//   clearDay: (args: MutationFunctionOptions<DayComponentClearDayMutation, DayComponentClearDayMutationVariables>) => Promise<MutationResult<DayComponentClearDayMutation>>,
+// }
 
-  generateDayResult: MutationResult<DayComponentNewDayMutation>,
-  generateDay: (args: MutationFunctionOptions<DayComponentNewDayMutation, DayComponentNewDayMutationVariables>) => Promise<MutationResult<DayComponentNewDayMutation>>,
-
-  clearDayResult: MutationResult<DayComponentClearDayMutation>,
-  clearDay: (args: MutationFunctionOptions<DayComponentClearDayMutation, DayComponentClearDayMutationVariables>) => Promise<MutationResult<DayComponentClearDayMutation>>,
-}
-
-export function DayComponent(props: DayComponentProps) {
+export default function DayComponent(props: DayComponentProps) {
   const {
     style,
     day,
@@ -77,17 +77,18 @@ export function DayComponent(props: DayComponentProps) {
     isTinyOrSmall,
     // me,
     onTitlePress,
-    newDayResult: { loading: newDayLoading },
-    newDay,
-    generateDayResult: { loading: generateDayLoading },
-    generateDay,
-    clearDayResult: { loading: clearDayLoading },
-    clearDay,
     loading,
     draggingMealItem,
+    title,
+    dayColor,
   } = props
 
   const me = useMe()!
+  const { planId } = useCalendarContext()
+
+  const [newDay, { loading: newDayLoading }] = useNewDay()
+  const [generateDay, { loading: generateDayLoading }] = useNewDay()
+  const [clearDay, { loading: clearDayLoading }] = useClearDay()
 
   const mealWidth = width > MEAL_WIDTH ? MEAL_WIDTH : width
   const _mealStyle = useMemo(() => RX.Styles.createViewStyle({
@@ -98,8 +99,8 @@ export function DayComponent(props: DayComponentProps) {
   // const isToday = date.hasSame(Date.local(), 'day')
   const _isFreeUser = false // && (Math.round(date.diff(Date.local()).as('day')) > 0) && (me && !me!.membership)
 
-  const dayInput = createDayInput(props.date, me.meals, me.nutritionProfile)
-  const dayOptimisticResponse = createDayInput(props.date, me.meals, me.nutritionProfile, true)
+  const dayInput = useMemo(() => createDayInput(me, props.date, false, planId), [!!me, props.date, planId])
+  const dayOptimisticResponse = useMemo(() => createDayInput(me, props.date, true), [!!me, props.date])
 
   const onClearDay = useCallback(() => {
     if (!props.day) return
@@ -107,12 +108,13 @@ export function DayComponent(props: DayComponentProps) {
     return clearDay({
       variables: {
         dayId: props.day.id,
+        planId,
       },
       optimisticResponse: {
         clearDay: props.day.id,
       }
     })
-  }, [!!props.day])
+  }, [props.day && props.day.id, planId])
 
   const onDayCreate = useCallback(() => newDay({
     variables: {
@@ -197,8 +199,8 @@ export function DayComponent(props: DayComponentProps) {
     alignSelf: 'stretch',
   }, false), [isTinyOrSmall])
 
-  const dayNutrition = day ? calculateDayNutrition(day) : null
-  const mealItemsCount = day ? day.meals.reduce(((accumulatedValue, meal) => accumulatedValue + meal.items.length), 0) : 0
+  const dayNutrition = useMemo(() => day ? calculateDayNutrition(day) : null, [day])
+  const mealItemsCount = useMemo(() => day ? day.meals.reduce(((accumulatedValue, meal) => accumulatedValue + meal.items.length), 0) : 0, [day])
 
   return (
     <RX.View
@@ -217,9 +219,9 @@ export function DayComponent(props: DayComponentProps) {
               style={styles.container}
             >
               <DayTitle
-                date={date}
+                title={title}
                 onRegenerate={onDayRegenerate}
-                color={getDayColor(date)}
+                color={dayColor}
                 dayRegenerating={dayRegenerating || loading}
                 itemControlVisible
                 onTitlePress={_onDayTitlePress}
@@ -239,14 +241,14 @@ export function DayComponent(props: DayComponentProps) {
               }
 
               {
-                day.meals.map((meal, index) => (
+                day.meals.map(meal => (
                   <MealComponent
                     ref={ref => _mealComponentRefs.current[meal.id] = ref}
                     key={meal.userMeal!.id}
                     meal={meal}
                     dayId={day.id}
                     style={_mealStyle}
-                    showIAteThis={index === 0}
+                    showIAteThis={!!day.date}
                     spaceIndex={_getMealSpaceIndex(meal)}
                     setSpaceIndex={_setMealSpaceIndex}
                   />
@@ -282,9 +284,9 @@ export function DayComponent(props: DayComponentProps) {
                 <DayPayWall /> :
                 <>
                   <DayTitle
-                    date={date}
+                    title={title}
                     onRegenerate={onDayRegenerate}
-                    color={getDayColor(date)}
+                    color={dayColor}
                     dayRegenerating={dayRegenerating || loading}
                     itemControlVisible={false}
                     onTitlePress={_onDayTitlePress}
@@ -330,49 +332,29 @@ DayComponent.operations = {
     ${DayComponent.fragments.day}
   `,
   clearDay: gql`
-    mutation DayComponentClearDayMutation($dayId: ObjectId!) {
-      clearDay(dayId: $dayId)
+    mutation DayComponentClearDayMutation($dayId: ObjectId!, $planId: ObjectId!) {
+      clearDay(dayId: $dayId, planId: $planId)
     }
   `
 }
 
-export default compose<FunctionComponent<DayComponentCommonProps>>(
-  graphql<DayComponentCommonProps, DayComponentNewDayMutation, DayComponentNewDayMutationVariables, DayComponentProps>(DayComponent.operations.newDay, {
-    name: 'newDay',
-    options: {
-      ignoreResults: false,
-      notifyOnNetworkStatusChange: true,
-      update: (proxy, { data }) => data && CalendarService.setDay(proxy, data.newDay),
-    }
-  }),
-  graphql<DayComponentCommonProps, DayComponentNewDayMutation, DayComponentNewDayMutationVariables, DayComponentProps>(DayComponent.operations.newDay, {
-    name: 'generateDay',
-    options: {
-      ignoreResults: false,
-      notifyOnNetworkStatusChange: true,
-      update: (proxy, { data }) => data && CalendarService.setDay(proxy, data.newDay),
-    }
-  }),
-  graphql<DayComponentCommonProps, DayComponentClearDayMutation, DayComponentClearDayMutationVariables, DayComponentProps>(DayComponent.operations.clearDay, {
-    name: 'clearDay',
-    options: {
-      ignoreResults: false,
-      notifyOnNetworkStatusChange: true,
-      update: (proxy, { data }) => data && CalendarService.removeDay(proxy, data.clearDay),
-    }
-  }),
-)(React.memo(DayComponent, areFieldsEqual([
-  'height',
-  'width',
-  'isTinyOrSmall',
-  'clearDayResult',
-  'newDayResult',
-  'generateDayResult',
-  'day',
-  'date',
-  'loading',
-  'draggingMealItem',
-])))
+function useNewDay() {
+  const { planId, defaultPlan } = useCalendarContext()
+
+  return useMutation<DayComponentNewDayMutation, DayComponentNewDayMutationVariables>(DayComponent.operations.newDay, {
+    notifyOnNetworkStatusChange: true,
+    update: (proxy, { data }) => data && CalendarService.setDay(proxy, data.newDay, planId, defaultPlan),
+  })
+}
+
+function useClearDay() {
+  const { planId, defaultPlan } = useCalendarContext()
+
+  return useMutation<DayComponentClearDayMutation, DayComponentClearDayMutationVariables>(DayComponent.operations.clearDay, {
+    notifyOnNetworkStatusChange: true,
+    update: (proxy, { data }) => data && CalendarService.removeDay(proxy, data.clearDay, planId, defaultPlan),
+  })
+}
 
 const styles = {
   container: RX.Styles.createViewStyle({

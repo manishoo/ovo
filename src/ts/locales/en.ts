@@ -3,9 +3,18 @@
  * Copyright: Mehdi J. Shooshtari 2020
  */
 
-enum Content {
+enum EnLocale {
+  'lightTheme' = 'Day',
+  'darkTheme' = 'Night',
+  'perAmountOf' = 'per {{amount}} of {{foodName}}',
+
+  NewPlan = 'New Plan',
+  Tags = 'Tags',
+  Plans = 'Plans',
+  day = 'day',
+  newDay = 'New Day',
   'hello' = 'Hello!',
-  'hiPrana' = 'Hi Prana \uD83D\uDC4B',
+  'hiPrana' = 'Hi Ovo \uD83D\uDC4B',
   'IAlreadyHaveAnAccount' = 'I already have an account',
   'saturday' = 'Saturday',
   'sunday' = 'Sunday',
@@ -32,10 +41,14 @@ enum Content {
   'Edit Recipe' = 'Edit Recipe',
   'Edit Food' = 'Edit Food',
   'CreateNewMeal' = 'Create Meal',
+  'Create' = 'Create',
+  'mealEmptyUseInput' = 'Empty meal. Use the input above to add meal items',
+  'ingredientsEmptyUseInput' = 'Empty ingredients. Use the input above to add ingredients',
   'Edit Meal' = 'Edit Meal',
   'Add Alternative' = 'Add Alternative',
   'Bulk create' = 'Bulk Create',
   'Foods' = 'Foods',
+  'Timing' = 'Timing',
   'Recipes' = 'Recipes',
   'Meals' = 'Meals',
   'Search' = 'Search',
@@ -45,7 +58,7 @@ enum Content {
   'Amount' = 'Amount',
   'Feed' = 'Feed',
   'ensureSafeAccount' = 'To ensure a safe account, we require your password to be at least 8 characters, including an uppercase letter and a number.',
-  'terms' = 'By creating a new account or signing in, You are agreeing to Prana’s Terms of Service and Privacy Policy.',
+  'terms' = 'By creating a new account or signing in, You are agreeing to Ovo’s Terms of Service and Privacy Policy.',
   'Articles' = 'Articles',
   'MealPlan&ShoppingList' = 'Meal Plan & ShoppingList',
   'DrawerBrowse' = 'Browse',
@@ -71,27 +84,44 @@ enum Content {
   'weightName' = 'Unit name',
   'gramWeight' = 'Weight (grams)',
   'landingTitle' = 'Take Control of Your Food',
+  'en' = 'English',
+  'de' = 'Deutsch',
+  'fa' = 'فارسی',
   'landingSubtitle' = 'The only App you\'ll ever need to manage your eating',
   'LandingStartFree' = 'Start Free! \uD83D\uDCB8',
-  'assistantIntro1' = 'Hi! I\'m Prana, your new Personal assistant.',
+  'assistantIntro1' = 'Hi! I\'m Ovo, your new Personal assistant.',
   'assistantIntro2' = 'I can help you manage eating, activities, habits, and so much more.',
-  'hiAssistant' = 'Hi Prana \uD83D\uDC4B',
+  'hiAssistant' = 'Hi Ovo \uD83D\uDC4B',
   'Ok' = 'Ok',
   'AssistantInputPlaceholder' = 'Message',
   'getNamePlaceholder' = 'Enter your first name',
   'getAgePlaceholder' = 'Enter your age',
   'Path' = 'My Path',
   'MealPlan' = 'Meal Plan',
-  'LandingFooterCentralOffice' = 'Central Office',
-  'LandingFooterAboutPrana' = 'About Prana',
+  'AboutOvo' = 'About Ovo',
   'LandingFooterContactUs' = 'Contact Us',
-  'LandingFooterTerms' = 'Terms of Use',
-  'LandingFooterSocialMediaText' = 'Follow Prana on Social Media',
+  'Terms' = 'Terms of Use',
+  'Privacy' = 'Privacy',
+  'LandingFooterSocialMediaText' = 'Follow Ovo on Social Media',
   'LandingReadMore' = 'Read More',
+  'Partners' = 'Partners',
+  'Recipe Developers' = 'Recipe Developers',
+  'Health Professionals' = 'Health Professionals',
+  'Fitness Trainers' = 'Fitness Trainers',
+  'Corporations' = 'Corporations',
+  'Help' = 'Help',
+  'FAQ' = 'FAQ',
+  'Learn More' = 'Learn More',
+  'Team' = 'Team',
+  'Health Education' = 'Health Education',
+  'Legal' = 'Legal',
+  'Cookies' = 'Cookies',
+
   '______Recipe_Page______' = '//',
   'Nutrition (per serving)' = 'Nutrition (per serving)',
   'Serving' = 'Serving',
   'serving' = 'serving',
+  'ServingName' = 'Serving Name',
   'kg' = 'kg',
   'lb' = 'lb',
   'mg' = 'mg',
@@ -106,7 +136,7 @@ enum Content {
   'Create Recipe' = 'Create Recipe',
   'e.g. Cook the Rice...' = 'e.g. Cook the Rice...',
   '______Create_Meal_Page______' = '//',
-  'Main Meal Items' = 'Main Meal Items',
+  'Meal Items' = 'Meal Items',
   'Create Meal' = 'Create Meal',
   'Update Meal' = 'Update Meal',
   'viewMealPlan' = 'View Meal Plan',
@@ -178,7 +208,10 @@ enum Content {
   other = 'other',
   recipe = 'recipe',
 
-  'site.title' = 'Prana | Personal Fitness Assistant',
+  'site.title' = 'Ovo | Personal Fitness Assistant',
+
+  'FindYourPlan.title' = 'You can either start off with a blank meal plan or automatically generate a plan a week ahead. You can always change this at any time.',
+  'FindYourPlan.title2' = 'or use a Pre-Planned Plan',
 
   'Add Meal Item' = 'Add Meal Item',
   'Edit Meal Settings' = 'Edit Meal Settings',
@@ -214,7 +247,7 @@ enum Content {
   'landing_4_t' = 'Get notified when its time to plan, shop or cook!',
   'landing_4_s' = 'sex forever',
 
-  'landingfooterAck' = 'Copyright © Wellington Production 2020 All Rights Reserved',
+  'landingfooterAck' = 'Copyright © Mehdi J. Shooshtari 2020 All Rights Reserved',
 
   'estimatedGramWeight' = 'Estimated weight (g)',
 
@@ -230,8 +263,10 @@ enum Content {
 
   'Targets' = 'Targets',
 
-  finishSetup = 'Finish setting up your account'
+  finishSetup = 'Finish setting up your account',
+
+  dragOrInput = 'Drag a meal item here or use the input above'
 
 }
 
-export default Content
+export default EnLocale

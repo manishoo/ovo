@@ -36,8 +36,8 @@ export default class DayPayWall extends RX.Component<DayPayWallProps> {
               }
             ]}
           >
-            <Text type={Text.types.title} translate>Prana Premium</Text>
-            <Text type={Text.types.body} translate>With Prana Premium, you can plan future meals!</Text>
+            <Text type={Text.types.title} translate>Ovo Premium</Text>
+            <Text type={Text.types.body} translate>With Ovo Premium, you can plan future meals!</Text>
             <Link to={Routes.membership}>
               <FilledButton
                 style={{ marginTop: Styles.values.spacing }}
