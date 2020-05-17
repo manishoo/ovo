@@ -1,17 +1,16 @@
 /*
  * AppBootstrapperNative.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/client'
 import client from '@App/client'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import RootView from '@Views/RootView/RootView'
-import { ApolloProvider } from 'react-apollo'
-import Splash from 'react-native-splash-screen'
-import RX from 'reactxp'
 // Do shimming before anything else.
 import * as ShimHelpers from '@Utils/ShimHelpers'
+import RootView from '@Views/RootView/RootView'
+import Splash from 'react-native-splash-screen'
+import RX from 'reactxp'
 import AppBootstrapper from './AppBootstrapper'
 import AppConfig from './AppConfig'
 
@@ -32,13 +31,11 @@ class AppBootstrapperNative extends AppBootstrapper {
 
   protected _renderRootView(): any {
     return (
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <RootView
-            onLayout={this._onLayoutRootView}
-          />
-        </ApolloHooksProvider>
-      </ApolloProvider>
+      <ApolloHooksProvider client={client}>
+        <RootView
+          onLayout={this._onLayoutRootView}
+        />
+      </ApolloHooksProvider>
     )
   }
 

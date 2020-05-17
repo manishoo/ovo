@@ -1,8 +1,16 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { UserUpdateInput, Gender, Role } from "./../../../models/global-types";
+import {
+  Gender,
+  MealAvailableTime,
+  MealSize,
+  NutritionProfileMode,
+  Role,
+  UserUpdateInput
+} from './../../../models/global-types'
 
 // ====================================================
 // GraphQL mutation operation: SettingsMutation
@@ -29,13 +37,57 @@ export interface SettingsMutation_updateUser_socialNetworks {
   pinterest: string | null;
 }
 
+export interface SettingsMutation_updateUser_nutritionProfile_carbs {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface SettingsMutation_updateUser_nutritionProfile_fat {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface SettingsMutation_updateUser_nutritionProfile_protein {
+  max: number;
+  min: number;
+  percentage: number | null;
+}
+
+export interface SettingsMutation_updateUser_nutritionProfile {
+  id: any;
+  calories: number;
+  carbs: SettingsMutation_updateUser_nutritionProfile_carbs;
+  fat: SettingsMutation_updateUser_nutritionProfile_fat;
+  protein: SettingsMutation_updateUser_nutritionProfile_protein;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
+}
+
+export interface SettingsMutation_updateUser_membership {
+  type: string;
+}
+
+export interface SettingsMutation_updateUser_achievements {
+  finishedSetup: boolean | null;
+}
+
+export interface SettingsMutation_updateUser_meals {
+  id: string;
+  availableTime: MealAvailableTime;
+  size: MealSize;
+  cook: boolean | null;
+  time: string;
+  name: string;
+}
+
 export interface SettingsMutation_updateUser {
   id: string;
   username: string;
-  session: string;
+  session: string | null;
   email: string;
   firstName: string | null;
-  middleName: string | null;
   lastName: string | null;
   avatar: SettingsMutation_updateUser_avatar | null;
   gender: Gender | null;
@@ -44,9 +96,13 @@ export interface SettingsMutation_updateUser {
   bio: string | null;
   weight: SettingsMutation_updateUser_weight | null;
   height: SettingsMutation_updateUser_height | null;
-  caloriesPerDay: number | null;
   socialNetworks: SettingsMutation_updateUser_socialNetworks | null;
+  nutritionProfile: SettingsMutation_updateUser_nutritionProfile;
+  membership: SettingsMutation_updateUser_membership | null;
   role: Role;
+  achievements: SettingsMutation_updateUser_achievements;
+  meals: SettingsMutation_updateUser_meals[];
+  plan: any;
 }
 
 export interface SettingsMutation {

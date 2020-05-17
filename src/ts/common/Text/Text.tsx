@@ -1,6 +1,6 @@
 /*
  * Text.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
@@ -31,13 +31,14 @@ enum TextType {
   title = 'title',
   subtitle = 'subtitle',
   body = 'body',
+  link = 'link',
 }
 
 export default class Text extends RX.Component<TextProps> {
   static types = TextType
 
   public render() {
-    const { style } = this.props
+    const { style, selectable = true } = this.props
 
     const Component = this._getComponent()
 
@@ -46,6 +47,7 @@ export default class Text extends RX.Component<TextProps> {
         {({ theme }) => (
           <Component
             {...this.props}
+            ellipsizeMode={'tail'}
             importantForAccessibility={ImportantForAccessibility.Yes}
             style={[styles.container, this._getFont(), this._getStyle(theme), style]}
           >
@@ -57,15 +59,24 @@ export default class Text extends RX.Component<TextProps> {
   }
 
   private _getFont = () => {
-    return {
-      fontFamily: Styles.fonts[AppConfig.locale].displayRegular.fontFamily,
+    switch (this.props.type) {
+      case TextType.title:
+        return {
+          fontFamily: Styles.fonts.display.fontFamily,
+        }
+      default:
+        return {
+          fontFamily: Styles.fonts.text.fontFamily,
+        }
     }
   }
 
   private _getStyle = (theme: Theme) => {
-    let style = {}
+    let style: any = {
+      color: theme.colors.text,
+    }
 
-    if (this.props.onPress) {
+    if (this.props.onPress || this.props.type === TextType.link) {
       style = {
         ...style,
         color: theme.colors.linkColor,
@@ -75,6 +86,7 @@ export default class Text extends RX.Component<TextProps> {
     if (this.props.type === TextType.title) {
       style = {
         ...style,
+        color: theme.colors.textDark,
         fontSize: 20,
         marginBottom: 16,
         fontWeight: 'bold',
@@ -93,7 +105,7 @@ export default class Text extends RX.Component<TextProps> {
     if (this.props.type === TextType.body) {
       style = {
         ...style,
-        fontWeight: 100,
+        fontWeight: '100',
       }
     }
 
@@ -133,6 +145,7 @@ export default class Text extends RX.Component<TextProps> {
 
 const styles = {
   container: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayRegular,
+    // @ts-ignore web
+    transition: 'all 0.3s'
   }),
 }

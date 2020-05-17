@@ -1,0 +1,3 @@
+extend type Mutation { # needs to extend if type exists server-side
+  logOut: Boolean
+}

@@ -1,13 +1,16 @@
 /*
  * UserMeals.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import CalorieIndicator from '@Common/CalorieIndicator/CalorieIndicator'
 import Text from '@Common/Text/Text'
-import Content from '@Locales/en'
+import TimingPie from '@Common/TimingPie/TimingPie'
+import EnLocale from '@Locales/en'
+import { MealAvailableTime, MealSize } from '@Models/global-types'
 import ImageSource from '@Modules/images'
 import SortableList from '@Modules/SortableList'
 import MealSettingsScreen from '@Views/MealSettingsScreen/MealSettingsScreen'
@@ -18,14 +21,15 @@ import RX from 'reactxp'
 interface UserMealsProps {
   style?: any,
   meals: MealSettingsMeal[],
+  onMealsChange?: (meals: MealSettingsMeal[]) => void,
 }
 
 interface UserMealsState {
-  meals: MealSettingsMeal[]
+  meals: MealSettingsMeal[],
 }
 
 export default class UserMeals extends RX.Component<UserMealsProps, UserMealsState> {
-  constructor(props) {
+  constructor(props: UserMealsProps) {
     super(props)
 
     this.state = {
@@ -46,7 +50,7 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
             <SortableList
               items={meals}
               renderItem={this._renderMealItem(theme)}
-              onItemsChange={(meals) => this.setState({ meals })}
+              onItemsChange={(meals) => this.setState({ meals }, this._onMealsChange)}
             />
             {this._renderAddMealItem(theme)}
           </RX.View>
@@ -55,19 +59,26 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
     )
   }
 
+  private _onMealsChange = () => {
+    const { onMealsChange } = this.props
+
+    onMealsChange && onMealsChange(this.state.meals)
+  }
+
   public getMeals = () => this.state.meals
 
   private _renderAddMealItem = (theme: Theme) => {
     return (
       <RX.View
         onPress={() => MealSettingsScreen.showModal({
+          theme,
           onSubmit: meal => {
             this.setState(({ meals }) => ({
               meals: [
                 ...meals,
                 meal,
               ]
-            }))
+            }), this._onMealsChange)
           }
         })}
         style={[
@@ -78,11 +89,67 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
         ]}
       >
         <Text
-          translate={Content.CreateUserMeal}
+          translate={EnLocale.CreateUserMeal}
           style={{ color: theme.colors.userMealsMealItemBG }}
         />
       </RX.View>
     )
+  }
+
+  private _getCalorieForMealSize = (mealSize: MealSize) => {
+    switch (mealSize) {
+      case MealSize.tiny:
+        return 99
+      case MealSize.small:
+        return 199
+      case MealSize.normal:
+        return 499
+      case MealSize.big:
+        return 799
+      case MealSize.huge:
+        return 801
+    }
+  }
+
+  private _getTimingForMealAvailableTime = (availableTime: MealAvailableTime) => {
+    switch (availableTime) {
+      case MealAvailableTime.noTime:
+        return {
+          prepTime: 5,
+          cookTime: 55,
+          totalTime: 5,
+        }
+      case MealAvailableTime.littleTime:
+        return {
+          prepTime: 15,
+          cookTime: 45,
+          totalTime: 15,
+        }
+      case MealAvailableTime.someTime:
+        return {
+          prepTime: 30,
+          cookTime: 30,
+          totalTime: 30,
+        }
+      case MealAvailableTime.moreTime:
+        return {
+          prepTime: 45,
+          cookTime: 15,
+          totalTime: 45,
+        }
+      case MealAvailableTime.lotsOfTime:
+        return {
+          prepTime: 60,
+          cookTime: 0,
+          totalTime: 60,
+        }
+      case MealAvailableTime.noLimit:
+        return {
+          prepTime: 0,
+          cookTime: 1,
+          totalTime: Infinity,
+        }
+    }
   }
 
   private _renderMealItem = (theme: Theme) => (meal: MealSettingsMeal) => {
@@ -112,10 +179,10 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
               appRegion: 'drag'
             }}
           >
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
-            <RX.View style={[styles.bar, { backgroundColor: theme.colors.bg }]} />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
+            <RX.View style={[styles.bar, { backgroundColor: theme.colors.cardBg }]} ignorePointerEvents />
           </RX.View>
 
           {/**
@@ -132,8 +199,21 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
               }
             ]}
           />
-        </RX.View>
 
+          <CalorieIndicator
+            calories={this._getCalorieForMealSize(meal.size)}
+            style={styles.timingPie}
+          />
+          <TimingPie
+            size={30}
+            timing={this._getTimingForMealAvailableTime(meal.availableTime)}
+            // prepTimeColor='red'
+            cookTimeColor={meal.availableTime === MealAvailableTime.noLimit ? 'rgba(255, 255, 255, 0.5)' : '#fff'}
+            labelStyle={{
+              color: theme.colors.textLight
+            }}
+          />
+        </RX.View>
 
         <RX.View
           style={{
@@ -141,12 +221,15 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
             alignItems: 'center',
           }}
         >
+
+
           {/**
            * Settings icon
            * */}
           <RX.View
             onPress={() => MealSettingsScreen.showModal({
               meal,
+              theme,
               onSubmit: meal => {
                 this.setState(({ meals }) => ({
                   meals: meals.map(m => {
@@ -156,9 +239,12 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
 
                     return m
                   })
-                }))
+                }), this._onMealsChange)
               }
             })}
+            style={{
+              cursor: 'pointer',
+            }}
           >
             <RX.Image
               source={ImageSource.Cog}
@@ -175,7 +261,10 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
           <RX.View
             onPress={() => this.setState(({ meals }) => ({
               meals: meals.filter(p => p.id !== meal.id)
-            }))}
+            }), this._onMealsChange)}
+            style={{
+              cursor: 'pointer',
+            }}
           >
             <RX.Image
               source={ImageSource.Trash}
@@ -201,20 +290,27 @@ export default class UserMeals extends RX.Component<UserMealsProps, UserMealsSta
 
         return m
       })
-    }))
+    }), this._onMealsChange)
   }
 }
 
 const styles = {
+  timingPie: RX.Styles.createViewStyle({
+    [Styles.values.marginEnd]: Styles.values.spacing / 2,
+    [Styles.values.marginStart]: Styles.values.spacing,
+  }),
   bar: RX.Styles.createViewStyle({
     width: 15,
     height: 1,
     marginBottom: 3,
   }),
   container: RX.Styles.createViewStyle({
-    flex: 1,
+    // flex: 1,
   }),
   mealItemContainer: RX.Styles.createViewStyle({
+    // @ts-ignore web
+    cursor: 'grab',
+
     flexDirection: 'row',
     padding: Styles.values.spacing / 2,
     paddingHorizontal: Styles.values.spacing,
@@ -228,6 +324,7 @@ const styles = {
     paddingHorizontal: 5,
   }),
   addMeal: RX.Styles.createViewStyle({
+    cursor: 'pointer',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,

@@ -1,4 +1,16 @@
+/*
+ * fa.ts
+ * Copyright: Mehdi J. Shooshtari 2020
+ */
+
 enum FaLocale {
+  'lightTheme' = 'روز',
+  'darkTheme' = 'شب',
+
+  'FindYourPlan.title' = 'FindYourPlan.title',
+  'FindYourPlan.title2' = 'FindYourPlan.title2',
+
+  NewPlan = 'برنامه جدید',
   'hello' = 'سلام',
   'getStarted' = 'شروع!',
   'saturday' = 'شنبه',
@@ -11,7 +23,7 @@ enum FaLocale {
 
   'Email' = 'ایمیل',
   'Gender' = 'جنسیت',
-  'PasswordAgain' = 'تکرار گذرواژه',
+  'passwordConfirmation' = 'تکرار گذرواژه',
 
   'Username' = 'نام کاربری',
   'Password' = 'گذرواژه',
@@ -23,16 +35,20 @@ enum FaLocale {
   'Ingredients' = 'مواد لازم',
   'IngredientsYieldLabel' = 'برای {{number}} نفر',
   'ShoppingList' = 'لیست خرید',
+  'Pantry' = 'پنتری',
   'Explore' = 'گشت‌و‌گذار',
   'Profile' = 'پروفایل',
   'Dishes' = 'دیش ها',
   'CreateRecipe' = 'دیش جدید',
   'CreateNewMeal' = 'سفره جدید',
+  'Create' = 'ساختن',
+  'mealEmptyUseInput' = 'سفره خالیست',
+  'ingredientsEmptyUseInput' = 'ادد کن ممد',
 
   'Feed' = 'برای من',
   'Back' = 'بازگشت',
   'ensureSafeAccount' = 'To ensure a safe account, we require your password to be at least 8 characters, including an uppercase letter and a number.',
-  'terms' = 'By creating a new account or signing in, You are agreeing to Prana’s Terms of Service and Privacy Policy.',
+  'terms' = 'By creating a new account or signing in, You are agreeing to Ovo’s Terms of Service and Privacy Policy.',
   'MealPlan&ShoppingList' = 'برنامه غذایی و لیست خرید',
   'Articles' = 'مقالات',
   'DrawerBrowse' = 'دسته‌بندی ها',
@@ -71,25 +87,45 @@ enum FaLocale {
   'landing_3_t' = 'طرزتهیه\u200Cها و غذاهای جدید رو تجربه کنین',
   'landing_3_s' = 'خوشمزه\u200Cهایی که توی آشپزخونه\u200Cها ساخته میشن تمومی ندارن، تو دنیای اینترنت غذا\u200Cها از این آشپزخونه به اون آشپزخونه سفر میکنن. تجربه کنین و دست\u200Cپختتون رو با دیگران به اشتراک بگذارین.',
 
+  'en' = 'English',
+  'de' = 'Deutsch',
+  'fa' = 'فارسی',
+
   'landing_4_t' = 'لیست خریدتون طبق برنامتون آماده میشه',
   'landing_4_s' = 'خرید کردن با لیست خریدی که طبق نیاز و برنامه اختصاصی\nخودتون آماده شده راحت\u200Cتره.',
 
-  'landingfooterAck' = 'استفاده از مطالب پرانا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است. کلیه حقوق این سایت متعلق به  mycaloria.com می\u200Cباشد.',
+  'landingfooterAck' = 'استفاده از مطالب Ovo فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است. کلیه حقوق این سایت متعلق به ovopal.com می\u200Cباشد.',
 
   'landingTitle' = 'دستیار هوشمند تغذیه',
   'landingSubtitle' = 'دکتر و آشپز و فروشگاهو بزار تو جیبت!',
   'LandingStartFree' = 'رایگان شروع کنید! \uD83D\uDCB8',
 
-  'LandingFooterCentralOffice' = 'دفتر مرکزی',
-  'LandingFooterAboutPrana' = 'درباره پرانا',
+  'LandingFooterTitle' = 'لینک ها',
+  'AboutOvo' = 'درباره پرانا',
   'LandingFooterContactUs' = 'ارتباط با ما',
-  'LandingFooterTerms' = 'مقررات استفاده',
+  'Terms' = 'مقررات استفاده',
+  'Privacy' = 'پرایوسی',
   'LandingFooterSocialMediaText' = 'پرانا را در شبکه های اجتماعی دنبال کنید',
+
+  'Partners' = 'پارتنر ها',
+  'Recipe Developers' = 'رسپی دولوپر',
+  'Health Professionals' = 'متخصصین سلامتی',
+  'Fitness Trainers' = 'ترینر ها',
+  'Corporations' = 'سازمان ها',
+  'Help' = 'کمک',
+  'FAQ' = 'FAQ',
+  'Learn More' = 'Learn More',
+  'Team' = 'تیم',
+  'Health Education' = 'آموزش سلامتی',
+  'Legal' = 'قانونی',
+  'Cookies' = 'کوکی ها',
+
   'LandingReadMore' = 'بیشتر بخوانید',
 
   'assistantIntro1' = 'سلام!\n من پرانا هستم',
   'assistantIntro2' = 'من میتونم کمکت کنم غذاتو راحت تر تهیه کنی و خیلی چیزای دیگه',
   'hiAssistant' = 'سلام پرانا \uD83D\uDC4B',
+  'Ok' = 'باشه',
   'AssistantInputPlaceholder' = 'پیام',
   'getNamePlaceholder' = 'مثل محمد',
   'getAgePlaceholder' = 'مثل ۳۲',
@@ -131,7 +167,7 @@ enum FaLocale {
   'Nutrition (per serving)' = 'اطلاعات تغذیه‌ای (برای هر وعده)',
   'calories' = 'کالری',
   'proteins' = 'پروتئین',
-  'totalCarbs' = 'کربوهیدرات',
+  'carbs' = 'کربوهیدرات',
   'fats' = 'چربی',
   'Complexity' = 'درجه پیچیدگی',
   'Timing' = 'زمانبندی',
@@ -146,6 +182,7 @@ enum FaLocale {
   'Meal Items' = 'آیتم های سفره',
   'Edit Meal' = 'بروزرسانی سفره',
   'Create Meal' = 'ساخت سفره',
+  'Update Meal' = 'تغییر سفره',
 
   '______Settings_Page______' = '//',
   'Edit Profile' = 'بروزرسانی پروفایل',
@@ -198,6 +235,8 @@ enum FaLocale {
 
   'serving' = 'وعده',
   'Serving' = 'وعده',
+  'Tags' = 'برچسب ها',
+  'ServingName' = 'نام وعده',
   'kg' = 'کیلوگرم',
   'lb' = 'پوند',
   'mg' = 'میلی‌گرم',
@@ -207,6 +246,9 @@ enum FaLocale {
   ', and ' = '، و ',
   Calories = 'کالری',
   Reviews = 'دستور تهیه های در انتظار تائید',
+  Plans = 'برنامه ها',
+  day = 'روز',
+  newDay = 'روز جدید',
   'Rejecting' = 'در حال رد درخواست',
   'Reject Request' = 'رد درخواست',
   'Accepting' = 'در حال تائید',
@@ -221,10 +263,71 @@ enum FaLocale {
   Send = 'ارسال',
   commaAnd = '، ',
   Today = 'امروز',
+  Tomorrow = 'فردا',
+  Yesterday = 'دیروز',
   availableTime = 'زمان موجود',
   mealSize = 'اندازه وعده',
   Save = 'ذخیره',
-  Snack = 'اسنک'
+  Snack = 'اسنک',
+  Settings = 'تنظیمات',
+  editMealPlanSettings = 'تنظیمات برنامه‌غذایی',
+  editNutritionProfile = 'هدف غذایی',
+
+  Groceries = 'سبد خرید',
+
+  cuisine = 'cuisine',
+  diet = 'diet',
+  imported = 'imported',
+  ingredient = 'ingredient',
+  meal = 'meal',
+  Meal = 'Meal',
+  occasion = 'occasion',
+  other = 'other',
+  recipe = 'recipe',
+
+  'site.title' = 'پرانا | دستیار هوشمند تغذیه',
+  'Add Meal Item' = 'افزودن غذا',
+  'Edit Meal Settings' = 'تنظیمات وعده',
+  'Clear Meals Items' = 'پاک کردن سفره',
+  'ClearDay' = 'پاک کردن روز',
+  'Remove from meal' = 'حذف',
+
+  'tiny' = 'خیلی کوچک',
+  'small' = 'کوچک',
+  'normal' = 'متوسط',
+  'huge' = 'بزرگ',
+  'big' = 'خیلی بزرگ',
+
+  noTime = '۵ دقیقه',
+  littleTime = '۱۵ دقیقه',
+  someTime = 'نیم ساعت',
+  moreTime = '۴۵ دقیقه',
+  lotsOfTime = 'یک ساعت',
+  noLimit = 'بدون محدودیت',
+
+  'Delete All Instances' = 'حذف تمام جایگشت ها',
+  AlreadyAMember = 'AlreadyAMember',
+  Or = 'یا',
+  GetStartedNow = 'همین الان شروع کن',
+
+  'estimatedGramWeight' = 'وزن حدودی (گرم)',
+
+  'nutrition' = 'ارزش غذایی',
+  'note' = 'نوت',
+  'loadMore' = 'بیشتر',
+  'resetAll' = 'تنظیم مجدد',
+
+  forgotPassword = 'فراموشی رمز عبور',
+
+  'optional' = 'اختیاری',
+
+  'Add Alternative Meal Item' = 'افزودن غذای آلترناتیو',
+  'Log Meal' = 'لاگ کردن',
+
+  finishSetup = 'کامل کن اطلاعاتتو',
+
+  dragOrInput = 'یه میل آیتم بنداز اینجا یا از اینپوت استفاده کن',
+
 }
 
 export default FaLocale

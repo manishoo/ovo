@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, TagType } from "./../../../../../models/global-types";
+import { LanguageCode, TagType } from './../../../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: Tag
@@ -19,7 +20,7 @@ export interface Tag_info {
 }
 
 export interface Tag {
-  slug: string | null;
+  slug: string;
   title: Tag_title[] | null;
   info: Tag_info[] | null;
   type: TagType;

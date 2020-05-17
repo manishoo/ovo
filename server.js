@@ -12,8 +12,10 @@ const compression = require('compression')
 const chalk = require('chalk')
 const favicon = require('serve-favicon')
 const paths = require('./webpack/paths')
-const shimBrowser = require('./shim-browser')
 const config = require('./server.config')
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const publicPath = '/static/'
 
@@ -34,34 +36,29 @@ app.use('/img', serve(paths.images, true))
 app.use('/manifest.json', serve(paths.manifest, true))
 app.use('/app.css', serve(paths.appCss, true))
 app.use('/sw.js', serve(paths.buildSW))
+app.use('/favicons', serve(paths.favicons))
 app.use(favicon(paths.favicon))
 
 if (isProd) {
   const assets = require('./web/build/assets.json')
 
-  config.supportedLanguages.map(lang => {
-    app.get('/' + lang + '*', (req, res) => {
-      shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
-      return require('./web/build/server-bundle').default(assets)(req, res, lang)
-    })
+  app.get('/*', (req, res) => {
+    const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
+    // shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
+    return require('./web/build/server-bundle').default(assets)(req, res, lang)
   })
-
-  // fallback on en
-  app.get('/', (req, res) => res.redirect(`/${req.language || config.defaultLocale}`))
 } else {
   require('@babel/register')
 
-  config.supportedLanguages.map(lang => {
-    app.get('/' + lang + '*', (req, res) => {
-      return require('./src/ts/app/web/render-dev-app')(res, lang)
-    })
-  })
+  app.get('/*', (req, res) => {
+    const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
 
-  // fallback on en
-  app.get('/', (req, res) => res.redirect(`/${req.language || config.defaultLocale}`))
+    return require('./src/ts/app/web/render-dev-app')(res, lang)
+  })
 }
 
 app.use((err, req, res, next) => {
+  console.log('err', err)
   console.error(chalk`{red error:} {underline.redBright ${err.message}}`)
   res.status(err.status || 500)
 })

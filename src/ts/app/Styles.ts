@@ -1,6 +1,6 @@
 /*
  * Styles.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
@@ -16,7 +16,7 @@ export default class Styles {
     drawerWidth: 200,
     mainContentMaxWidth: 975,
     defaultShadow: {
-      shadowColor: 'rgba(0, 0, 0, .3)',
+      shadowColor: 'rgba(0, 0, 0, .1)',
       shadowRadius: 4,
       shadowOffset: { width: 0, height: 3 },
       shadowOpacity: -1
@@ -65,6 +65,42 @@ export default class Styles {
       return `borderBottom${this.Start}Radius`
     },
 
+    get borderEndWidth() {
+      return `border${this.End}Width`
+    },
+    get borderStartWidth() {
+      return `border${this.Start}Width`
+    },
+
+    macroColors: {
+      proteins: '#e95855',
+      fats: '#ffd633',
+      carbs: '#60c365',
+    },
+
+    rainbow: [
+      '#5E35B1',
+      '#E53935',
+      '#FFCC00',
+      '#F06292',
+      '#4caf50',
+      '#f57c00',
+      '#1E88E5',
+    ],
+
+    powerRange: {
+      1: '#64dd17',
+      2: '#aeea00',
+      3: '#ffd600',
+      4: '#ffab00',
+      5: '#ff6d00',
+    },
+
+    timingColors: {
+      prepTimeColor: '#cddc39',
+      cookTimeColor: '#ffb300',
+    },
+
     absolutelyExtended: {
       position: 'absolute',
       left: 0,
@@ -87,60 +123,34 @@ export default class Styles {
   }
 
   public static fonts = {
-    monospace: {
-      fontFamily: FontRefs.monospace,
+    typography: '"Comfortaa", "DINRoundPro", helvetica, sans-serif',
+
+    text: {
+      fontFamily: FontRefs.text,
+    } as RX.Types.FontInfo,
+    display: {
+      fontFamily: FontRefs.display,
+      // fontWeight: '400'
     } as RX.Types.FontInfo,
 
     fa: {
-      displayLight: {
-        fontFamily: FontRefs.displayFaLight,
+      text: {
+        fontFamily: FontRefs.text,
       } as RX.Types.FontInfo,
-      displayRegular: {
-        fontFamily: FontRefs.displayFaRegular,
-        fontWeight: '400'
-      } as RX.Types.FontInfo,
-      displaySemibold: {
-        fontFamily: FontRefs.displayFaSemibold,
-        fontWeight: '600'
-      } as RX.Types.FontInfo,
-      displayBold: {
-        fontFamily: FontRefs.displayFaBold,
-        fontWeight: '700'
+      display: {
+        fontFamily: FontRefs.display,
+        // fontWeight: '400'
       } as RX.Types.FontInfo,
     },
 
     en: {
-      displayLight: {
-        fontFamily: FontRefs.displayEnLight,
+      text: {
+        fontFamily: FontRefs.text,
       } as RX.Types.FontInfo,
-      displayRegular: {
-        fontFamily: FontRefs.displayEnRegular,
-        fontWeight: '400'
-      } as RX.Types.FontInfo,
-      displaySemibold: {
-        fontFamily: FontRefs.displayEnSemibold,
-        fontWeight: '600'
-      } as RX.Types.FontInfo,
-      displayBold: {
-        fontFamily: FontRefs.displayEnBold,
-        fontWeight: '700'
+      display: {
+        fontFamily: FontRefs.display,
+        fontWeight: '800'
       } as RX.Types.FontInfo,
     },
-
-    displayLight: {
-      fontFamily: FontRefs.displayLight,
-    } as RX.Types.FontInfo,
-    displayRegular: {
-      fontFamily: FontRefs.displayRegular,
-      fontWeight: '400'
-    } as RX.Types.FontInfo,
-    displaySemibold: {
-      fontFamily: FontRefs.displaySemibold,
-      fontWeight: '600'
-    } as RX.Types.FontInfo,
-    displayBold: {
-      fontFamily: FontRefs.displayBold,
-      fontWeight: '700'
-    } as RX.Types.FontInfo,
   }
 }

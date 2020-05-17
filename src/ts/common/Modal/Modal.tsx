@@ -1,25 +1,35 @@
 /*
  * Modal.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { ApolloProvider } from '@apollo/client'
+import client from '@App/client'
 import Styles from '@App/Styles'
+import { Theme } from '@App/Theme'
+import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
+
+import KeyCodes from '@Utils/KeyCodes'
 import assert from 'assert'
+import { createContext } from 'react'
 
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 
-import KeyCodes from '@Utils/KeyCodes'
 
+export const ModalContext = createContext<{ modalId?: string, isRoute?: boolean }>({})
 
 interface ModalProps extends RX.CommonProps {
   modalId: string;
   children?: JSX.Element | JSX.Element[];
-  modalWidth?: number;
+  maxWidth?: number;
   fullWidth?: boolean;
   modalHeight?: number;
   fullHeight?: boolean;
+  url?: string,
+  theme: Theme,
+  route?: boolean,
 }
 
 interface ModalState {
@@ -35,15 +45,21 @@ const _styles = {
   modalContainerBackground: RX.Styles.createViewStyle({
     ...Styles.values.absolutelyExtended,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    flexDirection: 'row'
+    flexDirection: 'row',
+
+    // @ts-ignore web
+    zIndex: 2
   }),
   modalContainer: RX.Styles.createViewStyle({
     flex: -1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   }),
   modalBox: RX.Styles.createViewStyle({
     flex: -1,
+    alignItems: 'center',
+    justifyContent: 'center',
     // margin: 32
+    // borderRadius: 10,
   })
 }
 
@@ -78,13 +94,17 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     })
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // To give children a chance to cancel the ESC handler,
-    // subscribing in componentWillMount so that the children
+    // subscribing in UNSAFE_componentWillMount so that the children
     // could subscribe after.
     super.componentWillMount()
 
     RX.Input.keyUpEvent.subscribe(this._onKeyUp)
+
+    if (this.props.url) {
+      LocationStore.pushHistory(this.props.url)
+    }
   }
 
   componentDidMount() {
@@ -116,33 +136,50 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
   }
 
   public render() {
+    const { theme, children, modalId, route } = this.props
+
     const modalBoxStyles = [_styles.modalBox, this.state.widthStyle, this.state.heightStyle]
     const modalContentStyles = [_styles.modalContainer, this._contentScaleAnimationStyle, this.state.heightStyle]
 
     let modalContent = (
-      <RX.Animated.View style={modalContentStyles}>
-        <RX.View
-          style={modalBoxStyles}
-          onPress={this._clickInside}
-          accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
-          restrictFocusWithin={true}
-          disableTouchOpacityAnimation={true}
-          tabIndex={-1}
+      <ModalContext.Provider
+        value={{
+          modalId,
+          isRoute: route
+        }}
+      >
+        <RX.Animated.View
+          style={modalContentStyles}
         >
-          {this.props.children}
-        </RX.View>
-      </RX.Animated.View>
+          <RX.View
+            style={modalBoxStyles}
+            onPress={this._clickInside}
+            accessibilityTraits={RX.Types.AccessibilityTrait.Dialog}
+            restrictFocusWithin={true}
+            disableTouchOpacityAnimation={true}
+            tabIndex={-1}
+          >
+            {children}
+          </RX.View>
+        </RX.Animated.View>
+      </ModalContext.Provider>
     )
 
     return (
-      <RX.Animated.View
-        style={[_styles.modalContainerBackground, this._opacityAnimationStyle]}
-        onPress={this._clickOutside}
-        onLongPress={this._onLongPressOutside}
-        disableTouchOpacityAnimation={true}
-      >
-        {modalContent}
-      </RX.Animated.View>
+      <ApolloProvider client={client}>
+        <RX.Animated.View
+          style={[
+            _styles.modalContainerBackground,
+            this._opacityAnimationStyle,
+          ]}
+          onPress={this._clickOutside}
+          onLongPress={this._onLongPressOutside}
+          disableTouchOpacityAnimation={true}
+        >
+          {modalContent}
+        </RX.Animated.View>
+      </ApolloProvider>
+
     )
   }
 
@@ -152,9 +189,9 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
     newState.widthStyle = undefined
     newState.heightStyle = undefined
 
-    if (props.modalWidth) {
+    if (props.maxWidth) {
       newState.widthStyle = RX.Styles.createViewStyle({
-        width: props.modalWidth,
+        maxWidth: props.maxWidth,
       }, false)
     }
     if (props.fullWidth) {
@@ -197,7 +234,9 @@ export default class Modal extends ComponentBase<ModalProps, ModalState> {
 
   private _clickOutside = (e: RX.Types.SyntheticEvent) => {
     e.stopPropagation()
+
     Modal.dismissAnimated(this.props.modalId)
+      .then(() => this.props.route && LocationStore.goBack())
   }
 
   private _animateClose(onAnimationComplete: () => void) {

@@ -1,6 +1,6 @@
 /*
  * TabBar.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { ThemeContext } from '@App/ThemeContext'
@@ -38,7 +38,7 @@ export default class TabBar extends RX.Component<TabBarProps> {
           >
             <RX.View
               style={{
-                backgroundColor: theme.colors.white,
+                backgroundColor: theme.colors.cardBg,
                 position: 'absolute',
                 left: 0,
                 top: 0,

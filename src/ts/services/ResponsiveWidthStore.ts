@@ -1,9 +1,9 @@
 /*
  * ResponsiveWidthStore.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import Styles from '@App/Styles'
+import AppConfig from '@App/AppConfig'
 import RX from 'reactxp'
 import { AutoSubscribeStore, autoSubscribeWithKey, disableWarnings, StoreBase } from 'resub'
 
@@ -22,8 +22,8 @@ const MainWindowId = 'MainWindowId'
 @AutoSubscribeStore
 class ResponsiveWidthStore extends StoreBase {
   private _drawerVisible: boolean = false
-  private _rawWidth: { [index: string]: number } = { [MainWindowId]: 0 }
-  private _rawHeight: { [index: string]: number } = { [MainWindowId]: 0 }
+  private _rawWidth: { [index: string]: number } = { [MainWindowId]: 10000 }
+  private _rawHeight: { [index: string]: number } = { [MainWindowId]: 10000 }
   private _responsiveWidth: { [index: string]: ResponsiveWidth } = { [MainWindowId]: ResponsiveWidth.Medium }
 
   constructor() {
@@ -81,12 +81,14 @@ class ResponsiveWidthStore extends StoreBase {
   }
 
   @autoSubscribeWithKey(TriggerKeys.Width)
-  getWidthConsideringDrawer(rootViewId: string = MainWindowId): number {
-    if (this.isDrawerVisible()) {
-      return this._rawWidth[rootViewId] - Styles.values.drawerWidth
+  getWidthConsideringMaxWidth(rootViewId: string = MainWindowId): number {
+    const width = this._rawWidth[rootViewId]
+
+    if (width > AppConfig.contentMaxWidth) {
+      return AppConfig.contentMaxWidth
     }
 
-    return this._rawWidth[rootViewId]
+    return width
   }
 
   @autoSubscribeWithKey(TriggerKeys.Drawer)
@@ -101,7 +103,13 @@ class ResponsiveWidthStore extends StoreBase {
 
   @autoSubscribeWithKey(TriggerKeys.Height)
   getHeight(rootViewId: string = MainWindowId): number {
-    return this._rawHeight[rootViewId]
+    if (this.isSmallOrTinyScreenSize()) {
+      // FIXME: fix on pages where tabbar is hidden
+      return this._rawHeight[rootViewId] // - TabBar.height
+    }
+
+    // FIXME: fix on pages where navbar is hidden
+    return this._rawHeight[rootViewId] // - AppNavbar.height
   }
 
   @disableWarnings
@@ -110,7 +118,7 @@ class ResponsiveWidthStore extends StoreBase {
   }
 
   @autoSubscribeWithKey(TriggerKeys.ResponsiveWidth)
-  getResponsiveWidth(rootViewId: string = MainWindowId): number {
+  getResponsiveWidth(rootViewId: string = MainWindowId): ResponsiveWidth {
     return this._responsiveWidth[rootViewId]
   }
 

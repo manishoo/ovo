@@ -1,12 +1,12 @@
 /*
  * HoverButton.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import RX from 'reactxp'
 
 
-export interface HoverButtonProps extends RX.CommonProps {
+export interface HoverButtonProps extends RX.Types.ButtonProps {
   onRenderChild: (isHovering: boolean) => JSX.Element | null;
   onPress?: (e: RX.Types.SyntheticEvent) => void;
   title?: string;
@@ -22,6 +22,7 @@ export default class HoverButton extends RX.Component<HoverButtonProps, HoverBut
   render(): JSX.Element | null {
     return (
       <RX.Button
+        {...this.props}
         onPress={this._onPress}
         onHoverStart={this._onHoverStart}
         onHoverEnd={this._onHoverEnd}
@@ -46,9 +47,12 @@ export default class HoverButton extends RX.Component<HoverButtonProps, HoverBut
     }
   }
 
-  private _onHoverEnd = () => {
+  private _onHoverEnd = (e: any) => {
     if (!this.props.disabled) {
       this.setState({ isHovering: false })
+      if (this.props.onPressOut) {
+        this.props.onPressOut(e)
+      }
     }
   }
 }

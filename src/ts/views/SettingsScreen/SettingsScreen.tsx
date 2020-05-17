@@ -1,46 +1,49 @@
 /*
  * SettingsScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import FlatButton from '@Common/FlatButton/FlatButton'
 import Image from '@Common/Image/Image'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Navbar from '@Common/Navbar/Navbar'
+import Page from '@Common/Page'
 import Select from '@Common/Select/Select'
 import Text from '@Common/Text/Text'
 import TextInputAutoGrow from '@Common/TextInputAutoGrow/TextInputAutoGrow'
 import { Routes } from '@Models/common'
 import { Gender, UserUpdateInput } from '@Models/global-types'
+import { useLogOut } from '@Models/graphql/auth/auth'
+import { MeFragment, MeOperation, useMe } from '@Models/graphql/me/me'
+import { Me } from '@Models/graphql/me/types/Me'
 import FilePicker from '@Modules/FilePicker'
 import ImageSource from '@Modules/images'
 import LocationStore from '@Services/LocationStore'
-import UserStore from '@Services/UserStore'
-import { RegisterForm } from '@Views/Register/RegisterForm'
-import { Me } from '@Views/Register/types/Me'
+import UsernameInput from '@Views/Register/components/UsernameInput'
 import { SettingsMutation, SettingsMutationVariables } from '@Views/SettingsScreen/types/SettingsMutation'
-import gql from 'graphql-tag'
+import { ExecutionResult } from 'graphql'
 import _set from 'lodash/set'
-import { ExecutionResult } from 'react-apollo'
+import React from 'react'
 import RX from 'reactxp'
-import { ComponentBase } from 'resub'
 
 
 const AVATAR_SIZE = 150
 
 interface SettingsProps {
+  me: Me,
+
   style?: any,
-  onUpdate: (variables: SettingsMutationVariables) => Promise<ExecutionResult<SettingsMutation>>
+  onUpdate: (variables: SettingsMutationVariables) => Promise<ExecutionResult<SettingsMutation>>,
+  onLogOut: () => Promise<any>,
 }
 
 interface SettingsState {
-  me?: Me,
+  me: Me,
 
   avatarImage?: any,
   avatarImagePreview?: any,
@@ -50,25 +53,39 @@ interface SettingsState {
   password2: string,
 }
 
-class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
+class SettingsScreen extends React.PureComponent<SettingsProps, SettingsState> {
+  constructor(props: SettingsProps) {
+    super(props)
+
+    this.state = {
+      me: props.me,
+
+      newPassword: '',
+      password: '',
+      password2: '',
+    }
+  }
+
   public render() {
     const { me } = this.state
 
     return (
       <ThemeContext.Consumer>
         {({ theme }) => (
-          <CenterAlignedPageView maxWidth={500}>
+          <Page
+            maxWidth={500}
+          >
             <Navbar title={translate('Edit Profile')} />
             {this._renderAvatar()}
             <Text translate type={Text.types.title}>Account Info</Text>
 
             <Input
-              value={me.firstName}
+              value={me.firstName || undefined}
               onChange={this._onChange(['firstName'])}
               label={translate('First Name')}
             />
             <Input
-              value={me.lastName}
+              value={me.lastName || undefined}
               onChange={this._onChange(['lastName'])}
               label={translate('Last Name')}
             />
@@ -77,10 +94,8 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
               value={me.gender}
               options={[
                 { value: null, text: <Text translate>Select gender</Text> },
-                ...Object.keys(Gender).map(k => ({
-                  value: Gender[k],
-                  text: <Text>{k}</Text>,
-                }))
+                { value: Gender.female, text: <Text translate>{'female'}</Text> },
+                { value: Gender.male, text: <Text translate>{'male'}</Text> },
               ]}
               onChange={this._onChange(['gender'])}
             />
@@ -91,18 +106,17 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
             />
             <TextInputAutoGrow
               label={translate('Bio')}
-              value={me.bio}
+              value={me.bio || undefined}
               placeholder={translate('Tell others about yourself')}
               onChangeText={this._onChange(['bio'])}
             />
-            <Input
+            <UsernameInput
               value={me.username}
               onChange={this._onChange(['username'])}
-              label={translate('Username')}
             />
 
             <Input
-              value={me.socialNetworks.website}
+              value={me.socialNetworks && me.socialNetworks.website ? me.socialNetworks.website : undefined}
               onChange={this._onChange(['socialNetworks', 'website'])}
               label={translate('Website')}
             />
@@ -110,19 +124,19 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
             <Text translate type={Text.types.title}>Social Media</Text>
 
             <Input
-              value={me.socialNetworks.instagram}
+              value={me.socialNetworks && me.socialNetworks.instagram ? me.socialNetworks.instagram : undefined}
               onChange={this._onChange(['socialNetworks', 'instagram'])}
               label={translate('Instagram')}
               placeholder={translate('socialMediaPlaceholderInstagram')}
             />
             <Input
-              value={me.socialNetworks.twitter}
+              value={me.socialNetworks && me.socialNetworks.twitter ? me.socialNetworks.twitter : undefined}
               onChange={this._onChange(['socialNetworks', 'twitter'])}
               label={translate('Twitter')}
               placeholder={translate('socialMediaPlaceholderTwitter')}
             />
             <Input
-              value={me.socialNetworks.pinterest}
+              value={me.socialNetworks && me.socialNetworks.pinterest ? me.socialNetworks.pinterest : undefined}
               onChange={this._onChange(['socialNetworks', 'pinterest'])}
               label={translate('Pinterest')}
               placeholder={translate('socialMediaPlaceholderPinterest')}
@@ -148,7 +162,7 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
                 <Input
                   value={this.state.password2}
                   onChange={this._onChange(['password2'])}
-                  label={translate('PasswordAgain')}
+                  label={translate('passwordConfirmation')}
                   validate={value => value === this.state.password}
                   secureTextEntry
                 />
@@ -170,20 +184,10 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
               }}
               label={translate('Log out')}
             />
-          </CenterAlignedPageView>
+          </Page>
         )}
       </ThemeContext.Consumer>
     )
-  }
-
-  protected _buildState(props: SettingsProps, initialBuild: boolean): Partial<SettingsState> | undefined {
-    if (initialBuild) {
-      return {
-        me: UserStore.getUser(),
-      }
-    }
-
-    return null
   }
 
   private _renderAvatar = () => {
@@ -240,7 +244,17 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
   private _onChange = (fieldNameAddress: string[]) => (value: any) => {
     const me = { ...this.state.me }
 
-    _set(me, fieldNameAddress, value)
+    if (fieldNameAddress.length > 1) {
+      // @ts-ignore
+      me[fieldNameAddress[0]] = {
+        // @ts-ignore
+        ...me[fieldNameAddress[0]],
+        [fieldNameAddress[1]]: value
+      }
+    } else {
+      _set(me, fieldNameAddress, value)
+    }
+
     this.setState({
       me
     })
@@ -255,12 +269,11 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       firstName: me.firstName,
       gender: me.gender,
       lastName: me.lastName,
-      middleName: me.middleName,
       socialNetworks: {
-        instagram: me.socialNetworks.instagram,
-        twitter: me.socialNetworks.twitter,
-        pinterest: me.socialNetworks.pinterest,
-        website: me.socialNetworks.website,
+        instagram: me.socialNetworks && me.socialNetworks.instagram,
+        twitter: me.socialNetworks && me.socialNetworks.twitter,
+        pinterest: me.socialNetworks && me.socialNetworks.pinterest,
+        website: me.socialNetworks && me.socialNetworks.website,
       },
       username: me.username,
       avatar: this.state.avatarImage,
@@ -272,28 +285,28 @@ class SettingsScreen extends ComponentBase<SettingsProps, SettingsState> {
       id: this.state.me.id,
       user: this._getUser()
     })
-      .then(({ data: { updateUser: { username } } }) => {
-        LocationStore.navigate(this.props, `/${username}`, { params: { replace: true } })
+      .then(({ data }) => {
+        if (!data) return
+        LocationStore.navigate(this.props, `/${data.updateUser.username}`, { params: { replace: true } })
 
         /**
          * If profile image changed, reload the page
          * */
-        if (this.state.avatarImage) {
+        if (this.state.avatarImage && typeof window !== 'undefined') {
           window.location.reload()
         }
       })
   }
 
   private _handleLogOut = () => {
-    UserStore.setSession()
-    UserStore.setUser()
-    RX.Storage.clear()
-
-    LocationStore.navigate(this.props, Routes.login)
+    this.props.onLogOut()
+      .then(() => LocationStore.navigate(this.props, Routes.home))
   }
 }
 
 export default function () {
+  const client = useApolloClient()
+
   const [updateUser] = useMutation<SettingsMutation, SettingsMutationVariables>(gql`
     mutation SettingsMutation($id: ObjectId!, $user: UserUpdateInput!) {
       updateUser(id: $id, user: $user) {
@@ -301,18 +314,25 @@ export default function () {
       }
     }
 
-    ${RegisterForm.fragments.me}
+    ${MeFragment}
   `, {
-    update: (proxy, { data }) => {
-      if (data) {
-        UserStore.setUser(data.updateUser)
-      }
-    }
+    fetchPolicy: 'no-cache',
+    onCompleted: ({ updateUser }) => {
+      client.writeQuery({
+        query: MeOperation,
+        data: {
+          me: updateUser,
+        },
+      })
+    },
   })
+  const logOut = useLogOut()
 
   return (
     <SettingsScreen
+      me={useMe()!}
       onUpdate={variables => updateUser({ variables })}
+      onLogOut={logOut}
     />
   )
 }

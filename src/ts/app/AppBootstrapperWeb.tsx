@@ -1,17 +1,17 @@
 /*
  * AppBootstrapperWeb.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/client'
 import client from '@App/client'
 import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import RootView from '@Views/RootView/RootView'
-import { ApolloProvider } from 'react-apollo'
-import RX from 'reactxp'
 // Do shimming before anything else.
 import * as ShimHelpers from '@Utils/ShimHelpers'
+import RootView from '@Views/RootView/RootView'
+import { Router } from 'react-router-dom'
+import RX from 'reactxp'
 import AppBootstrapper from './AppBootstrapper'
 import AppConfig from './AppConfig'
 
@@ -35,31 +35,36 @@ AppConfig.initialize({
 
 class AppBootstrapperWeb extends AppBootstrapper {
   protected async _getInitialUrl(): Promise<string | undefined> {
+    if (typeof window === 'undefined') return
+
     return window.location.pathname
   }
 
   protected _hideSplash(): any {
-    //
+    if (typeof document !== 'undefined') {
+      const splashEl = document.getElementById('splash')!
+      splashEl.parentNode!.removeChild(splashEl)
+    }
   }
 
   protected _renderRootView(): any {
-    const history = createBrowserHistory({ basename: `/${AppConfig.locale}` })
+    const history = createBrowserHistory()
     LocationStore.setHistory(history)
 
     return (
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
+      <ApolloHooksProvider client={client}>
+        <Router history={history}>
           <RootView
-            history={history}
             onLayout={this._onLayoutRootView}
           />
-        </ApolloHooksProvider>
-      </ApolloProvider>
+        </Router>
+      </ApolloHooksProvider>
     )
   }
 
   private _onLayoutRootView = (e: RX.Types.ViewOnLayoutEvent) => {
     const { width, height } = e
+
     ResponsiveWidthStore.putWindowSize(width, height)
   }
 }

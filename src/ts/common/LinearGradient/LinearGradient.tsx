@@ -1,6 +1,6 @@
 /*
  * LinearGradient.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import { LinearGradientProps } from '@Common/LinearGradient/types'
@@ -17,18 +17,26 @@ export default class LinearGradient extends RX.Component<LinearGradientProps> {
           styles.container,
           style,
           {
-            backgroundImage: `linear-gradient(${colors.join(', ')})`
+            backgroundImage: `linear-gradient(${this._getDirection()}, ${colors.join(', ')})`
           }
         ]}
       >
       </RX.View>
     )
   }
+
+  private _getDirection = () => {
+    switch (this.props.direction) {
+      case 'toLeft':
+        return 'to left'
+      case 'toRight':
+        return 'to right'
+    }
+  }
 }
 
 const styles = {
   container: RX.Styles.createViewStyle({
-    backgroundColor: 'red',
     position: 'absolute',
     top: 0,
     left: 0,

@@ -1,20 +1,19 @@
 /*
- * LoginFormForm.tsx
- * Copyright: Ouranos Studio 2019
+ * LoginForm.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
-import UserStore from '@Services/UserStore'
+import { Routes } from '@Models/common'
+import { MeFragment, MeOperation } from '@Models/graphql/me/me'
 import { navigate } from '@Utils'
 import getGraphQLUserInputErrors from '@Utils/get-graphql-user-input-errors'
 import { LoginMutation, LoginMutationVariables } from '@Views/Login/types/LoginMutation'
-import { RegisterForm } from '@Views/Register/RegisterForm'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
+import { ExecutionResult } from 'graphql'
 import RX from 'reactxp'
 
 
@@ -90,9 +89,7 @@ export class LoginForm extends RX.Component<LoginProps> {
         /**
          * LoginForm Success
          * */
-        UserStore.setUser(data.loginUser.user)
-        UserStore.setSession(data.loginUser.session)
-        return navigate(this.props, `/${data.loginUser.user.username}`, {
+        return navigate(this.props, Routes.calendar, {
           replace: true,
         })
       })
@@ -100,18 +97,28 @@ export class LoginForm extends RX.Component<LoginProps> {
 }
 
 export default function (props: any) {
+  const client = useApolloClient()
   const [loginUser, { error }] = useMutation<LoginMutation, LoginMutationVariables>(gql`
     mutation LoginMutation($username: String!, $password: String!) {
       loginUser(username: $username, password: $password) {
         user {
           ...Me
         }
-        session
       }
     }
 
-    ${RegisterForm.fragments.me}
-  `)
+    ${MeFragment}
+  `, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data => {
+      client.writeQuery({
+        query: MeOperation,
+        data: {
+          me: data.loginUser.user,
+        },
+      })
+    })
+  })
 
   return (
     <LoginForm

@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { LanguageCode, TagType } from "./../../../../../models/global-types";
+import { LanguageCode, TagType } from './../../../../../models/global-types'
 
 // ====================================================
 // GraphQL query operation: TagsInputQuery
@@ -19,7 +20,7 @@ export interface TagsInputQuery_tags_info {
 }
 
 export interface TagsInputQuery_tags {
-  slug: string | null;
+  slug: string;
   title: TagsInputQuery_tags_title[] | null;
   info: TagsInputQuery_tags_info[] | null;
   type: TagType;

@@ -1,53 +1,56 @@
 /*
  * RootView.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
-import { Theme } from '@App/Theme'
+import { Theme, ThemeMode } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
 import SafeArea from '@Common/SafeArea/SafeArea'
 import ToastContainer from '@Common/ToastContainer/ToastContainer'
+import { MeContext, useMe } from '@Models/graphql/me/me'
 import Navigator from '@Modules/navigator'
+import { useState } from 'react'
 import RX from 'reactxp'
 
 
 interface RootViewProps extends RX.CommonProps {
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void;
-  history?: any
 }
 
-interface RootViewState {
-  theme: Theme
-}
+export default function RootView({ onLayout }: RootViewProps) {
+  const [theme, setTheme] = useState<Theme>(() => new Theme(AppConfig.theme))
+  const me = useMe()
 
-export default class RootView extends RX.Component<RootViewProps, RootViewState> {
-  constructor(props: RootViewProps) {
-    super(props)
-
-    this.state = {
-      theme: new Theme('light'),
-    }
-  }
-
-  public render() {
-    return (
-      <ThemeContext.Provider
+  return (
+    <ThemeContext.Provider
+      value={{
+        theme,
+        toggleTheme: (mode: ThemeMode) => setTheme(new Theme(mode))
+      }}
+    >
+      <MeContext.Provider
         value={{
-          theme: this.state.theme,
-          toggleTheme: (mode: 'dark' | 'light') => this.setState({ theme: new Theme(mode) })
+          me,
         }}
       >
-        <RX.View style={styles.root} onLayout={this.props.onLayout}>
+        <RX.View
+          style={[
+            styles.root,
+            {
+              backgroundColor: theme.colors.bg,
+            }
+          ]}
+          onLayout={onLayout}
+        >
           {AppConfig.getPlatformType() === 'ios' && <SafeArea />}
-          <Navigator history={this.props.history} />
+          <Navigator me={me} />
 
           <ToastContainer />
         </RX.View>
-      </ThemeContext.Provider>
-    )
-  }
-
+      </MeContext.Provider>
+    </ThemeContext.Provider>
+  )
 }
 
 const styles = {

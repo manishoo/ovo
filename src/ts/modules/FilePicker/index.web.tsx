@@ -1,10 +1,9 @@
 /*
- * FilePicker.tsx
- * Copyright: Ouranos Studio 2019
+ * index.web.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
-import imageCompression from 'browser-image-compression'
 import React from 'react'
 import RX from 'reactxp'
 import { FilePickerProps } from './types'
@@ -12,13 +11,13 @@ import { FilePickerProps } from './types'
 
 export default class FilePicker extends RX.Component<FilePickerProps> {
   _input: any
-  reader: FileReader
+  private readonly _reader: FileReader | null = null
 
   constructor(props: FilePickerProps) {
     super(props)
 
     if (!AppConfig.isNode()) {
-      this.reader = new FileReader()
+      this._reader = new FileReader()
     }
   }
 
@@ -44,16 +43,16 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
   }
 
   private _onChange = ({ target: { validity, files } }: React.ChangeEvent<HTMLInputElement>) => {
-    const file = files[0]
+    const file = files![0]
 
-    if (this.reader) {
+    if (this._reader) {
       if (!file) return null
 
-      this.reader.onload = (event) => {
-        this.props.onImagePreviewChange(event.target.result)
+      this._reader.onload = (event) => {
+        this.props.onImagePreviewChange(event.target!.result)
       }
 
-      this.reader.readAsDataURL(file)
+      this._reader.readAsDataURL(file)
 
       if (!validity.valid) return null
 
@@ -66,17 +65,23 @@ export default class FilePicker extends RX.Component<FilePickerProps> {
     }
   }
 
-  private _compressImage = async (image: File) => {
+  private _compressImage = async (image: any) => {
+    if (typeof File === undefined) throw new Error('No File')
+
+    const imageCompression = require('browser-image-compression').default
+
     return {
       full: await imageCompression(image, this.props.fullImageOptions || {
         maxSizeMB: 0.5,
         maxWidthOrHeight: 1920,
-        useWebWorker: true
+        useWebWorker: true,
+        onProgress: () => null,
       }),
       thumb: this.props.withThumbnail && await imageCompression(image, this.props.thumbImageOptions || {
-        maxSizeMB: 0.05,
+        maxSizeMB: 0.08,
         maxWidthOrHeight: 500,
-        useWebWorker: true
+        useWebWorker: true,
+        onProgress: () => null,
       }),
     }
   }

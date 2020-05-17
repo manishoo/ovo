@@ -1,6 +1,6 @@
 /*
  * webpack.base.config.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const webpack = require('webpack')
@@ -18,6 +18,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const commonConfig = merge(
   {
+    mode: process.env.NODE_ENV,
     entry: paths.entryClient,
     output: {
       path: paths.build,
@@ -89,7 +90,7 @@ const productionConfig = merge(
       maxAssetSize: 450000 // in bytes
     }
   },
-  // parts.minifyJS(),
+  parts.minifyJS(),
   parts.loadImages({
     include: paths.src,
     options: {
@@ -98,13 +99,13 @@ const productionConfig = merge(
     }
   }),
   // should go after loading images
-  parts.optimizeImages(),
-  // parts.optimizeChunks(),
+  // parts.optimizeImages(),
+  parts.optimizeChunks(),
 )
 
 const developmentConfig = merge(
   {
-    devtool: 'source-map',
+    devtool: 'cheap-module-source-map',
     plugins: [
       new FriendlyErrorsPlugin(),
     ]

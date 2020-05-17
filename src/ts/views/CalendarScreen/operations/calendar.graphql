@@ -1,0 +1,8 @@
+extend type Query {
+  calendarCache: [DayCache!]!
+}
+
+type DayCache {
+  date: DateTime!,
+  dateQueried: DateTime!,
+}

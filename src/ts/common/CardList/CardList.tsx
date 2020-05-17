@@ -1,10 +1,11 @@
 /*
  * CardList.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
+import { ResponsiveWidth } from '@Models/ResponsiveWidthModels'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
@@ -16,9 +17,10 @@ interface RecipesListProps extends RX.CommonProps {
   showAddButton?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   renderAddCell: (size: number) => any,
-  renderCell: (item: any, size: number) => any,
+  renderCell: (item: any, size: number, index: number) => any,
   hideAvatar?: boolean,
   loading?: boolean,
+  columns?: number,
 }
 
 interface RecipesListState {
@@ -31,32 +33,51 @@ export default class CardList extends ComponentBase<RecipesListProps, RecipesLis
   public render() {
     const { style } = this.props
 
-    return [
+    const size = this._getCellSize()
+    return (
       <RX.View
-        style={[styles.container, { minWidth: this._getCellSize() * this.state.columns }, style]}
+        style={[styles.container, { minWidth: size * this.state.columns }, style]}
         onLayout={this.props.onLayout}
       >
-        {this.props.showAddButton && this.props.renderAddCell(this._getCellSize())}
+        {this.props.showAddButton && this.props.renderAddCell(size)}
 
-        {this.props.items.map(item => this.props.renderCell(item, this._getCellSize()))}
-      </RX.View>,
-      this.props.loading && <RX.View
-        style={{
-          width: this.state.width,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <LoadingIndicator />
+        {this.props.items.map((item, index) => this.props.renderCell(item, size, index))}
+
+        {
+          this.props.loading && <RX.View
+            style={{
+              width: size,
+              height: size,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <LoadingIndicator />
+          </RX.View>
+        }
       </RX.View>
-    ]
+    )
   }
 
   protected _buildState(props: RecipesListProps, initialBuild: boolean): Partial<RecipesListState> | undefined {
+    let columns = this.props.columns || 3
+
+    switch (ResponsiveWidthStore.getResponsiveWidth()) {
+      case ResponsiveWidth.Large:
+        columns = columns + 1
+        break
+      case ResponsiveWidth.Medium:
+        break
+      case ResponsiveWidth.Small:
+      default:
+        columns = columns - 1
+        break
+    }
+
     return {
-      columns: ResponsiveWidthStore.isSmallOrTinyScreenSize() ? 2 : 4,
+      columns,
       isSmallOrTiny: ResponsiveWidthStore.isSmallOrTinyScreenSize(),
-      width: ResponsiveWidthStore.getWidthConsideringDrawer(),
+      width: ResponsiveWidthStore.getWidthConsideringMaxWidth(),
     }
   }
 
@@ -67,6 +88,6 @@ const styles = {
   container: RX.Styles.createViewStyle({
     flexDirection: 'row',
     flexWrap: 'wrap',
-    maxWidth: Styles.values.mainContentMaxWidth
+    maxWidth: 1200
   }),
 }

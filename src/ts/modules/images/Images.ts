@@ -1,6 +1,6 @@
 /*
  * Images.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 export interface ImageSourceBase {
@@ -40,7 +40,6 @@ export interface ImageSourceBase {
   LandingCurve: string;
   AssistantExtra: string;
   AssistantExtraWhite: string;
-  ComingSoonButtonGroup: string;
 
   FaceBookIcon: string;
   YoutubeIcon: string;
@@ -72,4 +71,17 @@ export interface ImageSourceBase {
   Regenerate: string;
 
   GooeyRingSpinner: string;
+
+  AppStoreButton: string;
+  GooglePlayButton: string;
+  CafeBazaarButton: string;
+
+  VerifiedBadge: string;
+  VerifyingBadge: string;
+
+  Crown: string;
+  CrownEmpty: string;
+
+  Check: string;
+  AIGeneratedPlanCardBG: string;
 }

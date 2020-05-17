@@ -1,6 +1,6 @@
 /*
  * Image.ios.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import RX, { Types } from 'reactxp'

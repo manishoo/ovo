@@ -1,6 +1,6 @@
 /*
  * TotalTime.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Image from '@Common/Image/Image'
@@ -40,7 +40,7 @@ export default class TotalTime extends RX.Component<TotalTimeProps> {
             height: 13,
           }}
         />
-        <RX.Text style={{ fontSize: 10, fontWeight: '100' }}>{this.props.totalTime}m</RX.Text>
+        {/*<RX.Text style={{ fontSize: 10, fontWeight: '100' }}>{this.props.totalTime}m</RX.Text>*/}
       </RX.View>
     )
   }

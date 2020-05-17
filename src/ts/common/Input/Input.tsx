@@ -1,11 +1,13 @@
 /*
  * Input.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import { ThemeContext } from '@App/ThemeContext'
+import Image from '@Common/Image/Image'
+import LoadingIndicator from '@Common/LoadingIndicator/LoadingIndicator'
 import Text from '@Common/Text/Text'
 import debounce from 'lodash/debounce'
 import RX from 'reactxp'
@@ -25,6 +27,9 @@ export interface InputProps extends RX.Types.TextInputProps {
   usesNetwork?: boolean,
 
   errorMessage?: string,
+  loading?: boolean,
+
+  selectAllOnPress?: boolean
 }
 
 interface InputState {
@@ -46,6 +51,8 @@ export default class Input extends RX.Component<InputProps, InputState> {
     }
   }
 
+  private _textInputRef: any
+
   public render() {
     const {
       style,
@@ -55,6 +62,9 @@ export default class Input extends RX.Component<InputProps, InputState> {
       inputRef,
       required,
       errorMessage,
+      loading,
+      selectAllOnPress,
+      onChange,
       ...props
     } = this.props
 
@@ -63,11 +73,25 @@ export default class Input extends RX.Component<InputProps, InputState> {
         {({ theme }) => (
           <RX.View
             style={[styles.container, style]}
+            onPress={selectAllOnPress ? () => this._textInputRef.selectAll() : undefined}
           >
-            {!!label && <RX.Text
-              style={[styles.label, { color: theme.colors.labelInput }, this._getLabelStyle(theme)]}>{required && this._renderRequiredStart(theme)}{label}</RX.Text>}
+            {
+              !!label &&
+              <Text
+                style={[
+                  styles.label,
+                  {
+                    color: theme.colors.labelInput,
+                    fontWeight: required ? 'bold' : undefined,
+                  },
+                  this._getLabelStyle(theme)
+                ]}
+              >{required && this._renderRequiredStart(theme)}{label}</Text>}
             <RX.TextInput
-              ref={inputRef}
+              ref={ref => {
+                this._textInputRef = ref
+                inputRef && inputRef(ref)
+              }}
               value={value}
               onChangeText={this._onChangeText}
               style={[
@@ -78,13 +102,46 @@ export default class Input extends RX.Component<InputProps, InputState> {
               ]}
               {...props}
             />
+
+            {
+              this.props.clearButtonMode === 'while-editing' && value && value.length > 0 &&
+              <RX.View
+                onPress={loading ? undefined : this._onClearText}
+                style={styles.clearContainer}
+              >
+                {
+                  loading
+                    ? <LoadingIndicator size={25} />
+                    : <Image
+                      source={Image.source.Clear}
+                      style={styles.clear}
+                    />
+                }
+
+              </RX.View>
+            }
+
             {!!errorMessage &&
             <RX.Text
-              style={[styles.label, styles.errorLabel, { color: theme.colors.inputErrorColor }]}>{errorMessage}</RX.Text>}
+              style={[
+                styles.label,
+                styles.errorLabel,
+                {
+                  color: theme.colors.inputErrorColor
+                }
+              ]}
+            >{errorMessage}</RX.Text>}
           </RX.View>
         )}
       </ThemeContext.Consumer>
     )
+  }
+
+  private _onClearText = (e: RX.Types.SyntheticEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    this.props.onChange!('')
   }
 
   private _renderRequiredStart = (theme: Theme) => {
@@ -117,7 +174,7 @@ export default class Input extends RX.Component<InputProps, InputState> {
     }
   }
 
-  private _getLabelStyle = (theme: Theme) => {
+  private _getLabelStyle = (theme: Theme): any => {
     if (!this.props.validate) return null
 
     if (this.state.isPristine || this.props.errorMessage) {
@@ -136,16 +193,18 @@ export default class Input extends RX.Component<InputProps, InputState> {
   }
 
   private _onChangeText = async (v: string) => {
-    if (this.state.isPristine) {
-      this.setState({
-        isPristine: false,
-      })
+    if (this.props.validate) {
+      if (this.state.isPristine) {
+        this.setState({
+          isPristine: false,
+        })
+      }
+      await this._validateInput(v)
     }
-    await this._validateInput(v)
     return this.props.onChange!(v)
   }
 
-  private _validateInput = async (v: any) => {
+  private readonly _validateInput = async (v: any) => {
     if (this.props.validate) {
       const isValid = await this.props.validate(v)
 
@@ -157,20 +216,37 @@ export default class Input extends RX.Component<InputProps, InputState> {
 const styles = {
   container: RX.Styles.createViewStyle({
     marginBottom: Styles.values.spacing,
+
+    justifyContent: 'center',
     // borderBottomWidth: 2,
     // paddingBottom: 5,
   }),
   label: RX.Styles.createTextStyle({
-    fontWeight: '500',
+    // fontWeight: '500',
     marginBottom: Styles.values.spacing / 2,
   }),
   textInput: RX.Styles.createTextInputStyle({
     padding: Styles.values.spacing / 2,
     borderRadius: Styles.values.normalBorderRadius,
     borderWidth: 1,
-    borderColor: 'transparent'
+    borderColor: 'transparent',
+    minWidth: 20,
   }),
   errorLabel: RX.Styles.createTextStyle({
     marginTop: Styles.values.spacing / 2,
+  }),
+  clear: RX.Styles.createImageStyle({
+    width: 15,
+    height: 15,
+  }),
+  clearContainer: RX.Styles.createViewStyle({
+    position: 'absolute',
+    [Styles.values.end]: 0,
+
+    cursor: 'pointer',
+
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   })
 }

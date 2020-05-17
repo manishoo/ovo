@@ -1,26 +1,29 @@
 /*
  * RecipesList.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import AddCell from '@Common/AddCell/AddCell'
 import CardList from '@Common/CardList/CardList'
-import { RecipeCardRecipe } from '@Common/RecipesList/components/RecipeCard/types/RecipeCardRecipe'
 import { Routes } from '@Models/common'
+import { IngredientRecipe } from '@Models/types/IngredientRecipe'
 import LocationStore from '@Services/LocationStore'
-import { ProfileRecipesQuery_recipes_recipes } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
 import RX from 'reactxp'
 import RecipeCell from './components/RecipeCard/RecipeCard'
 
 
+export interface RecipesListRecipe extends IngredientRecipe {
+}
+
 interface RecipesListProps extends RX.CommonProps {
   style?: any,
-  recipes: ProfileRecipesQuery_recipes_recipes[],
+  recipes: IngredientRecipe[],
   showAddRecipe?: boolean,
   onLayout?: (e: RX.Types.ViewOnLayoutEvent) => void,
   hideAvatar?: boolean,
   loading?: boolean,
+  columns?: number,
 }
 
 export default class RecipesList extends RX.Component<RecipesListProps> {
@@ -34,11 +37,12 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
         onLayout={this.props.onLayout}
         hideAvatar={this.props.hideAvatar}
         loading={this.props.loading}
+        columns={this.props.columns}
       />
     )
   }
 
-  private _renderRecipeCell = (recipe: RecipeCardRecipe, size: number) => {
+  private _renderRecipeCell = (recipe: IngredientRecipe, size: number) => {
     return (
       <RecipeCell
         recipe={recipe}
@@ -63,7 +67,7 @@ export default class RecipesList extends RX.Component<RecipesListProps> {
 
 const styles = {
   item: RX.Styles.createViewStyle({
-    [Styles.values.marginEnd]: Styles.values.spacing,
+    marginHorizontal: Styles.values.spacing / 4,
     marginBottom: Styles.values.spacing,
   })
 }

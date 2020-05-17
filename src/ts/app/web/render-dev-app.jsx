@@ -1,16 +1,19 @@
 /*
  * render-dev-app.jsx
- * Copyright: Ouranos Studio 2019
- *
- * this file will be used in nodeserver.js to serve the dev app locally
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const React = require('react')
 const { renderToString } = require('react-dom/server')
 const Html = require('./html')
 
-const renderDevApp = (res, lang) => {
-  const html = renderToString(<Html lang={lang} />)
+const renderDevApp = (res) => {
+  const html = renderToString(
+    <Html
+      lang={'en'}
+      title={'Ovo | Loveliest Eating Companion'}
+    />
+  )
 
   res.send(`<!doctype html>${html}`)
 }

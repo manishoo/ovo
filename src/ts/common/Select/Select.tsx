@@ -1,13 +1,13 @@
 /*
  * Select.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import { SelectPopup, showSelectDialog } from '@Common/Select/components/SelectDialog'
 import Text from '@Common/Text/Text'
 import RX from 'reactxp'
+import { SelectPopup, showSelectDialog } from './components/SelectDialog'
 
 
 const POPUP_ID = 'Select'
@@ -19,11 +19,35 @@ export interface Option {
 
 interface SelectProps {
   style?: any,
-  value?: string,
+  value: any,
   options: Option[],
   onChange: (value: any) => void,
   label?: string
+  children?: any,
+  editable?: boolean,
+  textStyle?: any
+  containerStyle?: any
+  labelStyle?: any
 }
+
+// <select
+//   style={{
+//     padding: 8,
+//     borderRadius: 5,
+//     marginBottom: Styles.values.spacing,
+//     backgroundColor: theme.colors.textInputBg,
+//     cursor: editable ? 'pointer' : undefined,
+//     // ...style,
+//   }}
+//   value={selectedOption ? selectedOption.value : undefined}
+//   onChange={e => this.props.onChange(e.target.value)}
+// >
+//   {
+//     ...this.props.options.map((({ value, text }) => (
+//       <option value={value}>{text}</option>
+//     )))
+//   }
+// </select>
 
 export default class Select extends RX.Component<SelectProps> {
   private _mountedButton: any
@@ -31,21 +55,28 @@ export default class Select extends RX.Component<SelectProps> {
   private _popupDisplayed: boolean = false
 
   public render() {
-    const { style, label } = this.props
+    const { style, label, editable = true, textStyle, containerStyle, labelStyle } = this.props
+
+    const selectedOption = this.props.options.find(p => p.value === this.props.value)
 
     return (
       <ThemeContext.Consumer>
-        {({ theme }) => [
-          !!label && <RX.Text style={[styles.label, { color: theme.colors.labelInput }]}>{label}</RX.Text>,
+        {({ theme }) => <RX.View style={containerStyle}>
+          {
+            !!label && <Text style={[styles.label, { color: theme.colors.labelInput }, labelStyle]}>{label}</Text>
+          }
           <RX.View
-            style={[styles.selectContainer, { backgroundColor: theme.colors.textInputBg }, style]}
-            onPress={this._handleOnPress}
-            activeOpacity={0.4}
+            style={[styles.selectContainer, {
+              backgroundColor: theme.colors.textInputBg,
+              cursor: editable ? 'pointer' : undefined,
+            }, style]}
+            onPress={editable ? this._handleOnPress : undefined}
+            activeOpacity={0.7}
             ref={ref => this._mountedButton = ref}
           >
-            <Text>{this.props.options.find(p => p.value === this.props.value)!.text}</Text>
+            <Text style={[styles.selectItemText, textStyle]}>{selectedOption && selectedOption.text}</Text>
           </RX.View>
-        ]}
+        </RX.View>}
       </ThemeContext.Consumer>
     )
   }
@@ -74,6 +105,7 @@ export default class Select extends RX.Component<SelectProps> {
       },
       positionPriorities: ['bottom', 'left', 'right', 'top'],
       useInnerPositioning: false,
+      cacheable: true,
       onDismiss: () => {
         this._popupDisplayed = false
       }
@@ -83,8 +115,10 @@ export default class Select extends RX.Component<SelectProps> {
     this._popupDisplayed = true
   }
 
-  private _handleOnPress = () => {
+  private _handleOnPress = (e: RX.Types.SyntheticEvent) => {
     if (RX.Platform.getType() === 'web') {
+      e.preventDefault()
+      e.stopPropagation()
       this._showPopup()
     } else {
       showSelectDialog({
@@ -100,12 +134,13 @@ const styles = {
   selectContainer: RX.Styles.createViewStyle({
     padding: 8,
     borderRadius: 5,
-    cursor: 'pointer',
     marginBottom: Styles.values.spacing
   }),
-
   label: RX.Styles.createTextStyle({
     fontWeight: '500',
     marginBottom: Styles.values.spacing / 2,
   }),
+  selectItemText: RX.Styles.createTextStyle({
+    textAlign: 'center'
+  })
 }

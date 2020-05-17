@@ -1,6 +1,6 @@
 /*
  * index.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 /**
@@ -23,26 +23,38 @@ export default loadComponent
  * */
 export const ShoppingList = loadComponent('ShoppingList')
 export const LandingScreen = loadComponent('LandingScreen')
-export const MealSettingsScreen = loadComponent('MealSettingsScreen')
-// export const Login = loadComponent('Login', 'LoginForm')
-// export const LoginModal = loadComponent('Login', 'LoginModal')
+export const FindYourPlan = loadComponent('FindYourPlan')
+export const PlanScreen = loadComponent('PlanScreen')
+
+export const AboutScreen = loadComponent('AboutScreen')
+export const CookiesScreen = loadComponent('CookiesScreen')
+export const CorporationsScreen = loadComponent('CorporationsScreen')
+export const FAQScreen = loadComponent('FAQScreen')
+export const FitnessTrainersScreen = loadComponent('FitnessTrainersScreen')
+export const HealthProfessionalsScreen = loadComponent('HealthProfessionalsScreen')
+export const PrivacyScreen = loadComponent('PrivacyScreen')
+export const RecipeDevelopersScreen = loadComponent('RecipeDevelopersScreen')
+export const TeamScreen = loadComponent('TeamScreen')
+export const TermsScreen = loadComponent('TermsScreen')
+
 export const LoginScreen = loadComponent('Login', 'LoginScreen')
 export const Register = loadComponent('Register', 'RegisterForm')
 export const RegisterScreen = loadComponent('Register', 'RegisterScreen')
-// export const RegisterModal = loadComponent('Register', 'RegisterModal')
-// export const FeedScreen = loadComponent('FeedScreen')
+export const SetupScreen = loadComponent('AssistantChat', 'SetupScreen')
 export const CalendarScreen = loadComponent('CalendarScreen')
-export const ProfileScreen = loadComponent('ProfileScreen', 'ProfileScreenContainer')
+export const NewPlanScreen = loadComponent('NewPlanScreen')
+export const ProfileOr404 = loadComponent('ProfileScreen', 'ProfileOr404')
 export const RecipeForm = loadComponent('RecipeForm')
-export const Recipe = loadComponent('Recipe')
+export const RecipeScreen = loadComponent('RecipeScreen')
 
 export const MealForm = loadComponent('MealForm')
 export const FoodScreen = loadComponent('FoodScreen')
 
-// export const RecipeFormContainer = loadComponent('RecipeForm', 'RecipeFormContainer')
 export const SettingsScreen = loadComponent('SettingsScreen')
-export const PublicProfileScreen = loadComponent('ProfileScreen', 'PublicProfileScreenContainer')
-// export const AssistantScreen = loadComponent('AssistantScreen')
-export const AuthLoadingScreen = loadComponent('AuthLoadingScreen')
+export const MealPlanSettingsScreen = loadComponent('MealPlanSettingsScreen')
 
 export const SearchResult = loadComponent('SearchResult', 'SearchResultContainer')
+export const PayScreen = loadComponent('PayScreen')
+
+export const ForgotPasswordScreen = loadComponent('ForgotPasswordScreen')
+export const NewPasswordScreen = loadComponent('NewPasswordScreen')

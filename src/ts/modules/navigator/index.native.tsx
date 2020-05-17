@@ -1,16 +1,16 @@
 /*
- * navigator.ios.tsx
- * Copyright: Ouranos Studio 2019
+ * index.native.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import SelectDialog from '@Common/Select/components/SelectDialog'
 import { Routes } from '@Models/common'
+import AssistantChat from '@Views/AssistantChat/AssistantChat'
 import AuthLoadingScreen from '@Views/AuthLoadingScreen/AuthLoadingScreen'
 import FoodScreen from '@Views/FoodScreen/FoodScreen'
-import Introduction from '@Views/Introduction/Introduction'
 import LandingScreen from '@Views/LandingScreen/LandingScreen'
 import LoginScreen from '@Views/Login/LoginScreen'
-import RecipeScreenContainer from '@Views/Recipe/Recipe'
+import RecipeScreenContainer from '@Views/RecipeScreen/RecipeScreen'
 import SettingsScreen from '@Views/SettingsScreen/SettingsScreen'
 import ShoppingList from '@Views/ShoppingList/ShoppingList'
 import { createStackNavigator, createSwitchNavigator, withNavigation as withNav } from 'react-navigation'
@@ -42,8 +42,8 @@ const CardStack = createStackNavigator(
       path: 'food/:foodId',
       screen: FoodScreen,
     },
-    // mealPlan: {
-    //   calendar: 'mealPlan',
+    // plan: {
+    //   calendar: 'plan',
     //   screen: MealPlanContainer,
     // },
     shoppingList: {
@@ -73,8 +73,8 @@ const CardStack = createStackNavigator(
 const AppStack = createStackNavigator(
   {
     main: CardStack,
-    // mealPlan: {
-    //   calendar: 'mealPlan',
+    // plan: {
+    //   calendar: 'plan',
     //   screen: MealPlanContainer,
     // },
     // [Routes.assistant]: {
@@ -101,9 +101,9 @@ const AppStack = createStackNavigator(
 
 const AuthStack = createStackNavigator(
   {
-    [Routes.introduction]: {
-      path: Routes.introduction,
-      screen: Introduction,
+    [Routes.setupProcess]: {
+      path: Routes.setupProcess,
+      screen: AssistantChat,
     },
     [Routes.login]: {
       path: Routes.login,
@@ -111,7 +111,7 @@ const AuthStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: Routes.introduction,
+    initialRouteName: Routes.setupProcess,
     headerMode: 'none',
     cardStyle: {
       backgroundColor: '#fff',

@@ -1,6 +1,6 @@
 /*
  * TextInputAutoGrow.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '@App/AppConfig'
@@ -37,7 +37,7 @@ export default class TextInputAutoGrow extends RX.Component<TextInputAutoGrowPro
               ignorePointerEvents
               style={{ position: 'absolute' }}
               onLayout={e => {
-                this.setState({ height: e.height + 28 })
+                this.setState({ height: e.height })
               }}
             >
               <Text style={styles.text} translations={this.props.translations}>{value}</Text>
@@ -47,7 +47,7 @@ export default class TextInputAutoGrow extends RX.Component<TextInputAutoGrowPro
                 value={this._getValue()}
                 multiline
                 onChangeText={this._onChange}
-                style={[{ height: this.state.height, minHeight: 56, backgroundColor: 'transparent' }, style]}
+                style={[{ height: this.state.height, minHeight: 22, backgroundColor: 'transparent' }, style]}
                 {...props}
               />
             }
@@ -58,8 +58,12 @@ export default class TextInputAutoGrow extends RX.Component<TextInputAutoGrowPro
   }
 
   private _getValue = () => {
-    if (this.props.translations && this.props.translations.length > 0) {
-      return this.props.translations[0].text
+    if (this.props.translations) {
+      if (this.props.translations.length > 0) {
+        return this.props.translations[0].text
+      } else {
+        return ''
+      }
     }
 
     return this.props.value

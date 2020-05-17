@@ -1,6 +1,6 @@
 /*
  * index.web.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import AppConfig from '../../app/AppConfig'
@@ -42,7 +42,6 @@ class ImageSource implements ImageSourceBase {
   LandingCurve = AppConfig.getImagePath('LandingCurve.svg')
   AssistantExtra = AppConfig.getImagePath('AssistantExtra.png')
   AssistantExtraWhite = AppConfig.getImagePath('AssistantExtraWhite.png')
-  ComingSoonButtonGroup = AppConfig.getImagePath('ComingSoonButtonGroup.png')
 
   FaceBookIcon = AppConfig.getImagePath('FB.svg')
   YoutubeIcon = AppConfig.getImagePath('YT.svg')
@@ -65,7 +64,7 @@ class ImageSource implements ImageSourceBase {
   RemoveIconWhite = AppConfig.getImagePath('RemoveIconWhite.png')
 
   Path = AppConfig.getImagePath('Path.png')
-  Logo = AppConfig.getImagePath('Logo.png')
+  Logo = AppConfig.getImagePath('Logo.svg')
 
   Trash = AppConfig.getImagePath('Trash.svg')
   Cog = AppConfig.getImagePath('Cog.png')
@@ -74,6 +73,19 @@ class ImageSource implements ImageSourceBase {
   Regenerate = AppConfig.getImagePath('Regenerate.svg')
 
   GooeyRingSpinner = AppConfig.getImagePath('GooeyRingSpinner.svg')
+
+  AppStoreButton = AppConfig.getImagePath('AppStoreButton.png')
+  GooglePlayButton = AppConfig.getImagePath('GooglePlayButton.png')
+  CafeBazaarButton = AppConfig.getImagePath('CafeBazaarButton.png')
+
+  VerifiedBadge = AppConfig.getImagePath('VerifiedBadge.svg')
+  VerifyingBadge = AppConfig.getImagePath('VerifyingBadge.svg')
+
+  Crown = AppConfig.getImagePath('Crown.svg')
+  CrownEmpty = AppConfig.getImagePath('CrownEmpty.svg')
+
+  Check = AppConfig.getImagePath('Check.svg')
+  AIGeneratedPlanCardBG = AppConfig.getImagePath('AIGeneratedPlanCardBG.svg')
 }
 
 export default new ImageSource()

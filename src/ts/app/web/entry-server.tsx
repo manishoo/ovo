@@ -1,24 +1,22 @@
 /*
- * entry-server.jsx
- * Copyright: Ouranos Studio 2019
- *
- * The entry for rendering the app on the server
+ * entry-server.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks'
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
+import { renderToStringWithData } from '@apollo/react-ssr'
 import AppConfig from '@App/AppConfig'
+import { translate } from '@Common/LocalizedText/LocalizedText'
 import { LanguageCode } from '@Models/global-types'
 import fetch from '@Modules/fetch'
-import LocationStore from '@Services/LocationStore'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
+// @ts-ignore
 import { Request, Response } from 'express'
-import { ApolloProvider, renderToStringWithData } from 'react-apollo'
+// @ts-ignore
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
 import RX from 'reactxp'
 import RootView from '../../views/RootView/RootView'
+// @ts-ignore
 import Html from './html'
 
 
@@ -28,7 +26,7 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
   const splitPoints: any[] = []
 
   const client = new ApolloClient({
-    // ssrMode: true,
+    ssrMode: true,
     // Remember that this is the interface the SSR server will use to connect to the
     // API server, so we need to ensure it isn't firewalled, etc
     link: createHttpLink({
@@ -43,23 +41,17 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
     cache: new InMemoryCache(),
   })
 
-  let initialUrl = req.url.replace('/en', '')
-  initialUrl = initialUrl.replace('/fa', '')
-
-  LocationStore.setPath(initialUrl)
   renderToStringWithData(
     <ApolloProvider client={client}>
-      <ApolloHooksProvider client={client}>
-        <StaticRouter
-          location={initialUrl}
-          context={{
-            // @ts-ignore
-            splitPoints
-          }}
-        >
-          <RootView history={createMemoryHistory({ initialEntries: [initialUrl] })} />
-        </StaticRouter>
-      </ApolloHooksProvider>
+      <StaticRouter
+        location={req.url}
+        context={{
+          // @ts-ignore
+          splitPoints
+        }}
+      >
+        <RootView />
+      </StaticRouter>
     </ApolloProvider>
   )
     .then((content) => {
@@ -68,7 +60,14 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
       const chunkNames = splitPoints.map(name => `${name.replace(/\//g, '-')}.js`)
 
       const html = renderToString(
-        <Html content={content} assets={assets} chunkNames={chunkNames} state={initialState} lang={lang} />,
+        <Html
+          content={content}
+          assets={assets}
+          chunkNames={chunkNames}
+          state={initialState}
+          lang={lang}
+          title={translate('site.title')}
+        />,
       )
 
       res.status(200)
@@ -76,6 +75,7 @@ const renderProdApp = (assets: any) => (req: Request, res: Response, lang: Langu
       res.end()
     })
     .catch(e => {
+      console.log(e)
       console.error(JSON.stringify(e, null, 2))
       console.error('======>>>>> ERROR')
       res.status(500)

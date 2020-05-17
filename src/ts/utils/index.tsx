@@ -1,14 +1,18 @@
 /*
  * index.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import ImageComponent from '@Common/Image/Image'
+import ImageClickable from '@Common/Image/ImageClickable'
+import { Image } from '@Common/Image/types/Image'
 import { Routes } from '@Models/common'
-import { Image } from '@Models/FoodModels'
 import LocationStore from '@Services/LocationStore'
 import RX from 'reactxp'
 import AppConfig from '../app/AppConfig'
 
+
+const qs = require('querystring')
 
 export function fullWidth() {
   return RX.UserInterface.measureWindow().width
@@ -59,6 +63,25 @@ export function getParam(props: any, paramName: string) {
   }
 }
 
+export function getQueryParam(props: any, paramName: string) {
+  const type = RX.Platform.getType()
+
+  if (type === 'web') {
+    let q
+
+    if (typeof location !== 'undefined' && location.search) {
+      if (location.search[0] === '?') {
+        q = location.search.replace('?', '')
+      }
+
+      const parsedQS = qs.parse(q)
+
+      return parsedQS[paramName]
+    }
+  } else {
+  }
+}
+
 export function getimage(imageObject?: Image) {
   if (imageObject) {
     return `${AppConfig.serverAddress}/${imageObject.url}`
@@ -67,18 +90,25 @@ export function getimage(imageObject?: Image) {
   return '' // placeholder image
 }
 
-const DAY_COLORS = [
+export const DAY_COLORS = [
   { day: 6, color: '#5E35B1' }, // saturday
   { day: 0, color: '#E53935' }, // sunday
   { day: 1, color: '#FFCC00' },
   { day: 2, color: '#F06292' },
-  { day: 3, color: '#43A047' },
-  { day: 4, color: '#FF9209' },
+  { day: 3, color: '#4caf50' },
+  { day: 4, color: '#f57c00' },
   { day: 5, color: '#1E88E5' },
 ]
 
-export function getDayColor(date: Date) {
+export function getDayColorByDate(date: Date) {
   const found = DAY_COLORS.find(p => p.day === date.getDay())
+  if (!found) return '#fff'
+
+  return found.color
+}
+
+export function getDayColorByDay(number: number) {
+  const found = DAY_COLORS.find(p => p.day === number)
   if (!found) return '#fff'
 
   return found.color
@@ -90,10 +120,23 @@ export function isEmailValid(email: string) {
   return email.match(EMAIL_REGEX)
 }
 
-export function renderImageOrPlaceholder(image?: Image, style?: any) {
+export function renderImageOrPlaceholder(image: Image | null, style?: any, onPress?: () => void) {
   if (image) {
+    if (onPress) {
+      return (
+        <ImageClickable
+          source={image.url}
+          width={style.width}
+          height={style.height}
+          onPress={onPress}
+          style={style}
+          resizeMode={'cover'}
+        />
+      )
+    }
+
     return (
-      <RX.Image
+      <ImageComponent
         source={image.url}
         style={style}
         resizeMode={'cover'}
@@ -102,7 +145,12 @@ export function renderImageOrPlaceholder(image?: Image, style?: any) {
   } else {
     return (
       <RX.View
-        style={style}
+        style={[
+          {
+            //
+          },
+          style
+        ]}
       />
     )
   }

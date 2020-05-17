@@ -14,31 +14,11 @@ module.exports = {
 
       // optional disable SSL validation check
       skipSSLValidation: true,
-      watch: true,
+      watch: false,
       globalTypesFile: './src/ts/models/global-types.ts',
       noAddTypeName: true,
       target: 'typescript',
+      // includes: ["src/resources"]
     },
-    includes: [
-      './src/ts/views/Register/**/*',
-      './src/ts/views/LoginForm/**/*',
-      './src/ts/views/ProfileScreen/**/*',
-      './src/ts/views/RecipeForm/**/*',
-      './src/ts/views/Recipe/**/*',
-      './src/ts/views/Login/**/*',
-      './src/ts/views/SettingsScreen/**/*',
-      './src/ts/views/SearchResult/**/*',
-      './src/ts/views/MealForm/**/*',
-      './src/ts/views/MealScreen/**/*',
-      './src/ts/views/FoodScreen/**/*',
-      './src/ts/views/MealSettingsScreen/**/*',
-      './src/ts/views/Introduction/**/*',
-      './src/ts/views/CalendarScreen/**/*',
-
-      './src/ts/common/FoodDialog/**/*',
-      './src/ts/common/RecipesList/**/*',
-      './src/ts/common/UserMeals/**/*',
-      './src/ts/common/recipe/**/*',
-    ],
   }
 }

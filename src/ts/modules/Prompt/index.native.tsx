@@ -1,6 +1,6 @@
 /*
- * Prompt.native.tsx
- * Copyright: Ouranos Studio 2019
+ * index.native.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import RX from 'reactxp'

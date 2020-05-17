@@ -1,6 +1,6 @@
 /*
- * Toast.tsx
- * Copyright: Ouranos Studio 2019
+ * ToastContainer.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -56,13 +56,13 @@ export default class ToastContainer extends ComponentBase<ToastProps, ToastState
               {
                 backgroundColor: theme.colors.toast.success,
                 borderWidth: 1,
-                borderColor: theme.colors.white,
+                borderColor: theme.colors.cardBg,
               }
             ]}
           >
             <Text
               style={{
-                color: theme.colors.white,
+                color: theme.colors.cardBg,
               }}
             >{toast.message}</Text>
           </RX.View>
@@ -76,13 +76,13 @@ export default class ToastContainer extends ComponentBase<ToastProps, ToastState
               {
                 backgroundColor: theme.colors.toast.error,
                 borderWidth: 1,
-                borderColor: theme.colors.white,
+                borderColor: theme.colors.cardBg,
               }
             ]}
           >
             <Text
               style={{
-                color: theme.colors.white,
+                color: theme.colors.cardBg,
               }}
             >{toast.message}</Text>
           </RX.View>

@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 //==============================================================
@@ -20,11 +21,11 @@ export enum AssistantExpectations {
   goal = "goal",
   height = "height",
   meal = "meal",
-  mealPlan = "mealPlan",
-  mealPlanSettings = "mealPlanSettings",
   meals = "meals",
   nickname = "nickname",
   normalRoutine = "normalRoutine",
+  plan = 'plan',
+  planSettings = 'planSettings',
   register = "register",
   weight = "weight",
 }
@@ -41,8 +42,13 @@ export enum Gender {
  * Language codes
  */
 export enum LanguageCode {
+  ar = 'ar',
+  de = 'de',
   en = "en",
+  es = 'es',
   fa = "fa",
+  fr = 'fr',
+  it = 'it',
 }
 
 /**
@@ -80,18 +86,27 @@ export enum MessageSender {
  * Message Type
  */
 export enum MessageType {
+  ack = 'ack',
   email = "email",
   food = "food",
   form = "form",
   height = "height",
-  mealPlan = "mealPlan",
-  mealPlanSettings = "mealPlanSettings",
   meals = "meals",
   number = "number",
   password = "password",
+  plan = 'plan',
+  planSettings = 'planSettings',
   select = "select",
   text = "text",
   weight = "weight",
+}
+
+/**
+ * Nutrition Profile Mode
+ */
+export enum NutritionProfileMode {
+  percentage = "percentage",
+  range = "range",
 }
 
 /**
@@ -108,9 +123,9 @@ export enum RecipeDifficulty {
  * Recipe Status
  */
 export enum RecipeStatus {
-  private = "private",
-  public = "public",
-  review = "review",
+  reviewing = 'reviewing',
+  unverified = 'unverified',
+  verified = 'verified',
 }
 
 /**
@@ -136,15 +151,36 @@ export enum TagType {
   recipe = "recipe",
 }
 
-export interface IngredientInput {
-  food?: string | null;
-  amount: number;
-  customUnit?: string | null;
+export interface CustomUnitInput {
+  name: TranslationInput[];
   gramWeight?: number | null;
+}
+
+export interface DayInput {
+  id?: any | null;
+  date?: any | null;
+  planId: any;
+  meals: DayMealInput[];
+}
+
+export interface DayMealInput {
+  id?: any | null;
+  userMeal: UserMealInput;
+  time?: any | null;
+  items?: MealItemInput[] | null;
+  ate?: boolean | null;
+}
+
+export interface IngredientInput {
+  id?: any | null;
   name?: TranslationInput[] | null;
-  weight?: string | null;
+  amount?: number | null;
+  unit: string;
+  food?: any | null;
+  recipe?: any | null;
+  isOptional?: boolean | null;
+  customUnit?: CustomUnitInput | null;
   description?: TranslationInput[] | null;
-  thumbnail?: any | null;
 }
 
 export interface InstructionInput {
@@ -162,25 +198,32 @@ export interface MealInput {
 
 export interface MealItemInput {
   id?: any | null;
-  amount: number;
-  food?: string | null;
-  recipe?: string | null;
-  weight?: string | null;
-  customUnit?: string | null;
-  gramWeight?: number | null;
+  name?: TranslationInput[] | null;
+  amount?: number | null;
+  unit: string;
+  food?: any | null;
+  recipe?: any | null;
+  isOptional?: boolean | null;
+  customUnit?: CustomUnitInput | null;
   description?: TranslationInput[] | null;
-  alternativeMealItems?: MealItemInputBase[] | null;
+  alternativeMealItems: IngredientInput[];
 }
 
-export interface MealItemInputBase {
+export interface NutritionProfileInput {
   id?: any | null;
-  amount: number;
-  food?: string | null;
-  recipe?: string | null;
-  weight?: string | null;
-  customUnit?: string | null;
-  gramWeight?: number | null;
+  calories: number;
+  protein: TargetNutritionInput;
+  carbs: TargetNutritionInput;
+  fat: TargetNutritionInput;
+  isStrict: boolean;
+  mode: NutritionProfileMode;
+}
+
+export interface PlanInput {
+  name?: TranslationInput[] | null;
   description?: TranslationInput[] | null;
+  coverImage?: any | null;
+  thumbnailImage?: any | null;
 }
 
 export interface RecipeInput {
@@ -188,6 +231,7 @@ export interface RecipeInput {
   ingredients: IngredientInput[];
   instructions: InstructionInput[];
   serving: number;
+  servingName?: TranslationInput[] | null;
   timing: TimingInput;
   difficulty?: RecipeDifficulty | null;
   slug?: string | null;
@@ -212,16 +256,31 @@ export interface TagInput {
   type: TagType;
 }
 
+export interface TargetNutritionInput {
+  percentage?: number | null;
+  min: number;
+  max: number;
+}
+
 export interface TimingInput {
   prepTime?: number | null;
   cookTime?: number | null;
-  totalTime: number;
+  totalTime?: number | null;
 }
 
 export interface TranslationInput {
   locale: LanguageCode;
   text: string;
   verified?: boolean | null;
+}
+
+export interface UserMealInput {
+  id: string;
+  name: string;
+  time: string;
+  size: MealSize;
+  availableTime: MealAvailableTime;
+  cook?: boolean | null;
 }
 
 export interface UserRegistrationInput {

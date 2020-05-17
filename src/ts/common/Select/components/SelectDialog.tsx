@@ -1,6 +1,6 @@
 /*
  * SelectDialog.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -41,7 +41,12 @@ const OptionItem = ({ option, onOptionPress, active }: { option: Option, onOptio
     <ThemeContext.Consumer>
       {({ theme }) => (
         <RX.View
-          style={styles.searchResultItemContainer}
+          style={[
+            styles.searchResultItemContainer,
+            {
+              borderColor: theme.colors.borderLight,
+            }
+          ]}
           onPress={() => onOptionPress(option)}
         >
           <Text
@@ -64,12 +69,13 @@ export class SelectPopup extends RX.Component<SelectDialogProps & { anchorPositi
       <ThemeContext.Consumer>
         {({ theme }) => (
           <RX.View style={[styles.container, {
-            backgroundColor: theme.colors.white,
+            backgroundColor: theme.colors.cardBg,
             borderColor: theme.colors.selectBorderColor
           }, this.props.style]}>
             {
               this.props.options.map(option => (
                 <OptionItem
+                  key={option.value}
                   option={option}
                   active={this.props.value === option.value}
                   onOptionPress={this.props.onOptionSelect}
@@ -115,7 +121,7 @@ export default class SelectDialog extends ComponentBase<SelectDialogProps & RX.C
                 this._containerAnimationStyle,
               ]}
             >
-              <RX.View style={[styles.container, { backgroundColor: theme.colors.white }, style]}>
+              <RX.View style={[styles.container, { backgroundColor: theme.colors.cardBg }, style]}>
                 {
                   this.props.options.map(option => (
                     this._renderOption(option)
@@ -211,7 +217,6 @@ const styles = {
   searchResultItemContainer: RX.Styles.createViewStyle({
     height: 40,
     borderBottomWidth: 1,
-    borderColor: '#eee',
     justifyContent: 'center',
     padding: Styles.values.spacing,
   }),

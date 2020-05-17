@@ -1,24 +1,31 @@
 /*
  * Image.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import RX, { Types } from 'reactxp'
+import { gql } from '@apollo/client'
 import ImageSource from '@Modules/images'
+import RX, { Types } from 'reactxp'
 
 
-interface ImageProps extends Types.ImageProps {
+export interface ImageProps extends Types.ImageProps {
   style?: any,
 }
 
 export default class Image extends RX.Component<ImageProps> {
   static source = ImageSource
+  static fragments = {
+    image: gql`
+      fragment Image on Image {
+        url
+      }
+    `
+  }
 
   public render() {
     const { style } = this.props
 
     return (
-      // @ts-ignore
       <RX.Image
         style={[styles.container, style]}
         resizeMode={'cover'}

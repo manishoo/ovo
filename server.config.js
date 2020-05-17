@@ -4,9 +4,14 @@
  */
 
 module.exports = {
-  defaultLocale: 'fa',
+  defaultLocale: 'en',
   supportedLanguages: [
     'en',
+    'de',
+    'it',
+    'es',
+    'fr',
     'fa',
+    'ar',
   ],
 }

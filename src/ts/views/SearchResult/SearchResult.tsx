@@ -1,22 +1,22 @@
 /*
  * SearchResult.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { QueryResult } from '@apollo/client'
 import Styles from '@App/Styles'
-import CenterAlignedPageView from '@Common/CenterAlignedPageView'
+import Page from '@Common/Page'
+import RecipesList from '@Common/RecipesList/RecipesList'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
-import ExploreSearch from '@Views/ExploreSearch/ExploreSearch'
-import SearchResultRecipes from '@Views/SearchResult/SearchResultRecipes'
-import { SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
-// import Text from '@Common/Text/Text'
+import { SearchResultQuery, SearchResultQueryVariables } from '@Views/SearchResult/types/SearchResultQuery'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
-import { SearchResultParameters } from './SearchResultContainer'
+import { SEARCH_RESULT_RECIPES_QUERY, SearchResultParameters } from './SearchResultContainer'
 
 
 interface SearchResultProps {
   parameters?: SearchResultParameters,
+  recipesData: QueryResult<SearchResultQuery, SearchResultQueryVariables>
 }
 
 interface SearchResultState {
@@ -26,22 +26,24 @@ interface SearchResultState {
 }
 
 export default class SearchResult extends ComponentBase<SearchResultProps, SearchResultState> {
-  private _recipesListHeight: number
+  private _recipesListHeight: number | null = null
   private _recipes: any
 
   public render() {
+    const { recipesData } = this.props
+
     return (
-      <CenterAlignedPageView
-        scrollViewProps={{
-          onScroll: this._onScroll(this._handleOnReachEnd),
+      <Page
+            scrollViewProps={{
+              onScroll: this._onScroll,
         }}
       >
         <RX.View style={styles.container}>
-          <ExploreSearch
+          {/*<ExploreSearch
             variables={this.state.variables}
             onChange={variables => this.setState({ variables })}
-            onSubmit={variables => this.setState({ variables }, () => this._recipes.fetchMore(this.state.variables, true))}
-          />
+            onSubmit={variables => this.setState({ variables }, () => this._fetchMoreRecipes(true))}
+          />*/}
           {/*<RX.View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <RX.View
               onPress={() => this.setState({filterVisible: !this.state.filterVisible})}
@@ -76,13 +78,14 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
             <SearchResultFilter />
           }*/}
 
-          <SearchResultRecipes
-            ref={ref => this._recipes = ref}
-            variables={this.state.variables}
-            onHeightChange={this._onHeightChange}
+          <RecipesList
+            recipes={recipesData.data && recipesData.data.recipes ? recipesData.data.recipes.recipes : []}
+            onLayout={e => this._onHeightChange(e.height)}
+            loading={recipesData.loading}
+            columns={4}
           />
         </RX.View>
-      </CenterAlignedPageView>
+      </Page>
     )
   }
 
@@ -90,7 +93,7 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
     return {
       height: ResponsiveWidthStore.getHeight(),
       variables: {
-        nameSearchQuery: this.props.parameters ? this.props.parameters.q : '',
+        nameSearchQuery: this.props.parameters && this.props.parameters.q ? this.props.parameters.q : '',
       },
       filterVisible: false,
     }
@@ -98,31 +101,56 @@ export default class SearchResult extends ComponentBase<SearchResultProps, Searc
 
   private _onHeightChange = (height: number) => {
     this._recipesListHeight = height
-
-    this._checkIfRecipesHeightWasShorter()
   }
 
-  private _checkIfRecipesHeightWasShorter = () => {
-    const { height } = this.state
+  private _fetchMoreRecipes = (refetch?: boolean) => {
+    const { data } = this.props.recipesData
+    if (!data) return null
 
-    if (height > this._recipesListHeight) {
-      this._recipes.fetchMore()
+    if (!refetch) {
+      if (!data.recipes.pagination.hasNext && data.recipes.recipes.length > 0) return
     }
+
+    let lastId: any
+
+    const lastItem = data.recipes.recipes[data.recipes.recipes.length - 1]
+    if (lastItem) {
+      lastId = lastItem.id
+    }
+
+    this.props.recipesData.fetchMore({
+      query: SEARCH_RESULT_RECIPES_QUERY,
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return previousResult
+
+        return {
+          ...previousResult,
+          recipes: {
+            recipes: [
+              ...previousResult.recipes.recipes,
+              ...fetchMoreResult.recipes.recipes,
+            ],
+            pagination: fetchMoreResult.recipes.pagination,
+          }
+        }
+      },
+      variables: {
+        ...this.state.variables,
+        lastId: refetch ? null : lastId,
+      }
+    })
+
   }
 
-  private _onScroll = (onReachEnd: () => void) => (newScrollValue: number) => {
+  private _onScroll = (newScrollValue: number) => {
     const { height } = this.state
 
     const OFFSET = 100
 
-    const bottomOfViewPoint = newScrollValue + height
-    if ((bottomOfViewPoint + OFFSET) >= this._recipesListHeight) {
-      onReachEnd()
+    const bottomOfViewPoint = newScrollValue + height + OFFSET
+    if (this._recipesListHeight && bottomOfViewPoint >= this._recipesListHeight) {
+      this._fetchMoreRecipes()
     }
-  }
-
-  private _handleOnReachEnd = () => {
-    this._recipes.fetchMore()
   }
 }
 

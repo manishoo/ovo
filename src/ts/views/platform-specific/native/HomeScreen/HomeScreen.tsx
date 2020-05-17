@@ -1,19 +1,18 @@
 /*
  * HomeScreen.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Assistant from '@Common/Assistant/Assistant'
 import FilledButton from '@Common/FilledButton/FilledButton'
+import Link from '@Common/Link/Link'
 import { __ } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
-import LocationStore from '@Services/LocationStore'
 import ResponsiveWidthStore from '@Services/ResponsiveWidthStore'
 import { getParam, map } from '@Utils'
-import { AssistantMessage } from '@Views/Introduction/components/ChatBox'
-import ProfileScreenContainer from '@Views/ProfileScreen/ProfileScreenContainer'
-import SearchResult from '@Views/SearchResult/SearchResult'
+import { AssistantMessage } from '@Views/AssistantChat/components/ChatBox'
+import SearchResultContainer from '@Views/SearchResult/SearchResultContainer'
 import RX from 'reactxp'
 import { ComponentBase } from 'resub'
 import TabBar from './components/TabBar/TabBar'
@@ -78,13 +77,13 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
 					<Path {...this.props} />
 					<Profile {...this.props} />*/}
           <RX.View style={{ width: this.state.width }}>
-            <SearchResult />
+            <SearchResultContainer />
           </RX.View>
           <RX.View style={{ width: this.state.width }}>
 
           </RX.View>
           <RX.View style={{ width: this.state.width }}>
-            <ProfileScreenContainer />
+            {/*<ProfileScreenContainer />*/}
           </RX.View>
         </RX.ScrollView>
 
@@ -104,15 +103,18 @@ export default class HomeScreen extends ComponentBase<{}, HomeScreenState> {
           this.isIntro() && this.renderIntroDialog()
         }
 
-        <Assistant
-          size={80}
-          onPress={() => LocationStore.navigate(this.props, Routes.assistant)}
+        <Link
+          to={Routes.assistant}
           style={{
             position: 'absolute',
             bottom: this.state.assistantBottom,
             alignSelf: 'center',
           }}
-        />
+        >
+          <Assistant
+            size={80}
+          />
+        </Link>
       </RX.View>
     )
   }

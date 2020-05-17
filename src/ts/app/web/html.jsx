@@ -1,8 +1,6 @@
 /*
  * html.jsx
- * Copyright: Ouranos Studio 2019
- *
- * The Html component that will be stringified and sent to web clients
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const React = require('react')
@@ -10,8 +8,15 @@ const PropTypes = require('prop-types')
 
 const isProd = process.env.NODE_ENV === 'production'
 
+const Splash = (
+  <div id="splash">
+    <img src="/img/Logo.svg" className="logo" />
+    <img src="/img/GooeyRingSpinner.svg" className="loading" />
+  </div>
+)
+
 const Html = props => {
-  const { assets, chunkNames, lang, state = {} } = props
+  const { assets, chunkNames, lang, state = {}, title } = props
 
   let { content } = props
   let scripts
@@ -40,21 +45,34 @@ const Html = props => {
   }
 
   return (
-    <html lang={lang || 'en'} dir={lang === 'fa' ? 'rtl' : 'ltr'}>
+    <html lang={lang || 'en'} dir={['fa', 'ar'].includes(lang) ? 'rtl' : 'ltr'}>
     <head>
       <meta charSet='utf-8' />
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <meta name='theme-color' content='#606c76' />
-      <title>پرانا | ‌Prana</title>
+      <title>{title}</title>
       {isProd && preloadLinks}
       <link rel='manifest' href='/manifest.json' />
-      <link rel='shortcut icon' href='/favicon.ico' />
+
+      <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/favicons/apple-touch-icon-57x57.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/favicons/apple-touch-icon-114x114.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/favicons/apple-touch-icon-72x72.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/favicons/apple-touch-icon-144x144.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/favicons/apple-touch-icon-120x120.png" />
+      <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/favicons/apple-touch-icon-152x152.png" />
+      <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32" />
+      <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16" />
+      <meta name="application-name" content="Ovo" />
+      <meta name="msapplication-TileColor" content="#FFFFFF" />
+      <meta name="msapplication-TileImage" content="/favicons/mstile-144x144.png" />
+
       <link rel='stylesheet' href='/app.css' />
-      {/*{isProd && <link href={assets['main.css']} type='text/css' rel='stylesheet' />}*/}
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Comfortaa&text=Ovo" />
     </head>
     <body>
     <input type="hidden" name="appVersion" id="appVersion" value="{{ version }}" />
     {content}
+    {Splash}
     <script dangerouslySetInnerHTML={{
       __html: `window.__APOLLO_STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')};`,
     }} />

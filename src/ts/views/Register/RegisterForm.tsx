@@ -1,9 +1,9 @@
 /*
- * Register.tsx
- * Copyright: Ouranos Studio 2019
+ * RegisterForm.tsx
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { useMutation } from '@apollo/react-hooks'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
 import Styles from '@App/Styles'
 import { Theme } from '@App/Theme'
 import Checkbox from '@Common/Checkbox/Checkbox'
@@ -11,11 +11,9 @@ import FilledButton from '@Common/FilledButton/FilledButton'
 import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import { Routes } from '@Models/common'
-import UserStore from '@Services/UserStore'
+import { MeFragment, MeOperation } from '@Models/graphql/me/me'
 import { navigate } from '@Utils'
 import { RegisterMutation, RegisterMutationVariables } from '@Views/Register/types/RegisterMutation'
-import gql from 'graphql-tag'
-import { ExecutionResult } from 'react-apollo'
 import RX from 'reactxp'
 import validator from 'validator'
 import UsernameInput from './components/UsernameInput'
@@ -25,46 +23,11 @@ const FORM_WIDTH = 270
 
 interface RegisterFormProps {
   style?: any,
-  onSubmit: (variables: RegisterMutationVariables) => Promise<ExecutionResult<RegisterMutation>>,
+  onSubmit: (variables: RegisterMutationVariables) => void,
+  maxWidth?: boolean,
 }
 
 export class RegisterForm extends RX.Component<RegisterFormProps> {
-  static fragments = {
-    me: gql`
-      fragment Me on User {
-        id
-        username
-        session
-        email
-        firstName
-        middleName
-        lastName
-        avatar {
-          url
-        }
-        gender
-        bodyFat
-        age
-        bio
-        weight {
-          value
-          unit
-        }
-        height {
-          value
-          unit
-        }
-        caloriesPerDay
-        socialNetworks {
-          instagram
-          twitter
-          website
-          pinterest
-        }
-        role
-      }
-    `
-  }
   state = {
     username: '',
     password: '',
@@ -77,13 +40,13 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
   }
 
   public render() {
-    const { style } = this.props
+    const { style, maxWidth = false } = this.props
 
     return (
       <RX.View
         style={[styles.container, style]}
       >
-        <RX.View style={styles.inputContainer}>
+        <RX.View style={maxWidth ? undefined : styles.inputContainer}>
           <Input
             value={this.state.email}
             onChange={this._onChange('email')}
@@ -115,7 +78,7 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
           <Input
             value={this.state.password2}
             onChange={this._onChange('password2')}
-            label={translate('PasswordAgain')}
+            label={translate('passwordConfirmation')}
             validate={value => value === this.state.password}
             secureTextEntry
           />
@@ -162,17 +125,6 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
         email: this.state.email,
       }
     })
-      .then(async ({ data }) => {
-        if (!data) return
-        /**
-         * Register Success
-         * */
-        UserStore.setUser(data.registerUser.user)
-        UserStore.setSession(data.registerUser.session)
-        return navigate(this.props, Routes.home, {
-          replace: true,
-        })
-      })
   }
 
   // @ts-ignore
@@ -192,6 +144,8 @@ export class RegisterForm extends RX.Component<RegisterFormProps> {
 }
 
 export default function (props: {}) {
+  const client = useApolloClient()
+
   const [registerUser] = useMutation<RegisterMutation, RegisterMutationVariables>(gql`
     mutation RegisterMutation($user: UserRegistrationInput!) {
       registerUser(user: $user) {
@@ -202,13 +156,32 @@ export default function (props: {}) {
       }
     }
 
-    ${RegisterForm.fragments.me}
-  `)
+    ${MeFragment}
+  `, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data => {
+      client.writeQuery({
+        query: MeOperation,
+        data: {
+          me: data.registerUser.user,
+        },
+      })
+    }),
+  })
 
   return (
     <RegisterForm
       {...props}
-      onSubmit={(variables: RegisterMutationVariables) => registerUser({ variables })}
+      onSubmit={(variables: RegisterMutationVariables) => registerUser({ variables })
+        .then(async ({ data }) => {
+          if (!data) return
+          /**
+           * Register Success
+           * */
+          return navigate(props, Routes.calendar, {
+            replace: true,
+          })
+        })}
     />
   )
 }
@@ -216,14 +189,14 @@ export default function (props: {}) {
 const styles = {
   container: RX.Styles.createViewStyle({
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
     padding: Styles.values.spacing,
   }),
   inputContainer: RX.Styles.createViewStyle({
     width: FORM_WIDTH,
   }),
   submitButton: RX.Styles.createViewStyle({
-    marginTop: Styles.values.spacing,
+    flex: 1,
   }),
   logo: RX.Styles.createImageStyle({
     width: 150,

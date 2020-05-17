@@ -1,8 +1,9 @@
 /*
  * ProfileInfo.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
 import Styles from '@App/Styles'
 import FilledButton from '@Common/FilledButton/FilledButton'
 import Image from '@Common/Image/Image'
@@ -13,7 +14,6 @@ import { Routes } from '@Models/common'
 import ImageSource from '@Modules/images'
 import { navigate } from '@Utils'
 import { ProfileInfoUser } from '@Views/ProfileScreen/components/types/ProfileInfoUser'
-import gql from 'graphql-tag'
 import RX from 'reactxp'
 
 
@@ -51,21 +51,18 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
       <RX.View
         style={[styles.container, style]}
       >
-        <RX.View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {
-            !this.props.isMyProfile &&
-            <Image
-              source={user.avatar!.url}
-              style={[
-                styles.avatar,
-                {
-                  [Styles.values.marginEnd]: Styles.values.spacing / 2,
-                }
-              ]}
-            />
-          }
+        <RX.View style={{ flexDirection: 'row' }}>
+          <Image
+            source={user.avatar!.url}
+            style={[
+              styles.avatar,
+              {
+                [Styles.values.marginEnd]: Styles.values.spacing,
+              }
+            ]}
+          />
 
-          <RX.View style={{ flexDirection: 'row' }}>
+          <RX.View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             <RX.View>
               <Text type={Text.types.title} style={{ marginBottom: Styles.values.spacing / 2 }}>{this._getName()}</Text>
               <Text type={Text.types.subtitle}>@{user.username}</Text>
@@ -78,7 +75,6 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
                 label={translate('ProfileSettings')}
                 onPress={() => navigate(this.props, Routes.settings)}
                 style={{ [Styles.values.marginStart]: Styles.values.spacing }}
-                // labelStyle={{ fontSize: 14 }}
               />
             }
 
@@ -89,7 +85,7 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
           user.bio &&
           <Text
             type={Text.types.body}
-            style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing }}
+            style={{ marginTop: Styles.values.spacing, marginBottom: Styles.values.spacing / 2 }}
           >{user.bio}</Text>
         }
 
@@ -97,7 +93,9 @@ export default class ProfileInfo extends RX.Component<ProfileInfoProps> {
           /**
            * If any social media accounts were added
            * */
-          Object.keys(user.socialNetworks).filter(k => user.socialNetworks[k] && (k !== '__typename')).length > 0 &&
+          user.socialNetworks &&
+          // @ts-ignore
+          Object.keys(user.socialNetworks).filter(k => user.socialNetworks![k] && (k !== '__typename')).length > 0 &&
           <RX.View style={{ flexDirection: 'row', marginTop: Styles.values.spacing }}>
             {
               user.socialNetworks.instagram && <Link

@@ -1,6 +1,6 @@
 /*
  * LoadingIndicator.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Image from '@Common/Image/Image'
@@ -26,7 +26,7 @@ export default class LoadingIndicator extends RX.Component<LoadingIndicatorProps
   private _loopAnimation: RX.Types.Animated.CompositeAnimation
   private _opacityAnimation: RX.Types.Animated.CompositeAnimation
 
-  constructor(props) {
+  constructor(props: LoadingIndicatorProps) {
     super(props)
 
     this._loopAnimation = RX.Animated.timing(this._ellipsisAnimationValue, {

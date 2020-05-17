@@ -1,73 +1,94 @@
 /*
  * InstructionRow.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { gql } from '@apollo/client'
+import AppConfig from '@App/AppConfig'
 import Styles from '@App/Styles'
 import { ThemeContext } from '@App/ThemeContext'
-import IntlInput from '@Common/Input/IntlInput'
+import Input from '@Common/Input/Input'
 import { translate } from '@Common/LocalizedText/LocalizedText'
 import Text from '@Common/Text/Text'
 import Keys from '@Utils/KeyCodes'
-import { ProfileRecipesQuery_recipes_recipes_instructions } from '@Views/ProfileScreen/components/ProfileRecipes/types/ProfileRecipesQuery'
+import { InstructionRowInstruction } from '@Views/RecipeForm/components/InstructionRow/types/InstructionRowInstruction'
+import { forwardRef, Ref } from 'react'
 import RX from 'reactxp'
 
 
 const IMAGE_DIMENSIONS = 50
 const CLEAR_DIMENSIONS = 20
 
-interface IngredientRowProps {
+interface InstructionRowProps {
   style?: any,
-  instruction: ProfileRecipesQuery_recipes_recipes_instructions,
-  onChange: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
-  onEnterPressed: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
-  onDeletePressed: (instruction: ProfileRecipesQuery_recipes_recipes_instructions) => void,
-  onDelete: (step: number) => void,
+  instruction: InstructionRowInstruction,
+  onChange: (instruction: InstructionRowInstruction) => void,
+  onEnterPressed: (instruction: InstructionRowInstruction) => void,
+  onDeletePressed: (instruction: InstructionRowInstruction) => void,
   step: number,
 }
 
-export default class InstructionRow extends RX.Component<IngredientRowProps> {
-  onDeletePress = () => this.props.onDelete(this.props.instruction.step)
-
-  public render() {
-    const { style, instruction } = this.props
-
-    return (
-      <ThemeContext.Consumer>
-        {({ theme }) => (
-          <RX.View>
-            <RX.View
-              style={[styles.container, style]}
-            >
-              <RX.View style={styles.clearWrapper}>
-                <Text>{instruction.step}</Text>
-              </RX.View>
-              <IntlInput
-                autoFocus={instruction.step > 1}
-                translations={instruction.text}
-                onTranslationsChange={translations => this.props.onChange({
-                  ...this.props.instruction,
-                  text: translations,
-                })}
-                placeholder={this.props.step === 1 && translate('e.g. Cook the Rice...')}
-                returnKeyType={'done'}
-                style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
-                onKeyPress={e => {
-                  if (e.keyCode === Keys.Enter) {
-                    this.props.onEnterPressed(instruction)
-                  }
-                  if (e.keyCode === Keys.Delete) {
-                    this.props.onDeletePressed(instruction)
-                  }
-                }}
-              />
-            </RX.View>
-          </RX.View>
-        )}
-      </ThemeContext.Consumer>
-    )
-  }
+export const fragments = {
+  instruction: gql`
+    fragment InstructionRowInstruction on Instruction {
+      step
+      text { text locale }
+    }
+  `
 }
+
+function InstructionRow(props: InstructionRowProps, ref: Ref<any>) {
+  const { style, instruction } = props
+
+  const _onInstructionChange = (value: string) => {
+    const { instruction } = props
+
+    const text = instruction.text.length > 0
+      ? instruction.text.map((t, index) => index === 0 ? { text: value, locale: t.locale } : t)
+      : [{ text: value, locale: AppConfig.locale }]
+
+    props.onChange({
+      ...props.instruction,
+      text,
+    })
+  }
+
+  const value = instruction.text[0] ? instruction.text[0].text : ''
+
+  return (
+    <ThemeContext.Consumer>
+      {({ theme }) => (
+        <RX.View
+          style={[styles.container, style]}
+        >
+          <RX.View style={styles.clearWrapper}>
+            <Text>{instruction.step}</Text>
+          </RX.View>
+          <Input
+            inputRef={ref}
+            // autoFocus={instruction.step > 1 && (instruction.text[0].text.length === 0)}
+            value={value}
+            // translations={instruction.text}
+            onChange={_onInstructionChange}
+            placeholder={props.step === 1 && translate('e.g. Cook the Rice...')}
+            returnKeyType={'done'}
+            style={[styles.textInput, { backgroundColor: theme.colors.createRecipeTextInputBG, }]}
+            onKeyPress={e => {
+              if (e.keyCode === Keys.Enter) {
+                props.onEnterPressed(instruction)
+              }
+              if (e.keyCode === Keys.Delete) {
+                value.length === 0 && props.onDeletePressed(instruction)
+              }
+            }}
+          />
+        </RX.View>
+      )}
+    </ThemeContext.Consumer>
+  )
+}
+
+export default forwardRef(InstructionRow)
 
 const styles = {
   name: RX.Styles.createTextStyle({

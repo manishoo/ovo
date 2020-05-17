@@ -1,12 +1,12 @@
 /*
- * get-graphql-user-input-errors.tsx
- * Copyright: Ouranos Studio 2019
+ * get-graphql-user-input-errors.ts
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { ApolloError } from 'apollo-client'
+import { ApolloError } from '@apollo/client'
 
 
-export default function getGraphQLUserInputErrors(error?: ApolloError) {
+export default function getGraphQLUserInputErrors(error?: ApolloError): any {
   let fieldErrors = {}
 
   if (!error) return fieldErrors

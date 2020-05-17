@@ -1,6 +1,6 @@
 /*
  * GoDownIndicator.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 import Styles from '@App/Styles'
@@ -68,8 +68,8 @@ const styles = {
     //
   }),
   text: RX.Styles.createTextStyle({
-    font: Styles.fonts.displayLight,
-    color: '#BBBBBB',
+    fontWeight: '300',
+    color: '#dde5ec',
     marginHorizontal: Styles.values.spacing / 2,
   })
 }

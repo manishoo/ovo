@@ -1,6 +1,6 @@
 /*
  * webpack.client.config.js
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 const webpack = require('webpack')
@@ -50,11 +50,11 @@ const productionConfig = merge(
 const developmentConfig = {
   entry: [
     '@babel/polyfill',
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client?noInfo=false&reload=true&overlay=true',
+    // 'react-hot-loader/patch',
+    // 'webpack-hot-middleware/client?noInfo=false&reload=true&overlay=true',
     paths.entryClient
   ],
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   output: {
     filename: 'app.js',
     // devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-calendar]',
@@ -62,7 +62,7 @@ const developmentConfig = {
   plugins: [
     new CleanPlugin(),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     // new BundleAnalyzerPlugin()
   ],

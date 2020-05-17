@@ -1,35 +1,38 @@
 /*
  * LocationStore.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { Routes } from '@Models/common'
-import { Action, History, Location } from 'history'
+import { Action, History, Location, LocationDescriptorObject } from 'history'
 import RX from 'reactxp'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
 import * as SyncTasks from 'synctasks'
+import LocationDescriptor = History.LocationDescriptor
 
 
 @AutoSubscribeStore
 class LocationStore extends StoreBase implements IPersistableStore {
   public name = 'LocationStore'
-  private path: string | undefined = undefined
-  private history: History
+  private path: string | null = null
+  private history: History | null = null
 
   startup(): SyncTasks.Thenable<void> {
     let deferred = SyncTasks.Defer<void>()
 
     deferred.resolve(void 0)
-    window.addEventListener('popstate', e => this._onUrlChange(e))
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', e => this._onUrlChange(e))
+    }
 
     return deferred.promise()
   }
 
-  setHistory(history: any) {
+  setHistory(history: History) {
     this.history = history
 
-    this.history.listen(this._handleLocationChange)
+    history.listen(this._handleLocationChange)
 
     this.trigger()
   }
@@ -46,25 +49,41 @@ class LocationStore extends StoreBase implements IPersistableStore {
     ]
   }
 
-  navigate(props: any, route: Routes | string, config: any = { params: {} }): void {
+  pushHistory(routeName: string) {
+    if (!this.history) return
+
+    this.history.push(routeName)
+  }
+
+  goBack() {
+    if (!this.history) return
+
+    this.history.goBack()
+  }
+
+  navigate(props: any, route: LocationDescriptor<History.PoorMansUnknown>, config: any = { params: {} }): void {
+    if (!this.history) return
+
     const type = RX.Platform.getType()
     const params = config.params || {}
     const replace = config.params && config.params.replace
-    let routeName = String(route)
 
     if (type === 'web') {
-      Object.keys(params).forEach(key => {
-        routeName = routeName.replace(`/:${key}`, `/${params[key]}`)
-      })
+      // Object.keys(params).forEach(key => {
+      //   routeName = routeName.replace(`/:${key}`, `/${params[key]}`)
+      // })
 
-      if (routeName === 'back') {
+      if (route === 'back') {
         return this.history.goBack()
       }
 
-      this.setPath(routeName)
+      if (replace) {
+        return this.history.replace(route as LocationDescriptorObject)
+      }
 
-      this.history.push(routeName)
+      this.history.push(route as LocationDescriptorObject)
     } else {
+      let routeName = String(route)
       Object.keys(params).forEach(key => {
         routeName = routeName.replace(`/:${key}`, '')
       })
@@ -85,11 +104,13 @@ class LocationStore extends StoreBase implements IPersistableStore {
   }
 
   @autoSubscribe
-  getPath(): string | undefined {
+  getPath(): string {
+    if (!this.path) throw new Error('no path available')
     return this.path
   }
 
-  getHistory(): History | undefined {
+  getHistory(): History {
+    if (!this.history) throw new Error('no history available')
     return this.history
   }
 

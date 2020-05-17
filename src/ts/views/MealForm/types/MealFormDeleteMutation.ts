@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -7,10 +8,9 @@
 // ====================================================
 
 export interface MealFormDeleteMutation {
-  deleteMeal: string[];
+  deleteMeal: string;
 }
 
 export interface MealFormDeleteMutationVariables {
   id: any;
-  bulkDelete?: boolean | null;
 }

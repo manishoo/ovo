@@ -1,8 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+// @generated
 // This file was automatically generated and should not be edited.
 
-import { MealAvailableTime, MealSize } from "./../../../models/global-types";
+import { MealAvailableTime, MealSize } from './../../../models/global-types'
 
 // ====================================================
 // GraphQL fragment: MealSettingsMeal
@@ -10,8 +11,8 @@ import { MealAvailableTime, MealSize } from "./../../../models/global-types";
 
 export interface MealSettingsMeal {
   id: string;
-  availableTime: MealAvailableTime | null;
-  size: MealSize | null;
+  availableTime: MealAvailableTime;
+  size: MealSize;
   cook: boolean | null;
   time: string;
   name: string;

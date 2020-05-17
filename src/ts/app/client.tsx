@@ -1,35 +1,36 @@
 /*
  * client.tsx
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { ApolloClient, ApolloLink, Observable, Operation } from '@apollo/client'
 import { cache } from '@App/client-cache'
+import resolvers from '@App/resolvers'
+import { MeOperation } from '@Models/graphql/me/me'
+import { MeQuery } from '@Models/graphql/me/types/MeQuery'
 import fetch from '@Modules/fetch'
-import ToastStore, { ToastTypes } from '@Services/ToastStore'
-import UserStore from '@Services/UserStore'
-/**
- * Apollo Client
- * */
-import { ApolloClient } from 'apollo-client'
-import { ApolloLink, Observable } from 'apollo-link'
-import { onError } from 'apollo-link-error'
-import { withClientState } from 'apollo-link-state'
 import { createUploadLink } from 'apollo-upload-client'
+import { inflate } from 'graphql-deduplicator'
 import AppConfig from './AppConfig'
 
 
-const request = async (operation: any) => {
+const inflateLink = new ApolloLink((operation, forward) => forward(operation).map((response) => inflate(response)))
+
+const request = async (operation: Operation) => {
   operation.setContext({
     headers: {
       'accept-language': AppConfig.locale,
     }
   })
 
-  const token = await UserStore.getSession()
-  if (token) {
+  const meQuery = client.readQuery<MeQuery>({
+    query: MeOperation,
+  })
+
+  if (meQuery && meQuery.me && meQuery.me.session) {
     operation.setContext({
       headers: {
-        authorization: token,
+        authorization: meQuery.me.session,
         'accept-language': AppConfig.locale,
       }
     })
@@ -58,6 +59,10 @@ const requestLink = new ApolloLink((operation, forward) =>
   })
 )
 
+// TODO: batching important operations (https://blog.apollographql.com/batching-client-graphql-queries-a685f5bcd41b)
+// use persisted queries
+//
+
 function sendToLoggingService(errors: any) {
   //
 }
@@ -68,44 +73,35 @@ function logoutUser() {
 }
 
 const client = new ApolloClient({
+  connectToDevTools: true,
+  resolvers,
   link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError, operation }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(error => {
-          sendToLoggingService(error)
-          ToastStore.toast({
-            message: error.message,
-            type: ToastTypes.Error,
-          })
-        })
-      }
-      if (networkError) {
-        logoutUser()
-        ToastStore.toast({
-          message: networkError.message,
-          type: ToastTypes.Error,
-        })
-      }
-    }),
+    // batchLink,
+    // onError(({ graphQLErrors, networkError, operation }) => {
+    //   if (graphQLErrors) {
+    //     graphQLErrors.map(error => {
+    //       sendToLoggingService(error)
+    //       // ToastStore.toast({
+    //       //   message: error.message,
+    //       //   type: ToastTypes.Error,
+    //       // })
+    //     })
+    //   }
+    //   if (networkError) {
+    //     logoutUser()
+    //     // ToastStore.toast({
+    //     //   message: networkError.message,
+    //     //   type: ToastTypes.Error,
+    //     // })
+    //   }
+    // }),
     requestLink,
-    withClientState({
-      defaults: {
-        isConnected: true
-      },
-      resolvers: {
-        Mutation: {
-          updateNetworkStatus: (_: any, { isConnected }: any, { cache }: any) => {
-            cache.writeData({ data: { isConnected } })
-            return null
-          }
-        }
-      },
-      cache
-    }),
+    inflateLink,
+    // @ts-ignore
     createUploadLink({
       uri: AppConfig.graphQLAddress,
       fetch,
-    })
+    }),
   ]),
   cache
 })

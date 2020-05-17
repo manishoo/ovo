@@ -1,6 +1,6 @@
 /*
  * Storage.native.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
 export { AsyncStorage as default } from 'react-native'

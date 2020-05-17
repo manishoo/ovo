@@ -1,8 +1,9 @@
 /*
  * ToastStore.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
+import { createId } from '@Utils/create-id'
 import { autoSubscribe, AutoSubscribeStore, StoreBase } from 'resub'
 import { IPersistableStore } from 'resub-persist'
 import * as SyncTasks from 'synctasks'
@@ -35,7 +36,7 @@ class ToastStore extends StoreBase implements IPersistableStore {
   }
 
   public toast(toast: Toast) {
-    toast._id = String(Math.random())
+    toast._id = createId()
     this.toasts.push(toast)
 
     setTimeout(() => {

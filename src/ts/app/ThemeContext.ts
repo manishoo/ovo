@@ -1,14 +1,21 @@
 /*
  * ThemeContext.ts
- * Copyright: Ouranos Studio 2019
+ * Copyright: Mehdi J. Shooshtari 2020
  */
 
-import { Theme } from '@App/Theme'
-import React from 'react'
+import AppConfig from '@App/AppConfig'
+import { Theme, ThemeMode } from '@App/Theme'
+import React, { useContext } from 'react'
 
 
 export const ThemeContext = React.createContext({
-  theme: new Theme('light'),
-  toggleTheme: (mode: 'dark' | 'light') => {
+  theme: new Theme(AppConfig.theme),
+  toggleTheme: (mode: ThemeMode) => {
   },
 })
+
+export const useTheme = () => {
+  const { theme } = useContext(ThemeContext)
+
+  return theme
+}
