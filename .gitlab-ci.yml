@@ -11,10 +11,6 @@ build staging image:
     - branches
   services:
     - docker:dind
-  cache:
-    key: $CI_COMMIT_REF_SLUG
-    paths:
-      - node_modules/
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
@@ -47,10 +43,6 @@ build production image:
     - /.*-staging$/
   services:
     - docker:dind
-  cache:
-    key: $CI_COMMIT_REF_SLUG
-    paths:
-      - node_modules/
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""

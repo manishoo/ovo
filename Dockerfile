@@ -6,7 +6,7 @@ WORKDIR /service
 RUN apk add --no-cache git
 
 COPY ["package.json", "yarn.lock", "./"]
-RUN yarn --production --no-cache --frozen-lockfile && cd node_modules/ && rm -rf hermes-engine jsc-android recyclerlistview
+RUN yarn --no-cache --frozen-lockfile && cd node_modules/ && rm -rf hermes-engine jsc-android recyclerlistview
 
 COPY ["tsconfig.json", "tslint.json", "babel.config.js", "server.js", "server.config.js", "gulpfile.js", "./"]
 COPY webpack webpack
