@@ -40,13 +40,17 @@ app.use('/favicons', serve(paths.favicons))
 app.use(favicon(paths.favicon))
 
 if (isProd) {
-  const assets = require('./web/build/assets.json')
+  try {
+    const assets = require('./web/build/assets.json')
 
-  app.get('/*', (req, res) => {
-    const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
-    // shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
-    return require('./web/build/server-bundle').default(assets)(req, res, lang)
-  })
+    app.get('/*', (req, res) => {
+      const lang = config.supportedLanguages.includes(req.language) ? req.language : config.defaultLocale
+      // shimBrowser(lang, lang === 'fa' ? 'rtl' : 'ltr')
+      return require('./web/build/server-bundle').default(assets)(req, res, lang)
+    })
+  } catch (e) {
+    //
+  }
 } else {
   require('@babel/register')
 
