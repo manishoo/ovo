@@ -18,4 +18,4 @@ ARG API_ADDRESS
 ARG GRAPHQL_ENDPOINT
 ARG TAG
 
-RUN npm run build:web:prod
+# RUN npm run build:web:prod
