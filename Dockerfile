@@ -10,12 +10,12 @@ RUN yarn --production --no-cache --frozen-lockfile && cd node_modules/ && rm -rf
 
 COPY ["tsconfig.json", "tslint.json", "babel.config.js", "server.js", "server.config.js", "gulpfile.js", "./"]
 COPY webpack webpack
-#COPY buildtools buildtools
+COPY buildtools buildtools
 COPY web web
-#COPY src src
+COPY src src
 
-#ARG API_ADDRESS
-#ARG GRAPHQL_ENDPOINT
-#ARG TAG
+ARG API_ADDRESS
+ARG GRAPHQL_ENDPOINT
+ARG TAG
 
-# RUN npm run build:web:prod
+RUN npm run build:web:prod

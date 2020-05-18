@@ -473,5 +473,5 @@ gulp.task('noop', function (callback) {
   callback()
 })
 
-gulp.task('run-once', gulp.series('clean', /*'lint',*/ 'copy', 'build', 'apply-aliases', usesWebpack() ? 'webpack-js' : 'noop', usesWebpack() ? 'webpack-js-server' : 'apply-tscpaths'))
+gulp.task('run-once', gulp.series('clean', /*'lint',*/ 'copy', 'build', 'apply-aliases', 'apply-tscpaths'/*, usesWebpack() ? 'webpack-js' : 'noop'*//*, usesWebpack() ? 'webpack-js-server' : 'apply-tscpaths'*/))
 gulp.task('run', gulp.series('clean', 'copy', 'build', 'apply-aliases', 'watch', usesWebpack() ? 'webpack-js-watch' : 'noop', usesWebpack() ? 'webpack-js-server' : 'apply-tscpaths'))

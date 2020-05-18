@@ -64,6 +64,9 @@
   "exclude": [
     "node_modules",
     "temp",
+    "ios",
+    "android",
+    "src/resources",
     ".vscode",
     "web",
     ".idea",
